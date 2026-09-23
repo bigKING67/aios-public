@@ -1,0 +1,31 @@
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.textareaCount {
+  width: 100%;
+  text-align: right;
+  margin-top: -2px;
+  margin-bottom: 2px;
+  padding-right: 4px;
+  color: var(--text-disabled);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-none);
+}
+
+.editor {
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editor h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}

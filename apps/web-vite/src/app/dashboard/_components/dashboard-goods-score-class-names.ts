@@ -1,0 +1,37 @@
+export interface DashboardGoodsScoreClassNames {
+  goodsScoreTooltipCard: string;
+  goodsScoreTooltipTitle: string;
+  goodsScoreTooltipSub: string;
+  goodsScoreTooltipKpis: string;
+  goodsScoreTooltipScoreWrap: string;
+  goodsScoreTooltipScoreLabel: string;
+  goodsScoreTooltipScoreValue: string;
+  goodsScoreTooltipScoreMax: string;
+  goodsScoreTooltipMetaWrap: string;
+  goodsMatrixTooltipQuadrantTag: string;
+  goodsMatrixTooltipQuadrantStar: string;
+  goodsMatrixTooltipQuadrantStable: string;
+  goodsMatrixTooltipQuadrantOpportunity: string;
+  goodsMatrixTooltipQuadrantLongtail: string;
+  goodsMatrixTooltipQuadrantNeutral: string;
+  goodsScoreTooltipRank: string;
+  goodsScoreTooltipRow: string;
+  goodsScoreTooltipTrendUp: string;
+  goodsScoreTooltipTrendDown: string;
+  goodsScoreTooltipTrendNeutral: string;
+  goodsScoreTooltipGrid: string;
+  goodsScoreTooltipGridItem: string;
+  goodsScoreTooltipGridValue: string;
+  goodsScoreTooltipRowValue: string;
+  goodsScoreTooltipConfidence: string;
+  goodsScoreTooltipConfidenceHigh: string;
+  goodsScoreTooltipConfidenceMedium: string;
+  goodsScoreTooltipConfidenceLow: string;
+  goodsScoreTooltipConfidenceNeutral: string;
+  trendUp: string;
+  trendDown: string;
+  trendNeutral: string;
+  goodsScoreConfidenceHigh: string;
+  goodsScoreConfidenceMedium: string;
+  goodsScoreConfidenceLow: string;
+}

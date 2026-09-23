@@ -1,0 +1,37 @@
+.drawer :global(.ant-drawer-body) {
+  overflow-x: hidden;
+  padding: 0 22px 22px;
+}
+
+.drawer :global(.ant-drawer-title) {
+  min-width: 0;
+}
+
+.drawer :global(.ant-drawer-header) {
+  padding: 17px 28px 17px 26px;
+}
+
+.drawer :global(.ant-drawer-header-title) {
+  min-width: 0;
+}
+
+.panel {
+  display: flex;
+  min-height: min(760px, calc(100dvh - 132px));
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 18px 0 54px;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    display: block;
+    min-height: 0;
+    padding: 6px 0 0;
+  }
+
+  .drawer :global(.ant-drawer-body) {
+    padding: 12px 14px 18px;
+  }
+}

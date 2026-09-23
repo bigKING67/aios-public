@@ -1,0 +1,117 @@
+/* ========== 导入设计系统与样式 ========== */
+@import './design-tokens.css';  /* AIOS 设计 Token 系统 */
+@import './design-system-globals.css';  /* 基础元素与工具类 */
+@import './echarts.css';        /* ECharts 主题与样式 */
+@import './light-theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== 全局基础样式 ========== */
+
+/* 重置和基础设置 */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  background-color: var(--bg-global);
+  color: var(--text-primary);
+  transition: background-color var(--transition-base),
+              color var(--transition-base);
+
+  /* 强制浅色主题（AIOS v1 版本仅支持浅色） */
+  color-scheme: light;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== UI 组件全局样式 ========== */
+
+/* Ant Design / Arco Design 覆盖 - 禁用默认模糊 */
+.ant-modal-mask,
+.ant-drawer-mask {
+  backdrop-filter: blur(0px) !important;
+}
+
+/* 报告容器 */
+.report-container {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--shadow-base);
+  padding: var(--spacing-6);
+}
+
+.report-section {
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.report-section:last-child {
+  border-bottom: none;
+}
+
+.report-section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-4);
+}
+
+.report-section-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-3);
+}
+
+/* 卡片网格 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--spacing-4);
+}
+
+@media (min-width: 576px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ========== 打印样式 ========== */
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .report-container {
+    box-shadow: none;
+    page-break-after: avoid;
+    border: 1px solid var(--border-color);
+  }
+
+  .report-section {
+    page-break-inside: avoid;
+  }
+}

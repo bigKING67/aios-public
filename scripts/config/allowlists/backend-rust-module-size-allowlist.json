@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "maxLines": 800,
+  "description": "Frozen legacy Rust backend line-count budget. New backend Rust modules should stay under maxLines; legacy mega-files may only shrink unless this allowlist is deliberately updated.",
+  "allowed": [
+    {
+      "path": "backend-rust/src/dashboard/qianchuan/mod.rs",
+      "maxLines": 818,
+      "reason": "Frozen legacy qianchuan dashboard module after VPS hotfix integration; split by query/domain boundaries before increasing this cap."
+    },
+    {
+      "path": "backend-rust/src/content_live_center/repository.rs",
+      "maxLines": 930,
+      "reason": "Temporary frozen live-center repository debt after recording upload resume, HEAD verification, failed-segment retry recycle, and segment-offset refresh shipped; split upload mutations, session queries, and analysis-job persistence into focused repository modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/handlers.rs",
+      "maxLines": 808,
+      "reason": "Temporary frozen content-assets handler debt after Qianchuan performance and industry material inspiration endpoints shipped; split route handlers from request validation and response mapping before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/video_link_import.rs",
+      "maxLines": 939,
+      "reason": "Temporary frozen external video import debt after download-failure bindability and archive integration fixes shipped; split import orchestration, provider parsing, and persistence helpers into focused modules before lowering this cap and do not grow this file further."
+    }
+  ]
+}

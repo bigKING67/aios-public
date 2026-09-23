@@ -1,0 +1,194 @@
+.goodsCardTypographyScope .sourceName,
+.goodsCardTypographyScope .metricValue,
+.goodsCardTypographyScope .metricTrend,
+.goodsCardTypographyScope .metricMetaLabel {
+  font-weight: 400;
+}
+
+.goodsCardTypographyScope .levelBadge {
+  font-weight: 500;
+}
+
+.sourceCell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.levelBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--dashboard-traffic-level-badge-border);
+  background: var(--dashboard-traffic-level-badge-bg);
+  color: var(--dashboard-traffic-level-badge-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-normal);
+  box-shadow: var(--dashboard-badge-inset-shadow);
+  transform: translateY(0.5px);
+}
+
+.levelBadgeL1 {
+  border-color: var(--dashboard-traffic-l1-badge-border);
+  background: var(--dashboard-traffic-l1-badge-bg);
+  color: var(--dashboard-traffic-l1-badge-text);
+}
+
+.levelBadgeL2 {
+  border-color: var(--dashboard-traffic-l2-badge-border);
+  background: var(--dashboard-traffic-l2-badge-bg);
+  color: var(--dashboard-traffic-l2-badge-text);
+}
+
+.levelBadgeL3 {
+  border-color: var(--dashboard-traffic-l3-badge-border);
+  background: var(--dashboard-traffic-l3-badge-bg);
+  color: var(--dashboard-traffic-l3-badge-text);
+}
+
+.levelBadgeSummary {
+  border-color: var(--dashboard-traffic-summary-badge-border);
+  background: var(--dashboard-traffic-summary-badge-bg);
+  color: var(--dashboard-traffic-summary-badge-text);
+}
+
+.sourceTextWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+  text-align: left;
+}
+
+.sourceName {
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goodsProductCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  max-width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+
+.goodsProductName {
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goodsProductNameSummary {
+  font-weight: 400;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: clip;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: var(--line-height-normal);
+}
+
+.goodsProductId {
+  color: var(--dashboard-id-pill-text);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  font-family: var(--font-family-mono);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex;
+  align-self: flex-start;
+  border-radius: 999px;
+  border: 1px solid var(--dashboard-id-pill-border);
+  background: var(--dashboard-id-pill-bg);
+  padding: 1px 7px;
+}
+
+.metricCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.metricValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  line-height: var(--line-height-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.metricMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--dashboard-traffic-metric-meta-text);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-compact);
+}
+
+.metricTrend {
+  font-size: var(--font-size-xs);
+  font-weight: 400;
+}
+
+.metricTrendUp {
+  color: var(--trend-up);
+}
+
+.metricTrendDown {
+  color: var(--trend-down);
+}
+
+.metricTrendNeutral {
+  color: var(--trend-neutral);
+}
+
+.metricMetaLabel {
+  color: var(--dashboard-traffic-metric-meta-label);
+  font-weight: 400;
+}
+
+:global(.traffic-row-l1) .sourceName,
+:global(.traffic-goods-row-l1) .sourceName,
+:global(.traffic-row-l2) .sourceName,
+:global(.traffic-goods-row-l2) .sourceName,
+:global(.traffic-row-l3) .sourceName,
+:global(.traffic-goods-row-l3) .sourceName,
+:global(.traffic-goods-row-summary) .sourceName {
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .metricCell {
+    align-items: flex-start;
+  }
+}

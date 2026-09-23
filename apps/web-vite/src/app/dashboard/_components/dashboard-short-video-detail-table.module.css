@@ -1,0 +1,27 @@
+.shortVideoHeaderCell {
+  font-size: var(--font-size-base) !important;
+  font-weight: 700;
+  line-height: var(--line-height-snug);
+}
+
+.shortVideoTextHeaderCell {
+  text-align: center;
+}
+
+.shortVideoTextHeaderCell :global(.ant-table-column-sorters) {
+  justify-content: center;
+  gap: 6px;
+}
+
+.shortVideoTextHeaderCell :global(.ant-table-column-title) {
+  text-align: center;
+}
+
+.shortVideoTextBodyCell {
+  text-align: center;
+}
+
+.shortVideoBodyCell {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}

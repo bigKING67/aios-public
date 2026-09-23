@@ -1,0 +1,168 @@
+services:
+  aios-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.vite
+      args:
+        VITE_API_GATEWAY_PREFIX: ${VITE_API_GATEWAY_PREFIX:-/v1}
+        VITE_FORCE_FRESH_DATA: ${VITE_FORCE_FRESH_DATA:-0}
+        VITE_SAMPLE_INVENTORY_ACCESS_MODE: ${VITE_SAMPLE_INVENTORY_ACCESS_MODE:-authenticated}
+    image: ${AIOS_WEB_IMAGE:-aios-web:latest}
+    container_name: aios-web
+    restart: unless-stopped
+    depends_on:
+      - aios-api
+    expose:
+      - "8080"
+    networks:
+      - aios-internal
+      - traefik-public
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
+      - "traefik.http.routers.aios.rule=Host(`${AIOS_DOMAIN}`)"
+      - "traefik.http.routers.aios.entrypoints=websecure"
+      - "traefik.http.routers.aios.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
+      - "traefik.http.routers.aios.priority=10"
+      - "traefik.http.services.aios.loadbalancer.server.port=8080"
+
+  aios-api:
+    build:
+      context: ./backend-rust
+      dockerfile: Dockerfile
+    image: ${AIOS_API_IMAGE:-aios-api:latest}
+    container_name: aios-api
+    restart: unless-stopped
+    environment:
+      RUST_API_HOST: ${RUST_API_HOST:-0.0.0.0}
+      RUST_API_PORT: ${RUST_API_PORT:-8000}
+      DATABASE_URL: ${DATABASE_URL}
+      DB_MAX_CONNECTIONS: ${DB_MAX_CONNECTIONS:-30}
+      DB_MIN_CONNECTIONS: ${DB_MIN_CONNECTIONS:-0}
+      DB_ACQUIRE_TIMEOUT_SECONDS: ${DB_ACQUIRE_TIMEOUT_SECONDS:-20}
+      SECRET_KEY: ${SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-15}
+      REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      CONTENT_PRODUCTION_ENABLED: ${CONTENT_PRODUCTION_ENABLED:-false}
+      CONTENT_PRODUCTION_PLANNING_ENABLED: ${CONTENT_PRODUCTION_PLANNING_ENABLED:-false}
+      CONTENT_PRODUCTION_SHOT_EXTRACTION_ENABLED: ${CONTENT_PRODUCTION_SHOT_EXTRACTION_ENABLED:-false}
+      CONTENT_PRODUCTION_SEMANTICS_ENABLED: ${CONTENT_PRODUCTION_SEMANTICS_ENABLED:-false}
+      DRAGONFLY_URL: ${DRAGONFLY_URL:-redis://aios-dragonfly:6379}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      SAMPLE_INVENTORY_ACCESS_MODE: ${SAMPLE_INVENTORY_ACCESS_MODE:-authenticated}
+      WEEKLY_REPORT_CACHE_TTL_SECONDS: ${WEEKLY_REPORT_CACHE_TTL_SECONDS:-900}
+      WEEKLY_PERIOD_CACHE_TTL_SECONDS: ${WEEKLY_PERIOD_CACHE_TTL_SECONDS:-60}
+      MONTHLY_REPORT_CACHE_TTL_SECONDS: ${MONTHLY_REPORT_CACHE_TTL_SECONDS:-900}
+      MONTHLY_PERIOD_CACHE_TTL_SECONDS: ${MONTHLY_PERIOD_CACHE_TTL_SECONDS:-60}
+      REPORT_BUILD_CONCURRENCY: ${REPORT_BUILD_CONCURRENCY:-8}
+      REPORT_WARMUP_WEEKLY_PERIOD_LIMIT: ${REPORT_WARMUP_WEEKLY_PERIOD_LIMIT:-200}
+      REPORT_WARMUP_MONTHLY_PERIOD_LIMIT: ${REPORT_WARMUP_MONTHLY_PERIOD_LIMIT:-200}
+      REPORT_WARMUP_PARALLELISM: ${REPORT_WARMUP_PARALLELISM:-6}
+      REPORT_WARMUP_INTERVAL_SECONDS: ${REPORT_WARMUP_INTERVAL_SECONDS:-300}
+      LLM_DEFAULT_PROVIDER: ${LLM_DEFAULT_PROVIDER:-deepseek}
+      LLM_DEFAULT_MODEL: ${LLM_DEFAULT_MODEL:-}
+      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-60}
+      LLM_REASONER_TIMEOUT_SECONDS: ${LLM_REASONER_TIMEOUT_SECONDS:-660}
+      LLM_REASONER_MAX_TOKENS: ${LLM_REASONER_MAX_TOKENS:-8192}
+      LLM_TEMPERATURE: ${LLM_TEMPERATURE:-1.0}
+      LLM_MAX_TOKENS: ${LLM_MAX_TOKENS:-2000}
+      KIMI_BASE_URL: ${KIMI_BASE_URL:-https://api.moonshot.cn/v1}
+      KIMI_API_KEY: ${KIMI_API_KEY:-}
+      KIMI_MODEL: ${KIMI_MODEL:-kimi-k2.5}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-reasoner}
+      DATAOPS_PREFECT_API_URL: ${DATAOPS_PREFECT_API_URL_WEB:-${DATAOPS_PREFECT_API_URL:-http://host.docker.internal:4200/api}}
+      DATAOPS_PREFECT_AUTH_MODE: ${DATAOPS_PREFECT_AUTH_MODE:-none}
+      DATAOPS_PREFECT_API_KEY: ${DATAOPS_PREFECT_API_KEY:-}
+      DATAOPS_PREFECT_BASIC_AUTH_USERNAME: ${DATAOPS_PREFECT_BASIC_AUTH_USERNAME:-}
+      DATAOPS_PREFECT_BASIC_AUTH_PASSWORD: ${DATAOPS_PREFECT_BASIC_AUTH_PASSWORD:-}
+      DATAOPS_FEISHU_DEFAULT_WEBHOOK_URL: ${DATAOPS_FEISHU_DEFAULT_WEBHOOK_URL:-}
+      DATAOPS_FEISHU_BACKUP_WEBHOOK_URL: ${DATAOPS_FEISHU_BACKUP_WEBHOOK_URL:-}
+      DATAOPS_FEISHU_SYNC_TRIGGER_URL: ${DATAOPS_FEISHU_SYNC_TRIGGER_URL:-}
+      DATAOPS_FEISHU_SYNC_TRIGGER_TOKEN: ${DATAOPS_FEISHU_SYNC_TRIGGER_TOKEN:-}
+      DATAOPS_FEISHU_SYNC_TRIGGER_TIMEOUT_MS: ${DATAOPS_FEISHU_SYNC_TRIGGER_TIMEOUT_MS:-10000}
+      DATAOPS_RUNTIME_STORE_DIR: ${DATAOPS_RUNTIME_STORE_DIR:-/app/.dataops/runtime-store}
+      DATAOPS_POSTGRES_ENABLED: ${DATAOPS_POSTGRES_ENABLED:-0}
+      DATAOPS_PSQL_BIN: ${DATAOPS_PSQL_BIN:-psql}
+      DATAOPS_RUNTIME_PG_SCHEMA: ${DATAOPS_RUNTIME_PG_SCHEMA:-dataops}
+      DATAOPS_RUNTIME_RETENTION_DAYS: ${DATAOPS_RUNTIME_RETENTION_DAYS:-90}
+      DATAOPS_NOTIFY_TRACE_SLO_ENABLED: ${DATAOPS_NOTIFY_TRACE_SLO_ENABLED:-1}
+      DATAOPS_NOTIFY_TRACE_SLO_RECOVERY_THRESHOLD: ${DATAOPS_NOTIFY_TRACE_SLO_RECOVERY_THRESHOLD:-70}
+      DATAOPS_NOTIFY_TRACE_SLO_MIN_FIRST_FAILED_COUNT: ${DATAOPS_NOTIFY_TRACE_SLO_MIN_FIRST_FAILED_COUNT:-3}
+      DATAOPS_NOTIFY_TRACE_SLO_COOLDOWN_MINUTES: ${DATAOPS_NOTIFY_TRACE_SLO_COOLDOWN_MINUTES:-30}
+      DATAOPS_NOTIFY_TRACE_SLO_MAX_REASON_ITEMS: ${DATAOPS_NOTIFY_TRACE_SLO_MAX_REASON_ITEMS:-3}
+      DATAOPS_NOTIFY_TRACE_SLO_AUTO_NOTIFY: ${DATAOPS_NOTIFY_TRACE_SLO_AUTO_NOTIFY:-0}
+      DATAOPS_NOTIFY_TRACE_SLO_CHANNEL_ID: ${DATAOPS_NOTIFY_TRACE_SLO_CHANNEL_ID:-feishu_default_bot}
+      DATAOPS_NOTIFY_TRACE_SLO_OPERATOR: ${DATAOPS_NOTIFY_TRACE_SLO_OPERATOR:-dataops.slo.bot}
+      DATAOPS_NOTIFY_TRACE_SLO_SCAN_CONCURRENCY: ${DATAOPS_NOTIFY_TRACE_SLO_SCAN_CONCURRENCY:-4}
+      PGHOST: ${PGHOST:-}
+      PGPORT: ${PGPORT:-}
+      PGUSER: ${PGUSER:-}
+      PGDATABASE: ${PGDATABASE:-}
+      PGPASSWORD: ${PGPASSWORD:-}
+      CONTENT_ASSET_DELIVERY_PROVIDER: ${CONTENT_ASSET_DELIVERY_PROVIDER:-tos_signed_url}
+      CONTENT_ASSET_SIGNED_URL_TTL_SECONDS: ${CONTENT_ASSET_SIGNED_URL_TTL_SECONDS:-600}
+      DOUYIN_LIVE_RECORDING_UPLOAD_SIGNED_URL_TTL_SECONDS: ${DOUYIN_LIVE_RECORDING_UPLOAD_SIGNED_URL_TTL_SECONDS:-28800}
+      CONTENT_ASSET_CDN_BASE_URL: ${CONTENT_ASSET_CDN_BASE_URL:-}
+      TOS_ACCESS_KEY_ID: ${TOS_ACCESS_KEY_ID:-}
+      TOS_SECRET_ACCESS_KEY: ${TOS_SECRET_ACCESS_KEY:-}
+      TOS_ENDPOINT: ${TOS_ENDPOINT:-https://tos-s3-cn-shanghai.volces.com}
+      TOS_REGION: ${TOS_REGION:-cn-shanghai}
+      TOS_BUCKET: ${TOS_BUCKET:-content-video-prod}
+    depends_on:
+      - aios-dragonfly
+    expose:
+      - "8000"
+    ports:
+      - target: ${RUST_API_PORT:-8000}
+        published: ${RUST_API_PORT:-8000}
+        host_ip: ${AIOS_API_BIND_ADDRESS:-127.0.0.1}
+        protocol: tcp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - aios-internal
+      - traefik-public
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
+      - "traefik.http.routers.aios-api.rule=Host(`${AIOS_DOMAIN}`) && (PathPrefix(`/v1`) || Path(`/health`))"
+      - "traefik.http.routers.aios-api.entrypoints=websecure"
+      - "traefik.http.routers.aios-api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
+      - "traefik.http.routers.aios-api.priority=100"
+      - "traefik.http.services.aios-api.loadbalancer.server.port=${RUST_API_PORT:-8000}"
+
+  aios-dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: aios-dragonfly
+    restart: unless-stopped
+    command:
+      - --bind=0.0.0.0
+      - --port=6379
+      - --logtostderr=true
+    expose:
+      - "6379"
+    volumes:
+      - aios-dragonfly-data:/data
+    networks:
+      - aios-internal
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  aios-internal:
+    name: ${AIOS_INTERNAL_NETWORK:-aios-internal}
+    internal: true
+  traefik-public:
+    external: true
+    name: ${TRAEFIK_NETWORK:-traefik-public}
+
+volumes:
+  aios-dragonfly-data:
+    name: ${AIOS_DRAGONFLY_VOLUME:-aios-dragonfly-data}
+    external: ${AIOS_DRAGONFLY_VOLUME_EXTERNAL:-false}

@@ -1,0 +1,208 @@
+.levelTag,
+.levelOptionPill {
+  margin-inline-end: 0;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.optionPill,
+.statusOptionPill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 22px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  vertical-align: middle;
+}
+
+.optionPill {
+  padding: 2px 10px;
+  color: var(
+    --creator-platform-chip-text,
+    color-mix(in srgb, var(--creator-platform-color) 92%, var(--text-primary))
+  );
+  background: var(
+    --creator-platform-chip-bg,
+    color-mix(in srgb, var(--creator-platform-color) 16%, var(--bg-card))
+  );
+  border-color: transparent;
+}
+
+.levelTag,
+.levelOptionPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 11px;
+  border: 1px solid transparent;
+  color: var(--creator-level-text, var(--text-secondary));
+  background: var(--creator-level-bg, var(--bg-subtle));
+  box-shadow: inset 0 1px 0 var(--creator-library-material-white-a760);
+  vertical-align: middle;
+}
+
+.statusOptionPill {
+  padding: 3px 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--creator-cooperation-text);
+  background: var(--creator-cooperation-bg);
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 var(--creator-library-material-white-a760);
+}
+
+.platformToneTmall {
+  --creator-platform-color: var(--platform-tmall);
+}
+
+.platformToneDouyin {
+  --creator-platform-color: var(--platform-douyin);
+  --creator-platform-chip-text: var(--text-inverse);
+  --creator-platform-chip-bg: var(--text-primary);
+}
+
+.platformToneXiaohongshu {
+  --creator-platform-color: var(--platform-xiaohongshu);
+}
+
+.platformToneKuaishou {
+  --creator-platform-color: var(--platform-kuaishou);
+}
+
+.platformToneJd {
+  --creator-platform-color: var(--platform-jd);
+}
+
+.platformToneWechat {
+  --creator-platform-color: var(--platform-wechat);
+}
+
+.platformToneMulti {
+  --creator-platform-color: var(--brand-primary);
+}
+
+.platformToneUnknown {
+  --creator-platform-color: var(--platform-unknown);
+  --creator-platform-chip-text: var(--text-secondary);
+  --creator-platform-chip-bg: var(--bg-subtle);
+}
+
+.levelToneS {
+  --creator-level-text: var(--domain-creator-s-text);
+  --creator-level-bg: var(--domain-creator-s-bg);
+}
+
+.levelToneA {
+  --creator-level-text: var(--domain-creator-a-text);
+  --creator-level-bg: var(--domain-creator-a-bg);
+}
+
+.levelToneB {
+  --creator-level-text: var(--domain-creator-b-text);
+  --creator-level-bg: var(--domain-creator-b-bg);
+}
+
+.levelToneC {
+  --creator-level-text: var(--domain-creator-c-text);
+  --creator-level-bg: var(--domain-creator-c-bg);
+}
+
+.levelToneD {
+  --creator-level-text: var(--domain-creator-d-text);
+  --creator-level-bg: var(--domain-creator-d-bg);
+}
+
+.levelToneUnknown {
+  --creator-level-text: var(--text-tertiary);
+  --creator-level-bg: var(--bg-disabled);
+}
+
+.cooperationToneUnclassified {
+  --creator-cooperation-text: var(--domain-cooperation-unclassified-text);
+  --creator-cooperation-bg: var(--domain-cooperation-unclassified-bg);
+}
+
+.cooperationToneInitial {
+  --creator-cooperation-text: var(--domain-cooperation-initial-contact-text);
+  --creator-cooperation-bg: var(--domain-cooperation-initial-contact-bg);
+}
+
+.cooperationToneSample {
+  --creator-cooperation-text: var(--domain-cooperation-sample-negotiation-text);
+  --creator-cooperation-bg: var(--domain-cooperation-sample-negotiation-bg);
+}
+
+.cooperationToneNotConsidering {
+  --creator-cooperation-text: var(--domain-cooperation-not-considering-text);
+  --creator-cooperation-bg: var(--domain-cooperation-not-considering-bg);
+}
+
+.cooperationTonePaused {
+  --creator-cooperation-text: var(--domain-cooperation-paused-text);
+  --creator-cooperation-bg: var(--domain-cooperation-paused-bg);
+}
+
+.cooperationToneLiveStarted {
+  --creator-cooperation-text: var(--domain-cooperation-live-started-text);
+  --creator-cooperation-bg: var(--domain-cooperation-live-started-bg);
+}
+
+.cooperationToneBlacklist {
+  --creator-cooperation-text: var(--text-inverse);
+  --creator-cooperation-bg: var(--text-primary);
+}
+
+.cooperationToneNotCooperable {
+  --creator-cooperation-text: var(--text-inverse);
+  --creator-cooperation-bg: var(--creator-library-material-blocked-red);
+}
+
+.anchorTagDropdown :global(.ant-select-item-option-state) {
+  display: none;
+}
+
+.checkboxOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.checkboxOptionBox {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-color-hover);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-card);
+}
+
+.checkboxOptionBoxChecked {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+}
+
+.checkboxOptionBoxChecked::after {
+  content: '';
+  width: 7px;
+  height: 4px;
+  border: solid var(--text-inverse);
+  border-width: 0 0 1.5px 1.5px;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+.checkboxOptionLabel {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

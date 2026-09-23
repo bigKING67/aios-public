@@ -1,0 +1,32 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.summaryItem {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 14px;
+  border: 1px solid var(--dashboard-detail-summary-border);
+  background: var(--dashboard-detail-drawer-bg);
+  padding: 10px 11px;
+}
+
+.summaryLabel {
+  color: var(--dashboard-detail-drawer-muted-text);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+}
+
+.summaryValue {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-lg);
+  font-weight: 560;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

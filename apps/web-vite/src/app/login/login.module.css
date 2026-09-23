@@ -1,0 +1,92 @@
+/**
+ * 登录页面样式
+ */
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(135deg, var(--bg-global), var(--brand-secondary));
+  padding: var(--spacing-3);
+  width: 100%;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: min(400px, calc(100vw - var(--spacing-6)));
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-base);
+}
+
+.loginCard :global(.ant-card-body) {
+  padding: var(--spacing-8);
+}
+
+.loginHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  text-align: center;
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-16);
+  height: var(--spacing-16);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-base);
+}
+
+.brandMarkImage {
+  display: block;
+  width: calc(var(--spacing-16) - var(--spacing-2));
+  height: calc(var(--spacing-16) - var(--spacing-2));
+  object-fit: contain;
+}
+
+.loginTitle {
+  margin: var(--spacing-0);
+  color: var(--text-primary);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-display);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.loginSubtitle,
+.loginFootnote {
+  margin: var(--spacing-0);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.loginFootnote {
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.loginForm :global(.ant-form-item:last-child) {
+  margin-bottom: var(--spacing-0);
+}
+
+.loginForm :global(.ant-btn) {
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  .loginCard :global(.ant-card-body) {
+    padding: var(--spacing-5) var(--spacing-4);
+  }
+}

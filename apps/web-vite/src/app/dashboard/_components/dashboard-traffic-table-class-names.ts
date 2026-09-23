@@ -1,0 +1,35 @@
+export interface DashboardTrafficTableClassNames {
+  trafficHeaderCell: string;
+  trafficFirstHeaderCell: string;
+  trafficMetricHeaderCell: string;
+  trafficGoodsMetricHeaderCell: string;
+  trafficBodyCell: string;
+  trafficFirstCell: string;
+  trafficFirstCellL1: string;
+  trafficFirstCellL2: string;
+  trafficFirstCellL3: string;
+  trafficGoodsFirstCellSummary: string;
+  trafficGoodsFirstCellL1: string;
+  trafficGoodsFirstCellL2: string;
+  trafficGoodsFirstCellL3: string;
+  trafficMetricCell: string;
+  trafficMetricValue: string;
+  trafficMetricMeta: string;
+  trafficMetricMetaLabel: string;
+  trafficMetricTrend: string;
+  trafficSourceCell: string;
+  trafficLevelBadge: string;
+  trafficLevelBadgeSummary: string;
+  trafficLevelBadgeL1: string;
+  trafficLevelBadgeL2: string;
+  trafficLevelBadgeL3: string;
+  trafficSourceTextWrap: string;
+  trafficSourceName: string;
+  trafficGoodsProductCell: string;
+  trafficGoodsProductName: string;
+  trafficGoodsProductNameSummary: string;
+  trafficGoodsProductId: string;
+  trendUp: string;
+  trendDown: string;
+  trendNeutral: string;
+}

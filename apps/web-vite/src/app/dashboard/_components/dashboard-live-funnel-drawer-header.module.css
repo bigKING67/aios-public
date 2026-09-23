@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 34px;
+}
+
+.titleText {
+  flex: 0 0 auto;
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 640;
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-tight);
+}
+
+@media (max-width: 768px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

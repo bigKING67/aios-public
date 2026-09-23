@@ -1,0 +1,379 @@
+.uploadModal :global(.ant-modal-header) {
+  margin-bottom: 14px;
+}
+
+.uploadModal :global(.ant-modal-body) {
+  padding-top: 2px;
+}
+
+.uploadModal :global(.ant-modal-footer) {
+  margin-top: 20px;
+}
+
+.modalTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 28px;
+}
+
+.modalTitle span {
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 660;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.modalTitle p {
+  max-width: 66ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: var(--line-height-normal);
+}
+
+.uploadStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.uploadFilePreview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-card);
+}
+
+.uploadFilePreview div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 4px;
+}
+
+.uploadFilePreview strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploadFilePreview span,
+.uploadError {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.uploadError {
+  margin: 0;
+  color: var(--status-danger-strong);
+}
+
+.sourceUploadContext {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: 14px;
+  background: var(--brand-secondary);
+}
+
+.sourceUploadContext strong {
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.sourceUploadContext span {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploadProgressPanel {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  background: var(--brand-secondary);
+}
+
+.uploadProgressHeader {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.uploadProgressHeader strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.uploadProgressHeader span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.uploadProgressBar {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-card);
+}
+
+.uploadProgressBar::-webkit-progress-bar {
+  background: var(--bg-card);
+}
+
+.uploadProgressBar::-webkit-progress-value {
+  border-radius: 999px;
+  background: var(--brand-primary);
+}
+
+.uploadProgressBar::-moz-progress-bar {
+  border-radius: 999px;
+  background: var(--brand-primary);
+}
+
+.uploadProgressHint {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.uploadProgressHint span {
+  position: relative;
+  min-width: 0;
+  padding: 9px 10px 9px 26px;
+  border: 1px solid var(--brand-border);
+  border-radius: 12px;
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+}
+
+.uploadProgressHint span::before {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--brand-primary);
+  content: '';
+  transform: translateY(-50%);
+}
+
+.uploadProgressHint span[data-active="true"] {
+  border-color: var(--brand-border);
+  color: var(--brand-text);
+  background: var(--bg-card);
+}
+
+.uploadPipelineNote {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.uploadPipelineNote :global(.anticon) {
+  margin-top: 2px;
+  color: var(--brand-text);
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider-color);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 640;
+  line-height: var(--line-height-tight);
+}
+
+.sectionHeader p {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.uploadFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 14px;
+}
+
+.uploadFormWide {
+  grid-column: 1 / -1;
+}
+
+.uploadForm :global(.ant-form-item-extra) {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.linkPreviewPanel {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 8px;
+  margin-top: -10px;
+  margin-bottom: 16px;
+}
+
+.linkPreviewNotice {
+  grid-column: 1 / -1;
+  margin-top: -10px;
+  margin-bottom: 12px;
+}
+
+.linkPreviewCandidate {
+  display: grid;
+  gap: 7px;
+  padding: 10px 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: 14px;
+  background: var(--brand-secondary);
+}
+
+.linkPreviewCandidate[data-selected='true'] {
+  border-color: var(--brand-primary);
+  background: color-mix(in srgb, var(--brand-secondary) 74%, var(--bg-card));
+}
+
+.linkPreviewHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linkPreviewHeader span {
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  font-weight: 640;
+  line-height: var(--line-height-snug);
+}
+
+.linkPreviewHeader code {
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.linkPreviewHeader em,
+.linkPreviewCandidate small {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-style: normal;
+  line-height: var(--line-height-snug);
+}
+
+.linkPreviewCandidate p {
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linkPreviewCandidate button {
+  justify-self: start;
+}
+
+.uploadForm :global(.ant-select-multiple .ant-select-selection-item) {
+  border-color: var(--brand-border);
+  border-radius: 999px;
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+}
+
+.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search),
+.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-content-item-suffix) {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  flex: 0 0 0 !important;
+  margin-inline-start: 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search-input),
+.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-input),
+.uploadForm :global(.ant-cascader-picker .ant-select-selection-search-input) {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  color: transparent;
+  caret-color: transparent;
+  opacity: 0;
+}
+
+@media (max-width: 720px) {
+  .uploadProgressHint,
+  .uploadFormGrid {
+    grid-template-columns: 1fr;
+  }
+}

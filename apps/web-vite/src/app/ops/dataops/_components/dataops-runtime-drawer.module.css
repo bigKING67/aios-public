@@ -1,0 +1,105 @@
+:global(:root) {
+  /* Drawer-local material alias. Keep raw colors only in --*-material-* tokens. */
+  --ops-dataops-runtime-drawer-material-white-a880: rgba(255, 255, 255, 0.88);
+}
+
+.runtimeDrawerBody {
+  display: grid;
+  gap: 12px;
+}
+
+.runtimeDrawerSection {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 12px;
+}
+
+.runtimeDrawerHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 680;
+}
+
+.runtimeStoreOverview {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.metricTextStrong {
+  font-size: inherit;
+}
+
+.runtimeStoreOverviewHint {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.runtimeStoreDetailsBody {
+  display: grid;
+  gap: 6px;
+}
+
+.runtimeStoreDetailsBody p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.runtimeStoreMeta {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.runtimeStoreBadge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 3px 9px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-none);
+  font-weight: 600;
+}
+
+.runtimeStoreBadgeOk {
+  color: var(--status-success-strong);
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.runtimeStoreBadgeWarn {
+  color: var(--status-warning-strong);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.runtimeStoreBadgeNeutral {
+  color: var(--status-neutral-strong);
+  background: var(--status-neutral-bg);
+  border-color: var(--status-neutral-border);
+}
+
+.snapshotBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.snapshotBar span {
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--ops-dataops-runtime-drawer-material-white-a880);
+  padding: 8px 12px;
+}

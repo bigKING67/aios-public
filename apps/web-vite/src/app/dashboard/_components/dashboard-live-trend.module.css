@@ -1,0 +1,61 @@
+.panel {
+  border-color: var(--border-color);
+  box-shadow: var(--dashboard-live-trend-panel-shadow);
+}
+
+.tooltipCard {
+  min-width: 188px;
+  max-width: 248px;
+}
+
+.tooltipDate {
+  color: var(--dashboard-tooltip-dark-muted-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+  line-height: var(--line-height-tight);
+}
+
+.tooltipHint {
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--dashboard-live-trend-hint-bg);
+  color: var(--brand-text-strong);
+  font-size: var(--font-size-base);
+  font-weight: 540;
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-tight);
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.tooltipMetrics {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.tooltipMetricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.tooltipMetricLabel {
+  color: var(--dashboard-tooltip-dark-muted-text);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}
+
+.tooltipMetricValue {
+  color: var(--dashboard-tooltip-dark-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}

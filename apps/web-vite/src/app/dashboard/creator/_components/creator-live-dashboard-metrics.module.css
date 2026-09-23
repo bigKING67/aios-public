@@ -1,0 +1,260 @@
+.liveMetricGrid {
+  gap: 12px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.liveMetricGridFourColumn {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.liveMetricGridFeaturedPlusFourColumn {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.liveMetricGridShortVideoBusinessGroups {
+  grid-template-columns: repeat(35, minmax(0, 1fr));
+}
+
+.liveMetricGridFeaturedPlusFourColumn .liveMetricCard {
+  grid-column: span 3;
+}
+
+.liveMetricGridFeaturedPlusFourColumn .liveMetricCardFeatured {
+  grid-column: span 4;
+}
+
+.liveMetricCard {
+  min-width: 0;
+  min-height: 136px;
+  padding: 16px 18px 18px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.liveMetricCardFeatured {
+  grid-column: span 2;
+  min-height: 156px;
+  padding: 18px 20px 20px;
+}
+
+.liveMetricGridShortVideoBusinessGroups .liveMetricCard,
+.liveMetricGridShortVideoBusinessGroups .liveMetricCardFeatured {
+  grid-column: span 5;
+}
+
+.liveMetricGridShortVideoBusinessGroups .liveMetricCard:nth-child(-n + 5),
+.liveMetricGridShortVideoBusinessGroups .liveMetricCardFeatured:nth-child(-n + 5) {
+  grid-column: span 7;
+}
+
+.liveMetricCard p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 460;
+  color: var(--text-tertiary);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-normal);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.liveMetricCard .liveMetricValueRegular,
+.liveMetricCard .liveMetricValueMedium,
+.liveMetricCard .liveMetricValueCompact {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 72px;
+  line-height: var(--line-height-none);
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.liveMetricMeta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 18px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  line-height: var(--line-height-tight);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.liveMetricTrendUp,
+.liveMetricTrendDown,
+.liveMetricTrendNeutral {
+  font-weight: 660;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.liveMetricTrendUp {
+  color: var(--trend-up);
+}
+
+.liveMetricTrendDown {
+  color: var(--trend-down);
+}
+
+.liveMetricTrendNeutral {
+  color: var(--trend-neutral);
+}
+
+.liveMetricCardFeatured .liveMetricValueRegular,
+.liveMetricCardFeatured .liveMetricValueMedium,
+.liveMetricCardFeatured .liveMetricValueCompact {
+  min-height: 88px;
+}
+
+.liveMetricCard .liveMetricValueRegular {
+  font-size: clamp(var(--font-size-data-lg), 2vw, var(--font-size-marketing-lg));
+}
+
+.liveMetricCard .liveMetricValueMedium {
+  font-size: clamp(var(--font-size-display), 1.7vw, var(--font-size-data-lg));
+}
+
+.liveMetricCard .liveMetricValueCompact {
+  font-size: clamp(var(--font-size-2xl), 1.45vw, var(--font-size-display));
+}
+
+.liveMetricSkeletonCard {
+  min-height: 136px;
+}
+
+.liveMetricSkeletonCard :global(.ant-skeleton-title) {
+  margin-bottom: 18px !important;
+}
+
+.liveMetricSkeletonCard :global(.ant-skeleton-paragraph) {
+  margin-block-start: 0 !important;
+}
+
+@media (max-width: 1320px) {
+  .liveMetricGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .liveMetricGridFourColumn {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .liveMetricGridFeaturedPlusFourColumn {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .liveMetricGridShortVideoBusinessGroups {
+    grid-template-columns: repeat(35, minmax(0, 1fr));
+  }
+
+  .liveMetricCard {
+    min-height: 128px;
+  }
+
+  .liveMetricCardFeatured {
+    min-height: 128px;
+    padding: 16px 18px 18px;
+  }
+
+  .liveMetricGrid:not(.liveMetricGridFeaturedPlusFourColumn):not(.liveMetricGridShortVideoBusinessGroups)
+    .liveMetricCardFeatured {
+    grid-column: span 1;
+  }
+
+  .liveMetricCardFeatured .liveMetricValueRegular,
+  .liveMetricCardFeatured .liveMetricValueMedium,
+  .liveMetricCardFeatured .liveMetricValueCompact {
+    min-height: 72px;
+  }
+
+  .liveMetricCard .liveMetricValueRegular {
+    font-size: clamp(var(--font-size-data-lg), 2.6vw, var(--font-size-marketing-lg));
+  }
+
+  .liveMetricCard .liveMetricValueMedium {
+    font-size: clamp(var(--font-size-display), 2.3vw, var(--font-size-data-lg));
+  }
+
+  .liveMetricCard .liveMetricValueCompact {
+    font-size: clamp(var(--font-size-2xl), 1.95vw, var(--font-size-display));
+  }
+}
+
+@media (max-width: 900px) {
+  .liveMetricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .liveMetricGridFourColumn {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .liveMetricGridFeaturedPlusFourColumn {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .liveMetricGridShortVideoBusinessGroups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .liveMetricGridFeaturedPlusFourColumn .liveMetricCard,
+  .liveMetricGridFeaturedPlusFourColumn .liveMetricCardFeatured,
+  .liveMetricGridShortVideoBusinessGroups .liveMetricCard,
+  .liveMetricGridShortVideoBusinessGroups .liveMetricCardFeatured,
+  .liveMetricGridShortVideoBusinessGroups .liveMetricCard:nth-child(-n + 5),
+  .liveMetricGridShortVideoBusinessGroups .liveMetricCardFeatured:nth-child(-n + 5) {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .liveMetricCard {
+    min-height: 122px;
+    padding: 14px 16px 16px;
+  }
+
+  .liveMetricCard .liveMetricValueRegular,
+  .liveMetricCard .liveMetricValueMedium,
+  .liveMetricCard .liveMetricValueCompact {
+    min-height: 64px;
+  }
+
+  .liveMetricCard .liveMetricValueRegular {
+    font-size: clamp(var(--font-size-display), 8vw, var(--font-size-data-lg));
+  }
+
+  .liveMetricCard .liveMetricValueMedium {
+    font-size: clamp(var(--font-size-2xl), 7.2vw, var(--font-size-display));
+  }
+
+  .liveMetricCard .liveMetricValueCompact {
+    font-size: clamp(var(--font-size-2xl), 6.4vw, var(--font-size-display));
+  }
+
+  .liveMetricGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .liveMetricGridFourColumn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .liveMetricGridFeaturedPlusFourColumn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .liveMetricGridShortVideoBusinessGroups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

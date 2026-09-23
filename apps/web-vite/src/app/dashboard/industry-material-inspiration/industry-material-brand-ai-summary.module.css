@@ -1,0 +1,102 @@
+.summaryCard {
+  min-width: 0;
+  padding: var(--spacing-5);
+  border-top: 1px solid var(--brand-border);
+  border-bottom: 1px solid var(--brand-border);
+  background: color-mix(in srgb, var(--brand-secondary) 46%, var(--dashboard-surface-bg));
+}
+
+.summaryHeader {
+  min-width: 0;
+}
+
+.summaryHeader > span,
+.summaryGrid article > span {
+  display: block;
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-snug);
+}
+
+.summaryHeader h3 {
+  max-width: 920px;
+  margin: var(--spacing-1) 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+}
+
+.summaryHeader p {
+  max-width: 920px;
+  margin: var(--spacing-2) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.summaryGrid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: var(--spacing-4);
+  border-top: 1px solid var(--brand-border);
+}
+
+.summaryGrid article {
+  min-width: 0;
+  padding: var(--spacing-4) var(--spacing-4) 0 0;
+}
+
+.summaryGrid article + article {
+  padding-left: var(--spacing-4);
+  border-left: 1px solid var(--brand-border);
+}
+
+.summaryGrid strong {
+  display: block;
+  margin-top: var(--spacing-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.summaryGrid p {
+  margin: var(--spacing-2) 0 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.summaryGrid article:last-child p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 900px) {
+  .summaryGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .summaryGrid article {
+    padding: var(--spacing-3) 0;
+  }
+
+  .summaryGrid article + article {
+    padding-left: 0;
+    border-top: 1px solid var(--brand-border);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .summaryCard {
+    padding: var(--spacing-4);
+  }
+}

@@ -1,0 +1,88 @@
+.batchFailureSummaryPanel {
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 10px;
+}
+
+.batchFailureSummaryHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.batchFailureSummaryHeadMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.batchFailureSummaryHead strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}
+
+.batchFailureSummaryHead span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.batchFailureSummaryList {
+  display: grid;
+  gap: 8px;
+}
+
+.batchFailureSummaryItem {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  appearance: none;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 8px;
+  align-items: start;
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.batchFailureSummaryItem:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-base);
+}
+
+.batchFailureSummaryItemActive {
+  border-color: var(--status-danger-border);
+  box-shadow: var(--shadow-base);
+  background: var(--status-danger-bg);
+}
+
+.batchFailureSummaryItem:focus-visible {
+  outline: none;
+  border-color: var(--brand-dark);
+  box-shadow: 0 0 0 3px var(--brand-focus-ring);
+}
+
+.batchFailureSummaryItem:active {
+  transform: translateY(1px);
+}
+
+.batchFailureSummaryItem p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.batchFailureSummaryItem span {
+  grid-column: 2;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}

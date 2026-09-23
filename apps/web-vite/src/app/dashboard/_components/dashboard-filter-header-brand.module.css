@@ -1,0 +1,20 @@
+.brandBlock {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.brand {
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 680;
+  letter-spacing: var(--letter-spacing-normal);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .brand {
+    font-size: var(--font-size-xl);
+  }
+}

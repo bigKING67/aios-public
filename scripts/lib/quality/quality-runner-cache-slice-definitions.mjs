@@ -1,0 +1,96 @@
+import {
+  QUALITY_RUNNER_CACHE_ARTIFACT_INPUTS,
+  QUALITY_RUNNER_CACHE_KEY_DIGEST_INPUTS,
+  QUALITY_RUNNER_CACHE_KEY_ENV_INPUTS,
+  QUALITY_RUNNER_CACHE_KEY_TOOL_VERSION_INPUTS,
+  QUALITY_RUNNER_CACHE_LOCAL_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_ARTIFACT_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_CONFIG_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_REPAIR_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_RESULT_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_STATS_INPUTS,
+  QUALITY_RUNNER_CACHE_STATS_INPUTS,
+} from './quality-runner-slice-inputs.mjs';
+import {
+  defineSlice,
+} from './quality-runner-slice-definition-utils.mjs';
+
+export const QUALITY_RUNNER_CACHE_SLICE_DEFINITIONS = Object.freeze([
+  defineSlice({
+    slice: 'cache-stats',
+    name: 'verify:quality-runner:cache-stats',
+    command: 'node scripts/checks/quality-runner/cache-stats.mjs',
+    label: '[quality] quality runner cache stats self-check',
+    inputs: QUALITY_RUNNER_CACHE_STATS_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-key-digest',
+    name: 'verify:quality-runner:cache-key-digest',
+    command: 'node scripts/checks/quality-runner/cache-key-digest.mjs',
+    label: '[quality] quality runner cache key digest self-check',
+    inputs: QUALITY_RUNNER_CACHE_KEY_DIGEST_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-key-env',
+    name: 'verify:quality-runner:cache-key-env',
+    command: 'node scripts/checks/quality-runner/cache-key-env.mjs',
+    label: '[quality] quality runner cache key env self-check',
+    inputs: QUALITY_RUNNER_CACHE_KEY_ENV_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-key-tool-version',
+    name: 'verify:quality-runner:cache-key-tool-version',
+    command: 'node scripts/checks/quality-runner/cache-key-tool-version.mjs',
+    label: '[quality] quality runner cache key tool-version self-check',
+    inputs: QUALITY_RUNNER_CACHE_KEY_TOOL_VERSION_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-local',
+    name: 'verify:quality-runner:cache-local',
+    command: 'node scripts/checks/quality-runner/cache-local.mjs',
+    label: '[quality] quality runner local cache self-check',
+    inputs: QUALITY_RUNNER_CACHE_LOCAL_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-artifact',
+    name: 'verify:quality-runner:cache-artifact',
+    command: 'node scripts/checks/quality-runner/cache-artifact.mjs',
+    label: '[quality] quality runner artifact cache self-check',
+    inputs: QUALITY_RUNNER_CACHE_ARTIFACT_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-remote-config',
+    name: 'verify:quality-runner:cache-remote-config',
+    command: 'node scripts/checks/quality-runner/cache-remote-config.mjs',
+    label: '[quality] quality runner remote cache config self-check',
+    inputs: QUALITY_RUNNER_CACHE_REMOTE_CONFIG_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-remote-result',
+    name: 'verify:quality-runner:cache-remote-result',
+    command: 'node scripts/checks/quality-runner/cache-remote-result.mjs',
+    label: '[quality] quality runner remote result cache self-check',
+    inputs: QUALITY_RUNNER_CACHE_REMOTE_RESULT_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-remote-stats',
+    name: 'verify:quality-runner:cache-remote-stats',
+    command: 'node scripts/checks/quality-runner/cache-remote-stats.mjs',
+    label: '[quality] quality runner remote cache stats self-check',
+    inputs: QUALITY_RUNNER_CACHE_REMOTE_STATS_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-remote-repair',
+    name: 'verify:quality-runner:cache-remote-repair',
+    command: 'node scripts/checks/quality-runner/cache-remote-repair.mjs',
+    label: '[quality] quality runner remote cache repair self-check',
+    inputs: QUALITY_RUNNER_CACHE_REMOTE_REPAIR_INPUTS,
+  }),
+  defineSlice({
+    slice: 'cache-remote-artifact',
+    name: 'verify:quality-runner:cache-remote-artifact',
+    command: 'node scripts/checks/quality-runner/cache-remote-artifact.mjs',
+    label: '[quality] quality runner remote artifact cache self-check',
+    inputs: QUALITY_RUNNER_CACHE_REMOTE_ARTIFACT_INPUTS,
+  }),
+]);

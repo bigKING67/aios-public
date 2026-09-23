@@ -1,0 +1,18 @@
+services:
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: aios-dragonfly
+    restart: unless-stopped
+    volumes:
+      - dragonfly-data:/data
+    ports:
+      - "6379:6379"
+    command:
+      - --bind=0.0.0.0
+      - --port=6379
+      - --logtostderr=true
+
+volumes:
+  dragonfly-data:
+    name: ${AIOS_DRAGONFLY_VOLUME:-aios-dragonfly-data}
+    external: ${AIOS_DRAGONFLY_VOLUME_EXTERNAL:-false}

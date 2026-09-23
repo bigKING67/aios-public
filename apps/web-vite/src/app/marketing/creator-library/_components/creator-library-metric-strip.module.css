@@ -1,0 +1,62 @@
+.metricStrip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metricItem {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  animation: metricEnter var(--transition-slow) both;
+  animation-delay: calc(var(--enter-index) * 60ms);
+}
+
+.metricLabel,
+.metricNote {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.metricLabel {
+  font-weight: var(--font-weight-semibold);
+}
+
+.metricValue {
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-data-md);
+  font-weight: var(--font-weight-data);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+@keyframes metricEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1180px) {
+  .metricStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .metricStrip {
+    grid-template-columns: 1fr;
+  }
+}

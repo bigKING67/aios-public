@@ -1,0 +1,411 @@
+/* Route-local legacy workspace geometry; the AIOS shell remains unchanged. */
+.pageRoot {
+  --sample-inventory-workspace-material-page-surface: #f4f6f8;
+  --sample-inventory-workspace-material-text: #1e293b;
+  --sample-inventory-workspace-material-warning-border: #fbbf24;
+  --sample-inventory-workspace-material-warning-surface: #fffbeb;
+  --sample-inventory-workspace-material-border: #e2e8f0;
+  --sample-inventory-workspace-material-card-surface: #fff;
+  --sample-inventory-workspace-material-card-shadow: rgb(15 23 42 / 6%);
+  --sample-inventory-workspace-material-muted: #94a3b8;
+  --sample-inventory-workspace-material-success: #22c55e;
+  --sample-inventory-workspace-material-success-ring: rgb(34 197 94 / 12%);
+  --sample-inventory-workspace-material-secondary: #64748b;
+  --sample-inventory-workspace-material-hover-surface: #f1f5f9;
+  --sample-inventory-workspace-material-primary: #2563eb;
+  --sample-inventory-workspace-material-danger: #ef4444;
+  --sample-inventory-workspace-material-subtle-surface: #f8fafc;
+  --sample-inventory-workspace-material-success-text: #16a34a;
+  --sample-inventory-workspace-material-warning-text: #d97706;
+  --sample-inventory-workspace-material-purple-text: #7c3aed;
+  --sample-inventory-workspace-material-teal-text: #0d9488;
+  --sample-inventory-workspace-material-danger-text: #dc2626;
+  --sample-inventory-workspace-material-label: #475569;
+  --sample-inventory-workspace-material-batch-border: #ddd6fe;
+  --sample-inventory-workspace-material-batch-surface: #f5f3ff;
+  --sample-inventory-workspace-material-batch-text: #5b21b6;
+  --font-size-sample-inventory-legacy-tab: 13px;
+  --font-size-sample-inventory-legacy-badge: 10px;
+  --line-height-sample-inventory-legacy-title: 1.3;
+
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 16px;
+  overflow-x: clip;
+  background: var(--sample-inventory-workspace-material-page-surface);
+  color: var(--sample-inventory-workspace-material-text);
+}
+
+.lowStockAlert {
+  margin-bottom: 10px;
+  border-color: var(--sample-inventory-workspace-material-warning-border);
+  background: var(--sample-inventory-workspace-material-warning-surface);
+  font-size: var(--font-size-sm);
+}
+
+.legacyShell {
+  min-width: 0;
+  padding: 14px 16px 10px;
+  overflow: hidden;
+  border: 1px solid var(--sample-inventory-workspace-material-border);
+  border-radius: 10px;
+  background: var(--sample-inventory-workspace-material-card-surface);
+  box-shadow: 0 2px 8px var(--sample-inventory-workspace-material-card-shadow);
+}
+
+.legacyHeader {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sample-inventory-workspace-material-border);
+}
+
+.legacyTitle {
+  flex: 0 0 auto;
+}
+
+.legacyTitle h1 {
+  margin: 0;
+  color: var(--sample-inventory-workspace-material-text);
+  font-size: var(--font-size-section-title);
+  font-weight: 700;
+  line-height: var(--line-height-sample-inventory-legacy-title);
+}
+
+.legacyTitle p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  color: var(--sample-inventory-workspace-material-muted);
+  font-size: var(--font-size-sm);
+}
+
+.legacyTitle p span {
+  margin-left: 6px;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sample-inventory-workspace-material-success);
+  box-shadow: 0 0 0 3px var(--sample-inventory-workspace-material-success-ring);
+}
+
+.primaryTabs {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.primaryTabs button,
+.subTabs button {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.primaryTabs button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--sample-inventory-workspace-material-secondary);
+  font-size: var(--font-size-sample-inventory-legacy-tab);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.primaryTabs button :global(.anticon) {
+  flex: 0 0 auto;
+  font-size: var(--font-size-sample-inventory-legacy-tab);
+  line-height: var(--line-height-none);
+}
+
+.primaryTabs button:hover {
+  background: var(--sample-inventory-workspace-material-hover-surface);
+  color: var(--sample-inventory-workspace-material-primary);
+}
+
+.primaryTabs .tabActive {
+  background: var(--sample-inventory-workspace-material-primary);
+  color: var(--sample-inventory-workspace-material-card-surface);
+}
+
+.primaryTabs button:focus-visible,
+.subTabs button:focus-visible {
+  outline: 2px solid var(--sample-inventory-workspace-material-primary);
+  outline-offset: 2px;
+}
+
+.pendingDot {
+  display: inline-grid;
+  min-width: 17px;
+  height: 17px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--sample-inventory-workspace-material-danger);
+  color: var(--sample-inventory-workspace-material-card-surface);
+  font-size: var(--font-size-sample-inventory-legacy-badge);
+  font-variant-numeric: tabular-nums;
+}
+
+.routeAlert {
+  margin-bottom: 8px;
+  font-size: var(--font-size-sm);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stats[data-count="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stats[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.stats[data-count="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.statCard {
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--sample-inventory-workspace-material-border);
+  border-radius: 8px;
+  background: var(--sample-inventory-workspace-material-subtle-surface);
+  text-align: center;
+}
+
+.statCard strong {
+  display: block;
+  overflow: hidden;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-section-title);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+}
+
+.statCard span {
+  display: block;
+  margin-top: 2px;
+  color: var(--sample-inventory-workspace-material-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.stat-blue {
+  color: var(--sample-inventory-workspace-material-primary);
+}
+.stat-green {
+  color: var(--sample-inventory-workspace-material-success-text);
+}
+.stat-orange {
+  color: var(--sample-inventory-workspace-material-warning-text);
+}
+.stat-purple {
+  color: var(--sample-inventory-workspace-material-purple-text);
+}
+.stat-teal {
+  color: var(--sample-inventory-workspace-material-teal-text);
+}
+.stat-red {
+  color: var(--sample-inventory-workspace-material-danger-text);
+}
+
+.subTabs {
+  display: flex;
+  min-width: 0;
+  gap: 4px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--sample-inventory-workspace-material-border);
+}
+
+.subTabs button {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: 6px 6px 0 0;
+  background: var(--sample-inventory-workspace-material-subtle-surface);
+  color: var(--sample-inventory-workspace-material-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.subTabCount {
+  display: inline-block;
+  margin-left: 5px;
+  color: currentColor;
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+}
+
+.subTabs .subTabActive {
+  background: var(--sample-inventory-workspace-material-primary);
+  color: var(--sample-inventory-workspace-material-card-surface);
+}
+
+.pageContent {
+  min-width: 0;
+}
+
+.toolbar,
+.batchBar {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.toolbar {
+  margin-bottom: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--sample-inventory-workspace-material-border);
+  border-radius: 6px;
+  background: var(--sample-inventory-workspace-material-subtle-surface);
+}
+
+.searchInput {
+  width: min(280px, 100%);
+  min-width: 200px;
+}
+
+.stockFilter,
+.statusSelect {
+  width: 130px;
+}
+
+.dateGroup {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  color: var(--sample-inventory-workspace-material-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.batchBar :global(.ant-input) {
+  width: 88px;
+}
+
+.batchBar :global(.ant-space-compact) :global(.ant-input) {
+  width: 150px;
+}
+
+.batchHint {
+  color: var(--sample-inventory-workspace-material-muted);
+}
+
+.dateInput {
+  width: 136px;
+}
+
+.toolbarHint {
+  color: var(--sample-inventory-workspace-material-muted);
+  font-size: var(--font-size-xs);
+}
+
+.batchBar {
+  margin-bottom: 7px;
+  padding: 6px 8px;
+  border: 1px solid var(--sample-inventory-workspace-material-batch-border);
+  border-radius: 6px;
+  background: var(--sample-inventory-workspace-material-batch-surface);
+  color: var(--sample-inventory-workspace-material-batch-text);
+  font-size: var(--font-size-xs);
+}
+
+.legacyFooter {
+  margin-top: 10px;
+  color: var(--sample-inventory-workspace-material-muted);
+  font-size: var(--font-size-xs);
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .legacyHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .primaryTabs {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageRoot {
+    padding: 10px;
+  }
+
+  .legacyShell {
+    padding: 10px;
+  }
+
+  .stats,
+  .stats[data-count="4"],
+  .stats[data-count="3"],
+  .stats[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar,
+  .batchBar {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageRoot {
+    padding: 6px;
+  }
+
+  .legacyShell {
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .primaryTabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .primaryTabs button {
+    width: 100%;
+    padding-inline: 8px;
+  }
+
+  .searchInput {
+    width: 100%;
+    min-width: 0;
+  }
+}

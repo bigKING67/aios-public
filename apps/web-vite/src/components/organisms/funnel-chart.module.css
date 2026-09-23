@@ -1,0 +1,284 @@
+:global(:root) {
+  /* Material aliases generated from raw color audit. Keep raw colors only here. */
+  --components-organisms-funnel-chart-material-slate-ink-a550: rgba(15, 23, 42, 0.55);
+  --components-organisms-funnel-chart-material-white-a680: rgba(255, 255, 255, 0.68);
+  --components-organisms-funnel-chart-material-slate-ink-a480: rgba(15, 23, 42, 0.48);
+  --components-organisms-funnel-chart-material-white-a500: rgba(255, 255, 255, 0.5);
+}
+.funnelRoot {
+  width: 100%;
+  min-height: var(--funnel-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: var(--funnel-opacity);
+}
+
+.funnelStack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stepBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.funnelStepWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.funnelStep {
+  position: relative;
+  display: flex;
+  width: var(--funnel-step-width);
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-height: 78px;
+  padding: 8px 28px 9px;
+  border-radius: 999px;
+  background: var(--funnel-step-bg);
+  box-shadow: 0 10px 20px -18px var(--components-organisms-funnel-chart-material-slate-ink-a550);
+  border: 1px solid var(--components-organisms-funnel-chart-material-white-a680);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: funnel-enter 420ms cubic-bezier(0.21, 0.98, 0.42, 0.98) both;
+  animation-delay: var(--funnel-step-delay);
+  will-change: transform;
+}
+
+.funnelStep:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 24px -18px var(--components-organisms-funnel-chart-material-slate-ink-a480);
+}
+
+.stepHighlight {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 0;
+  height: 1px;
+  background: var(--components-organisms-funnel-chart-material-white-a500);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.stepPrimaryRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.stepLabel {
+  color: var(--funnel-step-text);
+  font-size: var(--font-size-section-title);
+  font-weight: 650;
+  line-height: var(--line-height-compact);
+  letter-spacing: var(--letter-spacing-normal);
+  white-space: nowrap;
+}
+
+.stepValue {
+  color: var(--funnel-step-text);
+  font-size: var(--font-size-data-lg);
+  font-weight: 700;
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-data);
+  font-family: var(--font-family-mono);
+  white-space: nowrap;
+}
+
+.stepSecondaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  min-width: 0;
+}
+
+.stepMetaHint {
+  color: var(--funnel-step-text);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  opacity: 0.78;
+  white-space: nowrap;
+  margin-right: auto;
+}
+
+.stepMetaRight {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.stepMetaPrev {
+  color: var(--funnel-step-text);
+  font-size: var(--font-size-xs);
+  opacity: 0.78;
+}
+
+.stepMetaWow {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.stepTextTone {
+  color: var(--funnel-step-text);
+}
+
+.trendUp {
+  color: var(--trend-up);
+}
+
+.trendDown {
+  color: var(--trend-down);
+}
+
+.trendNeutral {
+  color: var(--trend-neutral);
+}
+
+.connector {
+  margin: 4px 0 6px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connectorMetric {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 20px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--domain-funnel-track-bg);
+  border: 1px solid var(--domain-funnel-connector-color);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+  text-align: center;
+}
+
+.connectorLabel {
+  font-weight: 620;
+  color: var(--text-primary);
+}
+
+.connectorPrev {
+  color: var(--text-tertiary);
+}
+
+.connectorWoW {
+  font-weight: 700;
+}
+
+.connectorNeutralTone {
+  color: var(--trend-neutral);
+}
+
+.emptyState {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+@keyframes funnel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 1280px) {
+  .funnelStep {
+    min-height: 70px;
+    padding: 7px 22px 8px;
+  }
+
+  .stepLabel {
+    font-size: var(--font-size-lg);
+  }
+
+  .stepValue {
+    font-size: var(--font-size-display);
+  }
+
+  .stepMetaHint,
+  .stepMetaPrev,
+  .stepMetaWow,
+  .stepSecondaryRow {
+    font-size: var(--font-size-xs);
+  }
+
+  .connectorMetric {
+    font-size: var(--font-size-xs);
+    min-height: 18px;
+    padding: 2px 8px;
+  }
+}
+
+@media (max-width: 860px) {
+  .funnelStep {
+    min-height: 58px;
+    gap: 4px;
+    padding: 6px 14px 7px;
+  }
+
+  .stepPrimaryRow {
+    gap: 8px;
+  }
+
+  .stepLabel {
+    font-size: var(--font-size-base);
+  }
+
+  .stepValue {
+    font-size: var(--font-size-2xl);
+  }
+
+  .stepSecondaryRow {
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-snug);
+  }
+
+  .stepMetaHint,
+  .stepMetaPrev,
+  .stepMetaWow {
+    font-size: var(--font-size-xs);
+  }
+
+  .connector {
+    margin: 3px 0 4px;
+  }
+
+  .connectorMetric {
+    font-size: var(--font-size-xs);
+    min-height: 16px;
+    padding: 1px 7px;
+    gap: 5px;
+  }
+}

@@ -1,0 +1,116 @@
+.traceReasonHashPanel {
+  margin: 0 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+}
+
+.traceReasonHashHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.traceReasonHashHeadMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.traceReasonHashHead strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}
+
+.traceReasonHashHead span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.traceReasonHashGrid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.traceReasonHashItem {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  appearance: none;
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.traceReasonHashItem:hover {
+  border-color: var(--status-info-border);
+  box-shadow: var(--shadow-base);
+}
+
+.traceReasonHashItemActive {
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-base);
+  background: var(--status-info-bg);
+}
+
+.traceReasonHashItem:focus-visible {
+  outline: none;
+  border-color: var(--brand-dark);
+  box-shadow: 0 0 0 3px var(--brand-focus-ring);
+}
+
+.traceReasonHashItem:active {
+  transform: translateY(1px);
+}
+
+.traceReasonHashItemHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.traceReasonHashMetric {
+  margin: 6px 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.traceReasonHashHint {
+  margin-top: 4px;
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.traceReasonHashFocusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--status-info-strong);
+  font-size: var(--font-size-sm);
+  border-radius: 999px;
+  border: 1px solid var(--status-info-border);
+  background: var(--status-info-bg);
+  padding: 2px 8px;
+}
+
+.traceReasonHashClearButton {
+  padding-inline: 6px;
+  height: auto;
+}
+
+@media (max-width: 980px) {
+  .traceReasonHashGrid {
+    grid-template-columns: 1fr;
+  }
+}

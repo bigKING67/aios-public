@@ -1,0 +1,91 @@
+.tabButton {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dashboard-selection-compact-height);
+  min-width: var(--dashboard-selection-compact-min-width);
+  border: none;
+  border-radius: var(--border-radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: var(--line-height-none);
+  white-space: nowrap;
+  padding: calc(var(--spacing-2) + 1px) calc(var(--spacing-3) + 2px);
+  cursor: pointer;
+  transition:
+    color var(--transition-duration-fast) var(--transition-easing-standard),
+    background-color var(--transition-duration-fast) var(--transition-easing-standard),
+    box-shadow var(--transition-duration-fast) var(--transition-easing-standard),
+    transform var(--transition-duration-fast) var(--transition-easing-standard);
+  text-decoration: none;
+}
+
+.tabButton:hover {
+  color: var(--brand-dark);
+  background: var(--brand-secondary);
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.tabButton:visited {
+  text-decoration: none;
+}
+
+.tabButton:active {
+  transform: translateY(1px);
+  text-decoration: none;
+}
+
+.tabButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  text-decoration: none;
+}
+
+.tabButtonActive {
+  color: var(--brand-on-primary) !important;
+  border-radius: var(--border-radius-full) !important;
+  background-color: var(--brand-primary) !important;
+  background-image: none !important;
+  box-shadow: var(--dashboard-brand-tab-shadow) !important;
+  text-decoration: none !important;
+}
+
+.tabButtonActive:hover,
+.tabButtonActive:focus-visible {
+  color: var(--brand-on-primary) !important;
+  background-color: var(--brand-dark) !important;
+  background-image: none !important;
+}
+
+.tabButtonActiveWithThumb,
+.tabButtonActiveWithThumb:hover {
+  color: var(--brand-on-primary) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.tabButtonActiveWithThumb:focus-visible {
+  color: var(--brand-on-primary) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: 0 0 0 2px var(--brand-focus-ring) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabButton {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tabButton {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+}

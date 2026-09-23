@@ -1,0 +1,128 @@
+import type {
+  DataOpsTriggerParameterSpecsMap,
+} from './dataops-trigger-param-types';
+
+export const DATAOPS_OPERATION_TRIGGER_PARAMETER_SPECS: DataOpsTriggerParameterSpecsMap = {
+  dataops_runtime_events_cleanup: [
+    {
+      key: 'retain_days',
+      label: '保留天数',
+      type: 'number',
+      min: 1,
+      max: 3650,
+      defaultValue: 90,
+      description: '清理该天数之前的运行态事件（审计、通知、批量历史）。',
+    },
+    {
+      key: 'cleanup_batch_execution_events',
+      label: '清理批量历史',
+      type: 'boolean',
+      defaultValue: true,
+      description: 'true 时会同步清理 runtime_batch_execution_events。',
+    },
+    {
+      key: 'notify_on_deleted_only',
+      label: '仅有删除时通知',
+      type: 'boolean',
+      defaultValue: true,
+      description: 'true 时若本次没有删除数据，则只记录日志不发送飞书通知。',
+    },
+  ],
+  dashboard_ads_freshness_check: [
+    {
+      key: 'target_date',
+      label: '目标日期',
+      type: 'string',
+      defaultValue: 'yesterday',
+      placeholder: 'yesterday 或 2026-04-30',
+      description: '检查哪个业务日期；默认 yesterday。',
+    },
+    {
+      key: 'notify_on_issue_only',
+      label: '仅异常通知',
+      type: 'boolean',
+      defaultValue: true,
+      description: 'true 时仅在 ODS 未到或 ADS 未刷时发送通知。',
+    },
+    {
+      key: 'fail_on_stale',
+      label: 'ADS 未刷则失败',
+      type: 'boolean',
+      defaultValue: false,
+      description: 'true 时若 ODS 已有目标日期但 ADS 没有，会将 flow 标记为失败。',
+    },
+  ],
+  dataops_notification_trace_slo_scan: [
+    {
+      key: 'dry_run',
+      label: '仅演练',
+      type: 'boolean',
+      defaultValue: false,
+      description: 'true 时只扫描并返回结果，不触发真实通知。',
+    },
+    {
+      key: 'lookback_hours',
+      label: '回看小时',
+      type: 'number',
+      min: 1,
+      max: 720,
+      defaultValue: 24,
+      description: '扫描最近多少小时内的通知失败重试组。',
+    },
+    {
+      key: 'max_groups',
+      label: '最大分组数',
+      type: 'number',
+      min: 1,
+      max: 200,
+      defaultValue: 30,
+      description: '单次扫描最多处理的重试组数量。',
+    },
+    {
+      key: 'scan_concurrency',
+      label: '扫描并发',
+      type: 'number',
+      min: 1,
+      max: 12,
+      defaultValue: 4,
+      description: '通知链路巡检并发度。',
+    },
+    {
+      key: 'notify_on_issue_only',
+      label: '仅异常通知',
+      type: 'boolean',
+      defaultValue: true,
+      description: 'true 时仅在发现风险分组时发送通知。',
+    },
+  ],
+  daily_business_brief: [
+    {
+      key: 'target_date',
+      label: '简报日期',
+      type: 'string',
+      placeholder: '留空为上海时区昨日，或输入 2026-08-24',
+      description: '留空使用 Asia/Shanghai 昨日；正式补发请明确填写 YYYY-MM-DD。',
+    },
+    {
+      key: 'delivery_mode',
+      label: '投递模式',
+      type: 'string',
+      required: true,
+      defaultValue: 'preview',
+      options: [
+        { label: '仅预览（不发送）', value: 'preview' },
+        { label: '测试群发送', value: 'test' },
+        { label: '正式运营群发送', value: 'production' },
+      ],
+      description: 'preview 不发送；test 只发送测试群；production 会触发正式群投递门禁。',
+    },
+    {
+      key: 'production_confirmed',
+      label: '确认正式投递',
+      type: 'boolean',
+      required: true,
+      defaultValue: false,
+      description: '仅 production 模式必须开启；后端仍会校验日期唯一账本和数据完整性。',
+    },
+  ],
+};

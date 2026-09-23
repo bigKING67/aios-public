@@ -1,0 +1,199 @@
+.brandCell,
+.textCell,
+.mutedText {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.brandCell {
+  color: var(--text-secondary);
+  font-weight: var(--component-table-detail-body-font-weight);
+}
+
+.brandPill {
+  display: inline-flex;
+  min-width: 64px;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--spacing-3);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-full);
+  font-size: inherit;
+  line-height: var(--line-height-snug);
+  vertical-align: middle;
+}
+
+.brandPill:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.brandPillKnown { border-color: var(--brand-border); background: var(--brand-secondary); color: var(--brand-text); }
+
+.brandPillReview { border-color: var(--status-warning-border); background: var(--status-warning-bg); color: var(--status-warning-strong); }
+
+.brandPillUnknown { border-color: var(--status-neutral-border); background: var(--status-neutral-bg); color: var(--status-neutral-strong); }
+
+.textCell { color: var(--text-secondary); }
+
+.mutedText { color: var(--text-tertiary); }
+
+.tagGroupCell {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  max-height: 48px;
+  grid-template-rows: repeat(2, 22px);
+  align-content: center;
+  align-items: center;
+  justify-items: start;
+  row-gap: 4px;
+  overflow: hidden;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tagRow {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 22px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.tagChip,
+.moreTagChip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  max-width: 132px;
+  min-height: 22px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2px var(--spacing-2);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  font-size: var(--component-table-detail-body-font-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audienceTagGroup .tagChip {
+  max-width: 104px;
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+}
+
+.sellingPointTagGroup .tagChip {
+  max-width: 132px;
+  border-color: var(--border-color);
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+.sellingPointTagGroup .tagChipMedium {
+  max-width: 220px;
+}
+
+.sellingPointTagGroup .tagChipWide {
+  max-width: 100%;
+}
+
+.sellingPointTagGroup .tagChipWideWithMore {
+  max-width: calc(100% - 54px);
+}
+
+.moreTagChip {
+  border-color: var(--border-color);
+  background: var(--status-neutral-bg);
+  color: var(--text-tertiary);
+}
+
+.numericCell,
+.exposureCell,
+.rankCell {
+  display: inline-block;
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--component-table-detail-numeric-letter-spacing);
+}
+
+.numericCell {
+  min-width: 64px;
+  text-align: right;
+}
+
+.exposureCell {
+  min-width: 72px;
+  text-align: center;
+}
+
+.rankCell {
+  min-width: 32px;
+  text-align: center;
+}
+
+.assetLink {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  gap: var(--spacing-1);
+  overflow: hidden;
+  color: var(--brand-text);
+  font-weight: var(--component-table-detail-link-font-weight);
+  text-decoration: none;
+  transition:
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.assetLink:hover {
+  color: var(--brand-active);
+  text-decoration: none;
+}
+
+.assetLink:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+}
+
+.assetLink :global(.anticon) {
+  flex: 0 0 auto;
+}
+
+.videoCell {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-2);
+  text-align: left;
+}
+
+.videoTitle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+}
+
+.videoCell > .videoTitle,
+.assetLink .videoTitle {
+  display: block;
+}

@@ -1,0 +1,22 @@
+.productMutedSummary {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+}
+
+.mutedSummaryBadge {
+  border-radius: 999px;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding: 4px 8px;
+}
+
+.mutedSummaryText {
+  min-width: 0;
+}

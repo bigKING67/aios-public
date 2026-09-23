@@ -1,0 +1,39 @@
+.pageRoot {
+  position: relative;
+  min-height: 100dvh;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 16% 8%, var(--dashboard-canvas-brand-glow), transparent 42%),
+    radial-gradient(circle at 86% 0%, var(--dashboard-canvas-info-glow), transparent 38%),
+    linear-gradient(180deg, var(--dashboard-canvas-bg-start) 0%, var(--dashboard-canvas-bg-end) 100%);
+}
+
+.backdropGlow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 85% 22%, var(--dashboard-backdrop-brand-glow), transparent 34%),
+    radial-gradient(circle at 8% 78%, var(--dashboard-backdrop-success-glow), transparent 30%);
+}
+
+.surface {
+  position: relative;
+  z-index: 1;
+  max-width: 1680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: var(--font-family-base);
+}
+
+@media (max-width: 768px) {
+  .pageRoot {
+    padding: 12px;
+  }
+
+  .surface {
+    gap: 12px;
+  }
+}

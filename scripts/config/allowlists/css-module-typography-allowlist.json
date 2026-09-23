@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "description": "Frozen legacy CSS Modules typography raw-value budget. New CSS Modules must use typography tokens instead of raw font-size, line-height, or letter-spacing values.",
+  "allowed": []
+}

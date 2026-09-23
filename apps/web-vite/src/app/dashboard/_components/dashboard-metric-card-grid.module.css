@@ -1,0 +1,93 @@
+.metricGrid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.liveMetricSecondaryGrid {
+  margin-top: 2px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.secondaryGridStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.secondaryGridStack .liveMetricSecondaryGrid {
+  margin-top: 0;
+}
+
+.metricGridThree {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metricGridFour {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metricCarrierGrid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.metricCard {
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: var(--dashboard-surface-bg);
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--status-info-border);
+  box-shadow: var(--dashboard-brand-card-hover-shadow);
+}
+
+.metricCardLabel {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  min-height: 2.4em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metricCardValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-compact);
+  font-weight: 680;
+}
+
+@media (max-width: 1024px) {
+  .metricGrid,
+  .liveMetricSecondaryGrid,
+  .metricCarrierGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .metricGridFour {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .metricGrid,
+  .liveMetricSecondaryGrid,
+  .metricGridThree,
+  .metricGridFour,
+  .metricCarrierGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,70 @@
+.aiScopeNote {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--divider-color);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+}
+
+.aiScopeNote strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.aiScopeNote p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.aiScopeNote div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.aiScopeNote button {
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  cursor: pointer;
+}
+
+.backfillPanel {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+}
+
+.backfillPanel strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.backfillPanel p {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.backfillActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

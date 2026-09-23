@@ -1,0 +1,40 @@
+.goodsDataHeaderCell {
+  font-weight: 590 !important;
+  text-align: center !important;
+}
+
+.goodsDataHeaderCell :global(.ant-table-column-sorters) {
+  justify-content: center !important;
+}
+
+.goodsDataMetricHeaderCell {
+  text-align: right !important;
+}
+
+.goodsDataMetricHeaderCell :global(.ant-table-column-sorters) {
+  justify-content: flex-end !important;
+}
+
+.goodsDataHeaderCell :global(.ant-table-column-sorter) {
+  margin-inline-start: calc(var(--spacing-2) - 2px) !important;
+}
+
+.goodsDataBodyCell {
+  padding: calc(var(--spacing-4) + 2px) calc(var(--spacing-2) + 2px) !important;
+}
+
+@media (max-width: 768px) {
+  .goodsDataMetricHeaderCell {
+    text-align: left !important;
+  }
+
+  .goodsDataMetricHeaderCell :global(.ant-table-column-sorters) {
+    justify-content: flex-start !important;
+  }
+
+  .goodsDataHeaderCell,
+  .goodsDataBodyCell {
+    padding-left: calc(var(--spacing-2) + 2px) !important;
+    padding-right: calc(var(--spacing-2) + 2px) !important;
+  }
+}

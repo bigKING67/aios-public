@@ -1,0 +1,560 @@
+.analysisResultShell {
+  min-height: 100dvh;
+  padding: var(--spacing-4);
+  background: var(--bg-global);
+}
+
+.analysisResultConsole {
+  display: grid;
+  gap: var(--spacing-4);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.analysisResultTopbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--spacing-4);
+  align-items: center;
+  padding: var(--spacing-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.analysisResultBackLink {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: 32px;
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  text-decoration: none;
+}
+
+.analysisResultBackLink:hover {
+  color: var(--brand-text-strong);
+}
+
+.analysisResultTitleBlock {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.analysisResultTitleBlock span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultTitleBlock h1 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-page-title);
+  font-weight: var(--font-weight-page-title);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisResultCard {
+  display: grid;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.reviewCover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: var(--spacing-4);
+  min-width: 0;
+  padding: var(--spacing-5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-subtle);
+}
+
+.reviewCoverMain,
+.reviewCoverAside {
+  min-width: 0;
+}
+
+.reviewCoverMain {
+  display: grid;
+  gap: var(--spacing-3);
+  align-content: start;
+}
+
+.reviewEyebrow {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-data);
+  line-height: var(--line-height-none);
+}
+
+.reviewCoverMain h2 {
+  max-width: 820px;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-4xl));
+  font-weight: var(--font-weight-page-title);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-title);
+  overflow-wrap: anywhere;
+}
+
+.reviewCoverMain p,
+.reviewCoverAside p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.reviewEvidenceLine {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.reviewEvidenceLine span,
+.reviewCoverAside span,
+.reviewCoverAside small {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.reviewCoverAside {
+  display: grid;
+  gap: var(--spacing-2);
+  align-content: start;
+  padding: var(--spacing-4);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+}
+
+.reviewCoverAside strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultInlineAction {
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultInlineAction:disabled {
+  color: var(--text-tertiary);
+}
+
+.analysisResultStatusLine {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+}
+
+.analysisResultSection,
+.analysisResultScriptCard {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding: var(--spacing-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+}
+
+.analysisResultSectionHeader,
+.analysisResultRowTitle {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.analysisResultSectionMeta > span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.analysisResultSectionMeta {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.analysisResultRowTitle strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+}
+
+.analysisResultExcerpt {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.analysisResultSectionHeader {
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.analysisResultSectionHeaderMetaOnly {
+  justify-content: flex-end;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.analysisResultSectionHeader h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.analysisResultRowTitle > span:not(:global(.status-badge)),
+.analysisResultSubMeta,
+.analysisResultTaskMeta span,
+.analysisResultUsageList span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultEvidenceTable {
+  display: grid;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+}
+
+.analysisResultEvidenceHeader,
+.analysisResultEvidenceRow {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.8fr) minmax(160px, 1fr) minmax(220px, 1.4fr) minmax(140px, 0.8fr);
+  min-width: 0;
+}
+
+.analysisResultEvidenceHeader {
+  background: var(--bg-subtle);
+}
+
+.analysisResultEvidenceHeader span,
+.analysisResultEvidenceRow > span {
+  min-width: 0;
+  padding: var(--spacing-3);
+  border-right: 1px solid var(--divider-color);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.analysisResultEvidenceHeader span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultEvidenceHeader span:last-child,
+.analysisResultEvidenceRow > span:last-child {
+  border-right: 0;
+}
+
+.analysisResultEvidenceRow + .analysisResultEvidenceRow {
+  border-top: 1px solid var(--divider-color);
+}
+
+.analysisResultMonoStack {
+  display: grid;
+  gap: var(--spacing-1);
+}
+
+.analysisResultMonoStack strong,
+.analysisResultMonoStack small {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisResultMonoStack strong {
+  color: var(--text-primary);
+}
+
+.analysisResultMonoStack small {
+  color: var(--text-tertiary);
+}
+
+.analysisResultTwoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.analysisResultScriptList {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.analysisResultScriptCard {
+  background: var(--bg-subtle);
+}
+
+.analysisResultScriptText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.analysisResultTaskMeta,
+.analysisResultUsageList {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.analysisResultEmpty {
+  padding: var(--spacing-4) 0;
+}
+
+.analysisResultExcerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 8;
+}
+
+.analysisResultMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+}
+
+.analysisResultMetaGrid div {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+}
+
+.analysisResultMetaGrid dt,
+.analysisResultMetaGrid dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisResultMetaGrid dt {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-none);
+}
+
+.analysisResultMetaGrid dd {
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.analysisResultAppendix {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding: var(--spacing-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-subtle);
+}
+
+.analysisResultAppendixHeader {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.analysisResultAppendixHeader span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.analysisResultAppendixHeader strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultAppendixHeader p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.analysisResultAppendixDetails {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+}
+
+.analysisResultAppendixDetails > summary {
+  cursor: pointer;
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultAppendixDetails[open] > summary {
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.analysisResultAppendixDetails > .analysisResultSection {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 1080px) {
+  .analysisResultMetaGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .reviewCover {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisResultTopbar {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .analysisResultTwoColumnGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisResultEvidenceHeader {
+    display: none;
+  }
+
+  .analysisResultEvidenceRow {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisResultEvidenceRow > span {
+    display: grid;
+    gap: var(--spacing-1);
+    border-right: 0;
+  }
+
+  .analysisResultEvidenceRow > span::before {
+    content: attr(data-label);
+    color: var(--text-tertiary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+  }
+
+  .analysisResultEvidenceRow > span + span {
+    border-top: 1px solid var(--divider-color);
+  }
+}
+
+@media (max-width: 520px) {
+  .analysisResultShell {
+    padding: var(--spacing-3);
+  }
+
+  .analysisResultCard,
+  .reviewCover,
+  .reviewCoverAside,
+  .analysisResultScriptCard,
+  .analysisResultTopbar {
+    padding: var(--spacing-3);
+  }
+
+  .analysisResultMetaGrid {
+    grid-template-columns: 1fr;
+  }
+}

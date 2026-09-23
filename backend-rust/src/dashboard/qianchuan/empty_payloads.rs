@@ -1,0 +1,41 @@
+use serde_json::{json, Value};
+
+pub(super) fn empty_totals_value() -> Value {
+    json!({
+      "material_count": 0,
+      "account_count": 0,
+      "overall_impression_count": 0,
+      "overall_click_count": 0,
+      "overall_click_rate": null,
+      "overall_conversion_rate": null,
+      "overall_order_count": 0,
+      "overall_gmv": 0,
+      "overall_cost": 0,
+      "overall_pay_roi": null,
+      "overall_order_cost": null,
+      "overall_cpm": null,
+      "overall_cpc": null,
+      "net_gmv": 0,
+      "net_gmv_roi": null,
+      "net_order_count": 0,
+      "net_order_cost": null,
+      "refund_amount_1h": 0,
+      "refund_rate_1h": null,
+      "settlement_amount_7d": 0,
+      "settlement_roi_7d": null,
+      "settlement_amount_14d": 0,
+      "settlement_roi_14d": null,
+      "settlement_amount_30d": 0,
+      "settlement_roi_30d": null,
+      "settlement_amount_90d": 0,
+      "settlement_roi_90d": null,
+      "new_fans_count": 0,
+      "live_comment_count": 0,
+      "live_like_count": 0,
+      "video_like_count": 0,
+      "video_play_count": 0,
+      "video_complete_play_count": 0,
+      "video_complete_play_rate": null,
+      "video_comment_count": 0
+    })
+}

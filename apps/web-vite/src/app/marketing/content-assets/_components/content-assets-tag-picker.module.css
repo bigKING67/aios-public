@@ -1,0 +1,60 @@
+.tagPicker {
+  --ant-select-active-border-color: var(--border-color-hover) !important;
+  --ant-select-active-outline-color: var(--marketing-content-assets-material-brand-a120) !important;
+  --ant-select-hover-border-color: var(--border-color-hover) !important;
+}
+
+.tagPicker :global(.ant-select-selection-search-input),
+.tagPicker :global(.ant-select-input) {
+  caret-color: var(--text-primary);
+}
+
+.tagPicker :global(.ant-select-selection-search-input:focus),
+.tagPicker :global(.ant-select-input:focus) {
+  box-shadow: none !important;
+}
+
+.tagDropdown :global(.ant-select-item-option-state) {
+  display: none;
+}
+
+.checkboxOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.checkboxBox {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-color-hover);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-card);
+}
+
+.checkboxBoxChecked {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+}
+
+.checkboxBoxChecked::after {
+  content: '';
+  width: 7px;
+  height: 4px;
+  border: solid var(--text-inverse);
+  border-width: 0 0 1.5px 1.5px;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+.checkboxLabel {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

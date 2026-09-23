@@ -1,0 +1,77 @@
+.detailStack {
+  display: grid;
+  gap: 16px;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background:
+    radial-gradient(circle at 88% 8%, var(--creator-library-material-brand-a120), transparent 36%),
+    var(--bg-subtle);
+}
+
+.detailHeaderTags {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.detailHeader p,
+.detailHeader h2 {
+  margin: 0;
+}
+
+.detailHeader p {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.detailHeader h2 {
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-display);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.detailList {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+}
+
+.detailRow + .detailRow {
+  border-top: 1px solid var(--border-color);
+}
+
+.detailRow dt,
+.detailRow dd {
+  margin: 0;
+  padding: 8px 12px;
+}
+
+.detailRow dt {
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+}
+
+.detailRow dd {
+  border-left: 1px solid var(--border-color);
+  overflow-wrap: anywhere;
+}

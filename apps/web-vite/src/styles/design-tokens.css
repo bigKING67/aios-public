@@ -1,0 +1,505 @@
+/**
+ * AIOS 设计系统 - CSS 变量定义
+ *
+ * 约定：
+ * - 所有颜色值使用十六进制（#RRGGBB）
+ * - 所有间距使用像素（px）
+ * - 所有圆角使用像素（px）
+ * - 当前 AIOS runtime 为亮色主题；暗色主题需单独设计后再启用
+ */
+
+:root {
+  /* ========== 背景色系 ========== */
+
+  /** 全局页面背景（品牌浅灰） */
+  --bg-global: #F5F5F5;
+
+  /** 卡片/模块背景（纯白） */
+  --bg-card: #FFFFFF;
+
+  /** 悬停背景（极浅灰） */
+  --bg-hover: #FAFAFA;
+
+  /** 次级柔和背景 */
+  --bg-subtle: #F8F8F8;
+
+  /** 禁用背景 */
+  --bg-disabled: #FAFAFA;
+
+  /** 输入框背景 */
+  --bg-input: #FFFFFF;
+
+  /** Sider/Sidebar 背景（哑光黑） */
+  --sidebar-bg: #1A1A1A;
+
+  /* ========== 文字色系 ========== */
+
+  /** 一级文字（核心数据、标题） */
+  --text-primary: #1A1A1A;
+
+  /** 二级文字（正文、标签） */
+  --text-secondary: #5F6368;
+
+  /** 三级文字（辅助、说明） */
+  --text-tertiary: #8A8F8A;
+
+  /** 禁用文字 */
+  --text-disabled: #B8B8B8;
+
+  /** 反白文字 */
+  --text-inverse: #FFFFFF;
+
+  /* ========== 边界与分割线 ========== */
+
+  /** 卡片/输入框边框（极淡灰） */
+  --border-color: #E6E6E6;
+
+  /** 分割线/网格线（几乎透明） */
+  --divider-color: #F0F0F0;
+
+  /** Hover 边框颜色（稍深） */
+  --border-color-hover: #D6DAD6;
+
+  /* ========== 功能色系 ========== */
+  /* 注：所有颜色对比度经过 WCAG AA 验证（4.5:1） */
+
+  /** 成功/健康状态（系统成功绿，不等于品牌蓝） */
+  --color-success: #168A3A;
+
+  /** 危险/错误状态（红） */
+  --color-danger: #C93A32;
+
+  /** 警告（深棕黄） - 对比度 4.9:1 */
+  --color-warning: #B87503;
+
+  /** 信息（默认沿用品牌蓝文字色） */
+  --color-info: #2457C5;
+
+  /* ========== 状态色系 ========== */
+  /* 状态色只用于系统反馈，不与经营趋势色混用。 */
+
+  --status-success: var(--color-success);
+  --status-success-strong: #0F6F2E;
+  --status-success-bg: #EAF8EE;
+  --status-success-border: #BFE8CA;
+
+  --status-warning: var(--color-warning);
+  --status-warning-strong: #8F5E02;
+  --status-warning-bg: #FFF7E6;
+  --status-warning-border: #F3D38D;
+
+  --status-danger: var(--color-danger);
+  --status-danger-strong: #9F3D35;
+  --status-danger-bg: #FFF1F0;
+  --status-danger-border: #F2C4C0;
+
+  --status-info: var(--color-info);
+  --status-info-strong: #1F4FBF;
+  --status-info-bg: var(--brand-secondary);
+  --status-info-border: var(--brand-border);
+
+  --status-neutral: var(--text-tertiary);
+  --status-neutral-strong: var(--text-secondary);
+  --status-neutral-bg: #F5F5F5;
+  --status-neutral-border: #E6E6E6;
+
+  /* ========== 趋势色系 ========== */
+  /* 中文经营看板语义：上涨偏红、下跌偏绿；不要直接复用成功/错误状态色。 */
+
+  /** 上升/增长趋势 */
+  --trend-up: #BF3D2F;
+
+  /** 下降/回落趋势 */
+  --trend-down: #2F8C5B;
+
+  /** 无变化/缺失趋势 */
+  --trend-neutral: #8A8F8A;
+
+  /** 上升趋势浅背景 */
+  --trend-up-muted: #FFF1EF;
+
+  /** 下降趋势浅背景 */
+  --trend-down-muted: #ECF8F1;
+
+  /* ========== 平台图例色系 ========== */
+  /* 平台品牌色仅用于分平台图表图例、饼图和 marker。抖音纯黑是品牌图例例外，不用于正文/UI 文本。 */
+
+  --platform-tmall: #EC5E2A;
+  --platform-douyin: #000000;
+  --platform-xiaohongshu: #FF2442;
+  --platform-kuaishou: #FF3C21;
+  --platform-jd: #DA291C;
+  --platform-wechat: #07C160;
+  --platform-unknown: #8A8F8A;
+
+  /* ========== 品牌色系 ========== */
+
+  /** 品牌主色（现代 SaaS 蓝，大面积填充和主强调色） */
+  --brand-primary: #2F6EEA;
+
+  /** 品牌浅色背景 */
+  --brand-secondary: #F2F6FF;
+
+  /** 品牌高亮色（小面积/渐变终点） */
+  --brand-bright: #75B1F8;
+
+  /** 品牌浅边框 */
+  --brand-border: #C9D8FF;
+
+  /** 品牌文本色（用于链接、图标、小字号强调） */
+  --brand-text: #2457C5;
+
+  /** 品牌强文本色（用于 hover 文本和强强调） */
+  --brand-text-strong: #1F4FBF;
+
+  /** 品牌填充上的文字色 */
+  --brand-on-primary: #FFFFFF;
+
+  /** 品牌填充上的弱文字色 */
+  --brand-on-primary-muted: rgba(255, 255, 255, 0.76);
+
+  /** 品牌悬停色 */
+  --brand-dark: #255FD9;
+
+  /** 品牌按下色 */
+  --brand-active: #1F4FBF;
+
+  /** 品牌焦点环 */
+  --brand-focus-ring: rgba(47, 110, 234, 0.48);
+
+  /* ========== 字体族 ========== */
+
+  /** 默认字体族（中英文混排） */
+  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+
+  /** Display 字体族（英文品牌标题/短标题） */
+  --font-family-display: 'Geist', 'Avenir Next', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+
+  /** 代码/数字字体族（等宽） */
+  --font-family-code: 'Maple Mono', 'SF Mono', 'JetBrains Mono', 'Roboto Mono', 'Cascadia Code', Consolas, monospace;
+
+  /** 产品语义别名：数字/代码等宽字体 */
+  --font-family-mono: var(--font-family-code);
+
+  /* ========== 字号 ========== */
+
+  /** 极小（标签、徽章） */
+  --font-size-xs: 11px;
+
+  /** 小（辅助说明、单位） */
+  --font-size-sm: 12px;
+
+  /** 标准（正文、表头） */
+  --font-size-base: 14px;
+
+  /** 中等（正文、次标题） */
+  --font-size-lg: 16px;
+
+  /** 大（卡片标题） */
+  --font-size-xl: 18px;
+
+  /** 超大（页面标题） */
+  --font-size-2xl: 24px;
+
+  /** 特大（强视觉标题/大数值） */
+  --font-size-3xl: 32px;
+
+  /** DeepSeek-like 页面主标题 */
+  --font-size-display: 30px;
+
+  /** DeepSeek-like 区块标题 */
+  --font-size-section-title: 20px;
+
+  /** 数值大（KPI 数字） */
+  --font-size-data-lg: 32px;
+
+  /** 营销主标题大 */
+  --font-size-marketing-lg: 40px;
+
+  /** 营销主标题最大 */
+  --font-size-marketing-xl: 48px;
+
+  /** 数值中 */
+  --font-size-data-md: 24px;
+
+  /** 数值小 */
+  --font-size-data-sm: 18px;
+
+  /* ========== 字重 ========== */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-title: 640;
+  --font-weight-section-title: 660;
+  --font-weight-display: 680;
+  --font-weight-data: 660;
+  --font-weight-domain: 600;
+  --font-weight-bold: 700;
+
+  /* ========== 行高 ========== */
+
+  --line-height-none: 1;
+  --line-height-zero: 0;
+  --line-height-compact: 1.12;
+  --line-height-snug: 1.25;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+  --line-height-prose: 1.75;
+
+  /* ========== 字距 ========== */
+
+  --letter-spacing-normal: 0;
+  --letter-spacing-label: 0.04em;
+  --letter-spacing-eyebrow: 0.12em;
+  --letter-spacing-tight: -0.03em;
+  --letter-spacing-title: -0.02em;
+  --letter-spacing-data: -0.035em;
+
+  /* ========== 表格组件语义 ========== */
+
+  /** Dashboard 明细表头（达人/素材等高密度证据表） */
+  --component-table-detail-header-font-size: var(--font-size-base);
+  --component-table-detail-header-font-weight: 620;
+  --component-table-detail-header-line-height: var(--line-height-tight);
+  --component-table-detail-header-letter-spacing: var(--letter-spacing-label);
+
+  /** Dashboard 明细表体（高密度扫读） */
+  --component-table-detail-body-font-size: var(--font-size-sm);
+  --component-table-detail-body-font-weight: 410;
+  --component-table-detail-body-line-height: var(--line-height-normal);
+  --component-table-detail-body-letter-spacing: var(--letter-spacing-normal);
+
+  /** Dashboard 明细表内链接与数值 */
+  --component-table-detail-link-font-weight: var(--component-table-detail-body-font-weight);
+  --component-table-detail-numeric-letter-spacing: var(--letter-spacing-data);
+
+  /* ========== 间距（8px 栅格） ========== */
+
+  --spacing-0: 0;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* ========== 圆角 ========== */
+
+  /** 无圆角 */
+  --border-radius-none: 0;
+
+  /** 极小圆角（表格、输入框） */
+  --border-radius-sm: 2px;
+
+  /** 标准圆角（卡片、按钮） */
+  --border-radius-base: 4px;
+
+  /** 中等圆角 */
+  --border-radius-md: 6px;
+
+  /** 大圆角（模态框） */
+  --border-radius-lg: 12px;
+
+  /** 超大圆角（高可见数据模块） */
+  --border-radius-xl: 12px;
+
+  /** 特大圆角（高可见数据容器） */
+  --border-radius-2xl: 16px;
+
+  /** 完全圆形 */
+  --border-radius-full: 9999px;
+
+  /* ========== 阴影 ========== */
+
+  --shadow-none: none;
+
+  /** 极轻阴影（几乎不可见） */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+  /** 轻阴影（Hover 态） */
+  --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  /** 中等阴影 */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /** 重阴影（浮层） */
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.10);
+
+  /** 超重阴影（模态框） */
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
+
+  /* ========== 过渡 ========== */
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-duration-fast: 150ms;
+  --transition-duration-base: 250ms;
+  --transition-duration-slow: 350ms;
+  --transition-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-easing-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ========== 响应式断点 ========== */
+
+  --breakpoint-xs: 0px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1600px;
+
+  /* ========== 组件特定尺寸 ========== */
+
+  /** 按钮高度 */
+  --component-button-height-sm: 24px;
+  --component-button-height-base: 32px;
+  --component-button-height-lg: 40px;
+  --component-button-padding-x-sm: 8px;
+  --component-button-padding-x-base: 16px;
+  --component-button-padding-x-lg: 24px;
+  --component-button-border-radius: var(--border-radius-base);
+
+  /** 输入框高度 */
+  --component-input-height: 32px;
+  --component-input-padding-x: 12px;
+  --component-input-padding-y: 4px;
+  --component-input-border-radius: var(--border-radius-base);
+
+  /** 控件内部垂直居中行高（用于 AntD Pagination / Select / small action） */
+  --component-control-line-height-xs: 20px;
+  --component-control-line-height-sm: 22px;
+  --component-control-line-height-md: 28px;
+  --component-control-line-height-lg: 34px;
+
+  /** 卡片内边距 */
+  --component-card-border-radius: var(--border-radius-base);
+  --component-card-padding: var(--spacing-4);
+  --component-card-shadow: var(--shadow-base);
+  --component-modal-border-radius: var(--border-radius-lg);
+  --component-modal-shadow: var(--shadow-xl);
+
+  /* ========== 图表色系 ========== */
+
+  /** 普通图表序列色：只用于无平台/趋势/状态/domain 语义的 bar/line 图 */
+  --chart-series-1: #445DF6;
+  --chart-series-2: #75B1F8;
+  --chart-series-3: #3264F6;
+  --chart-series-4: #4F8CB5;
+  --chart-series-5: #536F86;
+  --chart-series-6: #A4772A;
+  --chart-series-muted: #8A8F8A;
+  --chart-series-highlight: #3264F6;
+
+  /** 本周/当前数据：普通主序列 */
+  --chart-color-this-week: var(--chart-series-1);
+
+  /** 上周/历史数据：低噪参考序列 */
+  --chart-color-prev-week: var(--chart-series-muted);
+
+  /** 上升趋势图表色 */
+  --chart-color-trend-up: var(--trend-up);
+
+  /** 下降趋势图表色 */
+  --chart-color-trend-down: var(--trend-down);
+
+  /** 数据点标签颜色（二级文字颜色） */
+  --chart-label-color: #5F6368;
+
+  /** 折线宽度 */
+  --chart-line-width: 2px;
+
+  /* ========== Domain taxonomy 色系 ========== */
+  /* 业务分类色只用于 chips、图表 marker/bar/pie slice、行强调，不用于 status/trend/action。 */
+
+  --domain-traffic-summary-accent: #8795AA;
+  --domain-traffic-summary-text: #3F5067;
+  --domain-traffic-summary-bg: #F1F5FB;
+  --domain-traffic-summary-border: #A6B4C7;
+  --domain-traffic-l1-accent: #445DF6;
+  --domain-traffic-l1-text: #243CB5;
+  --domain-traffic-l1-bg: #F2F5FF;
+  --domain-traffic-l1-border: #B8C4FF;
+  --domain-traffic-l2-accent: #2F6EEA;
+  --domain-traffic-l2-text: #2457C5;
+  --domain-traffic-l2-bg: #F2F6FF;
+  --domain-traffic-l2-border: #C9D8FF;
+  --domain-traffic-l3-accent: #75B1F8;
+  --domain-traffic-l3-text: #2F6EA8;
+  --domain-traffic-l3-bg: #F4FAFF;
+  --domain-traffic-l3-border: #CDE6FE;
+
+  --domain-topsis-star-text: #BF3D2F;
+  --domain-topsis-star-bg: #FFF1EF;
+  --domain-topsis-star-border: #F2C4C0;
+  --domain-topsis-stable-text: #2457C5;
+  --domain-topsis-stable-bg: #F2F6FF;
+  --domain-topsis-stable-border: #C9D8FF;
+  --domain-topsis-opportunity-text: #2F6F9F;
+  --domain-topsis-opportunity-bg: #EAF3FA;
+  --domain-topsis-opportunity-border: #BFD5E5;
+  --domain-topsis-long-tail-text: #2F8C5B;
+  --domain-topsis-long-tail-bg: #ECF8F1;
+  --domain-topsis-long-tail-border: #BFE8CA;
+  --domain-topsis-neutral-text: #8A8F8A;
+  --domain-topsis-neutral-bg: #FAFAFA;
+  --domain-topsis-neutral-border: #E6E6E6;
+
+  --domain-funnel-track-color: #C9D8FF;
+  --domain-funnel-track-bg: #F2F6FF;
+  --domain-funnel-exposure-color: #7EA1F7;
+  --domain-funnel-exposure-bg: #F2F6FF;
+  --domain-funnel-visit-color: #5D86F1;
+  --domain-funnel-visit-bg: #EFF4FF;
+  --domain-funnel-intent-color: #4476ED;
+  --domain-funnel-intent-bg: #E8F0FF;
+  --domain-funnel-conversion-color: #2F6EEA;
+  --domain-funnel-conversion-bg: #F5F8FF;
+  --domain-funnel-connector-color: #D7DEE0;
+  --domain-funnel-text-on-fill: #FFFFFF;
+
+  --domain-creator-s-from: #1F4FBF;
+  --domain-creator-s-to: #445DF6;
+  --domain-creator-s-bg: #D6E0FF;
+  --domain-creator-s-text: #1F4FBF;
+  --domain-creator-a-from: #3264F6;
+  --domain-creator-a-to: #5D86F1;
+  --domain-creator-a-bg: #DDE7FF;
+  --domain-creator-a-text: #243CB5;
+  --domain-creator-b-from: #2F6EEA;
+  --domain-creator-b-to: #75B1F8;
+  --domain-creator-b-bg: #E5EEFF;
+  --domain-creator-b-text: #2457C5;
+  --domain-creator-c-from: #75B1F8;
+  --domain-creator-c-to: #CDE6FE;
+  --domain-creator-c-bg: #EAF7FF;
+  --domain-creator-c-text: #2F6EA8;
+  --domain-creator-d-from: #C9D8FF;
+  --domain-creator-d-to: #F2F6FF;
+  --domain-creator-d-bg: #F0F5FF;
+  --domain-creator-d-text: #536F86;
+
+  --domain-cooperation-unclassified-text: #5F6368;
+  --domain-cooperation-unclassified-bg: #EFEFEF;
+  --domain-cooperation-initial-contact-text: #2457C5;
+  --domain-cooperation-initial-contact-bg: #E4ECFF;
+  --domain-cooperation-sample-negotiation-text: #8F5E02;
+  --domain-cooperation-sample-negotiation-bg: #FFF0C7;
+  --domain-cooperation-not-considering-text: #A65F3E;
+  --domain-cooperation-not-considering-bg: #FFE4DD;
+  --domain-cooperation-paused-text: #9F3D35;
+  --domain-cooperation-paused-bg: #FFE1DE;
+  --domain-cooperation-live-started-text: #0F6F2E;
+  --domain-cooperation-live-started-bg: #DFF5E7;
+}
+
+/* ========== 文件结束 ========== */

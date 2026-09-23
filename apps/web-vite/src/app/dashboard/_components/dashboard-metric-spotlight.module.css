@@ -1,0 +1,132 @@
+.spotlightGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.spotlightGrid.spotlightGridThree {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.spotlightGrid.spotlightGridTwo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.spotlightGrid.spotlightGridOne {
+  grid-template-columns: 1fr;
+}
+
+.spotlightCard {
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: var(--dashboard-surface-bg);
+  padding: 14px 16px 12px;
+  box-shadow: var(--dashboard-card-shadow);
+}
+
+.goodsCardSpotlightGrid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.goodsCardSpotlightCard {
+  min-height: 172px;
+  padding: 12px;
+  border-radius: 18px;
+}
+
+.goodsCardSpotlightCard .spotlightHeading {
+  flex-wrap: wrap;
+  gap: 4px 7px;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.goodsCardSpotlightCard .spotlightSubtitle {
+  font-size: var(--font-size-sm);
+}
+
+.goodsCardSpotlightCard .spotlightValue {
+  font-size: clamp(var(--font-size-xl), 1.8vw, var(--font-size-data-lg));
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.spotlightHeading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  font-weight: 640;
+}
+
+.spotlightTooltipIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-tertiary);
+  cursor: help;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-none);
+  transition: color 0.18s ease;
+}
+
+.spotlightTooltipIcon:hover {
+  color: var(--brand-primary);
+}
+
+.spotlightSubtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 560;
+}
+
+.spotlightValue {
+  margin-top: 8px;
+  color: var(--text-primary);
+  font-size: var(--font-size-data-lg);
+  line-height: var(--line-height-none);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.spotlightMeta {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.spotlightTrendUnavailable {
+  margin-top: 12px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+@media (max-width: 1024px) {
+  .spotlightGrid,
+  .spotlightGrid.spotlightGridThree,
+  .spotlightGrid.spotlightGridTwo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .goodsCardSpotlightGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .spotlightGrid,
+  .spotlightGrid.spotlightGridThree,
+  .spotlightGrid.spotlightGridTwo,
+  .spotlightGrid.spotlightGridOne,
+  .goodsCardSpotlightGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .spotlightValue {
+    font-size: var(--font-size-data-lg);
+  }
+}

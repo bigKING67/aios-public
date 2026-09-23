@@ -1,0 +1,13 @@
+/**
+ * AIOS light theme entrypoint.
+ *
+ * Keep this file as the stable import surface from globals.css. Theme rules
+ * live in focused submodules so navigation, AntD overrides, and report
+ * surfaces can evolve without turning the entrypoint into a mega-file.
+ */
+
+@import './light-theme/base.css';
+@import './light-theme/header.css';
+@import './light-theme/nav-submenus.css';
+@import './light-theme/antd-controls.css';
+@import './light-theme/surfaces-and-overlays.css';

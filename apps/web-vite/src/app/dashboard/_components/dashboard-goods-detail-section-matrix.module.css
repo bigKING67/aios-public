@@ -1,0 +1,52 @@
+.matrixSummary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.matrixSummaryItem {
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  cursor: pointer;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.matrixSummaryItemActive {
+  opacity: 1;
+}
+
+.matrixSummaryItemInactive {
+  opacity: 0.54;
+  background: var(--bg-hover);
+}
+
+.matrixSummaryItem:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 1px;
+}
+
+.matrixSummaryDot {
+  width: calc(var(--spacing-2) - 1px);
+  height: calc(var(--spacing-2) - 1px);
+  border-radius: var(--border-radius-full);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .matrixSummary {
+    justify-content: flex-start;
+  }
+}

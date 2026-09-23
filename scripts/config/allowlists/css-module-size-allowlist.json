@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "maxLines": 620,
+  "description": "Frozen CSS Module line-count budget. New CSS Modules should stay under maxLines or be split by component/domain boundary before merging.",
+  "allowed": [
+    {
+      "path": "apps/web-vite/src/app/content/live-center/live-center.module.css",
+      "maxLines": 970,
+      "reason": "Temporary frozen live-center stylesheet debt grew during the live-center evidence workflow push; split page chrome, evidence command strip, session list, and review workspace styles before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-console.module.css",
+      "maxLines": 629,
+      "reason": "Temporary frozen content-assets console stylesheet debt surfaced during the content hub navigation push; split shell, module cards, and selected-state styles before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/reports/special/special-report-tmall-products.module.css",
+      "maxLines": 1577,
+      "reason": "Temporary frozen special-report debt after the Tmall product contribution/trend/delta/attribution stylesheet grew with product pages and traffic flow sections; split by chart/table/mobile responsibilities before lowering this cap and do not grow this file further."
+    }
+  ]
+}

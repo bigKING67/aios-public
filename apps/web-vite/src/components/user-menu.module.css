@@ -1,0 +1,106 @@
+/**
+ * 用户菜单样式
+ */
+
+.headerLoginButton {
+  height: 40px;
+  min-width: 86px;
+  border-radius: 10px;
+  padding-inline: 18px;
+  font-weight: 600;
+}
+
+.headerLoginButton:global(.ant-btn-primary) {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+.headerLoginButton:global(.ant-btn-primary):hover,
+.headerLoginButton:global(.ant-btn-primary):focus-visible {
+  border-color: var(--brand-dark);
+  background: var(--brand-dark);
+  color: var(--brand-on-primary);
+}
+
+.headerUserTrigger {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  max-width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.headerUserTrigger:hover,
+.headerUserTrigger:focus-visible {
+  background-color: var(--bg-hover);
+  border-color: var(--border-color);
+}
+
+.usernameText {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userInfo {
+  padding: 8px 0;
+}
+
+.username {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.email {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  margin-top: 4px;
+}
+
+.logoutItem {
+  color: var(--status-danger);
+}
+
+.userAvatar {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-6);
+  height: var(--spacing-6);
+  border-radius: var(--border-radius-full);
+  background-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+@media (max-width: 768px) {
+  .headerUserTrigger {
+    padding: 0 6px;
+  }
+
+  .usernameText {
+    max-width: 84px;
+  }
+}
+
+@media (max-width: 460px) {
+  .headerLoginButton {
+    min-width: 72px;
+    height: 36px;
+    padding-inline: 12px;
+  }
+
+  .headerUserTrigger {
+    padding: 0 4px;
+  }
+
+  .usernameText {
+    display: none;
+  }
+}

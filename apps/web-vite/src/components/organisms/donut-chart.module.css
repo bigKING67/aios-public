@@ -1,0 +1,112 @@
+.root {
+  /* SVG text uses viewBox units, so keep its scale local to the chart. */
+  --font-size-donut-label: 5px;
+  --font-size-donut-value: 6px;
+
+  min-height: var(--donut-height);
+  display: grid;
+  grid-template-columns: minmax(160px, 42%) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.chart {
+  width: 100%;
+  max-height: calc(var(--donut-height) - var(--spacing-4));
+  overflow: visible;
+}
+
+.track,
+.currentSegment,
+.previousSegment {
+  fill: none;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.track {
+  stroke: var(--bg-hover);
+  stroke-width: 11;
+}
+
+.currentSegment,
+.previousSegment {
+  stroke: var(--donut-color);
+  stroke-dasharray: var(--donut-dash);
+  stroke-dashoffset: var(--donut-offset);
+}
+
+.currentSegment {
+  stroke-width: 11;
+}
+
+.previousSegment {
+  stroke-width: 8;
+}
+
+.totalLabel,
+.totalValue {
+  text-anchor: middle;
+  fill: var(--text-secondary);
+}
+
+.totalLabel {
+  font-size: var(--font-size-donut-label);
+}
+
+.totalValue {
+  font-size: var(--font-size-donut-value);
+  font-weight: 700;
+  fill: var(--text-primary);
+}
+
+.legend {
+  min-width: 0;
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendItem {
+  display: grid;
+  grid-template-columns: 10px minmax(48px, 1fr) auto auto auto;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--donut-color);
+}
+
+.legendName {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .root {
+    grid-template-columns: 1fr;
+  }
+
+  .chart {
+    max-height: 180px;
+  }
+
+  .legendItem {
+    grid-template-columns: 10px minmax(44px, 1fr) auto auto;
+  }
+
+  .legendItem > :last-child {
+    display: none;
+  }
+}

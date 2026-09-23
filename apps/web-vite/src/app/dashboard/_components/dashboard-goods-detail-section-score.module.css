@@ -1,0 +1,24 @@
+.scoreSubtitleText {
+  color: var(--dashboard-goods-subtitle-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.scoreHintTag {
+  margin: 0 !important;
+  border-radius: var(--border-radius-full);
+  border-color: var(--dashboard-goods-hint-border) !important;
+  background: var(--dashboard-goods-hint-bg) !important;
+  color: var(--dashboard-goods-hint-text) !important;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  line-height: var(--line-height-tight);
+  padding: calc(var(--spacing-1) / 2) var(--spacing-2);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .scoreHintTag {
+    white-space: normal;
+  }
+}

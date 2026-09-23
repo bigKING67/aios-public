@@ -1,0 +1,179 @@
+.sceneStrategyPanel {
+  min-width: 0;
+  border-radius: var(--border-radius-2xl);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--creator-shadow-surface);
+  padding: var(--spacing-4);
+  display: grid;
+  gap: var(--spacing-3);
+}
+
+.sceneStrategyHead {
+  min-width: 0;
+}
+
+.sceneStrategyMeta {
+  min-width: 0;
+}
+
+.sceneStrategyMeta h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 680;
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.sceneStrategyMeta p {
+  margin: var(--spacing-1) 0 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.sceneStrategyTable {
+  min-width: 0;
+  width: 100%;
+}
+
+.sceneStrategyTable :global(.ant-table-container) {
+  border-radius: var(--border-radius-lg);
+}
+
+.sceneStrategyTable :global(.ant-table-cell) {
+  font-variant-numeric: tabular-nums;
+}
+
+.sceneStrategyTable :global(thead .ant-table-cell:first-child) {
+  text-align: center !important;
+}
+
+.sceneStrategyTable :global(tbody .ant-table-cell:first-child) {
+  text-align: left !important;
+}
+
+.sceneStrategyTable :global(tbody .ant-table-cell:first-child.ant-table-cell-with-append) {
+  white-space: nowrap;
+}
+
+.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-indent),
+.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-expand-icon) {
+  vertical-align: middle;
+}
+
+.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-expand-icon) {
+  margin-inline-end: var(--spacing-2);
+}
+
+.sceneStrategyRowScene :global(.ant-table-cell) {
+  background: color-mix(in srgb, var(--brand-secondary) 18%, var(--bg-card));
+}
+
+.sceneStrategyRowGroup :global(.ant-table-cell) {
+  background: color-mix(in srgb, var(--bg-subtle) 78%, var(--bg-card));
+}
+
+.sceneStrategyRowSubtype :global(.ant-table-cell) {
+  background: var(--bg-card);
+}
+
+.sceneStrategyName {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--spacing-2);
+  max-width: 100%;
+}
+
+.sceneStrategyNameMuted .sceneStrategyLabelText {
+  color: var(--text-tertiary);
+}
+
+.sceneStrategyLevelBadge {
+  flex: 0 0 auto;
+  min-width: 56px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  color: var(--text-tertiary);
+  padding: 2px 6px;
+  font-size: var(--font-size-xs);
+  font-weight: 620;
+  text-align: center;
+  line-height: var(--line-height-snug);
+}
+
+.sceneStrategyLevelBadgeScene {
+  border-color: color-mix(in srgb, var(--brand-primary) 22%, var(--border-color));
+  background: color-mix(in srgb, var(--brand-secondary) 26%, var(--bg-card));
+  color: var(--brand-primary);
+}
+
+.sceneStrategyLevelBadgeGroup {
+  border-color: color-mix(in srgb, var(--brand-primary) 14%, var(--border-color));
+  background: color-mix(in srgb, var(--brand-secondary) 14%, var(--bg-card));
+  color: var(--text-secondary);
+}
+
+.sceneStrategyLevelBadgeSubtype {
+  background: var(--bg-card);
+  color: var(--text-tertiary);
+}
+
+.sceneStrategyLabelStack {
+  display: inline-grid;
+  min-width: 0;
+  gap: var(--spacing-1);
+}
+
+.sceneStrategyLabelText {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sceneStrategyShareCell {
+  display: inline-grid;
+  grid-template-columns: max-content minmax(84px, 1fr);
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.sceneStrategyProgress {
+  height: 6px;
+  overflow: hidden;
+  appearance: none;
+  border: 0;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-hover);
+}
+
+.sceneStrategyProgress::-webkit-progress-bar {
+  background: var(--bg-hover);
+}
+
+.sceneStrategyProgress::-webkit-progress-value {
+  background: var(--brand-primary);
+}
+
+.sceneStrategyProgress::-moz-progress-bar {
+  background: var(--brand-primary);
+}
+
+@media (max-width: 768px) {
+  .sceneStrategyPanel {
+    padding: var(--spacing-3);
+  }
+}

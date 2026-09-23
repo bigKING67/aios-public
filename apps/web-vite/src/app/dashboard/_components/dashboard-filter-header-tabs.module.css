@@ -1,0 +1,56 @@
+.tabRail {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  gap: var(--spacing-2);
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabRail::-webkit-scrollbar {
+  display: none;
+}
+
+.tabRailThumb {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  width: var(--dashboard-platform-thumb-base-width, 1px);
+  border-radius:
+    var(--dashboard-platform-thumb-radius-x, var(--border-radius-full)) /
+    var(--dashboard-platform-thumb-radius-y, var(--border-radius-full));
+  background-color: var(--brand-primary);
+  background-image: none;
+  box-shadow: var(--dashboard-brand-tab-shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--dashboard-platform-thumb-origin-left, 0), 0, 0)
+    scaleX(var(--dashboard-platform-thumb-scale-x, 1));
+  transform-origin: center center;
+  will-change: transform;
+  transition:
+    background-color var(--transition-duration-fast) var(--transition-easing-standard),
+    box-shadow var(--transition-duration-fast) var(--transition-easing-standard);
+}
+
+.tabRailMotionReady .tabRailThumb {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabRailThumb {
+    transition: none;
+  }
+}

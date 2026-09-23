@@ -1,0 +1,139 @@
+.jobList {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.jobRow {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+}
+
+.jobRowMain {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.jobRowMain strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.jobRowMain span,
+.jobMetaGrid,
+.jobOpenButton {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.jobMetaGrid {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.jobMetaGrid span:last-child {
+  overflow: hidden;
+  font-family: var(--font-family-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jobProgress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.jobProgressTrack {
+  position: relative;
+  overflow: hidden;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--status-info-border);
+}
+
+.jobProgressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: inherit;
+  background: var(--brand-primary);
+  transition: width 280ms ease;
+}
+
+.jobProgress strong {
+  color: var(--brand-text-strong);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: 680;
+  line-height: var(--line-height-none);
+}
+
+.jobProgress[data-status="succeeded"] .jobProgressFill {
+  background: var(--status-success-strong);
+}
+
+.jobProgress[data-status="succeeded"] strong {
+  color: var(--status-success-strong);
+}
+
+.jobError {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--status-danger-border);
+  border-radius: 10px;
+  background: var(--status-danger-bg);
+}
+
+.jobError strong {
+  color: var(--status-danger-strong);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.jobError span,
+.jobError small {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.jobError small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jobActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.jobOpenButton {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  color: var(--brand-text);
+  background: transparent;
+  cursor: pointer;
+}

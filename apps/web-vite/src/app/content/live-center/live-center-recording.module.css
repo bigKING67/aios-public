@@ -1,0 +1,167 @@
+.recordingUploadPrompt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-height: 160px;
+  margin: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+  padding: var(--spacing-4);
+  border: 1px dashed var(--brand-border);
+  border-radius: var(--border-radius-xl);
+  background: color-mix(in srgb, var(--brand-secondary) 42%, var(--bg-card));
+}
+
+.recordingUploadPromptCopy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--spacing-3);
+  align-items: center;
+  min-width: 0;
+}
+
+.recordingUploadPromptCopy > :global(.anticon) {
+  display: inline-grid;
+  place-items: center;
+  width: var(--spacing-10);
+  height: var(--spacing-10);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-full);
+  background: var(--bg-card);
+  color: var(--brand-text);
+  font-size: var(--font-size-xl);
+}
+
+.recordingUploadPromptCopy div {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.recordingUploadPromptCopy strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.recordingUploadPromptCopy span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.recordingAnalysisBar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, auto);
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-top: 1px solid var(--divider-color);
+  background: color-mix(in srgb, var(--bg-subtle) 72%, var(--bg-card));
+}
+
+.recordingAnalysisCopy {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.recordingAnalysisTitle {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+}
+
+.recordingAnalysisTitle > :global(.anticon) {
+  color: var(--brand-text);
+  font-size: var(--font-size-lg);
+}
+
+.recordingAnalysisTitle strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.recordingAnalysisMetaText {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.recordingAnalysisSummary {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recordingAnalysisControls {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) auto;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: end;
+  min-width: 0;
+}
+
+.recordingAnalysisControls :global(.ant-input-affix-wrapper) {
+  min-width: 0;
+}
+
+.recordingAnalysisResultButton {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 var(--spacing-4);
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--border-radius-lg);
+  background: var(--brand-primary);
+  color: var(--text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.recordingAnalysisResultButton:hover {
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 860px) {
+  .recordingUploadPrompt,
+  .recordingAnalysisBar {
+    grid-template-columns: 1fr;
+  }
+
+  .recordingAnalysisControls {
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
+  .recordingAnalysisSummary {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 520px) {
+  .recordingUploadPrompt {
+    margin: var(--spacing-3);
+    padding: var(--spacing-3);
+  }
+}

@@ -1,0 +1,307 @@
+.eyebrow {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-kicker);
+  line-height: var(--line-height-snug);
+  text-transform: uppercase;
+}
+
+.aiInsightPanel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--dashboard-surface-bg-strong);
+}
+
+.aiInsightHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+}
+
+.aiInsightHeader > div {
+  min-width: 0;
+}
+
+.aiInsightHeader h2 {
+  margin: var(--spacing-1) 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: var(--font-weight-section-title);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.aiInsightHeader p:not(.eyebrow) {
+  max-width: 820px;
+  margin: var(--spacing-2) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.aiInsightStatus,
+.aiInsightStatusSecondary,
+.aiInsightStatusProcessing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-full);
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.aiInsightStatusSecondary {
+  border-color: var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+.aiInsightStatusProcessing {
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+  color: var(--status-warning-strong);
+}
+
+.aiStatusRow {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.aiInsightActions {
+  display: flex;
+  flex: 0 0 auto;
+  max-width: 440px;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-2);
+}
+
+.aiBackfillButton {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.aiBackfillHelper {
+  max-width: 320px;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  text-align: right;
+}
+
+.aiBackfillFeedback {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+}
+
+.aiBackfillFeedback strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.aiBackfillFeedback span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+.aiBackfillDetails {
+  min-width: 0;
+}
+
+.aiBackfillDetails summary {
+  width: fit-content;
+  color: var(--brand-text);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-relaxed);
+}
+
+.aiBackfillDetails summary:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--brand-active);
+  outline-offset: 2px;
+}
+
+.aiBackfillDetails span {
+  display: block;
+  margin-top: var(--spacing-1);
+}
+
+.aiBackfillFeedbackSuccess {
+  border-color: var(--status-success-border);
+  background: var(--status-success-bg);
+}
+
+.aiBackfillFeedbackWarning {
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+}
+
+.aiBackfillFeedbackError {
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+}
+
+.aiInsightEmpty {
+  display: flex;
+  min-height: 112px;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin: 0 var(--spacing-5) var(--spacing-5);
+  padding: var(--spacing-5);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: color-mix(in srgb, var(--bg-hover) 72%, transparent);
+}
+
+.aiInsightEmpty strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.aiInsightEmpty span {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.aiCoverageNotice {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  border: 1px solid var(--status-warning-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--status-warning-bg);
+}
+
+.aiCoverageNotice strong {
+  flex: 0 0 auto;
+  color: var(--status-warning-strong);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-relaxed);
+  white-space: nowrap;
+}
+
+.aiCoverageNotice span {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.aiInsightNotices {
+  display: grid;
+  min-width: 0;
+  gap: var(--spacing-2);
+  padding: 0 var(--spacing-5) var(--spacing-4);
+}
+
+.aiInsightBody {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding: var(--spacing-5);
+}
+
+.aiOverviewGrid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: var(--spacing-5);
+}
+
+@media (max-width: 1100px) {
+  .aiOverviewGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .aiInsightHeader {
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: var(--spacing-4);
+  }
+
+  .aiInsightStatus,
+  .aiInsightActions,
+  .aiStatusRow {
+    justify-content: flex-start;
+  }
+
+  .aiInsightActions {
+    width: 100%;
+    max-width: 100%;
+    align-items: flex-start;
+  }
+
+  .aiStatusRow {
+    width: 100%;
+  }
+
+  .aiBackfillHelper {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .aiStatusRow span {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .aiCoverageNotice {
+    flex-direction: column;
+  }
+
+  .aiInsightNotices {
+    padding: 0 var(--spacing-4) var(--spacing-4);
+  }
+
+  .aiInsightBody {
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+  }
+
+  .aiInsightEmpty {
+    margin: 0 var(--spacing-4) var(--spacing-4);
+    padding: var(--spacing-4);
+  }
+}

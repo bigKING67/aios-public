@@ -1,0 +1,99 @@
+.contentUnderstandingBlock {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.contentUnderstandingHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.contentUnderstandingHeader > div:first-child {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.contentUnderstandingHeader span {
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-snug);
+}
+
+.contentUnderstandingHeader strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+  line-height: var(--line-height-tight);
+}
+
+.contentUnderstandingMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  max-width: 320px;
+}
+
+.contentUnderstandingMeta span {
+  display: inline-flex;
+  min-height: 22px;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid var(--divider-color);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  line-height: var(--line-height-snug);
+}
+
+.contentUnderstandingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.contentUnderstandingItem {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--divider-color);
+  border-radius: 13px;
+  background: var(--bg-subtle);
+}
+
+.contentUnderstandingItem span {
+  color: var(--brand-text);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-snug);
+}
+
+.contentUnderstandingItem p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .contentUnderstandingHeader,
+  .contentUnderstandingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .contentUnderstandingMeta {
+    justify-content: flex-start;
+    max-width: none;
+  }
+}

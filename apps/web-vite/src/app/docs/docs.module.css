@@ -1,0 +1,542 @@
+:global(:root) {
+  /* Material aliases generated from raw color audit. Keep raw colors only here. */
+  --docs-docs-material-scrollbar-slate-a780: rgba(100, 116, 139, 0.78);
+  --docs-docs-material-slate-a260: rgba(148, 163, 184, 0.26);
+  --docs-docs-material-scrollbar-slate-a750: rgba(100, 116, 139, 0.75);
+  --docs-docs-material-blue-ring-a240: rgba(59, 130, 246, 0.24);
+}
+.pageWrap {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr) 232px;
+  column-gap: 0;
+  width: 100%;
+  height: calc(100dvh - 72px);
+  min-height: calc(100dvh - 72px);
+  font-family: var(--font-family-base);
+  background: var(--bg-card);
+}
+
+.workspaceState {
+  min-height: calc(100dvh - 72px);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-6);
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--bg-card);
+}
+
+.workspaceState strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+.workspaceState p {
+  max-width: 42rem;
+  margin: 0;
+}
+
+.workspaceStateAction {
+  min-height: 34px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--brand-text);
+  background: var(--bg-card);
+  font: inherit;
+  cursor: pointer;
+}
+
+.workspaceStateAction:hover {
+  background: var(--brand-secondary);
+}
+
+.workspaceStateAction:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.contentScroll {
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.contentScroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.isScrolling {
+  scrollbar-width: thin;
+  scrollbar-color: var(--docs-docs-material-scrollbar-slate-a780) var(--docs-docs-material-slate-a260);
+}
+
+.isScrolling::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.isScrolling::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: var(--docs-docs-material-slate-a260);
+}
+
+.isScrolling::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: var(--docs-docs-material-scrollbar-slate-a750);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.mainPanel {
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.contentScroll {
+  box-sizing: border-box;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  padding: 24px 50px 72px;
+}
+
+.contentInner {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.heroHeader {
+  padding-top: 4px;
+}
+
+.heroEyebrow {
+  margin: 0;
+  color: var(--status-success);
+  font-size: var(--font-size-sm);
+  font-weight: 630;
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.heroRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.heroTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-compact);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.heroSubtitle {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-prose);
+  max-width: 44em;
+}
+
+.heroAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+  white-space: nowrap;
+}
+
+.heroAction:hover {
+  background: var(--bg-hover);
+}
+
+.docSection {
+  margin-top: 34px;
+  scroll-margin-top: 16px;
+}
+
+.docSection h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.docSection p {
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.sectionLead {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.valueTableWrap {
+  max-width: 100%;
+  margin-top: 14px;
+  overflow-x: auto;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.valueTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.valueTable th,
+.valueTable td {
+  text-align: left;
+  padding: 11px 8px;
+  border-bottom: 1px solid var(--divider-color);
+  overflow-wrap: anywhere;
+}
+
+.valueTable th {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 620;
+}
+
+.valueTable td {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+}
+
+.valueTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tableStack {
+  margin-top: 16px;
+  display: grid;
+  gap: 18px;
+}
+
+.dataTableBlock {
+  min-width: 0;
+}
+
+.tableTitle {
+  margin: 0 0 10px;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.docDataTable {
+  min-width: 720px;
+}
+
+.quickCardAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 0 10px;
+  color: var(--brand-text);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+}
+
+.quickCardAction:hover {
+  background: var(--brand-secondary);
+}
+
+.cardGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.infoCard {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.infoCard h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-title);
+  overflow-wrap: anywhere;
+}
+
+.infoCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+  overflow-wrap: anywhere;
+}
+
+.infoCard .cardMeta {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  font-weight: 620;
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.cardDetails {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.cardDetailRow {
+  display: grid;
+  gap: 2px;
+}
+
+.cardDetailRow dt {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-normal);
+}
+
+.cardDetailRow dd {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cardTag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--text-tertiary);
+  background: var(--bg-soft);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.infoCard .quickCardAction {
+  grid-column: auto;
+  grid-row: auto;
+  justify-self: start;
+  margin-top: 2px;
+}
+
+.stepList {
+  margin-top: 14px;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.stepItem {
+  position: relative;
+  border-bottom: 1px solid var(--divider-color);
+  padding: 12px 4px 12px 14px;
+  background: transparent;
+}
+
+.stepItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--border-color-hover);
+}
+
+.stepItem strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.stepItem p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+}
+
+.stepItem {
+  scroll-margin-top: 16px;
+}
+
+@media (max-width: 1380px) {
+  .pageWrap {
+    grid-template-columns: 248px minmax(0, 1fr) 208px;
+  }
+
+  .contentScroll {
+    padding: 20px 34px 56px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .pageWrap {
+    grid-template-columns: 248px minmax(0, 1fr);
+  }
+
+  .mainPanel {
+    border-right: 0;
+  }
+
+  .contentInner {
+    width: min(100%, 820px);
+  }
+
+  .docSection h2 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (max-width: 920px) {
+  .pageWrap {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100dvh - 72px);
+  }
+
+  .mainPanel {
+    border-right: 0;
+  }
+
+  .contentScroll {
+    height: auto;
+    padding: 18px 16px 34px;
+  }
+
+  .contentInner {
+    width: 100%;
+  }
+
+  .heroRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .heroTitle {
+    font-size: var(--font-size-2xl);
+  }
+
+  .heroSubtitle {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-prose);
+  }
+
+  .docSection {
+    margin-top: 28px;
+  }
+
+  .docSection h2 {
+    font-size: var(--font-size-section-title);
+  }
+
+  .docSection p {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-prose);
+  }
+
+  .valueTable th {
+    font-size: var(--font-size-sm);
+  }
+
+  .valueTable td {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .docDataTable {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .docDataTable thead {
+    display: none;
+  }
+
+  .docDataTable,
+  .docDataTable tbody,
+  .docDataTable tr,
+  .docDataTable td {
+    display: block;
+  }
+
+  .docDataTable tr {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--divider-color);
+  }
+
+  .docDataTable tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .docDataTable td {
+    display: grid;
+    grid-template-columns: minmax(88px, 30%) minmax(0, 1fr);
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 0;
+  }
+
+  .docDataTable td::before {
+    content: attr(data-label);
+    color: var(--text-tertiary);
+    font-size: var(--font-size-xs);
+    font-weight: 620;
+    line-height: var(--line-height-normal);
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .quickCardAction {
+    justify-self: start;
+  }
+}

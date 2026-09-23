@@ -1,0 +1,252 @@
+/**
+ * AIOS 设计系统 - 语义状态与领域标签类
+ */
+
+/* ========== 状态标签/徽章 ========== */
+
+.badge,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.badge-success,
+.status-badge-success {
+  background-color: var(--status-success-bg);
+  color: var(--status-success);
+  border-color: var(--status-success-border);
+}
+
+.badge-danger,
+.badge-error,
+.status-badge-danger,
+.status-badge-error {
+  background-color: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger-border);
+}
+
+.badge-warning,
+.status-badge-warning {
+  background-color: var(--status-warning-bg);
+  color: var(--status-warning);
+  border-color: var(--status-warning-border);
+}
+
+.badge-info,
+.status-badge-info {
+  background-color: var(--status-info-bg);
+  color: var(--status-info);
+  border-color: var(--status-info-border);
+}
+
+.badge-neutral,
+.status-badge-neutral {
+  background-color: var(--status-neutral-bg);
+  color: var(--status-neutral-strong);
+  border-color: var(--status-neutral-border);
+}
+
+.status-panel {
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-3);
+}
+
+.status-panel-success {
+  background-color: var(--status-success-bg);
+  border-color: var(--status-success-border);
+  color: var(--status-success-strong);
+}
+
+.status-panel-warning {
+  background-color: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+  color: var(--status-warning-strong);
+}
+
+.status-panel-danger,
+.status-panel-error {
+  background-color: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+  color: var(--status-danger-strong);
+}
+
+.status-panel-info {
+  background-color: var(--status-info-bg);
+  border-color: var(--status-info-border);
+  color: var(--status-info-strong);
+}
+
+.status-panel-neutral {
+  background-color: var(--status-neutral-bg);
+  border-color: var(--status-neutral-border);
+  color: var(--status-neutral-strong);
+}
+
+.text-status-success { color: var(--status-success); }
+.text-status-success-strong { color: var(--status-success-strong); }
+.text-status-warning { color: var(--status-warning); }
+.text-status-warning-strong { color: var(--status-warning-strong); }
+.text-status-danger { color: var(--status-danger); }
+.text-status-danger-strong { color: var(--status-danger-strong); }
+.text-status-info { color: var(--status-info); }
+.text-status-info-strong { color: var(--status-info-strong); }
+.text-status-neutral { color: var(--status-neutral); }
+.text-status-neutral-strong { color: var(--status-neutral-strong); }
+
+.bg-status-success-soft { background-color: var(--status-success-bg); }
+.bg-status-warning-soft { background-color: var(--status-warning-bg); }
+.bg-status-danger-soft { background-color: var(--status-danger-bg); }
+.bg-status-info-soft { background-color: var(--status-info-bg); }
+.bg-status-neutral-soft { background-color: var(--status-neutral-bg); }
+
+.border-status-success { border-color: var(--status-success-border); }
+.border-status-warning { border-color: var(--status-warning-border); }
+.border-status-danger { border-color: var(--status-danger-border); }
+.border-status-info { border-color: var(--status-info-border); }
+.border-status-neutral { border-color: var(--status-neutral-border); }
+
+/* ========== Domain taxonomy 标签 ========== */
+
+.domain-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: 3px var(--spacing-2);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-full);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-domain);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.domain-chip-traffic-summary {
+  color: var(--domain-traffic-summary-text);
+  background-color: var(--domain-traffic-summary-bg);
+  border-color: var(--domain-traffic-summary-border);
+}
+
+.domain-chip-traffic-l1 {
+  color: var(--domain-traffic-l1-text);
+  background-color: var(--domain-traffic-l1-bg);
+  border-color: var(--domain-traffic-l1-border);
+}
+
+.domain-chip-traffic-l2 {
+  color: var(--domain-traffic-l2-text);
+  background-color: var(--domain-traffic-l2-bg);
+  border-color: var(--domain-traffic-l2-border);
+}
+
+.domain-chip-traffic-l3 {
+  color: var(--domain-traffic-l3-text);
+  background-color: var(--domain-traffic-l3-bg);
+  border-color: var(--domain-traffic-l3-border);
+}
+
+.domain-chip-topsis-star {
+  color: var(--domain-topsis-star-text);
+  background-color: var(--domain-topsis-star-bg);
+  border-color: var(--domain-topsis-star-border);
+}
+
+.domain-chip-topsis-stable {
+  color: var(--domain-topsis-stable-text);
+  background-color: var(--domain-topsis-stable-bg);
+  border-color: var(--domain-topsis-stable-border);
+}
+
+.domain-chip-topsis-opportunity {
+  color: var(--domain-topsis-opportunity-text);
+  background-color: var(--domain-topsis-opportunity-bg);
+  border-color: var(--domain-topsis-opportunity-border);
+}
+
+.domain-chip-topsis-long-tail {
+  color: var(--domain-topsis-long-tail-text);
+  background-color: var(--domain-topsis-long-tail-bg);
+  border-color: var(--domain-topsis-long-tail-border);
+}
+
+.domain-chip-topsis-neutral {
+  color: var(--domain-topsis-neutral-text);
+  background-color: var(--domain-topsis-neutral-bg);
+  border-color: var(--domain-topsis-neutral-border);
+}
+
+.domain-chip-creator-s {
+  color: var(--domain-creator-s-text);
+  background-color: var(--domain-creator-s-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-initial-contact {
+  color: var(--domain-cooperation-initial-contact-text);
+  background-color: var(--domain-cooperation-initial-contact-bg);
+  border-color: transparent;
+}
+
+.domain-chip-creator-a {
+  color: var(--domain-creator-a-text);
+  background-color: var(--domain-creator-a-bg);
+  border-color: transparent;
+}
+
+.domain-chip-creator-b {
+  color: var(--domain-creator-b-text);
+  background-color: var(--domain-creator-b-bg);
+  border-color: transparent;
+}
+
+.domain-chip-creator-c {
+  color: var(--domain-creator-c-text);
+  background-color: var(--domain-creator-c-bg);
+  border-color: transparent;
+}
+
+.domain-chip-creator-d {
+  color: var(--domain-creator-d-text);
+  background-color: var(--domain-creator-d-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-unclassified {
+  color: var(--domain-cooperation-unclassified-text);
+  background-color: var(--domain-cooperation-unclassified-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-sample-negotiation {
+  color: var(--domain-cooperation-sample-negotiation-text);
+  background-color: var(--domain-cooperation-sample-negotiation-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-not-considering {
+  color: var(--domain-cooperation-not-considering-text);
+  background-color: var(--domain-cooperation-not-considering-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-paused {
+  color: var(--domain-cooperation-paused-text);
+  background-color: var(--domain-cooperation-paused-bg);
+  border-color: transparent;
+}
+
+.domain-chip-cooperation-live-started {
+  color: var(--domain-cooperation-live-started-text);
+  background-color: var(--domain-cooperation-live-started-bg);
+  border-color: transparent;
+}

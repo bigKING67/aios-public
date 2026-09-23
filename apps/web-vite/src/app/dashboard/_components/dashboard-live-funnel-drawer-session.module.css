@@ -1,0 +1,29 @@
+.sessionArea {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.sessionSwitchLabel {
+  flex: 0 0 auto;
+  color: var(--dashboard-live-funnel-control-text);
+  font-size: var(--font-size-base);
+  font-weight: 560;
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-tight);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sessionArea {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+}

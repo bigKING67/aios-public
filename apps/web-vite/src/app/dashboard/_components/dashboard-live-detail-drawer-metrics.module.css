@@ -1,0 +1,56 @@
+.metricGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.metricGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metricGroup h5 {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--dashboard-detail-border);
+  border-left: 1px solid var(--dashboard-detail-border);
+}
+
+.metricItem {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+  border-right: 1px solid var(--dashboard-detail-border);
+  border-bottom: 1px solid var(--dashboard-detail-border);
+  padding: 8px 9px;
+}
+
+.metricLabel {
+  overflow: hidden;
+  color: var(--dashboard-detail-label-text);
+  font-size: var(--font-size-xs);
+  font-weight: 420;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metricValue {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

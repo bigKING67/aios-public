@@ -1,0 +1,5 @@
+# Deployments are defined explicitly by the scripts/deploy_prefect_*.sh entrypoints.
+build: null
+push: null
+pull: null
+deployments: []

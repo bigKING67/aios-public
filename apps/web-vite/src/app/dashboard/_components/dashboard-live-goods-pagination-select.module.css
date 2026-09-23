@@ -1,0 +1,22 @@
+.paginationSelect :global(.ant-pagination-options) {
+  margin-inline-start: 8px;
+}
+
+.paginationSelect :global(.ant-select-selector) {
+  height: 30px !important;
+  border-color: var(--dashboard-control-border) !important;
+  border-radius: 10px !important;
+  background: var(--bg-card) !important;
+  box-shadow: none !important;
+}
+
+.paginationSelect :global(.ant-select-selection-item) {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 400 !important;
+  line-height: var(--component-control-line-height-md) !important;
+}
+
+.paginationSelect :global(.ant-select-arrow) {
+  color: var(--text-tertiary);
+}

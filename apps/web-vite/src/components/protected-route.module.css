@@ -1,0 +1,20 @@
+.centerState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+}
+
+.forbiddenState {
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-md);
+}
+
+.forbiddenContent {
+  text-align: center;
+}
+
+.forbiddenHint {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-body-sm);
+}

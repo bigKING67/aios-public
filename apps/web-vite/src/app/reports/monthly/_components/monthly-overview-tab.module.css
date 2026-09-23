@@ -1,0 +1,85 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.periodBadge {
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-base);
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.periodValue {
+  font-weight: var(--font-weight-semibold);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--spacing-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.divider {
+  height: 1px;
+  background: var(--divider-color);
+}
+
+.panel {
+  padding: var(--spacing-6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  background: var(--bg-card);
+}
+
+.summaryStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.summaryParagraph {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.subSectionTitle {
+  margin: 0 0 var(--spacing-3);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.highlightTitle {
+  color: var(--status-success-strong);
+}
+
+.riskTitle {
+  color: var(--status-danger-strong);
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding-left: 20px;
+}
+
+.summaryListItem {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}

@@ -1,0 +1,43 @@
+.sectionStack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--dashboard-panel-border);
+  background: linear-gradient(
+    180deg,
+    var(--dashboard-panel-bg-start) 0%,
+    var(--dashboard-panel-bg-end) 100%
+  );
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--dashboard-panel-shadow-subtle);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    var(--dashboard-traffic-l1-accent-soft),
+    var(--dashboard-traffic-l2-accent-soft),
+    var(--dashboard-traffic-l3-accent-soft)
+  );
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    padding: 12px;
+    border-radius: 16px;
+  }
+}

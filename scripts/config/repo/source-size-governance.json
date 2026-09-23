@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "description": "Cross-language full-root source-size governance. Specialized frontend component, CSS, and Rust gates remain stricter; this guard closes TypeScript, all-Python, and quality-tooling discovery gaps.",
+  "categories": [
+    {
+      "name": "frontend-typescript",
+      "roots": ["apps/web-vite/src"],
+      "excludeRoots": ["apps/web-vite/src/generated"],
+      "extensions": [".ts", ".tsx"],
+      "maxLines": 1200,
+      "allowed": [
+        {
+          "path": "apps/web-vite/src/app/content/live-center/_lib/live-center-view-helpers.ts",
+          "maxLines": 2995,
+          "owner": "frontend-platform",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "Recording acceptance, ordering, and upload-index planning moved to live-center-recording-view-helpers.ts; freeze the reduced facade while time-anchor, payload-normalization, and view-model seams continue to split."
+        },
+        {
+          "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-analysis-result.ts",
+          "maxLines": 1206,
+          "owner": "content-assets",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "Public analysis contracts moved to content-assets-analysis-contracts.ts; freeze the reduced hydrator while diagnosis, evidence, and presentation normalization continue to split."
+        },
+        {
+          "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-inspector-ai-sections.tsx",
+          "maxLines": 1211,
+          "owner": "content-assets",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "Frozen inspector rendering debt; split decision, evidence, score, timeline, and action sections by owned UI responsibility."
+        }
+      ]
+    },
+    {
+      "name": "etl-python",
+      "roots": ["etl/groland_postgres"],
+      "extensions": [".py"],
+      "maxLines": 1800,
+      "allowed": [
+        {
+          "path": "etl/groland_postgres/scripts/live_center_analysis/processor.py",
+          "maxLines": 5564,
+          "owner": "live-center-dataops",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "JSON recovery moved to json_parser.py; freeze the reduced worker while claim/orchestration, input preparation, prompt contract, output normalization, persistence, and evidence-quality seams continue to split."
+        },
+        {
+          "path": "etl/groland_postgres/scripts/marketing_content_assets/analysis_processor.py",
+          "maxLines": 2320,
+          "owner": "content-assets-dataops",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "Frozen analysis worker debt; continue separating provider, normalization, repository, and orchestration seams."
+        }
+      ]
+    },
+    {
+      "name": "backend-rust",
+      "roots": ["backend-rust/src"],
+      "extensions": [".rs"],
+      "maxLines": 1000,
+      "allowed": []
+    },
+    {
+      "name": "frontend-css-modules",
+      "roots": ["apps/web-vite/src"],
+      "extensions": [".module.css"],
+      "maxLines": 1000,
+      "allowed": []
+    },
+    {
+      "name": "quality-tooling",
+      "roots": ["scripts/checks", "scripts/lib"],
+      "extensions": [".mjs"],
+      "maxLines": 1000,
+      "allowed": [
+        {
+          "path": "scripts/checks/dashboard/industry-material-inspiration-contract.mjs",
+          "maxLines": 3849,
+          "owner": "dashboard-quality",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-22-aios-quality-performance-architecture-governance",
+          "reason": "Contract fixture intentionally co-locates the end-to-end industry-material schema matrix; split transport, model, and rendering fixtures before extending coverage."
+        },
+        {
+          "path": "scripts/checks/reports/special-smoke.mjs",
+          "maxLines": 3273,
+          "owner": "special-reports-quality",
+          "expiresOn": "2026-10-31",
+          "remediationTask": "07-23-aios-quality-score-95-plus-hardening",
+          "reason": "Tmall product/traffic CSS assertions moved to special-report-tmall-css-smoke.mjs; freeze the reduced facade while remaining report-family composition contracts continue to split."
+        }
+      ]
+    }
+  ]
+}

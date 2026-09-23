@@ -1,0 +1,12 @@
+.detailMeta {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-1) / 2);
+}
+
+.detailMetaTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 680;
+}

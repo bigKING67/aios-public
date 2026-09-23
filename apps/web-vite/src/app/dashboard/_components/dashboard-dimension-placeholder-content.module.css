@@ -1,0 +1,42 @@
+.dimensionPlaceholderTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+}
+
+.dimensionPlaceholderDescription {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.dimensionPlaceholderCard {
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(
+    180deg,
+    var(--dashboard-surface-gradient-start),
+    var(--dashboard-surface-gradient-end)
+  );
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dimensionPlaceholderCardLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  font-weight: 600;
+}
+
+.dimensionPlaceholderCardValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: 660;
+}

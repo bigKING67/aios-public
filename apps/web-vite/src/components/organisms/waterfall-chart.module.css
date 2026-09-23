@@ -1,0 +1,43 @@
+.root {
+  display: flex;
+  width: 100%;
+  height: var(--waterfall-chart-height);
+  flex-direction: column;
+}
+
+.legend {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: var(--spacing-4);
+  row-gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+  padding-inline: var(--spacing-1);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendMarker {
+  width: var(--spacing-2);
+  height: var(--spacing-2);
+  border-radius: 999px;
+  background-color: var(--waterfall-legend-color);
+}
+
+.legendLabel {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.chartCanvas {
+  min-height: 0;
+  width: 100%;
+  flex: 1;
+}

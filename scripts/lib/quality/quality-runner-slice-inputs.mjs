@@ -1,0 +1,152 @@
+export {
+  QUALITY_RUNNER_PREFLIGHT_CACHE_KEY_INPUTS,
+  QUALITY_RUNNER_PREFLIGHT_CACHE_WRAPPER_INPUTS,
+} from './quality-runner-preflight-slice-inputs.mjs';
+
+export {
+  QUALITY_RUNNER_SCHEDULER_CACHE_BYPASS_INPUTS,
+  QUALITY_RUNNER_SCHEDULER_CONCURRENCY_INPUTS,
+  QUALITY_RUNNER_SCHEDULER_ENV_INPUTS,
+  QUALITY_RUNNER_SCHEDULER_LOCAL_BIN_INPUTS,
+  QUALITY_RUNNER_SCHEDULER_SHELL_INPUTS,
+} from './quality-runner-scheduler-slice-inputs.mjs';
+
+export {
+  QUALITY_RUNNER_AFFECTED_EXPLAIN_INPUTS,
+  QUALITY_RUNNER_AFFECTED_FILES_INPUTS,
+  QUALITY_RUNNER_AFFECTED_MAPPING_INPUTS,
+  QUALITY_RUNNER_AFFECTED_MODE_INPUTS,
+  QUALITY_RUNNER_AFFECTED_RUNTIME_ENV_INPUTS,
+  QUALITY_RUNNER_AFFECTED_RUNTIME_STATUS_INPUTS,
+  QUALITY_RUNNER_PREPUSH_INPUTS,
+} from './quality-runner-affected-slice-inputs.mjs';
+
+export {
+  QUALITY_RUNNER_CACHE_ARTIFACT_INPUTS,
+  QUALITY_RUNNER_CACHE_LOCAL_INPUTS,
+  QUALITY_RUNNER_CACHE_STATS_INPUTS,
+} from './quality-runner-cache-slice-inputs.mjs';
+
+export {
+  QUALITY_RUNNER_CACHE_KEY_DIGEST_INPUTS,
+  QUALITY_RUNNER_CACHE_KEY_ENV_INPUTS,
+  QUALITY_RUNNER_CACHE_KEY_TOOL_VERSION_INPUTS,
+} from './quality-runner-cache-key-slice-inputs.mjs';
+
+export {
+  QUALITY_RUNNER_CACHE_REMOTE_ARTIFACT_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_CONFIG_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_REPAIR_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_RESULT_INPUTS,
+  QUALITY_RUNNER_CACHE_REMOTE_STATS_INPUTS,
+} from './quality-runner-cache-remote-slice-inputs.mjs';
+
+export const QUALITY_RUNNER_MANIFEST_INPUTS = Object.freeze([
+  'scripts/checks/quality-runner/manifest.mjs',
+  'scripts/quality-runner.mjs',
+  'scripts/lib/quality/quality-affected.mjs',
+  'scripts/lib/quality/quality-affected-gates.mjs',
+  'scripts/lib/quality/quality-cache.mjs',
+  'scripts/lib/quality/quality-cache-key.mjs',
+  'scripts/lib/quality/quality-cache-paths.mjs',
+  'scripts/lib/quality/quality-manifest.mjs',
+]);
+
+export const QUALITY_RUNNER_ENTRYPOINT_INPUTS = Object.freeze([
+  'scripts/checks/quality-runner/entrypoint.mjs',
+  'scripts/quality-runner.mjs',
+  'scripts/lib/quality/quality-runner-actions.mjs',
+  'scripts/lib/quality/quality-runner-args.mjs',
+  'scripts/lib/quality/quality-runner-output.mjs',
+  'scripts/lib/quality/quality-runner-repo.mjs',
+  'scripts/lib/quality/quality-runner-selection.mjs',
+]);
+
+export const QUALITY_RUNNER_BENCHMARK_INPUTS = Object.freeze([
+  'scripts/checks/quality-runner/benchmark.mjs',
+  'scripts/quality-runner.mjs',
+  'scripts/lib/quality/quality-gate-registry.mjs',
+  'scripts/lib/quality/quality-runner-actions.mjs',
+  'scripts/lib/quality/quality-runner-args.mjs',
+  'scripts/lib/quality/quality-runner-benchmark.mjs',
+  'scripts/lib/quality/quality-runner-output.mjs',
+  'scripts/lib/quality/quality-runner-selection.mjs',
+  'scripts/lib/quality/quality-scheduler.mjs',
+]);
+
+export const QUALITY_RUNNER_REGISTRY_INPUTS = Object.freeze([
+  'scripts/config/quality/quality-gates.mjs',
+  'scripts/checks/ci/manifest-order.mjs',
+  'scripts/checks/ci/package-wiring.mjs',
+  'scripts/checks/deploy/config.behavior.mjs',
+  'scripts/checks/deploy/config.mjs',
+  'scripts/checks/quality-runner/behavior-dispatch.mjs',
+  'scripts/checks/quality-runner/behavior-dispatch-table.mjs',
+  'scripts/checks/quality-runner/command-layout.mjs',
+  'scripts/lib/quality/quality-command-layout-core.mjs',
+  'scripts/lib/quality/quality-command-layout-legacy-paths.mjs',
+  'scripts/checks/quality-runner/registry.mjs',
+  'scripts/checks/quality-runner/registry-primary-check-file-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-aggregate-input-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-ci-runtime-input-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-command-layout-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-design-input-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-frontend-delivery-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-lib-gate-group-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-reports-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-runner-input-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-slice-definition-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-slice-gate-group-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-slice-metadata-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-split-input-fixtures.mjs',
+  'scripts/checks/quality-runner/registry-weekly-input-fixtures.mjs',
+  'scripts/checks/quality-runner/profiles.mjs',
+  'scripts/lib/quality/quality-affected.mjs',
+  'scripts/lib/quality/quality-affected-gates.mjs',
+  'scripts/lib/quality/quality-profiles.mjs',
+  'scripts/lib/quality/quality-gate-inputs.mjs',
+  'scripts/lib/quality/quality-gate-named-inputs.mjs',
+  'scripts/lib/quality/gate-inputs/design-inputs.mjs',
+  'scripts/lib/quality/gate-inputs/frontend-delivery-inputs.mjs',
+  'scripts/lib/quality/gate-inputs/frontend-structure-inputs.mjs',
+  'scripts/lib/quality/gate-inputs/weekly-inputs.mjs',
+  'scripts/lib/quality/quality-gate-command-targets.mjs',
+  'scripts/lib/quality/quality-gate-input-expansion.mjs',
+  'scripts/lib/quality/quality-gate-registry-base-gates.mjs',
+  'scripts/lib/quality/quality-gate-registry-gates.mjs',
+  'scripts/lib/quality/quality-gate-registry-inference.mjs',
+  'scripts/lib/quality/quality-gate-registry-metadata.mjs',
+  'scripts/lib/quality/quality-gate-registry-scripts.mjs',
+  'scripts/lib/quality/quality-gate-registry-validation.mjs',
+  'scripts/lib/reports/special-report-smoke-gate.mjs',
+  'scripts/lib/reports/special-report-chart-gallery-smoke.mjs',
+  'scripts/lib/reports/special-report-reader-fatigue-smoke.mjs',
+  'scripts/lib/reports/special-report-section-source.mjs',
+  'scripts/config/reports/special-smoke-inputs.mjs',
+  'scripts/lib/quality/quality-runner-lib-gate-groups.mjs',
+  'scripts/lib/quality/quality-allowlist-affected-gates.mjs',
+  'scripts/lib/quality/quality-runner-cache-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-cache-key-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-cache-remote-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-affected-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-affected-slice-definitions.mjs',
+  'scripts/lib/quality/quality-affected-frontend-rules.mjs',
+  'scripts/lib/quality/affected/frontend-delivery-helper-rules.mjs',
+  'scripts/lib/quality/quality-runner-cache-slice-definitions.mjs',
+  'scripts/lib/quality/quality-runner-slice-definition-utils.mjs',
+  'scripts/lib/quality/quality-runner-slice-definitions.mjs',
+  'scripts/lib/quality/quality-runner-compat-slice-definitions.mjs',
+  'scripts/lib/quality/quality-runner-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-actions.mjs',
+  'scripts/lib/quality/quality-runner-args.mjs',
+  'scripts/lib/quality/quality-runner-output.mjs',
+  'scripts/lib/quality/quality-runner-repo.mjs',
+  'scripts/lib/quality/quality-runner-selection.mjs',
+  'scripts/lib/quality/quality-runner-scheduler-slice-inputs.mjs',
+  'scripts/lib/quality/quality-runner-preflight-slice-inputs.mjs',
+  'scripts/lib/ci/verify-ci-design-run-gates.mjs',
+  'scripts/lib/ci/verify-ci-frontend-run-gates.mjs',
+  'scripts/lib/ci/verify-ci-gates.mjs',
+  'scripts/lib/ci/verify-ci-run-gate-utils.mjs',
+  'scripts/lib/ci/verify-ci-meta-gates.mjs',
+]);

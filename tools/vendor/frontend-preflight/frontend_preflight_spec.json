@@ -1,0 +1,88 @@
+{
+  "version": "2026-04-27.v1",
+  "tiers": ["L0", "L1-F", "L1-V", "L2"],
+  "execution_modes": ["main_serial", "spawn_default", "spawn_worker"],
+  "runtime_remediation_policies": ["not_required", "repair_then_retry"],
+  "style_authority_revision_policies": ["none", "enforce_current_baseline", "evolve_current_baseline"],
+  "core_baseline_skills": [
+    "design-taste-frontend"
+  ],
+  "composition_skills": [
+    "frontend-skill"
+  ],
+  "mutex_style_skills": [
+    "high-end-visual-design",
+    "minimalist-ui",
+    "industrial-brutalist-ui",
+    "gpt-taste"
+  ],
+  "workflow_modifier_skills": [
+    "image-to-code",
+    "redesign-existing-projects",
+    "stitch-design-taste"
+  ],
+  "finalizer_skills": [
+    "full-output-enforcement"
+  ],
+  "imagegen_only_skills": [
+    "imagegen-frontend-web",
+    "imagegen-frontend-mobile",
+    "brandkit"
+  ],
+  "l1f_visual_warning_skills": [
+    "frontend-skill",
+    "high-end-visual-design",
+    "minimalist-ui",
+    "industrial-brutalist-ui",
+    "gpt-taste",
+    "image-to-code",
+    "redesign-existing-projects",
+    "imagegen-frontend-web",
+    "imagegen-frontend-mobile",
+    "brandkit"
+  ],
+  "authority_required_sections": {
+    "typography": ["typography", "font", "字体"],
+    "color": ["color", "colour", "palette", "颜色"],
+    "motion": ["motion", "interaction", "animation", "动效", "交互"],
+    "component": ["component", "components", "组件"]
+  },
+  "normalized_error_codes": [
+    "OK",
+    "L1F_CHAIN_WARNING",
+    "PREFLIGHT_MISSING",
+    "PREFLIGHT_INVALID_CODE",
+    "STYLE_AUTHORITY_MISSING",
+    "STYLE_MUTEX_CONFLICT",
+    "STYLE_SKILL_REQUIRED",
+    "BASELINE_SKILL_MISSING",
+    "FRONTEND_SKILL_REQUIRED",
+    "RUNTIME_ERROR"
+  ],
+  "preflight_emitted_codes": [
+    "OK",
+    "L1F_CHAIN_WARNING",
+    "STYLE_AUTHORITY_MISSING",
+    "STYLE_MUTEX_CONFLICT",
+    "STYLE_SKILL_REQUIRED",
+    "BASELINE_SKILL_MISSING",
+    "FRONTEND_SKILL_REQUIRED",
+    "RUNTIME_ERROR"
+  ],
+  "preflight_priority": [
+    "PREFLIGHT_MISSING",
+    "PREFLIGHT_INVALID_CODE",
+    "STYLE_MUTEX_CONFLICT",
+    "STYLE_SKILL_REQUIRED",
+    "BASELINE_SKILL_MISSING",
+    "FRONTEND_SKILL_REQUIRED",
+    "STYLE_AUTHORITY_MISSING",
+    "L1F_CHAIN_WARNING"
+  ],
+  "legacy_forbidden_codes": ["STYLE_STYLE_SKILL_REQUIRED"],
+  "entry_gate": {
+    "allowed_status": ["pass", "warn", "fail"],
+    "allow_status": ["pass", "warn"],
+    "deny_status": ["fail"]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source": "https://github.com/tmwgsicp/wechat-download-api.git",
+  "tag": "v1.7.0",
+  "tag_object": "79c0549bd3b7880c0e81173effc1fbbc45446442",
+  "commit": "fd70a886a82a8838312e2439bb0eed1c2e1ad00b",
+  "tree": "8c96f7859b2779e3c92a7a361d733d36f35f8454",
+  "image": "tmwgsicp/wechat-download-api@sha256:6977f00af2334af4a8dc9ed19d0a82a5214fd4eca4d1c724f7d14b1299cc66ec",
+  "license": "AGPL-3.0-only",
+  "license_sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+  "upstream_file_sha256": {
+    "routes/articles.py": "3b5165c7c50c486ac25e8e7d4eaee5fe1b0ad33a08587d4b0d74e00f3bf54c13",
+    "routes/health.py": "5503cf8d6f04b8b4e4103d6570e60571246fa1fa1993a6c8528350911d56cfe5",
+    "utils/http_client.py": "967f37ced2885550490163e6d3efa4f70b91b9e43d3f0e54b4f489c235ccfde8",
+    "utils/proxy_pool.py": "19fb0098297b92b71772a3378498b8428bffaafdeecd95ccc223f1364971807f",
+    "utils/rss_poller.py": "0decff250819cb224507fbb530aebfe26f4390250cc922284636ea0fd93bea77"
+  },
+  "new_files": [
+    "utils/article_list_client.py"
+  ]
+}

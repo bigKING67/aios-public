@@ -1,0 +1,201 @@
+.fusionSnapshot {
+  min-width: 0;
+  padding-left: var(--spacing-5);
+  border-left: 1px solid var(--divider-color);
+}
+
+.fusionHeader {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.fusionHeader > div:first-child {
+  min-width: 0;
+}
+
+.fusionHeader > div:first-child > span {
+  display: block;
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-snug);
+}
+
+.fusionHeader h3 {
+  max-width: 240px;
+  margin: var(--spacing-1) 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.primaryScore {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-1);
+}
+
+.scoreValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-1);
+}
+
+.scoreValue strong {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-data-lg);
+  font-weight: var(--font-weight-data);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-none);
+}
+
+.scoreValue span,
+.primaryScore > span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.scoreValue span {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreMeaning {
+  margin: var(--spacing-3) 0 0;
+  padding: var(--spacing-2) 0 var(--spacing-2) var(--spacing-3);
+  border-left: 2px solid var(--brand-border);
+  background: color-mix(in srgb, var(--brand-secondary) 28%, transparent);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.supportMetrics {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: var(--spacing-4);
+  border-top: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.supportMetrics > div {
+  min-width: 0;
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-3) 0;
+}
+
+.supportMetrics > div + div {
+  padding-left: var(--spacing-3);
+  border-left: 1px solid var(--divider-color);
+}
+
+.supportMetrics strong {
+  display: block;
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-data);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+}
+
+.supportMetrics span {
+  display: block;
+  margin-top: var(--spacing-1);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.methodDetails {
+  min-width: 0;
+  margin-top: var(--spacing-3);
+}
+
+.methodDetails summary {
+  width: fit-content;
+  color: var(--brand-text);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.methodDetails summary:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--brand-active);
+  outline-offset: 2px;
+}
+
+.methodDetails p {
+  margin: var(--spacing-2) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+.fusionEmpty {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--divider-color);
+}
+
+.fusionEmpty strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.fusionEmpty span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+@media (max-width: 1100px) {
+  .fusionSnapshot {
+    padding-top: var(--spacing-5);
+    padding-left: 0;
+    border-top: 1px solid var(--divider-color);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .fusionHeader {
+    flex-direction: column;
+  }
+
+  .primaryScore {
+    align-items: flex-start;
+  }
+
+  .supportMetrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .supportMetrics > div {
+    padding: var(--spacing-3) 0;
+  }
+
+  .supportMetrics > div + div {
+    padding-left: 0;
+    border-top: 1px solid var(--divider-color);
+    border-left: 0;
+  }
+}

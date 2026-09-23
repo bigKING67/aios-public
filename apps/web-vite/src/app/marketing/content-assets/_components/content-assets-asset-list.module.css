@@ -1,0 +1,496 @@
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
+  gap: 14px;
+}
+
+.assetCard,
+.assetCardSkeleton {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: var(--bg-card);
+}
+
+.assetCard {
+  display: block;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.32, 0.72, 0, 1), border-color 180ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 180ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.assetCard:hover {
+  border-color: var(--brand-border);
+  box-shadow: var(--shadow-base);
+  transform: translateY(-3px);
+}
+
+.assetCard:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 3px;
+}
+
+.coverFrame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 18% 18%, var(--marketing-content-assets-material-white-a960), transparent 24%),
+    linear-gradient(135deg, var(--marketing-content-assets-material-brand-a080), var(--marketing-content-assets-material-neutral-a720)),
+    var(--bg-subtle);
+}
+
+.coverToneCyan {
+  background:
+    radial-gradient(circle at 80% 18%, var(--marketing-content-assets-material-white-a960), transparent 24%),
+    linear-gradient(135deg, var(--brand-secondary), var(--bg-subtle)),
+    var(--bg-subtle);
+}
+
+.coverToneSlate {
+  background:
+    radial-gradient(circle at 24% 78%, var(--marketing-content-assets-material-white-a960), transparent 22%),
+    linear-gradient(135deg, var(--bg-subtle), var(--marketing-content-assets-material-neutral-a720)),
+    var(--bg-subtle);
+}
+
+.coverToneWarm {
+  background:
+    radial-gradient(circle at 72% 22%, var(--marketing-content-assets-material-white-a960), transparent 22%),
+    linear-gradient(135deg, var(--status-warning-bg), var(--bg-subtle)),
+    var(--bg-subtle);
+}
+
+.coverToneBlue {
+  background:
+    radial-gradient(circle at 22% 24%, var(--marketing-content-assets-material-white-a960), transparent 22%),
+    linear-gradient(135deg, var(--brand-secondary), var(--marketing-content-assets-material-brand-a080)),
+    var(--bg-subtle);
+}
+
+.coverFrame::after {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 64%;
+  background: linear-gradient(180deg, transparent, var(--marketing-content-assets-material-ink-a780));
+  content: "";
+}
+
+.coverFrameWithImage {
+  background: var(--bg-subtle);
+}
+
+.coverFrameWithImage::after {
+  height: 68%;
+}
+
+.coverFramePreviewing::after {
+  height: 70%;
+  background: linear-gradient(180deg, transparent 8%, var(--marketing-content-assets-material-ink-a780));
+}
+
+.coverVisual {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(72%, 180px);
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.coverPlay {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--bg-card) 46%, transparent);
+  border-radius: 999px;
+  color: var(--text-inverse);
+  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 24%, transparent),
+    0 10px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
+  opacity: 0.8;
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  font: inherit;
+  line-height: var(--line-height-none);
+  transition: transform 160ms cubic-bezier(0.32, 0.72, 0, 1), border-color 160ms cubic-bezier(0.32, 0.72, 0, 1), background 160ms cubic-bezier(0.32, 0.72, 0, 1), opacity 160ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 160ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.coverVisual span :global(.anticon) {
+  color: var(--brand-text);
+}
+
+.coverPlay :global(.anticon) {
+  color: currentColor;
+  font-size: var(--font-size-xl);
+}
+
+.assetCard:hover .coverPlay {
+  border-color: color-mix(in srgb, var(--bg-card) 68%, transparent);
+  background: color-mix(in srgb, var(--text-primary) 40%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 32%, transparent),
+    0 12px 30px color-mix(in srgb, var(--text-primary) 24%, transparent);
+  opacity: 0.96;
+  transform: scale(1.04);
+}
+
+.coverTimeline {
+  display: grid;
+  grid-template-columns: 1.2fr 0.7fr 1fr 0.5fr;
+  gap: 5px;
+  width: 100%;
+}
+
+.coverTimeline i {
+  display: block;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--marketing-content-assets-material-white-a960);
+}
+
+.coverStatePill {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--marketing-content-assets-material-white-a960);
+}
+
+.durationBadge {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  left: 12px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: var(--text-inverse);
+  background: var(--marketing-content-assets-material-ink-a780);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.statusBadge {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 12px;
+  max-width: calc(100% - 92px);
+  overflow: hidden;
+  padding: 3px 7px;
+  border: 1px solid var(--marketing-content-assets-material-white-a960);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--marketing-content-assets-material-white-a960);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardBody {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 64px 14px 14px;
+  background: linear-gradient(180deg, transparent, var(--marketing-content-assets-material-ink-a780));
+  pointer-events: none;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.cardTitleRow h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-inverse);
+  font-size: var(--font-size-base);
+  font-weight: 660;
+  line-height: var(--line-height-tight);
+  text-shadow: 0 1px 10px var(--marketing-content-assets-material-ink-a780);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cardMeta {
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  line-height: var(--line-height-snug);
+  opacity: 0.86;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 8px var(--marketing-content-assets-material-ink-a780);
+  white-space: nowrap;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tagRow span {
+  overflow: hidden;
+  max-width: 100%;
+  padding: 3px 7px;
+  border: 1px solid var(--marketing-content-assets-material-white-a960);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--marketing-content-assets-material-white-a960);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tagRow .aiTag {
+  border-color: var(--brand-border);
+  color: var(--brand-text);
+  background: var(--brand-secondary);
+}
+
+.readinessRow,
+.tableReadinessPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.readinessRow span,
+.tableReadinessPills span {
+  min-width: 0;
+  padding: 2px 6px;
+  border: 1px solid var(--marketing-content-assets-material-white-a960);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--marketing-content-assets-material-white-a960);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+}
+
+.readinessRow .readinessPillReady,
+.tableReadinessPills .readinessPillReady {
+  border-color: var(--brand-border);
+  color: var(--brand-text);
+  background: var(--brand-secondary);
+}
+
+.readinessRow .readinessPillActive,
+.tableReadinessPills .readinessPillActive {
+  border-color: var(--status-info-border);
+  color: var(--status-info-strong);
+  background: var(--status-info-bg);
+}
+
+.readinessRow .readinessPillFailed,
+.tableReadinessPills .readinessPillFailed {
+  border-color: var(--status-danger-border);
+  color: var(--status-danger-strong);
+  background: var(--status-danger-bg);
+}
+
+.sourceUploadButton,
+.tableSourceUploadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid var(--brand-border);
+  border-radius: 999px;
+  color: var(--brand-text);
+  background: var(--brand-secondary);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-snug);
+  cursor: pointer;
+  transition:
+    border-color 160ms cubic-bezier(0.32, 0.72, 0, 1),
+    background 160ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 160ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.sourceUploadButton {
+  width: fit-content;
+  padding: 5px 9px;
+  pointer-events: auto;
+}
+
+.tableSourceUploadButton {
+  padding: 4px 9px;
+}
+
+.sourceUploadButton:hover,
+.tableSourceUploadButton:hover {
+  border-color: var(--brand-primary);
+  background: var(--bg-card);
+  transform: translateY(-1px);
+}
+
+.sourceUploadButton:focus-visible,
+.tableSourceUploadButton:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+.tableReadinessPills span {
+  border-color: var(--border-color);
+  background: var(--bg-subtle);
+}
+
+.assetTable :global(.ant-table) {
+  border-radius: 14px;
+}
+
+.assetTableRow {
+  cursor: pointer;
+  transition: background 180ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.assetTableRow:hover > td {
+  background: var(--brand-secondary) !important;
+}
+
+.tableTitleButton {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tableTitleButton strong {
+  overflow: hidden;
+  color: var(--brand-text);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tableTitleButton span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.assetCardSkeleton {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  background:
+    radial-gradient(circle at 18% 16%, var(--marketing-content-assets-material-white-a960), transparent 24%),
+    linear-gradient(135deg, var(--brand-secondary), var(--bg-subtle)),
+    var(--bg-subtle);
+}
+
+.assetCardSkeleton::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 68%;
+  background: linear-gradient(180deg, transparent, var(--marketing-content-assets-material-ink-a780));
+  content: "";
+}
+
+.skeletonDuration,
+.skeletonPlay,
+.skeletonBody {
+  position: absolute;
+  z-index: 2;
+}
+
+.skeletonDuration {
+  top: 12px;
+  left: 12px;
+  width: 54px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--marketing-content-assets-material-ink-a780);
+}
+
+.skeletonPlay {
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in srgb, var(--bg-card) 46%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 24%, transparent),
+    0 10px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
+  opacity: 0.78;
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  transform: translate(-50%, -50%);
+}
+
+.skeletonBody {
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonBody i {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--marketing-content-assets-material-white-a960);
+}
+
+.skeletonBody i:first-child {
+  width: 86%;
+  height: 14px;
+}
+
+.skeletonBody i:nth-child(2) {
+  width: 62%;
+}
+
+.skeletonBody i:last-child {
+  width: 42%;
+}

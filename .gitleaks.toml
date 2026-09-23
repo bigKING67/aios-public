@@ -1,0 +1,18 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+  [[rules.allowlists]]
+description = "Known frontend metric identifiers parsed as generic API keys"
+condition = "AND"
+regexTarget = "line"
+paths = [
+  '''apps/web-vite/src/app/dashboard/_components/dashboard-metric-definitions\.ts$''',
+  '''apps/web-vite/src/app/dashboard/_components/dashboard-qianchuan-content\.tsx$''',
+  '''apps/web-vite/src/app/ops/dataops/_components/dataops-channel-columns\.tsx$'''
+]
+regexes = [
+  '''key:\s*["'][A-Za-z][A-Za-z0-9_]{7,}["']'''
+]

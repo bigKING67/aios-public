@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "maxLines": 390,
+  "description": "Frontend TSX/JSX component line-count budget. New component files should stay focused and split before reaching this limit.",
+  "allowed": [
+    {
+      "path": "apps/web-vite/src/app/dashboard/_components/dashboard-qianchuan-columns.tsx",
+      "maxLines": 584,
+      "reason": "Temporary frozen qianchuan dashboard column debt grew during goods-card carrier metric alignment; split column factories and metric renderers into focused modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/_components/dashboard-qianchuan-content.tsx",
+      "maxLines": 950,
+      "reason": "Temporary frozen qianchuan dashboard content debt grew during qianchuan scoped layout, filter polish, and goods-card carrier metric alignment; split sections by overview/table/filter responsibilities before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/content/live-center/_components/live-center-client.tsx",
+      "maxLines": 569,
+      "reason": "Temporary frozen live-center client debt grew during the live-center evidence workflow push; split command strip evidence tokens, session list orchestration, and review workspace state before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-asset-detail-workbench.tsx",
+      "maxLines": 1080,
+      "reason": "Temporary frozen content-asset detail debt grew during the strict qianchuan four-zone workbench implementation; split left/middle/right/bottom zone shells and diagnosis helpers into focused modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-client.tsx",
+      "maxLines": 432,
+      "reason": "Temporary frozen content-assets client debt surfaced by qianchuan performance and external video import work; split workspace query state, action handlers, and modal orchestration before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-identity-modal.tsx",
+      "maxLines": 412,
+      "reason": "Temporary frozen content-assets identity modal debt surfaced by pushed identity enrichment work; split identity fields, validation messaging, and footer actions before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-import-modal.tsx",
+      "maxLines": 897,
+      "reason": "Temporary frozen content-asset import modal debt surfaced by qianchuan content-asset validation; split source input, preview, and completion panels into focused modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-inspector-ai-sections.tsx",
+      "maxLines": 1273,
+      "reason": "Temporary frozen content-asset AI inspector debt after qianchuan performance snapshot, daily trend, and v2.1 fusion diagnosis sections were added; split performance snapshot, trend panel, and fusion evidence sections before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-profile-modal.tsx",
+      "maxLines": 439,
+      "reason": "Temporary frozen content-asset profile modal debt surfaced by the pushed content-asset identity diff; split profile form sections into focused subcomponents before lowering this cap and do not grow this file further."
+    }
+  ]
+}

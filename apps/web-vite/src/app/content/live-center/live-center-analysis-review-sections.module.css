@@ -1,0 +1,357 @@
+.momentReviewCard,
+.scriptReviewCard,
+.scorecardRow,
+.reviewFact,
+.recommendedAction,
+.actionBacklogRow {
+  min-width: 0;
+}
+
+.reviewFact p,
+.recommendedAction p,
+.scriptReviewCard p,
+.scorecardRow p,
+.scorecardSharedNote p,
+.actionBacklogBody p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.momentReviewList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scriptReviewHeader strong,
+.scorecardHeader strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.momentReviewCard {
+  display: grid;
+  grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) 0;
+  background: transparent;
+}
+
+.momentReviewList > li + li .momentReviewCard {
+  border-top: 1px solid var(--divider-color);
+}
+
+.momentTimeRail {
+  display: grid;
+  gap: var(--spacing-2);
+  align-content: start;
+  min-width: 0;
+  padding-right: var(--spacing-3);
+  border-right: 1px solid var(--divider-color);
+}
+
+.momentTimeRail strong {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.momentTimeRail span,
+.scriptReviewHeader span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.momentReviewBody {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.momentNarrative,
+.momentNarrativeSingle,
+.momentSignalList {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.momentNarrative {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.momentNarrativeSingle {
+  grid-template-columns: 1fr;
+}
+
+.momentSignalList {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.reviewFact {
+  display: grid;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+}
+
+.reviewFactCompact {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.reviewFactEmphasis {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.reviewFact span,
+.recommendedAction span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.scriptQuote {
+  margin: 0;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-left: 3px solid var(--brand-primary);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.scriptQuoteClamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.recommendedAction {
+  display: grid;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--brand-secondary);
+}
+
+.recommendedActionCompact {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.scriptReviewList {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+}
+
+.reviewSectionNotice,
+.actionBacklogPinnedNote {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.reviewSectionNotice {
+  padding: 0 0 var(--spacing-3);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.scriptReviewCard {
+  display: grid;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) 0;
+  background: transparent;
+}
+
+.scriptReviewCard + .scriptReviewCard {
+  border-top: 1px solid var(--divider-color);
+}
+
+.scriptReviewHeader,
+.scorecardHeader {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.scorecardStack,
+.scorecardList,
+.actionBacklogList {
+  display: grid;
+  min-width: 0;
+}
+
+.scorecardStack {
+  gap: var(--spacing-3);
+}
+
+.scorecardList,
+.actionBacklogList {
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.actionBacklogPinnedNote {
+  padding: 0 0 var(--spacing-3);
+}
+
+.scorecardSharedNote {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--brand-secondary);
+}
+
+.scorecardSharedNote span {
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.scorecardRow {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.34fr) minmax(0, 1fr);
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) 0;
+  background: transparent;
+}
+
+.scorecardRow + .scorecardRow {
+  border-top: 1px solid var(--divider-color);
+}
+
+.scorecardHeader {
+  align-content: start;
+  padding-right: var(--spacing-3);
+  border-right: 1px solid var(--divider-color);
+}
+
+.scorecardHeader span {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.scorecardBody {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.actionBacklogRow {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) 0;
+  background: transparent;
+}
+
+.actionBacklogList > li + li .actionBacklogRow {
+  border-top: 1px solid var(--divider-color);
+}
+
+.actionBacklogPriority {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  min-width: 0;
+}
+
+.actionBacklogPriority span {
+  display: inline-grid;
+  min-width: 42px;
+  min-height: 28px;
+  place-items: center;
+  padding: 0 var(--spacing-2);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-full);
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+}
+
+.actionBacklogBody {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .momentReviewCard,
+  .momentNarrative,
+  .momentNarrativeSingle,
+  .momentSignalList,
+  .scorecardRow {
+    grid-template-columns: 1fr;
+  }
+
+  .momentTimeRail {
+    padding-right: 0;
+    padding-bottom: var(--spacing-3);
+    border-right: 0;
+    border-bottom: 1px solid var(--divider-color);
+  }
+
+  .scorecardHeader {
+    padding-right: 0;
+    padding-bottom: var(--spacing-3);
+    border-right: 0;
+    border-bottom: 1px solid var(--divider-color);
+  }
+}
+
+@media (max-width: 520px) {
+  .momentReviewCard,
+  .scriptReviewCard,
+  .scorecardRow,
+  .actionBacklogRow {
+    padding: var(--spacing-3);
+  }
+
+  .actionBacklogRow {
+    grid-template-columns: 1fr;
+  }
+}

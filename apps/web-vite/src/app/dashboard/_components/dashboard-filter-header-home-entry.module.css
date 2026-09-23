@@ -1,0 +1,64 @@
+.homeEntryLink {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  color: var(--text-primary) !important;
+  opacity: 0.82;
+  line-height: var(--line-height-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  text-decoration: none !important;
+}
+
+.homeEntryLink:hover {
+  color: var(--brand-text) !important;
+  opacity: 1;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+
+.homeEntryLink:focus,
+.homeEntryLink:focus-visible {
+  color: var(--brand-text) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--brand-focus-ring) !important;
+  border-radius: var(--spacing-2) !important;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+
+.homeEntryLink:active {
+  color: var(--brand-text) !important;
+  transform: translateY(1px);
+  opacity: 0.7;
+}
+
+.homeEntryIcon {
+  font-size: var(--font-size-xl) !important;
+  width: 18px;
+  height: 18px;
+  color: currentColor !important;
+  line-height: var(--line-height-none);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .homeEntryLink {
+    width: 18px;
+    height: 18px;
+  }
+}

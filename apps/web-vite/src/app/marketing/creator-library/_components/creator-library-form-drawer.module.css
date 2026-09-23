@@ -1,0 +1,105 @@
+.drawerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 14px;
+}
+
+.drawerGrid :global(.ant-select-single .ant-select-selector) {
+  overflow: hidden;
+}
+
+.drawerGrid :global(.ant-select-single .ant-select-selection-item) {
+  overflow: hidden;
+  color: var(--text-primary);
+  text-overflow: ellipsis;
+}
+
+.drawerFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ghostButton,
+.primaryButton {
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.ghostButton {
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.primaryButton {
+  color: var(--text-inverse);
+  border: 1px solid var(--brand-primary);
+  background: var(--brand-primary);
+}
+
+.ghostButton:hover,
+.primaryButton:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  transform: none;
+}
+
+.anchorTagSelect {
+  --ant-select-active-border-color: var(--border-color-hover) !important;
+  --ant-select-active-outline-color: var(--creator-library-material-ink-a050) !important;
+  --ant-select-hover-border-color: var(--border-color-hover) !important;
+}
+
+.anchorTagSelect :global(.ant-select-selection-search-input),
+.anchorTagSelect :global(.ant-select-input) {
+  caret-color: var(--text-primary);
+}
+
+.anchorTagSelect :global(.ant-select-selection-search-input:focus),
+.anchorTagSelect :global(.ant-select-input:focus) {
+  box-shadow: none !important;
+}
+
+.anchorTagSelect.anchorTagSelectPristine {
+  --ant-select-active-outline-color: transparent !important;
+}
+
+.anchorTagSelectPristine :global(.ant-select-selection-search-input),
+.anchorTagSelectPristine :global(.ant-select-input) {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  color: transparent;
+  caret-color: transparent;
+  opacity: 0;
+}
+
+.anchorTagSelectPristine :global(.ant-select-selection-search),
+.anchorTagSelectPristine :global(.ant-select-content-item-suffix) {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  flex: 0 0 0 !important;
+  overflow: hidden;
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .drawerGrid {
+    grid-template-columns: 1fr;
+  }
+}

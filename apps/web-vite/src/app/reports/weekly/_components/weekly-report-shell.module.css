@@ -1,0 +1,84 @@
+.compactHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.brandWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: clamp(140px, 18vw, 220px);
+  flex-shrink: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.middle {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.periodControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.periodLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.weekPicker {
+  width: clamp(160px, 34vw, 220px);
+}
+
+.exportButton {
+  border-color: var(--brand-primary) !important;
+  background: var(--brand-primary) !important;
+  color: var(--brand-on-primary) !important;
+}
+
+.headerTabList {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 4px;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-hover);
+}
+
+.headerTabButton {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.headerTabButton.headerTabButtonActive {
+  background: var(--bg-card);
+  color: var(--brand-text);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-sm);
+}

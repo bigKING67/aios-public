@@ -1,0 +1,65 @@
+.scoreHeaderLabel {
+  display: inline-flex;
+  align-items: center;
+  line-height: var(--line-height-tight);
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--dashboard-goods-header-underline);
+  padding-bottom: 1px;
+  cursor: help;
+}
+
+.scoreCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.scoreValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+  font-weight: 630;
+  line-height: var(--line-height-compact);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.confidencePill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 1px 6px;
+  border: 1px solid transparent;
+  font-weight: 560;
+}
+
+.confidenceHigh {
+  color: var(--status-success-strong);
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.confidenceMedium {
+  color: var(--status-warning-strong);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.confidenceLow {
+  color: var(--status-danger-strong);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+}
+
+@media (max-width: 768px) {
+  .scoreCell {
+    align-items: flex-start;
+  }
+}

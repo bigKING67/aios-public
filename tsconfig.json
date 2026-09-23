@@ -1,0 +1,97 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    /* Path Aliases */
+    "paths": {
+      "@/*": [
+        "./apps/web-vite/src/*"
+      ],
+      "@/components": [
+        "./apps/web-vite/src/components"
+      ],
+      "@/components/*": [
+        "./apps/web-vite/src/components/*"
+      ],
+      "@/app": [
+        "./apps/web-vite/src/app"
+      ],
+      "@/app/*": [
+        "./apps/web-vite/src/app/*"
+      ],
+      "@/hooks": [
+        "./apps/web-vite/src/hooks"
+      ],
+      "@/hooks/*": [
+        "./apps/web-vite/src/hooks/*"
+      ],
+      "@/stores": [
+        "./apps/web-vite/src/stores"
+      ],
+      "@/stores/*": [
+        "./apps/web-vite/src/stores/*"
+      ],
+      "@/lib/*": [
+        "./apps/web-vite/src/lib/*"
+      ],
+      "@/theme/*": [
+        "./apps/web-vite/src/theme/*"
+      ],
+      "@/types/*": [
+        "./apps/web-vite/src/types/*"
+      ],
+      "@/types": [
+        "./apps/web-vite/src/types"
+      ],
+      "@/context/*": [
+        "./apps/web-vite/src/context/*"
+      ],
+      "@/context": [
+        "./apps/web-vite/src/context"
+      ],
+      "@/styles/*": [
+        "./apps/web-vite/src/styles/*"
+      ],
+      "@/config": [
+        "./apps/web-vite/src/config"
+      ],
+      "@/config/*": [
+        "./apps/web-vite/src/config/*"
+      ]
+    },
+    "incremental": true,
+    "types": [
+      "node"
+    ],
+    "allowJs": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

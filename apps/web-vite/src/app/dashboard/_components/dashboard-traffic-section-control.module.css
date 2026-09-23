@@ -1,0 +1,10 @@
+.liveScopeSwitch :global(.ant-segmented) {
+  border-radius: 999px;
+  background: var(--dashboard-panel-subtle-bg);
+}
+
+.liveScopeSwitch :global(.ant-segmented-item-label) {
+  min-width: 46px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}

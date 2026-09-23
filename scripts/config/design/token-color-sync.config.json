@@ -1,0 +1,69 @@
+{
+  "statusKeys": [
+    "success",
+    "successStrong",
+    "successBg",
+    "successBorder",
+    "warning",
+    "warningStrong",
+    "warningBg",
+    "warningBorder",
+    "danger",
+    "dangerStrong",
+    "dangerBg",
+    "dangerBorder",
+    "info",
+    "infoStrong",
+    "infoBg",
+    "infoBorder",
+    "neutral",
+    "neutralStrong",
+    "neutralBg",
+    "neutralBorder"
+  ],
+  "trendKeys": ["up", "down", "neutral"],
+  "platformKeys": ["tmall", "douyin", "xiaohongshu", "kuaishou", "jd", "wechat", "unknown"],
+  "chartKeys": ["series1", "series2", "series3", "series4", "series5", "series6", "muted", "highlight"],
+  "chartCssVarByKey": {
+    "series1": "--chart-series-1",
+    "series2": "--chart-series-2",
+    "series3": "--chart-series-3",
+    "series4": "--chart-series-4",
+    "series5": "--chart-series-5",
+    "series6": "--chart-series-6",
+    "muted": "--chart-series-muted",
+    "highlight": "--chart-series-highlight"
+  },
+  "domainTokenGroups": [
+    {
+      "group": "traffic",
+      "keys": ["summary", "l1", "l2", "l3"],
+      "props": ["accent", "text", "bg", "border"]
+    },
+    {
+      "group": "topsis",
+      "keys": ["star", "stable", "opportunity", "longTail", "neutral"],
+      "props": ["text", "bg", "border"]
+    },
+    {
+      "group": "funnel",
+      "keys": ["track", "exposure", "visit", "intent", "conversion"],
+      "props": ["color", "bg"]
+    },
+    {
+      "group": "funnel",
+      "keys": ["connector"],
+      "props": ["color"]
+    },
+    {
+      "group": "creator",
+      "keys": ["s", "a", "b", "c", "d"],
+      "props": ["from", "to", "bg", "text"]
+    },
+    {
+      "group": "cooperation",
+      "keys": ["unclassified", "initialContact", "sampleNegotiation", "notConsidering", "paused", "liveStarted"],
+      "props": ["text", "bg"]
+    }
+  ]
+}

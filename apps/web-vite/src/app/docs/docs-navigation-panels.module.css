@@ -1,0 +1,224 @@
+.sidebarPanel,
+.tocPanel {
+  min-height: 0;
+}
+
+.sidebarPanel {
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-global);
+  padding: 12px 10px 14px 16px;
+}
+
+.sidebarBrand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 12px;
+  text-decoration: none;
+}
+
+.brandMark {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--status-success);
+}
+
+.brandText {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 620;
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.sidebarScroll,
+.tocScroll {
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.sidebarScroll::-webkit-scrollbar,
+.tocScroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.isScrolling {
+  scrollbar-width: thin;
+  scrollbar-color: var(--docs-docs-material-scrollbar-slate-a780) var(--docs-docs-material-slate-a260);
+}
+
+.isScrolling::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.isScrolling::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: var(--docs-docs-material-slate-a260);
+}
+
+.isScrolling::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: var(--docs-docs-material-scrollbar-slate-a750);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.sidebarScroll {
+  height: calc(100% - 32px);
+  overflow-y: auto;
+  padding: 8px 1px 4px 0;
+}
+
+.navGroup + .navGroup {
+  margin-top: 20px;
+}
+
+.navGroupTitle {
+  margin: 0 8px 10px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-normal);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.navList {
+  display: grid;
+  gap: 2px;
+}
+
+.navLink {
+  display: block;
+  padding: 8px 10px;
+  margin: 0 4px;
+  border-radius: 999px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.routeNavLink {
+  display: grid;
+  gap: 3px;
+  border-radius: 12px;
+}
+
+.routeNavLink small {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  font-weight: 500;
+}
+
+.navLink:hover {
+  background: var(--brand-secondary);
+  color: var(--brand-text);
+}
+
+.navLinkActive {
+  background: var(--brand-secondary);
+  color: var(--brand-dark);
+  font-weight: 620;
+  box-shadow: inset 0 0 0 1px var(--docs-docs-material-blue-ring-a240);
+}
+
+.navLinkActive:hover {
+  background: var(--brand-secondary);
+  color: var(--brand-dark);
+}
+
+.navLinkActive small {
+  color: var(--brand-text);
+}
+
+.tocPanel {
+  padding: 14px 16px 12px 18px;
+  background: var(--bg-card);
+}
+
+.tocSticky {
+  position: sticky;
+  top: 14px;
+  height: calc(100% - 14px);
+}
+
+.tocTitle {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: 620;
+  letter-spacing: var(--letter-spacing-label);
+}
+
+.tocScroll {
+  margin-top: 10px;
+  max-height: calc(100% - 26px);
+  overflow-y: auto;
+  display: grid;
+  gap: 2px;
+  padding-right: 2px;
+}
+
+.tocLink {
+  display: block;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  border-left: 1px solid var(--border-color);
+  padding: 4px 0 4px 10px;
+}
+
+.tocLink:hover {
+  color: var(--text-primary);
+  border-left-color: var(--text-tertiary);
+}
+
+.tocLinkActive {
+  color: var(--text-primary);
+  border-left-color: var(--brand-primary);
+  background: var(--brand-secondary);
+  font-weight: 620;
+}
+
+.tocLinkActive:hover {
+  color: var(--text-primary);
+  border-left-color: var(--brand-primary);
+}
+
+@media (max-width: 1180px) {
+  .tocPanel {
+    display: none;
+  }
+}
+
+@media (max-width: 920px) {
+  .sidebarPanel {
+    border-right: 0;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
+    padding: 10px 10px 10px 12px;
+  }
+
+  .sidebarScroll {
+    max-height: 250px;
+    height: auto;
+    padding-right: 6px;
+  }
+
+  .navGroupTitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .navLink {
+    font-size: var(--font-size-base);
+  }
+
+  .routeNavLink small {
+    display: none;
+  }
+}

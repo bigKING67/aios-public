@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "engine": "@hyperframes/producer",
+  "engine_version": "0.8.53",
+  "files": {
+    "package.json": "a67bbe6c774d4bf4fb020df093e8b9841bc98d5e9e78e3f439986ad8022957dd",
+    "package-lock.json": "245e3c6a8c56386c8b06027faca28f7af67cd880b7d6a172170a50e02ce85f04",
+    "cli.mjs": "5da8937973bf6f2af3953fffd5c32aa12c595c802857802079021e49f4608ec0",
+    "project.mjs": "201e513905bdca00559eb2e6bb2b683d3503f66aa43aa7591d2cab39a49402c1",
+    "composition.mjs": "3ea8fdb59cec75ec1706824695590bea9947d6a2f74238665468f903cb3ea9ec",
+    "render.mjs": "1b28f3618263a76d38661271877bcdffb862501e42daa267378ec45c22c5d816"
+  }
+}

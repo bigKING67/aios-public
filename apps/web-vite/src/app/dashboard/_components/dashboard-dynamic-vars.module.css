@@ -1,0 +1,19 @@
+.goodsMatrixSummaryTone {
+  border-color: var(--goods-matrix-summary-border, var(--border-color));
+  background: var(--goods-matrix-summary-bg, var(--bg-hover));
+  color: var(--goods-matrix-summary-text, var(--text-secondary));
+}
+
+.goodsMatrixSummaryDotTone {
+  background: var(--goods-matrix-summary-dot, var(--text-tertiary));
+}
+
+.platformLegendDotTone {
+  background: var(--platform-legend-dot-color, var(--text-tertiary));
+}
+
+.liveFunnelBarTone {
+  width: var(--live-funnel-bar-width, 100%);
+  background: var(--live-funnel-bar-bg, var(--domain-funnel-conversion-color));
+  animation-delay: var(--live-funnel-bar-delay, 0ms);
+}

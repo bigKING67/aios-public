@@ -1,0 +1,2 @@
+# Run daily at 03:17 local time.
+17 3 * * * bash ~/.codex/tools/frontend_preflight_log_maintenance.sh

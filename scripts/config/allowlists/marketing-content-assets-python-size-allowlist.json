@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "maxLines": 800,
+  "description": "Frozen Python module line-count budget for marketing content asset workers. New worker modules should stay under maxLines; legacy mega-files may only shrink unless this allowlist is deliberately updated.",
+  "allowed": [
+    {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/analysis_processor.py",
+      "maxLines": 2487,
+      "reason": "Temporary frozen content-asset AI analysis worker debt, re-frozen on 2026-07-08 at the current observed size surfaced by the live-center ETL pre-push gate; split performance-context extraction, video-understanding cache/repository, failure writeback, and v2.1 schema mapping into focused modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/ark_responses.py",
+      "maxLines": 1759,
+      "reason": "Temporary frozen Ark response schema debt, re-frozen on 2026-07-08 at the current observed size surfaced by the live-center ETL pre-push gate; extract schema builders/action-library validation into focused modules before lowering this cap and do not grow this file further."
+    },
+    {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/yuntu_archive_repository.py",
+      "maxLines": 1192,
+      "reason": "Temporary frozen YunTu archive repository debt after video derivative archive storage and industry material inspiration evidence lookup shipped; split archive persistence, derivative metadata, and evidence-query helpers into focused repository modules before lowering this cap and do not grow this file further."
+    }
+  ]
+}

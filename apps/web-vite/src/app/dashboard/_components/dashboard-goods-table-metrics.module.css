@@ -1,0 +1,47 @@
+.metricCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.metricValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: var(--line-height-snug);
+  font-variant-numeric: tabular-nums;
+}
+
+.metricMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.metricTrend {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.metricTrendUp {
+  color: var(--trend-up);
+}
+
+.metricTrendDown {
+  color: var(--trend-down);
+}
+
+.metricTrendNeutral {
+  color: var(--trend-neutral);
+}
+
+@media (max-width: 768px) {
+  .metricCell {
+    align-items: flex-start;
+  }
+}

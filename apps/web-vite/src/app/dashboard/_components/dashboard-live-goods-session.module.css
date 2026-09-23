@@ -1,0 +1,7 @@
+.sessionCard {
+  overflow: hidden;
+  border-radius: 15px;
+  border: 1px solid var(--dashboard-live-card-border);
+  background: var(--bg-card);
+  box-shadow: none;
+}

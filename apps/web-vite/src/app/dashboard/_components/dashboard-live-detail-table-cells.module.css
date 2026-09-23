@@ -1,0 +1,58 @@
+.liveDetailAnchorCell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.liveDetailAnchorName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dashboard-detail-text);
+  font-size: var(--font-size-sm);
+  font-weight: 430;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.liveDetailAnchorId {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dashboard-detail-muted-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.liveDetailTypeTag {
+  margin-inline-end: 0;
+  border-color: var(--dashboard-detail-type-border);
+  background: var(--dashboard-detail-type-bg);
+  color: var(--dashboard-detail-text);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.liveDetailInspectButton {
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--dashboard-detail-action-border);
+  background: var(--bg-hover);
+  color: var(--dashboard-detail-text) !important;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: var(--component-control-line-height-sm);
+  padding-inline: 8px;
+}
+
+.liveDetailInspectButton:hover {
+  border-color: var(--dashboard-detail-action-hover-border);
+  background: var(--dashboard-detail-action-hover-bg);
+  color: var(--brand-dark) !important;
+}

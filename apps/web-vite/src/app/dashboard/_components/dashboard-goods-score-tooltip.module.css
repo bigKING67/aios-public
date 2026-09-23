@@ -1,0 +1,49 @@
+.scoreTooltip {
+  max-width: min(340px, calc(100vw - 16px));
+  pointer-events: none;
+}
+
+.matrixTooltip {
+  max-width: min(360px, calc(100vw - 16px));
+  pointer-events: none;
+}
+
+.card {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+  box-shadow: 0 10px 28px var(--dashboard-soft-shadow-color);
+  color: var(--text-secondary);
+  padding: var(--spacing-3) 14px;
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-sm);
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--spacing-1);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.sub {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: calc(var(--spacing-2) + 2px);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: calc(var(--spacing-2) + 2px) var(--spacing-3);
+  }
+
+  .title {
+    font-size: var(--font-size-base);
+    margin-bottom: calc(var(--spacing-1) - 1px);
+  }
+}

@@ -1,0 +1,57 @@
+.followModalStack {
+  display: grid;
+  gap: 18px;
+}
+
+.followHistorySection {
+  display: grid;
+  gap: 10px;
+}
+
+.followHistoryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.followHistoryHeader h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.followHistoryHeader span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.followHistoryColumnTitle {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.followLogDate {
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.followLogNoteCell {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.followLogNoteCell span:first-child {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: pre-wrap;
+}

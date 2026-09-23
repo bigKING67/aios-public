@@ -1,0 +1,38 @@
+/**
+ * AIOS 浅色主题 - 全局页面基底
+ *
+ * 设计语言：理性、高密度、高信噪比（参考抖音罗盘 + Arco Design）
+ * 背景：浅灰全局 + 纯白卡片
+ * 色彩：克制的黑白灰 + 功能色仅表达含义
+ */
+
+/* ============ 页面全局背景 ============ */
+
+body.light-theme {
+  background-color: var(--bg-global);
+  color: var(--text-primary);
+}
+
+.report-page-light {
+  background-color: var(--bg-global);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* 吸顶布局参数：顶部主导航 64px + 周报头部约 73px */
+  --weekly-sticky-top: 64px;
+  --weekly-header-sticky-height: 73px;
+}
+
+.weekly-report-client,
+.weekly-report-client .ant-tabs,
+.weekly-report-client .ant-tabs-content-holder {
+  overflow: visible;
+}
+
+.weekly-affix-surface {
+  background-color: var(--bg-global);
+}
+
+.weekly-affix-header-shell {
+  z-index: 40;
+}

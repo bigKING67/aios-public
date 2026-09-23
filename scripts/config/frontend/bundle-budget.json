@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "description": "Production gzip bundle budgets for the Vite web app output in apps/web-vite/dist.",
+  "reason": "Calibrated from the 2026-05-08 npm run build output after route chunk splitting, reviewed on 2026-05-25 for the marketing content asset center, recalibrated on 2026-06-04 after the GSV monthly-channel static special report added a chart-first report route, recalibrated on 2026-06-09 after the platform-structure report, content-asset multi-platform work, and creator shortvideo dashboard release, recalibrated on 2026-06-10 after the short-video creator dashboard hardening added route-local renderers and behavior gates, recalibrated on 2026-06-11 after the permission governance/content-asset resolver release, recalibrated on 2026-06-12 after the VPS short-video qianchuan/detail hotfixes plus brand carryover report polish, recalibrated on 2026-06-18 after the content-asset Qianchuan all-domain performance snapshot and data x video-understanding diagnosis UI shipped with local CSS/JS consolidation, recalibrated on 2026-06-23 after the pushed GSV monthly-channel Tmall full-month traffic static visuals plus dashboard goods-card heading compatibility fix, recalibrated on 2026-06-28 after the industry material inspiration dashboard plus content-assets and creator export release added route-local JS/CSS, recalibrated on 2026-06-30 after the live-center review workbench and content hub navigation release added route-local JS/CSS, recalibrated on 2026-07-01 after the live-center workspace/header polish plus session-list component split shipped with the live-center session-key release, recalibrated on 2026-07-02 after the live-center review workspace height/containment polish added route-local CSS, recalibrated on 2026-07-03 after live-center recording analysis v4 plus resumable upload UI shipped route-local JS/CSS, recalibrated on 2026-07-07 after the pushed live-center operator review/result stack plus upload recovery release, and recalibrated on 2026-07-13 after the industry-material visible profiles/fusion/structured hydration release and live-center shell polish. The industry-material client shell was split and its size allowlist retired before this increase; any next total-budget increase requires route-level JS/CSS consolidation rather than another budget-only adjustment.",
+  "targetRatio": 0.9,
+  "budgets": {
+    "maxJsChunkGzipBytes": {
+      "bytes": 204800,
+      "description": "Largest individual JavaScript chunk after gzip.",
+      "reason": "Current largest chunk is vendor-echarts at about 181 KiB gzip; 200 KiB keeps a tight ceiling on heavy route or vendor chunk growth."
+    },
+    "maxCssAssetGzipBytes": {
+      "bytes": 16896,
+      "description": "Largest individual CSS asset after gzip.",
+      "reason": "Raised on 2026-06-23 after the GSV monthly-channel Tmall traffic static visuals expanded the report page CSS. Current largest CSS asset is about 15.85 KiB gzip, so 16.50 KiB keeps tight headroom while preserving pressure to split report CSS if this route grows again."
+    },
+    "vendorEchartsGzipBytes": {
+      "bytes": 204800,
+      "description": "Total gzip size of vendor-echarts JavaScript chunk(s).",
+      "reason": "ECharts is intentionally isolated as the heaviest vendor chunk; matching the 200 KiB JS chunk cap prevents this dependency from silently expanding."
+    },
+    "totalJsGzipBytes": {
+      "bytes": 1302528,
+      "description": "Total gzip size of all emitted JavaScript assets.",
+      "reason": "Raised on 2026-07-13 after industry-material visible profiles, fusion scoring, structured hydration UI, and the live-center shell release. The clean v2.3.376 candidate emitted 1261.64 KiB gzip; 1272 KiB keeps about 10.36 KiB headroom. Before any next increase, split or consolidate the heaviest industry-material/live-center route modules and verify that no new dependency or duplicate vendor chunk caused the growth."
+    },
+    "totalCssGzipBytes": {
+      "bytes": 124928,
+      "description": "Total gzip size of all emitted CSS assets.",
+      "reason": "Raised on 2026-07-13 after the industry-material analysis profile/fusion scorecard and live-center shell polish added route-local CSS. The clean v2.3.376 candidate emitted 120.36 KiB gzip; 122 KiB keeps about 1.64 KiB headroom. Before any next increase, consolidate industry-material profile/fusion declarations and remove duplicated live-center shell layout rules."
+    }
+  }
+}

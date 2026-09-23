@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "description": "Frozen legacy shared-component inline visual-style budget. New apps/web-vite/src/components TSX/JSX files should use CSS Modules, Tailwind token aliases, or component props instead of inline visual styles.",
+  "allowed": []
+}

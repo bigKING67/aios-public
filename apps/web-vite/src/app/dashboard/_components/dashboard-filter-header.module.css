@@ -1,0 +1,83 @@
+.topBarDock {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  isolation: isolate;
+  padding: calc(var(--spacing-2) + 1px) 0 calc(var(--spacing-2) + 2px);
+  border-radius: calc(var(--border-radius-2xl) + 6px);
+  background: linear-gradient(180deg, var(--dashboard-canvas-bg-start) 0%, var(--dashboard-canvas-bg-start) 100%);
+  overflow: hidden;
+}
+
+.topBarDock::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 0;
+  width: 100vw;
+  transform: translateX(-50%);
+  border-radius: inherit;
+  background: inherit;
+  pointer-events: none;
+}
+
+.topBar {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(var(--spacing-3) + 2px);
+  padding: 0 var(--spacing-5);
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.topBar::before {
+  content: '';
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.topBar > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1380px) {
+  .topBar {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .topBarDock {
+    position: static;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .topBarDock::before {
+    display: none;
+  }
+
+  .topBar {
+    position: static;
+    padding: 0;
+    overflow: visible;
+  }
+}

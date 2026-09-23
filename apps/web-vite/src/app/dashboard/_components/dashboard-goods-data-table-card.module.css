@@ -1,0 +1,58 @@
+.goodsCardHeaderCell {
+  font-size: var(--font-size-sm);
+  font-weight: 560 !important;
+  line-height: var(--line-height-normal);
+}
+
+.goodsCardHeaderCell :global(.ant-table-column-sorters) {
+  width: 100%;
+  overflow: hidden;
+}
+
+.goodsCardIdentityHeaderCell,
+.goodsCardActionHeaderCell {
+  text-align: center !important;
+}
+
+.goodsCardIdentityHeaderCell :global(.ant-table-column-sorters) {
+  justify-content: center !important;
+  gap: var(--spacing-2);
+}
+
+.goodsCardHeaderCell :global(.ant-table-column-title) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goodsCardHeaderCell :global(.ant-table-column-sorter) {
+  margin-inline-start: calc(var(--spacing-2) - 2px) !important;
+}
+
+.goodsCardBodyCell {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  padding: calc(var(--spacing-3) + 2px) calc(var(--spacing-2) + 2px) !important;
+}
+
+.goodsCardHeaderCell:global(.ant-table-cell-fix-left),
+.goodsCardHeaderCell:global(.ant-table-cell-fix-left-last),
+.goodsCardHeaderCell:global(.ant-table-cell-fix-right),
+.goodsCardHeaderCell:global(.ant-table-cell-fix-right-first) {
+  background: var(--bg-hover) !important;
+  z-index: 40 !important;
+}
+
+.goodsCardBodyCell:global(.ant-table-cell-fix-left),
+.goodsCardBodyCell:global(.ant-table-cell-fix-left-last),
+.goodsCardBodyCell:global(.ant-table-cell-fix-right),
+.goodsCardBodyCell:global(.ant-table-cell-fix-right-first) {
+  z-index: 30 !important;
+}
+
+@media (max-width: 768px) {
+  .goodsCardHeaderCell,
+  .goodsCardBodyCell {
+    padding-left: calc(var(--spacing-2) + 2px) !important;
+    padding-right: calc(var(--spacing-2) + 2px) !important;
+  }
+}

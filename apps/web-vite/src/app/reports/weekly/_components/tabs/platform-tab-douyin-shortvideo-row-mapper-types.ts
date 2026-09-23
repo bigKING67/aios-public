@@ -1,0 +1,23 @@
+export type DouyinShortvideoAttributionItem = {
+  video_id?: unknown;
+  video_title?: unknown;
+  author_nickname?: unknown;
+  author_douyin_id?: unknown;
+  product_id?: unknown;
+  publish_time?: unknown;
+  is_promoted?: unknown;
+  play_url?: unknown;
+  curr_video_view_count?: unknown;
+  prev_video_view_count?: unknown;
+  curr_user_pay_amount?: unknown;
+  prev_user_pay_amount?: unknown;
+  user_pay_amount_delta?: unknown;
+  curr_refund_amount?: unknown;
+  prev_refund_amount?: unknown;
+  curr_live_room_pay_amount?: unknown;
+  prev_live_room_pay_amount?: unknown;
+  curr_search_after_view_pay_amount?: unknown;
+  prev_search_after_view_pay_amount?: unknown;
+  curr_shop_page_pay_amount?: unknown;
+  prev_shop_page_pay_amount?: unknown;
+};

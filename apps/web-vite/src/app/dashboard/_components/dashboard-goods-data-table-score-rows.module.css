@@ -1,0 +1,11 @@
+.goodsScoreDrilldownRow > :global(.ant-table-cell) {
+  transition: background-color 0.2s ease;
+}
+
+.goodsScoreDrilldownRow:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-goods-drilldown-hover-bg) !important;
+}
+
+.goodsScoreDrilldownRowActive > :global(.ant-table-cell) {
+  background: var(--dashboard-goods-drilldown-active-bg) !important;
+}

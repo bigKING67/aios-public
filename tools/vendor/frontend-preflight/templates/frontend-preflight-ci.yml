@@ -1,0 +1,87 @@
+name: frontend-preflight-tools
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run frontend preflight verification
+        run: bash ./tools/frontend_preflight_verify.sh
+
+      - name: Enforce frontend preflight policy (positive fixture)
+        run: |
+          mkdir -p "$HOME/.codex/logs"
+          python3 - "$HOME/.codex/logs/frontend_preflight_events.jsonl" <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import sys
+
+          path = Path(sys.argv[1])
+          event = {
+              "ts_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "source": "frontend-preflight-ci.yml",
+              "context": "prod",
+              "frontend_tier": "L1-F",
+              "skills": ["design-taste-frontend"],
+              "preflight_status": "pass",
+              "preflight_code": "OK",
+              "gate_decision": "allow",
+              "entry_exit_code": 0,
+              "ok": True,
+          }
+          path.write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
+          PY
+          bash ./tools/frontend_preflight_policy_run.sh \
+            --policy-path ./tools/frontend_preflight_policy.json \
+            --profile prod \
+            --log-path "$HOME/.codex/logs/frontend_preflight_events.jsonl" \
+            --json >/dev/null
+
+      - name: Enforce frontend preflight policy (negative fixture)
+        run: |
+          mkdir -p "$HOME/.codex/logs"
+          python3 - "$HOME/.codex/logs/frontend_preflight_events.jsonl" <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import sys
+
+          path = Path(sys.argv[1])
+          event = {
+              "ts_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "source": "frontend-preflight-ci.yml",
+              "context": "prod",
+              "frontend_tier": "L2",
+              "skills": ["design-taste-frontend"],
+              "preflight_status": "fail",
+              "preflight_code": "RUNTIME_ERROR",
+              "gate_decision": "deny",
+              "entry_exit_code": 2,
+              "ok": False,
+          }
+          path.write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
+          PY
+          set +e
+          bash ./tools/frontend_preflight_policy_run.sh \
+            --policy-path ./tools/frontend_preflight_policy.json \
+            --profile prod \
+            --log-path "$HOME/.codex/logs/frontend_preflight_events.jsonl" \
+            --json >/dev/null
+          rc=$?
+          set -e
+          if [[ "${rc}" -ne 2 ]]; then
+            echo "Expected policy runner rc=2 for negative fixture, got rc=${rc}" >&2
+            exit 1
+          fi

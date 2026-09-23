@@ -1,0 +1,25 @@
+.workbench { display: grid; gap: 16px; width: 100%; min-width: 0; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.heading h1, .heading h2, .panel h2 { margin: 0; color: var(--text-primary); }
+.heading h1 { font-size: var(--font-size-xl); }
+.panel h2 { font-size: var(--font-size-lg); }
+.heading span, .helper, .assetId { color: var(--text-secondary); font-size: var(--font-size-sm); }
+.columns { display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(300px, 1.4fr); gap: 16px; align-items: start; }
+.panel { display: grid; gap: 12px; min-width: 0; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; }
+.helper { margin: 0; line-height: 1.6; }
+.actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fields { display: flex; gap: 12px; align-items: start; flex-wrap: wrap; }
+.fields label { display: grid; gap: 6px; flex: 1; min-width: 100px; }
+.results { display: grid; gap: 8px; max-height: 620px; overflow-y: auto; }
+.hit, .clip { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; min-width: 0; }
+.hit p { margin: 0; line-height: 1.6; }
+.hit small, .assetId { overflow-wrap: anywhere; }
+.clip label { display: grid; gap: 6px; }
+.video { width: 100%; max-height: 360px; background: var(--text-primary); border-radius: 12px; }
+.projectSelect { min-width: 200px; max-width: 100%; }
+@media (max-width: 900px) { .columns { grid-template-columns: minmax(0, 1fr); } .results { max-height: 340px; } }
+
+.fields :global(.ant-switch) { justify-self: start; }
+
+.catalogResults { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 900px) { .catalogResults { grid-template-columns: minmax(0, 1fr); } }

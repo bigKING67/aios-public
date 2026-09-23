@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": ".cache/tsc/frontend.tsbuildinfo"
+  },
+  "include": [
+    "apps/web-vite/src/**/*.ts",
+    "apps/web-vite/src/**/*.tsx",
+    "apps/web-vite/vite.config.ts",
+    "apps/web-vite/vitest.config.ts",
+    "apps/web-vite/vitest.coverage.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "apps/web-vite/dist"
+  ]
+}

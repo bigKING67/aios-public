@@ -1,0 +1,198 @@
+.backToBusinessLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.backToBusinessLink:hover {
+  color: var(--brand-dark);
+  border-color: var(--status-info-border);
+  background: var(--brand-secondary);
+}
+
+.backToBusinessLink:active {
+  transform: translateY(1px);
+}
+
+.dashboardFill {
+  min-height: calc(100vh - 178px);
+  min-height: calc(100dvh - 178px);
+  --creator-dashboard-material-shell-shadow: 0 18px 34px -32px rgba(30, 41, 59, 0.5);
+  --creator-dashboard-material-surface-start: rgba(248, 250, 252, 0.85);
+  --creator-dashboard-material-surface-end: rgba(255, 255, 255, 0.92);
+  --creator-dashboard-material-surface-strong-start: rgba(248, 250, 252, 0.88);
+  --creator-dashboard-material-surface-strong-end: rgba(255, 255, 255, 0.96);
+  --creator-dashboard-material-grid-line-strong: rgba(148, 163, 184, 0.2);
+  --creator-dashboard-material-grid-line-soft: rgba(148, 163, 184, 0.12);
+  --creator-dashboard-material-donut-border: rgba(226, 232, 240, 0.8);
+  --creator-shell-shadow: var(--creator-dashboard-material-shell-shadow);
+  --creator-preview-surface-start: var(--creator-dashboard-material-surface-start);
+  --creator-preview-surface-end: var(--creator-dashboard-material-surface-end);
+  --creator-preview-surface-strong-start: var(--creator-dashboard-material-surface-strong-start);
+  --creator-preview-surface-strong-end: var(--creator-dashboard-material-surface-strong-end);
+  --creator-preview-grid-line-strong: var(--creator-dashboard-material-grid-line-strong);
+  --creator-preview-grid-line-soft: var(--creator-dashboard-material-grid-line-soft);
+  --creator-preview-donut-border: var(--creator-dashboard-material-donut-border);
+}
+
+.pageIntro {
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 14px 16px;
+  box-shadow: var(--creator-shell-shadow);
+}
+
+.pageIntro :global(h3),
+.pageIntro :global(p) {
+  margin: 0;
+}
+
+.metricTrend {
+  color: var(--trend-up);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+}
+
+.dateSurface {
+  min-width: 148px;
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.trendPlaceholder {
+  position: relative;
+  height: 300px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(
+    180deg,
+    var(--creator-preview-surface-start),
+    var(--creator-preview-surface-end)
+  );
+  overflow: hidden;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.trendGrid {
+  position: absolute;
+  inset: 14px 14px 40px;
+  background-image:
+    linear-gradient(to bottom, var(--creator-preview-grid-line-strong) 1px, transparent 1px),
+    linear-gradient(to right, var(--creator-preview-grid-line-soft) 1px, transparent 1px);
+  background-size: 100% 20%, 20% 100%;
+  border-radius: 12px;
+}
+
+.trendLine {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 86px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--chart-series-1) 22%, transparent),
+    color-mix(in srgb, var(--chart-series-1) 86%, transparent),
+    color-mix(in srgb, var(--chart-series-1) 22%, transparent)
+  );
+}
+
+.trendAxis {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+}
+
+.trendAxis span {
+  text-align: center;
+}
+
+.sharePlaceholder {
+  min-height: 300px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(
+    180deg,
+    var(--creator-preview-surface-strong-start),
+    var(--creator-preview-surface-strong-end)
+  );
+  display: grid;
+  place-items: center;
+}
+
+.shareDonut {
+  width: min(230px, 74%);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--bg-card) 41%, transparent 42%),
+    conic-gradient(
+      var(--chart-series-1) 0deg 128deg,
+      var(--chart-series-2) 128deg 214deg,
+      var(--chart-series-3) 214deg 286deg,
+      var(--chart-series-muted) 286deg 360deg
+    );
+  box-shadow: inset 0 0 0 1px var(--creator-preview-donut-border);
+}
+
+.emptySurface {
+  min-height: 220px;
+  border-radius: 18px;
+  border: 1px dashed var(--border-color-hover);
+  background: var(--bg-hover);
+  display: grid;
+  place-items: center;
+}
+
+.emptySurface :global(.ant-empty) {
+  margin: 24px 0;
+}
+
+@media (max-width: 1080px) {
+  .dateSurface {
+    min-width: 130px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboardFill {
+    min-height: calc(100vh - 220px);
+    min-height: calc(100dvh - 220px);
+  }
+
+  .dateSurface {
+    width: 100%;
+  }
+}

@@ -1,0 +1,41 @@
+.quadrantTag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--border-radius-full);
+  border: 1px solid transparent;
+  padding: 1px var(--spacing-2);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}
+
+.quadrantStar {
+  color: var(--dashboard-goods-quadrant-star-text);
+  background: var(--dashboard-goods-quadrant-star-bg);
+  border-color: var(--dashboard-goods-quadrant-star-border);
+}
+
+.quadrantStable {
+  color: var(--dashboard-goods-quadrant-stable-text);
+  background: var(--dashboard-goods-quadrant-stable-bg);
+  border-color: var(--dashboard-goods-quadrant-stable-border);
+}
+
+.quadrantOpportunity {
+  color: var(--dashboard-goods-quadrant-opportunity-text);
+  background: var(--dashboard-goods-quadrant-opportunity-bg);
+  border-color: var(--dashboard-goods-quadrant-opportunity-border);
+}
+
+.quadrantLongtail {
+  color: var(--dashboard-goods-quadrant-longtail-text);
+  background: var(--dashboard-goods-quadrant-longtail-bg);
+  border-color: var(--dashboard-goods-quadrant-longtail-border);
+}
+
+.quadrantNeutral {
+  color: var(--dashboard-goods-quadrant-neutral-text);
+  background: var(--dashboard-goods-quadrant-neutral-bg);
+  border-color: var(--dashboard-goods-quadrant-neutral-border);
+}

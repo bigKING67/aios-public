@@ -1,0 +1,42 @@
+.panel {
+  border-color: var(--dashboard-panel-border-muted);
+  background: var(--bg-card);
+  box-shadow: none;
+}
+
+.panel::before {
+  opacity: 0.22;
+}
+
+.panel .title {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 620;
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.inlineStatus {
+  align-self: flex-start;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+}
+
+.boardState {
+  display: flex;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 1px dashed var(--dashboard-panel-border);
+  background: var(--dashboard-live-goods-summary-metric-bg);
+  color: var(--dashboard-empty-state-text);
+  font-size: var(--font-size-base);
+  font-weight: 560;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

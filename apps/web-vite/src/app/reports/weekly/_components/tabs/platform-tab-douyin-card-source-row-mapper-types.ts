@@ -1,0 +1,24 @@
+export type DouyinCardSourceAttributionItem = {
+  source_level1?: unknown;
+  curr_card_exposure_user_count?: unknown;
+  prev_card_exposure_user_count?: unknown;
+  curr_card_click_user_count?: unknown;
+  prev_card_click_user_count?: unknown;
+  curr_card_buyer_count?: unknown;
+  prev_card_buyer_count?: unknown;
+  curr_card_cart_user_count?: unknown;
+  prev_card_cart_user_count?: unknown;
+  curr_card_favorite_user_count?: unknown;
+  prev_card_favorite_user_count?: unknown;
+  curr_card_bounce_user_count?: unknown;
+  prev_card_bounce_user_count?: unknown;
+  curr_card_order_count?: unknown;
+  prev_card_order_count?: unknown;
+  curr_card_user_pay_amount?: unknown;
+  prev_card_user_pay_amount?: unknown;
+  card_user_pay_amount_delta?: unknown;
+  curr_card_click_rate?: unknown;
+  prev_card_click_rate?: unknown;
+  curr_card_click_to_pay_rate?: unknown;
+  prev_card_click_to_pay_rate?: unknown;
+};

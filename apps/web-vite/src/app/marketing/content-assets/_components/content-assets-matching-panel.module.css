@@ -1,0 +1,107 @@
+.matchingList {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.matchingRow {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+}
+
+.matchingRowHeader {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.matchingRowHeader strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.matchingRowHeader span,
+.matchingIdGrid span,
+.matchingMetricGrid,
+.matchingTargetCard span,
+.matchingTargetCard p {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.matchingIdGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.matchingIdGrid div,
+.matchingTargetCard {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  background: var(--bg-card);
+}
+
+.matchingIdGrid code {
+  overflow: hidden;
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.matchingMetricGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.matchingMetricGrid span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--bg-card);
+}
+
+.matchingActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.matchingTargetCard {
+  margin-top: 14px;
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.matchingTargetCard strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 680px) {
+  .matchingIdGrid {
+    grid-template-columns: 1fr;
+  }
+}

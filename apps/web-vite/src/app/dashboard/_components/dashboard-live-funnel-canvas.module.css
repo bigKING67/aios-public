@@ -1,0 +1,304 @@
+.canvas {
+  --live-funnel-row-height: 68px;
+  --live-funnel-row-gap: 14px;
+  --live-funnel-top-space: 10px;
+  --live-funnel-stage-left: 124px;
+  --live-funnel-rate-width: 226px;
+  --live-funnel-link-color: var(--dashboard-live-funnel-connector);
+  --live-funnel-link-width: 2px;
+  --live-funnel-first-center: calc(var(--live-funnel-top-space) + var(--live-funnel-row-height) / 2);
+  --live-funnel-overall-span: calc((var(--live-funnel-row-height) + var(--live-funnel-row-gap)) * 4);
+  --live-funnel-overall-left: 36px;
+  --live-funnel-overall-bottom-arm: 284px;
+  position: relative;
+  width: min(100%, 860px);
+  min-height: 426px;
+  margin: 0 auto;
+  padding: var(--live-funnel-top-space) 0 18px var(--live-funnel-stage-left);
+  overflow: visible;
+}
+
+.overallBracket {
+  --overall-bracket-top-arm: calc(var(--live-funnel-stage-left) - var(--live-funnel-overall-left));
+  position: absolute;
+  left: var(--live-funnel-overall-left);
+  top: var(--live-funnel-first-center);
+  width: var(--live-funnel-overall-bottom-arm);
+  height: var(--live-funnel-overall-span);
+  border-left: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  border-bottom: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+.overallBracket::before {
+  position: absolute;
+  left: 0;
+  top: calc(var(--live-funnel-link-width) * -1);
+  width: var(--overall-bracket-top-arm);
+  border-top: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  content: "";
+}
+
+.overallBracket::after {
+  position: absolute;
+  right: -15px;
+  bottom: -9px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 16px solid var(--live-funnel-link-color);
+  content: "";
+}
+
+.overallBracketValue,
+.overallBracketLabel {
+  position: absolute;
+  left: 12px;
+  width: 150px;
+  text-align: left;
+}
+
+.overallBracketValue {
+  top: 46%;
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 480;
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-compact);
+}
+
+.overallBracketLabel {
+  top: calc(46% + 28px);
+  color: var(--dashboard-live-funnel-muted-text);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--line-height-snug);
+}
+
+.stageList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--live-funnel-row-gap);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--live-funnel-rate-width);
+  align-items: center;
+  column-gap: 20px;
+  min-height: var(--live-funnel-row-height);
+}
+
+.barWrap {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.bar {
+  display: flex;
+  height: var(--live-funnel-row-height);
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  color: var(--dashboard-live-funnel-bar-text);
+  padding: 10px 26px 10px 58px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 6.5% 100%);
+  animation: live-funnel-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  font-variant-numeric: tabular-nums;
+  will-change: transform, opacity;
+}
+
+.barValue {
+  color: var(--dashboard-live-funnel-bar-text);
+  font-size: var(--font-size-section-title);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-none);
+}
+
+.barLabel {
+  color: var(--dashboard-live-funnel-bar-muted-text);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: var(--line-height-compact);
+  text-align: right;
+}
+
+.sideRate,
+.sideRatePlaceholder {
+  min-height: var(--live-funnel-row-height);
+}
+
+.sideRate {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  display: flex;
+  width: var(--live-funnel-rate-width);
+  height: calc(var(--live-funnel-row-height) + var(--live-funnel-row-gap));
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding-left: 36px;
+  font-variant-numeric: tabular-nums;
+  z-index: 2;
+}
+
+.sideRate::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 100%;
+  border-top: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  border-right: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  border-bottom: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
+  border-radius: 0 7px 7px 0;
+  content: "";
+}
+
+.sideRate::after {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 14px solid var(--live-funnel-link-color);
+  content: "";
+  transform: translate(-4px, -50%);
+}
+
+.sideRateValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 480;
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-none);
+}
+
+.sideRateLabel {
+  color: var(--dashboard-live-funnel-muted-text);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+@keyframes live-funnel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .canvas {
+    --live-funnel-row-height: 62px;
+    --live-funnel-row-gap: 12px;
+    --live-funnel-top-space: 10px;
+    --live-funnel-stage-left: 68px;
+    --live-funnel-first-center: calc(var(--live-funnel-top-space) + var(--live-funnel-row-height) / 2);
+    --live-funnel-overall-span: calc((var(--live-funnel-row-height) + var(--live-funnel-row-gap)) * 4);
+    --live-funnel-overall-left: 8px;
+    --live-funnel-overall-bottom-arm: 156px;
+    width: 100%;
+    min-height: 512px;
+    margin: 0 auto;
+    padding-left: var(--live-funnel-stage-left);
+  }
+
+  .overallBracket {
+    left: var(--live-funnel-overall-left);
+    width: var(--live-funnel-overall-bottom-arm);
+  }
+
+  .overallBracketValue,
+  .overallBracketLabel {
+    left: 6px;
+    width: 90px;
+  }
+
+  .overallBracketValue {
+    font-size: var(--font-size-base);
+  }
+
+  .overallBracketLabel {
+    top: calc(47% + 20px);
+    font-size: var(--font-size-xs);
+  }
+
+  .stageList {
+    --live-funnel-rate-width: 100%;
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 7px;
+    min-height: 0;
+  }
+
+  .bar {
+    height: 62px;
+    padding: 9px 14px 9px 38px;
+  }
+
+  .barValue {
+    font-size: var(--font-size-xl);
+  }
+
+  .barLabel {
+    font-size: var(--font-size-base);
+  }
+
+  .sideRate {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    gap: 4px;
+    padding-left: 30px;
+  }
+
+  .sideRatePlaceholder {
+    display: none;
+  }
+
+  .sideRate::before {
+    top: 50%;
+    width: 22px;
+    height: 34px;
+    transform: translateY(-50%);
+  }
+
+  .sideRate::after {
+    top: 50%;
+    border-top-width: 9px;
+    border-bottom-width: 9px;
+    border-right-width: 12px;
+  }
+
+  .sideRateValue {
+    font-size: var(--font-size-lg);
+  }
+
+  .sideRateLabel {
+    font-size: var(--font-size-xs);
+    white-space: normal;
+  }
+}

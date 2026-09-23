@@ -1,0 +1,36 @@
+.goodsDataTable :global(.ant-table),
+.goodsCardDataTable :global(.ant-table) {
+  background: transparent;
+  font-size: var(--font-size-sm);
+}
+
+.goodsDataTable :global(.ant-table-container),
+.goodsCardDataTable :global(.ant-table-container) {
+  border-inline: none !important;
+  border-top: none !important;
+}
+
+.goodsDataShellHeaderCell {
+  background: var(--bg-hover) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  padding: var(--spacing-3) calc(var(--spacing-2) + 2px) !important;
+  white-space: nowrap;
+}
+
+.goodsDataShellHeaderCell::before {
+  display: none !important;
+}
+
+.goodsDataShellBodyCell {
+  background: var(--bg-card) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary);
+  line-height: var(--line-height-relaxed);
+  vertical-align: middle;
+}
+
+.goodsDataTableRow:hover > :global(.ant-table-cell),
+.goodsCardDataTableRow:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-goods-table-hover-bg) !important;
+}

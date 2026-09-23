@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "description": "Frozen app route/module boundary debt. New apps/web-vite/src/app modules should not import sibling or parent route internals; extract reusable code to shared layers instead.",
+  "moduleRoots": [
+    "apps/web-vite/src/app/admin",
+    "apps/web-vite/src/app/dashboard/creator",
+    "apps/web-vite/src/app/dashboard",
+    "apps/web-vite/src/app/docs",
+    "apps/web-vite/src/app/exports",
+    "apps/web-vite/src/app/login",
+    "apps/web-vite/src/app/marketing",
+    "apps/web-vite/src/app/ops/dataops",
+    "apps/web-vite/src/app/profile",
+    "apps/web-vite/src/app/reports/monthly",
+    "apps/web-vite/src/app/reports/weekly"
+  ],
+  "allowed": []
+}

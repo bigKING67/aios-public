@@ -1,0 +1,35 @@
+.skuToggle {
+  align-self: flex-start;
+  border: 1px solid var(--dashboard-live-sku-toggle-border);
+  border-radius: 999px;
+  background: var(--dashboard-live-card-hover-bg);
+  color: var(--dashboard-id-pill-text);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-none);
+  padding: 6px 9px;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.skuToggle:hover {
+  background: var(--dashboard-live-sku-toggle-hover-bg);
+}
+
+.skuToggle:active {
+  transform: translateY(1px);
+}
+
+.skuPanel {
+  grid-column: 1 / -1;
+  border-radius: 14px;
+  border: 1px solid var(--dashboard-live-sku-panel-border);
+  background: var(--dashboard-live-sku-panel-bg);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .skuPanel {
+    overflow-x: auto;
+  }
+}

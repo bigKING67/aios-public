@@ -1,0 +1,132 @@
+# ============ 依赖管理 ============
+/node_modules
+/.pnp
+.pnp.js
+/.yarn/install-state.gz
+
+# ============ 构建输出 ============
+/out/
+/build
+/dist
+*.tsbuildinfo
+
+# ============ 测试覆盖 ============
+/coverage
+/.nyc_output
+/test-results/
+
+# ============ 环境变量（敏感信息） ============
+# 开发环境变量 - 不提交本地配置
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+.env.vps
+.env.feishu-sync.vps
+.env.vps.bak.*
+
+# ============ 日志文件 ============
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# ============ 操作系统文件 ============
+.DS_Store
+Thumbs.db
+.directory
+ehthumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+._*
+
+# ============ IDE 配置（个人工作区） ============
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.netbeans/
+.classpath
+.project
+.settings/
+
+# ============ 编辑器备份 ============
+*.bak
+*.backup
+*.tmp
+
+# ============ macOS ============
+.AppleDouble
+.LSOverride
+._*
+
+# ============ Windows ============
+.VisualStudioCode/
+
+# ============ 第三方工具 ============
+# Vercel
+.vercel
+
+# Claude Code / IDE 工作目录
+.ace-tool/
+.claude/
+
+# 本地开发工具
+.env.*.local
+.vscode/settings.json
+.vscode/launch.json
+.tmp-*.pid
+.trellis/workspace/runtime-logs/
+
+# DataOps ETL 运行态目录（仓库内 etl/groland_postgres）
+/.cache/
+/.prefect_home/
+core.*
+etl/groland_postgres/.prefect_home/
+etl/groland_postgres/.prefect_logs/
+etl/groland_postgres/.venv/
+etl/groland_postgres/.uv-cache/
+.cache/aios-quality/
+.cache/aios-quality-remote/
+.cache/eslint/
+.cache/tsc/
+.artifacts/
+etl/groland_postgres/.ace-tool/
+etl/groland_postgres/.DS_Store
+.dataops/runtime-store/
+
+# ============ 生成文件 ============
+# 如果使用 Design Tokens 编译脚本
+/scripts/**/*.compiled.json
+# 本地一键部署私有配置
+scripts/deploy-vps.local.env
+scripts/config/deploy/vps.local.env
+
+# ============ 临时文件 ============
+*.tmp
+*.temp
+temp/
+tmp/
+**/__pycache__/
+*.pyc
+
+# ============ 保留以下文件 ============
+!.gitkeep
+!.env.example
+!.git-workflow.md
+!GIT_SETUP_PLAN.md
+!GIT_IMPLEMENTATION_SUMMARY.md
+!CLAUDE.md
+!README.md
+
+# Vite 构建产物
+apps/web-vite/dist/

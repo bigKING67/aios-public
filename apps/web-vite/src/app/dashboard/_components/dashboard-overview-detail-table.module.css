@@ -1,0 +1,7 @@
+.pendingMetricHeader {
+  color: var(--text-tertiary) !important;
+}
+
+.pendingMetricCell {
+  color: var(--text-tertiary);
+}

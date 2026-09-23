@@ -1,0 +1,51 @@
+.paginationCore :global(.ant-pagination) {
+  margin: 0;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+.paginationCore :global(.ant-pagination-total-text) {
+  margin-inline-end: 8px !important;
+  color: var(--text-secondary);
+  font-weight: 400 !important;
+}
+
+.paginationCore :global(.ant-pagination-item),
+.paginationCore :global(.ant-pagination-prev),
+.paginationCore :global(.ant-pagination-next) {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  line-height: var(--component-control-line-height-md);
+}
+
+.paginationCore :global(.ant-pagination-item) {
+  border: 0;
+  background: transparent;
+}
+
+.paginationCore :global(.ant-pagination-item a) {
+  color: var(--text-primary);
+  font-weight: 400 !important;
+}
+
+.paginationCore :global(.ant-pagination-item-active) {
+  background: var(--brand-primary);
+  box-shadow: none;
+}
+
+.paginationCore :global(.ant-pagination-item-active a) {
+  color: var(--dashboard-inverse-text);
+  font-weight: 500 !important;
+}
+
+.paginationCore :global(.ant-pagination-prev button),
+.paginationCore :global(.ant-pagination-next button) {
+  color: var(--text-secondary);
+}
+
+.paginationCore :global(.ant-pagination-disabled button) {
+  color: var(--dashboard-disabled-text) !important;
+}

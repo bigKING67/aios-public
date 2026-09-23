@@ -1,0 +1,34 @@
+.confidence {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--border-radius-full);
+  border: 1px solid transparent;
+  padding: 1px 7px;
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+  line-height: var(--line-height-tight);
+}
+
+.confidenceHigh {
+  color: var(--status-success-strong);
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.confidenceMedium {
+  color: var(--status-warning-strong);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.confidenceLow {
+  color: var(--status-danger-strong);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+}
+
+.confidenceNeutral {
+  color: var(--status-neutral-strong);
+  background: var(--status-neutral-bg);
+  border-color: var(--status-neutral-border);
+}

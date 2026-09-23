@@ -1,0 +1,164 @@
+.analysisResultQualityGate {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding: var(--spacing-4);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-subtle);
+}
+
+.analysisResultQualityGateHeader {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: start;
+  justify-content: space-between;
+  min-width: 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.analysisResultQualityGateHeader > div {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.analysisResultQualityGateHeader span:not(:global(.status-badge)) {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.analysisResultQualityGateHeader h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.analysisResultQualityGateSummary,
+.analysisResultQualityGateClear,
+.analysisResultQualityGateHealthItem p,
+.analysisResultQualityGateIssueList p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.analysisResultQualityGateStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.analysisResultQualityGateStats div,
+.analysisResultQualityGateHealthItem,
+.analysisResultQualityGateIssueList {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-card);
+}
+
+.analysisResultQualityGateStats span,
+.analysisResultQualityGateIssueList small {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultQualityGateStats strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-lg);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisResultQualityGateIssueGrid,
+.analysisResultQualityGateHealthList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.analysisResultQualityGateIssueList[data-tone='danger'] {
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+}
+
+.analysisResultQualityGateIssueList[data-tone='warning'] {
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+}
+
+.analysisResultQualityGateIssueList > strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultQualityGateIssueList ul {
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.analysisResultQualityGateIssueList li {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.analysisResultQualityGateIssueList li > span {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1080px) {
+  .analysisResultQualityGateStats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .analysisResultQualityGateIssueGrid,
+  .analysisResultQualityGateHealthList {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisResultQualityGateStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .analysisResultQualityGateStats {
+    grid-template-columns: 1fr;
+  }
+}

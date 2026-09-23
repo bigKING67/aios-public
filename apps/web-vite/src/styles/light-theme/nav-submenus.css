@@ -1,0 +1,193 @@
+/* ============ 顶部导航二级菜单（报告 / 营销） ============ */
+
+.ant-menu-submenu-popup .ant-menu {
+  min-width: 176px;
+  padding: 6px;
+  border-radius: 13px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-lg);
+  --header-nav-hover-bg: var(--bg-hover);
+  --header-nav-active-bg: var(--brand-secondary);
+  --header-nav-active-text: var(--brand-text-strong);
+  --header-nav-active-marker: var(--brand-primary);
+  --header-nav-focus-ring: var(--brand-focus-ring);
+}
+
+.ant-menu-submenu-popup .ant-menu-item {
+  position: relative;
+  margin: 0;
+  border-radius: 9px;
+  height: 36px;
+  min-height: 36px;
+  line-height: 36px;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap;
+  padding: 0 10px 0 16px !important;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 400;
+  background: transparent !important;
+  transition: background-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.ant-menu-submenu-popup .ant-menu-item .anticon {
+  color: inherit;
+  font-size: 15px;
+  transition: color var(--transition-base);
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  color: var(--text-secondary);
+  background: transparent;
+  box-shadow: none;
+  font-size: 14px;
+  transition:
+    color var(--transition-base),
+    transform var(--transition-base);
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  gap: 12px;
+  justify-content: space-between;
+  color: inherit !important;
+  font-size: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-link:hover,
+.ant-menu-submenu-popup .header-nav-submenu-link:focus,
+.ant-menu-submenu-popup .header-nav-submenu-link:focus-visible {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-link-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-current-badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 17px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--header-nav-active-text);
+  font-size: 11px;
+  font-weight: 520;
+  line-height: 1;
+}
+
+.ant-menu-submenu-popup .ant-menu-item .ant-menu-title-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.ant-menu-submenu-popup .ant-menu-item:hover .header-nav-submenu-link,
+.ant-menu-submenu-popup .ant-menu-item-active .header-nav-submenu-link,
+.ant-menu-submenu-popup .ant-menu-item:focus-within .header-nav-submenu-link,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current .header-nav-submenu-link,
+.ant-menu-submenu-popup .ant-menu-item-selected .header-nav-submenu-link {
+  color: inherit !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-item:hover,
+.ant-menu-submenu-popup .ant-menu-item-active,
+.ant-menu-submenu-popup .ant-menu-item:focus-within {
+  color: var(--header-nav-active-text) !important;
+  background: var(--brand-secondary) !important;
+  background-color: var(--brand-secondary) !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-item:hover .header-nav-submenu-icon,
+.ant-menu-submenu-popup .ant-menu-item-active .header-nav-submenu-icon,
+.ant-menu-submenu-popup .ant-menu-item:focus-within .header-nav-submenu-icon {
+  color: var(--brand-text-strong);
+  background: transparent;
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current {
+  color: var(--header-nav-active-text) !important;
+  background: var(--header-nav-active-bg) !important;
+  background-color: var(--header-nav-active-bg) !important;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item .header-nav-submenu-icon,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current .header-nav-submenu-icon {
+  color: var(--header-nav-active-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item::before,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current::before,
+.ant-menu-submenu-popup .ant-menu-item:hover::before,
+.ant-menu-submenu-popup .ant-menu-item-active::before,
+.ant-menu-submenu-popup .ant-menu-item:focus-within::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  width: 3px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--header-nav-active-marker);
+  transform: translateY(-50%);
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item:hover,
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item.ant-menu-item-active,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current:hover,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current.ant-menu-item-active {
+  color: var(--header-nav-active-text) !important;
+  background: var(--header-nav-active-bg) !important;
+  background-color: var(--header-nav-active-bg) !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item:hover .header-nav-submenu-icon,
+.ant-menu-submenu-popup .ant-menu-item-selected.header-nav-submenu-item.ant-menu-item-active .header-nav-submenu-icon,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current:hover .header-nav-submenu-icon,
+.ant-menu-submenu-popup .header-nav-submenu-item.is-current.ant-menu-item-active .header-nav-submenu-icon {
+  color: var(--header-nav-active-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.ant-menu-submenu-popup .ant-menu-item-selected:not(.header-nav-submenu-item)::after {
+  display: none;
+}
+
+.ant-menu-submenu-popup .header-nav-submenu-link:focus-visible {
+  outline: 2px solid var(--header-nav-focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

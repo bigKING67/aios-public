@@ -1,0 +1,20 @@
+.sessionDropdown {
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.sessionDropdown :global(.ant-select-item) {
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--dashboard-live-funnel-dropdown-text);
+  font-size: var(--font-size-base);
+  font-weight: 470;
+  line-height: var(--line-height-snug);
+}
+
+.sessionDropdown :global(.ant-select-item-option-selected) {
+  background: var(--dashboard-live-funnel-dropdown-selected-bg) !important;
+  color: var(--dashboard-live-funnel-dropdown-selected-text);
+  font-weight: 560;
+}

@@ -1,0 +1,89 @@
+.notificationTable {
+  width: 100%;
+}
+
+.notificationHeaderCell {
+  background: var(--bg-hover);
+  white-space: nowrap;
+  text-align: center !important;
+  padding: 10px 8px !important;
+}
+
+.notificationColumnTitle {
+  width: 100%;
+  display: block;
+  text-align: center !important;
+}
+
+.notificationBodyCell {
+  vertical-align: top;
+  padding: 10px 8px !important;
+}
+
+.notificationExpandCell {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  text-align: center !important;
+}
+
+.notificationTitleCell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.notificationTitleText {
+  margin: 0;
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notificationMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.notificationTargetText {
+  display: inline-block;
+  max-width: 210px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notificationExpandPanel {
+  padding: 4px 0 0;
+}
+
+.notificationDetailText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notificationCodeRow {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.notificationCodeActions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}

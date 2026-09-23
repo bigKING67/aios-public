@@ -1,0 +1,338 @@
+.table :global(.ant-table) {
+  background: transparent;
+  font-size: var(--font-size-sm);
+  --traffic-row-l1-first-bg: var(--bg-card);
+  --traffic-row-l2-first-bg: var(--bg-card);
+  --traffic-row-l3-first-bg: var(--bg-card);
+  --traffic-row-summary-first-bg: var(--bg-card);
+  --traffic-head-bg: var(--dashboard-traffic-table-head-bg);
+}
+
+.table :global(.ant-table-container) {
+  border-inline: none !important;
+  border-top: none !important;
+}
+
+.table :global(.ant-table-header),
+.table :global(.ant-table-body) {
+  scrollbar-gutter: stable both-edges;
+}
+
+.table :global(.ant-table-body::-webkit-scrollbar) {
+  width: 10px;
+  height: 10px;
+}
+
+.table :global(.ant-table-body::-webkit-scrollbar-track) {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+.table :global(.ant-table-body::-webkit-scrollbar-thumb) {
+  background: var(--text-tertiary);
+  border-radius: 999px;
+}
+
+.table :global(.ant-table-body::-webkit-scrollbar-thumb:hover) {
+  background: var(--text-secondary);
+}
+
+.trafficHeaderCell {
+  background: var(--traffic-head-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--dashboard-traffic-table-head-text) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: 600 !important;
+  overflow: hidden;
+  padding: 12px 10px !important;
+  text-align: left !important;
+  white-space: nowrap;
+}
+
+.trafficHeaderCell :global(.ant-table-column-sorters) {
+  width: 100%;
+  justify-content: flex-start !important;
+  overflow: hidden;
+}
+
+.trafficHeaderCell :global(.ant-table-column-title) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trafficMetricHeaderCell {
+  text-align: right !important;
+}
+
+.trafficMetricHeaderCell :global(.ant-table-column-sorters) {
+  justify-content: flex-end !important;
+  padding-inline-end: 2px;
+}
+
+.trafficFirstHeaderCell {
+  text-align: center !important;
+}
+
+.trafficFirstHeaderCell :global(.ant-table-column-sorters) {
+  width: auto !important;
+  justify-content: center !important;
+  margin-inline: auto !important;
+  gap: 6px;
+}
+
+.trafficGoodsMetricHeaderCell {
+  padding-right: 12px !important;
+}
+
+.trafficHeaderCell :global(.ant-table-column-sorter) {
+  margin-inline-start: 6px !important;
+}
+
+.trafficHeaderCell::before {
+  display: none !important;
+}
+
+.trafficBodyCell {
+  background: var(--bg-card) !important;
+  border-bottom: 1px solid var(--divider-color) !important;
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+  padding: 12px 10px !important;
+  line-height: var(--line-height-normal);
+  vertical-align: middle;
+}
+
+.trafficHeaderCell:global(.ant-table-cell-fix-left),
+.trafficHeaderCell:global(.ant-table-cell-fix-left-last) {
+  z-index: 40 !important;
+  background: var(--traffic-head-bg) !important;
+  overflow: hidden;
+}
+
+.trafficBodyCell:global(.ant-table-cell-fix-left),
+.trafficBodyCell:global(.ant-table-cell-fix-left-last) {
+  z-index: 30 !important;
+  overflow: hidden;
+}
+
+/* rc-table MeasureRow bypasses column hooks and components.body row/cell overrides. */
+.table :global(.ant-table-tbody > tr.ant-table-measure-row) {
+  height: 0 !important;
+}
+
+.table :global(.ant-table-tbody > tr.ant-table-measure-row > td) {
+  padding: 0 !important;
+  border: 0 !important;
+  height: 0 !important;
+  line-height: var(--line-height-zero) !important;
+  background: transparent !important;
+}
+
+.trafficHeaderCell:global(.ant-table-cell-fix-left-last)::after,
+.trafficBodyCell:global(.ant-table-cell-fix-left-last)::after {
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.trafficHeaderCell:global(.ant-table-cell-fix-left-last)::before {
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.trafficTableRow:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-traffic-row-hover-bg) !important;
+}
+
+.trafficTableRowL1 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficTableRowL2 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficTableRowL3 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficGoodsTableRowSummary > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficGoodsTableRowL1 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficGoodsTableRowL2 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficGoodsTableRowL3 > :global(.ant-table-cell) {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--divider-color) !important;
+}
+
+.trafficTableRowL1:hover > :global(.ant-table-cell),
+.trafficGoodsTableRowL1:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-traffic-l1-row-hover-bg) !important;
+}
+
+.trafficTableRowL2:hover > :global(.ant-table-cell),
+.trafficGoodsTableRowL2:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-traffic-l2-row-hover-bg) !important;
+}
+
+.trafficTableRowL3:hover > :global(.ant-table-cell),
+.trafficGoodsTableRowL3:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-traffic-l3-row-hover-bg) !important;
+}
+
+.trafficGoodsTableRowSummary:hover > :global(.ant-table-cell) {
+  background: var(--dashboard-traffic-summary-row-hover-bg) !important;
+}
+
+.trafficFirstCell {
+  --traffic-first-cell-bg: var(--bg-card);
+  --traffic-first-cell-accent: var(--divider-color);
+  --traffic-first-cell-hover-bg: var(--traffic-first-cell-bg);
+}
+
+.trafficTableRow > .trafficFirstCell {
+  background: var(--traffic-first-cell-bg) !important;
+  box-shadow: inset 2px 0 0 var(--traffic-first-cell-accent);
+}
+
+.trafficFirstCellL1 {
+  --traffic-first-cell-bg: var(--traffic-row-l1-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l1-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l1-first-hover-bg);
+}
+
+.trafficFirstCellL2 {
+  --traffic-first-cell-bg: var(--traffic-row-l2-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l2-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l2-first-hover-bg);
+}
+
+.trafficFirstCellL3 {
+  --traffic-first-cell-bg: var(--traffic-row-l3-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l3-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l3-first-hover-bg);
+}
+
+.trafficGoodsFirstCellSummary {
+  --traffic-first-cell-bg: var(--traffic-row-summary-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-summary-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-summary-first-hover-bg);
+}
+
+.trafficGoodsFirstCellL1 {
+  --traffic-first-cell-bg: var(--dashboard-traffic-l1-goods-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l1-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l1-first-hover-bg);
+}
+
+.trafficGoodsFirstCellL2 {
+  --traffic-first-cell-bg: var(--dashboard-traffic-l2-goods-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l2-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l2-first-hover-bg);
+}
+
+.trafficGoodsFirstCellL3 {
+  --traffic-first-cell-bg: var(--dashboard-traffic-l3-goods-first-bg);
+  --traffic-first-cell-accent: var(--dashboard-traffic-l3-accent);
+  --traffic-first-cell-hover-bg: var(--dashboard-traffic-l3-first-hover-bg);
+}
+
+.trafficTableRow:hover > .trafficFirstCell {
+  background: var(--traffic-first-cell-hover-bg) !important;
+}
+
+.trafficExpandIcon {
+  appearance: none;
+  align-items: center;
+  background: var(--dashboard-traffic-expand-icon-bg);
+  border: 1px solid var(--dashboard-traffic-expand-icon-border);
+  border-radius: 8px;
+  color: var(--dashboard-traffic-expand-icon-text);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font: inherit;
+  height: 24px;
+  justify-content: center;
+  line-height: var(--component-control-line-height-xs);
+  margin-inline-end: 10px;
+  margin-top: 1px;
+  padding: 0;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+  vertical-align: middle;
+  width: 24px;
+}
+
+.trafficExpandIcon::before {
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  content: "";
+  height: 6px;
+  margin-left: -2px;
+  transform: rotate(-45deg);
+  transition: transform 160ms ease;
+  width: 6px;
+}
+
+.trafficExpandIconExpanded::before {
+  margin-left: 0;
+  margin-top: -2px;
+  transform: rotate(45deg);
+}
+
+.trafficExpandIcon:hover {
+  background: var(--dashboard-traffic-expand-icon-hover-bg);
+  border-color: var(--dashboard-traffic-expand-icon-hover-border);
+  color: var(--text-secondary);
+}
+
+.trafficExpandIcon:focus-visible {
+  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  outline: none;
+}
+
+.trafficExpandIconPlaceholder {
+  cursor: default;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .trafficHeaderCell {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .trafficMetricHeaderCell {
+    text-align: left !important;
+  }
+
+  .trafficMetricHeaderCell :global(.ant-table-column-sorters) {
+    justify-content: flex-start !important;
+  }
+
+  .trafficBodyCell {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}

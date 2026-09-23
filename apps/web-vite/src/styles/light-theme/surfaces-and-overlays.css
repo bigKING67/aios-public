@@ -1,0 +1,162 @@
+/* ============ 通用卡片类 ============ */
+
+.light-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  box-shadow: none;
+  transition: var(--transition-base);
+}
+
+.light-card:hover {
+  box-shadow: var(--shadow-base);
+  border-color: var(--border-color-hover);
+}
+
+/* ============ 报告容器 ============ */
+
+.report-container {
+  background: var(--bg-card);
+  border-radius: var(--border-radius-base);
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+
+.report-section {
+  margin-bottom: var(--spacing-6);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.report-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.report-section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-4);
+}
+
+.report-section-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-3);
+}
+
+/* ============ 图表容器 ============ */
+
+.chart-container-light {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  padding: var(--spacing-6);
+  box-shadow: none;
+  transition: var(--transition-base);
+}
+
+.chart-container-light:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============ 状态消息 ============ */
+
+.ant-message-notice-content {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* ============ 弹窗/模态框 ============ */
+
+.ant-modal-content {
+  background: var(--bg-card) !important;
+  border-radius: var(--border-radius-md) !important;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid var(--divider-color) !important;
+  background-color: var(--bg-card) !important;
+}
+
+.ant-modal-close {
+  color: var(--text-tertiary) !important;
+}
+
+/* ============ 下拉菜单 ============ */
+
+.ant-dropdown-menu {
+  background: var(--bg-card) !important;
+}
+
+.ant-dropdown-menu-item {
+  color: var(--text-primary) !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============ 隐藏 Ant Design FloatButton ============ */
+
+.ant-float-btn {
+  display: none !important;
+}
+
+/* ============ 过渡动画 ============ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .card,
+  .light-card,
+  .ant-btn,
+  .ant-tabs-tab,
+  .ant-card,
+  button {
+    transition: var(--transition-base);
+  }
+}
+
+/* ============ 打印样式 ============ */
+
+@media print {
+  body {
+    background: var(--bg-card);
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .report-container {
+    box-shadow: none;
+    page-break-after: avoid;
+  }
+
+  .report-section {
+    page-break-inside: avoid;
+  }
+
+  .ant-btn {
+    border: 1px solid var(--text-primary) !important;
+  }
+}
+
+/* ============ 深色模式支持（可选） ============ */
+
+@media (prefers-color-scheme: dark) {
+  body.light-theme {
+    background-color: var(--bg-global);
+    color: var(--text-primary);
+  }
+
+  .light-card,
+  .ant-card,
+  .report-container {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+  }
+}

@@ -1,0 +1,45 @@
+.sessionSelect {
+  flex: 0 1 540px;
+  max-width: 560px;
+  min-width: 420px;
+}
+
+.sessionSelect :global(.ant-select-selector) {
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 36px 0 15px !important;
+  border-color: var(--dashboard-live-funnel-control-border) !important;
+  border-radius: 9px !important;
+  background: var(--bg-card) !important;
+  box-shadow: none !important;
+}
+
+.sessionSelect :global(.ant-select-selector .ant-select-selection-item) {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 520;
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--component-control-line-height-lg) !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sessionSelect:global(.ant-select-focused) :global(.ant-select-selector),
+.sessionSelect:hover :global(.ant-select-selector) {
+  border-color: var(--dashboard-live-funnel-control-hover-border) !important;
+}
+
+.sessionSelect :global(.ant-select-arrow) {
+  right: 15px;
+  color: var(--dashboard-live-funnel-control-arrow);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 768px) {
+  .sessionSelect {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+  }
+}

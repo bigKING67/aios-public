@@ -1,0 +1,44 @@
+.commandModalBody {
+  display: grid;
+  gap: 10px;
+}
+
+.commandCard {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+}
+
+.commandCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.commandCardHead h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}
+
+.commandCode {
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-hover);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  padding: 10px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.commandForm :global(.ant-form-item) {
+  margin-bottom: 8px;
+}

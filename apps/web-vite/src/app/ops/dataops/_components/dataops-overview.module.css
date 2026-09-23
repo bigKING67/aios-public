@@ -1,0 +1,356 @@
+.opsHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(520px, 0.9fr);
+  gap: 16px;
+  align-items: end;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.opsTitleBlock {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.opsEyebrowRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 650;
+  letter-spacing: var(--letter-spacing-normal);
+  text-transform: uppercase;
+}
+
+.opsTitleBlock h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-compact);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: 720;
+}
+
+.opsTitleBlock p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.opsHealthPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--status-neutral-border);
+  background: var(--bg-hover);
+  padding: 3px 9px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-none);
+  font-weight: 650;
+}
+
+.opsHealthPillOk {
+  color: var(--status-success-strong);
+  border-color: var(--status-success-border);
+  background: var(--status-success-bg);
+}
+
+.opsHealthPillWarning {
+  color: var(--status-warning-strong);
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+}
+
+.opsHealthPillError {
+  color: var(--status-danger-strong);
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+}
+
+.opsControlPanel {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 150px auto auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.opsSignalGrid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.35fr) repeat(3, minmax(180px, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.opsSignalCard {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.opsSignalCardOk {
+  border-color: var(--status-success-border);
+}
+
+.opsSignalCardRisk {
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+}
+
+.opsSignalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 650;
+}
+
+.opsSignalCard strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: 760;
+}
+
+.opsSignalCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.opsSignalTextValue {
+  font-size: var(--font-size-data-md) !important;
+}
+
+.workspaceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 8px;
+}
+
+.workspaceMeta {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.keywordInput :global(.ant-input-affix-wrapper),
+.statusSelect :global(.ant-select-selector) {
+  border-radius: 6px;
+}
+
+.statusSelect {
+  width: 150px;
+}
+
+.noticeDock {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 10px;
+}
+
+.noticeBody {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.noticeBody > * {
+  min-width: 0;
+}
+
+.noticeSection {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+}
+
+.noticeSectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.noticeSectionHead strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.noticeSectionHead span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.noticeMutedText {
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  padding: 8px 10px;
+}
+
+.noticeEmphasisText {
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--status-danger-border);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-strong);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+.tabRail {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  overflow-x: auto;
+}
+
+.tabRail::-webkit-scrollbar {
+  display: none;
+}
+
+.tabButton {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: var(--line-height-none);
+  padding: 9px 14px;
+  border-radius: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tabButton:hover {
+  color: var(--status-info-strong);
+  background: var(--status-info-bg);
+}
+
+.tabButton:active {
+  transform: translateY(1px);
+}
+
+.tabButtonActive {
+  color: var(--brand-text);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-base);
+}
+
+.metricMainStackBar {
+  margin-top: 8px;
+  height: 8px;
+  width: 100%;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  background: var(--border-color);
+}
+
+.metricMainStackSegment {
+  height: 100%;
+  min-width: 0;
+}
+
+.metricMainStackHealthy {
+  background: var(--status-success);
+}
+
+.metricMainStackWarning {
+  background: var(--status-warning);
+}
+
+.metricMainStackError {
+  background: var(--status-danger);
+}
+
+.metricMainStackPaused {
+  background: var(--status-neutral);
+}
+
+@media (max-width: 1200px) {
+  .opsHeader {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .opsSignalGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .opsControlPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .workspaceHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .workspaceMeta {
+    white-space: normal;
+  }
+
+  .statusSelect {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .opsHeader {
+    padding: 12px;
+  }
+
+  .opsSignalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .opsSignalCard strong {
+    font-size: var(--font-size-2xl);
+  }
+}

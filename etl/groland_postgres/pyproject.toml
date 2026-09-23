@@ -1,0 +1,23 @@
+[project]
+name = "groland-postgres"
+version = "0.1.0"
+description = "PostgreSQL assets and Prefect-based orchestration for groland"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "prefect==3.7.8",
+  "psycopg2-binary>=2.9.9,<3.0",
+  "python-dotenv>=1.0.0,<2.0",
+  "pyyaml>=6.0,<7.0",
+  "requests>=2.31.0,<3.0",
+  "schedule>=1.2.0,<2.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pip-audit>=2.9,<3",
+    "pytest>=8.4,<9",
+]

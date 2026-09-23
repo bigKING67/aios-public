@@ -1,0 +1,18 @@
+.trendUp,
+.trendDown,
+.trendNeutral {
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+}
+
+.trendUp {
+  color: var(--trend-up);
+}
+
+.trendDown {
+  color: var(--trend-down);
+}
+
+.trendNeutral {
+  color: var(--trend-neutral);
+}

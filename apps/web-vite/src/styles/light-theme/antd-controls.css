@@ -1,0 +1,232 @@
+/* ============ Ant Design 浅色主题覆盖（全局） ============ */
+
+/* 选择器 - 改为白底极淡边框 */
+.light-select .ant-select-selector {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius-base) !important;
+}
+
+.light-select .ant-select-selector:hover {
+  border-color: var(--border-color-hover) !important;
+  background-color: var(--bg-hover) !important;
+}
+
+.light-select .ant-select-arrow {
+  color: var(--text-tertiary);
+}
+
+.light-select .ant-select-selection-item {
+  color: var(--text-primary) !important;
+}
+
+.light-select .ant-select-placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* 输入框 */
+.light-theme .ant-input,
+.light-theme .ant-picker {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.light-theme .ant-input:hover,
+.light-theme .ant-picker:hover {
+  border-color: var(--border-color-hover) !important;
+}
+
+/* InputNumber owns focus styling on its wrapper; avoid a clipped second ring on the nested input. */
+.ant-input-number-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ============ Tabs - 现代简约 ============ */
+
+.light-tabs .ant-tabs-tab {
+  color: var(--text-secondary);
+  border-bottom-color: transparent;
+  transition: var(--transition-base);
+}
+
+.light-tabs .ant-tabs-tab-active {
+  color: var(--brand-text);
+  border-bottom-color: var(--brand-primary);
+  background-color: transparent;
+  font-weight: 500;
+}
+
+.light-tabs .ant-tabs-tab:hover {
+  color: var(--text-primary);
+  background-color: transparent;
+}
+
+/* Ant Design Tabs 默认样式覆盖 */
+.ant-tabs-nav {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--divider-color) !important;
+}
+
+.weekly-sticky-tabs .ant-tabs-nav {
+  position: sticky;
+  top: calc(var(--weekly-sticky-top) + var(--weekly-header-sticky-height));
+  z-index: 35;
+  margin-top: 0 !important;
+  background-color: var(--bg-global) !important;
+}
+
+.weekly-sticky-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid var(--divider-color) !important;
+}
+
+.weekly-sticky-tabbar {
+  position: sticky;
+  top: calc(var(--weekly-sticky-top) + var(--weekly-header-sticky-height));
+  z-index: 35;
+  background-color: var(--bg-global);
+}
+
+.weekly-sticky-tabbar .ant-tabs-nav {
+  margin-top: 0 !important;
+}
+
+.weekly-affix-tabbar {
+  z-index: 35;
+}
+
+.weekly-affix-tabbar .ant-tabs-nav {
+  margin-top: 0 !important;
+  background-color: var(--bg-global) !important;
+}
+
+.weekly-summary-card .ant-card-head {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.ant-tabs-tab-remove {
+  color: var(--text-tertiary) !important;
+}
+
+@media (max-width: 768px) {
+  .report-page-light {
+    --weekly-header-sticky-height: 108px;
+  }
+
+  .compact-header {
+    flex-wrap: wrap;
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .compact-header-brand-wrap,
+  .compact-header-actions {
+    min-width: auto !important;
+  }
+
+  .compact-header-middle {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+
+  .compact-header-actions {
+    width: 100%;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .weekly-header-tablist {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .weekly-header-tab-btn {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .weekly-summary-card .ant-card-head-wrapper {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    align-items: flex-start;
+  }
+
+  .weekly-summary-card .ant-card-extra {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+
+  .weekly-summary-extra {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .weekly-summary-extra {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .weekly-summary-extra .ant-btn {
+    width: 100%;
+  }
+}
+
+/* ============ 按钮 ============ */
+
+.ant-btn-primary {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: var(--brand-on-primary) !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--brand-dark) !important;
+  border-color: var(--brand-dark) !important;
+  color: var(--brand-on-primary) !important;
+}
+
+.ant-btn-default {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.ant-btn-default:hover {
+  border-color: var(--border-color-hover) !important;
+  background-color: var(--bg-hover) !important;
+}
+
+/* ============ 卡片（Card） ============ */
+
+.ant-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  box-shadow: none;
+  transition: var(--transition-base);
+}
+
+.ant-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-color-hover);
+}
+
+.ant-card-head {
+  border-bottom: 1px solid var(--divider-color);
+  background-color: var(--bg-card);
+}
+
+/* ============ 分割线 ============ */
+
+.ant-divider {
+  background-color: var(--divider-color) !important;
+  border-color: var(--divider-color) !important;
+}

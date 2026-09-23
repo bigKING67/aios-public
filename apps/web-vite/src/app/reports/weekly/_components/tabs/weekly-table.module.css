@@ -1,0 +1,208 @@
+.goodsDataTable {
+  height: 100%;
+}
+
+.goodsDataTable :global(.ant-table) {
+  background: transparent;
+  font-size: var(--font-size-sm);
+}
+
+.goodsDataTable :global(.ant-table-container) {
+  border-inline: none !important;
+  border-top: none !important;
+}
+
+.goodsDataTable :global(.ant-table-header),
+.goodsDataTable :global(.ant-table-body) {
+  scrollbar-gutter: stable both-edges;
+}
+
+.goodsDataTable :global(.ant-table-body::-webkit-scrollbar) {
+  width: 10px;
+  height: 10px;
+}
+
+.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-track) {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-thumb) {
+  background: var(--text-tertiary);
+  border-radius: 999px;
+}
+
+.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-thumb:hover) {
+  background: var(--text-secondary);
+}
+
+.weeklyTableHeaderCell {
+  background: var(--bg-hover) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 620 !important;
+  text-align: left;
+  padding: 13px 14px !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.weeklyTableHeaderCell::before {
+  display: none !important;
+}
+
+.weeklyTableBodyCell {
+  background: var(--bg-card) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary);
+  padding: 20px 14px !important;
+  line-height: var(--line-height-relaxed);
+  vertical-align: middle;
+}
+
+.weeklyTableScrollableCell {
+  overflow: hidden;
+}
+
+.weeklyTableBodyRow:hover > .weeklyTableBodyCell {
+  background: var(--bg-hover) !important;
+}
+
+.weeklyTableBodyRow:hover > .weeklyTableBodyFixedLeftCell,
+.weeklyTableBodyRow:hover > .weeklyTableBodyFixedLeftLastCell {
+  background: var(--brand-secondary) !important;
+}
+
+.weeklyTableHeaderFixedLeftCell,
+.weeklyTableHeaderFixedLeftLastCell {
+  z-index: 40 !important;
+  background: var(--bg-hover) !important;
+}
+
+.weeklyTableBodyFixedLeftCell,
+.weeklyTableBodyFixedLeftLastCell {
+  z-index: 30 !important;
+  background: var(--bg-card) !important;
+}
+
+.weeklyTableHeaderFixedLeftLastCell::before,
+.weeklyTableHeaderFixedLeftLastCell::after,
+.weeklyTableBodyFixedLeftLastCell::after {
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row) {
+  height: 0 !important;
+}
+
+.goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row > td) {
+  padding: 0 !important;
+  border: 0 !important;
+  height: 0 !important;
+  line-height: var(--line-height-zero) !important;
+  background: transparent !important;
+}
+
+.goodsFrozenHead,
+.goodsFrozenCol {
+  border-right: none !important;
+}
+
+.goodsNameCell {
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.goodsIdCell {
+  font-family: var(--font-family-mono);
+  color: var(--text-secondary);
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  line-height: var(--line-height-normal);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.goodsNameText {
+  display: block;
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.goodsIdText {
+  display: block;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: none !important;
+}
+
+.goodsGmvCell {
+  min-width: 190px;
+}
+
+.goodsMetricValue {
+  font-weight: 620;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.goodsMetricMeta {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.goodsMetricTrend {
+  font-size: var(--font-size-xs) !important;
+  line-height: var(--line-height-snug) !important;
+}
+
+.weeklyMetricBodyCell {
+  white-space: nowrap;
+}
+
+.reasonText {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: var(--line-height-normal);
+}
+
+.weeklyQuantBodyCell {
+  white-space: normal !important;
+  vertical-align: top !important;
+}
+
+.weeklyQuantHeaderCell {
+  white-space: nowrap !important;
+}
+
+@media (max-width: 860px) {
+  .goodsDataTable :global(.ant-table-body) {
+    max-height: 280px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .goodsDataTable :global(.ant-table) {
+    font-size: var(--font-size-xs);
+  }
+}

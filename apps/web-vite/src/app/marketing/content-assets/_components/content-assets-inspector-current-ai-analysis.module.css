@@ -1,0 +1,102 @@
+.currentAiAnalysisPanel {
+  display: grid;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-card);
+}
+
+.currentAnalysisHero {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--brand-border);
+  border-radius: 12px;
+  background: var(--brand-secondary);
+}
+
+.currentAnalysisHero > div:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.currentAnalysisHero span,
+.diagnosisBoundaryPanel strong {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.currentAnalysisHero span {
+  color: var(--brand-text);
+  font-weight: 620;
+}
+
+.currentAnalysisHero strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  font-weight: 680;
+  line-height: var(--line-height-tight);
+}
+
+.currentAnalysisHero p,
+.diagnosisBoundaryPanel p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.currentAnalysisMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.currentAnalysisMetaRow span {
+  display: inline-flex;
+  min-height: 22px;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid var(--divider-color);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  line-height: var(--line-height-snug);
+}
+
+.diagnosisBoundaryPanel {
+  display: grid;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  background: var(--bg-subtle);
+}
+
+.diagnosisBoundaryPanel > div:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diagnosisBoundaryPanel small {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.diagnosisBoundaryPanel :global(.ant-btn) {
+  justify-self: start;
+  height: auto;
+  padding: 0;
+}

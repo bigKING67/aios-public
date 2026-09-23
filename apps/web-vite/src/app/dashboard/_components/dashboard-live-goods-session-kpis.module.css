@@ -1,0 +1,48 @@
+.sessionKpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(86px, 1fr));
+  gap: 8px;
+}
+
+.sessionKpiItem {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--dashboard-live-kpi-label);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+  line-height: var(--line-height-tight);
+}
+
+.sessionKpiValue {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 430;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sessionKpiPrimary .sessionKpiValue {
+  color: var(--text-secondary);
+  font-weight: 430;
+}
+
+.sessionKpiMuted,
+.sessionKpiMuted .sessionKpiValue {
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 1024px) {
+  .sessionKpis {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sessionKpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

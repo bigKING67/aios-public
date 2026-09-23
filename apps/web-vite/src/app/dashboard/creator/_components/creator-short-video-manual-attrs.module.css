@@ -1,0 +1,246 @@
+.manualAttrCell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.manualAttrCellNumeric {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.manualAttrValue {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+.manualAttrMuted {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.manualAttrEditStack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+}
+
+.manualAttrFeeInputs {
+  display: grid;
+  grid-template-columns: minmax(112px, 1fr);
+  gap: var(--spacing-1);
+  width: 100%;
+}
+
+.manualAttrNumberInput,
+.manualAttrSelect,
+.manualAttrNoteInput {
+  width: 100%;
+}
+
+.manualAttrNumberInput {
+  display: inline-flex;
+  align-items: center;
+  height: var(--component-control-line-height-sm);
+  min-height: var(--component-control-line-height-sm);
+  border-color: var(--border-color);
+  border-radius: var(--component-input-border-radius);
+  background: var(--bg-card);
+  box-shadow: none;
+}
+
+.manualAttrNumberInput:hover {
+  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border-color));
+  background: var(--bg-card);
+}
+
+.manualAttrNumberInput:global(.ant-input-number-focused),
+.manualAttrNumberInput:focus-within {
+  border-color: var(--brand-primary);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand-primary) 24%, transparent);
+}
+
+.manualAttrNumberInput :global(.ant-input-number-actions),
+.manualAttrNumberInput :global(.ant-input-number-handler-wrap) {
+  display: none;
+}
+
+.manualAttrNumberInput :global(.ant-input-number-input-wrap) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.manualAttrNumberInput :global(.ant-input-number-input) {
+  flex: 1;
+  min-width: 0;
+  height: var(--component-control-line-height-sm);
+  padding-block: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  line-height: var(--component-control-line-height-sm);
+  text-align: right;
+}
+
+.manualAttrNoteInput,
+.manualAttrNoteInput :global(input) {
+  height: var(--component-control-line-height-sm);
+  border-color: var(--border-color);
+  border-radius: var(--component-input-border-radius);
+  background: var(--bg-card);
+  line-height: var(--component-control-line-height-sm);
+}
+
+.manualAttrNoteInput:hover,
+.manualAttrNoteInput:focus,
+.manualAttrNoteInput:focus-within {
+  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border-color));
+  background: var(--bg-card);
+}
+
+.manualAttrNumberInput :global(.ant-input-number-input::placeholder),
+.manualAttrNoteInput::placeholder,
+.manualAttrNoteInput :global(input::placeholder),
+.manualAttrTagSelect :global(.ant-select-placeholder),
+.manualAttrTagSelect :global(.ant-select-input),
+.manualAttrTagSelect :global(.ant-select-selection-placeholder),
+.manualAttrTagSelect :global(.ant-select-selection-search-input) {
+  color: var(--text-tertiary);
+  line-height: var(--component-control-line-height-sm);
+}
+
+.manualAttrNumberInput :global(.ant-input-number-input:placeholder-shown),
+.manualAttrNoteInput:placeholder-shown,
+.manualAttrNoteInput :global(input:placeholder-shown),
+.manualAttrTagSelect :global(.ant-select-selection-search-input) {
+  text-align: center;
+}
+
+.manualAttrTagSelect :global(.ant-select-selection-placeholder) {
+  inset-inline: 0;
+  padding-inline: var(--spacing-2);
+  text-align: center;
+}
+
+.manualAttrTagSelect :global(.ant-select-content) {
+  align-items: center;
+  min-height: var(--component-control-line-height-sm);
+}
+
+.manualAttrTagSelect :global(.ant-select-content-item) {
+  align-items: center;
+}
+
+.manualAttrTagSelect :global(.ant-select-selector) {
+  align-items: center;
+  min-height: var(--component-control-line-height-sm);
+  border-color: var(--border-color) !important;
+  border-radius: var(--component-input-border-radius);
+  background: var(--bg-card) !important;
+  box-shadow: none !important;
+}
+
+.manualAttrTagSelect:hover :global(.ant-select-selector),
+.manualAttrTagSelect:global(.ant-select-focused) :global(.ant-select-selector) {
+  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border-color)) !important;
+  background: var(--bg-card) !important;
+}
+
+.manualAttrTagSelect :global(.ant-select-selection-item) {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.manualAttrTagSelect :global(.ant-select-selection-overflow) {
+  align-items: center;
+  flex-wrap: nowrap;
+  min-height: var(--component-control-line-height-sm);
+}
+
+.manualAttrTagSelect :global(.ant-select-selection-overflow-item) {
+  align-self: center;
+}
+
+.manualAttrTag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: var(--component-control-line-height-sm);
+  padding: 0 var(--spacing-2);
+  border-radius: var(--border-radius-full);
+  color: var(--text-secondary);
+  background: var(--status-neutral-bg);
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+  line-height: var(--line-height-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.manualAttrOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.manualAttrOptionHint,
+.manualAttrEmptyHint {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.manualAttrSelectPopup :global(.ant-select-item-option-content) {
+  min-width: 0;
+}
+
+.manualAttrTagCreatorType {
+  color: var(--brand-text);
+  background: var(--brand-secondary);
+}
+
+.manualAttrTagMcn {
+  color: var(--status-info-strong);
+  background: var(--status-info-bg);
+}
+
+.manualAttrActions {
+  display: inline-flex;
+  align-items: center;
+}
+
+.manualAttrActionButton {
+  height: auto;
+  padding-inline: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+}
+
+.manualAttrColumnGroupHeader,
+.manualAttrColumnHeader {
+  background: color-mix(in srgb, var(--brand-secondary) 88%, var(--bg-card)) !important;
+  color: var(--brand-text);
+}
+
+.manualAttrColumnCell {
+  vertical-align: middle;
+  background: color-mix(in srgb, var(--brand-secondary) 34%, var(--bg-card)) !important;
+  box-shadow: inset 1px 0 color-mix(in srgb, var(--brand-primary) 8%, transparent);
+}
+
+.manualAttrColumnRow:hover .manualAttrColumnCell {
+  background: color-mix(in srgb, var(--brand-secondary) 68%, var(--bg-card)) !important;
+}

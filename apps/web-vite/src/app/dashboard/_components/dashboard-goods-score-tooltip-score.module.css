@@ -1,0 +1,46 @@
+.kpis {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--spacing-2) + 2px);
+  margin-bottom: var(--spacing-2);
+}
+
+.scoreWrap {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-1) / 2);
+}
+
+.scoreLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.scoreValue {
+  color: var(--text-primary);
+  font-size: var(--font-size-data-md);
+  font-weight: 630;
+  line-height: var(--line-height-none);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreMax {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 560;
+}
+
+@media (max-width: 768px) {
+  .kpis {
+    margin-bottom: calc(var(--spacing-2) - 2px);
+  }
+
+  .scoreValue {
+    font-size: var(--font-size-2xl);
+  }
+
+  .scoreMax {
+    font-size: var(--font-size-sm);
+  }
+}

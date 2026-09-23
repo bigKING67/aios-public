@@ -1,0 +1,236 @@
+:root {
+  /* Dashboard-local category tokens also cover AntD/ECharts portals. */
+
+  /* Goods TOPSIS quadrant palette. Keep as business taxonomy, not status colors. */
+  --dashboard-goods-quadrant-star-text: var(--domain-topsis-star-text);
+  --dashboard-goods-quadrant-star-bg: var(--domain-topsis-star-bg);
+  --dashboard-goods-quadrant-star-border: var(--domain-topsis-star-border);
+  --dashboard-goods-quadrant-stable-text: var(--domain-topsis-stable-text);
+  --dashboard-goods-quadrant-stable-bg: var(--domain-topsis-stable-bg);
+  --dashboard-goods-quadrant-stable-border: var(--domain-topsis-stable-border);
+  --dashboard-goods-quadrant-opportunity-text: var(--domain-topsis-opportunity-text);
+  --dashboard-goods-quadrant-opportunity-bg: var(--domain-topsis-opportunity-bg);
+  --dashboard-goods-quadrant-opportunity-border: var(--domain-topsis-opportunity-border);
+  --dashboard-goods-quadrant-longtail-text: var(--domain-topsis-long-tail-text);
+  --dashboard-goods-quadrant-longtail-bg: var(--domain-topsis-long-tail-bg);
+  --dashboard-goods-quadrant-longtail-border: var(--domain-topsis-long-tail-border);
+  --dashboard-goods-quadrant-neutral-text: var(--domain-topsis-neutral-text);
+  --dashboard-goods-quadrant-neutral-bg: var(--domain-topsis-neutral-bg);
+  --dashboard-goods-quadrant-neutral-border: var(--domain-topsis-neutral-border);
+
+  /* Traffic hierarchy palette. L1/L2/L3 are business tiers, not success/warning/error states. */
+  --dashboard-traffic-row-hover-bg: var(--bg-hover);
+  --dashboard-traffic-summary-accent: var(--domain-traffic-summary-accent);
+  --dashboard-traffic-summary-row-hover-bg: var(--domain-traffic-summary-bg);
+  --dashboard-traffic-summary-first-hover-bg: var(--domain-traffic-summary-bg);
+  --dashboard-traffic-summary-badge-bg: var(--domain-traffic-summary-bg);
+  --dashboard-traffic-summary-badge-border: var(--domain-traffic-summary-border);
+  --dashboard-traffic-summary-badge-text: var(--domain-traffic-summary-text);
+  --dashboard-traffic-l1-accent: var(--domain-traffic-l1-accent);
+  --dashboard-traffic-l1-accent-soft: var(--domain-traffic-l1-border);
+  --dashboard-traffic-l1-row-hover-bg: var(--domain-traffic-l1-bg);
+  --dashboard-traffic-l1-goods-first-bg: var(--domain-traffic-l1-bg);
+  --dashboard-traffic-l1-first-hover-bg: var(--domain-traffic-l1-bg);
+  --dashboard-traffic-l1-badge-bg: var(--domain-traffic-l1-bg);
+  --dashboard-traffic-l1-badge-border: var(--domain-traffic-l1-border);
+  --dashboard-traffic-l1-badge-text: var(--domain-traffic-l1-text);
+  --dashboard-traffic-l2-accent: var(--domain-traffic-l2-accent);
+  --dashboard-traffic-l2-accent-soft: var(--domain-traffic-l2-border);
+  --dashboard-traffic-l2-row-hover-bg: var(--domain-traffic-l2-bg);
+  --dashboard-traffic-l2-goods-first-bg: var(--domain-traffic-l2-bg);
+  --dashboard-traffic-l2-first-hover-bg: var(--domain-traffic-l2-bg);
+  --dashboard-traffic-l2-badge-bg: var(--domain-traffic-l2-bg);
+  --dashboard-traffic-l2-badge-border: var(--domain-traffic-l2-border);
+  --dashboard-traffic-l2-badge-text: var(--domain-traffic-l2-text);
+  --dashboard-traffic-l3-accent: var(--domain-traffic-l3-accent);
+  --dashboard-traffic-l3-accent-soft: var(--domain-traffic-l3-border);
+  --dashboard-traffic-l3-row-hover-bg: var(--domain-traffic-l3-bg);
+  --dashboard-traffic-l3-goods-first-bg: var(--domain-traffic-l3-bg);
+  --dashboard-traffic-l3-first-hover-bg: var(--domain-traffic-l3-bg);
+  --dashboard-traffic-l3-badge-bg: var(--domain-traffic-l3-bg);
+  --dashboard-traffic-l3-badge-border: var(--domain-traffic-l3-border);
+  --dashboard-traffic-l3-badge-text: var(--domain-traffic-l3-text);
+
+  /* Traffic table structural aliases. Keep separate from traffic hierarchy colors. */
+  --dashboard-traffic-level-badge-bg: var(--status-neutral-bg);
+  --dashboard-traffic-level-badge-border: var(--border-color);
+  --dashboard-traffic-level-badge-text: var(--text-secondary);
+  --dashboard-traffic-table-head-bg: var(--bg-hover);
+  --dashboard-traffic-table-head-text: var(--text-secondary);
+  --dashboard-traffic-expand-icon-bg: var(--bg-hover);
+  --dashboard-traffic-expand-icon-border: var(--border-color);
+  --dashboard-traffic-expand-icon-text: var(--text-secondary);
+  --dashboard-traffic-expand-icon-hover-bg: var(--brand-secondary);
+  --dashboard-traffic-expand-icon-hover-border: var(--border-color-hover);
+
+  /* Live goods table aliases. These are local emphasis tokens for nested traffic/live rows. */
+  --dashboard-live-goods-divider: var(--divider-color);
+  --dashboard-live-goods-summary-metric-bg: var(--bg-hover);
+  --dashboard-live-goods-summary-metric-hover-bg: var(--brand-secondary);
+  --dashboard-live-goods-sku-metric-bg: var(--bg-hover);
+  --dashboard-live-goods-sku-metric-hover-bg: var(--brand-secondary);
+  --dashboard-live-goods-sku-accent: var(--border-color-hover);
+  --dashboard-live-goods-sku-row-hover-bg: var(--bg-hover);
+
+  /* Dashboard structural tokens shared across this module. */
+  --dashboard-panel-border: var(--border-color);
+  --dashboard-panel-border-muted: var(--border-color);
+  --dashboard-panel-bg-start: var(--bg-card);
+  --dashboard-panel-bg-end: var(--bg-hover);
+  --dashboard-panel-subtle-bg: var(--bg-global);
+  --dashboard-panel-muted-text: var(--text-tertiary);
+  --dashboard-pill-border: var(--border-color);
+  --dashboard-pill-bg: var(--status-neutral-bg);
+  --dashboard-pill-text: var(--text-secondary);
+  --dashboard-id-pill-text: var(--text-secondary);
+  --dashboard-id-pill-border: var(--border-color);
+  --dashboard-id-pill-bg: var(--status-neutral-bg);
+  --dashboard-empty-state-text: var(--text-secondary);
+  --dashboard-disabled-text: var(--text-disabled);
+  --dashboard-control-border: var(--border-color);
+
+  /* Live card/list tokens. */
+  --dashboard-live-card-border: var(--border-color);
+  --dashboard-live-card-hover-bg: var(--bg-hover);
+  --dashboard-live-card-muted-bg: var(--bg-hover);
+  --dashboard-live-card-muted-hover-bg: var(--bg-hover);
+  --dashboard-live-rank-bg: var(--status-neutral-bg);
+  --dashboard-live-tag-border: var(--border-color);
+  --dashboard-live-tag-bg: var(--status-neutral-bg);
+  --dashboard-live-tag-text: var(--text-secondary);
+  --dashboard-live-muted-text: var(--text-tertiary);
+  --dashboard-live-kpi-label: var(--text-tertiary);
+  --dashboard-live-chevron-border: var(--border-color);
+  --dashboard-live-chevron-text: var(--text-secondary);
+  --dashboard-live-meta-border: var(--border-color);
+  --dashboard-live-meta-bg: var(--bg-hover);
+  --dashboard-live-meta-text: var(--text-tertiary);
+  --dashboard-live-meta-muted-border: var(--divider-color);
+  --dashboard-live-meta-muted-text: var(--text-tertiary);
+  --dashboard-live-muted-pill-text: var(--text-tertiary);
+  --dashboard-live-contribution-track: var(--divider-color);
+  --dashboard-live-sku-toggle-border: var(--border-color);
+  --dashboard-live-sku-toggle-hover-bg: var(--bg-hover);
+  --dashboard-live-sku-panel-border: var(--border-color);
+  --dashboard-live-sku-panel-bg: var(--bg-card);
+  --dashboard-live-sku-header-text: var(--text-tertiary);
+
+  /* Detail drawer/table tokens. */
+  --dashboard-detail-head-border: var(--divider-color);
+  --dashboard-detail-border: var(--divider-color);
+  --dashboard-detail-text: var(--text-secondary);
+  --dashboard-detail-muted-text: var(--text-tertiary);
+  --dashboard-detail-label-text: var(--text-tertiary);
+  --dashboard-detail-type-border: var(--border-color);
+  --dashboard-detail-type-bg: var(--status-neutral-bg);
+  --dashboard-detail-action-border: var(--border-color);
+  --dashboard-detail-action-hover-border: var(--border-color-hover);
+  --dashboard-detail-action-hover-bg: var(--brand-secondary);
+  --dashboard-detail-drawer-border: var(--border-color);
+  --dashboard-detail-drawer-bg: var(--bg-card);
+  --dashboard-detail-drawer-muted-text: var(--text-tertiary);
+  --dashboard-detail-summary-border: var(--border-color);
+
+  /* Goods matrix / score local tokens. */
+  --dashboard-goods-tooltip-divider: var(--border-color-hover);
+  --dashboard-goods-subtitle-text: var(--text-tertiary);
+  --dashboard-goods-hint-border: var(--status-info-border);
+  --dashboard-goods-hint-bg: var(--status-info-bg);
+  --dashboard-goods-hint-text: var(--brand-text);
+  --dashboard-goods-header-underline: var(--border-color-hover);
+  --dashboard-goods-footnote-text: var(--text-tertiary);
+  --dashboard-goods-footnote-label: var(--text-tertiary);
+  --dashboard-goods-table-hover-bg: var(--bg-hover);
+  --dashboard-goods-drilldown-hover-bg: var(--brand-secondary);
+  --dashboard-goods-drilldown-active-bg: var(--brand-secondary);
+
+  --dashboard-traffic-metric-meta-text: var(--text-tertiary);
+  --dashboard-traffic-metric-meta-label: var(--text-tertiary);
+
+  /* Live funnel local controls and geometry colors. */
+  --dashboard-live-funnel-control-text: var(--text-secondary);
+  --dashboard-live-funnel-control-border: var(--border-color);
+  --dashboard-live-funnel-control-hover-border: var(--border-color-hover);
+  --dashboard-live-funnel-control-arrow: var(--text-tertiary);
+  --dashboard-live-funnel-dropdown-text: var(--text-primary);
+  --dashboard-live-funnel-dropdown-selected-bg: var(--brand-secondary);
+  --dashboard-live-funnel-dropdown-selected-text: var(--text-primary);
+
+  --dashboard-live-funnel-connector: var(--domain-funnel-connector-color);
+  --dashboard-live-funnel-muted-text: var(--text-tertiary);
+  --dashboard-live-funnel-bar-text: var(--domain-funnel-text-on-fill);
+  --dashboard-live-funnel-bar-muted-text: var(--dashboard-material-inverse-text-soft);
+
+  /* Dashboard-local material primitives: translucent surfaces/shadows, not semantic colors. */
+  --dashboard-material-glow-brand: rgba(47, 110, 234, 0.18);
+  --dashboard-material-glow-accent: rgba(140, 178, 255, 0.12);
+  --dashboard-material-backdrop-brand: rgba(47, 110, 234, 0.16);
+  --dashboard-material-backdrop-success: rgba(22, 163, 74, 0.08);
+  --dashboard-material-glass-border: rgba(148, 163, 184, 0.3);
+  --dashboard-material-topbar-bg: rgba(255, 255, 255, 0.88);
+  --dashboard-material-surface-bg: rgba(255, 255, 255, 0.9);
+  --dashboard-material-surface-bg-strong: rgba(255, 255, 255, 0.92);
+  --dashboard-material-surface-gradient-start: rgba(248, 250, 252, 0.9);
+  --dashboard-material-surface-gradient-end: rgba(255, 255, 255, 0.96);
+  --dashboard-material-shadow-soft: rgba(15, 23, 42, 0.14);
+  --dashboard-material-shadow-strong: rgba(15, 23, 42, 0.55);
+  --dashboard-material-shadow-topbar: rgba(15, 23, 42, 0.32);
+  --dashboard-material-shadow-sidebar: rgba(30, 41, 59, 0.42);
+  --dashboard-material-shadow-chart-panel: rgba(15, 23, 42, 0.6);
+  --dashboard-material-shadow-panel-subtle: rgba(15, 23, 42, 0.2);
+  --dashboard-material-shadow-badge-inset: rgba(15, 23, 42, 0.04);
+  --dashboard-material-shadow-fixed-column: rgba(15, 23, 42, 0.35);
+  --dashboard-material-shadow-tooltip: rgba(15, 23, 42, 0.7);
+  --dashboard-material-tooltip-dark-bg: rgba(15, 23, 42, 0.92);
+  --dashboard-material-shadow-brand-soft: rgba(47, 110, 234, 0.42);
+  --dashboard-material-shadow-brand: rgba(47, 110, 234, 0.58);
+  --dashboard-material-shadow-brand-mobile: rgba(47, 110, 234, 0.52);
+  --dashboard-material-shadow-brand-hover: rgba(47, 110, 234, 0.38);
+  --dashboard-material-shadow-danger-notice: rgba(220, 38, 38, 0.55);
+  --dashboard-material-inverse-text-strong: rgba(255, 255, 255, 0.92);
+  --dashboard-material-inverse-text-soft: rgba(255, 255, 255, 0.9);
+  --dashboard-material-inverse-text-muted: rgba(255, 255, 255, 0.72);
+  --dashboard-material-inverse-text-faint: rgba(255, 255, 255, 0.7);
+
+  /* Dashboard-local material tokens. Keep local until reused outside dashboard surfaces. */
+  --dashboard-canvas-bg-start: var(--bg-subtle);
+  --dashboard-canvas-bg-end: var(--bg-global);
+  --dashboard-canvas-brand-glow: var(--dashboard-material-glow-brand);
+  --dashboard-canvas-info-glow: var(--dashboard-material-glow-accent);
+  --dashboard-backdrop-brand-glow: var(--dashboard-material-backdrop-brand);
+  --dashboard-backdrop-success-glow: var(--dashboard-material-backdrop-success);
+  --dashboard-glass-border: var(--dashboard-material-glass-border);
+  --dashboard-topbar-bg: var(--dashboard-material-topbar-bg);
+  --dashboard-topbar-shadow: 0 16px 34px -24px var(--dashboard-material-shadow-topbar);
+  --dashboard-surface-bg: var(--dashboard-material-surface-bg);
+  --dashboard-surface-bg-strong: var(--dashboard-material-surface-bg-strong);
+  --dashboard-surface-gradient-start: var(--dashboard-material-surface-gradient-start);
+  --dashboard-surface-gradient-end: var(--dashboard-material-surface-gradient-end);
+  --dashboard-sidebar-shadow: 0 16px 30px -26px var(--dashboard-material-shadow-sidebar);
+  --dashboard-card-shadow: 0 18px 34px -30px var(--dashboard-material-shadow-strong);
+  --dashboard-placeholder-shadow: 0 20px 36px -34px var(--dashboard-material-shadow-strong);
+  --dashboard-chart-panel-shadow: 0 22px 40px -36px var(--dashboard-material-shadow-chart-panel);
+  --dashboard-panel-shadow-subtle: 0 12px 24px -22px var(--dashboard-material-shadow-panel-subtle);
+  --dashboard-badge-inset-shadow: inset 0 -1px 0 var(--dashboard-material-shadow-badge-inset);
+  --dashboard-soft-shadow-color: var(--dashboard-material-shadow-soft);
+  --dashboard-live-trend-panel-shadow: 0 18px 34px -34px var(--dashboard-material-shadow-strong);
+  --dashboard-fixed-column-shadow: -6px 0 12px -14px var(--dashboard-material-shadow-fixed-column);
+  --dashboard-tooltip-dark-bg: var(--dashboard-material-tooltip-dark-bg);
+  --dashboard-tooltip-dark-text: var(--dashboard-material-inverse-text-strong);
+  --dashboard-tooltip-dark-muted-text: var(--dashboard-material-inverse-text-muted);
+  --dashboard-tooltip-dark-strong-text: var(--text-inverse);
+  --dashboard-tooltip-dark-shadow: 0 12px 20px -14px var(--dashboard-material-shadow-tooltip);
+  --dashboard-selection-compact-height: var(--spacing-8);
+  --dashboard-selection-compact-min-width: calc(var(--spacing-8) + var(--spacing-6));
+  --dashboard-selection-tile-radius: calc(var(--border-radius-2xl) + var(--spacing-1));
+  --dashboard-brand-tab-shadow: 0 8px 20px -16px var(--dashboard-material-shadow-brand-soft);
+  --dashboard-brand-selected-shadow: 0 12px 22px -20px var(--dashboard-material-shadow-brand);
+  --dashboard-brand-mobile-selected-shadow: 0 8px 16px -14px var(--dashboard-material-shadow-brand-mobile);
+  --dashboard-brand-card-hover-shadow: 0 18px 30px -24px var(--dashboard-material-shadow-brand-hover);
+  --dashboard-danger-notice-shadow: 0 12px 24px -22px var(--dashboard-material-shadow-danger-notice);
+  --dashboard-inverse-text: var(--brand-on-primary);
+  --dashboard-inverse-muted-text: var(--brand-on-primary-muted);
+  --dashboard-live-contribution-fill-start: var(--chart-series-2);
+  --dashboard-live-contribution-fill-end: var(--chart-series-3);
+  --dashboard-live-trend-hint-bg: var(--brand-secondary);
+}

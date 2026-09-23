@@ -1,0 +1,23 @@
+.platformSummary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.platformLegendTag {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  border-color: var(--status-neutral-border) !important;
+  background: var(--status-neutral-bg) !important;
+  color: var(--status-neutral-strong) !important;
+  font-weight: 560;
+}
+
+.platformLegendDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex: none;
+}

@@ -1,0 +1,237 @@
+.formArea {
+  --sample-inventory-registration-material-frame-border: #dbeafe;
+  --sample-inventory-registration-material-frame-surface: #f8fbff;
+  --sample-inventory-registration-material-text: #1e293b;
+  --sample-inventory-registration-material-muted: #94a3b8;
+  --sample-inventory-registration-material-card-border: #dbe2ea;
+  --sample-inventory-registration-material-card-surface: #fff;
+  --sample-inventory-registration-material-card-hover: #93c5fd;
+  --sample-inventory-registration-material-primary: #2563eb;
+  --sample-inventory-registration-material-selected-surface: #eff6ff;
+  --sample-inventory-registration-material-selected-ring: rgb(37 99 235 / 12%);
+  --sample-inventory-registration-material-secondary: #64748b;
+  --sample-inventory-registration-material-label: #475569;
+  --sample-inventory-registration-material-info-border: #bfdbfe;
+  --sample-inventory-registration-material-info-text: #1d4ed8;
+  --font-size-sample-inventory-legacy-compact: 10px;
+
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--sample-inventory-registration-material-frame-border);
+  border-radius: 8px;
+  background: var(--sample-inventory-registration-material-frame-surface);
+}
+
+.sectionHeading {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.sectionHeading strong {
+  color: var(--sample-inventory-registration-material-text);
+  font-size: var(--font-size-base);
+}
+
+.sectionHeading span {
+  color: var(--sample-inventory-registration-material-muted);
+  font-size: var(--font-size-sm);
+}
+
+.sampleCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  max-height: 220px;
+  gap: 8px;
+  padding: 2px 2px 6px;
+  overflow-y: auto;
+}
+
+.sampleCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 62px;
+  min-width: 0;
+  min-height: 74px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--sample-inventory-registration-material-card-border);
+  border-radius: 7px;
+  background: var(--sample-inventory-registration-material-card-surface);
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.sampleCard:hover {
+  border-color: var(--sample-inventory-registration-material-card-hover);
+}
+
+.sampleCardSelected {
+  border-color: var(--sample-inventory-registration-material-primary);
+  background: var(--sample-inventory-registration-material-selected-surface);
+  box-shadow: 0 0 0 3px var(--sample-inventory-registration-material-selected-ring);
+}
+
+.sampleCard:focus-visible {
+  outline: 2px solid var(--sample-inventory-registration-material-primary);
+  outline-offset: 2px;
+}
+
+.sampleCardBody {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.sampleCardBody strong,
+.sampleCode {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sampleCardBody strong {
+  font-size: var(--font-size-sm);
+}
+
+.sampleCode {
+  color: var(--sample-inventory-registration-material-secondary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sample-inventory-legacy-compact);
+}
+
+.sampleStock {
+  color: var(--sample-inventory-registration-material-primary);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.sampleStockLow {
+  color: var(--status-danger);
+}
+
+.sampleQuantity {
+  width: 62px;
+}
+
+.inlineEmpty {
+  grid-column: 1 / -1;
+  padding: 18px;
+  color: var(--sample-inventory-registration-material-muted);
+  text-align: center;
+}
+
+.inlineForm,
+.inboundInlineForm {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(105px, 1fr)) minmax(150px, 1.5fr) auto;
+  align-items: end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.inboundInlineForm {
+  grid-template-columns: minmax(180px, 1.3fr) minmax(92px, 0.5fr) repeat(2, minmax(120px, 0.8fr)) minmax(140px, 1.2fr) minmax(420px, auto);
+  margin-top: 0;
+}
+
+.inlineForm :global(.ant-form-item),
+.inboundInlineForm :global(.ant-form-item) {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.inlineForm :global(.ant-form-item-label),
+.inboundInlineForm :global(.ant-form-item-label) {
+  padding-bottom: 3px;
+}
+
+.inlineForm :global(.ant-form-item-label > label),
+.inboundInlineForm :global(.ant-form-item-label > label) {
+  height: auto;
+  color: var(--sample-inventory-registration-material-label);
+  font-size: var(--font-size-xs);
+}
+
+.inlineForm :global(.ant-input),
+.inboundInlineForm :global(.ant-input),
+.inboundInlineForm :global(.ant-input-number),
+.inboundInlineForm :global(.ant-select) {
+  width: 100%;
+}
+
+.submitField {
+  min-width: max-content;
+}
+
+.inboundActions {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.selectedInfo {
+  margin: -4px 0 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--sample-inventory-registration-material-info-border);
+  border-radius: 6px;
+  background: var(--sample-inventory-registration-material-selected-surface);
+  color: var(--sample-inventory-registration-material-info-text);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 1100px) {
+  .inlineForm,
+  .inboundInlineForm {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .submitField {
+    min-width: 0;
+  }
+
+  .inboundSubmitField {
+    grid-column: 1 / -1;
+  }
+
+  .inboundActions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .sampleCardGrid {
+    grid-template-columns: 1fr 1fr;
+    max-height: 260px;
+  }
+
+  .inlineForm,
+  .inboundInlineForm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .addressField,
+  .inboundRemarkField,
+  .inboundSubmitField {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .sampleCardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .inlineForm,
+  .inboundInlineForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .addressField,
+  .inboundRemarkField,
+  .inboundSubmitField {
+    grid-column: auto;
+  }
+}

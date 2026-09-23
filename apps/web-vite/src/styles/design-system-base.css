@@ -1,0 +1,199 @@
+/**
+ * AIOS 设计系统 - 基础元素样式
+ *
+ * CSS 变量真源保留在 design-tokens.css；本文件只放消费这些变量的元素样式。
+ */
+
+/* ========== 全局样式应用 ========== */
+
+html {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-global);
+  transition: background-color var(--transition-base),
+              color var(--transition-base);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-global);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== 基础元素样式 ========== */
+
+h1 {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.18;
+  letter-spacing: var(--letter-spacing-tight);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: var(--font-size-section-title);
+  font-weight: var(--font-weight-section-title);
+  line-height: 1.25;
+  letter-spacing: var(--letter-spacing-title);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-title);
+  line-height: 1.35;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+p {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+a {
+  color: var(--brand-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--brand-text-strong);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ========== 数字等宽处理（核心细节）========== */
+
+.data-value,
+.metric-number,
+.table-number,
+.number-display {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-data);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+/* ========== 标准卡片样式 ========== */
+
+.card,
+.dashboard-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  padding: var(--component-card-padding);
+  transition: all var(--transition-base);
+}
+
+.card:hover,
+.dashboard-card:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-base);
+}
+
+/* ========== 按钮基础 ========== */
+
+button {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  border: none;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ========== 输入框基础 ========== */
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  padding: var(--spacing-2) var(--spacing-3);
+  transition: all var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--bg-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* ========== 深色模式（禁用 - AIOS 仅支持浅色主题） ========== */
+
+/*
+ * 注意：深色模式默认被禁用以确保一致的光线设计系统体验。
+ * P3 功能可能会添加深色主题支持，但当前专注于浅色主题。
+ */
+
+@media (prefers-color-scheme: dark) {
+  /* 强制保持浅色主题，不理会系统偏好 */
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    background-color: var(--bg-global);
+  }
+
+  body {
+    background-color: var(--bg-global);
+    color: var(--text-primary);
+  }
+}
+
+/* ========== 打印样式 ========== */
+
+@media print {
+  body {
+    background-color: var(--bg-card);
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .card,
+  .dashboard-card {
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+}

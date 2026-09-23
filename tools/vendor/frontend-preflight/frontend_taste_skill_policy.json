@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "source": "Leonxlnx/taste-skill",
+  "sourceType": "github",
+  "sourceUrl": "https://github.com/Leonxlnx/taste-skill.git",
+  "branch": "main",
+  "skillRoot": "~/.agents/skills",
+  "lockfile": "~/.agents/.skill-lock.json",
+  "backupDir": "~/.agents/backups/taste-skill",
+  "claudeBridgeDir": "~/.claude/skills",
+  "forbiddenSources": [
+    "pbakaus/impeccable"
+  ],
+  "autoUpdate": {
+    "defaultMode": "apply",
+    "verifyAfterApply": true,
+    "logPath": "~/.codex/logs/frontend_taste_skill_update.log"
+  },
+  "verifyCommands": [
+    "bash ~/.codex/tools/frontend_preflight_verify.sh"
+  ],
+  "skills": [
+    {
+      "name": "design-taste-frontend",
+      "skillPath": "skills/taste-skill/SKILL.md"
+    },
+    {
+      "name": "high-end-visual-design",
+      "skillPath": "skills/soft-skill/SKILL.md"
+    },
+    {
+      "name": "minimalist-ui",
+      "skillPath": "skills/minimalist-skill/SKILL.md"
+    },
+    {
+      "name": "industrial-brutalist-ui",
+      "skillPath": "skills/brutalist-skill/SKILL.md"
+    },
+    {
+      "name": "redesign-existing-projects",
+      "skillPath": "skills/redesign-skill/SKILL.md"
+    },
+    {
+      "name": "stitch-design-taste",
+      "skillPath": "skills/stitch-skill/SKILL.md"
+    },
+    {
+      "name": "full-output-enforcement",
+      "skillPath": "skills/output-skill/SKILL.md"
+    },
+    {
+      "name": "gpt-taste",
+      "skillPath": "skills/gpt-tasteskill/SKILL.md"
+    },
+    {
+      "name": "image-to-code",
+      "skillPath": "skills/image-to-code-skill/SKILL.md"
+    },
+    {
+      "name": "imagegen-frontend-web",
+      "skillPath": "skills/imagegen-frontend-web/SKILL.md"
+    },
+    {
+      "name": "imagegen-frontend-mobile",
+      "skillPath": "skills/imagegen-frontend-mobile/SKILL.md"
+    },
+    {
+      "name": "brandkit",
+      "skillPath": "skills/brandkit/SKILL.md"
+    }
+  ]
+}

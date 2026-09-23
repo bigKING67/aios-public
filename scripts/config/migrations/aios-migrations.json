@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "ledgerTable": "public.aios_schema_migrations",
+  "advisoryLockKey": "aios-schema-migrations-v1",
+  "namespaces": {
+    "backend": {
+      "directory": "sql/migrations",
+      "versionPattern": "^(\\d{3})_.*\\.sql$",
+      "nonTransactionalVersions": ["004"]
+    },
+    "warehouse": {
+      "directory": "etl/groland_postgres/sql/migrations",
+      "versionPattern": "^(\\d{8}_\\d{4})__.*\\.sql$",
+      "nonTransactionalVersions": ["20260510_1900"]
+    }
+  }
+}

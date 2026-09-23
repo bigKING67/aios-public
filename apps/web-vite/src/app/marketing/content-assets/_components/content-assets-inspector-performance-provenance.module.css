@@ -1,0 +1,96 @@
+.mappingProvenancePanel {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  background: var(--bg-subtle);
+}
+
+.mappingProvenanceHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mappingProvenanceHeader strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 640;
+  line-height: var(--line-height-snug);
+}
+
+.mappingProvenancePanel p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.mappingChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mappingChipRow code,
+.materialProvenanceRow span {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 22px;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid var(--divider-color);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.mappingProvenanceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.mappingProvenanceGrid article {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--divider-color);
+  border-radius: 10px;
+  background: var(--bg-card);
+}
+
+.mappingProvenanceGrid span,
+.mappingProvenanceGrid small {
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mappingProvenanceGrid strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.materialProvenanceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}

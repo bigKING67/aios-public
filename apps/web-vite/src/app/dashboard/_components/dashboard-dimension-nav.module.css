@@ -1,0 +1,204 @@
+.dimensionSidebar {
+  position: sticky;
+  top: 90px;
+  height: calc(100vh - 106px);
+  height: calc(100dvh - 106px);
+  min-height: calc(100vh - 106px);
+  min-height: calc(100dvh - 106px);
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--dashboard-surface-bg);
+  box-shadow: var(--dashboard-sidebar-shadow);
+  padding: 14px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dimensionSidebarHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 4px 8px;
+}
+
+.dimensionTitleLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.dimensionTitleIcon {
+  color: var(--brand-text);
+  font-size: var(--font-size-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: var(--line-height-none);
+}
+
+.dimensionSidebarHead h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-section-title);
+  line-height: var(--line-height-compact);
+  font-weight: 760;
+}
+
+.dimensionNav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.dimensionButton {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--dashboard-selection-tile-radius);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 11px 10px 11px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  position: relative;
+  transition:
+    color var(--transition-duration-fast) var(--transition-easing-standard),
+    background-color var(--transition-duration-fast) var(--transition-easing-standard),
+    border-color var(--transition-duration-fast) var(--transition-easing-standard),
+    box-shadow var(--transition-duration-fast) var(--transition-easing-standard),
+    transform var(--transition-duration-fast) var(--transition-easing-standard);
+}
+
+.dimensionButton:hover {
+  border-color: var(--border-color);
+  background: var(--bg-hover);
+  color: var(--brand-dark);
+}
+
+.dimensionButton:active {
+  transform: translateY(1px);
+}
+
+.dimensionButtonActive {
+  border-radius: var(--dashboard-selection-tile-radius);
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: var(--dashboard-inverse-text);
+  box-shadow: var(--dashboard-brand-selected-shadow);
+}
+
+.dimensionButtonActive:hover,
+.dimensionButtonActive:focus-visible {
+  border-color: var(--brand-primary);
+  background: var(--brand-dark);
+  color: var(--dashboard-inverse-text);
+  box-shadow: var(--dashboard-brand-selected-shadow);
+}
+
+.dimensionButtonActive .dimensionButtonLabel {
+  color: var(--dashboard-inverse-text);
+}
+
+.dimensionButtonActive .dimensionButtonHint {
+  color: var(--dashboard-inverse-muted-text);
+}
+
+.dimensionButtonLabel {
+  color: inherit;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-tight);
+  font-weight: 650;
+}
+
+.dimensionButtonHint {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.dimensionMobileRail {
+  display: none;
+}
+
+.dimensionMobileTitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.dimensionMobileNav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--dashboard-surface-bg-strong);
+  overflow-x: auto;
+}
+
+.dimensionMobileNav::-webkit-scrollbar {
+  display: none;
+}
+
+.dimensionMobileButton {
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 620;
+  white-space: nowrap;
+  line-height: var(--line-height-none);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition:
+    color var(--transition-duration-fast) var(--transition-easing-standard),
+    background-color var(--transition-duration-fast) var(--transition-easing-standard),
+    box-shadow var(--transition-duration-fast) var(--transition-easing-standard),
+    transform var(--transition-duration-fast) var(--transition-easing-standard);
+}
+
+.dimensionMobileButton:active {
+  transform: translateY(1px);
+}
+
+.dimensionMobileButtonActive {
+  color: var(--dashboard-inverse-text);
+  background: var(--brand-primary);
+  box-shadow: var(--dashboard-brand-mobile-selected-shadow);
+}
+
+@media (max-width: 1024px) {
+  .dimensionSidebar {
+    height: calc(100vh - 100px);
+    height: calc(100dvh - 100px);
+    min-height: calc(100vh - 100px);
+    min-height: calc(100dvh - 100px);
+  }
+}
+
+@media (max-width: 768px) {
+  .dimensionSidebar {
+    display: none;
+  }
+
+  .dimensionMobileRail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+}

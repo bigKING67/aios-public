@@ -1,0 +1,8 @@
+.ace-tool/
+.venv/
+.prefect_home/
+.prefect_logs/
+logs/
+__pycache__/
+*.pyc
+*.pyo

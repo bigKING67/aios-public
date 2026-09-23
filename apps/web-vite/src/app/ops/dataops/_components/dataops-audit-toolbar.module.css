@@ -1,0 +1,49 @@
+.auditToolbar {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.auditFilterGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.auditQuickActions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.auditFilterSelect {
+  width: 140px;
+}
+
+.auditActionSelect {
+  width: 240px;
+}
+
+.auditToolbarMeta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 980px) {
+  .auditFilterGroup,
+  .auditToolbarMeta,
+  .auditQuickActions,
+  .auditFilterSelect,
+  .auditActionSelect {
+    width: 100%;
+  }
+}

@@ -1,0 +1,33 @@
+.sessionHeader {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(260px, 1.1fr) minmax(520px, 1.6fr) auto;
+  gap: 14px;
+  align-items: center;
+  border: 0;
+  background: var(--bg-card);
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.sessionHeader:hover {
+  background: var(--dashboard-live-card-hover-bg);
+}
+
+.sessionHeader:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 1024px) {
+  .sessionHeader {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .sessionHeader {
+    padding: 12px;
+  }
+}

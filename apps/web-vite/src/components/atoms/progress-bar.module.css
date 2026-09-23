@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.track {
+  width: 100%;
+  height: var(--progress-bar-height);
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--status-neutral-bg);
+}
+
+.fill {
+  width: var(--progress-bar-percent);
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--progress-bar-color);
+  transition: width var(--transition-base);
+}
+
+.label {
+  color: var(--status-neutral);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}

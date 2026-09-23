@@ -1,0 +1,680 @@
+
+export const designTokens = {
+  "version": "1.0.0",
+  "name": "AIOS Enterprise Design System",
+  "description": "Enterprise-grade design tokens for AIOS platform (Phase 1)",
+  "metadata": {
+    "owner": "frontend-platform",
+    "generated": "2026-04-29",
+    "contract": "https://aios.example.com/docs/design-system-v1",
+    "breakingChangePolicy": "semver"
+  },
+  "color": {
+    "primary": {
+      "value": "#2F6EEA",
+      "description": "Primary brand blue fill color",
+      "deprecated": false
+    },
+    "success": {
+      "value": "#168A3A",
+      "description": "Success / healthy state color",
+      "deprecated": false
+    },
+    "warning": {
+      "value": "#B87503",
+      "description": "Warning state color with AA contrast",
+      "deprecated": false
+    },
+    "error": {
+      "value": "#C93A32",
+      "description": "Error / danger state color",
+      "deprecated": false
+    },
+    "info": {
+      "value": "#2457C5",
+      "description": "Info state color (brand blue text family)",
+      "deprecated": false
+    },
+    "status": {
+      "success": {
+        "value": "#168A3A",
+        "description": "Success / healthy state text color"
+      },
+      "successStrong": {
+        "value": "#0F6F2E",
+        "description": "Success strong text color"
+      },
+      "successBg": {
+        "value": "#EAF8EE",
+        "description": "Success soft background"
+      },
+      "successBorder": {
+        "value": "#BFE8CA",
+        "description": "Success soft border"
+      },
+      "warning": {
+        "value": "#B87503",
+        "description": "Warning state text color"
+      },
+      "warningStrong": {
+        "value": "#8F5E02",
+        "description": "Warning strong text color"
+      },
+      "warningBg": {
+        "value": "#FFF7E6",
+        "description": "Warning soft background"
+      },
+      "warningBorder": {
+        "value": "#F3D38D",
+        "description": "Warning soft border"
+      },
+      "danger": {
+        "value": "#C93A32",
+        "description": "Danger / error state text color"
+      },
+      "dangerStrong": {
+        "value": "#9F3D35",
+        "description": "Danger strong text color"
+      },
+      "dangerBg": {
+        "value": "#FFF1F0",
+        "description": "Danger soft background"
+      },
+      "dangerBorder": {
+        "value": "#F2C4C0",
+        "description": "Danger soft border"
+      },
+      "info": {
+        "value": "#2457C5",
+        "description": "Info state text color"
+      },
+      "infoStrong": {
+        "value": "#1F4FBF",
+        "description": "Info strong text color"
+      },
+      "infoBg": {
+        "value": "#F2F6FF",
+        "description": "Info soft background"
+      },
+      "infoBorder": {
+        "value": "#C9D8FF",
+        "description": "Info soft border"
+      },
+      "neutral": {
+        "value": "#8A8F8A",
+        "description": "Neutral state text color"
+      },
+      "neutralStrong": {
+        "value": "#5F6368",
+        "description": "Neutral strong text color"
+      },
+      "neutralBg": {
+        "value": "#F5F5F5",
+        "description": "Neutral soft background"
+      },
+      "neutralBorder": {
+        "value": "#E6E6E6",
+        "description": "Neutral soft border"
+      }
+    },
+    "trend": {
+      "up": {
+        "value": "#BF3D2F",
+        "description": "Business upward trend color"
+      },
+      "down": {
+        "value": "#2F8C5B",
+        "description": "Business downward trend color"
+      },
+      "neutral": {
+        "value": "#8A8F8A",
+        "description": "Neutral or unavailable trend color"
+      }
+    },
+    "platform": {
+      "tmall": {
+        "value": "#EC5E2A",
+        "description": "Tmall legend color"
+      },
+      "douyin": {
+        "value": "#000000",
+        "description": "Douyin legend color; brand exception for platform chart markers only"
+      },
+      "xiaohongshu": {
+        "value": "#FF2442",
+        "description": "Xiaohongshu legend color; RGB 255, 36, 66"
+      },
+      "kuaishou": {
+        "value": "#FF3C21",
+        "description": "Kuaishou legend color; Hex #FF3C21"
+      },
+      "jd": {
+        "value": "#DA291C",
+        "description": "JD legend color; Pantone 485 C sRGB approximation"
+      },
+      "wechat": {
+        "value": "#07C160",
+        "description": "WeChat legend color; Hex #07C160"
+      },
+      "unknown": {
+        "value": "#8A8F8A",
+        "description": "Unknown platform legend fallback"
+      }
+    },
+    "text": {
+      "primary": {
+        "value": "#1A1A1A",
+        "description": "Primary title and core value text color"
+      },
+      "secondary": {
+        "value": "#5F6368",
+        "description": "Secondary body and description text color"
+      },
+      "tertiary": {
+        "value": "#8A8F8A",
+        "description": "Tertiary metadata and helper text color"
+      },
+      "disabled": {
+        "value": "#B8B8B8",
+        "description": "Disabled text color"
+      },
+      "inverse": {
+        "value": "#FFFFFF",
+        "description": "Inverse text on dark tooltip surfaces or saturated status/danger fills"
+      }
+    },
+    "background": {
+      "primary": {
+        "value": "#FFFFFF",
+        "description": "Primary background (white)"
+      },
+      "secondary": {
+        "value": "#F5F5F5",
+        "description": "Canvas background"
+      },
+      "tertiary": {
+        "value": "#FAFAFA",
+        "description": "Hover wash and quiet selected background"
+      },
+      "subtle": {
+        "value": "#F8F8F8",
+        "description": "Secondary soft background"
+      }
+    },
+    "border": {
+      "value": "#E6E6E6",
+      "description": "Border color"
+    },
+    "divider": {
+      "value": "#F0F0F0",
+      "description": "Divider color"
+    },
+    "brand": {
+      "primary": {
+        "value": "#2F6EEA",
+        "description": "Brand blue primary fill"
+      },
+      "bright": {
+        "value": "#75B1F8",
+        "description": "Brand bright blue highlight"
+      },
+      "soft": {
+        "value": "#F2F6FF",
+        "description": "Brand soft background"
+      },
+      "border": {
+        "value": "#C9D8FF",
+        "description": "Brand soft border"
+      },
+      "text": {
+        "value": "#2457C5",
+        "description": "Accessible brand text on light surfaces"
+      },
+      "onPrimary": {
+        "value": "#FFFFFF",
+        "description": "Text on brand blue filled surfaces"
+      }
+    },
+    "chart": {
+      "series1": {
+        "value": "#445DF6",
+        "description": "Ordinary chart series 1"
+      },
+      "series2": {
+        "value": "#75B1F8",
+        "description": "Ordinary chart series 2"
+      },
+      "series3": {
+        "value": "#3264F6",
+        "description": "Ordinary chart series 3"
+      },
+      "series4": {
+        "value": "#4F8CB5",
+        "description": "Ordinary chart series 4"
+      },
+      "series5": {
+        "value": "#536F86",
+        "description": "Ordinary chart series 5"
+      },
+      "series6": {
+        "value": "#A4772A",
+        "description": "Ordinary chart series 6"
+      },
+      "muted": {
+        "value": "#8A8F8A",
+        "description": "Previous period or benchmark series"
+      },
+      "highlight": {
+        "value": "#3264F6",
+        "description": "Selected chart point or bar"
+      }
+    },
+    "domainTaxonomy": {
+      "traffic": {
+        "summary": {
+          "accent": "#8795AA",
+          "text": "#3F5067",
+          "bg": "#F1F5FB",
+          "border": "#A6B4C7"
+        },
+        "l1": {
+          "accent": "#445DF6",
+          "text": "#243CB5",
+          "bg": "#F2F5FF",
+          "border": "#B8C4FF"
+        },
+        "l2": {
+          "accent": "#2F6EEA",
+          "text": "#2457C5",
+          "bg": "#F2F6FF",
+          "border": "#C9D8FF"
+        },
+        "l3": {
+          "accent": "#75B1F8",
+          "text": "#2F6EA8",
+          "bg": "#F4FAFF",
+          "border": "#CDE6FE"
+        }
+      },
+      "topsis": {
+        "star": {
+          "text": "#BF3D2F",
+          "bg": "#FFF1EF",
+          "border": "#F2C4C0"
+        },
+        "stable": {
+          "text": "#2457C5",
+          "bg": "#F2F6FF",
+          "border": "#C9D8FF"
+        },
+        "opportunity": {
+          "text": "#2F6F9F",
+          "bg": "#EAF3FA",
+          "border": "#BFD5E5"
+        },
+        "longTail": {
+          "text": "#2F8C5B",
+          "bg": "#ECF8F1",
+          "border": "#BFE8CA"
+        },
+        "neutral": {
+          "text": "#8A8F8A",
+          "bg": "#FAFAFA",
+          "border": "#E6E6E6"
+        }
+      },
+      "funnel": {
+        "track": {
+          "color": "#C9D8FF",
+          "bg": "#F2F6FF",
+          "textOnFill": "#1A1A1A"
+        },
+        "exposure": {
+          "color": "#7EA1F7",
+          "bg": "#F2F6FF",
+          "textOnFill": "#FFFFFF"
+        },
+        "visit": {
+          "color": "#5D86F1",
+          "bg": "#EFF4FF",
+          "textOnFill": "#FFFFFF"
+        },
+        "intent": {
+          "color": "#4476ED",
+          "bg": "#E8F0FF",
+          "textOnFill": "#FFFFFF"
+        },
+        "conversion": {
+          "color": "#2F6EEA",
+          "bg": "#F5F8FF",
+          "textOnFill": "#FFFFFF"
+        },
+        "connector": {
+          "color": "#D7DEE0",
+          "bg": "transparent",
+          "textOnFill": "#1A1A1A"
+        }
+      },
+      "creator": {
+        "s": {
+          "from": "#1F4FBF",
+          "to": "#445DF6",
+          "bg": "#D6E0FF",
+          "text": "#1F4FBF"
+        },
+        "a": {
+          "from": "#3264F6",
+          "to": "#5D86F1",
+          "bg": "#DDE7FF",
+          "text": "#243CB5"
+        },
+        "b": {
+          "from": "#2F6EEA",
+          "to": "#75B1F8",
+          "bg": "#E5EEFF",
+          "text": "#2457C5"
+        },
+        "c": {
+          "from": "#75B1F8",
+          "to": "#CDE6FE",
+          "bg": "#EAF7FF",
+          "text": "#2F6EA8"
+        },
+        "d": {
+          "from": "#C9D8FF",
+          "to": "#F2F6FF",
+          "bg": "#F0F5FF",
+          "text": "#536F86"
+        }
+      },
+      "cooperation": {
+        "unclassified": {
+          "text": "#5F6368",
+          "bg": "#EFEFEF"
+        },
+        "initialContact": {
+          "text": "#2457C5",
+          "bg": "#E4ECFF"
+        },
+        "sampleNegotiation": {
+          "text": "#8F5E02",
+          "bg": "#FFF0C7"
+        },
+        "notConsidering": {
+          "text": "#A65F3E",
+          "bg": "#FFE4DD"
+        },
+        "paused": {
+          "text": "#9F3D35",
+          "bg": "#FFE1DE"
+        },
+        "liveStarted": {
+          "text": "#0F6F2E",
+          "bg": "#DFF5E7"
+        }
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "base": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif",
+      "display": "'Geist', 'Avenir Next', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif",
+      "code": "'Maple Mono', 'SF Mono', 'JetBrains Mono', 'Roboto Mono', 'Cascadia Code', Consolas, monospace"
+    },
+    "fontSize": {
+      "xs": {
+        "value": "11px",
+        "lineHeight": "1.25"
+      },
+      "sm": {
+        "value": "12px",
+        "lineHeight": "1.35"
+      },
+      "base": {
+        "value": "14px",
+        "lineHeight": "1.5714"
+      },
+      "lg": {
+        "value": "16px",
+        "lineHeight": "1.5"
+      },
+      "xl": {
+        "value": "18px",
+        "lineHeight": "1.15"
+      },
+      "2xl": {
+        "value": "24px",
+        "lineHeight": "1.3333"
+      },
+      "3xl": {
+        "value": "32px",
+        "lineHeight": "1.25"
+      },
+      "display": {
+        "value": "30px",
+        "lineHeight": "1.18"
+      },
+      "sectionTitle": {
+        "value": "20px",
+        "lineHeight": "1.25"
+      },
+      "dataLg": {
+        "value": "32px",
+        "lineHeight": "1.2"
+      },
+      "dataMd": {
+        "value": "24px",
+        "lineHeight": "1.2"
+      },
+      "dataSm": {
+        "value": "18px",
+        "lineHeight": "1.4"
+      },
+      "marketingLg": {
+        "value": "40px",
+        "lineHeight": "1.12"
+      },
+      "marketingXl": {
+        "value": "48px",
+        "lineHeight": "1.08"
+      }
+    },
+    "letterSpacing": {
+      "normal": "0",
+      "label": "0.04em",
+      "eyebrow": "0.12em",
+      "tight": "-0.03em",
+      "title": "-0.02em",
+      "data": "-0.035em"
+    },
+    "lineHeight": {
+      "none": "1",
+      "zero": "0",
+      "compact": "1.12",
+      "snug": "1.25",
+      "tight": "1.2",
+      "normal": "1.4",
+      "relaxed": "1.6",
+      "prose": "1.75"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "title": 640,
+      "sectionTitle": 660,
+      "display": 680,
+      "data": 660,
+      "domain": 600,
+      "bold": 700
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "12": "48px",
+    "16": "64px",
+    "20": "80px",
+    "24": "96px"
+  },
+  "borderRadius": {
+    "none": "0",
+    "sm": "2px",
+    "base": "4px",
+    "md": "6px",
+    "lg": "12px",
+    "xl": "12px",
+    "2xl": "16px",
+    "full": "9999px"
+  },
+  "shadow": {
+    "none": "none",
+    "sm": "0 1px 2px rgba(0, 0, 0, 0.03)",
+    "base": "0 2px 8px rgba(0, 0, 0, 0.05)",
+    "md": "0 4px 12px rgba(0, 0, 0, 0.08)",
+    "lg": "0 10px 24px rgba(0, 0, 0, 0.10)",
+    "xl": "0 20px 40px rgba(0, 0, 0, 0.12)"
+  },
+  "transition": {
+    "fast": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+    "base": "250ms cubic-bezier(0.4, 0, 0.2, 1)",
+    "slow": "350ms cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  "transitionDuration": {
+    "fast": "150ms",
+    "base": "250ms",
+    "slow": "350ms"
+  },
+  "transitionEasing": {
+    "standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "out": "cubic-bezier(0, 0, 0.2, 1)",
+    "in": "cubic-bezier(0.4, 0, 1, 1)"
+  },
+  "breakpoint": {
+    "xs": "0px",
+    "sm": "576px",
+    "md": "768px",
+    "lg": "992px",
+    "xl": "1200px",
+    "2xl": "1600px"
+  },
+  "component": {
+    "button": {
+      "height": {
+        "sm": "24px",
+        "base": "32px",
+        "lg": "40px"
+      },
+      "paddingX": {
+        "sm": "8px",
+        "base": "16px",
+        "lg": "24px"
+      },
+      "borderRadius": "{borderRadius.base}"
+    },
+    "input": {
+      "height": "32px",
+      "paddingX": "12px",
+      "paddingY": "4px",
+      "borderRadius": "{borderRadius.base}"
+    },
+    "control": {
+      "lineHeight": {
+        "xs": "20px",
+        "sm": "22px",
+        "md": "28px",
+        "lg": "34px"
+      }
+    },
+    "card": {
+      "borderRadius": "{borderRadius.base}",
+      "padding": "{spacing.4}",
+      "shadow": "{shadow.base}"
+    },
+    "modal": {
+      "borderRadius": "{borderRadius.lg}",
+      "shadow": "{shadow.xl}"
+    },
+    "table": {
+      "detail": {
+        "header": {
+          "fontSize": "var(--font-size-base)",
+          "fontWeight": "620",
+          "lineHeight": "var(--line-height-tight)",
+          "letterSpacing": "var(--letter-spacing-label)"
+        },
+        "body": {
+          "fontSize": "var(--font-size-sm)",
+          "fontWeight": "410",
+          "lineHeight": "var(--line-height-normal)",
+          "letterSpacing": "var(--letter-spacing-normal)"
+        },
+        "link": {
+          "fontWeight": "var(--component-table-detail-body-font-weight)"
+        },
+        "numeric": {
+          "letterSpacing": "var(--letter-spacing-data)"
+        }
+      }
+    }
+  }
+} as const;
+
+export const DESIGN_TOKEN_RUNTIME_COLOR_VALUES = {
+  "primary": "#2F6EEA",
+  "success": "#168A3A",
+  "warning": "#B87503",
+  "danger": "#C93A32",
+  "info": "#2457C5",
+  "statusSuccess": "#168A3A",
+  "statusSuccessBg": "#EAF8EE",
+  "statusSuccessBorder": "#BFE8CA",
+  "statusWarning": "#B87503",
+  "statusWarningBg": "#FFF7E6",
+  "statusWarningBorder": "#F3D38D",
+  "statusDanger": "#C93A32",
+  "statusDangerBg": "#FFF1F0",
+  "statusDangerBorder": "#F2C4C0",
+  "statusInfo": "#2457C5",
+  "statusInfoStrong": "#1F4FBF",
+  "statusInfoBg": "#F2F6FF",
+  "statusInfoBorder": "#C9D8FF",
+  "statusNeutral": "#8A8F8A",
+  "trendUp": "#BF3D2F",
+  "trendDown": "#2F8C5B",
+  "trendNeutral": "#8A8F8A",
+  "textPrimary": "#1A1A1A",
+  "textSecondary": "#5F6368",
+  "textTertiary": "#8A8F8A",
+  "textInverse": "#FFFFFF",
+  "backgroundPrimary": "#FFFFFF",
+  "backgroundSecondary": "#F5F5F5",
+  "backgroundTertiary": "#FAFAFA",
+  "border": "#E6E6E6",
+  "divider": "#F0F0F0"
+} as const;
+export const DESIGN_TOKEN_RUNTIME_FONT_FAMILY = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif";
+export const DESIGN_TOKEN_RUNTIME_SHADOW_VALUES = {
+  "none": "none",
+  "sm": "0 1px 2px rgba(0, 0, 0, 0.03)",
+  "base": "0 2px 8px rgba(0, 0, 0, 0.05)",
+  "md": "0 4px 12px rgba(0, 0, 0, 0.08)",
+  "lg": "0 10px 24px rgba(0, 0, 0, 0.10)",
+  "xl": "0 20px 40px rgba(0, 0, 0, 0.12)"
+} as const;
+
+export type DesignTokens = typeof designTokens;
+export type ColorToken = keyof typeof designTokens.color;
+export type TypographyToken = keyof typeof designTokens.typography;
+export type SpacingToken = keyof typeof designTokens.spacing;
+export type BorderRadiusToken = keyof typeof designTokens.borderRadius;
+export type ShadowToken = keyof typeof designTokens.shadow;
+
+export const useDesignTokens = () => designTokens;

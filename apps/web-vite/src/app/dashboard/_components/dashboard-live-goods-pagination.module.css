@@ -1,0 +1,13 @@
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 2px 2px;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+}

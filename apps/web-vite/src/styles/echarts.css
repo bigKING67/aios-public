@@ -1,0 +1,355 @@
+/**
+ * ECharts Global Styling
+ *
+ * 与 AIOS 设计系统集成
+ * 注：深色模式由全局应用统一管理，此文件强制亮色模式
+ *
+ * 导入方式：
+ * 由 apps/web-vite/src/styles/globals.css 统一导入，并在 apps/web-vite/src/main.tsx 加载
+ */
+
+/* ===== ECharts 容器样式 ===== */
+.echarts-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.echarts-container canvas {
+  display: block;
+}
+
+/* ===== ECharts 主题变量（与 design-tokens.css 保持一致） ===== */
+:root {
+  /* 图表背景：透明，跟随卡片背景 */
+  --echarts-bg-color: transparent;
+
+  /* ECharts CSS fallback source values: keep raw colors only in this block. */
+  --echarts-fallback-text-inverse: #FFFFFF;
+  --echarts-fallback-chart-series-1: #445DF6;
+  --echarts-fallback-chart-series-2: #75B1F8;
+  --echarts-fallback-chart-series-3: #3264F6;
+  --echarts-fallback-chart-series-4: #4F8CB5;
+  --echarts-fallback-chart-series-5: #536F86;
+  --echarts-fallback-chart-series-6: #A4772A;
+  --echarts-fallback-chart-series-muted: #8A8F8A;
+  --echarts-fallback-chart-series-highlight: #3264F6;
+  --echarts-fallback-divider: #F0F0F0;
+  --echarts-fallback-tooltip-bg: rgba(26, 26, 26, 0.88);
+  --echarts-fallback-tooltip-shadow: rgba(26, 26, 26, 0.08);
+  --echarts-fallback-platform-tmall: #EC5E2A;
+  --echarts-fallback-platform-douyin: #000000;
+  --echarts-fallback-platform-xiaohongshu: #FF2442;
+  --echarts-fallback-platform-kuaishou: #FF3C21;
+  --echarts-fallback-platform-jd: #DA291C;
+  --echarts-fallback-platform-wechat: #07C160;
+  --echarts-fallback-platform-unknown: #8A8F8A;
+
+  /* 图表文字颜色：使用设计系统 Token */
+  --echarts-text-color: var(--text-primary);
+  --echarts-text-color-secondary: var(--text-secondary);
+  --echarts-text-color-tertiary: var(--text-tertiary);
+  --echarts-text-color-inverse: var(--text-inverse, var(--echarts-fallback-text-inverse));
+
+  /* 图表网格线：使用设计系统边界色 */
+  --echarts-border-color: var(--border-color);
+  --echarts-divider-color: var(--divider-color, var(--echarts-fallback-divider));
+
+  /* 普通图表序列色：只用于无平台/趋势/状态/domain 语义的 bar/line 图 */
+  --echarts-color-primary: var(--chart-series-1, var(--echarts-fallback-chart-series-1));
+  --echarts-color-secondary: var(--chart-series-2, var(--echarts-fallback-chart-series-2));
+  --echarts-color-tertiary: var(--chart-series-3, var(--echarts-fallback-chart-series-3));
+  --echarts-color-quaternary: var(--chart-series-4, var(--echarts-fallback-chart-series-4));
+  --echarts-color-muted: var(--chart-series-muted, var(--echarts-fallback-chart-series-muted));
+  --echarts-color-highlight: var(--chart-series-highlight, var(--echarts-fallback-chart-series-highlight));
+
+  /* 补充色系列：保持低噪，禁止紫/青/洋红等饱和兜底色 */
+  --echarts-color-1: var(--chart-series-1, var(--echarts-fallback-chart-series-1));
+  --echarts-color-2: var(--chart-series-2, var(--echarts-fallback-chart-series-2));
+  --echarts-color-3: var(--chart-series-3, var(--echarts-fallback-chart-series-3));
+  --echarts-color-4: var(--chart-series-4, var(--echarts-fallback-chart-series-4));
+  --echarts-color-5: var(--chart-series-5, var(--echarts-fallback-chart-series-5));
+  --echarts-color-6: var(--chart-series-6, var(--echarts-fallback-chart-series-6));
+  --echarts-color-7: var(--chart-series-muted, var(--echarts-fallback-chart-series-muted));
+  --echarts-color-8: var(--divider-color, var(--echarts-fallback-divider));
+
+  /* Tooltip */
+  --echarts-tooltip-bg: var(--echarts-fallback-tooltip-bg);
+  --echarts-tooltip-shadow: 0 2px 8px var(--echarts-fallback-tooltip-shadow);
+
+  /* 平台图例色（仅用于分平台饼图/图例/marker） */
+  --echarts-platform-tmall: var(--platform-tmall, var(--echarts-fallback-platform-tmall));
+  --echarts-platform-douyin: var(--platform-douyin, var(--echarts-fallback-platform-douyin));
+  --echarts-platform-xiaohongshu: var(--platform-xiaohongshu, var(--echarts-fallback-platform-xiaohongshu));
+  --echarts-platform-kuaishou: var(--platform-kuaishou, var(--echarts-fallback-platform-kuaishou));
+  --echarts-platform-jd: var(--platform-jd, var(--echarts-fallback-platform-jd));
+  --echarts-platform-wechat: var(--platform-wechat, var(--echarts-fallback-platform-wechat));
+  --echarts-platform-unknown: var(--platform-unknown, var(--echarts-fallback-platform-unknown));
+}
+
+/* ===== ECharts 标题样式 ===== */
+.echarts-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--echarts-text-color);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.echarts-title-secondary {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--echarts-text-color-secondary);
+}
+
+/* ===== ECharts 图例样式 ===== */
+.echarts-legend {
+  margin-top: 16px;
+}
+
+.echarts-legend-item {
+  display: inline-block;
+  margin-right: 24px;
+  font-size: 14px;
+  color: var(--echarts-text-color);
+}
+
+.echarts-legend-item-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ===== ECharts 工具栏样式 ===== */
+.echarts-toolbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.echarts-container:hover .echarts-toolbar {
+  opacity: 1;
+}
+
+.echarts-toolbar-button {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-base, 4px);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.echarts-toolbar-button:hover {
+  background-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+  border-color: var(--brand-primary);
+}
+
+/* ===== 响应式 ECharts 图表容器 ===== */
+/* Keep media queries static; runtime CSS variables are invalid in media conditions. */
+
+/* 移动设备 - 最小高度 */
+@media (max-width: 576px) {
+  .echarts-container {
+    min-height: 300px;
+  }
+
+  .echarts-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .echarts-toolbar {
+    display: none;
+  }
+}
+
+/* 平板设备 */
+@media (min-width: 577px) and (max-width: 992px) {
+  .echarts-container {
+    min-height: 350px;
+  }
+}
+
+/* 桌面设备 */
+@media (min-width: 993px) {
+  .echarts-container {
+    min-height: 400px;
+  }
+}
+
+/* ===== 特定图表类型样式 ===== */
+
+/* 折线图 */
+.echarts-line {
+  --echarts-line-width: 2px;
+  --echarts-symbol-size: 6px;
+}
+
+/* 柱状图 */
+.echarts-bar {
+  --echarts-bar-gap: 30%;
+  --echarts-category-gap: 20%;
+}
+
+/* 饼图 */
+.echarts-pie {
+  --echarts-pie-radius: 60%;
+  --echarts-pie-inner-radius: 0;
+}
+
+/* 仪表盘 */
+.echarts-gauge {
+  --echarts-gauge-radius: 75%;
+}
+
+/* ===== ECharts 加载动画 ===== */
+.echarts-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.echarts-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: echarts-spin 0.8s linear infinite;
+}
+
+@keyframes echarts-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== ECharts 提示框样式 ===== */
+.echarts-tooltip {
+  background-color: var(--echarts-tooltip-bg) !important;
+  border: none !important;
+  border-radius: var(--border-radius-base, 4px) !important;
+  box-shadow: var(--echarts-tooltip-shadow) !important;
+  padding: 8px 12px !important;
+}
+
+.echarts-tooltip-label {
+  color: var(--echarts-text-color-tertiary) !important;
+  font-size: 12px !important;
+  margin-bottom: 4px !important;
+}
+
+.echarts-tooltip-value {
+  color: var(--echarts-text-color-inverse) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* ===== ECharts 扩展响应式 ===== */
+
+/* 在父容器 flex 布局中的表现 */
+.echarts-flex-container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.echarts-flex-container .echarts-container {
+  flex: 1;
+}
+
+/* 网格容器中的表现 */
+.echarts-grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.echarts-grid-item .echarts-container {
+  flex: 1;
+  min-height: 300px;
+}
+
+/* ===== 实用工具类 ===== */
+
+/* 隐藏 ECharts 工具栏 */
+.echarts-no-toolbar .echarts-toolbar {
+  display: none;
+}
+
+/* ECharts 加载状态 */
+.echarts-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--bg-hover);
+  border-radius: var(--border-radius-base);
+  color: var(--text-tertiary);
+}
+
+/* ECharts 错误状态 */
+.echarts-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--bg-hover);
+  border-radius: var(--border-radius-base);
+  color: var(--status-danger);
+}
+
+/* ECharts 空数据状态 */
+.echarts-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--bg-hover);
+  border-radius: var(--border-radius-base);
+  color: var(--text-tertiary);
+}
+
+.aios-echarts-tooltip-host {
+  position: relative;
+}
+
+.aios-echarts-tooltip {
+  position: absolute;
+  z-index: 20;
+  inset: 0 auto auto 0;
+  max-width: min(320px, calc(100% - 16px));
+  padding: 8px 10px;
+  border: 1px solid var(--border-color-default);
+  border-radius: var(--radius-md);
+  background: var(--echarts-tooltip-bg);
+  color: var(--echarts-text-color-inverse);
+  box-shadow: var(--echarts-tooltip-shadow);
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: auto;
+}
+
+.aios-echarts-tooltip[hidden] {
+  display: none;
+}

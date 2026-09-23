@@ -1,0 +1,229 @@
+.sessionEvidencePanel {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius-xl);
+  box-shadow: none;
+}
+
+.recordingGrid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+  gap: var(--spacing-3);
+  align-items: stretch;
+  padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+  border-top: 1px solid var(--divider-color);
+}
+
+.fileUploadControl {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.fileUploadInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fileCell,
+.playerMeta {
+  display: grid;
+  gap: var(--spacing-1);
+}
+
+.fileCell strong,
+.playerMeta strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileCell span,
+.playerMeta span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segmentList {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.segmentList :global(.ant-table) {
+  color: var(--text-secondary);
+}
+
+.segmentList :global(.ant-table-wrapper) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.segmentList .segmentTableHeaderCell {
+  color: var(--text-tertiary);
+  font-size: var(--component-table-detail-header-font-size);
+  font-weight: var(--component-table-detail-header-font-weight);
+  line-height: var(--component-table-detail-header-line-height);
+  letter-spacing: var(--component-table-detail-header-letter-spacing);
+}
+
+.segmentList .segmentTableBodyCell {
+  font-size: var(--component-table-detail-body-font-size);
+  line-height: var(--component-table-detail-body-line-height);
+}
+
+.segmentCards {
+  display: none;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.segmentCard {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-card);
+}
+
+.segmentCardHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-2);
+  align-items: start;
+  min-width: 0;
+}
+
+.segmentCardTitle {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.segmentCardTitle strong {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.segmentCardTitle > span:not(:first-child),
+.segmentCardMeta > span {
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-data);
+}
+
+.segmentCardMeta {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+}
+
+.playerBox {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-subtle);
+}
+
+.playerBoxEmpty {
+  display: flex;
+  align-self: stretch;
+  min-height: 100%;
+}
+
+.videoPlayer {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--text-primary);
+}
+
+.playerMeta {
+  padding: var(--spacing-3);
+  background: var(--bg-card);
+}
+
+.playerEmpty {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 132px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.playerEmpty p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.playerEmpty :global(.anticon) {
+  color: var(--brand-text);
+  font-size: var(--font-size-3xl);
+}
+
+@media (max-width: 1080px) {
+  .recordingGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .segmentList :global(.ant-table-wrapper) {
+    display: none;
+  }
+
+  .segmentCards {
+    display: grid;
+  }
+
+  .segmentCardHeader {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .segmentCardHeader :global(.ant-btn) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .recordingGrid {
+    padding: var(--spacing-3);
+  }
+}

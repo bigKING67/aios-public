@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "path": "apps/web-vite/src/styles/design-tokens.css",
+      "owner": "runtime-token-source",
+      "reason": "Canonical runtime CSS variables for AIOS color, shadow, chart, platform, and domain taxonomy tokens.",
+      "allowed": "DESIGN.md-backed global CSS custom-property values.",
+      "notAllowed": "Page-local materials, one-off chart colors, or component-specific raw colors."
+    },
+    {
+      "path": "apps/web-vite/src/lib/design-tokens.ts",
+      "owner": "static-token-mirror",
+      "reason": "Generated/static TypeScript mirror of DESIGN_TOKENS.json for token consumers.",
+      "allowed": "Canonical token values mirrored from DESIGN_TOKENS.json.",
+      "notAllowed": "Component-local colors or manually invented values outside DESIGN.md."
+    },
+    {
+      "path": "apps/web-vite/src/lib/platform-colors.ts",
+      "owner": "platform-legend-color-source",
+      "reason": "Shared platform legend and marker colors for charts and category dots.",
+      "allowed": "Documented platform colors for Tmall, Douyin, Xiaohongshu, JD, WeChat, and fallback platform markers.",
+      "notAllowed": "Generic UI colors, button colors, status colors, or page decoration."
+    },
+    {
+      "path": "apps/web-vite/src/lib/domain-taxonomy-colors.ts",
+      "owner": "domain-taxonomy-color-source",
+      "reason": "Business taxonomy palettes for traffic hierarchy, TOPSIS quadrants, funnel stages, creator levels, cooperation stages, and ordinary chart series.",
+      "allowed": "Documented domain taxonomy palettes and chart series aliases.",
+      "notAllowed": "Generic status, trend, platform, or page-local material colors."
+    },
+    {
+      "path": "apps/web-vite/src/styles/echarts-theme.ts",
+      "owner": "echarts-token-adapter",
+      "reason": "ECharts runtime defaults and helper colors that bridge design tokens to chart options.",
+      "allowed": "Chart theme constants, token-backed fallbacks, gradients, and chart helper materials.",
+      "notAllowed": "Page-specific chart category colors that belong in domain or platform sources."
+    },
+    {
+      "path": "apps/web-vite/src/styles/echarts.css",
+      "owner": "echarts-css-adapter",
+      "reason": "CSS variable adapter for ECharts defaults and platform/chart token fallbacks.",
+      "allowed": "ECharts CSS custom-property defaults and token fallback values.",
+      "notAllowed": "Page-local CSS colors or one-off component styling."
+    },
+    {
+      "path": "apps/web-vite/src/theme/ant-theme.ts",
+      "owner": "antd-theme-adapter",
+      "reason": "Ant Design theme adapter that maps design tokens into Ant token slots.",
+      "allowed": "Token-derived Ant Design mappings and explicitly isolated dark-theme adapter values.",
+      "notAllowed": "Page-specific Ant component styling or local color experiments."
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/creator/_components/creator-chart-colors.ts",
+      "owner": "creator-chart-color-source",
+      "reason": "Creator dashboard has dense ECharts materials and tooltip treatments that are not yet reusable global tokens.",
+      "allowed": "Creator chart text, structural, material, tooltip, level, and platform semantics grouped by role.",
+      "notAllowed": "Generic AIOS UI colors, ordinary page styling, or colors that should already live in shared token/domain/platform sources."
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/_components/dashboard-token-aliases.css",
+      "owner": "dashboard-runtime-token-source",
+      "reason": "Dashboard runtime token aliases must be imported as plain CSS so Vite production extraction keeps critical dashboard variables.",
+      "allowed": "Dashboard-local material primitives, translucent surfaces, shadows, and runtime aliases required by production dashboard routes.",
+      "notAllowed": "Generic AIOS UI colors, new chart palettes, or values that should live in global design tokens, platform colors, or domain taxonomy colors."
+    },
+    {
+      "path": "apps/web-vite/src/app/page-materials.css",
+      "owner": "homepage-material-token-source",
+      "reason": "Homepage material aliases must be imported as plain CSS so Vite production extraction keeps page-local glass, spotlight, and shadow variables.",
+      "allowed": "Homepage-local material primitives used by page.module.css and page-hero.module.css.",
+      "notAllowed": "Generic AIOS UI colors, chart palettes, or values that should live in global design tokens, platform colors, or domain taxonomy colors."
+    }
+  ]
+}

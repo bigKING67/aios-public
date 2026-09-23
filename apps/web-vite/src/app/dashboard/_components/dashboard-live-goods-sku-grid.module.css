@@ -1,0 +1,58 @@
+.skuHeader,
+.skuRow {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(5, minmax(82px, 0.42fr));
+  gap: 10px;
+  align-items: center;
+  padding: 9px 12px;
+}
+
+.skuHeader {
+  background: var(--bg-hover);
+  color: var(--dashboard-live-sku-header-text);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+}
+
+.skuRow {
+  border-top: 1px solid var(--dashboard-live-meta-muted-border);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 430;
+}
+
+.skuCell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skuName {
+  color: var(--text-secondary);
+  font-weight: 480;
+}
+
+.skuPrefix {
+  color: var(--text-tertiary);
+  font-weight: 430;
+}
+
+.skuNumericCell {
+  text-align: right;
+  font-family: var(--font-family-mono);
+}
+
+.skuNumericValue {
+  text-align: right;
+  font-family: var(--font-family-mono);
+  color: var(--dashboard-id-pill-text);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .skuHeader,
+  .skuRow {
+    min-width: 680px;
+  }
+}

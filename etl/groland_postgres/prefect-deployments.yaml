@@ -1,0 +1,365 @@
+schema_version: 1
+defaults:
+  work_pool: default-agent-pool
+  timezone_env: TIMEZONE
+  timezone: Asia/Shanghai
+
+deployments:
+  - flow_name: cleanup-dataops-runtime-events-flow
+    deployment_name: cleanup-dataops-runtime-events-daily
+    state: active
+    deploy_script: scripts/deploy_prefect_cleanup_dataops_runtime_events.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 260
+    schedule: {kind: cron, source_env: DATAOPS_CLEANUP_CRON, adapter_env: CRON, default: "15 3 * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [cleanup_batch_execution_events, notify_on_deleted_only, retain_days]
+    concurrency: {source_env: DATAOPS_CLEANUP_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 1800, future_run_lookahead_minutes: 1800}
+
+  - flow_name: dashboard-ads-freshness-check-flow
+    deployment_name: dashboard-ads-freshness-check
+    state: active
+    deploy_script: scripts/deploy_prefect_dashboard_ads_freshness_check.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 170
+    schedule: {kind: cron, source_env: ADS_DASHBOARD_FRESHNESS_CHECK_CRON, adapter_env: CRON, default: "45 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fail_on_stale, notify_on_issue_only, target_date]
+    concurrency: {source_env: ADS_DASHBOARD_FRESHNESS_CHECK_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: daily-business-brief-flow
+    deployment_name: daily-business-brief
+    state: active
+    deploy_script: scripts/deploy_prefect_daily_business_brief.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 175
+    schedule: {kind: cron, source_env: DAILY_BRIEF_CRON, adapter_env: CRON, default: "5 11 * * *", enabled_env: DAILY_BRIEF_SCHEDULE_ENABLED, enabled_default: false, clean_count: 0, legacy_count: 0, active: false}
+    parameters: [delivery_mode, production_confirmed, target_date]
+    concurrency: {source_env: DAILY_BRIEF_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 1800}
+
+  - flow_name: dataops-notification-trace-slo-scan-flow
+    deployment_name: dataops-notification-trace-slo-scan
+    state: active
+    deploy_script: scripts/deploy_prefect_dataops_notification_trace_slo_scan.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 270
+    schedule: {kind: cron, source_env: DATAOPS_NOTIFY_TRACE_SLO_SCAN_CRON, adapter_env: CRON, default: "*/15 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [dry_run, lookback_hours, max_groups, notify_on_issue_only, scan_concurrency]
+    concurrency: {source_env: DATAOPS_NOTIFY_TRACE_SLO_SCAN_DEPLOY_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 60, future_run_lookahead_minutes: 60}
+
+  - flow_name: incremental-refresh-ads-all-trade-overview-flow
+    deployment_name: ads-01-overview-daily-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_all_trade_overview.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 20
+    schedule: {kind: cron, source_env: ADS_OVERVIEW_CRON, adapter_env: CRON, default: "30,55 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only, trigger_daily_brief]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-creator-live-dashboard-flow
+    deployment_name: ads-13-creator-live-dashboard-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_creator_live_dashboard.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 180
+    schedule: {kind: cron, source_env: ADS_CREATOR_LIVE_DASHBOARD_CRON, adapter_env: CRON, default: "33 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-douyin-live-detail-flow
+    deployment_name: ads-18-douyin-live-detail-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_douyin_live_detail.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 60
+    schedule: {kind: cron, source_env: ADS_DOUYIN_LIVE_DETAIL_CRON, adapter_env: CRON, default: "36,56 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-douyin-live-goods-detail-flow
+    deployment_name: ads-20-douyin-live-goods-detail-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_douyin_live_goods_detail.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 70
+    schedule: {kind: cron, source_env: ADS_DOUYIN_LIVE_GOODS_DETAIL_CRON, adapter_env: CRON, default: "38,58 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-douyin-shortvideo-detail-flow
+    deployment_name: ads-19-douyin-shortvideo-detail-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_douyin_shortvideo_detail.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 100
+    schedule: {kind: cron, source_env: ADS_DOUYIN_SHORTVIDEO_DETAIL_CRON, adapter_env: CRON, default: "37,57 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-douyin-trade-sale-card-dashboard-flow
+    deployment_name: ads-21-douyin-trade-sale-card-dashboard-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_douyin_trade_sale_card_dashboard.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 90
+    schedule: {kind: cron, source_env: ADS_DOUYIN_TRADE_SALE_CARD_DASHBOARD_CRON, adapter_env: CRON, default: "39,59 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-all-trade-week-platform-metrics-flow
+    deployment_name: ads-report-04-platform-week-metrics-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_all_trade_week_platform_metrics.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 190
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_METRICS_CRON, adapter_env: CRON, default: "32,57 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-douyin-trade-sale-attribution-metrics-week-flow
+    deployment_name: ads-report-07-douyin-week-attribution-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_douyin_trade_sale_attribution_metrics_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 220
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_DOUYIN_ATTRIBUTION_METRICS_CRON, adapter_env: CRON, default: "37 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-douyin-trade-sale-channel-metrics-week-flow
+    deployment_name: ads-report-06-douyin-week-channel-gmv-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_douyin_trade_sale_channel_metrics_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 210
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_DOUYIN_CHANNEL_METRICS_CRON, adapter_env: CRON, default: "35 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-douyin-trade-sale-metrics-week-flow
+    deployment_name: ads-report-05-douyin-week-metrics-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_douyin_trade_sale_metrics_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 200
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_DOUYIN_METRICS_CRON, adapter_env: CRON, default: "33,58 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-taobao-goods-traffic-channel-metrics-week-flow
+    deployment_name: ads-report-09-taobao-week-traffic-channel-attribution-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_taobao_goods_traffic_channel_metrics_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 240
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_PRODUCT_TRAFFIC_CHANNEL_METRICS_CRON, adapter_env: CRON, default: "45 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-taobao-one-goods-traffic-channel-metric-week-flow
+    deployment_name: ads-report-10-taobao-one-week-traffic-funnel-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_taobao_one_goods_traffic_channel_metric_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 250
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_PRODUCT_TRAFFIC_CHANNEL_METRIC_TAOBAO_ONE_CRON, adapter_env: CRON, default: "48 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-report-taobao-trade-product-metrics-week-flow
+    deployment_name: ads-report-08-taobao-week-product-attribution-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_report_taobao_trade_product_metrics_week.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 230
+    schedule: {kind: cron, source_env: ADS_WEEK_PLATFORM_PRODUCT_METRICS_CRON, adapter_env: CRON, default: "40 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-taobao-trade-sale-goods-daily-flow
+    deployment_name: ads-15-taobao-goods-daily-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_taobao_trade_sale_goods_daily.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 30
+    schedule: {kind: cron, source_env: ADS_TAOBAO_GOODS_DAILY_CRON, adapter_env: CRON, default: "22,52 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-taobao-traffic-goods-daily-flow
+    deployment_name: ads-17-taobao-traffic-goods-daily-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_taobao_traffic_goods_daily.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 50
+    schedule: {kind: cron, source_env: ADS_TAOBAO_TRAFFIC_GOODS_DAILY_CRON, adapter_env: CRON, default: "26,56 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: incremental-refresh-ads-taobao-traffic-shop-daily-flow
+    deployment_name: ads-16-taobao-traffic-shop-daily-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_incremental_taobao_traffic_shop_daily.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 40
+    schedule: {kind: cron, source_env: ADS_TAOBAO_TRAFFIC_SHOP_DAILY_CRON, adapter_env: CRON, default: "24,54 10,18 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [fallback_window_days, init_watermark_only]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: process-douyin-live-center-analysis-jobs
+    deployment_name: douyin-live-center-analysis-jobs
+    state: active
+    deploy_script: scripts/deploy_prefect_process_douyin_live_center_analysis_jobs.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 80
+    schedule: {kind: cron, source_env: DOUYIN_LIVE_CENTER_ANALYSIS_CRON, adapter_env: CRON, default: "5-59/10 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [limit]
+    concurrency: {source_env: DOUYIN_LIVE_CENTER_ANALYSIS_DEPLOY_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 45, future_run_lookahead_minutes: 45}
+
+  - flow_name: process-marketing-content-asset-analysis-jobs
+    deployment_name: marketing-content-asset-analysis-jobs
+    state: active
+    deploy_script: scripts/deploy_prefect_process_marketing_content_asset_analysis_jobs.sh
+    deploy_group: content-assets
+    deploy_order: 310
+    schedule: {kind: cron, source_env: CONTENT_ASSET_ANALYSIS_CRON, adapter_env: CRON, default: "3-59/10 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [limit, temp_dir]
+    concurrency: {source_env: CONTENT_ASSET_ANALYSIS_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 45, future_run_lookahead_minutes: 45}
+
+  - flow_name: process-marketing-content-asset-jobs
+    deployment_name: marketing-content-asset-processing-jobs
+    state: active
+    deploy_script: scripts/deploy_prefect_process_marketing_content_asset_jobs.sh
+    deploy_group: content-assets
+    deploy_order: 300
+    schedule: {kind: cron, source_env: CONTENT_ASSET_PROCESSING_CRON, adapter_env: CRON, default: "*/5 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [limit, temp_dir]
+    concurrency: {source_env: CONTENT_ASSET_PROCESSING_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 30, future_run_lookahead_minutes: 30}
+
+  - flow_name: process-marketing-content-asset-transcript-jobs
+    deployment_name: marketing-content-asset-transcript-jobs
+    state: active
+    deploy_script: scripts/deploy_prefect_process_marketing_content_asset_transcript_jobs.sh
+    deploy_group: content-assets
+    deploy_order: 320
+    schedule: {kind: cron, source_env: CONTENT_ASSET_TRANSCRIPT_CRON, adapter_env: CRON, default: "7-59/15 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [limit, temp_dir]
+    concurrency: {source_env: CONTENT_ASSET_TRANSCRIPT_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 60, future_run_lookahead_minutes: 60}
+
+  - flow_name: refresh-dwd-taobao-goods-sale-traffic-flow
+    deployment_name: dwd-04-taobao-goods-sale-traffic-daily
+    state: active
+    deploy_script: scripts/deploy_prefect_refresh_taobao_goods_sale_traffic.sh
+    deploy_group: dataops-hub-core
+    deploy_order: 10
+    schedule: {kind: cron, source_env: DWD_TAOBAO_GOODS_TRAFFIC_DAILY_CRON, adapter_env: CRON, default: "40 2 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [window_days]
+    concurrency: {source_env: COMMON_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 0}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: sync-marketing-content-assets
+    deployment_name: marketing-content-assets-sync
+    state: active
+    deploy_script: scripts/deploy_prefect_sync_marketing_content_assets.sh
+    deploy_group: content-assets
+    deploy_order: 330
+    schedule: {kind: cron, source_env: CONTENT_ASSET_FEISHU_SYNC_CRON, adapter_env: CRON, default: "20 9 * * *", enabled_env: CONTENT_ASSET_FEISHU_SYNC_SCHEDULE_ENABLED, enabled_default: false, clean_count: 0, legacy_count: 1, active: false}
+    parameters: [limit, mode, source_url, spreadsheet_token]
+    concurrency: {source_env: CONTENT_ASSET_SYNC_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: sync-marketing-industry-articles-flow
+    deployment_name: ads-21-marketing-industry-articles-inc
+    state: active
+    deploy_script: scripts/deploy_prefect_marketing_industry_articles.sh
+    deploy_group: marketing-industry
+    deploy_order: 340
+    schedule: {kind: cron, source_env: WECHAT_ARTICLE_DISCOVERY_CRON, adapter_env: WECHAT_ARTICLE_DISCOVERY_CRON, default: "17 8-22/2 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [api_base, backfill_missing_content, cache_only_backfill, content_fetch_retries, fetch_full_content, list_fetch_attempts, lookback_days, max_backfill_articles, max_pages_per_source, max_sources_per_run, page_size, rate_limit_buffer_seconds, request_sleep_seconds, retry_permanent_failures, rss_cache_db_path, sync_article_lists, timeout_seconds]
+    concurrency: {source_env: WECHAT_ARTICLE_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: sync-marketing-industry-articles-flow
+    deployment_name: ads-21-marketing-industry-articles-cache-sweep
+    state: active
+    deploy_script: scripts/deploy_prefect_marketing_industry_articles.sh
+    deploy_group: marketing-industry
+    deploy_order: 340
+    schedule: {kind: cron, source_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, adapter_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, default: "7 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    parameters: [api_base, backfill_missing_content, cache_only_backfill, content_fetch_retries, fetch_full_content, list_fetch_attempts, lookback_days, max_backfill_articles, max_pages_per_source, max_sources_per_run, page_size, rate_limit_buffer_seconds, request_sleep_seconds, retry_permanent_failures, rss_cache_db_path, sync_article_lists, timeout_seconds]
+    concurrency: {source_env: WECHAT_ARTICLE_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: 180, future_run_lookahead_minutes: 180}
+
+  - flow_name: sync-marketing-industry-articles-flow
+    deployment_name: ads-21-marketing-industry-articles-content-retry
+    state: active
+    deploy_script: scripts/deploy_prefect_marketing_industry_articles.sh
+    deploy_group: marketing-industry
+    deploy_order: 340
+    schedule: {kind: cron, source_env: WECHAT_ARTICLE_RETRY_CRON, adapter_env: WECHAT_ARTICLE_RETRY_CRON, default: "43 */6 * * *", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [api_base, backfill_missing_content, cache_only_backfill, content_fetch_retries, fetch_full_content, list_fetch_attempts, lookback_days, max_backfill_articles, max_pages_per_source, max_sources_per_run, page_size, rate_limit_buffer_seconds, request_sleep_seconds, retry_permanent_failures, rss_cache_db_path, sync_article_lists, timeout_seconds]
+    concurrency: {source_env: WECHAT_ARTICLE_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  - flow_name: weekly-overview-refund-nowcast-calibration-flow
+    deployment_name: ads-01-overview-refund-nowcast-weekly-calibration
+    state: active
+    deploy_script: scripts/deploy_prefect_weekly_overview_refund_nowcast_calibration.sh
+    deploy_group: weekly-calibration
+    deploy_order: 350
+    schedule: {kind: cron, source_env: OVERVIEW_REFUND_NOWCAST_WEEKLY_CRON, adapter_env: CRON, default: "15 9 * * 1", clean_count: 1, legacy_count: 1, active: false}
+    parameters: [as_of_date, eval_window_days, max_factor_move, min_sample_count, notify_on_pass, threshold_wape]
+    concurrency: {source_env: OVERVIEW_REFUND_NOWCAST_WEEKLY_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
+  # Retired deployments are audit tombstones and stay absent from a clean control plane.
+  - {flow_name: incremental-refresh-ads-all-trade-overview-flow, deployment_name: incremental-all-trade-overview, state: retired, legacy_state: unpaused_inactive}
+  - {flow_name: incremental-refresh-ads-all-trade-week-flow, deployment_name: ads-02-all-trade-week-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-all-trade-week-flow, deployment_name: incremental-all-trade-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-all-trade-week-platform-flow, deployment_name: ads-03-platform-week-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-all-trade-week-platform-flow, deployment_name: incremental-refresh-ads-all-trade-week-platform, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-all-trade-week-platform-metrics-flow, deployment_name: ads-04-platform-week-metrics-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-all-trade-week-platform-metrics-flow, deployment_name: incremental-refresh-ads-all-trade-week-platform-metrics, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-live-dashboard-daily-flow, deployment_name: ads-18-douyin-live-dashboard-daily-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-attribution-metrics-week-flow, deployment_name: ads-07-douyin-week-attribution-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-attribution-metrics-week-flow, deployment_name: incremental-refresh-ads-douyin-trade-sale-attribution-metrics-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-channel-metrics-week-flow, deployment_name: ads-06-douyin-week-channel-gmv-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-channel-metrics-week-flow, deployment_name: incremental-refresh-ads-douyin-trade-sale-channel-metrics-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-metrics-week-flow, deployment_name: ads-05-douyin-week-metrics-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-douyin-trade-sale-metrics-week-flow, deployment_name: incremental-refresh-ads-douyin-trade-sale-metrics-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-alimama-goods-marketingscene-attribution-month-flow, deployment_name: ads-12-taobao-alimama-month-attribution-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-alimama-goods-marketingscene-attribution-month-flow, deployment_name: incremental-taobao-alimama-goods-marketingscene-attribution-month, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-alimama-goods-marketingscene-attribution-week-flow, deployment_name: ads-11-taobao-alimama-week-attribution-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-alimama-goods-marketingscene-attribution-week-flow, deployment_name: incremental-taobao-alimama-goods-marketingscene-attribution-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-goods-traffic-channel-metrics-week-flow, deployment_name: incremental-refresh-ads-taobao-goods-traffic-channel-metrics-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-one-goods-traffic-channel-metric-week-flow, deployment_name: incremental-refresh-ads-taobao-one-goods-traffic-channel-metric-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-ads-taobao-trade-product-metrics-week-flow, deployment_name: incremental-refresh-ads-taobao-trade-product-metrics-week, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-dwd-all-trade-sale-flow, deployment_name: incremental-all-trade-sale, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-dwd-taobao-alimama-goods-marketingscene-flow, deployment_name: dwd-03-taobao-alimama-marketingscene-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-dws-taobao-alimama-goods-marketingscene-month-flow, deployment_name: dws-02-taobao-alimama-month-inc, state: retired, legacy_state: paused}
+  - {flow_name: incremental-refresh-dws-taobao-alimama-goods-marketingscene-week-flow, deployment_name: dws-01-taobao-alimama-week-inc, state: retired, legacy_state: paused}
+  - {flow_name: refresh-ads-all-trade-month-flow, deployment_name: refresh-all-trade-month-ads, state: retired, legacy_state: paused}
+  - {flow_name: refresh-dwd-all-trade-sale-flow, deployment_name: fallback-all-trade-sale-daily, state: retired, legacy_state: paused}

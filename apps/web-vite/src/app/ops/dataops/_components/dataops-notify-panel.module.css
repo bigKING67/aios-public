@@ -1,0 +1,206 @@
+.notifyLayout {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.panel {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 12px;
+}
+
+.panelHead {
+  margin-bottom: 8px;
+}
+
+.panelHead h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 660;
+}
+
+.panelHead p {
+  margin: 3px 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.notifyFilterGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notifyActionGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notifyFailureActions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notifyAdvancedPanel {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 6px 10px;
+}
+
+.notifyAdvancedPanel > summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.notifyAdvancedPanel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.notifyAdvancedPanel[open] {
+  width: 100%;
+  background: var(--bg-hover);
+  border-color: var(--border-color-hover);
+}
+
+.notifyAdvancedPanel[open] > summary {
+  margin-bottom: 8px;
+}
+
+.notifyToolbox {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.webhookSummaryRail {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 8px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.webhookSummaryHint {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.notifyToolbarRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+}
+
+.notifyToolbarMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notifyRetryMeta {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.notifyAdvancedInline {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.notifyFailureFold {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 0 10px 8px;
+  margin-bottom: 10px;
+}
+
+.notifyFailureFoldSummary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.notifyFailureFoldSummary::-webkit-details-marker {
+  display: none;
+}
+
+.notifyFailureFoldTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notifyFailureFoldTitle strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}
+
+.notifyFailureFoldTitle span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 980px) {
+  .notifyFilterGroup {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .notifyToolbarRow {
+    grid-template-columns: 1fr;
+  }
+
+  .notifyToolbarMeta {
+    width: 100%;
+  }
+
+  .notifyActionGroup,
+  .notifyFailureActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .notifyAdvancedPanel,
+  .notifyAdvancedInline,
+  .webhookSummaryRail {
+    width: 100%;
+  }
+
+  .notifyFailureFoldSummary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

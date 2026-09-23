@@ -1,0 +1,100 @@
+.batchPreviewPanel {
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px;
+}
+
+.batchPreviewHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.batchPreviewHead h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 650;
+}
+
+.batchPreviewHead span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.batchPreviewList {
+  display: grid;
+  gap: 8px;
+  max-height: 280px;
+  overflow: auto;
+}
+
+.batchPreviewItem {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 8px;
+}
+
+.batchPreviewItem strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  margin-bottom: 6px;
+}
+
+.batchPreviewCode {
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-hover);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  padding: 8px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.batchResultSummary {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.batchResultMetric {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 4px 9px;
+}
+
+.batchResultControls {
+  margin-bottom: 10px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.batchResultFilterSelect {
+  min-width: 220px;
+}
+
+.batchHistoryKeywordInput {
+  min-width: 280px;
+}
+
+.batchHistoryStatsText {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}

@@ -1,0 +1,110 @@
+.analysisResultPlaybackAlert {
+  border-radius: var(--border-radius-lg);
+}
+
+.analysisResultPlaybackPanel {
+  display: grid;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding: var(--spacing-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.analysisResultPlaybackHeader {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: start;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.analysisResultPlaybackHeader > div {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.analysisResultPlaybackHeader span {
+  color: var(--brand-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisResultPlaybackHeader strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisResultPlaybackVideo {
+  width: 100%;
+  max-height: 62vh;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+}
+
+.analysisResultPlaybackStatus {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--status-info-bg);
+}
+
+.analysisResultPlaybackStatus span {
+  min-width: 0;
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+
+.analysisResultPlaybackMeta {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.analysisResultPlaybackMeta span {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .analysisResultPlaybackHeader,
+  .analysisResultPlaybackStatus {
+    display: grid;
+  }
+
+  .analysisResultPlaybackStatus {
+    justify-content: stretch;
+  }
+
+  .analysisResultPlaybackVideo {
+    max-height: 56vh;
+  }
+}

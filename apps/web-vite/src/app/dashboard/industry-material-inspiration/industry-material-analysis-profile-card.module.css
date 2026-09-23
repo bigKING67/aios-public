@@ -1,0 +1,228 @@
+.analysisProfileCard {
+  min-width: 0;
+  border-top: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.analysisProfileSummary {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.analysisProfileSummary::-webkit-details-marker {
+  display: none;
+}
+
+.analysisProfileSummary::after {
+  color: var(--brand-text);
+  content: '展开';
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.analysisProfileCard[open] .analysisProfileSummary::after {
+  content: '收起';
+}
+
+.analysisProfileSummary:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--brand-active);
+  outline-offset: 2px;
+}
+
+.analysisProfileSummary > span:first-child {
+  color: var(--brand-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.analysisProfileSummary > strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.analysisProfileSummary > span:nth-child(3) {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.analysisProfileContent {
+  min-width: 0;
+  padding: 0 0 var(--spacing-4);
+  border-top: 1px solid var(--divider-color);
+}
+
+.analysisProfileHeader {
+  min-width: 0;
+  margin: var(--spacing-4) 0 var(--spacing-3);
+}
+
+.analysisProfileColumn > span {
+  display: block;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-snug);
+}
+
+.analysisProfileHeader strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.analysisProfileHeader p {
+  max-width: 920px;
+  margin: var(--spacing-2) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.analysisProfileGrid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+}
+
+.analysisProfileColumn {
+  min-width: 0;
+  padding: 0 var(--spacing-3);
+}
+
+.analysisProfileColumn:first-child {
+  padding-left: 0;
+}
+
+.analysisProfileColumn + .analysisProfileColumn {
+  border-left: 1px solid var(--divider-color);
+}
+
+.metricPriorityList {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-2);
+  margin: var(--spacing-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.metricPriorityList li {
+  min-width: 0;
+}
+
+.metricPriorityList strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.metricPriorityList span {
+  display: block;
+  margin-top: var(--spacing-1);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  overflow-wrap: anywhere;
+}
+
+.analysisProfileTags {
+  display: flex;
+  min-width: 0;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-3);
+}
+
+.analysisProfileTags span {
+  display: inline-flex;
+  min-height: 26px;
+  max-width: 100%;
+  align-items: center;
+  padding: 0 var(--spacing-2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  .analysisProfileSummary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .analysisProfileSummary > span:nth-child(3) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .analysisProfileGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .analysisProfileColumn {
+    padding: var(--spacing-3) 0;
+  }
+
+  .analysisProfileColumn + .analysisProfileColumn {
+    border-top: 1px solid var(--divider-color);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .analysisProfileSummary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .analysisProfileSummary > span:first-child,
+  .analysisProfileSummary > strong {
+    grid-column: 1;
+  }
+
+  .analysisProfileSummary::after {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .analysisProfileSummary > span:nth-child(3) {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .analysisProfileSummary > strong {
+    white-space: normal;
+  }
+
+  .metricPriorityList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

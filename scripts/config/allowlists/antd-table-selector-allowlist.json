@@ -1,0 +1,171 @@
+{
+  "version": 2,
+  "description": "Frozen AntD table deep-selector findings. Prefer onHeaderCell, onCell, rowClassName, or explicit component classes. Wrapper-scoped AntD internals are allowed only when there is no stable injection point. exceptionKind is either migration-debt or framework-internal.",
+  "allowed": [
+    {
+      "path": "apps/web-vite/src/app/dashboard/_components/dashboard-traffic-table.module.css",
+      "allowedSelectors": [
+        {
+          "selector": ".table :global(.ant-table-tbody > tr.ant-table-measure-row) {",
+          "exceptionKind": "framework-internal",
+          "reason": "rc-table MeasureRow renders its own tr outside AntD column hooks and components.body row overrides."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr.ant-table-measure-row > td) {",
+          "exceptionKind": "framework-internal",
+          "reason": "rc-table MeasureRow renders its own td outside AntD column hooks and components.body cell overrides."
+        }
+      ]
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/_components/dashboard-qianchuan-content.module.css",
+      "allowedSelectors": [
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th.ant-table-cell-fix-left),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column header styling is frozen until column-level header cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th.ant-table-cell-fix-left-last),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column header styling is frozen until column-level header cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th.ant-table-cell-fix-start),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column header styling is frozen until column-level header cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th.ant-table-cell-fix-start-shadow) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column header styling is frozen until column-level header cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-left),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column body styling is frozen until column-level cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-left-last),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column body styling is frozen until column-level cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-start),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column body styling is frozen until column-level cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-start-shadow) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table fixed-column body styling is frozen until column-level cell classes replace legacy AntD internals."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table header typography and spacing are frozen pending migration to explicit header cell classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th .ant-table-column-sorters),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table header typography and spacing are frozen pending migration to explicit header cell classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-thead > tr > th .ant-table-column-title) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table header typography and spacing are frozen pending migration to explicit header cell classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td .ant-table-cell-content),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td .ant-tag),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td .ant-typography),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td button),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td span),",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td strong) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        },
+        {
+          "selector": ".table :global(.ant-table-tbody > tr > td) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Qianchuan table body compact layout is frozen pending migration to explicit body cell and content classes."
+        }
+      ]
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/creator/_components/creator-short-video-scene-strategy-tree.module.css",
+      "allowedSelectors": [
+        {
+          "selector": ".sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-indent),",
+          "exceptionKind": "framework-internal",
+          "reason": "AntD tree table renders row indent controls inside the first cell outside stable column hook coverage."
+        },
+        {
+          "selector": ".sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-expand-icon) {",
+          "exceptionKind": "framework-internal",
+          "reason": "AntD tree table renders expand icons inside the first cell outside stable column hook coverage."
+        }
+      ]
+    },
+    {
+      "path": "apps/web-vite/src/app/dashboard/industry-material-inspiration/industry-material-inspiration.module.css",
+      "allowedSelectors": [
+        {
+          "selector": ".materialTable :global(.ant-table-thead > tr > th) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Industry material inspiration table header styling is frozen until AntD column-level header cell classes replace internal table selectors."
+        },
+        {
+          "selector": ".materialTable :global(.ant-table-tbody > tr > td) {",
+          "exceptionKind": "migration-debt",
+          "reason": "Industry material inspiration table body typography is frozen until column-level cell classes replace internal table selectors."
+        },
+        {
+          "selector": ".materialTable :global(.ant-table-tbody > tr:hover > td) { background: var(--bg-hover); }",
+          "exceptionKind": "migration-debt",
+          "reason": "Industry material inspiration table hover state is frozen until rowClassName or component-level row styling replaces internal table selectors."
+        }
+      ]
+    },
+    {
+      "path": "apps/web-vite/src/app/reports/weekly/_components/tabs/weekly-table.module.css",
+      "allowedSelectors": [
+        {
+          "selector": ".goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row) {",
+          "exceptionKind": "framework-internal",
+          "reason": "rc-table MeasureRow renders its own tr outside AntD column hooks and components.body row overrides."
+        },
+        {
+          "selector": ".goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row > td) {",
+          "exceptionKind": "framework-internal",
+          "reason": "rc-table MeasureRow renders its own td outside AntD column hooks and components.body cell overrides."
+        }
+      ]
+    }
+  ]
+}

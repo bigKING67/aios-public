@@ -1,0 +1,48 @@
+.pageRoot {
+  position: relative;
+  min-height: 100dvh;
+  padding: 8px;
+  background: transparent;
+}
+
+.backdropGlow {
+  display: none;
+}
+
+.surface {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-family-base);
+}
+
+.contentBlock {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.riskAlert {
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .pageRoot {
+    padding: 4px;
+  }
+
+  .surface {
+    gap: 10px;
+  }
+
+  .contentBlock {
+    padding: 10px;
+  }
+}

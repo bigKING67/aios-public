@@ -1,0 +1,298 @@
+.filterPanel {
+  --live-center-control-height: 38px;
+  --live-center-date-tab-min-width: 58px;
+  --live-center-date-tab-shadow: 0 8px 20px -16px color-mix(in srgb, var(--brand-primary) 42%, transparent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-3);
+  align-items: start;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-2xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.filterControls {
+  display: grid;
+  grid-template-columns:
+    minmax(240px, 0.85fr)
+    minmax(420px, 1.25fr)
+    auto;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-width: 0;
+}
+
+.filterActions {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.filterControls :global(.ant-input-affix-wrapper),
+.filterControls :global(.ant-picker) {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--live-center-control-height);
+  border-radius: var(--border-radius-lg);
+}
+
+.searchInput.searchInput {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--live-center-control-height);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: color-mix(in srgb, var(--bg-card) 88%, var(--bg-subtle));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 72%, transparent),
+    var(--shadow-sm);
+}
+
+.searchInput.searchInput:hover,
+.searchInput.searchInput:focus-within {
+  border-color: var(--brand-border);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 2px var(--brand-secondary);
+}
+
+.searchInput :global(.ant-input) {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.searchInput :global(.ant-input-prefix) {
+  color: var(--text-tertiary);
+}
+
+.dateRangeControl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-2) + 2px);
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+}
+
+.datePresetRail.datePresetRail {
+  min-width: max-content;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.datePresetRail :global(.ant-segmented-group) {
+  gap: var(--spacing-2);
+}
+
+.datePresetRail :global(.ant-segmented-item) {
+  min-width: var(--live-center-date-tab-min-width);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-full);
+  color: var(--text-secondary) !important;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: var(--line-height-snug);
+  text-align: center;
+  transition: none !important;
+}
+
+.datePresetRail :global(.ant-segmented-item-label) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--live-center-control-height);
+  padding: 0 calc(var(--spacing-3) + 2px);
+  border-radius: var(--border-radius-full);
+  color: inherit !important;
+  line-height: var(--line-height-none);
+  transition: none !important;
+}
+
+.datePresetRail :global(.ant-segmented-thumb) {
+  display: none;
+  border-radius: var(--border-radius-full);
+  background: var(--brand-primary);
+  box-shadow: var(--live-center-date-tab-shadow);
+}
+
+.datePresetRail :global(.ant-segmented-item:hover),
+.datePresetRail :global(.ant-segmented-item-active) {
+  background: var(--brand-secondary);
+  color: var(--brand-text-strong) !important;
+}
+
+.datePresetRail :global(.ant-segmented-item-selected) {
+  background: var(--brand-primary);
+  color: var(--brand-on-primary) !important;
+  box-shadow: var(--live-center-date-tab-shadow);
+}
+
+.datePresetRail :global(.ant-segmented-item:has(.ant-segmented-item-input:checked)) {
+  background: var(--brand-primary);
+  color: var(--brand-on-primary) !important;
+  box-shadow: var(--live-center-date-tab-shadow);
+}
+
+.datePresetRail :global(.ant-segmented-item-selected:hover),
+.datePresetRail :global(.ant-segmented-item-selected.ant-segmented-item-active),
+.datePresetRail :global(.ant-segmented-item:has(.ant-segmented-item-input:checked):hover) {
+  background: var(--brand-dark);
+  color: var(--brand-on-primary) !important;
+}
+
+.datePresetRail :global(.ant-segmented-item-selected .ant-segmented-item-label),
+.datePresetRail :global(.ant-segmented-item:has(.ant-segmented-item-input:checked) .ant-segmented-item-label) {
+  color: var(--brand-on-primary) !important;
+}
+
+.dateRangePickerShell {
+  flex: 1 1 238px;
+  min-width: 0;
+  min-height: var(--live-center-control-height);
+}
+
+.dateRangePicker.dateRangePicker {
+  --ant-date-picker-input-font-size: var(--font-size-base);
+  --ant-date-picker-input-font-size-sm: var(--font-size-base);
+  width: 100%;
+  min-width: 0;
+  min-height: var(--live-center-control-height);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-base);
+  background: color-mix(in srgb, var(--bg-card) 88%, var(--bg-subtle));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 72%, transparent),
+    var(--shadow-sm);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.dateRangePicker.dateRangePicker:hover,
+.dateRangePicker.dateRangePicker:focus-within,
+.dateRangePicker.dateRangePicker:global(.ant-picker-focused) {
+  border-color: var(--brand-border);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 2px var(--brand-secondary);
+}
+
+.dateRangePicker.dateRangePicker :global(.ant-picker-input > input) {
+  color: var(--text-primary);
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  transition: color var(--transition-fast) !important;
+}
+
+.dateRangePicker.dateRangePicker :global(.ant-picker-input > input::placeholder),
+.dateRangePicker.dateRangePicker :global(.ant-picker-separator),
+.dateRangePicker.dateRangePicker :global(.ant-picker-suffix),
+.dateRangePicker.dateRangePicker :global(.ant-picker-clear) {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-base) !important;
+}
+
+.liveCenterDatePickerPopup :global(.ant-picker-header-view),
+.liveCenterDatePickerPopup :global(.ant-picker-content th),
+.liveCenterDatePickerPopup :global(.ant-picker-cell-inner),
+.liveCenterDatePickerPopup :global(.ant-picker-footer) {
+  font-family: var(--font-family-base);
+}
+
+.liveCenterDatePickerPopup :global(.ant-picker-header-view) {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.liveCenterDatePickerPopup :global(.ant-picker-content th) {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.liveCenterDatePickerPopup :global(.ant-picker-cell-inner) {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+}
+
+.dateBoundsStatus {
+  flex: 0 0 auto;
+  color: var(--status-warning-strong);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}
+
+@media (max-width: 1380px) {
+  .filterPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .filterControls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filterActions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .filterControls {
+    grid-template-columns: 1fr;
+  }
+
+  .dateRangeControl {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .filterActions {
+    justify-content: flex-start;
+  }
+
+  .datePresetRail.datePresetRail {
+    min-width: 0;
+  }
+
+  .datePresetRail :global(.ant-segmented-group) {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .datePresetRail :global(.ant-segmented-item) {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .filterPanel {
+    padding: var(--spacing-3);
+  }
+
+  .filterPanel,
+  .filterControls {
+    gap: var(--spacing-2);
+  }
+
+  .dateRangePickerShell {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .datePresetRail :global(.ant-segmented-group) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,22 @@
+.importStack {
+  display: grid;
+  gap: 16px;
+}
+
+.importPreview {
+  display: grid;
+  gap: 10px;
+}
+
+.importPreviewMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.importPreviewMeta strong {
+  color: var(--text-primary);
+}

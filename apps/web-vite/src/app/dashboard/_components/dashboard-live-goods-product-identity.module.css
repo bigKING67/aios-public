@@ -1,0 +1,57 @@
+.productMain {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.productRank {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--dashboard-live-rank-bg);
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+}
+
+.productRankMuted {
+  background: var(--bg-hover);
+  color: var(--text-tertiary);
+  font-weight: 560;
+}
+
+.productText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.productName {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 560;
+  line-height: var(--line-height-normal);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.productNameMuted {
+  color: var(--dashboard-id-pill-text);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .productMain {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+  }
+}

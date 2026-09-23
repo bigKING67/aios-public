@@ -1,0 +1,35 @@
+.contribution {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contributionLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 560;
+}
+
+.contributionTrack {
+  display: block;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--dashboard-live-contribution-track);
+}
+
+.contributionFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--dashboard-live-contribution-fill-start) 0%,
+    var(--dashboard-live-contribution-fill-end) 100%
+  );
+}
+
+.mutedText {
+  color: var(--dashboard-live-muted-pill-text) !important;
+  font-weight: 430 !important;
+}

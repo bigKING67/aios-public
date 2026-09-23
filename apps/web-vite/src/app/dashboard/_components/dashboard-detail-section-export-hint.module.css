@@ -1,0 +1,45 @@
+.exportHint {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.exportHintWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-2) - 2px);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--bg-hover);
+}
+
+.loginEntryButton {
+  height: auto;
+  padding: 0 !important;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-none);
+  font-weight: 700;
+}
+
+.loginEntryButton :global(.anticon) {
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+  .exportHint {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .exportHintWrap {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+}

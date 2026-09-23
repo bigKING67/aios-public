@@ -1,0 +1,250 @@
+.analysisOptionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.analysisOptionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 158px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--surface-color);
+}
+
+.analysisOptionCard[data-active="true"] {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.analysisOptionCard[data-selected="true"] {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.analysisOptionCard[data-current="true"] {
+  border-color: var(--brand-border);
+}
+
+.analysisOptionHeader {
+  display: block;
+  min-width: 0;
+}
+
+.analysisOptionHeader > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.analysisOptionHeader strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-section-title);
+  letter-spacing: var(--letter-spacing-title);
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisOptionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  min-width: 0;
+}
+
+.analysisOptionBadge,
+.analysisOptionStateBadge,
+.analysisOptionCard p {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.analysisOptionBadge,
+.analysisOptionStateBadge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: var(--component-control-line-height-xs);
+  padding: 0 7px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.analysisOptionStateBadge {
+  border-color: var(--status-neutral-border);
+  background: var(--status-neutral-bg);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.analysisOptionStateBadge[data-tone="recommended"] {
+  border-color: var(--status-info-border);
+  background: var(--status-info-bg);
+  color: var(--brand-text-strong);
+}
+
+.analysisOptionStateBadge[data-tone="active"],
+.analysisOptionStateBadge[data-tone="current"],
+.analysisOptionStateBadge[data-tone="selected"] {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+  color: var(--brand-text-strong);
+}
+
+.analysisOptionCard p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0 0 2px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.analysisOptionAction {
+  margin-top: auto;
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* Ant v6 injects variant styles after CSS Modules; keep this override scoped to option CTAs. */
+.analysisOptionCard
+  .analysisOptionAction.analysisOptionAction:global(
+    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled)
+  ) {
+  border-color: transparent !important;
+  background: var(--brand-secondary) !important;
+  background-color: var(--brand-secondary) !important;
+  color: var(--brand-text-strong) !important;
+}
+
+.analysisOptionCard
+  .analysisOptionAction.analysisOptionAction:global(
+    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled):hover
+  ),
+.analysisOptionCard
+  .analysisOptionAction.analysisOptionAction:global(
+    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled):focus-visible
+  ) {
+  border-color: var(--brand-border) !important;
+  background: var(--status-info-bg) !important;
+  background-color: var(--status-info-bg) !important;
+  color: var(--brand-text-strong) !important;
+}
+
+.analysisOptionCard
+  .analysisOptionAction.analysisOptionAction:global(
+    .ant-btn.ant-btn-primary.ant-btn-color-primary:not(:disabled):not(.ant-btn-disabled)
+  ) {
+  border-color: var(--brand-primary) !important;
+  background: var(--brand-primary) !important;
+  background-color: var(--brand-primary) !important;
+  color: var(--brand-on-primary) !important;
+}
+
+.analysisOptionCard[data-emphasized="true"]
+  .analysisOptionAction.analysisOptionAction:global(.ant-btn.ant-btn-primary:disabled),
+.analysisOptionCard[data-emphasized="true"]
+  .analysisOptionAction.analysisOptionAction:global(.ant-btn.ant-btn-primary.ant-btn-disabled) {
+  border-color: var(--brand-primary) !important;
+  background: var(--brand-primary) !important;
+  background-color: var(--brand-primary) !important;
+  color: var(--brand-on-primary) !important;
+  opacity: 0.86;
+}
+
+.analysisOptionAction:global(.ant-btn:not(:disabled):active) {
+  transform: translateY(1px);
+}
+
+.analysisJobProgress {
+  display: grid;
+  gap: 5px;
+}
+
+.analysisJobProgressHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.analysisJobProgressHeader span {
+  overflow: hidden;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analysisJobProgressHeader strong {
+  flex: 0 0 auto;
+  color: var(--brand-text-strong);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: 680;
+  line-height: var(--line-height-none);
+}
+
+.analysisJobProgressTrack {
+  position: relative;
+  overflow: hidden;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--status-info-border);
+}
+
+.analysisJobProgressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: inherit;
+  background: var(--brand-primary);
+  transition: width 280ms ease;
+}
+
+.analysisJobProgress[data-status="queued"] .analysisJobProgressFill {
+  width: 5%;
+}
+
+.analysisJobProgress[data-status="running"] .analysisJobProgressFill {
+  width: 60%;
+}
+
+.analysisJobProgress[data-status="succeeded"] .analysisJobProgressHeader strong {
+  color: var(--status-success-strong);
+}
+
+.analysisJobProgress[data-status="succeeded"] .analysisJobProgressFill {
+  width: 100%;
+  background: var(--status-success-strong);
+}
+
+@media (max-width: 640px) {
+  .analysisOptionGrid {
+    grid-template-columns: 1fr;
+  }
+}

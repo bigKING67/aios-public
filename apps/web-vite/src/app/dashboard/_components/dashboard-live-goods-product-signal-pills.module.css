@@ -1,0 +1,22 @@
+.ratePills,
+.refundLine {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.signalPill {
+  display: inline-flex;
+  border-radius: 999px;
+  background: var(--dashboard-pill-bg);
+  color: var(--dashboard-id-pill-text);
+  font-size: var(--font-size-xs);
+  font-weight: 520;
+  line-height: var(--line-height-tight);
+  padding: 4px 8px;
+}
+
+.mutedPill {
+  color: var(--dashboard-live-muted-pill-text) !important;
+  background: var(--dashboard-live-meta-bg) !important;
+}

@@ -1,0 +1,337 @@
+.pipelineTaskCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+}
+
+.pipelineHead {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pipelineHead strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pipelineSecondaryText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pipelineStatusCell {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+}
+
+.pipelineStatusRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pipelineRecentCell {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+}
+
+.pipelineRecentCell p {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pipelineRecentCell p span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.pipelineRecentCell p strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  min-width: 0;
+}
+
+.pipelineTextCell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pipelineTextCell p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.pipelineTextCell p span {
+  color: var(--text-secondary);
+}
+
+.pipelineKvList {
+  display: grid;
+  gap: 6px;
+}
+
+.pipelineKvItem {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.pipelineKvLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+}
+
+.pipelineKvValue {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pipelineKvValueMultiline {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.inlineCode {
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-primary);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1px 6px;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.pipelineInlineCode {
+  width: 100%;
+  white-space: nowrap;
+  word-break: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.durationText {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.pipelineErrorSummary {
+  margin: 0;
+  color: var(--status-danger-strong);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterContextBar {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 6px 10px;
+}
+
+.filterContextSummary {
+  min-width: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.filterContextLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: 630;
+  white-space: nowrap;
+}
+
+.filterContextText {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterResetButton {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+}
+
+.pipelineActionGroup {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pipelineMainActionGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.pipelineActionButtonWrap {
+  width: 100%;
+}
+
+.pipelineMainActionGroup :global(.ant-btn) {
+  width: 100%;
+  justify-content: center;
+}
+
+.pipelinePrimaryAction {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+.pipelinePrimaryAction:hover,
+.pipelinePrimaryAction:focus-visible {
+  background: var(--brand-dark) !important;
+  border-color: var(--brand-dark) !important;
+  color: var(--brand-on-primary) !important;
+}
+
+.pipelineColumnTitle {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.pipelineHeaderCell {
+  background: var(--bg-hover);
+  white-space: nowrap;
+  text-align: center !important;
+  padding: 10px 8px !important;
+}
+
+.pipelineBodyCell {
+  vertical-align: top;
+  padding: 10px 8px !important;
+}
+
+.pipelineCompactTableCell {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  text-align: center !important;
+}
+
+.pipelineFixedCell {
+  background: var(--bg-card);
+}
+
+.pipelineExpandPanel {
+  padding: 4px 0 0;
+}
+
+.pipelineExpandGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pipelineExpandSection {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-hover);
+  padding: 10px 12px;
+}
+
+.pipelineExpandSection h4 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: 630;
+}
+
+.pipelineExpandSectionWide {
+  grid-column: 1 / -1;
+}
+
+.pipelineErrorDetail {
+  margin: 0;
+  color: var(--status-danger-strong);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 1200px) {
+  .pipelineExpandGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .filterContextBar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filterContextSummary {
+    width: 100%;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .filterContextText {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .filterResetButton {
+    padding-left: 0;
+  }
+}

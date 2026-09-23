@@ -1,0 +1,1694 @@
+{
+  "pipelines": [
+    {
+      "id": "dwd_taobao_goods_sale_traffic_daily",
+      "name": "淘宝商品流量成交日刷",
+      "domain": "DWD",
+      "flowName": "refresh-dwd-taobao-goods-sale-traffic-flow",
+      "deploymentName": "dwd-04-taobao-goods-sale-traffic-daily",
+      "cron": "40 2 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 7,
+      "sourceTables": [
+        "ods.taobao_trade_sale_goods_raw"
+      ],
+      "targetTables": [
+        "dwd.taobao_goods_sale_traffic"
+      ],
+      "procedures": [
+        "dwd.refresh_taobao_goods_sale_traffic(start_date, end_date)"
+      ],
+      "owner": "电商数据组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-12 02:40",
+      "lastSuccessAt": "2026-03-12 02:40",
+      "avgDurationSec": 189,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_refresh_taobao_goods_sale_traffic.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_refresh_taobao_goods_sale_traffic.sh",
+      "note": "为 ADS 天猫商品流量渠道归因提供 DWD 上游底表。"
+    },
+    {
+      "id": "ads_all_trade_overview_incremental",
+      "name": "全渠道日汇总总览增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-all-trade-overview-flow",
+      "deploymentName": "ads-01-overview-daily-inc",
+      "cron": "30,55 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 7,
+      "sourceTables": [
+        "ods.douyin_trade_sale_raw",
+        "ods.jd_trade_sale_raw",
+        "ods.taobao_trade_sale_raw",
+        "ods.wx_trade_sale_raw",
+        "ods.xhs_trade_sale_raw"
+      ],
+      "targetTables": [
+        "ads.all_trade_overview",
+        "ads.douyin_trade_sale_carrier_daily"
+      ],
+      "procedures": [
+        "ads.refresh_all_trade_overview_incremental(7, FALSE)"
+      ],
+      "watermarkTable": "etl.all_trade_overview_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-03 23:00",
+      "lastSuccessAt": "2026-03-03 23:00",
+      "avgDurationSec": 58,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_all_trade_overview.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_all_trade_overview.sh",
+      "note": "看板日级核心指标底座（10/18 点各一次主刷 + catch-up），包含抖音载体成交金额、退款金额（支付时间）nowcast 与 WAPE 质量告警（阈值 0.15）。"
+    },
+    {
+      "id": "ads_all_trade_overview_refund_nowcast_weekly_calibration",
+      "name": "全渠道总览退款 nowcast 周度校准",
+      "domain": "ADS",
+      "flowName": "weekly-overview-refund-nowcast-calibration-flow",
+      "deploymentName": "ads-01-overview-refund-nowcast-weekly-calibration",
+      "cron": "15 9 * * 1",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 42,
+      "sourceTables": [
+        "ads.all_trade_overview_refund_nowcast_daily"
+      ],
+      "targetTables": [
+        "ads.all_trade_overview_refund_nowcast_calibration_weekly",
+        "ads.all_trade_overview_refund_nowcast_active_calibration"
+      ],
+      "procedures": [
+        "ads.refresh_all_trade_overview_refund_nowcast_calibration_weekly(CURRENT_DATE, 42, 10, 0.15)",
+        "ads.activate_all_trade_overview_refund_nowcast_calibration(CURRENT_DATE, 42, 10, 0.08)"
+      ],
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "待部署",
+      "lastSuccessAt": "待部署",
+      "avgDurationSec": 30,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_weekly_overview_refund_nowcast_calibration.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_weekly_overview_refund_nowcast_calibration.sh",
+      "note": "每周评估退款 nowcast 的 WAPE/bias/zero-miss，通过护栏后激活 active calibration 参数；日常预测由 ads-01-overview-daily-inc 读取生效参数。"
+    },
+    {
+      "id": "ads_taobao_trade_sale_goods_daily_incremental",
+      "name": "天猫商品成交日粒度看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-taobao-trade-sale-goods-daily-flow",
+      "deploymentName": "ads-15-taobao-goods-daily-inc",
+      "cron": "22,52 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.taobao_trade_sale_goods_raw"
+      ],
+      "targetTables": [
+        "ads.taobao_trade_sale_goods_daily"
+      ],
+      "procedures": [
+        "ads.refresh_taobao_trade_sale_goods_daily_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.taobao_trade_sale_goods_daily_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-17 18:22",
+      "lastSuccessAt": "2026-03-17 18:22",
+      "avgDurationSec": 46,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_trade_sale_goods_daily.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_trade_sale_goods_daily.sh",
+      "note": "用于经营看板天猫商品维度（日/周/月/年/自定义）查询底表增量刷新。"
+    },
+    {
+      "id": "ads_taobao_traffic_shop_daily_incremental",
+      "name": "天猫店铺流量日粒度看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-taobao-traffic-shop-daily-flow",
+      "deploymentName": "ads-16-taobao-traffic-shop-daily-inc",
+      "cron": "24,54 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.taobao_traffic_shop_raw"
+      ],
+      "targetTables": [
+        "ads.taobao_traffic_shop_daily"
+      ],
+      "procedures": [
+        "ads.refresh_taobao_traffic_shop_daily_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.taobao_traffic_shop_daily_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-04-09 18:24",
+      "lastSuccessAt": "2026-04-09 18:24",
+      "avgDurationSec": 44,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_traffic_shop_daily.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_traffic_shop_daily.sh",
+      "note": "用于经营看板天猫-流量维度来源层级（日/周/月/年/自定义）查询底表增量刷新。"
+    },
+    {
+      "id": "ads_taobao_traffic_goods_daily_incremental",
+      "name": "天猫商品流量日粒度看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-taobao-traffic-goods-daily-flow",
+      "deploymentName": "ads-17-taobao-traffic-goods-daily-inc",
+      "cron": "26,56 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.taobao_traffic_goods_raw",
+        "ods.taobao_trade_sale_goods_raw"
+      ],
+      "targetTables": [
+        "ads.taobao_traffic_goods_daily"
+      ],
+      "procedures": [
+        "ads.refresh_taobao_traffic_goods_daily_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.taobao_traffic_goods_daily_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-04-09 18:26",
+      "lastSuccessAt": "2026-04-09 18:26",
+      "avgDurationSec": 48,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_traffic_goods_daily.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_taobao_traffic_goods_daily.sh",
+      "note": "用于经营看板天猫-商品流量来源层级（日/周/月/年/自定义）查询底表增量刷新。"
+    },
+    {
+      "id": "ads_douyin_live_detail_incremental",
+      "name": "抖音直播明细看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-douyin-live-detail-flow",
+      "deploymentName": "ads-18-douyin-live-detail-inc",
+      "cron": "36,56 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.douyin_trade_sale_live_raw",
+        "ads.douyin_self_anchor_map"
+      ],
+      "targetTables": [
+        "ads.douyin_live_detail"
+      ],
+      "procedures": [
+        "ads.refresh_douyin_live_detail_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.douyin_live_detail_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-04-22 18:36",
+      "lastSuccessAt": "2026-04-22 18:36",
+      "avgDurationSec": 41,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_live_detail.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_live_detail.sh",
+      "note": "支撑 /dashboard 抖音直播维度：顶部指标卡、趋势、以及直播场次明细。"
+    },
+    {
+      "id": "ads_douyin_live_goods_detail_incremental",
+      "name": "抖音直播商品明细看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-douyin-live-goods-detail-flow",
+      "deploymentName": "ads-20-douyin-live-goods-detail-inc",
+      "cron": "38,58 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.douyin_livestream_goods",
+        "ads.douyin_live_detail",
+        "ads.douyin_self_anchor_map"
+      ],
+      "targetTables": [
+        "ads.douyin_live_goods_detail"
+      ],
+      "procedures": [
+        "ads.refresh_douyin_live_goods_detail_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.douyin_live_goods_detail_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-04-27 18:38",
+      "lastSuccessAt": "2026-04-27 18:38",
+      "avgDurationSec": 43,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_live_goods_detail.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_live_goods_detail.sh",
+      "note": "支撑 /dashboard 抖音直播维度下方的直播商品表现树表（商品汇总+SKU展开）。"
+    },
+    {
+      "id": "ads_douyin_trade_sale_card_dashboard_incremental",
+      "name": "抖音商品卡看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-douyin-trade-sale-card-dashboard-flow",
+      "deploymentName": "ads-21-douyin-trade-sale-card-dashboard-inc",
+      "cron": "39,59 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.douyin_trade_sale_card_raw",
+        "ods.douyin_trade_sale_card_detail_raw"
+      ],
+      "targetTables": [
+        "ads.douyin_trade_sale_card",
+        "ads.douyin_trade_sale_card_detail"
+      ],
+      "procedures": [
+        "ads.refresh_douyin_trade_sale_card_dashboard_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.douyin_trade_sale_card_dashboard_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "待部署",
+      "lastSuccessAt": "待部署",
+      "avgDurationSec": 38,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_trade_sale_card_dashboard.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_trade_sale_card_dashboard.sh",
+      "note": "支撑 /dashboard 抖音商品卡维度：指标卡、GMV/曝光趋势、商品卡全字段列表与流量来源层级明细。"
+    },
+    {
+      "id": "ads_douyin_shortvideo_detail_incremental",
+      "name": "抖音短视频明细看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-douyin-shortvideo-detail-flow",
+      "deploymentName": "ads-19-douyin-shortvideo-detail-inc",
+      "cron": "37,57 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.douyin_trade_sale_shortvideo_raw",
+        "ods.douyin_trade_sale_image_raw",
+        "ods.douyin_qianchuan_shortvideo_raw",
+        "ads.marketing_content_platform_videos",
+        "ads.marketing_content_ad_materials",
+        "ads.marketing_content_assets"
+      ],
+      "targetTables": [
+        "ads.douyin_shortvideo_detail"
+      ],
+      "procedures": [
+        "ads.refresh_douyin_shortvideo_detail_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.douyin_shortvideo_detail_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-04-24 18:37",
+      "lastSuccessAt": "2026-04-24 18:37",
+      "avgDurationSec": 39,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_shortvideo_detail.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_douyin_shortvideo_detail.sh",
+      "note": "支撑 /dashboard 抖音短视频维度与达人短视频页：成交侧合并短视频与图文短视频 ODS，千川素材映射指标避免多 account_type 分层重复广告成本。"
+    },
+    {
+      "id": "dws_marketing_content_qianchuan_all_domain_material_performance",
+      "name": "内容素材千川全域素材表现刷新",
+      "domain": "DWS",
+      "flowName": "refresh-marketing-content-qianchuan-all-domain-material-performance",
+      "deploymentName": "manual-marketing-content-qianchuan-all-domain-material-performance",
+      "cron": "manual",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 30,
+      "sourceTables": [
+        "ods.douyin_qianchuan_shortvideo_raw",
+        "ods.douyin_qianchuan_live_video_raw",
+        "ods.douyin_trade_sale_live_raw",
+        "ads.marketing_content_platform_videos",
+        "ads.marketing_content_ad_materials",
+        "ads.marketing_content_assets"
+      ],
+      "targetTables": [
+        "dwd.marketing_content_qianchuan_material_performance_di",
+        "dws.marketing_content_qianchuan_material_summary",
+        "dws.marketing_content_qianchuan_live_room_acceptance_di"
+      ],
+      "procedures": [
+        "ads.refresh_marketing_content_qianchuan_all_domain_performance(asset_id, start_date, end_date)"
+      ],
+      "watermarkTable": "dwd.marketing_content_qianchuan_material_performance_di.updated_at",
+      "owner": "数据平台组",
+      "status": "warning",
+      "lastRunAt": "待部署",
+      "lastSuccessAt": "待部署",
+      "avgDurationSec": 45,
+      "linuxDeployScript": "etl/groland_postgres/scripts/refresh_qianchuan_all_domain_material_performance.py",
+      "linuxDeployCommand": "python3 etl/groland_postgres/scripts/refresh_qianchuan_all_domain_material_performance.py --days 30",
+      "note": "内容中台 /marketing/content-assets 投放快照和 daily trend 的数据底座；material_id 是千川素材实例唯一键，boost_* 只作解释项。"
+    },
+    {
+      "id": "ads_marketing_content_asset_fusion_diagnostics",
+      "name": "内容素材视频理解与融合诊断",
+      "domain": "ADS",
+      "flowName": "process-marketing-content-asset-analysis-jobs",
+      "deploymentName": "marketing-content-asset-analysis-jobs",
+      "cron": "3-59/10 * * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 7,
+      "sourceTables": [
+        "ads.marketing_content_asset_processing_jobs",
+        "ads.marketing_content_asset_objects",
+        "ads.marketing_content_asset_transcripts",
+        "ads.marketing_content_asset_video_understanding_results",
+        "dws.marketing_content_qianchuan_material_summary"
+      ],
+      "targetTables": [
+        "ads.marketing_content_asset_video_understanding_jobs",
+        "ads.marketing_content_asset_video_understanding_results",
+        "ads.marketing_content_asset_objects(object_role=analysis)"
+      ],
+      "procedures": [
+        "process_content_asset_analysis_jobs(limit, temp_dir)"
+      ],
+      "watermarkTable": "ads.marketing_content_asset_processing_jobs.updated_at",
+      "owner": "内容中台",
+      "status": "warning",
+      "lastRunAt": "待部署",
+      "lastSuccessAt": "待部署",
+      "avgDurationSec": 55,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_process_marketing_content_asset_analysis_jobs.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_process_marketing_content_asset_analysis_jobs.sh",
+      "note": "生成 v2.1 视频理解 + 数据表现融合诊断；缺 performance/video 任一侧时输出 degraded mode，不做单边过度结论。"
+    },
+    {
+      "id": "ads_marketing_industry_articles_incremental",
+      "name": "行业公众号文章发现与正文补全",
+      "domain": "ADS",
+      "flowName": "sync-marketing-industry-articles-flow",
+      "deploymentName": "ads-21-marketing-industry-articles-inc",
+      "cron": "17 8-22/2 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 45,
+      "sourceTables": [
+        "ads.marketing_industry_article_sources",
+        "WeChat RSS API"
+      ],
+      "targetTables": [
+        "ads.marketing_industry_articles",
+        "etl.marketing_industry_article_sync_state",
+        "etl.marketing_industry_article_upstream_status"
+      ],
+      "procedures": [
+        "sync_marketing_industry_articles_flow(sync_article_lists=true, backfill_missing_content=true)"
+      ],
+      "watermarkTable": "etl.marketing_industry_article_sync_state.updated_at",
+      "owner": "内容中台",
+      "status": "warning",
+      "lastRunAt": "待运行",
+      "lastSuccessAt": "待运行",
+      "avgDurationSec": 180,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "note": "发现行业公众号新文章并补全正文；DataOps 手动触发使用 Deployment 已固化的安全参数。"
+    },
+    {
+      "id": "ads_marketing_industry_articles_cache_sweep",
+      "name": "行业公众号文章缓存补扫",
+      "domain": "ADS",
+      "flowName": "sync-marketing-industry-articles-flow",
+      "deploymentName": "ads-21-marketing-industry-articles-cache-sweep",
+      "cron": "7 * * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 45,
+      "sourceTables": [
+        "ads.marketing_industry_articles",
+        "WeChat RSS cache"
+      ],
+      "targetTables": [
+        "ads.marketing_industry_articles",
+        "etl.marketing_industry_article_sync_state"
+      ],
+      "procedures": [
+        "sync_marketing_industry_articles_flow(sync_article_lists=false, cache_only_backfill=true)"
+      ],
+      "watermarkTable": "ads.marketing_industry_articles.last_content_fetched_at",
+      "owner": "内容中台",
+      "status": "warning",
+      "lastRunAt": "待运行",
+      "lastSuccessAt": "待运行",
+      "avgDurationSec": 240,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "note": "仅使用本地 RSS 缓存补扫缺失正文；不重新拉取文章列表或外部正文。"
+    },
+    {
+      "id": "ads_marketing_industry_articles_content_retry",
+      "name": "行业公众号文章正文失败重试",
+      "domain": "ADS",
+      "flowName": "sync-marketing-industry-articles-flow",
+      "deploymentName": "ads-21-marketing-industry-articles-content-retry",
+      "cron": "43 */6 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 45,
+      "sourceTables": [
+        "ads.marketing_industry_articles",
+        "WeChat RSS API"
+      ],
+      "targetTables": [
+        "ads.marketing_industry_articles",
+        "etl.marketing_industry_article_sync_state",
+        "etl.marketing_industry_article_upstream_status"
+      ],
+      "procedures": [
+        "sync_marketing_industry_articles_flow(sync_article_lists=false, backfill_missing_content=true)"
+      ],
+      "watermarkTable": "ads.marketing_industry_articles.last_content_fetched_at",
+      "owner": "内容中台",
+      "status": "warning",
+      "lastRunAt": "待运行",
+      "lastSuccessAt": "待运行",
+      "avgDurationSec": 240,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_marketing_industry_articles.sh",
+      "note": "重试尚未补全的文章正文；DataOps API 保留认证、活动运行锁和审计。"
+    },
+    {
+      "id": "ads_creator_live_dashboard_incremental",
+      "name": "直播达人看板增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-creator-live-dashboard-flow",
+      "deploymentName": "ads-13-creator-live-dashboard-inc",
+      "cron": "33 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.feishu_influencer_live",
+        "ods.douyin_trade_sale_live_raw"
+      ],
+      "targetTables": [
+        "ads.influencer_live_roster",
+        "ads.influencer_live_detail"
+      ],
+      "procedures": [
+        "ads.refresh_creator_live_dashboard_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.creator_live_dashboard_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-31 10:33",
+      "lastSuccessAt": "2026-03-31 10:33",
+      "avgDurationSec": 42,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_creator_live_dashboard.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_creator_live_dashboard.sh",
+      "note": "用于带货达人看板直播页：名册快照 + 直播日事实双底表增量刷新。"
+    },
+    {
+      "id": "ads_report_all_trade_week_platform_metrics_incremental",
+      "name": "周报平台扩展指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-all-trade-week-platform-metrics-flow",
+      "deploymentName": "ads-report-04-platform-week-metrics-inc",
+      "cron": "32,57 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "ods.taobao_trade_sale_raw",
+        "ods.taobao_one_alimama_marketingscenario"
+      ],
+      "targetTables": [
+        "ads.report_all_trade_week_platform_metrics"
+      ],
+      "procedures": [
+        "ads.refresh_report_all_trade_week_platform_metrics_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_all_trade_week_platform_metrics_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-02-28 14:35",
+      "lastSuccessAt": "2026-02-28 14:35",
+      "avgDurationSec": 74,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_all_trade_week_platform_metrics.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_all_trade_week_platform_metrics.sh",
+      "note": "补齐天猫平台核心指标（访客、支付转化率、UV价值、ROI）并与同期口径对齐。"
+    },
+    {
+      "id": "ads_report_douyin_trade_sale_metrics_week_incremental",
+      "name": "周报抖音经营指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-douyin-trade-sale-metrics-week-flow",
+      "deploymentName": "ads-report-05-douyin-week-metrics-inc",
+      "cron": "33,58 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "ods.douyin_trade_sale_raw"
+      ],
+      "targetTables": [
+        "ads.report_douyin_trade_sale_metrics_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_douyin_trade_sale_metrics_week_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_douyin_trade_sale_metrics_week_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-03 19:32",
+      "lastSuccessAt": "2026-03-03 19:32",
+      "avgDurationSec": 86,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_metrics_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_metrics_week.sh",
+      "note": "沉淀 ods.douyin_trade_sale_raw 周指标（含金额/流量/转化/退款）并与 report_all_trade_week_platform 的同期窗口对齐。"
+    },
+    {
+      "id": "ads_report_douyin_trade_sale_channel_metrics_week_incremental",
+      "name": "周报抖音渠道GMV指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-douyin-trade-sale-channel-metrics-week-flow",
+      "deploymentName": "ads-report-06-douyin-week-channel-gmv-inc",
+      "cron": "35 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ods.douyin_trade_sale_live_raw",
+        "ods.douyin_trade_sale_shortvideo_raw",
+        "ods.douyin_trade_sale_card_raw"
+      ],
+      "targetTables": [
+        "ads.report_douyin_trade_sale_channel_metrics_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_douyin_trade_sale_channel_metrics_week_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_douyin_trade_sale_channel_metrics_week_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-03 16:35",
+      "lastSuccessAt": "2026-03-03 16:35",
+      "avgDurationSec": 79,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_channel_metrics_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_channel_metrics_week.sh",
+      "note": "用于周报抖音平台页直播/短视频/商品卡三渠道 GMV 指标，周口径与 report_all_trade_week_platform 同步。"
+    },
+    {
+      "id": "ads_report_douyin_trade_sale_attribution_metrics_week_incremental",
+      "name": "周报抖音归因指标增量（直播/短视频/商品卡）",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-douyin-trade-sale-attribution-metrics-week-flow",
+      "deploymentName": "ads-report-07-douyin-week-attribution-inc",
+      "cron": "37 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "ods.douyin_trade_sale_live_raw",
+        "ods.douyin_trade_sale_shortvideo_raw",
+        "ods.douyin_trade_sale_card_raw",
+        "ods.douyin_trade_sale_card_detail_raw"
+      ],
+      "targetTables": [
+        "ads.report_douyin_trade_sale_live_metrics_week",
+        "ads.report_douyin_trade_sale_shortvideo_metrics_week",
+        "ads.report_douyin_trade_sale_card_metrics_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_douyin_trade_sale_live_metrics_week_incremental(14, FALSE)",
+        "ads.refresh_report_douyin_trade_sale_shortvideo_metrics_week_incremental(14, FALSE)",
+        "ads.refresh_report_douyin_trade_sale_card_metrics_week_incremental(14, FALSE)"
+      ],
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-05 18:37",
+      "lastSuccessAt": "2026-03-05 18:37",
+      "avgDurationSec": 102,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_attribution_metrics_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_douyin_trade_sale_attribution_metrics_week.sh",
+      "note": "用于周报抖音归因明细模块：直播场次定位、短视频内容定位、商品卡商品/来源定位。"
+    },
+    {
+      "id": "ads_report_taobao_trade_product_metrics_week_incremental",
+      "name": "周报天猫商品归因指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-taobao-trade-product-metrics-week-flow",
+      "deploymentName": "ads-report-08-taobao-week-product-attribution-inc",
+      "cron": "40 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "ods.taobao_trade_sale_goods_raw"
+      ],
+      "targetTables": [
+        "ads.report_taobao_trade_product_metrics_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_taobao_trade_product_metrics_week_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_taobao_trade_product_metrics_week_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-02-28 14:40",
+      "lastSuccessAt": "2026-02-28 14:40",
+      "avgDurationSec": 88,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_trade_product_metrics_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_trade_product_metrics_week.sh",
+      "note": "用于周报天猫页商品归因（商品列表 + 商品GMV增量瀑布）。"
+    },
+    {
+      "id": "ads_report_taobao_goods_traffic_channel_metrics_week_incremental",
+      "name": "周报天猫商品流量渠道归因指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-taobao-goods-traffic-channel-metrics-week-flow",
+      "deploymentName": "ads-report-09-taobao-week-traffic-channel-attribution-inc",
+      "cron": "45 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "dwd.taobao_goods_sale_traffic"
+      ],
+      "targetTables": [
+        "ads.report_taobao_goods_traffic_channel_metrics_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_taobao_goods_traffic_channel_metrics_week_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_taobao_goods_traffic_channel_metrics_week_refresh_state",
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-02-28 14:45",
+      "lastSuccessAt": "2026-02-28 14:45",
+      "avgDurationSec": 93,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_goods_traffic_channel_metrics_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_goods_traffic_channel_metrics_week.sh",
+      "note": "用于周报天猫页商品流量渠道定位（渠道明细 + 渠道GMV增量瀑布）。"
+    },
+    {
+      "id": "ads_report_taobao_one_goods_traffic_channel_metric_week_incremental",
+      "name": "周报淘宝万相台商品流量渠道漏斗指标增量",
+      "domain": "ADS",
+      "flowName": "incremental-refresh-ads-report-taobao-one-goods-traffic-channel-metric-week-flow",
+      "deploymentName": "ads-report-10-taobao-one-week-traffic-funnel-inc",
+      "cron": "48 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "fallbackWindowDays": 14,
+      "sourceTables": [
+        "ads.report_all_trade_week_platform",
+        "ods.taobao_one_alimama_goods_marketingscenario"
+      ],
+      "targetTables": [
+        "ads.report_taobao_one_goods_traffic_channel_metric_week"
+      ],
+      "procedures": [
+        "ads.refresh_report_taobao_one_goods_traffic_channel_metric_week_incremental(14, FALSE)"
+      ],
+      "watermarkTable": "etl.report_taobao_one_goods_traffic_channel_metric_week_refresh_state",
+      "owner": "营销数据组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-02 18:48",
+      "lastSuccessAt": "2026-03-02 18:48",
+      "avgDurationSec": 102,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_one_goods_traffic_channel_metric_week.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_incremental_report_taobao_one_goods_traffic_channel_metric_week.sh",
+      "note": "用于周报淘宝页“流量漏斗 + 量化归因”模块（关键词推广/搜索等付费渠道）。"
+    },
+    {
+      "id": "dashboard_ads_freshness_check",
+      "name": "Dashboard ADS 新鲜度检查",
+      "domain": "OPS",
+      "flowName": "dashboard-ads-freshness-check-flow",
+      "deploymentName": "dashboard-ads-freshness-check",
+      "cron": "45 10,18 * * *",
+      "timezone": "Asia/Shanghai",
+      "sourceTables": [
+        "ods.*_trade_sale_raw",
+        "ods.taobao_trade_sale_goods_raw",
+        "ods.taobao_traffic_shop_raw",
+        "ods.taobao_traffic_goods_raw",
+        "ods.douyin_trade_sale_live_raw",
+        "ods.douyin_livestream_goods",
+        "ods.douyin_trade_sale_shortvideo_raw",
+        "ods.douyin_trade_sale_image_raw",
+        "ods.douyin_trade_sale_card_raw",
+        "ods.douyin_trade_sale_card_detail_raw"
+      ],
+      "targetTables": [
+        "ads.all_trade_overview",
+        "ads.taobao_trade_sale_goods_daily",
+        "ads.taobao_traffic_shop_daily",
+        "ads.taobao_traffic_goods_daily",
+        "ads.douyin_live_detail",
+        "ads.douyin_live_goods_detail",
+        "ads.douyin_shortvideo_detail",
+        "ads.douyin_trade_sale_card",
+        "ads.douyin_trade_sale_card_detail"
+      ],
+      "procedures": [
+        "dashboard_ads_freshness_check_flow(target_date, notify_on_issue_only, fail_on_stale)"
+      ],
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "待部署",
+      "lastSuccessAt": "待部署",
+      "avgDurationSec": 8,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_dashboard_ads_freshness_check.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_dashboard_ads_freshness_check.sh",
+      "note": "只读对比昨日 ODS/ADS 行数，区分 ODS 未到、ADS 未刷和已新鲜，默认仅异常通知。"
+    },
+    {
+      "id": "dataops_runtime_events_cleanup",
+      "name": "DataOps 运行态事件定时清理",
+      "domain": "OPS",
+      "flowName": "cleanup-dataops-runtime-events-flow",
+      "deploymentName": "cleanup-dataops-runtime-events-daily",
+      "cron": "15 3 * * *",
+      "timezone": "Asia/Shanghai",
+      "sourceTables": [
+        "dataops.runtime_audit_events",
+        "dataops.runtime_notification_events",
+        "dataops.runtime_batch_execution_events"
+      ],
+      "targetTables": [
+        "dataops.runtime_audit_events",
+        "dataops.runtime_notification_events",
+        "dataops.runtime_batch_execution_events",
+        "dataops.runtime_cleanup_state"
+      ],
+      "procedures": [
+        "SELECT * FROM dataops.cleanup_runtime_events(retain_days, cleanup_batch_execution_events)"
+      ],
+      "owner": "平台运维组",
+      "status": "healthy",
+      "lastRunAt": "2026-02-28 03:15",
+      "lastSuccessAt": "2026-02-28 03:15",
+      "avgDurationSec": 9,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_cleanup_dataops_runtime_events.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_cleanup_dataops_runtime_events.sh",
+      "note": "每天按保留策略清理运行态事件（含批量历史，可按参数关闭），并记录最近清理结果供 DataOps 页面观测。"
+    },
+    {
+      "id": "dataops_notification_trace_slo_scan",
+      "name": "DataOps 通知链路 SLO 巡检",
+      "domain": "OPS",
+      "flowName": "dataops-notification-trace-slo-scan-flow",
+      "deploymentName": "dataops-notification-trace-slo-scan",
+      "cron": "*/15 * * * *",
+      "timezone": "Asia/Shanghai",
+      "sourceTables": [
+        "dataops.runtime_notification_events"
+      ],
+      "targetTables": [
+        "dataops.runtime_notification_events"
+      ],
+      "procedures": [
+        "POST /v1/dataops/runtime/notification-trace/scan"
+      ],
+      "owner": "平台运维组",
+      "status": "healthy",
+      "lastRunAt": "2026-03-02 18:45",
+      "lastSuccessAt": "2026-03-02 18:45",
+      "avgDurationSec": 6,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_dataops_notification_trace_slo_scan.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_dataops_notification_trace_slo_scan.sh",
+      "note": "周期扫描通知失败重试组，识别 SLO 风险并按策略发送飞书提醒。"
+    },
+    {
+      "id": "daily_business_brief",
+      "name": "每日生意简报",
+      "domain": "OPS",
+      "flowName": "daily-business-brief-flow",
+      "deploymentName": "daily-business-brief",
+      "cron": "event:ads-overview-ready",
+      "timezone": "Asia/Shanghai",
+      "sourceTables": [
+        "ads.all_trade_overview",
+        "ods.douyin_trade_sale_raw",
+        "ods.taobao_trade_sale_raw",
+        "ods.wx_trade_sale_raw",
+        "ods.xhs_trade_sale_raw",
+        "ods.jd_trade_sale_raw"
+      ],
+      "targetTables": [
+        "dataops.daily_business_brief_deliveries"
+      ],
+      "procedures": [
+        "daily_business_brief_flow(target_date, delivery_mode, production_confirmed)"
+      ],
+      "owner": "数据平台组",
+      "status": "healthy",
+      "lastRunAt": "2026-08-25 14:51",
+      "lastSuccessAt": "2026-08-25 14:51",
+      "avgDurationSec": 12,
+      "linuxDeployScript": "etl/groland_postgres/scripts/deploy_prefect_daily_business_brief.sh",
+      "linuxDeployCommand": "bash etl/groland_postgres/scripts/deploy_prefect_daily_business_brief.sh",
+      "batchTriggerAllowed": false,
+      "note": "ADS 五平台目标日总览就绪后自动请求正式简报；手工正式补发仍需单独选择 production 并显式确认。"
+    }
+  ],
+  "syncStreams": [
+    {
+      "id": "stream_trade_overview",
+      "streamName": "日经营总览链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.*_trade_sale_raw",
+      "target": "ads.all_trade_overview / ads.douyin_trade_sale_carrier_daily",
+      "checkpointTable": "etl.all_trade_overview_refresh_state",
+      "lagMinutes": 19,
+      "lastSyncAt": "2026-03-03 23:00",
+      "status": "healthy",
+      "note": "支撑 Dashboard 日/周/月、自定义区间真实经营数据，以及抖音生意载体成交金额卡片。"
+    },
+    {
+      "id": "stream_taobao_trade_sale_goods_daily",
+      "streamName": "天猫商品成交日粒度看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_trade_sale_goods_raw",
+      "target": "ads.taobao_trade_sale_goods_daily",
+      "checkpointTable": "etl.taobao_trade_sale_goods_daily_refresh_state",
+      "lagMinutes": 27,
+      "lastSyncAt": "2026-03-17 18:22",
+      "status": "healthy",
+      "note": "支撑经营看板天猫商品维度（商品成交、退款、支付人数与商品明细）日级事实底表。"
+    },
+    {
+      "id": "stream_taobao_traffic_shop_daily",
+      "streamName": "天猫店铺流量日粒度看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_traffic_shop_raw",
+      "target": "ads.taobao_traffic_shop_daily",
+      "checkpointTable": "etl.taobao_traffic_shop_daily_refresh_state",
+      "lagMinutes": 26,
+      "lastSyncAt": "2026-04-09 18:24",
+      "status": "healthy",
+      "note": "支撑经营看板天猫流量维度（来源树、转化指标、较上周期）日级事实底表。"
+    },
+    {
+      "id": "stream_taobao_traffic_goods_daily",
+      "streamName": "天猫商品流量日粒度看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_traffic_goods_raw / ods.taobao_trade_sale_goods_raw",
+      "target": "ads.taobao_traffic_goods_daily",
+      "checkpointTable": "etl.taobao_traffic_goods_daily_refresh_state",
+      "lagMinutes": 28,
+      "lastSyncAt": "2026-04-09 18:26",
+      "status": "healthy",
+      "note": "支撑经营看板天猫流量维度商品来源树（商品+来源层级、较上周期）日级事实底表。"
+    },
+    {
+      "id": "stream_douyin_live_detail",
+      "streamName": "抖音直播明细看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_live_raw / ads.douyin_self_anchor_map",
+      "target": "ads.douyin_live_detail",
+      "checkpointTable": "etl.douyin_live_detail_refresh_state",
+      "lagMinutes": 24,
+      "lastSyncAt": "2026-04-22 18:36",
+      "status": "healthy",
+      "note": "支撑 /dashboard 抖音直播维度（总览+自播+达播）的场次明细事实。"
+    },
+    {
+      "id": "stream_douyin_live_goods_detail",
+      "streamName": "抖音直播商品明细看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_livestream_goods / ads.douyin_live_detail / ads.douyin_self_anchor_map",
+      "target": "ads.douyin_live_goods_detail",
+      "checkpointTable": "etl.douyin_live_goods_detail_refresh_state",
+      "lagMinutes": 25,
+      "lastSyncAt": "2026-04-27 18:38",
+      "status": "healthy",
+      "note": "支撑经营看板抖音直播商品表现（商品汇总行与 SKU 子行）。"
+    },
+    {
+      "id": "stream_douyin_trade_sale_card_dashboard",
+      "streamName": "抖音商品卡看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_card_raw / ods.douyin_trade_sale_card_detail_raw",
+      "target": "ads.douyin_trade_sale_card / ads.douyin_trade_sale_card_detail",
+      "checkpointTable": "etl.douyin_trade_sale_card_dashboard_refresh_state",
+      "lagMinutes": 26,
+      "lastSyncAt": "待部署",
+      "status": "healthy",
+      "note": "支撑经营看板抖音商品卡维度（商品卡主表与流量来源层级明细）。"
+    },
+    {
+      "id": "stream_douyin_shortvideo_detail",
+      "streamName": "抖音短视频明细看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_shortvideo_raw / ods.douyin_trade_sale_image_raw / ods.douyin_qianchuan_shortvideo_raw / ads.marketing_content_platform_videos / ads.marketing_content_ad_materials / ads.marketing_content_assets",
+      "target": "ads.douyin_shortvideo_detail",
+      "checkpointTable": "etl.douyin_shortvideo_detail_refresh_state",
+      "lagMinutes": 25,
+      "lastSyncAt": "2026-04-24 18:37",
+      "status": "healthy",
+      "note": "支撑 /dashboard 抖音短视频维度与达人短视频页：成交侧合并短视频与图文短视频 ODS + 千川素材映射指标 + 素材库分类字段。"
+    },
+    {
+      "id": "stream_marketing_content_qianchuan_all_domain_material_performance",
+      "streamName": "内容素材千川全域素材表现链路",
+      "layers": [
+        "ODS",
+        "DWD",
+        "DWS"
+      ],
+      "source": "ods.douyin_qianchuan_shortvideo_raw / ods.douyin_qianchuan_live_video_raw / ods.douyin_trade_sale_live_raw / ads.marketing_content_platform_videos / ads.marketing_content_ad_materials",
+      "target": "dwd.marketing_content_qianchuan_material_performance_di / dws.marketing_content_qianchuan_material_summary / dws.marketing_content_qianchuan_live_room_acceptance_di",
+      "checkpointTable": "dwd.marketing_content_qianchuan_material_performance_di.updated_at",
+      "lagMinutes": 35,
+      "lastSyncAt": "待部署",
+      "status": "warning",
+      "note": "支撑内容中台投放快照和 performance/daily：按千川 material_id 回填全域素材表现；直播成交原始表仅作为账号日期承接环境，不做单素材精确归因。"
+    },
+    {
+      "id": "stream_marketing_content_asset_video_understanding",
+      "streamName": "内容素材视频理解链路",
+      "layers": [
+        "ADS",
+        "AI"
+      ],
+      "source": "ads.marketing_content_assets / ads.marketing_content_asset_objects / ads.marketing_content_asset_transcripts / ads.marketing_content_asset_processing_jobs",
+      "target": "ads.marketing_content_asset_video_understanding_jobs / ads.marketing_content_asset_video_understanding_results",
+      "checkpointTable": "ads.marketing_content_asset_video_understanding_jobs.updated_at",
+      "lagMinutes": 10,
+      "lastSyncAt": "待部署",
+      "status": "warning",
+      "note": "沉淀 media_hash、model、prompt_version、analysis_schema_version、input_snapshot_hash 与 cache_key，避免重复视频理解模型调用。"
+    },
+    {
+      "id": "stream_marketing_content_asset_fusion_diagnostics",
+      "streamName": "内容素材数据内容融合诊断链路",
+      "layers": [
+        "DWS",
+        "AI",
+        "ADS"
+      ],
+      "source": "dws.marketing_content_qianchuan_material_summary / ads.marketing_content_asset_video_understanding_results / ads.marketing_content_asset_transcripts",
+      "target": "ads.marketing_content_asset_objects(object_role=analysis)",
+      "checkpointTable": "ads.marketing_content_asset_processing_jobs.updated_at",
+      "lagMinutes": 12,
+      "lastSyncAt": "待部署",
+      "status": "warning",
+      "note": "生成 v2.1 融合诊断、证据账本和 next_actions；缺 performance 或 video understanding 时必须显式降级。"
+    },
+    {
+      "id": "stream_creator_live_dashboard",
+      "streamName": "直播达人看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.feishu_influencer_live / ods.douyin_trade_sale_live_raw",
+      "target": "ads.influencer_live_roster / ads.influencer_live_detail",
+      "checkpointTable": "etl.creator_live_dashboard_refresh_state",
+      "lagMinutes": 21,
+      "lastSyncAt": "2026-03-31 10:33",
+      "status": "healthy",
+      "note": "支撑 /dashboard/creator/live 的名册分组、趋势与导出明细。"
+    },
+    {
+      "id": "stream_creator_shortvideo_dashboard",
+      "streamName": "短视频达人看板链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ads.douyin_shortvideo_detail",
+      "target": "ads.douyin_shortvideo_detail",
+      "checkpointTable": "etl.douyin_shortvideo_detail_refresh_state",
+      "lagMinutes": 22,
+      "lastSyncAt": "2026-04-01 10:51",
+      "status": "healthy",
+      "note": "当前 /dashboard/creator/short-video 复用统一短视频 ADS 表，不再依赖飞书短视频 roster。"
+    },
+    {
+      "id": "stream_dwd_taobao_goods_sale_traffic",
+      "streamName": "淘宝商品流量成交 DWD 链路",
+      "layers": [
+        "ODS",
+        "DWD"
+      ],
+      "source": "ods.taobao_trade_sale_goods_raw",
+      "target": "dwd.taobao_goods_sale_traffic",
+      "checkpointTable": "dwd.taobao_goods_sale_traffic.updated_at",
+      "lagMinutes": 65,
+      "lastSyncAt": "2026-03-12 02:40",
+      "status": "healthy"
+    },
+    {
+      "id": "stream_report_all_trade_week_platform_metrics",
+      "streamName": "周报平台扩展指标链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_trade_sale_raw / ods.taobao_one_alimama_marketingscenario",
+      "target": "ads.report_all_trade_week_platform_metrics",
+      "checkpointTable": "etl.report_all_trade_week_platform_metrics_refresh_state",
+      "lagMinutes": 28,
+      "lastSyncAt": "2026-02-28 14:35",
+      "status": "healthy",
+      "note": "用于天猫平台页核心指标（访客、支付转化率、UV价值、ROI）。"
+    },
+    {
+      "id": "stream_report_douyin_trade_sale_metrics_week",
+      "streamName": "周报抖音经营指标链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_raw",
+      "target": "ads.report_douyin_trade_sale_metrics_week",
+      "checkpointTable": "etl.report_douyin_trade_sale_metrics_week_refresh_state",
+      "lagMinutes": 27,
+      "lastSyncAt": "2026-03-03 19:32",
+      "status": "healthy",
+      "note": "聚合抖音店铺成交概览全指标（含支付/流量/转化/退款）周同期口径。"
+    },
+    {
+      "id": "stream_report_douyin_trade_sale_channel_metrics_week",
+      "streamName": "周报抖音渠道GMV链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_live_raw / ods.douyin_trade_sale_shortvideo_raw / ods.douyin_trade_sale_card_raw",
+      "target": "ads.report_douyin_trade_sale_channel_metrics_week",
+      "checkpointTable": "etl.report_douyin_trade_sale_channel_metrics_week_refresh_state",
+      "lagMinutes": 29,
+      "lastSyncAt": "2026-03-03 16:35",
+      "status": "healthy",
+      "note": "仅聚合直播GMV、短视频GMV、商品卡GMV，不使用总盘口径。"
+    },
+    {
+      "id": "stream_report_douyin_trade_sale_attribution_metrics_week",
+      "streamName": "周报抖音归因明细链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.douyin_trade_sale_live_raw / ods.douyin_trade_sale_shortvideo_raw / ods.douyin_trade_sale_card_raw / ods.douyin_trade_sale_card_detail_raw",
+      "target": "ads.report_douyin_trade_sale_live_metrics_week / ads.report_douyin_trade_sale_shortvideo_metrics_week / ads.report_douyin_trade_sale_card_metrics_week",
+      "checkpointTable": "etl.report_douyin_trade_sale_live_metrics_week_refresh_state / etl.report_douyin_trade_sale_shortvideo_metrics_week_refresh_state / etl.report_douyin_trade_sale_card_metrics_week_refresh_state",
+      "lagMinutes": 30,
+      "lastSyncAt": "2026-03-05 18:37",
+      "status": "healthy",
+      "note": "用于周报抖音归因明细模块，定位直播场次、短视频内容与商品卡商品/来源。"
+    },
+    {
+      "id": "stream_report_taobao_trade_product_metrics_week",
+      "streamName": "周报天猫商品归因链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_trade_sale_goods_raw",
+      "target": "ads.report_taobao_trade_product_metrics_week",
+      "checkpointTable": "etl.report_taobao_trade_product_metrics_week_refresh_state",
+      "lagMinutes": 31,
+      "lastSyncAt": "2026-02-28 14:40",
+      "status": "healthy",
+      "note": "用于周报天猫页商品归因分析与单品增量瀑布。"
+    },
+    {
+      "id": "stream_report_taobao_goods_traffic_channel_metrics_week",
+      "streamName": "周报天猫商品流量渠道归因链路",
+      "layers": [
+        "DWD",
+        "ADS"
+      ],
+      "source": "dwd.taobao_goods_sale_traffic",
+      "target": "ads.report_taobao_goods_traffic_channel_metrics_week",
+      "checkpointTable": "etl.report_taobao_goods_traffic_channel_metrics_week_refresh_state",
+      "lagMinutes": 34,
+      "lastSyncAt": "2026-02-28 14:45",
+      "status": "healthy",
+      "note": "用于周报天猫页商品流量渠道定位与渠道GMV瀑布。"
+    },
+    {
+      "id": "stream_report_taobao_one_goods_traffic_channel_metric_week",
+      "streamName": "周报淘宝万相台流量漏斗链路",
+      "layers": [
+        "ODS",
+        "ADS"
+      ],
+      "source": "ods.taobao_one_alimama_goods_marketingscenario",
+      "target": "ads.report_taobao_one_goods_traffic_channel_metric_week",
+      "checkpointTable": "etl.report_taobao_one_goods_traffic_channel_metric_week_refresh_state",
+      "lagMinutes": 37,
+      "lastSyncAt": "2026-03-02 18:48",
+      "status": "healthy",
+      "note": "用于周报淘宝页流量漏斗、推广指标详情与五因子量化归因。"
+    }
+  ],
+  "notificationChannels": [
+    {
+      "id": "feishu_default_bot",
+      "channelName": "Groland Aios运维机器人",
+      "protocol": "webhook",
+      "provider": "feishu",
+      "endpointMasked": "https://open.feishu.cn/open-apis/bot/v2/hook/f7da****62f3",
+      "enabled": true,
+      "status": "healthy",
+      "retryPolicy": "指数退避，最多 4 次",
+      "lastDeliveredAt": "2026-02-28 14:37",
+      "failureCount24h": 0
+    },
+    {
+      "id": "feishu_dataops_backup",
+      "channelName": "Groland运营部机器人",
+      "protocol": "webhook",
+      "provider": "feishu",
+      "endpointMasked": "https://open.feishu.cn/open-apis/bot/v2/hook/11b6****b898",
+      "enabled": false,
+      "status": "paused",
+      "retryPolicy": "停用中",
+      "failureCount24h": 0
+    }
+  ],
+  "notificationEvents": [
+    {
+      "id": "evt_1001",
+      "channelId": "feishu_default_bot",
+      "level": "info",
+      "eventType": "pipeline_succeeded",
+      "title": "ADS 全渠道日经营总览增量刷新通知",
+      "targetTable": "ads.all_trade_overview",
+      "flowName": "incremental-refresh-ads-all-trade-overview-flow",
+      "status": "sent",
+      "sentAt": "2026-03-03 23:00",
+      "detail": "核心交易底座刷新成功，周/月 report 视图同步可见。"
+    },
+    {
+      "id": "evt_1002",
+      "channelId": "feishu_default_bot",
+      "level": "warning",
+      "eventType": "report_consistency_check",
+      "title": "周报视图一致性提醒",
+      "targetTable": "ads.report_all_trade_week / ads.report_all_trade_month",
+      "flowName": "incremental-refresh-ads-all-trade-overview-flow",
+      "status": "sent",
+      "sentAt": "2026-03-03 23:01",
+      "detail": "report 周/月视图统一读取 ads.all_trade_overview，发现差异时优先检查 overview 水位。"
+    },
+    {
+      "id": "evt_1005",
+      "channelId": "feishu_default_bot",
+      "level": "info",
+      "eventType": "pipeline_succeeded",
+      "title": "周报平台扩展指标增量刷新通知",
+      "targetTable": "ads.report_all_trade_week_platform_metrics",
+      "flowName": "incremental-refresh-ads-report-all-trade-week-platform-metrics-flow",
+      "status": "sent",
+      "sentAt": "2026-02-28 14:35",
+      "detail": "窗口刷新成功，新增 1，更新 1，删除 0。"
+    }
+  ],
+  "auditEvents": [
+    {
+      "id": "audit_101",
+      "action": "更新部署 Cron",
+      "operator": "gao.qian",
+      "scope": "ads-01-overview-daily-inc",
+      "result": "成功",
+      "eventAt": "2026-02-28 09:45",
+      "detail": "交易 report 周/月视图收敛到 overview 底座，调度只保留 overview 物理刷新。"
+    },
+    {
+      "id": "audit_102",
+      "action": "手动触发增量刷新",
+      "operator": "ops.bot",
+      "scope": "incremental-refresh-ads-report-all-trade-week-platform-metrics-flow",
+      "result": "成功",
+      "eventAt": "2026-02-28 08:12",
+      "detail": "手动触发回补，执行耗时 71s。"
+    },
+    {
+      "id": "audit_103",
+      "action": "Webhook 通道健康检查",
+      "operator": "platform.alert",
+      "scope": "feishu_default_bot",
+      "result": "失败",
+      "eventAt": "2026-02-28 11:39",
+      "detail": "目标端超时，自动重试后恢复。"
+    }
+  ],
+  "triggerParameterSpecs": {
+    "ads_all_trade_overview_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 7,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行日汇总刷新。"
+      }
+    ],
+    "ads_taobao_trade_sale_goods_daily_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行天猫商品成交日粒度增量刷新。"
+      }
+    ],
+    "ads_taobao_traffic_shop_daily_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行天猫店铺流量日粒度增量刷新。"
+      }
+    ],
+    "ads_taobao_traffic_goods_daily_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行天猫商品流量日粒度增量刷新。"
+      }
+    ],
+    "ads_douyin_live_detail_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行抖音直播明细看板增量刷新。"
+      }
+    ],
+    "ads_douyin_live_goods_detail_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行抖音直播商品明细看板增量刷新。"
+      }
+    ],
+    "ads_douyin_shortvideo_detail_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 90,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行抖音短视频明细看板增量刷新。"
+      }
+    ],
+    "ads_creator_live_dashboard_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14,
+        "description": "对应 Prefect 参数 fallback_window_days。"
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只初始化水位，不执行直播达人看板增量刷新。"
+      }
+    ],
+    "ads_report_all_trade_week_platform_metrics_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_douyin_trade_sale_metrics_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_douyin_trade_sale_channel_metrics_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_douyin_trade_sale_attribution_metrics_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_taobao_trade_product_metrics_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_taobao_goods_traffic_channel_metrics_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "ads_report_taobao_one_goods_traffic_channel_metric_week_incremental": [
+      {
+        "key": "fallback_window_days",
+        "label": "增量回看天数",
+        "type": "number",
+        "min": 1,
+        "max": 60,
+        "defaultValue": 14
+      },
+      {
+        "key": "init_watermark_only",
+        "label": "仅初始化水位",
+        "type": "boolean",
+        "defaultValue": false
+      }
+    ],
+    "dataops_runtime_events_cleanup": [
+      {
+        "key": "retain_days",
+        "label": "保留天数",
+        "type": "number",
+        "min": 1,
+        "max": 3650,
+        "defaultValue": 90,
+        "description": "清理该天数之前的运行态事件（审计、通知、批量历史）。"
+      },
+      {
+        "key": "cleanup_batch_execution_events",
+        "label": "清理批量历史",
+        "type": "boolean",
+        "defaultValue": true,
+        "description": "true 时会同步清理 runtime_batch_execution_events。"
+      },
+      {
+        "key": "notify_on_deleted_only",
+        "label": "仅有删除时通知",
+        "type": "boolean",
+        "defaultValue": true,
+        "description": "true 时若本次没有删除数据，则只记录日志不发送飞书通知。"
+      }
+    ],
+    "dashboard_ads_freshness_check": [
+      {
+        "key": "target_date",
+        "label": "目标日期",
+        "type": "string",
+        "defaultValue": "yesterday",
+        "placeholder": "yesterday 或 2026-04-30",
+        "description": "检查哪个业务日期；默认 yesterday。"
+      },
+      {
+        "key": "notify_on_issue_only",
+        "label": "仅异常通知",
+        "type": "boolean",
+        "defaultValue": true,
+        "description": "true 时仅在 ODS 未到或 ADS 未刷时发送通知。"
+      },
+      {
+        "key": "fail_on_stale",
+        "label": "ADS 未刷则失败",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时若 ODS 已有目标日期但 ADS 没有，会将 flow 标记为失败。"
+      }
+    ],
+    "dataops_notification_trace_slo_scan": [
+      {
+        "key": "dry_run",
+        "label": "仅演练",
+        "type": "boolean",
+        "defaultValue": false,
+        "description": "true 时只扫描并返回结果，不触发真实通知。"
+      },
+      {
+        "key": "lookback_hours",
+        "label": "回看小时",
+        "type": "number",
+        "min": 1,
+        "max": 720,
+        "defaultValue": 24,
+        "description": "扫描最近多少小时内的通知失败重试组。"
+      },
+      {
+        "key": "max_groups",
+        "label": "最大分组数",
+        "type": "number",
+        "min": 1,
+        "max": 200,
+        "defaultValue": 30,
+        "description": "单次扫描最多处理的重试组数量。"
+      },
+      {
+        "key": "scan_concurrency",
+        "label": "扫描并发",
+        "type": "number",
+        "min": 1,
+        "max": 12,
+        "defaultValue": 4,
+        "description": "通知链路巡检并发度。"
+      },
+      {
+        "key": "notify_on_issue_only",
+        "label": "仅异常通知",
+        "type": "boolean",
+        "defaultValue": true,
+        "description": "true 时仅在发现风险分组时发送通知。"
+      }
+    ],
+    "daily_business_brief": [
+      {
+        "key": "target_date",
+        "label": "简报日期",
+        "type": "string",
+        "placeholder": "留空为上海时区昨日，或输入 2026-08-24",
+        "description": "留空使用 Asia/Shanghai 昨日；正式补发请明确填写 YYYY-MM-DD。"
+      },
+      {
+        "key": "delivery_mode",
+        "label": "投递模式",
+        "type": "string",
+        "required": true,
+        "defaultValue": "preview",
+        "options": [
+          {
+            "label": "仅预览（不发送）",
+            "value": "preview"
+          },
+          {
+            "label": "测试群发送",
+            "value": "test"
+          },
+          {
+            "label": "正式运营群发送",
+            "value": "production"
+          }
+        ],
+        "description": "preview 不发送；test 只发送测试群；production 会触发正式群投递门禁。"
+      },
+      {
+        "key": "production_confirmed",
+        "label": "确认正式投递",
+        "type": "boolean",
+        "required": true,
+        "defaultValue": false,
+        "description": "仅 production 模式必须开启；后端仍会校验日期唯一账本和数据完整性。"
+      }
+    ]
+  },
+  "feishuSyncServiceDefinitions": [
+    {
+      "id": "feishu_sync_ods_douyin_trade_sale_raw",
+      "serviceName": "ods.douyin_trade_sale_raw",
+      "jobName": "飞书同步-抖音全店成交明细",
+      "sourceTable": "ods.douyin_trade_sale_raw",
+      "cliFlag": "--douyin-trade-sale"
+    },
+    {
+      "id": "feishu_sync_ods_douyin_trade_sale_live_raw",
+      "serviceName": "ods.douyin_trade_sale_live_raw",
+      "jobName": "飞书同步-抖音全店成交直播明细",
+      "sourceTable": "ods.douyin_trade_sale_live_raw",
+      "cliFlag": "--douyin-trade-sale-live"
+    },
+    {
+      "id": "feishu_sync_ods_douyin_trade_sale_card_raw",
+      "serviceName": "ods.douyin_trade_sale_card_raw",
+      "jobName": "飞书同步-抖音商品卡成交明细",
+      "sourceTable": "ods.douyin_trade_sale_card_raw",
+      "cliFlag": "--douyin-trade-sale-card"
+    },
+    {
+      "id": "feishu_sync_ods_taobao_trade_sale_raw",
+      "serviceName": "ods.taobao_trade_sale_raw",
+      "jobName": "飞书同步-天猫全店交易数据",
+      "sourceTable": "ods.taobao_trade_sale_raw",
+      "cliFlag": "--taobao-trade-sale"
+    },
+    {
+      "id": "feishu_sync_ods_xhs_trade_sale_raw",
+      "serviceName": "ods.xhs_trade_sale_raw",
+      "jobName": "飞书同步-小红书店铺交易数据",
+      "sourceTable": "ods.xhs_trade_sale_raw",
+      "cliFlag": "--xhs-trade-sale"
+    },
+    {
+      "id": "feishu_sync_ods_taobao_one_alimama_marketingscenario",
+      "serviceName": "ods.taobao_one_alimama_marketingscenario",
+      "jobName": "飞书同步-淘宝阿里妈妈场景营销",
+      "sourceTable": "ods.taobao_one_alimama_marketingscenario",
+      "cliFlag": "--taobao-alimama-scenario"
+    },
+    {
+      "id": "feishu_sync_ods_jd_trade_sale_raw",
+      "serviceName": "ods.jd_trade_sale_raw",
+      "jobName": "飞书同步-京东店铺成交数据",
+      "sourceTable": "ods.jd_trade_sale_raw",
+      "cliFlag": "--jd-trade-sale"
+    },
+    {
+      "id": "feishu_sync_ods_wx_trade_sale_raw",
+      "serviceName": "ods.wx_trade_sale_raw",
+      "jobName": "飞书同步-微信小程序店铺成交数据",
+      "sourceTable": "ods.wx_trade_sale_raw",
+      "cliFlag": "--wx-trade-sale"
+    }
+  ],
+  "feishuSyncTargetLabel": "飞书多维表",
+  "feishuSyncHealthyLagMinutes": 1440,
+  "feishuSyncWarningLagMinutes": 2880
+}
