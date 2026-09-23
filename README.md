@@ -43,6 +43,29 @@ Do not place credentials in tracked files. Production deployment, private
 business datasets, and environment-specific infrastructure are outside this
 public repository.
 
+## Feedback, contributions, and security / 反馈、贡献与安全
+
+Reproducible bug reports and documentation feedback from individual users are
+welcome through [GitHub Issues](https://github.com/bigKING67/aios-public/issues).
+This repository is a generated, one-way public snapshot, so direct changes and
+pull requests are not automatically imported into the private source. Read
+[`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing a change.
+
+Report suspected vulnerabilities privately according to
+[`SECURITY.md`](SECURITY.md). Do not place vulnerability details, credentials,
+private data, or production evidence in a public issue or pull request.
+Participation in Issues or pull requests does not grant any additional right
+to use the code beyond the root `LICENSE`.
+
+欢迎个人用户通过 [GitHub Issues](https://github.com/bigKING67/aios-public/issues)
+提交可复现的缺陷和文档反馈。本仓库是由私有源仓库单向生成的公开快照，直接修改或
+Pull Request 不会自动回流私有源仓库；提出变更前请先阅读
+[`CONTRIBUTING.md`](CONTRIBUTING.md)。
+
+疑似安全漏洞请按 [`SECURITY.md`](SECURITY.md) 私密报告。不要在公开 Issue 或
+Pull Request 中披露漏洞细节、凭据、私有数据或生产证据。参与 Issue 或 Pull
+Request 不会获得根目录 `LICENSE` 以外的任何代码使用权。
+
 ## Usage and license status / 使用与授权
 
 This repository is **source-available, not open source**.

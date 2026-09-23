@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "03d1c2b2a408e4d038674046f60f06eb35c3c9e3",
-  "policySha256": "a6da2148619d03c4105cc26ddc2e3e51bea15b609cbe2fcb2131947bc09deef2",
-  "fileCount": 3813,
-  "contentSha256": "bac8124c54d917c65c03936f4799794b8231cb9ef31a7e75305f8bc9ddd2c3f2",
+  "sourceCommit": "90468c4ae60a37be1df0a4a645f391dc419c6799",
+  "policySha256": "91c63b89fabd8027ea5ccf052e39657f0536bc277bc3cc7695e7cb45a46e5c15",
+  "fileCount": 3815,
+  "contentSha256": "d8426669128e7bdb2194ce835aa157da977c0b830579f5007c6d85b1d3b73806",
   "files": [
     {
       "path": ".dockerignore",
@@ -14419,6 +14419,12 @@
       "sha256": "a04592a7c8f3566aa274bae3f559da382d6b0bc4162d36f8f2cc68eef94930ca"
     },
     {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "size": 3784,
+      "sha256": "3d193586414df549ac0e1096c859734a833d1538868bff4f853a0e202266f26d"
+    },
+    {
       "path": "DESIGN_TOKENS.json",
       "mode": "100644",
       "size": 14387,
@@ -17475,8 +17481,8 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "size": 3825,
-      "sha256": "dd4f25e8124b9686b0e4664c2b9c7b7e58eb3faf50c079d6a85b364fe67f17b1"
+      "size": 5195,
+      "sha256": "e43030fdb2137cf9b0f56de06bee06a6e97e2588397faeb14c23a672eb715f5b"
     },
     {
       "path": "rust-toolchain.toml",
@@ -22721,6 +22727,12 @@
       "mode": "100755",
       "size": 6920,
       "sha256": "cc4ce3c4aef069c8dbccda15bcd6f2e535ddcac68c84a6a350b52b92c7aac692"
+    },
+    {
+      "path": "SECURITY.md",
+      "mode": "100644",
+      "size": 3674,
+      "sha256": "29e802900601117b3dce30b1156bbe90ee8111e9392ff03031cf6bd0b8f58ead"
     },
     {
       "path": "sql/001_auth_schema.sql",
