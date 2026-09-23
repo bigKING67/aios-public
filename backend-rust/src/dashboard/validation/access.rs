@@ -214,11 +214,11 @@ mod tests {
     }
 
     #[test]
-    fn default_sixseven_identity_gets_admin_level_dashboard_access() {
+    fn admin_role_gets_admin_level_dashboard_access() {
         let super_admin = CurrentUser {
-            user_id: "user-sixseven".to_string(),
-            username: Some("sixseven".to_string()),
-            roles: Vec::new(),
+            user_id: "user-operator".to_string(),
+            username: Some("operator".to_string()),
+            roles: vec!["admin".to_string()],
             permissions: Vec::new(),
         };
 

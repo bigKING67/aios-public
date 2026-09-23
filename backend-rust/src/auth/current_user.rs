@@ -21,7 +21,7 @@ pub struct CurrentUser {
     pub permissions: Vec<String>,
 }
 
-const DEFAULT_SUPER_ADMIN_IDENTIFIERS: [&str; 1] = ["sixseven"];
+const DEFAULT_SUPER_ADMIN_IDENTIFIERS: [&str; 0] = [];
 
 fn normalize_role_code(raw: &str) -> String {
     raw.trim()
@@ -216,12 +216,12 @@ mod tests {
     }
 
     #[test]
-    fn default_sixseven_identity_is_super_admin_even_without_role() {
-        let current_user = user(Some("sixseven"), &[], &[]);
+    fn no_default_identity_is_super_admin_without_role() {
+        let current_user = user(Some("operator"), &[], &[]);
 
-        assert!(current_user.is_super_admin());
-        assert!(current_user.is_admin());
-        assert!(ensure_any_permission(&current_user, &["role:list:all"]).is_ok());
+        assert!(!current_user.is_super_admin());
+        assert!(!current_user.is_admin());
+        assert!(ensure_any_permission(&current_user, &["role:list:all"]).is_err());
     }
 
     #[test]

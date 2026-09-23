@@ -166,7 +166,7 @@ pub(super) async fn ensure_auth_timestamp_schema(pool: &PgPool) -> anyhow::Resul
             SELECT user_item.id, role.id
             FROM public.auth_users user_item
             JOIN public.auth_roles role ON role.name = 'content_ops'
-            WHERE LOWER(user_item.username) IN ('haha', 'admin', 'sixseven')
+            WHERE LOWER(user_item.username) IN ('__public_identity_bootstrap_disabled__')
               AND NOT EXISTS (
                 SELECT 1
                 FROM public.auth_user_roles existing_mapping
@@ -178,7 +178,7 @@ pub(super) async fn ensure_auth_timestamp_schema(pool: &PgPool) -> anyhow::Resul
             SELECT user_item.id, role.id
             FROM public.auth_users user_item
             JOIN public.auth_roles role ON role.name = 'content_ops_manager'
-            WHERE LOWER(user_item.username) IN ('haha', 'admin', 'sixseven')
+            WHERE LOWER(user_item.username) IN ('__public_identity_bootstrap_disabled__')
               AND NOT EXISTS (
                 SELECT 1
                 FROM public.auth_user_roles existing_mapping

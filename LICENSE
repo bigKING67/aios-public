@@ -1,0 +1,133 @@
+AIOS PERSONAL LEARNING LICENSE 1.0
+
+Copyright (c) 2026 AIOS copyright holders
+All rights reserved.
+
+This is a source-available license. It is not an open-source license.
+
+1. Definitions
+
+"Licensor" means each copyright holder that makes the Software available under
+this License.
+
+"Software" means the source code, documentation, and other materials in the
+repository that contains this License, excluding Third-Party Materials.
+
+"Individual" means a natural person acting solely on that person's own behalf
+and not for, at the direction of, or for the benefit of an Organization.
+
+"Organization" means any company, enterprise, corporation, partnership, legal
+entity, nonprofit organization, educational institution, government body, or
+other organized group, whether or not operated for profit.
+
+"Personal Learning Purpose" means private, non-commercial study, research, or
+experimentation by an Individual. It excludes use performed in the course of
+employment or engagement, use intended to benefit an Organization, and use
+intended to obtain any direct or indirect commercial advantage.
+
+"Hosted Fork" means a fork of the original public repository created and kept
+on the same source-code hosting service through that service's standard fork
+functionality.
+
+"Third-Party Materials" means any material identified as being licensed by a
+third party or governed by separate license terms.
+
+2. Limited permission for individuals
+
+Subject to every term of this License, the Licensor grants an Individual a
+limited, worldwide, royalty-free, non-exclusive, non-transferable, and
+non-sublicensable copyright license to:
+
+  a. reproduce the Software for the Individual's Personal Learning Purpose;
+  b. run the Software locally for that Personal Learning Purpose;
+  c. study and privately modify the Software for that Personal Learning
+     Purpose; and
+  d. create and maintain a Hosted Fork solely for that Personal Learning
+     Purpose, subject to Section 5.
+
+No other permission is granted.
+
+3. No organizational or commercial use
+
+This License grants no permission to an Organization or to any person acting
+for, at the direction of, or for the benefit of an Organization. Without a
+separate prior written agreement from the Licensor, the Software must not be
+used for or in connection with:
+
+  a. internal business or organizational operations;
+  b. production deployment or operation;
+  c. commercial evaluation, benchmarking, or proof of concept;
+  d. any product, hosted application, SaaS, API, or other service;
+  e. consulting, professional services, or paid training;
+  f. sale, resale, licensing, or other commercialization;
+  g. development or distribution of a commercial derivative work; or
+  h. any direct or indirect commercial or organizational advantage.
+
+An Individual's employment or affiliation alone does not disqualify that
+Individual. However, any use within the scope of that employment or
+affiliation, using the Software on behalf of the Organization, or intended to
+benefit the Organization is prohibited.
+
+4. No distribution or service provision
+
+Except for a Hosted Fork permitted by Section 2(d), this License does not grant
+permission to distribute, publish, mirror, sublicense, sell, rent, transfer, or
+otherwise make the Software or a modified version available to another person,
+or to provide access to its functionality as a hosted or network service.
+
+5. Conditions
+
+Every permitted copy and Hosted Fork must retain this License, all copyright
+notices, and all attribution notices. Modified files must be clearly identified
+as modified. A Hosted Fork must not publish releases, packages, container
+images, binaries, or hosted services, and must not suggest endorsement by the
+Licensor.
+
+6. Ownership; no trademark or patent license
+
+The Software is licensed, not sold. The Licensor retains all rights not
+expressly granted by this License. This License grants no right to use any
+trademark, trade name, logo, or other brand feature, and grants no patent
+license.
+
+7. Third-Party Materials
+
+Third-Party Materials remain governed by their separate license terms. This
+License does not reduce, replace, or expand rights granted under those terms.
+
+8. Termination
+
+The permissions granted by this License terminate automatically upon any
+breach. After termination, the recipient must stop all use permitted by this
+License and remove all copies and Hosted Forks under the recipient's control.
+The Licensor may reinstate permission only in writing. Sections 3 through 11
+survive termination to the extent applicable.
+
+9. Disclaimer of warranty
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS PROVIDED "AS IS" AND
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR
+STATUTORY, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+10. Limitation of liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR WILL NOT BE LIABLE FOR ANY
+DIRECT, INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE
+DAMAGES, OR FOR ANY LOSS OF DATA, PROFITS, REVENUE, BUSINESS, OR GOODWILL,
+ARISING FROM OR RELATED TO THE SOFTWARE OR THIS LICENSE, UNDER ANY THEORY OF
+LIABILITY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+11. General terms
+
+If any provision of this License is held unenforceable, it will be limited or
+removed only to the minimum extent necessary, and the remaining provisions
+will continue in effect. A failure to enforce a provision is not a waiver. This
+License does not create an employment, agency, partnership, or joint-venture
+relationship.
+
+12. Separate commercial permission
+
+The Licensor may offer separate written terms, including commercial or
+organizational permission. No such permission exists unless it is expressly
+granted in a written agreement by the Licensor.

@@ -1,7 +1,7 @@
 import { frontendEnv } from './frontend-env';
 
 const ADMIN_ROLE_CANDIDATES = ['admin', 'super_admin', 'superadmin'];
-const DEFAULT_SUPER_ADMIN_IDENTIFIERS = ['sixseven'];
+const DEFAULT_SUPER_ADMIN_IDENTIFIERS: string[] = [];
 
 function normalizeIdentity(value?: string | null): string {
   return (value || '').trim().toLowerCase();

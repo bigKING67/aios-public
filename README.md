@@ -48,33 +48,43 @@ public repository.
 This repository is **source-available, not open source**.
 
 Unless a separate written agreement says otherwise, permission is limited to
-natural persons acting only on their own behalf to view, clone, and run the
-code locally solely for personal, non-commercial learning, research, and
-experimentation.
+natural persons acting only on their own behalf to view, clone, run locally,
+privately modify, and maintain a GitHub fork of the code solely for personal,
+non-commercial learning, research, and experimentation.
 
 No permission is granted to any company, enterprise, legal entity,
 organization, or person acting for or on behalf of one. Without prior written
 authorization, the code may not be used for internal business operations,
 production deployment, commercial evaluation or proof of concept, products,
-SaaS or other services, consulting, training, sale, resale, redistribution, or
-commercial derivative works, nor for any direct or indirect commercial
-advantage.
+SaaS or other services, consulting, training, sale, resale, redistribution
+outside the limited hosted-fork permission, or commercial derivative works,
+nor for any direct or indirect commercial advantage.
 
-Public visibility and GitHub's viewing or forking features do not grant rights
-beyond this notice and the GitHub Terms of Service. All rights not expressly
-granted are reserved. A root `LICENSE` file with the controlling terms will be
-added before this repository is made public.
+The root [`LICENSE`](LICENSE) contains the controlling terms. Public visibility
+and GitHub's viewing or forking features do not grant rights beyond that
+license and the GitHub Terms of Service. All rights not expressly granted are
+reserved.
+
+Third-party and separately licensed material is governed by its own terms, as
+listed in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Those terms may
+grant broader rights for the identified component only; they do not grant any
+right to use the rest of AIOS for an organizational or commercial purpose.
 
 本仓库为**源码可见（source-available），并非开源软件**。
 
 除非另有书面协议，仅允许以本人名义行事的自然人，为个人、非商业的学习、
-研究与实验目的查看、克隆并在本地运行本代码。
+研究与实验目的查看、克隆、在本地运行、私下修改本代码，以及维护 GitHub Fork。
 
 本仓库不向任何公司、企业、法人、组织，以及代表前述主体行事的个人授予使用
 许可。未经事先书面授权，不得将本代码用于企业内部业务、生产部署、商业评估或
-概念验证、产品、SaaS 或其他服务、咨询、培训、销售、转售、再分发、商业性衍生
-作品，亦不得用于获取任何直接或间接商业利益。
+概念验证、产品、SaaS 或其他服务、咨询、培训、销售、转售、超出托管 Fork 许可
+范围的再分发、商业性衍生作品，亦不得用于获取任何直接或间接商业利益。
 
-仓库公开可见以及 GitHub 提供的查看或 Fork 功能，不代表获得本声明及 GitHub
-服务条款之外的权利。未明确授予的权利均予保留。本仓库转为公开前，将在根目录
-加入具有正式约束力的 `LICENSE` 文件。
+根目录的 [`LICENSE`](LICENSE) 为正式约束条款。仓库公开可见以及 GitHub 提供的
+查看或 Fork 功能，不代表获得该许可证及 GitHub 服务条款之外的权利。未明确授予
+的权利均予保留。
+
+第三方及单独许可的材料继续适用其各自条款，详见
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。这些条款即使向特定组件授予
+更宽泛的权利，也不会把该权利扩展到 AIOS 的其他部分，更不代表企业或组织获准
+使用 AIOS 自有代码。

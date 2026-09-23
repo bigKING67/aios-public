@@ -8,12 +8,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
-DEFAULT_SOURCE_URL = "https://lcnscy2r8lk5.feishu.cn/wiki/UXQVwAd67iKb9vkBPgUcovbwnlY?sheet=116973"
+DEFAULT_SOURCE_URL = "https://example.invalid/feishu-source?sheet=sheet001"
 DEFAULT_SPREADSHEET_TOKEN = ""
 DEFAULT_SHEET_NAMES = {
-  "116973": "千川投流视频-官号",
-  "uGTOQ9": "小红书&抖音-种草视频",
-  "njCewC": "杭井抖音koc-种草视频",
+  "sheet001": "Example sheet",
 }
 DEFAULT_SHEET_IDS = tuple(DEFAULT_SHEET_NAMES.keys())
 

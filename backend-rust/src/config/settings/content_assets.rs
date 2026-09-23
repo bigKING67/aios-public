@@ -36,7 +36,7 @@ pub(super) fn resolve_content_asset_settings() -> ContentAssetSettings {
         tos_secret_access_key: env_var_or("TOS_SECRET_ACCESS_KEY", ""),
         tos_endpoint: env_var_or("TOS_ENDPOINT", "https://tos-s3-cn-shanghai.volces.com"),
         tos_region: env_var_or("TOS_REGION", "cn-shanghai"),
-        tos_bucket: env_var_or("TOS_BUCKET", "content-video-prod"),
+        tos_bucket: env_var_or("TOS_BUCKET", "aios-content-assets"),
     }
 }
 

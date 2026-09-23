@@ -212,11 +212,11 @@ export async function runFrontendPermissionPolicyBehaviorFixtures(assertions) {
       identity: {
         email: null,
         fullName: null,
-        roles: [],
-        username: 'sixseven',
+        roles: ['admin'],
+        username: 'operator',
       },
     })),
-    'configured super-admin identity should receive elevated permission access',
+    'admin role should receive elevated permission access',
   );
   assertTrue(
     hasEffectivePermission({
@@ -343,12 +343,12 @@ export async function runFrontendPermissionPolicyBehaviorFixtures(assertions) {
     'admin role should keep report navigation visible through shared policy',
   );
   assertTrue(
-    canAccessPath('/reports/weekly', [], [], {
+    canAccessPath('/reports/weekly', [], ['admin'], {
       email: null,
       fullName: null,
-      username: 'sixseven',
+      username: 'operator',
     }, true),
-    'super-admin identity should keep report navigation visible through shared policy',
+    'admin role should keep report navigation visible through shared policy',
   );
   assertTrue(
     canAccessPath('/dashboard/creator', [], ['admin'], {

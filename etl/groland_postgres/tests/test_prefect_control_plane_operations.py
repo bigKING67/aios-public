@@ -252,7 +252,7 @@ mkdir -p "${paths[@]}"
       unsafe_consumer = units / "unsafe-env-consumer.service"
       unsafe_consumer.write_text(
         "[Service]\n"
-        "User=sixseven\n"
+        "User=fixture-user\n"
         f"EnvironmentFile={env_file}\n",
         encoding="utf-8",
       )
@@ -272,7 +272,7 @@ mkdir -p "${paths[@]}"
 
       unsafe_consumer.write_text(
         "[Service]\n"
-        "User=sixseven\n"
+        "User=fixture-user\n"
         "SupplementaryGroups=fixture-runtime-env\n"
         f"EnvironmentFile={env_file}\n",
         encoding="utf-8",

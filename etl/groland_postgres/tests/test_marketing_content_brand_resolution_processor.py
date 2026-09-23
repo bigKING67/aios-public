@@ -162,7 +162,7 @@ def sample_candidate(
     asset_title="黄黑皮闭眼冲",
     product_names=(),
     creator_name="",
-    bucket="content-video-prod",
+    bucket="aios-content-assets",
     preview_object_key="preview/sample.mp4",
     raw_object_key="raw/sample.mp4",
     transcript_context=transcript_context,

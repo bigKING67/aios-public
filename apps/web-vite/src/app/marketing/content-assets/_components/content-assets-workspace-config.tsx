@@ -192,7 +192,7 @@ export function createModuleConfig(
       metrics: [
         { label: '分发方式', value: '短时签名', helper: '未备案阶段' },
         { label: '目标域名', value: 'video', helper: 'video.groland-inc.com' },
-        { label: '存储桶', value: 'TOS', helper: 'content-video-prod' },
+        { label: '存储桶', value: 'TOS', helper: 'aios-content-assets' },
       ],
       actions: [
         { label: '检查 TOS 配置', helper: 'AK/SK 仅在后端环境变量' },

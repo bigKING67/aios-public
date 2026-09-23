@@ -40,7 +40,7 @@ class MarketingIndustryArticleSyncConfigTest(unittest.TestCase):
     with patch.dict(os.environ, {}, clear=True):
       config = self._resolve()
 
-    self.assertEqual(config.api_base, "https://wechatrss.52671314.xyz/api")
+    self.assertEqual(config.api_base, "http://127.0.0.1:3000/api")
     self.assertEqual(config.page_size, 20)
     self.assertEqual(config.max_pages_per_source, 1)
     self.assertEqual(config.max_sources_per_run, 1)

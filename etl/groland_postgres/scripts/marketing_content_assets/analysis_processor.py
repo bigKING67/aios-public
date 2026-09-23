@@ -875,7 +875,7 @@ def _complete_analysis_job(
       (
         object_id,
         asset_id,
-        job.get("bucket") or "content-video-prod",
+        job.get("bucket") or "aios-content-assets",
         analysis_key,
         analysis_size_bytes,
         analysis_sha256,

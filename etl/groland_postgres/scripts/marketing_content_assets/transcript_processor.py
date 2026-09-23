@@ -449,7 +449,7 @@ def _complete_transcript_job(
       (
         object_id,
         asset_id,
-        job.get("bucket") or "content-video-prod",
+        job.get("bucket") or "aios-content-assets",
         transcript_key,
         transcript_size_bytes,
         transcript_sha256,

@@ -21,6 +21,7 @@ const IGNORED_FILE_PATTERNS = Object.freeze([
 
 const QUALITY_INFRASTRUCTURE_FILES = Object.freeze([
   /^\.github\/workflows\/quality-gate\.yml$/u,
+  /^\.github\/workflows\/sync-aios-public\.yml$/u,
   /^\.trellis\/scripts\/.+\.py$/u,
   /^eslint\.config\.[cm]?js$/u,
   /^docs\/QUALITY_GATE_RUNNER\.md$/u,
@@ -28,6 +29,7 @@ const QUALITY_INFRASTRUCTURE_FILES = Object.freeze([
   /^scripts\/(?:deploy-vps\.sh|install-git-hooks\.sh|quality-runner\.mjs|verify-[A-Za-z0-9-]+\.sh|vps-up\.sh)$/u,
   /^scripts\/(?:build|ci|fixtures|frontend|ops)\/.+\.(?:js|mjs|sh)$/u,
   /^scripts\/checks\/.+\.(?:mjs|py|sh)$/u,
+  /^scripts\/config\/public-export\/.+$/u,
   /^scripts\/lib\/.+\.mjs$/u,
 ]);
 

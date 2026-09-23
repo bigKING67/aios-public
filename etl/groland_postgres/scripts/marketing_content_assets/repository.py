@@ -189,7 +189,7 @@ def claim_next_processing_batch(
   ]
   return ProcessingBatch(
     asset_id=_as_uuid(first["asset_id"]),
-    bucket=str(first["bucket"] or "content-video-prod"),
+    bucket=str(first["bucket"] or "aios-content-assets"),
     raw_object_key=str(first["raw_object_key"] or ""),
     raw_sha256=str(first["raw_sha256"] or ""),
     file_ext=str(first["file_ext"] or ""),

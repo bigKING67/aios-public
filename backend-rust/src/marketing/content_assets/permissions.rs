@@ -206,9 +206,9 @@ mod tests {
     }
 
     #[test]
-    fn default_super_admin_identity_can_edit_owned_asset() {
+    fn admin_role_can_edit_owned_asset() {
         assert!(can_edit_content_asset_owner_scope(
-            &user("sixseven", &[], &[]),
+            &user("operator", &["admin"], &[]),
             Some("owner-001"),
             None,
             "ready"

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-DEFAULT_API_BASE = "https://wechatrss.52671314.xyz/api"
+DEFAULT_API_BASE = "http://127.0.0.1:3000/api"
 DEFAULT_PAGE_SIZE = 20
 DEFAULT_MAX_PAGES_PER_SOURCE = 1
 DEFAULT_MAX_SOURCES_PER_RUN = 1

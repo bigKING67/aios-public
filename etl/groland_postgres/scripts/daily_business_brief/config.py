@@ -10,7 +10,7 @@ from .models import DeliveryMode, SUPPORTED_PLATFORMS
 
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
-DEFAULT_DASHBOARD_URL = "https://groland.52671314.xyz/dashboard"
+DEFAULT_DASHBOARD_URL = "http://127.0.0.1:5173/dashboard"
 
 
 @dataclass(frozen=True)

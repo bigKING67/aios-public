@@ -145,7 +145,7 @@ mod tests {
     }
 
     #[test]
-    fn allows_default_super_admin_identity_override_for_owned_target() {
-        assert!(target(&["user-002"]).can_edit(&user("sixseven", &[], &[])));
+    fn allows_admin_role_override_for_owned_target() {
+        assert!(target(&["user-002"]).can_edit(&user("operator", &["admin"], &[])));
     }
 }

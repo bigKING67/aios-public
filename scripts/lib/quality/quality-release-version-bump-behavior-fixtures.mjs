@@ -178,7 +178,10 @@ export function runReleaseVersionBumpBehaviorFixtures(assertions) {
   const result = runCase({
     changedFiles: [
       { file: '.github/workflows/quality-gate.yml', status: 'M' },
+      { file: '.github/workflows/sync-aios-public.yml', status: 'A' },
       { file: 'scripts/checks/quality-runner/cache-local.mjs', status: 'A' },
+      { file: 'scripts/config/public-export/aios-public-policy.json', status: 'A' },
+      { file: 'scripts/config/public-export/LICENSE.public.txt', status: 'A' },
       { file: 'scripts/checks/repo/naming.mjs', status: 'A' },
       { file: 'scripts/lib/repo/repo-governance-gates.mjs', status: 'A' },
       { file: 'scripts/lib/quality/quality-runner-slices.mjs', status: 'M' },

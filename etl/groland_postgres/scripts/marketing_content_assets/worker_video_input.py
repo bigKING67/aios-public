@@ -223,7 +223,7 @@ def upsert_analysis_proxy_object(
       (
         object_id,
         asset_id,
-        job.get("bucket") or "content-video-prod",
+        job.get("bucket") or "aios-content-assets",
         proxy_object_key,
         proxy_size_bytes,
         proxy_sha256,

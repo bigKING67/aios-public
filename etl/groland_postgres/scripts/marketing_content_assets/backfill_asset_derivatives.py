@@ -42,7 +42,7 @@ class BackfillCandidate:
     source_task_names = row.get("source_task_names") or []
     return cls(
       asset_id=uuid.UUID(str(row["asset_id"])),
-      bucket=str(row.get("bucket") or "content-video-prod"),
+      bucket=str(row.get("bucket") or "aios-content-assets"),
       raw_object_key=str(row.get("raw_object_key") or ""),
       raw_sha256=str(row.get("raw_sha256") or ""),
       file_ext=str(row.get("file_ext") or ""),

@@ -111,7 +111,7 @@ services:
       TOS_SECRET_ACCESS_KEY: ${TOS_SECRET_ACCESS_KEY:-}
       TOS_ENDPOINT: ${TOS_ENDPOINT:-https://tos-s3-cn-shanghai.volces.com}
       TOS_REGION: ${TOS_REGION:-cn-shanghai}
-      TOS_BUCKET: ${TOS_BUCKET:-content-video-prod}
+      TOS_BUCKET: ${TOS_BUCKET:-aios-content-assets}
     depends_on:
       - aios-dragonfly
     expose:

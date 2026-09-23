@@ -782,7 +782,7 @@ async fn create_import_request(
     let mode = normalize_import_mode(payload.mode)?;
     let run_id = Uuid::new_v4();
     let source_url = payload.source_url.unwrap_or_else(|| {
-        "https://lcnscy2r8lk5.feishu.cn/wiki/UXQVwAd67iKb9vkBPgUcovbwnlY?sheet=116973".to_string()
+        "https://example.invalid/feishu-source?sheet=sheet001".to_string()
     });
     let sheet_ids = normalize_sheet_ids(payload.sheet_ids);
     create_import_run(

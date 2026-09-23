@@ -31,7 +31,7 @@ class TosStorageConfig:
       secret_access_key=secret_access_key,
       endpoint=(os.getenv("TOS_ENDPOINT") or "https://tos-s3-cn-shanghai.volces.com").strip(),
       region=(os.getenv("TOS_REGION") or "cn-shanghai").strip(),
-      bucket=(os.getenv("TOS_BUCKET") or "content-video-prod").strip(),
+      bucket=(os.getenv("TOS_BUCKET") or "aios-content-assets").strip(),
     )
 
 

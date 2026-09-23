@@ -869,7 +869,7 @@ For frontend style authority or token changes, run the smallest relevant closed 
 bash ~/.codex/tools/frontend_worker_entry.sh \
   --frontend-tier L1-V \
   --skills design-taste-frontend,frontend-skill,stitch-design-taste \
-  --style-authority-path /Users/gaoqian/Documents/sixseven/workman/groland/aios/DESIGN.md
+  --style-authority-path $PWD/DESIGN.md
 
 npm run lint
 npm run verify:design:raw-colors
