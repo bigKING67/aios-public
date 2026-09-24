@@ -24,6 +24,7 @@ DEFAULT_ORIGINS = [
   "http://127.0.0.1:4173",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5173",
+  "http://127.0.0.1:5173",
 ]
 
 DEFAULT_METHODS = ["GET", "HEAD", "PUT", "POST"]

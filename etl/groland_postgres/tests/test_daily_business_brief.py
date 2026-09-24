@@ -15,6 +15,7 @@ sys.path.insert(0, str(ETL_ROOT / "scripts"))
 
 from daily_business_brief.config import (  # noqa: E402
   BriefConfig,
+  DEFAULT_DASHBOARD_URL,
   resolve_brief_config,
   resolve_target_date,
 )
@@ -160,6 +161,13 @@ def test_config_parses_deduplicated_required_shop_ids() -> None:
 
   assert config.lookback_days == 90
   assert config.required_shop_ids_by_platform == {"douyin": ("123", "456")}
+
+
+def test_config_defaults_to_canonical_aios_dashboard() -> None:
+  config = resolve_brief_config({})
+
+  assert DEFAULT_DASHBOARD_URL == "http://127.0.0.1:5173/dashboard"
+  assert config.dashboard_url == DEFAULT_DASHBOARD_URL
 
 
 def test_config_rejects_same_test_and_production_webhook() -> None:

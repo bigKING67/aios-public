@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "5585a5c6f2f08bf17085f83ea2c71639d199fed2",
+  "sourceCommit": "3c47ba4b4f925c8a9f67da2f4b5f5f8a6a239e4c",
   "policySha256": "62cc385b9fbe665669b63bbd39aaf3770ac180346d734e3c7c11551aea6c3093",
   "fileCount": 3816,
-  "contentSha256": "bd2458e4ccaa179d199c19c50a20a4c7c0e318cbc4cc58bfca71a2f0e4a3749a",
+  "contentSha256": "6b551be2eb267e626740474b4ab86bcf0c393d70a286a14bc0e83f8776908486",
   "files": [
     {
       "path": ".dockerignore",
@@ -14457,8 +14457,8 @@
     {
       "path": "docker-compose.yml",
       "mode": "100644",
-      "size": 8115,
-      "sha256": "e738095b2c63b6c74e6799b89e568fb721fcde64a1a282e745e094e282be4671"
+      "size": 8185,
+      "sha256": "e6f0ddf8042b210c23bb3bc13ddca8600f5f7ada0c8ea5ee522b4862adf2c615"
     },
     {
       "path": "docker/content-production/Dockerfile",
@@ -14883,8 +14883,8 @@
     {
       "path": "etl/groland_postgres/scripts/configure_marketing_content_tos_cors.py",
       "mode": "100644",
-      "size": 6128,
-      "sha256": "a24edda374c497524f85a5614a4275130b0a88bea6420963819f33dcaffcdc50"
+      "size": 6155,
+      "sha256": "76df127af75e0754c52997750d166c344d0c9e1c9462dc4095e29053fcfd713c"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/__init__.py",
@@ -17265,8 +17265,8 @@
     {
       "path": "etl/groland_postgres/tests/test_daily_business_brief.py",
       "mode": "100644",
-      "size": 16554,
-      "sha256": "b59fdb9abd14356d3c9c588bfc1afcb6576449aaebccbfe791f2acddec9db27b"
+      "size": 16805,
+      "sha256": "effb2ce02a7270ca968ab6e4afaa91898b8c37d36fa7c7fb60b9c6fffe47f15a"
     },
     {
       "path": "etl/groland_postgres/tests/test_dataops_api_client.py",
@@ -17440,13 +17440,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 340054,
-      "sha256": "776a2678f89d37ac892f4ea5a65c44512eec2285968b5ab4be832c7ab5faed2d"
+      "sha256": "1f461a5629ef43c597cca9f85ff00d8894005924eb88371147e8814d15b8666c"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54479,
-      "sha256": "a5a5223010787f198f21c0744f46efbafcf8eeddb0b27d123e7b8d2541ce1b29"
+      "sha256": "8dd0d0d1d4def78c3d1c79ad6eac305967e4ca0609d3aaff22be12099ff53805"
     },
     {
       "path": "postcss.config.js",

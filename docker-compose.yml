@@ -22,7 +22,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
-      - "traefik.http.routers.aios.rule=Host(`${AIOS_DOMAIN}`)"
+      - "traefik.http.routers.aios.rule=(Host(`${AIOS_DOMAIN}`) || Host(`${AIOS_LEGACY_DOMAIN}`))"
       - "traefik.http.routers.aios.entrypoints=websecure"
       - "traefik.http.routers.aios.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
       - "traefik.http.routers.aios.priority=10"
@@ -131,7 +131,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
-      - "traefik.http.routers.aios-api.rule=Host(`${AIOS_DOMAIN}`) && (PathPrefix(`/v1`) || Path(`/health`))"
+      - "traefik.http.routers.aios-api.rule=(Host(`${AIOS_DOMAIN}`) || Host(`${AIOS_LEGACY_DOMAIN}`)) && (PathPrefix(`/v1`) || Path(`/health`))"
       - "traefik.http.routers.aios-api.entrypoints=websecure"
       - "traefik.http.routers.aios-api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-myresolver}"
       - "traefik.http.routers.aios-api.priority=100"
