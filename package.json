@@ -1,6 +1,6 @@
 {
   "name": "aios",
-  "version": "4.0.12",
+  "version": "4.0.13",
   "description": "数据中枢 - 企业级数据可视化看板平台（支持周报、月报、看板、报表导出）",
   "private": true,
   "scripts": {

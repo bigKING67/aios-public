@@ -48,3 +48,6 @@ etl/groland_postgres/**/*.pyc
 # Host-local credentials must never enter any image build context.
 **/.env*
 !**/.env.example
+
+# Final deny after the env-example exception: never traverse host runtime data.
+.dataops/
