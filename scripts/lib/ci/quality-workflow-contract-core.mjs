@@ -3,9 +3,11 @@ import { join } from 'node:path';
 
 export const QUALITY_WORKFLOW_PATH = '.github/workflows/quality-gate.yml';
 export const QUALITY_WORKFLOW_CACHE_STEP_NAME = 'Restore AIOS quality cache';
+export const QUALITY_WORKFLOW_CARGO_CACHE_STEP_NAME = 'Restore Cargo cache';
 export const QUALITY_WORKFLOW_VERIFY_STEP_NAME = 'Verify (lint + build + type-check + shell + frontend preflight)';
 export const QUALITY_WORKFLOW_WARM_STEP_NAME = 'Verify bounded warm-cache reuse';
 export const QUALITY_WORKFLOW_STATS_POLICY_STEP_NAME = 'Verify quality stats policy';
+export const REQUIRED_QUALITY_WORKFLOW_CACHE_ACTION = 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9';
 export const REQUIRED_QUALITY_WORKFLOW_CACHE_PATHS = Object.freeze([
   '.cache/aios-quality',
   '.cache/aios-quality-remote',
@@ -48,13 +50,20 @@ export function namedWorkflowStep(source, name) {
   return nextStep ? remainder.slice(0, marker.length + nextStep.index) : remainder;
 }
 
-function checkCacheStep(cacheStep, findings) {
+function checkPinnedCacheAction(cacheStep, stepName, findings) {
   if (!cacheStep) {
-    findings.push(`${QUALITY_WORKFLOW_PATH} must keep the ${QUALITY_WORKFLOW_CACHE_STEP_NAME} step`);
-    return;
+    findings.push(`${QUALITY_WORKFLOW_PATH} must keep the ${stepName} step`);
+    return false;
   }
-  if (!cacheStep.includes('uses: actions/cache@v4')) {
-    findings.push(`${QUALITY_WORKFLOW_PATH} must restore AIOS caches with actions/cache@v4`);
+  if (!cacheStep.includes(`uses: ${REQUIRED_QUALITY_WORKFLOW_CACHE_ACTION}`)) {
+    findings.push(`${QUALITY_WORKFLOW_PATH} ${stepName} must use actions/cache v6.1.0 pinned to ${REQUIRED_QUALITY_WORKFLOW_CACHE_ACTION}`);
+  }
+  return true;
+}
+
+function checkCacheStep(cacheStep, findings) {
+  if (!checkPinnedCacheAction(cacheStep, QUALITY_WORKFLOW_CACHE_STEP_NAME, findings)) {
+    return;
   }
   for (const cachePath of REQUIRED_QUALITY_WORKFLOW_CACHE_PATHS) {
     if (!cacheStep.includes(cachePath)) {
@@ -139,6 +148,11 @@ export function checkQualityWorkflowCacheContract(source) {
     findings.push(`${QUALITY_WORKFLOW_PATH} must not skip all Markdown changes; governed Markdown files require repository checks`);
   }
   checkCacheStep(namedWorkflowStep(source, QUALITY_WORKFLOW_CACHE_STEP_NAME), findings);
+  checkPinnedCacheAction(
+    namedWorkflowStep(source, QUALITY_WORKFLOW_CARGO_CACHE_STEP_NAME),
+    QUALITY_WORKFLOW_CARGO_CACHE_STEP_NAME,
+    findings,
+  );
   checkVerifyStep(namedWorkflowStep(source, QUALITY_WORKFLOW_VERIFY_STEP_NAME), findings);
   checkWarmStep(namedWorkflowStep(source, QUALITY_WORKFLOW_WARM_STEP_NAME), findings);
   checkStatsPolicyStep(namedWorkflowStep(source, QUALITY_WORKFLOW_STATS_POLICY_STEP_NAME), findings);

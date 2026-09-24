@@ -33,7 +33,7 @@ jobs:
   quality-gate:
     steps:
       - name: Restore AIOS quality cache
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
             .cache/aios-quality
@@ -43,6 +43,12 @@ jobs:
           key: aios-quality-\${{ runner.os }}-\${{ hashFiles('package-lock.json', 'tsconfig*.json', 'apps/**/tsconfig*.json', 'eslint.config.*', 'scripts/lib/quality/**/*.mjs', 'scripts/checks/quality-runner/**') }}
           restore-keys: |
             aios-quality-\${{ runner.os }}-
+
+      - name: Restore Cargo cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: backend-rust/target
+          key: aios-cargo-\${{ runner.os }}
 
       - name: Verify (lint + build + type-check + shell + frontend preflight)
         env:
@@ -226,6 +232,38 @@ export function runPackageWiringBehaviorFixtures(assertions) {
     });
     assertEqual(result.status, 1, 'missing eslint cache ignore should fail');
     assertIncludes(result.stderr, 'eslint.config.mjs must ignore .cache/**', 'missing generated cache ignore should be reported');
+  }
+
+  {
+    const result = runWiringGuard({}, {
+      qualityWorkflowText: QUALITY_WORKFLOW_FIXTURE.replace(
+        'uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9',
+        'uses: actions/cache@v4',
+      ),
+    });
+    assertEqual(result.status, 1, 'floating Node 20 AIOS cache action should fail');
+    assertIncludes(
+      result.stderr,
+      'Restore AIOS quality cache must use actions/cache v6.1.0 pinned to',
+      'AIOS cache action runtime and immutable pin should be enforced',
+    );
+  }
+
+  {
+    const result = runWiringGuard({}, {
+      qualityWorkflowText: QUALITY_WORKFLOW_FIXTURE.replace(
+        `      - name: Restore Cargo cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9`,
+        `      - name: Restore Cargo cache
+        uses: actions/cache@v4`,
+      ),
+    });
+    assertEqual(result.status, 1, 'floating Node 20 Cargo cache action should fail');
+    assertIncludes(
+      result.stderr,
+      'Restore Cargo cache must use actions/cache v6.1.0 pinned to',
+      'Cargo cache action runtime and immutable pin should be enforced',
+    );
   }
 
   {
