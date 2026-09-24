@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "18ff029b7883ac96b8f7f072da30e060c13430b0",
-  "policySha256": "91c63b89fabd8027ea5ccf052e39657f0536bc277bc3cc7695e7cb45a46e5c15",
-  "fileCount": 3815,
-  "contentSha256": "a32e76b65f705d584e9e256de3c43736e894e15bd137f3af988096f27017d1c6",
+  "sourceCommit": "f3b681d23cb1fb18c134d5b1b46addd5c247debb",
+  "policySha256": "62cc385b9fbe665669b63bbd39aaf3770ac180346d734e3c7c11551aea6c3093",
+  "fileCount": 3816,
+  "contentSha256": "fcd6f5685e8f25499ffc33f1647d0790380ca1e97caa157471754bb6f870c497",
   "files": [
     {
       "path": ".dockerignore",
@@ -28,7 +28,7 @@
       "path": ".github/workflows/quality-gate.yml",
       "mode": "100644",
       "size": 886,
-      "sha256": "bfe4ee908934b8864d5d5f1dfa8e321ac682cec18538331eacb6723c8705c02f"
+      "sha256": "d99aa7aec807fb17b21b2262a9a74e2b0a4b1c9af3914a6c0a15ffda269c12ef"
     },
     {
       "path": ".gitignore",
@@ -41,6 +41,12 @@
       "mode": "100644",
       "size": 533,
       "sha256": "49f6de88df4498081b34cf83a6a1a137b4ae6a0981da4494ffd0f7383bb51479"
+    },
+    {
+      "path": ".nvmrc",
+      "mode": "100644",
+      "size": 3,
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
     },
     {
       "path": "apps/web-vite/AGENTS.md",
@@ -14614,13 +14620,13 @@
       "path": "Dockerfile",
       "mode": "100644",
       "size": 797,
-      "sha256": "e95da3835901804ed8ba235aadfda5b3da31337bc86173f747073b35f69cd5e9"
+      "sha256": "e8d49519590787d4873f854f98dccb977dfe70445410fe30714869d1af104eff"
     },
     {
       "path": "Dockerfile.vite",
       "mode": "100644",
       "size": 797,
-      "sha256": "e95da3835901804ed8ba235aadfda5b3da31337bc86173f747073b35f69cd5e9"
+      "sha256": "e8d49519590787d4873f854f98dccb977dfe70445410fe30714869d1af104eff"
     },
     {
       "path": "eslint.config.mjs",
@@ -17434,13 +17440,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 340054,
-      "sha256": "311611aceb4185f4cd5debabf17b00a115d654d8c91a54867c66f06f20b24f3f"
+      "sha256": "776a2678f89d37ac892f4ea5a65c44512eec2285968b5ab4be832c7ab5faed2d"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54479,
-      "sha256": "a038841dcff5c562b32c5b381e1dd50c088fb195ac17c5f179c1c39975e8395e"
+      "sha256": "a5a5223010787f198f21c0744f46efbafcf8eeddb0b27d123e7b8d2541ce1b29"
     },
     {
       "path": "postcss.config.js",
@@ -17482,7 +17488,7 @@
       "path": "README.md",
       "mode": "100644",
       "size": 5195,
-      "sha256": "e43030fdb2137cf9b0f56de06bee06a6e97e2588397faeb14c23a672eb715f5b"
+      "sha256": "4bcf4402e18b4ae9369be5a5717f45a097a493bb03cb154e54f787e79157d679"
     },
     {
       "path": "rust-toolchain.toml",

@@ -18,7 +18,7 @@ commits and do not preserve private repository ancestry.
 
 Requirements:
 
-- Node.js 20 or newer
+- Node.js 24 or newer
 - npm 9 or newer
 - Rust toolchain
 - PostgreSQL for backend and data-workflow development
