@@ -36,6 +36,11 @@ export const CATEGORY_BUDGETS = Object.freeze({
     warnAvgMs: 12000,
     hint: 'profile the full uncached test suite and its runtime startup without reducing test coverage',
   },
+  'etl-suite': {
+    warnMaxMs: 120000,
+    warnAvgMs: 90000,
+    hint: 'profile real-media encoding and database fixtures in the full ETL suite without skipping coverage',
+  },
   'runtime-smoke': {
     warnMaxMs: 20000,
     warnAvgMs: 12000,
@@ -68,9 +73,14 @@ export function budgetForCategory(category, {
   platform = process.platform,
 } = {}) {
   const budget = CATEGORY_BUDGETS[category] ?? CATEGORY_BUDGETS.other;
-  if (category === 'unit-suite' && platform === 'linux'
-    && env.GITHUB_ACTIONS === 'true' && env.RUNNER_OS === 'Linux') {
-    return { ...budget, warnAvgMs: 45000, warnMaxMs: 60000, profile: 'github-linux' };
+  if (platform === 'linux' && env.GITHUB_ACTIONS === 'true' && env.RUNNER_OS === 'Linux') {
+    // Native runner cold/warm samples: frontend 62-65s, ETL real-media suite 122-127s.
+    if (category === 'unit-suite') {
+      return { ...budget, warnAvgMs: 75000, warnMaxMs: 90000, profile: 'github-linux' };
+    }
+    if (category === 'etl-suite') {
+      return { ...budget, warnAvgMs: 150000, warnMaxMs: 180000, profile: 'github-linux' };
+    }
   }
   return { ...budget, profile: 'default' };
 }
@@ -102,7 +112,10 @@ export function categoryForGate(gate, targetFiles = []) {
   if (gate?.group === 'backend' || kind === 'cargo') {
     return 'backend-serial';
   }
-  if (gate.name === 'test:frontend:unit' || gate.name === 'test:etl:unit') {
+  if (gate.name === 'test:etl:unit') {
+    return 'etl-suite';
+  }
+  if (gate.name === 'test:frontend:unit') {
     return 'unit-suite';
   }
   if (gate?.name?.includes(':smoke') || command.includes('vite preview')) {

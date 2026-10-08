@@ -65,17 +65,22 @@ export async function runQualityRunnerCacheStatsBehaviorFixtures(assertions) {
   }
   assertions.assertEqual(budgetStatus({ coldMaxMs: 60001, coldAvgMs: 1000 }, CATEGORY_BUDGETS['dependency-audit']), 'warn', 'audit peak overrun must fail');
   assertions.assertEqual(budgetStatus({ coldMaxMs: 40000, coldAvgMs: 30001 }, CATEGORY_BUDGETS['dependency-audit']), 'warn', 'audit average overrun must fail');
-  for (const name of ['test:frontend:unit', 'test:etl:unit']) {
-    assertions.assertEqual(categoryForGate({ name }), 'unit-suite', 'full test suites have explicit runtime budgets');
-  }
+  assertions.assertEqual(categoryForGate({ name: 'test:frontend:unit' }), 'unit-suite', 'frontend keeps the unit-suite category');
+  assertions.assertEqual(categoryForGate({ name: 'test:etl:unit' }), 'etl-suite', 'ETL real-media workloads have their own bounded budget');
   assertions.assertEqual(categoryForGate({ name: 'test:unknown' }), 'other', 'unclassified tests keep the existing strict budget');
   assertions.assertEqual(budgetStatus({ coldMaxMs: 20001, coldAvgMs: 1000 }, CATEGORY_BUDGETS['unit-suite']), 'warn', 'suite peak overrun must fail');
   assertions.assertEqual(budgetStatus({ coldMaxMs: 15000, coldAvgMs: 12001 }, CATEGORY_BUDGETS['unit-suite']), 'warn', 'suite average overrun must fail');
   const githubLinux = { platform: 'linux', env: { GITHUB_ACTIONS: 'true', RUNNER_OS: 'Linux' } };
   const ciSuiteBudget = budgetForCategory('unit-suite', githubLinux);
-  assertions.assertEqual(budgetStatus({ coldMaxMs: 60000, coldAvgMs: 45000 }, ciSuiteBudget), 'ok', 'approved Linux CI limits are inclusive');
-  assertions.assertEqual(budgetStatus({ coldMaxMs: 60001, coldAvgMs: 1000 }, ciSuiteBudget), 'warn', 'Linux CI peak overrun remains blocking');
-  assertions.assertEqual(budgetStatus({ coldMaxMs: 50000, coldAvgMs: 45001 }, ciSuiteBudget), 'warn', 'Linux CI average overrun remains blocking');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 90000, coldAvgMs: 75000 }, ciSuiteBudget), 'ok', 'calibrated Linux CI limits are inclusive');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 90001, coldAvgMs: 1000 }, ciSuiteBudget), 'warn', 'Linux CI peak overrun remains blocking');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 80000, coldAvgMs: 75001 }, ciSuiteBudget), 'warn', 'Linux CI average overrun remains blocking');
+  const ciEtlBudget = budgetForCategory('etl-suite', githubLinux);
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 180000, coldAvgMs: 150000 }, ciEtlBudget), 'ok', 'ETL CI limits are inclusive');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 180001, coldAvgMs: 1000 }, ciEtlBudget), 'warn', 'ETL CI peak overrun remains blocking');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 160000, coldAvgMs: 150001 }, ciEtlBudget), 'warn', 'ETL CI average overrun remains blocking');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 120001, coldAvgMs: 1000 }, CATEGORY_BUDGETS['etl-suite']), 'warn', 'local ETL peak overrun remains blocking');
+  assertions.assertEqual(budgetStatus({ coldMaxMs: 100000, coldAvgMs: 90001 }, CATEGORY_BUDGETS['etl-suite']), 'warn', 'local ETL average overrun remains blocking');
   for (const runtime of [
     { platform: 'darwin', env: {} },
     { platform: 'linux', env: {} },
@@ -84,11 +89,13 @@ export async function runQualityRunnerCacheStatsBehaviorFixtures(assertions) {
     { platform: 'darwin', env: githubLinux.env },
     { platform: 'linux', env: { GITHUB_ACTIONS: 'true', RUNNER_OS: 'Windows' } },
   ]) {
+    assertions.assertEqual(budgetForCategory('etl-suite', runtime).warnAvgMs, 90000, 'other runtimes retain the local ETL average budget');
+    assertions.assertEqual(budgetForCategory('etl-suite', runtime).warnMaxMs, 120000, 'other runtimes retain the local ETL peak budget');
     assertions.assertEqual(budgetForCategory('unit-suite', runtime).warnAvgMs, 12000, 'other runtimes retain the local suite average budget');
     assertions.assertEqual(budgetForCategory('unit-suite', runtime).warnMaxMs, 20000, 'other runtimes retain the local suite peak budget');
   }
   for (const [category, budget] of Object.entries(CATEGORY_BUDGETS)) {
-    if (category === 'unit-suite') continue;
+    if (category === 'unit-suite' || category === 'etl-suite') continue;
     assertions.assertEqual(budgetForCategory(category, githubLinux).warnAvgMs, budget.warnAvgMs, 'CI does not relax unrelated average budgets');
     assertions.assertEqual(budgetForCategory(category, githubLinux).warnMaxMs, budget.warnMaxMs, 'CI does not relax unrelated peak budgets');
   }
