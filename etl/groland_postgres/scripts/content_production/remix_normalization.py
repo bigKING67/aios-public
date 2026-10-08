@@ -310,6 +310,9 @@ def finalize(video: Path, receipt: dict, snapshot: dict, clips: list[dict], sett
     if copy_video and (videos[0].get("codec_name") != "h264" or (videos[0]["width"], videos[0]["height"])
                        != (expected["width"], expected["height"])):
         raise NormalizationError("云端成片的编码或画幅与成片规格不一致")
+    frames = int(videos[0]["nb_read_packets"])
+    if audios and abs(float(audios[0]["duration"]) - frames / FPS) > 2 / FPS:
+        raise NormalizationError("渲染产物音频时长与画面不一致")
     folder = work / "normalized"
     folder.mkdir()
     output = folder / "video.mp4"
@@ -328,6 +331,11 @@ def finalize(video: Path, receipt: dict, snapshot: dict, clips: list[dict], sett
             audio_filter = f"{pre},aresample={SAMPLE_RATE}"
         else:
             audio_filter = f"{pre},{loudnorm_filter(settings, measured)},aresample={SAMPLE_RATE}"
+        # FFmpeg 6.1 dynamic loudnorm can leave EOF timestamps on its 100 ms block
+        # grid. Rebuild the sample clock, then bound decoded AAC padding to the
+        # video timeline after resampling (1600 samples/frame).
+        # Input drift is rejected above; no apad, so missing audio still fails below.
+        audio_filter += f",asetpts=N/SR/TB,atrim=end_sample={frames * SAMPLE_RATE // FPS}"
     text = run_ffmpeg(encode_command(video, output, expected, settings, audio_filter, copy_video),
                       folder / "encode.log", work, tick, settings.timeout_seconds, lock_fd)
     if audios and measured is not None:

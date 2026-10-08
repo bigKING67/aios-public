@@ -1,6 +1,6 @@
 {
   "name": "aios",
-  "version": "4.1.83",
+  "version": "4.1.84",
   "description": "AGI AIOS - AI 驱动的企业业务生产力系统（经营分析、内容中台与 AI 创作、报告、数据运维）",
   "private": true,
   "scripts": {

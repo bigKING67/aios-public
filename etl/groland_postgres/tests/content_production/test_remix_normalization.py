@@ -120,6 +120,25 @@ class GainTests(unittest.TestCase):
 
 
 class DurationGuardTests(unittest.TestCase):
+    def test_input_duration_mismatch_is_not_hidden_by_tail_trim(self):
+        for duration in ("7.900000", "8.100000"):
+            with self.subTest(duration=duration), tempfile.TemporaryDirectory() as scratch:
+                work = Path(scratch)
+                source = work / "source.mp4"
+                source.write_bytes(b"fixture")
+                receipt = {"status": "completed", "output": {"sha256": rn.file_hash(source)}}
+                before = {"streams": [
+                    {"codec_type": "video", "codec_name": "h264", "width": 1080,
+                     "height": 1920, "nb_read_packets": "240"},
+                    {"codec_type": "audio", "duration": duration},
+                ]}
+                with mock.patch.object(rn, "probe", return_value=before), \
+                        mock.patch.object(rn, "run_ffmpeg") as encode:
+                    with self.assertRaisesRegex(rn.NormalizationError, "渲染产物音频时长与画面不一致"):
+                        rn.finalize(source, receipt, {"aspect": "portrait", "outputProfile": "hd_1080_v1"},
+                                    [], rn.Settings(), work, lambda: None, copy_video=True)
+                encode.assert_not_called()
+
     def test_duration_mismatch_keeps_guard_and_reports_stream_evidence(self):
         for duration in ("7.900000", "8.100000"):
             with self.subTest(duration=duration), tempfile.TemporaryDirectory() as scratch:
@@ -225,7 +244,15 @@ class RealMediaTests(unittest.TestCase):
 
     def test_cloud_render_keeps_video_bytes_and_only_normalizes_audio(self):
         """MediaKit output: canvas-sized H.264 with 44.1 kHz audio; video is copied, audio fixed to 48 kHz/-14 LUFS."""
-        settings = rn.Settings()
+        self.assert_cloud_normalization()
+
+    def test_dynamic_loudnorm_tail_stays_on_video_timeline(self):
+        # Preserve the 12 dB source difference and request LRA=1 to deterministically
+        # exercise dynamic mode, including FFmpeg 6.1's extra 100 ms output block.
+        self.assert_cloud_normalization(dynamic=True)
+
+    def assert_cloud_normalization(self, dynamic=False):
+        settings = rn.Settings(lra=1.0) if dynamic else rn.Settings()
         with tempfile.TemporaryDirectory(dir=self.folder.name) as scratch:
             work = Path(scratch)
             cloud = work / "cloud.mp4"
@@ -238,6 +265,9 @@ class RealMediaTests(unittest.TestCase):
             self.assertEqual([c["measuredOn"] for c in clips], ["rendered_output"] * 2)
             self.assertEqual([c["renderedFrames"] for c in clips], [120, 120])
             self.assertGreater(clips[0]["gainDb"], clips[1]["gainDb"])  # quiet window boosted more
+            if dynamic:
+                for clip in clips:
+                    clip["linearGain"] = 1.0
             video, receipt = rn.finalize(cloud, receipt, self.snapshot, clips, settings, work, lambda: None,
                                          copy_video=True)
             video_md5 = lambda file: subprocess.run(["ffmpeg", "-v", "error", "-i", str(file), "-map", "0:v", "-c", "copy",
@@ -245,9 +275,24 @@ class RealMediaTests(unittest.TestCase):
             self.assertEqual(video_md5(video), video_md5(cloud))
             streams = {s["codec_type"]: s for s in rn.probe(video, work)["streams"]}
             self.assertEqual((streams["audio"]["sample_rate"], streams["audio"]["channels"]), ("48000", 2))
+            self.assertAlmostEqual(float(streams["audio"]["duration"]), 8.0, delta=1 / rn.SAMPLE_RATE)
             overall, _ = loudness(video)
             self.assertLess(abs(overall - settings.target_lufs), 1.5)
             self.assertEqual(receipt["host_output_normalization"]["encode"]["videoCodec"], "copy")
+            if dynamic:
+                self.assertEqual(receipt["host_output_normalization"]["loudnorm"]["normalizationType"], "dynamic")
+                packets = json.loads(subprocess.run(
+                    ["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_packets",
+                     "-show_entries", "packet=pts_time", "-of", "json", str(video)],
+                    capture_output=True, text=True, check=True, timeout=120).stdout)["packets"]
+                for previous, current in zip(packets, packets[1:]):
+                    self.assertAlmostEqual(float(current["pts_time"]) - float(previous["pts_time"]),
+                                           1024 / rn.SAMPLE_RATE, delta=1 / rn.SAMPLE_RATE)
+                # The end of the source remains audible; trimming must only remove
+                # the filter's surplus tail, not replace the final content with silence.
+                tail, _ = loudness(video, 7.5, 0.5)
+                preceding, _ = loudness(video, 6.5, 0.5)
+                self.assertLess(abs(tail - preceding), 2)
             inspection = inspect_output(video, self.snapshot, False, receipt, lambda: None)
             self.assertEqual(inspection["sha256"], receipt["output"]["sha256"])
 
