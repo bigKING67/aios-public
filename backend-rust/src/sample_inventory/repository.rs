@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: SQL fragments are constants; sort identifiers/directions are allowlisted and filters bound.
 use sqlx::{PgPool, Postgres, Row, Transaction};
 use tracing::error;
 
@@ -244,7 +245,7 @@ pub(crate) async fn list_samples(
         LIMIT $7 OFFSET $8
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(query.keyword.as_deref())
         .bind(query.include_archived)
         .bind(query.date_from.as_ref())
@@ -290,7 +291,7 @@ pub(crate) async fn list_samples(
           )
         "#
     );
-    let total: i64 = sqlx::query_scalar(&total_sql)
+    let total: i64 = sqlx::query_scalar(sqlx::AssertSqlSafe(total_sql.as_str()))
         .bind(query.keyword.as_deref())
         .bind(query.include_archived)
         .bind(query.date_from.as_ref())
@@ -363,7 +364,7 @@ pub(crate) async fn get_summary(pool: &PgPool) -> AppResult<SampleInventorySumma
         GROUP BY settings.low_stock_threshold
         "#
     );
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .fetch_optional(pool)
         .await
         .map_err(|error| map_database_error(error, "get_summary"))?;
@@ -404,7 +405,7 @@ pub(crate) async fn get_sample_in_tx(
         WHERE sample.id = $1
         "#
     );
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(sample_id)
         .fetch_optional(&mut **tx)
         .await
@@ -446,7 +447,7 @@ pub(crate) async fn list_inbounds(
         LIMIT $6 OFFSET $7
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(query.keyword.as_deref())
         .bind(query.sample_id)
         .bind(query.include_voided)
@@ -505,7 +506,7 @@ pub(crate) async fn get_inbound_in_tx(
         WHERE inbound.id = $1
         "#
     );
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(inbound_id)
         .fetch_optional(&mut **tx)
         .await
@@ -552,7 +553,7 @@ pub(crate) async fn list_outbounds(
         LIMIT $6 OFFSET $7
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(query.keyword.as_deref())
         .bind(query.status.as_deref())
         .bind(query.sample_id)
@@ -614,7 +615,7 @@ pub(crate) async fn get_outbound_in_tx(
         WHERE outbound.id = $1 AND outbound.archived_at IS NULL
         "#
     );
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(request_id)
         .fetch_optional(&mut **tx)
         .await
@@ -653,7 +654,7 @@ pub(crate) async fn export_samples(pool: &PgPool) -> AppResult<Vec<SampleInvento
         LIMIT 10000
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .fetch_all(pool)
         .await
         .map_err(|error| map_database_error(error, "export_samples"))?;
@@ -673,7 +674,7 @@ pub(crate) async fn export_inbounds(pool: &PgPool) -> AppResult<Vec<SampleInvent
         LIMIT 10000
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .fetch_all(pool)
         .await
         .map_err(|error| map_database_error(error, "export_inbounds"))?;
@@ -694,7 +695,7 @@ pub(crate) async fn export_outbounds(pool: &PgPool) -> AppResult<Vec<SampleInven
         LIMIT 10000
         "#
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .fetch_all(pool)
         .await
         .map_err(|error| map_database_error(error, "export_outbounds"))?;

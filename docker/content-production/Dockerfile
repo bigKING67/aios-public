@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9
+FROM node:24-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
 RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv ffmpeg chromium fonts-noto-cjk ca-certificates && rm -rf /var/lib/apt/lists/*
 RUN python3 -m venv /opt/venv
 COPY docker/content-production/requirements.txt /opt/requirements.txt

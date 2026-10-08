@@ -409,7 +409,7 @@ async fn spawn_fixture_server(pool: PgPool, database_url: String) -> (SocketAddr
     let dragonfly_client = dragonfly_client::Client::open(settings.dragonfly_url.as_str())
         .expect("open dragonfly fixture client");
     let dragonfly_connection = dragonfly_client
-        .get_multiplexed_tokio_connection()
+        .get_multiplexed_async_connection()
         .await
         .expect("connect to local dragonfly fixture");
     let state = Arc::new(AppState {

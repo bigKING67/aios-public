@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Schema/table identifiers pass the existing identifier validators; event values remain bound.
 use super::super::types::DataOpsNotificationEvent;
 use super::common::{deserialize_payload_rows, runtime_schema_name, runtime_table};
 use crate::state::AppState;
@@ -18,7 +19,7 @@ pub(crate) async fn list_postgres_notification_events_by_retry_group(
         LIMIT $2
         "#
     );
-    let rows = sqlx::query(query.as_str())
+    let rows = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .bind(retry_group_id)
         .bind(limit as i64)
         .fetch_all(&state.pool)

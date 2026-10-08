@@ -41,7 +41,7 @@ pub(crate) async fn run() -> anyhow::Result<()> {
     }
 
     let dragonfly_client = dragonfly_client::Client::open(settings.dragonfly_url.as_str())?;
-    let dragonfly_connection = dragonfly_client.get_multiplexed_tokio_connection().await?;
+    let dragonfly_connection = dragonfly_client.get_multiplexed_async_connection().await?;
     let http_client = reqwest::Client::builder().build()?;
 
     let state = Arc::new(AppState {

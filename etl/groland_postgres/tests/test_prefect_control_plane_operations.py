@@ -323,7 +323,7 @@ mkdir -p "${paths[@]}"
       self.assertIn("valid PostgreSQL PREFECT_API_DATABASE_CONNECTION_URL", rejected.stderr)
       self.assertEqual(chown_log.read_text(encoding="utf-8"), chown_before_rejection)
 
-  def test_prefect_retention_and_shadow_settings_are_real_378_settings(self) -> None:
+  def test_prefect_retention_and_shadow_settings_are_real_388_settings(self) -> None:
     environment = os.environ.copy()
     environment.update({
       "PREFECT_SERVER_SERVICES_DB_VACUUM_ENABLED": "events,flow_runs",
@@ -376,7 +376,8 @@ print(json.dumps({
       capture_output=True,
     )
     observed = json.loads(completed.stdout)
-    self.assertEqual(observed["vacuum_types"], ["events", "flow_runs"])
+    # Prefect 3.8 includes orphan cleanup whenever flow-run retention is enabled.
+    self.assertEqual(observed["vacuum_types"], ["events", "flow_runs", "orphans"])
     self.assertEqual(observed["vacuum_days"], 90)
     self.assertEqual(observed["event_days"], 7)
     self.assertTrue(all(observed["disabled"].values()), observed["disabled"])
@@ -477,7 +478,7 @@ cat >> "$PSQL_CAPTURE"
       "status --porcelain --untracked-files=all",
       'RELEASE_DIR="$RUNTIME_ROOT/releases/$GIT_SHA"',
       "sync --project \"$ETL_ROOT\" --frozen --no-dev",
-      'if [[ "$installed_version" != "3.7.8" ]]',
+      'if [[ "$installed_version" != "3.8.8" ]]',
       "AIOS_RUNTIME_ENV_GROUP",
       "AIOS_RUNTIME_ENV_OPERATOR_USER",
       "PREFECT_RUNTIME_PYTHON",

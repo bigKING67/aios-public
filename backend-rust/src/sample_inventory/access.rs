@@ -7,7 +7,7 @@ use axum::{
     response::{IntoResponse, Response},
 };
 use chrono::Utc;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::{Digest, Sha256};
 use tracing::warn;
 use uuid::Uuid;

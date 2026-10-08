@@ -38,7 +38,7 @@ async fn real_http_worker_render_and_signed_delivery() {
     .execute(&pool)
     .await
     .unwrap();
-    let source_hash = format!("{:x}", Sha256::digest(&source));
+    let source_hash = hex::encode(Sha256::digest(&source));
     sqlx::raw_sql(include_str!(
         "../../../../../sql/migrations/027_content_production_run_renders.sql"
     ))
@@ -70,7 +70,7 @@ async fn real_http_worker_render_and_signed_delivery() {
     settings.tos_secret_access_key = required("TOS_SECRET_ACCESS_KEY");
     let redis = dragonfly_client::Client::open(settings.dragonfly_url.as_str())
         .unwrap()
-        .get_multiplexed_tokio_connection()
+        .get_multiplexed_async_connection()
         .await
         .unwrap();
     let settings = Arc::new(settings);
@@ -175,7 +175,7 @@ async fn real_http_worker_render_and_signed_delivery() {
         .bytes()
         .await
         .unwrap();
-    assert_eq!(format!("{:x}", Sha256::digest(&original)), source_hash);
+    assert_eq!(hex::encode(Sha256::digest(&original)), source_hash);
     super::planning_http_fixture::exercise(&client, &base, &token, ASSET, &model_calls).await;
     super::runs::http_fixture::exercise(&state, &client, &base, &token, ASSET, &model_calls).await;
     super::runs::render_http_fixture::exercise(&state, &client, &base, &token, ASSET).await;
@@ -308,7 +308,7 @@ async fn real_http_worker_render_and_signed_delivery() {
     let receipt: Value = row.get("receipt");
     assert_eq!(
         receipt["output"]["sha256"],
-        format!("{:x}", Sha256::digest(&output))
+        hex::encode(Sha256::digest(&output))
     );
     assert_eq!(receipt["host_revision"], 2);
     assert_eq!(receipt["output"]["duration"], 2);

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM rust:1.88-bookworm AS builder
+FROM rust:1.99.0-bookworm AS builder
 WORKDIR /app
 
 COPY Cargo.toml Cargo.lock ./
@@ -9,7 +9,7 @@ COPY src ./src
 RUN --mount=type=cache,target=/usr/local/cargo/registry,sharing=locked \
   --mount=type=cache,target=/usr/local/cargo/git,sharing=locked \
   --mount=type=cache,target=/app/target-cache,sharing=locked \
-  CARGO_TARGET_DIR=/app/target-cache cargo build --release \
+  CARGO_TARGET_DIR=/app/target-cache cargo build --locked --release \
   && cp /app/target-cache/release/aios-backend-rust /app/aios-backend-rust
 
 FROM debian:bookworm-slim AS runner

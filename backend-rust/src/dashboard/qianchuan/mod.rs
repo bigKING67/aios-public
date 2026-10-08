@@ -759,7 +759,7 @@ async fn fetch_trend(
 
 async fn fetch_json_payload(
     pool: &PgPool,
-    sql: &str,
+    sql: &'static str,
     dates: &[&str],
     column: &str,
 ) -> Result<Value, String> {

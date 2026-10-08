@@ -7,10 +7,9 @@ fn invalid() -> AppError {
     AppError::Conflict("字幕高清复检证据与当前工程不一致".into())
 }
 fn digest(value: &Value) -> String {
-    format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(value).expect("JSON serializes"))
-    )
+    hex::encode(Sha256::digest(
+        serde_json::to_vec(value).expect("JSON serializes"),
+    ))
 }
 fn sha(value: &Value) -> bool {
     value.as_str().is_some_and(|s| {

@@ -10,10 +10,9 @@ use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
 fn digest(value: &Value) -> String {
-    format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(value).expect("JSON value serializes"))
-    )
+    hex::encode(Sha256::digest(
+        serde_json::to_vec(value).expect("JSON value serializes"),
+    ))
 }
 
 pub(super) fn inspect(

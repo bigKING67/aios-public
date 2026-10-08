@@ -122,10 +122,9 @@ pub(super) async fn poll(
         match row.get::<String, _>("status").as_str() {
             "succeeded" => {
                 let report = &metadata["host_caption_preflight"]["report"];
-                let digest = format!(
-                    "{:x}",
-                    Sha256::digest(serde_json::to_vec(report).map_err(|_| AppError::Internal)?)
-                );
+                let digest = hex::encode(Sha256::digest(
+                    serde_json::to_vec(report).map_err(|_| AppError::Internal)?,
+                ));
                 let empty =
                     report["status"] == "needs_inspection" && report["candidates"] == json!([]);
                 if report["deliveryApproved"] != false

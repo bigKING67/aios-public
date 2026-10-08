@@ -85,10 +85,10 @@ mod tests {
         let query = builder.build();
         let sql = query.sql();
 
-        assert!(sql.contains("CASE WHEN owner_user_id ="));
-        assert!(sql.contains("created_by_user_id ="));
-        assert!(sql.contains("THEN 0"));
-        assert!(sql.contains("THEN 1"));
-        assert!(sql.contains("updated_at DESC, id DESC"));
+        assert!(sql.as_str().contains("CASE WHEN owner_user_id ="));
+        assert!(sql.as_str().contains("created_by_user_id ="));
+        assert!(sql.as_str().contains("THEN 0"));
+        assert!(sql.as_str().contains("THEN 1"));
+        assert!(sql.as_str().contains("updated_at DESC, id DESC"));
     }
 }

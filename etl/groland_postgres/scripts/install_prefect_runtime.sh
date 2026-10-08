@@ -162,7 +162,7 @@ if [[ ! -x "$RELEASE_DIR/venv/bin/prefect" ]]; then
 fi
 
 installed_version="$($RELEASE_DIR/venv/bin/python -c 'import importlib.metadata; print(importlib.metadata.version("prefect"))')"
-if [[ "$installed_version" != "3.7.8" ]]; then
+if [[ "$installed_version" != "3.8.8" ]]; then
   echo "Managed runtime Prefect version drifted: $installed_version" >&2
   exit 1
 fi
@@ -180,7 +180,7 @@ chmod -R go-w "$RELEASE_DIR"
 
 if ! "$RUNUSER_BIN" --user "$SERVICE_USER" -- \
   "$RELEASE_DIR/venv/bin/python" -c \
-  'import importlib.metadata, prefect; assert importlib.metadata.version("prefect") == prefect.__version__ == "3.7.8"'; then
+  'import importlib.metadata, prefect; assert importlib.metadata.version("prefect") == prefect.__version__ == "3.8.8"'; then
   echo "Managed runtime is not executable by service user $SERVICE_USER." >&2
   exit 1
 fi

@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 from prefect_postgres_connection import ConnectionUrlError, parse_connection_url
 
 
-SUPPORTED_PREFECT_VERSIONS = {"3.7.8"}
+SUPPORTED_PREFECT_VERSIONS = {"3.8.8"}
 DEFAULT_PREFECT_DATABASE_URL = "sqlite+aiosqlite:///prefect.db"
 SUPPORTED_DATABASE_BACKENDS = {"sqlite", "postgresql"}
 TARGET_FUNCTIONS = (

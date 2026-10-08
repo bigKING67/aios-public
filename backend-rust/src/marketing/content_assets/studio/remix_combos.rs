@@ -57,7 +57,7 @@ pub(super) fn combination_hash(segment_ids: &[Uuid]) -> String {
         }
         hasher.update(id.hyphenated().to_string().as_bytes());
     }
-    format!("{:x}", hasher.finalize())
+    hex::encode(hasher.finalize())
 }
 
 struct SplitMix64(u64);

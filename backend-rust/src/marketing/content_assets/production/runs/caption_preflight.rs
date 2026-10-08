@@ -88,7 +88,7 @@ pub(crate) async fn authorize_worker(
                     .all(|b| b.is_ascii_alphanumeric() || b == b'_' || b == b'-')
         })
         .ok_or(AppError::Unauthorized)?;
-    let digest = format!("{:x}", Sha256::digest(secret.as_bytes()));
+    let digest = hex::encode(Sha256::digest(secret.as_bytes()));
     let owner: String = sqlx::query_scalar("SELECT r.owner_user_id FROM ads.marketing_content_asset_processing_jobs j JOIN ads.content_production_runs r ON r.run_id::text=j.metadata->'caption_request'->>'runId' WHERE j.job_id=$1 AND j.job_type='analysis' AND j.status='running' AND j.attempts=1 AND j.max_attempts=1 AND j.started_at>clock_timestamp()-INTERVAL '20 minutes' AND j.metadata->>'operation'='source_caption_preflight_v1' AND j.metadata->>'caption_claim_token'=$2 AND j.metadata->>'caption_authorization_sha256'=$3")
         .bind(job).bind(request.claim_token.to_string()).bind(&digest).fetch_optional(&state.pool).await
         .map_err(super::super::repository::db_error)?.ok_or(AppError::Forbidden)?;

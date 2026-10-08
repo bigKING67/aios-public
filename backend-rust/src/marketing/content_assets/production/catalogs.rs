@@ -70,7 +70,7 @@ pub(super) async fn import(
     // Local frame paths, annotations, arbitrary metadata and URLs never enter persistent state.
     let snapshot =
         serde_json::to_value(Stored { source, clips }).map_err(|_| AppError::Internal)?;
-    let digest = format!("{:x}", Sha256::digest(snapshot.to_string()));
+    let digest = hex::encode(Sha256::digest(snapshot.to_string()));
     let id = Uuid::new_v4();
     sqlx::query("INSERT INTO ads.content_production_shot_catalogs(catalog_id,owner_user_id,asset_id,content_hash,snapshot) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (owner_user_id,asset_id,content_hash) DO NOTHING")
         .bind(id).bind(&user.user_id).bind(asset_id).bind(&digest).bind(snapshot).execute(&state.pool).await.map_err(db_error)?;

@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal SQL builders use fixed fragments and validated/escaped inputs; never pass raw request SQL.
 use std::sync::Arc;
 
 use axum::{
@@ -445,7 +446,7 @@ async fn fetch_douyin_payload(
     let month_start = format!("{month}-01");
     let storage_readiness = query_video_understanding_storage_readiness(pool).await?;
     let query_sql = build_douyin_payload_sql(storage_readiness);
-    let row = sqlx::query(query_sql.as_str())
+    let row = sqlx::query(sqlx::AssertSqlSafe(query_sql.as_str()))
         .bind(month_start)
         .bind(video_type)
         .bind(requested_brand)
@@ -587,7 +588,7 @@ async fn query_brand_ai_backfill_scope(
         BRAND_AI_BACKFILL_SCOPE_SQL,
         storage_readiness.brand_resolution_table_available,
     );
-    let row = sqlx::query(query_sql.as_str())
+    let row = sqlx::query(sqlx::AssertSqlSafe(query_sql.as_str()))
         .bind(month_start)
         .bind(request.video_type)
         .bind(request.brand.as_str())
@@ -623,7 +624,7 @@ async fn query_brand_ai_backfill_assets(
         storage_readiness.brand_resolution_table_available,
     );
     let month_start = format!("{}-01", request.month);
-    let rows = sqlx::query(query_sql.as_str())
+    let rows = sqlx::query(sqlx::AssertSqlSafe(query_sql.as_str()))
         .bind(month_start)
         .bind(request.video_type)
         .bind(brand_key)

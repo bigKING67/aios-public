@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Schema/table identifiers pass the existing identifier validators; event values remain bound.
 use std::collections::HashMap;
 
 use chrono::{DateTime, FixedOffset, NaiveDateTime, TimeZone, Utc};
@@ -24,7 +25,7 @@ pub(super) async fn fetch_feishu_sync_states(
         table_name
     );
 
-    let rows = sqlx::query(query.as_str())
+    let rows = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .fetch_all(&state.pool)
         .await
         .map_err(|error| {

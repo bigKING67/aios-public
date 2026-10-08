@@ -49,7 +49,7 @@ pub(super) async fn pool() -> PgPool {
 }
 
 fn random_sha() -> String {
-    format!("{:x}", Sha256::digest(Uuid::new_v4().as_bytes()))
+    hex::encode(Sha256::digest(Uuid::new_v4().as_bytes()))
 }
 
 pub(super) async fn asset(

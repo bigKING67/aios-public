@@ -23,7 +23,7 @@ pub(super) async fn exercise(
     .execute(pool)
     .await
     .unwrap();
-    let shots:Vec<_>=[(0,1000),(1000,3000)].iter().map(|(s,e)|json!({"shotId":format!("{:x}",Sha256::digest(format!("{hash}:{s}:{e}")))[..24],"startMs":s,"endMs":e,"semanticStatus":"not_analyzed","observations":null,"representativeFrame":{"path":"/must-never-be-read/private.jpg"}})).collect();
+    let shots:Vec<_>=[(0,1000),(1000,3000)].iter().map(|(s,e)|json!({"shotId":hex::encode(Sha256::digest(format!("{hash}:{s}:{e}")))[..24],"startMs":s,"endMs":e,"semanticStatus":"not_analyzed","observations":null,"representativeFrame":{"path":"/must-never-be-read/private.jpg"}})).collect();
     let mut body = json!({"rightsConfirmed":true,"catalog":{"schema":"aios.shot-catalog.v1","timebase":"raw-relative-ms","coverage":"complete","assetId":asset,"rawSha256":hash,"source":{"durationMs":3000},"shots":shots}});
     let url = format!("{base}/shot-catalogs");
     assert_eq!(

@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 //! 单条剪辑: one output from an explicit ordered list of confirmed segments of
 //! one preset version, each optionally trimmed inside its own bounds. All
 //! clips share one product. Sources pass the same production binding as
@@ -124,7 +125,7 @@ async fn load_segments(
         "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.product_name, s.source_content_hash FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.segment_id = ANY($1) AND s.status = 'confirmed' AND s.preset_key = $2 AND s.preset_version = $3 AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.segment_id{}",
         if lock { " FOR SHARE OF s" } else { "" }
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(&ids)
         .bind(preset_key)
         .bind(preset_version)
@@ -317,7 +318,7 @@ async fn compare(
         "SELECT br.batch_id, br.ordinal, br.segments, br.output_asset_id, r.status, oa.cover_object_key, COALESCE(b.structure->>'mode', 'framework') AS mode, COALESCE(b.constraints->>'productName', '') AS product_name, b.created_at::TEXT AS created_at FROM ads.content_remix_batch_runs br JOIN ads.content_remix_batches b ON b.batch_id = br.batch_id JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.marketing_content_assets oa ON oa.asset_id = br.output_asset_id AND oa.is_deleted = FALSE WHERE r.status IN ('succeeded', 'queued', 'running', 'paused') AND (br.output_asset_id IS NULL OR oa.asset_id IS NOT NULL) AND ($1::TEXT IS NULL OR b.owner_user_id = $1) AND EXISTS (SELECT 1 FROM JSONB_ARRAY_ELEMENTS(br.segments) cs WHERE (cs->>'assetId')::UUID = ANY($2)) AND {} ORDER BY b.created_at DESC, br.ordinal LIMIT $4",
         batch_in_enterprise_sql(3)
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(owner)
         .bind(&assets)
         .bind(enterprise_tag)
@@ -420,7 +421,7 @@ pub(super) fn digest(request: &CreateRemixEditRequest) -> String {
         "presetVersion": request.preset_version,
         "clips": clips,
     });
-    format!("{:x}", Sha256::digest(canonical.to_string().as_bytes()))
+    hex::encode(Sha256::digest(canonical.to_string().as_bytes()))
 }
 
 /// Untrimmed edits share the 框架混剪 segment-id hash (so a later framework
@@ -441,7 +442,7 @@ pub(super) fn edit_hash(clips: &[RemixEditClip], untrimmed: bool) -> String {
             )
         })
         .collect();
-    format!("{:x}", Sha256::digest(canonical.join("\n").as_bytes()))
+    hex::encode(Sha256::digest(canonical.join("\n").as_bytes()))
 }
 
 pub(super) async fn create(

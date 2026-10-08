@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 //! Reads of 框架混剪批次: the owner's batches in scoped studio access, every
 //! batch in open access (`owner` filter `None`). Batch and item status are
 //! derived from the live Runs so pause/cancel through the Runs API is
@@ -152,7 +153,7 @@ pub(super) async fn list(
         "{BATCH_SELECT} AND {} GROUP BY b.batch_id ORDER BY b.created_at DESC, b.batch_id DESC LIMIT $2",
         batch_in_enterprise_sql(3)
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(owner)
         .bind(BATCH_LIST_LIMIT)
         .bind(enterprise_tag)
@@ -187,7 +188,7 @@ pub(super) async fn refresh_stored_status(
     .map_err(db_error)?
     .ok_or(AppError::NotFound)?;
     let sql = format!("{BATCH_SELECT} AND b.batch_id = $2 GROUP BY b.batch_id");
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(owner)
         .bind(batch_id)
         .fetch_one(&mut *tx)
@@ -245,7 +246,7 @@ pub(super) async fn ensure_in_enterprise(
         "SELECT EXISTS (SELECT 1 FROM ads.content_remix_batches b WHERE b.batch_id = $1 AND {})",
         batch_in_enterprise_sql(2)
     );
-    let inside: bool = sqlx::query_scalar(&sql)
+    let inside: bool = sqlx::query_scalar(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(batch_id)
         .bind(enterprise_tag)
         .fetch_one(pool)
@@ -266,7 +267,7 @@ pub(super) async fn detail(
     batch_id: Uuid,
 ) -> StudioResult<RemixBatchDetail> {
     let sql = format!("{BATCH_SELECT} AND b.batch_id = $2 GROUP BY b.batch_id");
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(owner)
         .bind(batch_id)
         .fetch_optional(pool)

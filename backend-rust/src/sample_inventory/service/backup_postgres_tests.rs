@@ -642,7 +642,7 @@ async fn sample_inventory_backup_restore_postgres_contract() {
 
     let before_failed_restore_sha = state_sha(&pool).await;
     let before_failed_restore_counts = audit_counts(&pool).await;
-    sqlx::raw_sql(&format!(
+    sqlx::raw_sql(sqlx::AssertSqlSafe(format!(
         r#"
         CREATE FUNCTION sample_inventory.fail_fixture_restore()
         RETURNS TRIGGER LANGUAGE plpgsql AS $$
@@ -658,7 +658,7 @@ async fn sample_inventory_backup_restore_postgres_contract() {
         FOR EACH ROW EXECUTE FUNCTION sample_inventory.fail_fixture_restore();
         "#,
         sample.id
-    ))
+    )))
     .execute(&pool)
     .await
     .expect("install fixture failure trigger");

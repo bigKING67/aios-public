@@ -38,7 +38,7 @@ fn budget(options: &LlmCallOptions) -> AppResult<()> {
     Ok(())
 }
 fn hash(text: &str) -> String {
-    format!("{:x}", Sha256::digest(text.as_bytes()))
+    hex::encode(Sha256::digest(text.as_bytes()))
 }
 
 pub(super) fn correction_request(

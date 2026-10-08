@@ -53,7 +53,7 @@ pub(super) async fn exercise(
         .await
         .unwrap();
     assert_eq!(
-        format!("{:x}", Sha256::digest(&video)),
+        hex::encode(Sha256::digest(&video)),
         receipt["host_caption_review"]["candidateRender"]["receipt"]["output"]["sha256"]
             .as_str()
             .unwrap()

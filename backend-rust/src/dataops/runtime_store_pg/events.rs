@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Schema/table identifiers pass the existing identifier validators; event values remain bound.
 use serde::{de::DeserializeOwned, Serialize};
 use sqlx::types::Json;
 
@@ -39,7 +40,7 @@ pub(crate) async fn append_postgres_payload_event<T: Serialize>(
             "#
         );
 
-        sqlx::query(query.as_str())
+        sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
             .bind(id)
             .bind(Json(payload))
             .bind(reason_hash)
@@ -58,7 +59,7 @@ pub(crate) async fn append_postgres_payload_event<T: Serialize>(
             "#
         );
 
-        sqlx::query(query.as_str())
+        sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
             .bind(id)
             .bind(Json(payload))
             .execute(&state.pool)
@@ -77,7 +78,7 @@ pub(crate) async fn list_postgres_payload_events<T: DeserializeOwned>(
     let schema = runtime_schema_name()?;
     let table = runtime_table(schema.as_str(), table_name)?;
     let query = format!("SELECT payload FROM {table} ORDER BY event_at DESC, id DESC LIMIT $1");
-    let rows = sqlx::query(query.as_str())
+    let rows = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .bind(limit as i64)
         .fetch_all(&state.pool)
         .await
@@ -94,7 +95,7 @@ pub(crate) async fn delete_postgres_payload_event(
     let schema = runtime_schema_name()?;
     let table = runtime_table(schema.as_str(), table_name)?;
     let query = format!("DELETE FROM {table} WHERE id = $1");
-    let result = sqlx::query(query.as_str())
+    let result = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .bind(id)
         .execute(&state.pool)
         .await

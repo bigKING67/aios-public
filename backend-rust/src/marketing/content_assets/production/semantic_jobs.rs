@@ -54,7 +54,7 @@ pub(super) async fn enqueue(
         return Err(AppError::bad_request("镜头不属于所选目录"));
     }
     let value = serde_json::to_value(snapshot).map_err(|_| AppError::Internal)?;
-    let hash = format!("{:x}", Sha256::digest(value.to_string()));
+    let hash = hex::encode(Sha256::digest(value.to_string()));
     let row=sqlx::query("INSERT INTO ads.content_production_semantic_jobs(job_id,owner_user_id,catalog_id,request_hash,snapshot) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (owner_user_id,catalog_id,request_hash) WHERE status IN ('queued','running','cancel_requested') DO UPDATE SET catalog_id=EXCLUDED.catalog_id RETURNING job_id,status")
         .bind(Uuid::new_v4()).bind(&user.user_id).bind(request.catalog_id).bind(hash).bind(value).fetch_one(&state.pool).await.map_err(db_error)?;
     Ok(Json(

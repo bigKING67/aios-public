@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 use serde_json::json;
 use sqlx::{PgPool, Postgres, QueryBuilder, Row};
 use tracing::error;
@@ -138,7 +139,7 @@ pub(super) async fn query_asset_by_id(
     asset_id: Uuid,
 ) -> AppResult<Option<ContentAssetItem>> {
     let sql = format!("{ASSET_SELECT} WHERE asset.asset_id = $1 AND asset.is_deleted = FALSE");
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(asset_id)
         .fetch_optional(pool)
         .await

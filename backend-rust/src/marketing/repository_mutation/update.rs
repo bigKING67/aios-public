@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 use sqlx::PgPool;
 use tracing::error;
 
@@ -32,7 +33,7 @@ pub(crate) async fn update_creator_by_id(
     let owner_user_id = resolved_owner.user_id.as_deref();
 
     let sql = update_creator_sql();
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(id)
         .bind(input.platform.as_str())
         .bind(input.influencer_name.as_str())

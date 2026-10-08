@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 //! AI 创作中心首页总览: estimated model-analysis and cloud-composition spend,
 //! pipeline counts and recent work in one read. Costs are estimates from the
 //! usage each job recorded and the published list prices below; they ignore
@@ -79,15 +80,15 @@ pub(super) async fn overview(
     let key = query.period.unwrap_or_else(|| "last30".to_string());
     let batch_in_scope = batch_in_enterprise_sql(2);
     let start = period_start_sql(&key)?;
-    let period = sqlx::query(&format!(
+    let period = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT TO_CHAR(({start}) AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS from_at, \
                 TO_CHAR(NOW() AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS to_at"
-    ))
+    )))
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
 
-    let model = sqlx::query(&format!(
+    let model = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT COUNT(*) AS calls, \
                 COALESCE(SUM((usage->>'input_tokens')::BIGINT), 0)::BIGINT AS input_tokens, \
                 COALESCE(SUM((usage->'input_tokens_details'->>'audio_tokens')::BIGINT), 0)::BIGINT AS audio_tokens, \
@@ -97,14 +98,14 @@ pub(super) async fn overview(
          FROM ads.content_segment_suggestion_jobs j \
          WHERE created_at >= {start} AND usage ? 'input_tokens' AND ($1::TEXT IS NULL OR owner_user_id = $1) \
            AND {JOB_IN_SCOPE}"
-    ))
+    )))
     .bind(owner)
     .bind(enterprise_tag)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
     // Price only the calls on the priced model; others still count their tokens.
-    let priced = sqlx::query(&format!(
+    let priced = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT COALESCE(SUM((usage->>'input_tokens')::BIGINT), 0)::BIGINT AS input_tokens, \
                 COALESCE(SUM((usage->'input_tokens_details'->>'audio_tokens')::BIGINT), 0)::BIGINT AS audio_tokens, \
                 COALESCE(SUM((usage->'input_tokens_details'->>'cached_tokens')::BIGINT), 0)::BIGINT AS cached_tokens, \
@@ -112,7 +113,7 @@ pub(super) async fn overview(
          FROM ads.content_segment_suggestion_jobs j \
          WHERE created_at >= {start} AND usage ? 'input_tokens' AND model LIKE '{PRICED_MODEL_PREFIX}%' \
            AND ($1::TEXT IS NULL OR owner_user_id = $1) AND {JOB_IN_SCOPE}"
-    ))
+    )))
     .bind(owner)
     .bind(enterprise_tag)
     .fetch_one(pool)
@@ -125,7 +126,7 @@ pub(super) async fn overview(
         priced.get("output_tokens"),
     ));
 
-    let composition_rows = sqlx::query(&format!(
+    let composition_rows = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT COALESCE(j.receipt->'mediakit'->>'resultResolution', 'unknown') AS resolution, \
                 COUNT(*) AS tasks, \
                 COALESCE(SUM((j.receipt->'mediakit'->>'resultDurationSeconds')::DOUBLE PRECISION), 0) AS seconds \
@@ -136,7 +137,7 @@ pub(super) async fn overview(
          WHERE j.receipt->>'engine' = '{MEDIAKIT_ENGINE}' AND j.finished_at >= {start} \
            AND ($1::TEXT IS NULL OR b.owner_user_id = $1) AND {batch_in_scope} \
          GROUP BY 1 ORDER BY 1"
-    ))
+    )))
     .bind(owner)
     .bind(enterprise_tag)
     .fetch_all(pool)
@@ -164,7 +165,7 @@ pub(super) async fn overview(
         })
         .collect();
 
-    let pipeline = sqlx::query(&format!(
+    let pipeline = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT \
            (SELECT COUNT(*) FROM ads.marketing_content_assets \
               WHERE is_deleted = FALSE AND asset_status = 'ready' \
@@ -196,14 +197,14 @@ pub(super) async fn overview(
            (SELECT COUNT(*) FROM ads.marketing_content_assets \
               WHERE is_deleted = FALSE AND source_type = 'ai_studio_output' AND created_at >= {start} \
                 AND ($2::TEXT IS NULL OR $2 = ANY(tags))) AS outputs"
-    ))
+    )))
     .bind(owner)
     .bind(enterprise_tag)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
 
-    let recent = sqlx::query(&format!(
+    let recent = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT * FROM ( \
            SELECT 'analysis' AS kind, j.job_id AS id, COALESCE(a.title, '已删除的素材') AS title, j.status, \
                   j.error_code AS detail, j.created_at \
@@ -216,7 +217,7 @@ pub(super) async fn overview(
            FROM ads.content_remix_batches b \
            WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1) AND {batch_in_scope} \
          ) recent ORDER BY created_at DESC LIMIT $3"
-    ))
+    )))
     .bind(owner)
     .bind(enterprise_tag)
     .bind(RECENT_LIMIT)

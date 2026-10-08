@@ -451,7 +451,7 @@ async fn download_remote_video(
     Ok(RemoteVideoDownload {
         bytes,
         size_bytes: size_bytes as i64,
-        sha256: format!("{:x}", hasher.finalize()),
+        sha256: hex::encode(hasher.finalize()),
         content_type,
     })
 }

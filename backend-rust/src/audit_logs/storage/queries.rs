@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Storage enum chooses fixed table identifiers; filters remain bound.
 use sqlx::{PgPool, Row};
 use tracing::error;
 
@@ -14,16 +15,18 @@ pub(in crate::audit_logs) async fn count_audit_logs_by_storage(
     keyword_filter: Option<&str>,
 ) -> AppResult<i64> {
     let tables = audit_storage_tables(storage);
-    let row = sqlx::query(count_audit_logs_sql(tables.logs, tables.users).as_str())
-        .bind(module_filter)
-        .bind(action_filter)
-        .bind(keyword_filter)
-        .fetch_one(pool)
-        .await
-        .map_err(|error| {
-            error!(?error, ?storage, "count audit logs failed");
-            AppError::Internal
-        })?;
+    let row = sqlx::query(sqlx::AssertSqlSafe(
+        count_audit_logs_sql(tables.logs, tables.users).as_str(),
+    ))
+    .bind(module_filter)
+    .bind(action_filter)
+    .bind(keyword_filter)
+    .fetch_one(pool)
+    .await
+    .map_err(|error| {
+        error!(?error, ?storage, "count audit logs failed");
+        AppError::Internal
+    })?;
 
     Ok(row.try_get::<i64, _>("total").unwrap_or(0))
 }
@@ -38,18 +41,20 @@ pub(in crate::audit_logs) async fn query_audit_logs_by_storage(
     offset: i64,
 ) -> AppResult<Vec<AuditLogItem>> {
     let tables = audit_storage_tables(storage);
-    let rows = sqlx::query(query_audit_logs_sql(tables.logs, tables.users).as_str())
-        .bind(module_filter)
-        .bind(action_filter)
-        .bind(keyword_filter)
-        .bind(limit)
-        .bind(offset)
-        .fetch_all(pool)
-        .await
-        .map_err(|error| {
-            error!(?error, ?storage, "query audit logs failed");
-            AppError::Internal
-        })?;
+    let rows = sqlx::query(sqlx::AssertSqlSafe(
+        query_audit_logs_sql(tables.logs, tables.users).as_str(),
+    ))
+    .bind(module_filter)
+    .bind(action_filter)
+    .bind(keyword_filter)
+    .bind(limit)
+    .bind(offset)
+    .fetch_all(pool)
+    .await
+    .map_err(|error| {
+        error!(?error, ?storage, "query audit logs failed");
+        AppError::Internal
+    })?;
 
     Ok(rows.into_iter().map(row_to_audit_log_item).collect())
 }

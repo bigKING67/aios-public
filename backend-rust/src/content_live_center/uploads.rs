@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use chrono::{Datelike, SecondsFormat, Utc};
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use reqwest::{
     header::{HeaderMap, CONTENT_LENGTH},
     Client, StatusCode,

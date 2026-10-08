@@ -42,7 +42,7 @@ pub(super) fn parse(value: &Value) -> AppResult<(Uuid, String, u32, Vec<Clip>)> 
         {
             return Err(invalid());
         }
-        let id = format!("{:x}", Sha256::digest(format!("{hash}:{start}:{end}")))[..24].to_string();
+        let id = hex::encode(Sha256::digest(format!("{hash}:{start}:{end}")))[..24].to_string();
         if shot["shotId"] != id {
             return Err(invalid());
         }
@@ -68,7 +68,7 @@ mod tests {
     use serde_json::json;
     pub(super) fn sample() -> Value {
         let hash = "a".repeat(64);
-        let id = format!("{:x}", Sha256::digest(format!("{hash}:0:1000")))[..24].to_string();
+        let id = hex::encode(Sha256::digest(format!("{hash}:0:1000")))[..24].to_string();
         json!({"schema":"aios.shot-catalog.v1","assetId":Uuid::nil(),"rawSha256":hash,"timebase":"raw-relative-ms","coverage":"complete","source":{"durationMs":1000},"shots":[{"shotId":id,"startMs":0,"endMs":1000,"semanticStatus":"not_analyzed","observations":null}]})
     }
     #[test]

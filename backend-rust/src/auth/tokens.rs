@@ -134,4 +134,27 @@ mod tests {
             ));
         }
     }
+
+    #[test]
+    fn independent_hs256_token_remains_compatible_and_rejects_wrong_key() {
+        use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+        use hmac::{Hmac, KeyInit, Mac};
+        use sha2::Sha256;
+
+        // Build a synthetic standard JWT without jsonwebtoken's encoder, so
+        // decoder compatibility is tested independently and no token is stored.
+        let header = URL_SAFE_NO_PAD.encode(br#"{"alg":"HS256","typ":"JWT"}"#);
+        let payload = URL_SAFE_NO_PAD.encode(br#"{"sub":"upgrade-fixture","typ":"access","exp":4102444800,"iat":1704067200,"jti":"synthetic","username":null,"roles":[],"permissions":[]}"#);
+        let signing_input = format!("{header}.{payload}");
+        let mut mac = Hmac::<Sha256>::new_from_slice(b"fixture-only-signing-key").unwrap();
+        mac.update(signing_input.as_bytes());
+        let signature = URL_SAFE_NO_PAD.encode(mac.finalize().into_bytes());
+        let token = format!("{signing_input}.{signature}");
+        let claims = decode_token(&token, "fixture-only-signing-key", "access").unwrap();
+        assert_eq!(claims.sub, "upgrade-fixture");
+        assert!(matches!(
+            decode_token(&token, "wrong-key", "access"),
+            Err(AppError::Unauthorized)
+        ));
+    }
 }

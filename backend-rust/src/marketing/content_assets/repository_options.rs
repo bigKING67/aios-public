@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 use sqlx::{PgPool, Row};
 use tracing::{error, warn};
 
@@ -27,7 +28,7 @@ pub(super) async fn query_array_text_options(
          WHERE asset.is_deleted = FALSE AND NULLIF(BTRIM(value), '') IS NOT NULL \
          ORDER BY value ASC LIMIT $1"
     );
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(limit)
         .fetch_all(pool)
         .await
@@ -46,10 +47,13 @@ pub(super) async fn query_distinct_text(pool: &PgPool, column: &str) -> AppResul
         "SELECT DISTINCT {column} AS value FROM ads.marketing_content_assets \
          WHERE is_deleted = FALSE AND NULLIF(BTRIM({column}), '') IS NOT NULL ORDER BY {column} ASC LIMIT 200"
     );
-    let rows = sqlx::query(&sql).fetch_all(pool).await.map_err(|error| {
-        error!(?error, %column, "query marketing content asset distinct option failed");
-        AppError::Internal
-    })?;
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
+        .fetch_all(pool)
+        .await
+        .map_err(|error| {
+            error!(?error, %column, "query marketing content asset distinct option failed");
+            AppError::Internal
+        })?;
     Ok(rows
         .iter()
         .filter_map(|row| row.try_get::<String, _>("value").ok())

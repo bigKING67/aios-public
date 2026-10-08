@@ -13,7 +13,7 @@ pub(super) async fn bootstrap_weekly_summary_storage(pool: &PgPool) -> AppResult
     }
 
     for statement in WEEKLY_SUMMARY_STORAGE_BOOTSTRAP_STATEMENTS {
-        sqlx::query(statement).execute(pool).await.map_err(|error| {
+        sqlx::query(*statement).execute(pool).await.map_err(|error| {
             error!(?error, "initialize weekly summary storage failed");
             AppError::bad_request(
                 "周报总结表尚未初始化，请执行 sql/migrations/010_weekly_summary_scope_hardening.sql 后重试。",

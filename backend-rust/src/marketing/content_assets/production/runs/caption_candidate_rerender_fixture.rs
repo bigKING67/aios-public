@@ -73,7 +73,7 @@ pub(super) async fn exercise(
         .await
         .unwrap();
     assert_eq!(
-        format!("{:x}", Sha256::digest(&bytes)),
+        hex::encode(Sha256::digest(&bytes)),
         receipt["output"]["sha256"].as_str().unwrap()
     );
     std::fs::write(root.join("caption-adopted-video.mp4"), bytes).unwrap();

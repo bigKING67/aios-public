@@ -106,10 +106,7 @@ pub(super) async fn exercise(
         }
         if ["detail_frame", "detail_words"].contains(&case) {
             let evidence = &bad["host_visual_review"]["entries"][0]["captionEvidence"];
-            let digest = format!(
-                "{:x}",
-                Sha256::digest(serde_json::to_vec(evidence).unwrap())
-            );
+            let digest = hex::encode(Sha256::digest(serde_json::to_vec(evidence).unwrap()));
             bad["host_visual_review"]["entries"][0]["captionEvidenceSha256"] = json!(digest);
         }
         sqlx::query("UPDATE ads.content_production_jobs SET receipt=$1 WHERE job_id=$2::uuid")

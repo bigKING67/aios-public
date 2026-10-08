@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Table resolution returns only the two literal CASE branches; token values remain bound.
 use sqlx::PgPool;
 use tracing::error;
 
@@ -25,7 +26,7 @@ pub(crate) async fn revoke_refresh_token(pool: &PgPool, refresh_token: &str) -> 
         "
     );
 
-    sqlx::query(sql.as_str())
+    sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(token_hash)
         .execute(pool)
         .await

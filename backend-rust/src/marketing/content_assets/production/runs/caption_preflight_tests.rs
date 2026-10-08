@@ -33,7 +33,7 @@ async fn live_owner_and_queue_authorization() {
     settings.dragonfly_url = redis_url;
     let redis = dragonfly_client::Client::open(settings.dragonfly_url.as_str())
         .unwrap()
-        .get_multiplexed_tokio_connection()
+        .get_multiplexed_async_connection()
         .await
         .unwrap();
     let settings = Arc::new(settings);
@@ -106,7 +106,7 @@ async fn live_owner_and_queue_authorization() {
         asset.to_string()
     );
     let secret = "z".repeat(43); // Fixture capability, never a real account token.
-    let digest = format!("{:x}", Sha256::digest(secret.as_bytes()));
+    let digest = hex::encode(Sha256::digest(secret.as_bytes()));
     sqlx::query("UPDATE ads.marketing_content_asset_processing_jobs SET metadata=metadata || jsonb_build_object('caption_authorization_sha256',$2::text) WHERE job_id=$1")
         .bind(job).bind(&digest).execute(&pool).await.unwrap();
     let worker_endpoint = format!("{base}/caption-preflight-jobs/{job}/authorize-worker");
@@ -177,9 +177,9 @@ async fn live_owner_and_queue_authorization() {
         "execution_version=2",
         "owner_user_id='other'",
     ] {
-        sqlx::query(&format!(
+        sqlx::query(sqlx::AssertSqlSafe(format!(
             "UPDATE ads.content_production_runs SET {change} WHERE run_id=$1::uuid"
-        ))
+        )))
         .bind(run)
         .execute(&pool)
         .await
@@ -252,7 +252,7 @@ async fn exercise_planning(state: &AppState, original: &str, asset: Uuid, sha: &
         .await
         .is_err());
     let report = json!({"status":"needs_inspection","candidates":[],"deliveryApproved":false});
-    let receipt = json!({"report":report,"reportSha256":format!("{:x}",Sha256::digest(serde_json::to_vec(&report).unwrap())),"deliveryApproved":false});
+    let receipt = json!({"report":report,"reportSha256":hex::encode(Sha256::digest(serde_json::to_vec(&report).unwrap())),"deliveryApproved":false});
     sqlx::query("UPDATE ads.marketing_content_asset_processing_jobs SET status='succeeded',metadata=metadata || jsonb_build_object('host_caption_preflight',$2::jsonb) WHERE metadata->'caption_request'->>'runId'=$1")
         .bind(run_id.to_string()).bind(receipt).execute(pool).await.unwrap();
     assert_eq!(

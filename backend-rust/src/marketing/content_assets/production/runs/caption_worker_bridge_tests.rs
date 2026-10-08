@@ -50,7 +50,7 @@ pub(super) async fn exercise(state: &AppState, base: &str, original: &str) {
         .await
         .unwrap();
     assert!(output.status.success(), "fixture video generation failed");
-    let sha = format!("{:x}", Sha256::digest(std::fs::read(&media).unwrap()));
+    let sha = hex::encode(Sha256::digest(std::fs::read(&media).unwrap()));
     let asset = Uuid::new_v4();
     let run_id = Uuid::new_v4();
     let attempt = Uuid::new_v4();
@@ -72,7 +72,7 @@ pub(super) async fn exercise(state: &AppState, base: &str, original: &str) {
         .await
         .unwrap();
     assert!(remux.status.success());
-    let voice_sha = format!("{:x}", Sha256::digest(std::fs::read(&voice_media).unwrap()));
+    let voice_sha = hex::encode(Sha256::digest(std::fs::read(&voice_media).unwrap()));
     let voice = Uuid::new_v4();
     sqlx::query("INSERT INTO ads.marketing_content_assets(asset_id,title,asset_status,bucket,raw_object_key,raw_sha256,duration_seconds) VALUES($1,'voice','ready','fixture','voice.mp4',$2,3)").bind(voice).bind(&voice_sha).execute(pool).await.unwrap();
     original_run.request.narration_asset_id = Some(voice);

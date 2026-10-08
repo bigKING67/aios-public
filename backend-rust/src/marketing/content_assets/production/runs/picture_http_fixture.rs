@@ -18,7 +18,7 @@ pub(in crate::marketing::content_assets::production) async fn exercise(
     let picture = Uuid::new_v4();
     let picture_bytes =
         std::fs::read(std::env::var("CONTENT_PRODUCTION_TEST_PICTURE").unwrap()).unwrap();
-    let hash = format!("{:x}", Sha256::digest(picture_bytes));
+    let hash = hex::encode(Sha256::digest(picture_bytes));
     sqlx::query("INSERT INTO ads.marketing_content_assets (asset_id,title,asset_status,bucket,raw_object_key,raw_sha256,duration_seconds,repurpose_allowed,authorization_status) VALUES ($1,'画面混剪隔离原片','ready','127','picture.mp4',$2,3,TRUE,'authorized')")
         .bind(picture).bind(&hash).execute(&state.pool).await.unwrap();
     let job = Uuid::new_v4();

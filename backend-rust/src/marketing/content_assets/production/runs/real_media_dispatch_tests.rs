@@ -49,7 +49,7 @@ async fn real_media_rust_dispatch() {
             .unwrap();
         let path = record["path"].as_str().unwrap();
         assert_eq!(
-            format!("{:x}", Sha256::digest(fs::read(path).unwrap())),
+            hex::encode(Sha256::digest(fs::read(path).unwrap())),
             asset.sha256
         );
         asset.duration_ms = (record["durationSeconds"].as_f64().unwrap() * 1000.0).round() as u32;

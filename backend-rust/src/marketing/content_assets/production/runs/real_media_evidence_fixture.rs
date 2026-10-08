@@ -84,7 +84,7 @@ pub(super) async fn seed(
     settings.dragonfly_url = std::env::var("CONTENT_PRODUCTION_TEST_REDIS_URL").unwrap();
     let redis = dragonfly_client::Client::open(settings.dragonfly_url.as_str())
         .unwrap()
-        .get_multiplexed_tokio_connection()
+        .get_multiplexed_async_connection()
         .await
         .unwrap();
     AppState {

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use chrono::{SecondsFormat, Utc};
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::{Digest, Sha256};
 
 use crate::{

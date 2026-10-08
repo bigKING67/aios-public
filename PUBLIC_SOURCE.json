@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "677cab0049c1b921f20440705e84dfd900973678",
+  "sourceCommit": "dcda0a677f6f51ce088620736ff56eacf4aa27f8",
   "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
   "fileCount": 4256,
-  "contentSha256": "9ee340ab85f45158115b4ae1d41fb849dd26cbaefd2fd991b780092fd3822737",
+  "contentSha256": "632c2f8d8b75b58d283f459eac45fa5632664a54e151db31221ccb2a63d2e71e",
   "files": [
     {
       "path": ".dockerignore",
@@ -9705,14 +9705,14 @@
     {
       "path": "backend-rust/Cargo.lock",
       "mode": "100644",
-      "size": 75840,
-      "sha256": "b9439871cec887460034fb5eb73b2fcda8b98af29222d4407317d5486aca6596"
+      "size": 75616,
+      "sha256": "3c7a733fc6b8c1c6f4e2f7473f385fef613e468cd31e92a421f0b50746df76f5"
     },
     {
       "path": "backend-rust/Cargo.toml",
       "mode": "100644",
-      "size": 1314,
-      "sha256": "b896dd003d44c030d35bcb3a30452440d1a31565c3293ea143348c30183d6701"
+      "size": 1436,
+      "sha256": "2fcb72f76d67fc49921d48e39bbbe1e0c59737fb76bdaaeb42133afa3d48f5cd"
     },
     {
       "path": "backend-rust/CLAUDE.md",
@@ -9723,8 +9723,8 @@
     {
       "path": "backend-rust/Dockerfile",
       "mode": "100644",
-      "size": 803,
-      "sha256": "f10c436c9e4a5e1f4f6b59a1f6dafc4a4476b246a104f7b40f3de8b3288663ae"
+      "size": 814,
+      "sha256": "7ffd43fd507ea25348483fb65ee786e05f64885539a3784f186604821d54a1b5"
     },
     {
       "path": "backend-rust/README.md",
@@ -9807,8 +9807,8 @@
     {
       "path": "backend-rust/src/audit_logs/storage/queries.rs",
       "mode": "100644",
-      "size": 3752,
-      "sha256": "b3bae36b6f0b11be6e3944bfe2c7538d82e47236e5a2eab7cc850ecb5eb022ce"
+      "size": 3831,
+      "sha256": "1e76b6ebafb3bc0e245d5591d94b8c4d24c9c28aea161460120ee734fd23c27a"
     },
     {
       "path": "backend-rust/src/audit_logs/storage/resolve.rs",
@@ -9891,8 +9891,8 @@
     {
       "path": "backend-rust/src/auth/handlers/password.rs",
       "mode": "100644",
-      "size": 1917,
-      "sha256": "153d6db95628a2d16d73e5ce4dee019deb6272097bac61127b1ea7c05a6b4a99"
+      "size": 2363,
+      "sha256": "90921177aff0b73093f92f2ee75596a2eecf0edb6103b8f11b0b3eecbb2c0cbd"
     },
     {
       "path": "backend-rust/src/auth/handlers/profile.rs",
@@ -9999,14 +9999,14 @@
     {
       "path": "backend-rust/src/auth/storage/refresh_tokens/persist.rs",
       "mode": "100644",
-      "size": 1500,
-      "sha256": "2de1ad2b9be0ca4d80bf89075e0ff8e844d95c0dead0c5504ab022cf61237d21"
+      "size": 1628,
+      "sha256": "a5c853de97c87d8bb84dca36ce7a09eaf57716b5be76a3b49bd989df4986b460"
     },
     {
       "path": "backend-rust/src/auth/storage/refresh_tokens/revoke.rs",
       "mode": "100644",
-      "size": 979,
-      "sha256": "68697e0a1d3dd6af01ca34a858d9474088755226e15787f8cd910381d08811a9"
+      "size": 1107,
+      "sha256": "d66f1164e946cb7b7f9f5a58e74580ccfda714a0bb91372e7cbe750005a629ca"
     },
     {
       "path": "backend-rust/src/auth/storage/refresh_tokens/table.rs",
@@ -10017,14 +10017,14 @@
     {
       "path": "backend-rust/src/auth/storage/refresh_tokens/validate.rs",
       "mode": "100644",
-      "size": 1643,
-      "sha256": "3039d5681a4e06964453d01fef939d7b6c68f717e4d426cb7205824e02b00c3b"
+      "size": 1771,
+      "sha256": "6b28f2ceb6d684cd95ce4d02ff7b3629dc67851eb1009351f0cd82498afe48e9"
     },
     {
       "path": "backend-rust/src/auth/tokens.rs",
       "mode": "100644",
-      "size": 3820,
-      "sha256": "04bc57a27de2883cd2788ee77e6ebb3d594669d050facb452ae28342a4596f82"
+      "size": 5092,
+      "sha256": "83eb1e85f66c3259d9acf8d2e8d06857aae0068bf9280f36ea1bb69f61fdf8c1"
     },
     {
       "path": "backend-rust/src/auth/types.rs",
@@ -10239,8 +10239,8 @@
     {
       "path": "backend-rust/src/content_live_center/uploads.rs",
       "mode": "100644",
-      "size": 24121,
-      "sha256": "fcee21452f1ab7d1bbc0cc606625873df3f0b41eb92767c281b0da1d162eaa3b"
+      "size": 24130,
+      "sha256": "0d83bd45689a07efa50da22dbf0977e992c9c447b1e55b35b7f1fdf4876eb08b"
     },
     {
       "path": "backend-rust/src/content_live_center/validation.rs",
@@ -10641,8 +10641,8 @@
     {
       "path": "backend-rust/src/dashboard/industry_material_inspiration.rs",
       "mode": "100644",
-      "size": 25258,
-      "sha256": "60f7d996393724db749e149b3e913657b86ad700590af469c1182f50bba62dab"
+      "size": 25440,
+      "sha256": "4ed6e28343f0a3ded4f2715dc58a3c2d16d739631d146a50f94fdeca21d125c5"
     },
     {
       "path": "backend-rust/src/dashboard/industry_material_inspiration/brand_ai_backfill_assets.sql",
@@ -11163,14 +11163,14 @@
     {
       "path": "backend-rust/src/dashboard/qianchuan/mod.rs",
       "mode": "100644",
-      "size": 31181,
-      "sha256": "96513370ace14b7fdd9c607f6aca6c8a384705db4758d83c39c49af1430d10f8"
+      "size": 31189,
+      "sha256": "bf7f46b50c9c84287b35f5c8aec0ff532d3eee3c409f340e9b3d3ca6fd149da0"
     },
     {
       "path": "backend-rust/src/dashboard/query_runtime.rs",
       "mode": "100644",
-      "size": 2951,
-      "sha256": "84018de7723b3580150b3f89b1bf6666016a6fca65dab0debf455e88a8e38c8e"
+      "size": 3091,
+      "sha256": "9895aa68d28eeacb3d85fa23cf0802fe928f53accc774ef1a81019106708bb8b"
     },
     {
       "path": "backend-rust/src/dashboard/responses.rs",
@@ -11667,8 +11667,8 @@
     {
       "path": "backend-rust/src/dataops/feishu_sync/states.rs",
       "mode": "100644",
-      "size": 2628,
-      "sha256": "a80a7085c463f29e1503e697cb9b4cfcec43579c22b9330c09c292483e990c1c"
+      "size": 2761,
+      "sha256": "874a8e77ea351c54e44cee5b66c69d724d3a1b32660bbbb3e95764956d388f82"
     },
     {
       "path": "backend-rust/src/dataops/feishu_sync/status.rs",
@@ -11949,14 +11949,14 @@
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/events.rs",
       "mode": "100644",
-      "size": 3498,
-      "sha256": "2021facf3c78ba9984b4299b33652910fcda43e6358e5ab4a34dcd0109a440ea"
+      "size": 3694,
+      "sha256": "76b07f2c8c2d8977c8d66205f7b997662f158dda27fb2e486ab76a34310e7a59"
     },
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/locks.rs",
       "mode": "100644",
-      "size": 1561,
-      "sha256": "c9c6cc1091733137f8c249fca959576d465e1ee5622c91c07b7d9beb4bb5dc2f"
+      "size": 1715,
+      "sha256": "42ca0ea48d7212ae04bb16b333dd4fdb01e1d9640cff9555ebcddf742c402ecd"
     },
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/mod.rs",
@@ -11967,14 +11967,14 @@
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/notifications.rs",
       "mode": "100644",
-      "size": 977,
-      "sha256": "3ec48963916342b760962cb188c12c410f9eabad03759ba856c44360eb16170d"
+      "size": 1110,
+      "sha256": "5340ead3bcd735aa32d976fab6d444100253e3f4d6336e7448566871b59ce228"
     },
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/status.rs",
       "mode": "100644",
-      "size": 1691,
-      "sha256": "42a106c9bf431229576bf285c801f0471e0779738e182182048bcaadfdf47034"
+      "size": 1824,
+      "sha256": "7786fa819f813f0a019f66c98d00fd6ab5adbaae5bedb3061b636b3799293ae0"
     },
     {
       "path": "backend-rust/src/dataops/runtime_store_pg/types.rs",
@@ -12477,8 +12477,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/delivery.rs",
       "mode": "100644",
-      "size": 11784,
-      "sha256": "de07bc8fba84d7d6899cdf46e7dd0583c1e8444dd96f33aca6a78ac664afce11"
+      "size": 11793,
+      "sha256": "5d7c570436b85e128fdb0db2f72e6c7fa53ee169dd554ac5eac4713c369547c7"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/detail_types.rs",
@@ -12532,7 +12532,7 @@
       "path": "backend-rust/src/marketing/content_assets/handlers/qianchuan_http_route_tests.rs",
       "mode": "100644",
       "size": 25350,
-      "sha256": "6cf1cbbc217a8672f9b3515440f1dc5901f1eaab381ba7f98201591f540df23f"
+      "sha256": "6cf74e95e8288c8ce90f80fefd3b526a747c16c7b73e25beaa6b9cfa3a01f7f3"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/identity_lookup.rs",
@@ -12579,8 +12579,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/performance_snapshot.rs",
       "mode": "100644",
-      "size": 18093,
-      "sha256": "7bd64771b9929215dcd65c39d6514eaacaef0fea842d671505b693ebf5bf97aa"
+      "size": 18242,
+      "sha256": "0c27053b1c7fbe7951069e070a102a9fcf2db19d88703a4e4a057074c9a7903c"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/performance.rs",
@@ -12657,20 +12657,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/catalog_domain.rs",
       "mode": "100644",
-      "size": 3340,
-      "sha256": "2c4dbeb963bbdd6ef10d22dc86285c49683b8eb34878594b43c4ff9522beeab8"
+      "size": 3332,
+      "sha256": "185ba70e8cb5516027442f1ea16449d71abc863740f1862a8532f4cef28e04b0"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/catalog_http_fixture.rs",
       "mode": "100644",
-      "size": 6677,
-      "sha256": "02cb5fc7a34364ee71cb8dad218ee2896c01d2d9d61169b790c6e757224398d4"
+      "size": 6674,
+      "sha256": "9c1ab6640ea389797a1e160af22c1cd52d06b81088971d86504488025049c820"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/catalogs.rs",
       "mode": "100644",
-      "size": 5199,
-      "sha256": "59a15eda955f97381b8ffa502d8e8d75fa91be279ef9ad0c9bd96aab2639abaa"
+      "size": 5195,
+      "sha256": "a5451a6e188dd9bf80daee2fdcd7a020d56443947e561b53be733383f2824cab"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/domain.rs",
@@ -12681,8 +12681,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/http_e2e_tests.rs",
       "mode": "100644",
-      "size": 15247,
-      "sha256": "48b4aaf66c1a0b1adc3827c225736e2d35f563efe8d1c2e9e91c338b415667ab"
+      "size": 15235,
+      "sha256": "ff422b7b458107b9292e24372520df2a75eb25f3da3d215f900841e1bee3c311"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/jobs.rs",
@@ -12717,8 +12717,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/render_binding.rs",
       "mode": "100644",
-      "size": 2725,
-      "sha256": "f4bd03bd7b5c1d3b9102f31a2f1214c27fc0c9cacf1b597a1280d4e7886839c7"
+      "size": 2721,
+      "sha256": "6d1f452aecfae60ba2c34e741b4cdc1c7b550f838b3386a11240ba13203851c5"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/render-binding.json",
@@ -12777,8 +12777,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/batch_http_fixture.rs",
       "mode": "100644",
-      "size": 12762,
-      "sha256": "e2051f14ee64e7892abb08c88b1e5db03eee838e7690aa538230e7117875cdb3"
+      "size": 12758,
+      "sha256": "5704c5447c92971bb22e544cf9780edfb4ebd67fcc3bf1f3cf8bdcf841449efc"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_browser_fixture.rs",
@@ -12789,20 +12789,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_http_fixture.rs",
       "mode": "100644",
-      "size": 5458,
-      "sha256": "301cc207ce32bcf7ed96a417d41198c23f3b414e09178599a5e78aef1c507ada"
+      "size": 5454,
+      "sha256": "694c739682ae0ce20f73179f2605c067c5b705ffbe6c763a6b3ea4857c1bebdb"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_rerender_fixture.rs",
       "mode": "100644",
-      "size": 3305,
-      "sha256": "941c9c40bceee9afa27c2ee01885f31290f30018460b22bc54eb929fee78c396"
+      "size": 3301,
+      "sha256": "bdb26a78762b8a64ce7e29f5af3207678799db2b6fdcb1de0b8d8435961f21cb"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate.rs",
       "mode": "100644",
-      "size": 7586,
-      "sha256": "45553081f3f6b2d4d11febb4e0da79374712b08ab49e28e8e8b6c570deef6a05"
+      "size": 7575,
+      "sha256": "1e03b1af81a7b0c6752e3dad3b0615b30ad2de7af8dedd02c40f92daa5cb668c"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate/tests.rs",
@@ -12831,20 +12831,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight_planning.rs",
       "mode": "100644",
-      "size": 9590,
-      "sha256": "6539088d21c9db79187feeb0fa82f8008a0f5a40bda4eb245687eb6979fa40fc"
+      "size": 9567,
+      "sha256": "0095f61d78b8a51f448b5d7fc0f5ec14dfaebc429db0b32e7eedd32b2ac5074c"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight_tests.rs",
       "mode": "100644",
-      "size": 12754,
-      "sha256": "7ea944424e34e943f0e7d2c2ccab3b1e41784517b2236086563f69b210ba6e08"
+      "size": 12767,
+      "sha256": "e82acf49cc2a06b4f021924764874e907c5995ffc21808b1eba773faf324c18d"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight.rs",
       "mode": "100644",
-      "size": 5497,
-      "sha256": "30985ff91d9e251a0b41d8a275198521d378bbcb4ccb8f3c3f8e56c423bb0577"
+      "size": 5493,
+      "sha256": "632c1a92ae1e8fecfc8552ff8cf80e10c3042c07493af63221c2dcee217017a5"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_render_fixture.rs",
@@ -12873,8 +12873,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/caption_worker_bridge_tests.rs",
       "mode": "100644",
-      "size": 11090,
-      "sha256": "e0b860e2c7df2b0956adc43722594f4dd258421c5791a1acab8c48054dcadac9"
+      "size": 11082,
+      "sha256": "6fcbfe9f18ed302f04573a89e68529cb7d39edd001270088e087aa131d442eac"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/captions.rs",
@@ -12963,8 +12963,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/picture_http_fixture.rs",
       "mode": "100644",
-      "size": 13415,
-      "sha256": "84b504f99aa4d963547471f96e80b13a038b1d5477f1b46f40cdb5ba4f12e1b8"
+      "size": 13411,
+      "sha256": "c05bbd49939af8231270657f99385ac53856ed68cf5def1cb14c1f5eff45dfc0"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/picture_remix.rs",
@@ -13017,8 +13017,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/planning_repair.rs",
       "mode": "100644",
-      "size": 12243,
-      "sha256": "d91717a210a2bd735265d7c99ac8474220a84dfbf26889380b4cc7bd45aac504"
+      "size": 12239,
+      "sha256": "ddb718acd39bba11dddd75fbcee7c61fface4861dddb06e4b7037a3f3a55ed83"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/preservation_probe.rs",
@@ -13029,14 +13029,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_dispatch_tests.rs",
       "mode": "100644",
-      "size": 8038,
-      "sha256": "e2cd685016c0fab4276322808e93d0b674c1c45fc5386473595eeac20a7c6587"
+      "size": 8034,
+      "sha256": "831de605da4a146545a7cfe7340aef787622abd902cac3589a740acb87b1d717"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_evidence_fixture.rs",
       "mode": "100644",
       "size": 5058,
-      "sha256": "61fdfcdd0929ada0f438872cff1877fb2d7653f7e95eb60939c5d3c1fbd938ca"
+      "sha256": "d07833f82567e4913df5c291d0fb7b9a0a8c18a9f20aa34466d48e73f28e3e46"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_planner_fixture.rs",
@@ -13203,20 +13203,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/visual_caption_evidence.rs",
       "mode": "100644",
-      "size": 3676,
-      "sha256": "bf973c287c4d643aab6897d05c658574985b08f04a574e7896581563b613aae4"
+      "size": 3665,
+      "sha256": "afbbf756a3f3dbeb78546817c946349be30bb039d527e09e7cda5cd6d69d68dc"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/visual_review_http_fixture.rs",
       "mode": "100644",
-      "size": 7364,
-      "sha256": "2974d454f67b94dcd052848500b91a8ee9a0e72beedf5c39038f3ea263cf3c2d"
+      "size": 7314,
+      "sha256": "9a4874bb7c223c32bc1831a47dcdf8dfaece87096acc329138702b5e3144b6ab"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/visual_review.rs",
       "mode": "100644",
-      "size": 10349,
-      "sha256": "bf7bd06522aecba38fa963f6b3baba5f0abe70e0155a7b179dab0d5d05824acf"
+      "size": 10338,
+      "sha256": "754f845e1ae495795313973445468592c6110f9a5799dfac8f1d34d18f3b661a"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/search.rs",
@@ -13233,8 +13233,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/semantic_jobs.rs",
       "mode": "100644",
-      "size": 6406,
-      "sha256": "5374d8f0d6c83f00b0536286e70a00341569b5d884e1ab6fa0b357792a08661d"
+      "size": 6402,
+      "sha256": "ad6657e4e22c421f3606c41a7228251438ea681b33a391cb780dff5ce9168228"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/shot_jobs_http_fixture.rs",
@@ -13293,14 +13293,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/repository_options.rs",
       "mode": "100644",
-      "size": 7268,
-      "sha256": "60d924c1e69c4a9ea46dbc155ccf035d71b68a7073bf2358e6b25cc22bd7c5d3"
+      "size": 7485,
+      "sha256": "7abedd71244e86224993fb29706726827a369bf68ef586162f5d51dc13dbf070"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/repository.rs",
       "mode": "100644",
-      "size": 29150,
-      "sha256": "76b1f26a0f0b0360f29b24f304409d149d26c2eb427a34502e17876a733b9994"
+      "size": 29299,
+      "sha256": "797304b55c506c81c9ec7928b8800628111a12c80bf0e082da1e34037ba01759"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/row_mapping.rs",
@@ -13377,14 +13377,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/overview.rs",
       "mode": "100644",
-      "size": 14692,
-      "sha256": "1ee3fdc8c26c6ad1c65e2f746ec5611eb83c8ce4410ce750cfdd0d8ff34de901"
+      "size": 14932,
+      "sha256": "e34adffd847073f2afa22c245fd6936bab9d6391cbbd2bec4a7379ce6d7827f0"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/postgres_tests.rs",
       "mode": "100644",
-      "size": 22676,
-      "sha256": "bd24ab145421f13c8c509ac4dce209421826ebf8c79d03573bf2d49db069cb3f"
+      "size": 22672,
+      "sha256": "d7c2cdd7aa1e8090542c81847e0b27d861818aaa26f919abc3f12a58af0c1ea6"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_cancel.rs",
@@ -13395,8 +13395,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_combos.rs",
       "mode": "100644",
-      "size": 12069,
-      "sha256": "880e6b0eb6c245810e259804264c1d378b0aeb0bc29ff4fc13896b02f8951480"
+      "size": 12065,
+      "sha256": "17ac4d4a349561a2cd496bed50d734ee6b31b3edcdc21d48d22f662bda201348"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_edit_postgres_tests.rs",
@@ -13407,20 +13407,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_edit.rs",
       "mode": "100644",
-      "size": 26267,
-      "sha256": "439d984289ab480219afd3a872b6eb001a579f5729f409ffe3646f7c1a7f9471"
+      "size": 26437,
+      "sha256": "dcd62b1b4e646eacf1e23f23ea632215b9bc16f1f63f31282f20998060e1b77e"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_postgres_tests.rs",
       "mode": "100644",
-      "size": 24589,
-      "sha256": "d5cfb782a36cdf8477eab3f8b4a60f1d433170a9754051c1345a517f68c54945"
+      "size": 24581,
+      "sha256": "d6f908a7b2ac74354769f3a812ceb384b8d00cc65cc43a3dff071e448cc3bc30"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_read.rs",
       "mode": "100644",
-      "size": 16581,
-      "sha256": "dc6c0f99a813c90b94e607a0fad9de50e2d6e654f2f9106f45234da0a09a27c0"
+      "size": 16817,
+      "sha256": "382ba86d67f3683939313aa6a8dc172ce65d575d42d8510740c429ab2d5e63c3"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_types.rs",
@@ -13431,14 +13431,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix.rs",
       "mode": "100644",
-      "size": 26470,
-      "sha256": "1deb3348e14fe37b6c0d6d11e8df8bc0188dccf76c710a55362866aecf0bd0ef"
+      "size": 26466,
+      "sha256": "eb1bfcf9638e6b9884bf060b500c70b41870b55c8031f15ccfd59c8c0d5c00cf"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/repository.rs",
       "mode": "100644",
-      "size": 23094,
-      "sha256": "0bc9a059bdb6de10d4a6579091a5e0d84db5e44fff98f24ad9ccf9cd85cdcfe5"
+      "size": 23263,
+      "sha256": "5f0c0b101297072da8e46302167cc5267f0cc29c09625b22312a7dcdb3050010"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/route_tests.rs",
@@ -13455,8 +13455,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/suggestions.rs",
       "mode": "100644",
-      "size": 13343,
-      "sha256": "a7cdde535bb009297ea8b9e78b9954438ea6210cea4395147fd1372d81fb91f2"
+      "size": 13503,
+      "sha256": "ad51fc7791f478b067bf3b3e5c1167ca599196d5196622a02fdbb05c0c7ea002"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/types.rs",
@@ -13503,8 +13503,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/video_link_import.rs",
       "mode": "100644",
-      "size": 34160,
-      "sha256": "b38be301dbe2db14330f29980e687814a481567714ea1322118390976eccfa15"
+      "size": 34156,
+      "sha256": "4f309494b64440fb45f7c7da27749ae59c48cd672139f962a57775609dc5fb5f"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/video_link_material_suggestion.rs",
@@ -13773,8 +13773,8 @@
     {
       "path": "backend-rust/src/marketing/repository_mutation/insert.rs",
       "mode": "100644",
-      "size": 3286,
-      "sha256": "44faed9f748020c06bf8ed42910d6c2777c140645256a5e52ee47e6b66971963"
+      "size": 3435,
+      "sha256": "74646070ac4cd6af808f8780e13ced26e05238f1fe9a0c64b7788084b7dcff83"
     },
     {
       "path": "backend-rust/src/marketing/repository_mutation/mod.rs",
@@ -13785,14 +13785,14 @@
     {
       "path": "backend-rust/src/marketing/repository_mutation/update.rs",
       "mode": "100644",
-      "size": 2905,
-      "sha256": "4867ff316e7eb76520f80011d1f77776e91489cc0ef16ff4d2faf858c93a4f8b"
+      "size": 3054,
+      "sha256": "98fac488c3d1e487d0c1e73e8539569ec0e9661d3ba7bf377be6a1c0d87cb3b4"
     },
     {
       "path": "backend-rust/src/marketing/repository_query.rs",
       "mode": "100644",
-      "size": 2389,
-      "sha256": "27d0adb0c1332ddeb6226121419f714e878741096f0cfef45f5505969443735f"
+      "size": 2538,
+      "sha256": "59e160b27841a731257175a41c2ec7dede4869f5400f843db3b849c91c4295ee"
     },
     {
       "path": "backend-rust/src/marketing/repository_row_filters/constants.rs",
@@ -13845,8 +13845,8 @@
     {
       "path": "backend-rust/src/marketing/repository_row_filters/sort.rs",
       "mode": "100644",
-      "size": 4281,
-      "sha256": "00c37abc47c32c64931737be8e0f49ebb6377c6316c5040c40cf596977c9361f"
+      "size": 4326,
+      "sha256": "bf9cd1349c93ae9ba499cf35595c1093cfe8e880bb7c851e4c0bb47a38698f4e"
     },
     {
       "path": "backend-rust/src/marketing/repository_sql/creator_select.rs",
@@ -14733,8 +14733,8 @@
     {
       "path": "backend-rust/src/reports/summary_storage/bootstrap.rs",
       "mode": "100644",
-      "size": 4603,
-      "sha256": "49f65125f72deda7f807df90474ea55b4937cfcf7335533f83c5f424e1c04d8b"
+      "size": 4604,
+      "sha256": "8e90e31678f6e8b6fc67d47329d9aefa062ca552f7ce9ffb09111d80090e2c9c"
     },
     {
       "path": "backend-rust/src/reports/summary_storage/errors.rs",
@@ -15069,8 +15069,8 @@
     {
       "path": "backend-rust/src/reports/weekly_goods_channel_funnel/queries/fallback.rs",
       "mode": "100644",
-      "size": 862,
-      "sha256": "1c5cc0dc7ff9714aa9ac664dff07332d4f5207ea41d1d01167bf52d574caafa6"
+      "size": 870,
+      "sha256": "19ff69e304d5d3bfbc3ec56aeb4733c4c2c77e11c935653dc20c3d44e0be3881"
     },
     {
       "path": "backend-rust/src/reports/weekly_goods_channel_funnel/queries/mod.rs",
@@ -15537,8 +15537,8 @@
     {
       "path": "backend-rust/src/sample_inventory/access.rs",
       "mode": "100644",
-      "size": 13478,
-      "sha256": "6e47188ba5516c5b495a53664e9fe7106685e2109c4e37520f6603811dc6153f"
+      "size": 13487,
+      "sha256": "c5b849adce47f4490e48f8fb30482cf029b3287582c7c188c083fb13b81280cb"
     },
     {
       "path": "backend-rust/src/sample_inventory/handlers.rs",
@@ -15555,8 +15555,8 @@
     {
       "path": "backend-rust/src/sample_inventory/repository.rs",
       "mode": "100644",
-      "size": 27294,
-      "sha256": "72879bf9982475ddb2dbc91d5fc3172bd0c7d37862d7d9733af9b1bb9e2f8c0d"
+      "size": 27724,
+      "sha256": "606c176890d937eb705ae27facc985f82fe58a008238647296ca1f6737e0cb4f"
     },
     {
       "path": "backend-rust/src/sample_inventory/service/approval_stock_postgres_tests.rs",
@@ -15573,8 +15573,8 @@
     {
       "path": "backend-rust/src/sample_inventory/service/backup_postgres_tests.rs",
       "mode": "100644",
-      "size": 26798,
-      "sha256": "0b4ec9bf0bf805654ed1796a21c3f51fb1c27f88adbd8e0d82340391acd93df1"
+      "size": 26818,
+      "sha256": "7dc3ae78415643f5db990fac7cbe8b4f13cb06e2af28ccce0c1ef1e431a5c45f"
     },
     {
       "path": "backend-rust/src/sample_inventory/service/backup_restore.rs",
@@ -15736,7 +15736,7 @@
       "path": "backend-rust/src/startup.rs",
       "mode": "100644",
       "size": 4136,
-      "sha256": "da1483b62c4c183ea1fa86a53211c4419b0936d250846e1107f33afbf70c8b93"
+      "sha256": "3c46eba568be68ab16321edc269042eeac430ee79310d84e14e23a9d58eed379"
     },
     {
       "path": "backend-rust/src/state.rs",
@@ -15994,7 +15994,7 @@
       "path": "docker/content-production/Dockerfile",
       "mode": "100644",
       "size": 1031,
-      "sha256": "c0d685f381dc7cd50625b67556fd2b1096215aca09a6ea97a31de33fa9e89b1a"
+      "sha256": "c3ff2f98236c1e525d2e16711e1b6c9772edbb02e930409d979d70faa11a1c2c"
     },
     {
       "path": "docker/content-production/README.md",
@@ -16084,7 +16084,7 @@
       "path": "docker/content-production/requirements.txt",
       "mode": "100644",
       "size": 195,
-      "sha256": "e1dd34f27b22b408b14c9d03a5fde3ea2c64b09da1a2188dc4999da3f9cb1e87"
+      "sha256": "82df8a211c99672ab1ddc88a33f6c8370f3e1f907fbbd1bf2c28c9f8fbe7e001"
     },
     {
       "path": "docker/content-production/worker.env.example",
@@ -16401,8 +16401,8 @@
     {
       "path": "etl/groland_postgres/pyproject.toml",
       "mode": "100644",
-      "size": 488,
-      "sha256": "cd775d24be78ffcc8e55de71cb9524c9954aafd84940b0279fccca2753951543"
+      "size": 598,
+      "sha256": "f42221d014c4163fdca2f12ac2aa8fb2d48fbe4e091788a26fb926c6859b6f47"
     },
     {
       "path": "etl/groland_postgres/README.md",
@@ -17014,7 +17014,7 @@
       "path": "etl/groland_postgres/scripts/install_prefect_runtime.sh",
       "mode": "100755",
       "size": 6838,
-      "sha256": "87ba454f9d035d4d450b36f91a48e02d2ef2f9ef660fe8f78deb78a9de88f687"
+      "sha256": "af57fe634f260a43d59abeed649309cc0dcb38758729169f4b70178b3db9ee70"
     },
     {
       "path": "etl/groland_postgres/scripts/install_prefect_systemd.sh",
@@ -17284,7 +17284,7 @@
       "path": "etl/groland_postgres/scripts/patch_prefect_sqlite_deployment_transactions.py",
       "mode": "100644",
       "size": 5845,
-      "sha256": "dcde801c4aa991ee5df0ed313e3e47b0a65c04ffd2572bd79e5a83df368241a6"
+      "sha256": "089d004279dba2351bd15e63b834d75f9723fd00ef066cf91e0d8d3ab2f133e9"
     },
     {
       "path": "etl/groland_postgres/scripts/prefect_cleanup_dataops_runtime_events.py",
@@ -17691,8 +17691,8 @@
     {
       "path": "etl/groland_postgres/scripts/test_prefect_control_plane_postgres.sh",
       "mode": "100755",
-      "size": 11429,
-      "sha256": "e04f1eefc7cfc8e52626977ee8a4f6710dadebc87e2d5934e8c8a30d339a8896"
+      "size": 12962,
+      "sha256": "bb98a36ed5d73a327d270f3f9823288fab0bc9a7f1c81a257ef0919c75338b93"
     },
     {
       "path": "etl/groland_postgres/scripts/test_report_overview_dependency_postgres.sh",
@@ -19899,8 +19899,8 @@
     {
       "path": "etl/groland_postgres/tests/test_prefect_control_plane_operations.py",
       "mode": "100644",
-      "size": 20008,
-      "sha256": "abf790c0f260ef2c921f018cd213fb0dbfb1e58dce93cc371dcf7bea4ea7a8d2"
+      "size": 20101,
+      "sha256": "016d7799855586ec93017982d4764e3ca4fc41b3db13ce9e8678c63fd0d70355"
     },
     {
       "path": "etl/groland_postgres/tests/test_prefect_control_plane_watchdog.py",
@@ -19911,8 +19911,8 @@
     {
       "path": "etl/groland_postgres/tests/test_prefect_dependency_contract.py",
       "mode": "100644",
-      "size": 831,
-      "sha256": "8f9f5cffccc9ef4abdde97d0420527403d581e79fba32c11a96fd42b7d474e4b"
+      "size": 1275,
+      "sha256": "45e002ac7d833d1139360150f54f683e79a3fef70e7116d8c5cc36212f06ef7e"
     },
     {
       "path": "etl/groland_postgres/tests/test_prefect_ops_utils_notifications.py",
@@ -19959,8 +19959,8 @@
     {
       "path": "etl/groland_postgres/uv.lock",
       "mode": "100644",
-      "size": 185689,
-      "sha256": "d7f39cdd35531a24fa8a4105a06540c5feb9fec24c5b4cf2c74155e8628f723a"
+      "size": 196460,
+      "sha256": "3f2a4ca7534e9aa6e23faae536b93bb9b2ddf5ec403cd362bbb59abd8f1453fc"
     },
     {
       "path": "LICENSE",
@@ -19972,13 +19972,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 332004,
-      "sha256": "85b628d7bb3727d9e9e12f0d8e7088fc36e3a27b5f4e11850202a26bcbfe17a4"
+      "sha256": "628cbc99b0ddba8dcc2b3bf3319ae74d8d163aad60b5f48457082b4bed6514cb"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54827,
-      "sha256": "634347bb42d363f06c709d863ed09bf48c41e403ff545f1908c6ae639f0ba0c0"
+      "sha256": "27355ab4af2974ba8316ca505b87f74c871f6dd0116f8f7db6a939ee45464f80"
     },
     {
       "path": "postcss.config.js",
@@ -20074,7 +20074,7 @@
       "path": "rust-toolchain.toml",
       "mode": "100644",
       "size": 66,
-      "sha256": "a6a0bbd29ffaa8182dc22d1d9149709f1091e47df40ed96eb8a78a711c66a4ce"
+      "sha256": "10c67ce85265f8fc5b1a52b416af1a553e56ad96ca9843da6579e2854741e084"
     },
     {
       "path": "scripts/backend-rust/cache-maintenance.py",

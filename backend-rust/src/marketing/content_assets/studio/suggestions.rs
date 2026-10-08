@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 //! AI 切段打标 jobs. The API only records explicit requests and reports job
 //! state; the independent Python worker performs the (optionally billable)
 //! model call and writes `origin=ai, status=suggested` segments. Jobs are
@@ -131,9 +132,9 @@ pub(super) async fn fetch_job(
     job_id: Uuid,
     enterprise_tag: Option<&str>,
 ) -> StudioResult<SegmentSuggestionJob> {
-    let row = sqlx::query(&format!(
+    let row = sqlx::query(sqlx::AssertSqlSafe(format!(
         "{JOB_SELECT} WHERE j.job_id = $1 AND a.is_deleted = FALSE AND ($2::TEXT IS NULL OR $2 = ANY(a.tags))"
-    ))
+    )))
     .bind(job_id)
     .bind(enterprise_tag)
     .fetch_optional(pool)
@@ -153,7 +154,7 @@ pub(super) async fn list_jobs(
 ) -> StudioResult<SegmentSuggestionJobListResponse> {
     let limit = job_list_limit(&query)?;
     let owner = query.asset_id.is_none().then(|| user.user_id.clone());
-    let rows = sqlx::query(&format!("{JOB_SELECT} WHERE a.is_deleted = FALSE AND ($1::UUID IS NULL OR j.asset_id = $1) AND ($2::TEXT IS NULL OR j.owner_user_id = $2) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY j.created_at DESC, j.job_id LIMIT $3"))
+    let rows = sqlx::query(sqlx::AssertSqlSafe(format!("{JOB_SELECT} WHERE a.is_deleted = FALSE AND ($1::UUID IS NULL OR j.asset_id = $1) AND ($2::TEXT IS NULL OR j.owner_user_id = $2) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY j.created_at DESC, j.job_id LIMIT $3")))
         .bind(query.asset_id).bind(owner).bind(limit).bind(enterprise_tag)
         .fetch_all(pool).await.map_err(db_error)?;
     Ok(SegmentSuggestionJobListResponse {

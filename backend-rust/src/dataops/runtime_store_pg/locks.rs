@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Schema/table identifiers pass the existing identifier validators; event values remain bound.
 use uuid::Uuid;
 
 use super::common::{runtime_schema_name, runtime_table};
@@ -15,7 +16,7 @@ pub(crate) async fn try_acquire_postgres_lock(
     let ttl_ms = ttl_ms.max(1_000);
 
     let cleanup_query = format!("DELETE FROM {table} WHERE expires_at <= NOW()");
-    sqlx::query(cleanup_query.as_str())
+    sqlx::query(sqlx::AssertSqlSafe(cleanup_query.as_str()))
         .execute(&state.pool)
         .await
         .map_err(|error| format!("runtime lock cleanup failed: {error}"))?;
@@ -33,7 +34,7 @@ pub(crate) async fn try_acquire_postgres_lock(
         "#
     );
 
-    let acquired = sqlx::query(lock_query.as_str())
+    let acquired = sqlx::query(sqlx::AssertSqlSafe(lock_query.as_str()))
         .bind(lock_namespace)
         .bind(lock_key)
         .bind(owner_token)

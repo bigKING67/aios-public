@@ -144,6 +144,8 @@ from __future__ import annotations
 import os
 import sys
 import time
+import subprocess
+from collections import defaultdict
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.environ["PREFECT_FIXTURE_SCRIPT_DIR"])
@@ -153,6 +155,8 @@ from manage_prefect_deployments import (  # noqa: E402
   active_entries,
   fetch_live_deployments,
   load_manifest,
+  ETL_ROOT,
+  _deployment_environment,
 )
 
 
@@ -192,7 +196,30 @@ timeout_seconds = float(sys.argv[2])
 client = PrefectApiClient(os.environ["PREFECT_API_URL"], timeout_seconds=10)
 manifest = load_manifest()
 
-if action == "shadow-empty":
+if action == "bootstrap-dormant":
+  # A fresh isolated control plane has no historical registrations to preserve.
+  # The shadow server disables scheduling; never invoke this on a live endpoint.
+  from urllib.parse import urlparse
+  if urlparse(client.api_url).hostname != "127.0.0.1":
+    raise RuntimeError("fixture bootstrap requires loopback API")
+  by_script = defaultdict(list)
+  for entry in active_entries(manifest):
+    if (entry["schedule"]["active"] is False
+        and not entry["schedule"].get("enabled_env")
+        and all(value is None for value in entry["watchdog"].values())):
+      by_script[entry["deploy_script"]].append(entry)
+  for script, entries in by_script.items():
+    subprocess.run(["bash", str(ETL_ROOT / script)], cwd=ETL_ROOT,
+                   env=_deployment_environment(entries, manifest["defaults"]), check=True)
+  dormant = {(e["flow_name"], e["deployment_name"])
+             for entries in by_script.values() for e in entries}
+  for item in fetch_live_deployments(client):
+    if (item["flow_name"], item["name"]) in dormant:
+      for schedule in item.get("schedules") or []:
+        client.request("PATCH", f"/deployments/{item['id']}/schedules/{schedule['id']}",
+                       {"active": False})
+  print(f"Fixture dormant registrations seeded with inactive schedules: {len(dormant)}")
+elif action == "shadow-empty":
   runs = client.request("POST", "/flow_runs/filter", {"limit": 1, "offset": 0})
   if runs:
     raise RuntimeError("shadow control plane generated a flow run")
@@ -204,6 +231,7 @@ elif action == "wait-future":
     for deployment_id, entry in active.items()
     if entry["schedule"]["active"]
   }
+  scheduled_count = len(missing)
   deadline = time.monotonic() + timeout_seconds
   while missing and time.monotonic() < deadline:
     now = datetime.now(timezone.utc).isoformat()
@@ -228,7 +256,7 @@ elif action == "wait-future":
       for entry in missing.values()
     )
     raise RuntimeError("scheduler did not create future runs for: " + ", ".join(names))
-  print("Prefect scheduler future-run check: PASS scheduled_deployments=28")
+  print(f"Prefect scheduler future-run check: PASS scheduled_deployments={scheduled_count}")
 elif action == "pause-delete":
   active = active_live(client, manifest)
   deployment_ids = list(active)
@@ -314,6 +342,7 @@ start_server() {
 
 cd "$ETL_ROOT"
 start_server shadow
+run_fixture_action bootstrap-dormant
 
 "$ETL_ROOT/.venv/bin/python" "$SCRIPT_DIR/manage_prefect_deployments.py" deploy active
 "$ETL_ROOT/.venv/bin/python" "$SCRIPT_DIR/manage_prefect_deployments.py" \
@@ -357,4 +386,4 @@ if [[ "$current_prefect_yaml_sha" != "$prefect_yaml_sha" ]]; then
   exit 1
 fi
 
-echo "Prefect PostgreSQL control-plane fixture: PASS active=30 retired=0 future_schedules=28 worker_smoke=COMPLETED"
+echo "Prefect PostgreSQL control-plane fixture: PASS manifest_parity=verified dormant_schedules=preserved worker_smoke=COMPLETED"

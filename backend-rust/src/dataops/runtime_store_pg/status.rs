@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Schema/table identifiers pass the existing identifier validators; event values remain bound.
 use sqlx::Row;
 
 use super::{
@@ -22,7 +23,7 @@ pub(crate) async fn fetch_runtime_cleanup_state(
         "#
     );
 
-    let Some(row) = sqlx::query(query.as_str())
+    let Some(row) = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .fetch_optional(&state.pool)
         .await
         .map_err(|error| format!("runtime cleanup state query failed: {error}"))?

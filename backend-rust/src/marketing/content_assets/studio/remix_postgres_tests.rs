@@ -40,7 +40,7 @@ pub(super) async fn asset(
     authorization: &str,
 ) -> (Uuid, String) {
     let id = Uuid::new_v4();
-    let sha = format!("{:x}", Sha256::digest(id.as_bytes()));
+    let sha = hex::encode(Sha256::digest(id.as_bytes()));
     sqlx::query("INSERT INTO ads.marketing_content_assets (asset_id, title, asset_status, bucket, raw_object_key, raw_sha256, duration_seconds, product_name, owner_user_id, authorization_status) VALUES ($1, 'remix fixture', 'ready', 'fixture', $2, $3, 60, $4, $5, $6)")
         .bind(id).bind(format!("raw/{id}.mp4")).bind(&sha).bind(product).bind(owner).bind(authorization)
         .execute(pool).await.unwrap();
@@ -354,7 +354,7 @@ async fn active_limit_changed_segments_and_reference_structure() {
     // A candidate asset whose raw content changes drops out of the candidates.
     sqlx::query("UPDATE ads.marketing_content_assets SET raw_sha256 = $2 WHERE asset_id = $1")
         .bind(f.b)
-        .bind(format!("{:x}", Sha256::digest(Uuid::new_v4().as_bytes())))
+        .bind(hex::encode(Sha256::digest(Uuid::new_v4().as_bytes())))
         .execute(&pool)
         .await
         .unwrap();

@@ -71,7 +71,7 @@ impl Normalized {
             "productName": self.product_name,
             "count": self.count,
         });
-        format!("{:x}", Sha256::digest(canonical.to_string().as_bytes()))
+        hex::encode(Sha256::digest(canonical.to_string().as_bytes()))
     }
 }
 

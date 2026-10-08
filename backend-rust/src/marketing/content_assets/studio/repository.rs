@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 //! Segment persistence. Segments are annotations of shared library assets:
 //! any signed-in content user may read them, writes require the existing
 //! content-asset edit permission on the source asset (open studio access only
@@ -215,9 +216,9 @@ fn revision_conflict(detail: String, id: Uuid) -> StudioError {
 }
 
 pub(super) async fn fetch_segment(pool: &PgPool, id: Uuid) -> StudioResult<Option<ContentSegment>> {
-    let row = sqlx::query(&format!(
+    let row = sqlx::query(sqlx::AssertSqlSafe(format!(
         "{SEGMENT_SELECT} WHERE s.segment_id = $1 AND a.is_deleted = FALSE"
-    ))
+    )))
     .bind(id)
     .fetch_optional(pool)
     .await
@@ -245,7 +246,7 @@ pub(super) async fn list_segments(
     }
     let product = domain::normalize_product_name(query.product_name.as_deref())?;
     let sql = format!("{SEGMENT_SELECT} WHERE a.is_deleted = FALSE AND ($1::UUID IS NULL OR s.asset_id = $1) AND ($2::TEXT IS NULL OR s.preset_key = $2) AND ($3::TEXT IS NULL OR s.label_key = $3) AND ($4::TEXT IS NULL OR s.product_name = $4) AND ($5::TEXT IS NULL OR s.status = $5) AND ($6::TEXT IS NULL OR s.origin = $6) AND ($7::UUID IS NULL OR (s.asset_id, s.preset_key, s.start_ms, s.segment_id) > (SELECT c.asset_id, c.preset_key, c.start_ms, c.segment_id FROM ads.content_segments c WHERE c.segment_id = $7)) AND ($9::BOOL IS NOT TRUE OR NULLIF(BTRIM(s.product_name), '') IS NULL) AND ($10::TEXT IS NULL OR $10 = ANY(a.tags)) ORDER BY s.asset_id, s.preset_key, s.start_ms, s.segment_id LIMIT $8");
-    let rows = sqlx::query(&sql)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(query.asset_id)
         .bind(query.preset_key)
         .bind(query.label_key)

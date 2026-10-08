@@ -62,3 +62,14 @@ pub(crate) async fn change_password(
         "message": "密码修改成功"
     })))
 }
+
+#[cfg(test)]
+mod dependency_compatibility_tests {
+    #[test]
+    fn existing_bcrypt_hashes_keep_verifying_after_upgrade() {
+        // Public synthetic vector also covered by bcrypt 0.17.1's Python fixture.
+        let stored = "$2b$04$EGdrhbKUv8Oc9vGiXX0HQOxSg445d458Muh7DAHskb6QbtCvdxcie";
+        assert!(bcrypt::verify("correctbatteryhorsestapler", stored).unwrap());
+        assert!(!bcrypt::verify("incorrect", stored).unwrap());
+    }
+}

@@ -47,7 +47,7 @@ mod tests {
         assert_eq!(binding.contract_version, 1);
         assert_eq!(
             binding.renderer_lock_sha256,
-            format!("{:x}", Sha256::digest(raw))
+            hex::encode(Sha256::digest(raw))
         );
         assert_eq!(binding.engine, lock["engine"]);
         assert_eq!(binding.engine_version, lock["engine_version"]);

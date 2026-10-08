@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 use sqlx::{PgPool, Postgres, QueryBuilder, Row};
 use tracing::error;
 
@@ -57,7 +58,7 @@ pub(crate) async fn fetch_creator_by_id(
     can_manage: bool,
 ) -> AppResult<Option<CreatorLibraryItem>> {
     let sql = select_creator_by_id_sql();
-    let row = sqlx::query(&sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(id)
         .bind(actor_user_id)
         .bind(can_manage)

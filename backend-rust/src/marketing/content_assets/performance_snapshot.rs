@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal fragments/columns are selected by fixed callers or allowlists; request values remain bound.
 use sqlx::{PgPool, Row};
 use tracing::error;
 use uuid::Uuid;
@@ -116,7 +117,7 @@ pub(super) async fn query_performance_snapshot(
         "#
     );
 
-    let rows = sqlx::query(&query)
+    let rows = sqlx::query(sqlx::AssertSqlSafe(query.as_str()))
         .bind(asset_id)
         .fetch_all(pool)
         .await

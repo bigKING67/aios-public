@@ -235,7 +235,7 @@ pub(in crate::marketing::content_assets::production) async fn exercise(
                 .await
                 .unwrap();
             let receipt: Value = row.get("receipt");
-            let hash = format!("{:x}", Sha256::digest(&bytes));
+            let hash = hex::encode(Sha256::digest(&bytes));
             assert_eq!(hash, receipt["host_inspection"]["sha256"]);
             std::fs::write(output.join(format!("video-{index:02}.mp4")), &bytes).unwrap();
             result["sha256"] = json!(hash);

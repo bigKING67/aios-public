@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Internal SQL builders use fixed fragments and validated/escaped inputs; never pass raw request SQL.
 use serde_json::Value;
 use sqlx::{PgPool, Row};
 
@@ -9,7 +10,7 @@ use super::overview_nowcast_patch::{
 };
 
 pub(super) async fn run_dashboard_query_json(pool: &PgPool, sql: &str) -> Result<Value, String> {
-    let row = sqlx::query(sql)
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql))
         .fetch_one(pool)
         .await
         .map_err(|error| error.to_string())?;

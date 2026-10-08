@@ -17,10 +17,9 @@ fn invalid() -> AppError {
     AppError::Conflict("画面复检与当前工程或成片不一致，请重新读取".into())
 }
 pub(super) fn digest(value: &Value) -> String {
-    format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(value).expect("JSON serializes"))
-    )
+    hex::encode(Sha256::digest(
+        serde_json::to_vec(value).expect("JSON serializes"),
+    ))
 }
 pub(super) fn sha(value: &Value) -> bool {
     value.as_str().is_some_and(|s| {

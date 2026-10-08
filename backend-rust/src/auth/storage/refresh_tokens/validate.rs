@@ -1,3 +1,4 @@
+// SQLx 0.9 audit: Table resolution returns only the two literal CASE branches; token values remain bound.
 use chrono::{DateTime, Utc};
 use sqlx::{PgPool, Row};
 use tracing::error;
@@ -28,7 +29,7 @@ pub(crate) async fn validate_refresh_token_storage(
         "
     );
 
-    let row = sqlx::query(sql.as_str())
+    let row = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(token_hash)
         .fetch_optional(pool)
         .await
