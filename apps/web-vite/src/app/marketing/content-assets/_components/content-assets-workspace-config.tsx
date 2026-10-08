@@ -83,7 +83,7 @@ export function createModuleConfig(
   summary: ContentAssetSummary | ContentAssetCoverageSummary
 ): ModulePanelConfig {
   const commonMetrics = createHomeMetrics(summary).slice(0, 3);
-  const configs: Record<Exclude<ContentAssetsModuleKey, 'home' | 'assets' | 'production'>, ModulePanelConfig> = {
+  const configs: Record<Exclude<ContentAssetsModuleKey, 'home' | 'assets'>, ModulePanelConfig> = {
     ai: {
       title: 'AI分析中心',
       eyebrow: '智能分析',
@@ -201,7 +201,7 @@ export function createModuleConfig(
       ],
     },
   };
-  return configs[module as Exclude<ContentAssetsModuleKey, 'home' | 'assets' | 'production'>];
+  return configs[module as Exclude<ContentAssetsModuleKey, 'home' | 'assets'>];
 }
 
 function ratioText(value: number, total: number): string {

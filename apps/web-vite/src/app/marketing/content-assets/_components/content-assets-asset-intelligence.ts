@@ -5,6 +5,7 @@ import {
 } from '../_lib/content-assets-processing-jobs';
 
 export type IntelligencePillState = 'ready' | 'active' | 'failed' | 'muted';
+export type AssetCardPill = { label: string; state: IntelligencePillState };
 
 export function resolveIntelligencePills(asset: ContentAssetItem, processingJobs: ContentAssetProcessingJob[]) {
   const analysisJob = findLatestProcessingJobForAsset(processingJobs, asset.assetId, 'analysis');

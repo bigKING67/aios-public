@@ -30,7 +30,6 @@ import type {
   ContentAssetPlatformVideoUpdatePayload,
   ContentAssetProfileUpdatePayload,
   ContentAssetUnmatchedStatsBindPayload,
-  ContentAssetUploadCreateResponse,
   ContentAssetUploadMutationPayload,
   ContentAssetUploadProgress,
   ContentAssetVideoLinkImportPayload,
@@ -39,6 +38,7 @@ import type {
   ContentAssetProcessingJob,
 } from '../_lib/content-assets-types';
 import { resolveContentAssetRequestError } from '../_lib/content-assets-ui-helpers';
+import { calculateFileSha256, uploadFileToTos } from '../_lib/content-assets-upload';
 
 interface ContentAssetsActionMutationCallbacks {
   onUploadSuccess: (response: ContentAssetDetailResponse) => void;
@@ -352,46 +352,4 @@ function hasPlatformVideoIdentity(payload: ContentAssetPlatformVideoCreatePayloa
     payload.platform?.trim() &&
       [payload.externalVideoId, payload.externalItemId, payload.externalNoteId].some((value) => value?.trim())
   );
-}
-
-async function calculateFileSha256(file: File): Promise<string> {
-  const buffer = await file.arrayBuffer();
-  const digest = await crypto.subtle.digest('SHA-256', buffer);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-async function uploadFileToTos(
-  upload: ContentAssetUploadCreateResponse,
-  file: File,
-  onProgress: (progress: ContentAssetUploadProgress) => void
-): Promise<void> {
-  await new Promise<void>((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open(upload.method, upload.uploadUrl);
-    Object.entries(upload.headers).forEach(([key, value]) => {
-      xhr.setRequestHeader(key, value);
-    });
-    xhr.upload.onprogress = (event) => {
-      const totalBytes = event.lengthComputable ? event.total : file.size || null;
-      onProgress({
-        stage: 'uploading',
-        loadedBytes: event.loaded,
-        totalBytes,
-        percent: totalBytes ? Math.min(99, Math.round((event.loaded / totalBytes) * 100)) : null,
-      });
-    };
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve();
-        return;
-      }
-      const detail = xhr.responseText ? `：${xhr.responseText.slice(0, 240)}` : '';
-      reject(new Error(`TOS 上传失败（HTTP ${xhr.status}）${detail}`));
-    };
-    xhr.onerror = () => reject(new Error('TOS 上传失败：网络连接异常'));
-    xhr.ontimeout = () => reject(new Error('TOS 上传失败：请求超时'));
-    xhr.send(file);
-  });
 }

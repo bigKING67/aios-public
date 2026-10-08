@@ -1,7 +1,7 @@
 {
   "name": "aios",
-  "version": "4.0.13",
-  "description": "数据中枢 - 企业级数据可视化看板平台（支持周报、月报、看板、报表导出）",
+  "version": "4.1.82",
+  "description": "AGI AIOS - AI 驱动的企业业务生产力系统（经营分析、内容中台与 AI 创作、报告、数据运维）",
   "private": true,
   "scripts": {
     "dev": "vite --config apps/web-vite/vite.config.ts",
@@ -377,7 +377,7 @@
     "verify:frontend": "node scripts/quality-runner.mjs run frontend",
     "verify:runtime": "node scripts/quality-runner.mjs run runtime",
     "verify:release": "node scripts/quality-runner.mjs run release",
-    "lint": "eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer --cache --cache-location .cache/eslint/full/ --cache-strategy content",
+    "lint": "eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer etl/groland_postgres/tests/content_production/browser_candidate_fixture.mjs etl/groland_postgres/tests/content_production/browser_candidate_fixture.tsx --cache --cache-location .cache/eslint/full/ --cache-strategy content",
     "lint:scripts": "eslint scripts eslint.config.mjs backend-rust/scripts --cache --cache-location .cache/eslint/scripts/ --cache-strategy content",
     "generate:api-contract": "node scripts/contracts/generate-aios-openapi.mjs",
     "verify:api-contract": "node scripts/checks/contracts/aios-api-contract.mjs",
@@ -443,7 +443,7 @@
   "dependencies": {
     "@ant-design/icons": "^6.3.2",
     "@tanstack/react-query": "^5.101.4",
-    "antd": "^6.5.1",
+    "antd": "^6.6.5",
     "dayjs": "^1.11.21",
     "echarts": "^6.1.0",
     "immer": "^10.0.0",
@@ -458,6 +458,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query-devtools": "^5.101.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -480,7 +481,7 @@
     "lightningcss": "^1.33.0",
     "openapi-typescript": "^6.7.6",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^4.3.3",
     "terser": "^5.49.0",
     "tsx": "^4.23.1",
     "typescript": "npm:@typescript/typescript6@^6.0.2",

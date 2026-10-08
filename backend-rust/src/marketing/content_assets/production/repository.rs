@@ -1,6 +1,6 @@
 use super::types::{Project, Snapshot};
 use crate::error::{AppError, AppResult};
-use sqlx::{PgPool, Row};
+use sqlx::{PgConnection, PgPool, Row};
 use uuid::Uuid;
 
 pub(super) fn db_error(error: sqlx::Error) -> AppError {
@@ -43,31 +43,52 @@ pub(super) async fn save(
     snapshot: Snapshot,
 ) -> AppResult<Project> {
     let mut tx = pool.begin().await.map_err(db_error)?;
+    let project_id = save_in_transaction(&mut tx, owner, id, expected, snapshot).await?;
+    tx.commit().await.map_err(db_error)?;
+    get_project(pool, owner, project_id).await
+}
+
+pub(super) async fn save_in_transaction(
+    db: &mut PgConnection,
+    owner: &str,
+    id: Option<Uuid>,
+    expected: Option<i32>,
+    mut snapshot: Snapshot,
+) -> AppResult<Uuid> {
     let project_id = id.unwrap_or_else(Uuid::new_v4);
     let revision = if id.is_some() {
-        let row = sqlx::query("SELECT revision FROM ads.content_production_projects WHERE project_id=$1 AND owner_user_id=$2 FOR UPDATE")
-            .bind(project_id).bind(owner).fetch_optional(&mut *tx).await.map_err(db_error)?.ok_or(AppError::NotFound)?;
+        let row = sqlx::query("SELECT p.revision,r.snapshot FROM ads.content_production_projects p JOIN ads.content_production_revisions r USING (project_id,revision) WHERE p.project_id=$1 AND p.owner_user_id=$2 FOR UPDATE OF p")
+            .bind(project_id).bind(owner).fetch_optional(&mut *db).await.map_err(db_error)?.ok_or(AppError::NotFound)?;
         let current: i32 = row.get("revision");
         if expected != Some(current) {
             return Err(AppError::Conflict("工程已更新，请重新打开后修改".into()));
         }
+        let previous: Snapshot =
+            serde_json::from_value(row.get("snapshot")).map_err(|_| AppError::Internal)?;
+        if previous.edit_document.is_some() && snapshot.edit_document.is_none() {
+            return Err(AppError::Conflict(
+                "此工程包含独立声音，请在 AI 剪辑方案中修改，旧编辑器不能覆盖该工程".into(),
+            ));
+        }
+        // Reopening/editing never silently upgrades the project's frozen output contract.
+        snapshot.output_profile = previous.output_profile;
+        snapshot.render_binding = previous.render_binding;
         let revision = current.checked_add(1).ok_or(AppError::Internal)?;
         sqlx::query("UPDATE ads.content_production_projects SET revision=$2,title=$3,updated_at=NOW() WHERE project_id=$1")
-            .bind(project_id).bind(revision).bind(&snapshot.title).execute(&mut *tx).await.map_err(db_error)?;
+            .bind(project_id).bind(revision).bind(&snapshot.title).execute(&mut *db).await.map_err(db_error)?;
         revision
     } else {
         if expected.is_some() {
             return Err(AppError::bad_request("新工程不接受旧版本号"));
         }
         sqlx::query("INSERT INTO ads.content_production_projects (project_id,owner_user_id,title,revision) VALUES ($1,$2,$3,1)")
-            .bind(project_id).bind(owner).bind(&snapshot.title).execute(&mut *tx).await.map_err(db_error)?;
+            .bind(project_id).bind(owner).bind(&snapshot.title).execute(&mut *db).await.map_err(db_error)?;
         1
     };
     sqlx::query("INSERT INTO ads.content_production_revisions (project_id,revision,snapshot) VALUES ($1,$2,$3)")
         .bind(project_id).bind(revision).bind(serde_json::to_value(snapshot).map_err(|_| AppError::Internal)?)
-        .execute(&mut *tx).await.map_err(db_error)?;
-    tx.commit().await.map_err(db_error)?;
-    get_project(pool, owner, project_id).await
+        .execute(&mut *db).await.map_err(db_error)?;
+    Ok(project_id)
 }
 
 pub(super) async fn snapshot(

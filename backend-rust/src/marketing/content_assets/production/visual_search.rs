@@ -33,9 +33,19 @@ struct VisualHit {
     playback_url: String,
 }
 
-// The legacy schema promises HH:MM:SS. Never guess units, proxy offsets or missing endpoints.
+// Accept legacy HH:MM:SS and explicit HH:MM:SS.mmm; never infer units or offsets.
 fn timestamp(value: &Value) -> Option<u32> {
     let s = value.as_str()?;
+    let (clock, millis) = match s.split_once('.') {
+        None => (s, 0),
+        Some((clock, fraction))
+            if fraction.len() == 3 && fraction.bytes().all(|b| b.is_ascii_digit()) =>
+        {
+            (clock, fraction.parse::<u32>().ok()?)
+        }
+        _ => return None,
+    };
+    let s = clock;
     let bytes = s.as_bytes();
     if bytes.len() != 8 || bytes[2] != b':' || bytes[5] != b':' {
         return None;
@@ -50,9 +60,9 @@ fn timestamp(value: &Value) -> Option<u32> {
     let h = s[0..2].parse::<u32>().ok()?;
     let m = s[3..5].parse::<u32>().ok()?;
     let sec = s[6..8].parse::<u32>().ok()?;
-    (m < 60 && sec < 60).then_some((h * 3600 + m * 60 + sec) * 1000)
+    (m < 60 && sec < 60).then_some((h * 3600 + m * 60 + sec) * 1000 + millis)
 }
-fn segment(item: &Value, duration: f64) -> Option<(u32, u32, String, String)> {
+fn segment(item: &Value, duration: f64) -> Option<(u32, u32, String, String, String)> {
     let start = timestamp(&item["start_time"])?;
     let end = timestamp(&item["end_time"])?;
     if !duration.is_finite()
@@ -70,7 +80,21 @@ fn segment(item: &Value, duration: f64) -> Option<(u32, u32, String, String)> {
     if purpose.chars().count() > 500 {
         return None;
     }
-    Some((start, end, text.to_string(), purpose.to_string()))
+    let quality = match item.get("quality_signal") {
+        None | Some(Value::Null) => "",
+        Some(Value::String(text)) => text.trim(),
+        _ => return None,
+    };
+    if quality.chars().count() > 1000 {
+        return None;
+    }
+    Some((
+        start,
+        end,
+        text.to_string(),
+        purpose.to_string(),
+        quality.to_string(),
+    ))
 }
 
 pub(super) async fn search(
@@ -83,35 +107,9 @@ pub(super) async fn search(
     if q.is_empty() || q.chars().count() > 100 {
         return Err(AppError::bad_request("请输入 1–100 个字符的画面关键词"));
     }
-    let available:bool=sqlx::query_scalar("SELECT to_regclass('ads.marketing_content_asset_video_understanding_results') IS NOT NULL AND to_regclass('ads.marketing_content_asset_video_understanding_jobs') IS NOT NULL").fetch_one(&state.pool).await.map_err(db_error)?;
-    if !available {
-        return Err(AppError::ServiceUnavailable(
-            "视频分析结果库尚未就绪".into(),
-        ));
-    }
-    let rows=sqlx::query(r#"
-        SELECT a.asset_id,a.title,a.owner_user_id,a.uploaded_by_user_id,a.raw_object_key,
-          a.duration_seconds::FLOAT8 AS duration_seconds,r.result_id,r.model_name,r.result_json->'analysis'->'timeline' AS timeline
-        FROM ads.marketing_content_assets a
-        JOIN LATERAL (
-          SELECT r.result_id,r.model_name,r.result_json FROM ads.marketing_content_asset_video_understanding_results r
-          WHERE r.asset_id=a.asset_id AND LOWER(r.media_hash)=LOWER(a.raw_sha256)
-            AND r.result_json->'inputSnapshot'->>'modelInputRole'='raw'
-            AND r.result_json->'inputSnapshot'->>'modelInputObjectKey'=a.raw_object_key
-            AND EXISTS (
-              SELECT 1 FROM ads.marketing_content_asset_video_understanding_jobs j
-              WHERE j.asset_id=r.asset_id AND j.media_hash=r.media_hash AND j.model_name=r.model_name
-                AND j.prompt_version=r.prompt_version AND j.analysis_schema_version=r.analysis_schema_version
-                AND j.input_snapshot_hash=r.input_snapshot_hash AND j.cache_key=r.cache_key
-                AND j.status='succeeded' AND j.storage_key=a.raw_object_key
-            )
-          ORDER BY r.updated_at DESC,r.result_id LIMIT 1
-        ) r ON TRUE
-        WHERE a.asset_status='ready' AND NOT a.external_only AND a.bucket=$2
-          AND LENGTH(a.raw_sha256)=64 AND a.raw_sha256 ~ '^[0-9a-fA-F]{64}$'
-          AND STRPOS(LOWER((r.result_json->'analysis'->'timeline')::TEXT),LOWER($1))>0
-        ORDER BY a.updated_at DESC,a.asset_id LIMIT 100
-    "#).bind(q).bind(&state.settings.tos_bucket).fetch_all(&state.pool).await.map_err(db_error)?;
+    let rows = load_rows(&state, q, &[])
+        .await?
+        .ok_or_else(|| AppError::ServiceUnavailable("视频分析结果库尚未就绪".into()))?;
     let mut hits = Vec::new();
     let needle = q.to_lowercase();
     for row in rows {
@@ -130,7 +128,7 @@ pub(super) async fn search(
             "ready",
         );
         for item in items.iter().take(100) {
-            let Some((start_ms, end_ms, text, purpose)) = segment(item, duration) else {
+            let Some((start_ms, end_ms, text, purpose, _)) = segment(item, duration) else {
                 continue;
             };
             if !text.to_lowercase().contains(&needle) && !purpose.to_lowercase().contains(&needle) {
@@ -164,6 +162,126 @@ pub(super) async fn search(
     ))
 }
 
+// A missing optional analysis store allows transcript-only planning. Query failures do not.
+async fn load_rows(
+    state: &AppState,
+    q: &str,
+    asset_ids: &[Uuid],
+) -> AppResult<Option<Vec<sqlx::postgres::PgRow>>> {
+    let available:bool=sqlx::query_scalar("SELECT to_regclass('ads.marketing_content_asset_video_understanding_results') IS NOT NULL AND to_regclass('ads.marketing_content_asset_video_understanding_jobs') IS NOT NULL").fetch_one(&state.pool).await.map_err(db_error)?;
+    if !available {
+        return Ok(None);
+    }
+    let rows=sqlx::query(r#"
+        SELECT a.asset_id,a.title,a.owner_user_id,a.uploaded_by_user_id,a.raw_object_key,
+          a.raw_sha256,a.duration_seconds::FLOAT8 AS duration_seconds,r.result_id,r.model_name,r.prompt_version,r.analysis_schema_version,r.input_snapshot_hash,r.cache_key,r.result_json->'analysis'->'timeline' AS timeline,r.result_json->'analysis'->'video_understanding'->'visible_text' AS visible_text
+        FROM ads.marketing_content_assets a
+        JOIN LATERAL (
+          SELECT r.result_id,r.model_name,r.prompt_version,r.analysis_schema_version,r.input_snapshot_hash,r.cache_key,r.result_json FROM ads.marketing_content_asset_video_understanding_results r
+          WHERE r.asset_id=a.asset_id AND LOWER(r.media_hash)=LOWER(a.raw_sha256)
+            AND r.result_json->'inputSnapshot'->>'modelInputRole'='raw'
+            AND r.result_json->'inputSnapshot'->>'modelInputObjectKey'=a.raw_object_key
+            AND EXISTS (
+              SELECT 1 FROM ads.marketing_content_asset_video_understanding_jobs j
+              WHERE j.asset_id=r.asset_id AND j.media_hash=r.media_hash AND j.model_name=r.model_name
+                AND j.prompt_version=r.prompt_version AND j.analysis_schema_version=r.analysis_schema_version
+                AND j.input_snapshot_hash=r.input_snapshot_hash AND j.cache_key=r.cache_key
+                AND j.status='succeeded' AND j.storage_key=a.raw_object_key
+            )
+          ORDER BY r.updated_at DESC,r.result_id LIMIT 1
+        ) r ON TRUE
+        WHERE a.asset_status='ready' AND NOT a.external_only AND a.bucket=$2
+          AND LENGTH(a.raw_sha256)=64 AND a.raw_sha256 ~ '^[0-9a-fA-F]{64}$'
+          AND (cardinality($3::uuid[]) = 0 OR a.asset_id = ANY($3))
+          AND STRPOS(LOWER((r.result_json->'analysis'->'timeline')::TEXT),LOWER($1))>0
+        ORDER BY a.updated_at DESC,a.asset_id LIMIT 100
+    "#).bind(q).bind(&state.settings.tos_bucket).bind(asset_ids).fetch_all(&state.pool).await.map_err(db_error)?;
+    Ok(Some(rows))
+}
+
+#[derive(Clone, serde::Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct VisualEvidence {
+    pub asset_id: Uuid,
+    pub title: String,
+    pub start_ms: u32,
+    pub end_ms: u32,
+    pub observation: String,
+    pub visible_text: Value,
+    pub purpose_suggestion: String,
+    pub quality_signal: String,
+    pub analysis_result_id: Uuid,
+    pub raw_sha256: String,
+    pub model: String,
+    pub prompt_version: String,
+    pub analysis_schema_version: String,
+    pub input_snapshot_hash: String,
+    pub cache_key: String,
+}
+
+pub(super) async fn planning_candidates(
+    state: &AppState,
+    user: &CurrentUser,
+    asset_ids: &[Uuid],
+) -> AppResult<Vec<VisualEvidence>> {
+    if asset_ids.is_empty() || asset_ids.len() > 10 {
+        return Err(AppError::bad_request("画面规划需要明确的素材范围"));
+    }
+    let Some(rows) = load_rows(state, "", asset_ids).await? else {
+        return Ok(vec![]);
+    };
+    let mut candidates = Vec::new();
+    for row in rows {
+        if !can_edit_content_asset_owner_scope(
+            user,
+            row.get::<Option<String>, _>("owner_user_id").as_deref(),
+            row.get::<Option<String>, _>("uploaded_by_user_id")
+                .as_deref(),
+            "ready",
+        ) {
+            continue;
+        }
+        let timeline: Value = row.get("timeline");
+        let (Some(items), Some(duration)) = (
+            timeline.as_array(),
+            row.get::<Option<f64>, _>("duration_seconds"),
+        ) else {
+            continue;
+        };
+        for (start_ms, end_ms, observation, purpose_suggestion, quality_signal) in items
+            .iter()
+            .take(100)
+            .filter_map(|item| segment(item, duration))
+            .take(30)
+        {
+            candidates.push(VisualEvidence {
+                asset_id: row.get("asset_id"),
+                title: row.get("title"),
+                start_ms,
+                end_ms,
+                observation,
+                visible_text: super::visible_text::for_segment(
+                    row.get::<Option<Value>, _>("visible_text")
+                        .unwrap_or(Value::Null),
+                    start_ms,
+                    end_ms,
+                    duration * 1000.0,
+                ),
+                purpose_suggestion,
+                quality_signal,
+                analysis_result_id: row.get("result_id"),
+                raw_sha256: row.get("raw_sha256"),
+                model: row.get("model_name"),
+                prompt_version: row.get("prompt_version"),
+                analysis_schema_version: row.get("analysis_schema_version"),
+                input_snapshot_hash: row.get("input_snapshot_hash"),
+                cache_key: row.get("cache_key"),
+            });
+        }
+    }
+    Ok(candidates)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -173,6 +291,20 @@ mod tests {
             assert!(timestamp(&json!(s)).is_none());
         }
         assert_eq!(timestamp(&json!("00:01:02")), Some(62000));
+        assert_eq!(timestamp(&json!("00:00:23.100")), Some(23100));
+        assert_eq!(timestamp(&json!("00:00:00.001")), Some(1));
+        for malformed in [
+            "00:00:23.1000",
+            "00:00:23.-01",
+            "00:00:23.１２３",
+            "00:00:23.100.0",
+        ] {
+            assert!(timestamp(&json!(malformed)).is_none());
+        }
+        let fractional =
+            json!({"start_time":"00:00:22.000","end_time":"00:00:23.100","visual":"冲洗"});
+        assert_eq!(segment(&fractional, 23.1).unwrap().1, 23100);
+        assert!(segment(&fractional, 23.0).is_none());
         let mut v = json!({"start_time":"00:00:01","end_time":"00:00:04","visual":"手持产品特写","purpose":"展示"});
         assert!(segment(&v, 3.9).is_none());
         assert!(segment(&v, f64::NAN).is_none());
@@ -182,5 +314,22 @@ mod tests {
         v["end_time"] = json!("00:00:04");
         v["visual"] = json!("");
         assert!(segment(&v, 4.0).is_none());
+    }
+    #[test]
+    fn quality_observation_is_bounded_optional_and_not_silently_dropped() {
+        let mut v = json!({"start_time":"00:00:01","end_time":"00:00:03","visual":"冲洗头发","quality_signal":"  泡沫可见但未露出产品  "});
+        assert_eq!(segment(&v, 4.0).unwrap().4, "泡沫可见但未露出产品");
+        for invalid in [
+            json!({"text":"warning"}),
+            json!("字".repeat(1001)),
+            json!(false),
+        ] {
+            v["quality_signal"] = invalid;
+            assert!(segment(&v, 4.0).is_none());
+        }
+        v["quality_signal"] = Value::Null;
+        assert!(segment(&v, 4.0).unwrap().4.is_empty());
+        v.as_object_mut().unwrap().remove("quality_signal");
+        assert!(segment(&v, 4.0).is_some());
     }
 }

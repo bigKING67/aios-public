@@ -39,10 +39,11 @@ use cookies::{
 };
 pub(crate) use current_user::resolve_optional_current_user;
 pub use current_user::{ensure_any_permission, CurrentUser};
+pub(crate) use storage::fetch_user_profile;
 use storage::{
-    fetch_user_by_id, fetch_user_by_username, fetch_user_permissions, fetch_user_profile,
-    fetch_user_roles, persist_refresh_token, revoke_refresh_token, update_last_login_at,
-    update_password_hash, validate_new_password, validate_refresh_token_storage,
+    fetch_user_by_id, fetch_user_by_username, fetch_user_permissions, fetch_user_roles,
+    persist_refresh_token, revoke_refresh_token, update_last_login_at, update_password_hash,
+    validate_new_password, validate_refresh_token_storage,
 };
 pub use types::{AuthUserResponse, TokenResponse};
 use types::{

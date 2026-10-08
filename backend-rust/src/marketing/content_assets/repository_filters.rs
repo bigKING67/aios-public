@@ -124,6 +124,16 @@ pub(super) fn push_filters(
     }
     push_status_filters(builder, query);
     push_todo_filter(builder, query);
+    push_segment_status_filter(builder, query);
+    match query.studio_outputs.as_deref() {
+        Some("exclude") => {
+            builder.push(" AND asset.source_type IS DISTINCT FROM 'ai_studio_output'");
+        }
+        Some("only") => {
+            builder.push(" AND asset.source_type = 'ai_studio_output'");
+        }
+        _ => {}
+    }
 }
 
 fn product_filter_values(product_name: &str) -> Vec<String> {
@@ -153,6 +163,38 @@ fn push_status_filters(builder: &mut QueryBuilder<Postgres>, query: &NormalizedC
         builder.push(" AND asset.external_only = ");
         builder.push_bind(external_only);
     }
+}
+
+/// AI 创作中心 整片素材 annotation state (migration 029). `unlabeled` means no
+/// suggested or confirmed segment; `suggested` has at least one suggestion
+/// awaiting review; `confirmed` has at least one confirmed segment.
+fn push_segment_status_filter(
+    builder: &mut QueryBuilder<Postgres>,
+    query: &NormalizedContentAssetQuery,
+) {
+    let Some(status) = &query.segment_status else {
+        return;
+    };
+    match status.as_str() {
+        "unlabeled" => builder.push(
+            " AND NOT EXISTS (SELECT 1 FROM ads.content_segments segment \
+                WHERE segment.asset_id = asset.asset_id \
+                  AND segment.status IN ('suggested', 'confirmed')",
+        ),
+        "suggested" | "confirmed" => {
+            builder.push(
+                " AND EXISTS (SELECT 1 FROM ads.content_segments segment \
+                    WHERE segment.asset_id = asset.asset_id AND segment.status = ",
+            );
+            builder.push_bind(status.clone())
+        }
+        _ => return,
+    };
+    if let Some(preset) = &query.segment_preset {
+        builder.push(" AND segment.preset_key = ");
+        builder.push_bind(preset.clone());
+    }
+    builder.push(")");
 }
 
 fn push_todo_filter(builder: &mut QueryBuilder<Postgres>, query: &NormalizedContentAssetQuery) {

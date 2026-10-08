@@ -6,7 +6,7 @@
 
 ## Brand & Product Context
 
-- Product name: AIOS (formerly DataHub); company-qualified name: Groland AIOS.
+- Product name: AIOS (formerly DataHub); current display name: AGI AIOS.
 - Product tagline: AI 驱动的业务生产力系统.
 - Naming transition: this remains the same product and visual baseline. Preserve the retired Agent boundary and existing design language while technical identities migrate under the release plan.
 - Domain: enterprise data operations, commerce analytics, reporting, and internal data-product workflows.
@@ -14,7 +14,9 @@
 - Primary scenarios: dashboard monitoring, weekly/monthly reports, DataOps runtime diagnosis, creator/live/traffic analysis, and operational admin.
 - Design direction: company-branded light enterprise console with DeepSeek-like typographic discipline: restrained, neutral, spacious, data-first, and low-noise.
 - Brand source: pure white `#FFFFFF` plus light gray `#F5F5F5` for space, modern SaaS blue `#2F6EEA` for primary fills, accessible blue text `#2457C5` for links/small text/icons, and matte black `#1A1A1A` for text/logo/title.
-- Existing constraints: Vite + React + React Router, Ant Design v6, Tailwind CSS v3, CSS Modules, ECharts, CSS variables.
+- Existing constraints: Vite + React + React Router, Ant Design v6, Tailwind CSS v4, CSS Modules, ECharts, CSS variables.
+- Tailwind v4 uses `@tailwindcss/vite` and explicit `@config` loading of `tailwind.config.ts`; its content paths remain the source scan boundary. Preserve the existing unlayered Preflight/utility cascade with AntD and CSS Modules. Theme variables use the `theme` layer; the v3 default border color is retained through the framework gray-200 variable. Do not replace the split imports with the default layered import without browser regression evidence.
+- Supported browser minimums for this integration: Chrome 111+, Safari 16.4+, Firefox 128+ (accepted for the v4 migration). This compatibility target does not imply all three engines were tested locally.
 - Do not blindly copy DeepSeek dark mode or SVG wordmark. Absorb its font hierarchy, neutral gray rhythm, tabular numeric feel, quiet buttons/tags, and sparse data layout while keeping AIOS's white/gray/blue brand authority.
 
 ## Page Archetypes
@@ -300,7 +302,7 @@ Value semantics for static-report charts:
 
 ### Content Hub / Live Center Pages
 
-- Primary job: organize content operations under the top-level 内容中台 navigation while keeping 素材库 and 直播中台 as focused secondary workbench entries.
+- Primary job: organize content operations under the top-level 内容中台 navigation while keeping 素材库, AI 创作中心, and 直播中台 as focused secondary workbench entries. 素材库 owns asset management; AI 创作中心 (`/content/ai-studio/*`) owns production (analysis, segments, editing, outputs) on the same asset truth and uses route-driven sidebar navigation, reusing the 素材库 console sidebar grammar rather than inventing a second one.
 - The content hub navigation grammar should stay one-language: the active top-level item may use the global blue pill treatment, while nested entry icons remain unframed unless the control itself is an explicit button. Do not stack an icon box inside an active navigation pill.
 - Live center pages are operational review workbenches: lead with the session queue, review status, source metadata, and next action rather than a marketing-style hero or decorative media wall.
 - Live center session queues default to Groland self-broadcast scope; do not mix other anchors or 达播 sessions into the primary review queue.

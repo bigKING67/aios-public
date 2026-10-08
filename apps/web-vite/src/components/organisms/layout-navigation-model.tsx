@@ -13,6 +13,7 @@ import {
   InboxOutlined,
   PlaySquareOutlined,
   QuestionCircleOutlined,
+  RobotOutlined,
   SafetyOutlined,
   SettingOutlined,
   TeamOutlined,
@@ -176,6 +177,7 @@ export function buildLayoutMenuItems({
 
   const contentChildren: LayoutMenuItems = [];
   const canAccessContentAssets = canAccess(ROUTE_PATHS.marketingContentAssets);
+  const canAccessAiStudio = canAccess(ROUTE_PATHS.contentAiStudio);
   const canAccessLiveCenter = canAccess(ROUTE_PATHS.contentLiveCenter);
 
   if (canAccessContentAssets) {
@@ -184,6 +186,16 @@ export function buildLayoutMenuItems({
         ROUTE_PATHS.marketingContentAssets,
         '素材库',
         <FileImageOutlined className="header-nav-submenu-icon" />,
+        { openInNewTab: true },
+      ),
+    );
+  }
+  if (canAccessAiStudio) {
+    contentChildren.push(
+      createSubmenuLinkItem(
+        ROUTE_PATHS.contentAiStudio,
+        'AI 创作中心',
+        <RobotOutlined className="header-nav-submenu-icon" />,
         { openInNewTab: true },
       ),
     );

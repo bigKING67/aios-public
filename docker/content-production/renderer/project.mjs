@@ -4,6 +4,8 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { bindCaptionFont, validateCaptionFont, verifyCaptionFont } from './caption-font.mjs';
+import { copyImmutable } from './copy-file.mjs';
 
 export const run = promisify(execFile);
 export const SCHEMA = 'creative-craft.local-edit.v1';
@@ -15,6 +17,14 @@ const text = (v) => typeof v === 'string' && v.length > 0 && v.length <= 2000;
 function keys(value, allowed) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) fail('Expected object');
   for (const key of Object.keys(value)) if (!allowed.includes(key)) fail(`Unknown field: ${key}`);
+}
+
+// Source-matched caption geometry is data, never caller-supplied CSS.
+export function validateCaptionStyle(style) {
+  keys(style, ['fontHeight', 'centerY', 'color', 'strokeWidth', 'weight']);
+  if (!number(style.fontHeight, .015, .08) || !number(style.centerY, .1, .9) ||
+      !number(style.strokeWidth, 0, .004) || ![400, 600, 700, 900].includes(style.weight) ||
+      typeof style.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(style.color)) fail('Invalid caption style');
 }
 
 export async function digest(file) {
@@ -49,7 +59,8 @@ export async function probe(file) {
 }
 
 export function validate(project) {
-  keys(project, ['schema_version', 'project_id', 'revision', 'parent_sha256', 'title', 'canvas', 'assets', 'clips', 'audio']);
+  keys(project, ['schema_version', 'project_id', 'revision', 'parent_sha256', 'title', 'canvas', 'assets', 'clips', 'audio', 'caption_font']);
+  if ('caption_font' in project) validateCaptionFont(project.caption_font);
   if (project.schema_version !== SCHEMA || !id(project.project_id) || !text(project.title) ||
       !integer(project.revision, 1, 999999)) fail('Invalid project identity');
   if (project.revision === 1 ? project.parent_sha256 !== null :
@@ -79,7 +90,8 @@ export function validate(project) {
         !number(clip.volume, 0, 1) || !['contain', 'cover'].includes(clip.fit) || !Array.isArray(clip.captions) || clip.captions.length > 500) fail('Invalid clip or source range');
     ids.add(clip.id);
     for (const caption of clip.captions) {
-      keys(caption, ['from', 'to', 'text']);
+      keys(caption, ['from', 'to', 'text', 'style']);
+      if ('style' in caption) validateCaptionStyle(caption.style);
       if (!number(caption.from, 0, asset.duration) || !number(caption.to, 0, asset.duration) ||
           caption.to <= caption.from || !text(caption.text)) fail('Invalid source-timed caption');
     }
@@ -152,10 +164,11 @@ export async function createProject(root, spec) {
   for (const { source, asset } of imports) {
     if (copied.has(asset.file)) continue;
     const target = path.join(root, asset.file);
-    await fs.copyFile(source, target, 1);
+    await copyImmutable(source, target);
     if (await digest(target) !== asset.sha256) fail('Source changed during import');
     copied.add(asset.file);
   }
+  await bindCaptionFont(root, project);
   await publish(root, project);
   return project;
 }
@@ -192,6 +205,7 @@ export async function editProject(root, expectedRevision, operations) {
 }
 
 export async function verifyAssets(root, project) {
+  await verifyCaptionFont(root, project);
   for (const asset of project.assets) {
     const file = await safePath(path.join(root, asset.file));
     if (await digest(file) !== asset.sha256) fail(`Asset changed: ${asset.id}`);

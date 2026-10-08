@@ -57,11 +57,12 @@ pub(super) fn build_optional_cover_url(
     settings: &Settings,
     asset: &ContentAssetItem,
 ) -> Option<String> {
-    let object_key = asset
-        .cover_object_key
-        .as_deref()
-        .map(str::trim)
-        .filter(|value| !value.is_empty())?;
+    build_cover_url_for_key(settings, asset.cover_object_key.as_deref()?)
+}
+
+/// Signed or CDN URL for a cover object key; `None` when blank or unsigned.
+pub(super) fn build_cover_url_for_key(settings: &Settings, object_key: &str) -> Option<String> {
+    let object_key = Some(object_key.trim()).filter(|value| !value.is_empty())?;
     let provider = settings.content_asset_delivery_provider.as_str();
     match provider {
         "volc_cdn" => build_cdn_url(settings, object_key).ok(),

@@ -45,9 +45,8 @@ etl/groland_postgres/.DS_Store
 etl/groland_postgres/**/__pycache__
 etl/groland_postgres/**/*.pyc
 
-# Host-local credentials must never enter any image build context.
+# Host-local credentials must never enter any image build context. No
+# negated (!) patterns: BuildKit must walk excluded trees to evaluate them,
+# which fails on root-only runtime data such as .dataops/runtime-store.
 **/.env*
-!**/.env.example
-
-# Final deny after the env-example exception: never traverse host runtime data.
 .dataops/

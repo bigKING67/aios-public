@@ -21,6 +21,7 @@ import { contentAssetStatusLabel } from '../_lib/content-assets-ui-helpers';
 import cardStyles from './content-assets-asset-list.module.css';
 import { ContentAssetPreviewMedia } from './content-assets-preview-media';
 import {
+  type AssetCardPill,
   type IntelligencePillState,
   resolveIntelligencePills,
 } from './content-assets-asset-intelligence';
@@ -41,6 +42,8 @@ export function ContentAssetGridCard({
   onPreviewActivate,
   onPreviewDeactivate,
   onSourceUploadOpen,
+  resolvePills,
+  openLabel = '打开素材详情',
 }: {
   asset: ContentAssetItem;
   index: number;
@@ -49,12 +52,17 @@ export function ContentAssetGridCard({
   onOpen: (asset: ContentAssetItem) => void;
   onPreviewActivate: (assetId: string) => void;
   onPreviewDeactivate: (assetId: string) => void;
-  onSourceUploadOpen: (asset: ContentAssetItem) => void;
+  /** Omit to hide the 补传源文件 action (for example in AI 创作中心). */
+  onSourceUploadOpen?: (asset: ContentAssetItem) => void;
+  /** Replaces the default AI/script readiness pills. */
+  resolvePills?: (asset: ContentAssetItem) => AssetCardPill[];
+  openLabel?: string;
 }) {
   const cardTags = resolveCardTags(asset);
   const displayTitle = resolveContentAssetDisplayTitle(asset);
   const statusLabel = resolveCardStatusLabel(asset);
-  const canSourceUpload = asset.externalOnly && asset.canEdit;
+  const canSourceUpload = Boolean(onSourceUploadOpen) && asset.externalOnly && asset.canEdit;
+  const pills = resolvePills ? resolvePills(asset) : resolveIntelligencePills(asset, processingJobs);
 
   return (
     <article
@@ -71,7 +79,7 @@ export function ContentAssetGridCard({
       }}
       role="button"
       tabIndex={0}
-      aria-label={`打开素材详情：${displayTitle}`}
+      aria-label={`${openLabel}：${displayTitle}`}
     >
       <div
         className={`${cardStyles.coverFrame} ${asset.coverUrl ? cardStyles.coverFrameWithImage : COVER_TONES[index % COVER_TONES.length]} ${isPreviewActive ? cardStyles.coverFramePreviewing : ''}`}
@@ -101,7 +109,7 @@ export function ContentAssetGridCard({
           </div>
         ) : null}
         <div className={cardStyles.readinessRow}>
-          {resolveIntelligencePills(asset, processingJobs).map((pill) => (
+          {pills.map((pill) => (
             <span className={readinessPillClassName(pill.state)} key={pill.label}>
               {pill.label}
             </span>
@@ -113,7 +121,7 @@ export function ContentAssetGridCard({
             type="button"
             onClick={(event) => {
               event.stopPropagation();
-              onSourceUploadOpen(asset);
+              onSourceUploadOpen?.(asset);
             }}
             onKeyDown={(event) => event.stopPropagation()}
           >

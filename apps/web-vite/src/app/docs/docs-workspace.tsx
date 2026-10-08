@@ -7,10 +7,12 @@ import { DocsSidebar, DocsToc } from './docs-navigation-panels';
 import { useScrollActivity } from './docs-scroll-activity';
 import type {
   DocsCard,
+  DocsFigure,
   DocsPageModel,
   DocsSection,
   DocsStep,
   DocsTable,
+  DocsVideo,
   DocsWorkspaceSnapshot,
 } from './docs-workspace-contracts';
 import {
@@ -201,6 +203,7 @@ function DocsSectionBlock({ section }: { section: DocsSection }) {
     <section className={styles.docSection} id={section.id}>
       <h2>{section.title}</h2>
       {section.lead ? <p className={styles.sectionLead}>{section.lead}</p> : null}
+      {section.video ? <DocsVideoBlock video={section.video} /> : null}
       {section.paragraphs?.map((paragraph) => (
         <p key={paragraph}>{paragraph}</p>
       ))}
@@ -208,6 +211,7 @@ function DocsSectionBlock({ section }: { section: DocsSection }) {
       {section.cards ? <DocsCards cards={section.cards} /> : null}
       {section.steps ? <DocsSteps steps={section.steps} /> : null}
       {section.tables ? <DocsTables tables={section.tables} /> : null}
+      {section.figures ? <DocsFigures figures={section.figures} /> : null}
     </section>
   );
 }
@@ -315,6 +319,32 @@ function DocsTables({ tables }: { tables: DocsTable[] }) {
             </table>
           </div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+function DocsVideoBlock({ video }: { video: DocsVideo }) {
+  return (
+    <figure className={styles.figure}>
+      <video className={styles.video} src={video.src} poster={video.poster} controls preload="none" playsInline aria-label={video.title}>
+        <a href={video.src}>下载视频：{video.title}</a>
+      </video>
+      {video.caption ? <figcaption>{video.caption}</figcaption> : null}
+    </figure>
+  );
+}
+
+function DocsFigures({ figures }: { figures: DocsFigure[] }) {
+  return (
+    <div className={styles.figureList}>
+      {figures.map((figure) => (
+        <figure key={figure.src} className={styles.figure}>
+          <a href={figure.src} target="_blank" rel="noreferrer" className={styles.figureLink} aria-label={`查看大图：${figure.alt}`}>
+            <img src={figure.src} alt={figure.alt} loading="lazy" decoding="async" />
+          </a>
+          {figure.caption ? <figcaption>{figure.caption}</figcaption> : null}
+        </figure>
       ))}
     </div>
   );

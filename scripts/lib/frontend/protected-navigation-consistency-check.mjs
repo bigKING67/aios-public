@@ -436,6 +436,17 @@ export async function runProtectedNavigationConsistencyCheck(assertions) {
     }),
     'content assets route access must still require authentication',
   );
+  for (const aiStudioPath of [ROUTE_PATHS.contentAiStudio, ROUTE_PATHS.contentAiStudioEditing]) {
+    assertTrue(
+      canAccess(aiStudioPath, { roles: [], permissions: [] }) ===
+        canAccess(ROUTE_PATHS.marketingContentAssets, { roles: [], permissions: [] }),
+      `${aiStudioPath} access must follow content assets route access`,
+    );
+    assertFalse(
+      canAccess(aiStudioPath, { isAuthenticated: false, permissions: ['marketing:content_assets:read'] }),
+      `${aiStudioPath} must still require authentication`,
+    );
+  }
   assertTrue(
     canAccess(ROUTE_PATHS.marketingIndustryNews, { roles: [], permissions: [] }),
     'regular authenticated users should allow industry news route access',

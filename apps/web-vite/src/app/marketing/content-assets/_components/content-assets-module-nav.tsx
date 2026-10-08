@@ -1,7 +1,7 @@
 import {
   FileImageOutlined,
 } from '@ant-design/icons';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { formatBytes } from '../_lib/content-assets-formatters';
 import type { ContentAssetSummary } from '../_lib/content-assets-types';
@@ -20,6 +20,8 @@ export function ContentAssetsModuleNav({
   onModuleChange: (module: ContentAssetsModuleKey) => void;
   summary: ContentAssetSummary;
 }) {
+  const navigate = useNavigate();
+
   return (
     <aside className={styles.moduleRail} aria-label="素材库导航">
       <div className={styles.brandLockup}>
@@ -47,9 +49,9 @@ export function ContentAssetsModuleNav({
                 className={`${styles.moduleNavItem} ${activeModule === item.key ? styles.moduleNavItemActive : ''}`}
                 type="button"
                 aria-label={item.label}
-                aria-pressed={activeModule === item.key}
-                title={item.label}
-                onClick={() => onModuleChange(item.key)}
+                aria-pressed={item.href === undefined ? activeModule === item.key : undefined}
+                title={item.href === undefined ? item.label : `${item.label}（已迁至 AI 创作中心）`}
+                onClick={() => (item.href === undefined ? onModuleChange(item.key) : navigate(item.href))}
               >
                 {item.icon}
                 <span>{item.label}</span>

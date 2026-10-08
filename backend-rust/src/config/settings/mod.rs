@@ -1,5 +1,6 @@
 mod auth;
 mod content_assets;
+pub(crate) use content_assets::studio_products_from_env;
 mod dashboard;
 mod db;
 mod env_file;
@@ -51,8 +52,26 @@ pub struct Settings {
     pub content_asset_delivery_provider: String,
     pub content_production_enabled: bool,
     pub content_production_planning_enabled: bool,
+    pub content_production_runs_enabled: bool,
     pub content_production_shot_extraction_enabled: bool,
     pub content_production_semantics_enabled: bool,
+    pub content_ai_studio_enabled: bool,
+    /// AI 创作中心 open access (default on): any signed-in user may write
+    /// studio segments, request AI 切段 and create/see/cancel every remix batch
+    /// without the content-asset edit permission. Off restores owner/role rules.
+    pub content_ai_studio_open_access: bool,
+    /// `企业:<name>` from `CONTENT_AI_STUDIO_ENTERPRISE` (e.g. 百雀羚): when set,
+    /// the studio only reads and admits library originals carrying this tag.
+    /// Unset keeps the whole library in scope.
+    pub content_ai_studio_enterprise_tag: Option<String>,
+    /// Enterprise product catalog (`CONTENT_AI_STUDIO_PRODUCTS`).
+    pub content_ai_studio_products: Vec<String>,
+    pub content_ai_studio_segment_suggest_enabled: bool,
+    pub content_ai_studio_segment_suggest_max_assets: usize,
+    pub content_ai_studio_remix_enabled: bool,
+    pub content_ai_studio_remix_max_seconds: u32,
+    pub content_ai_studio_remix_max_per_batch: usize,
+    pub content_ai_studio_remix_max_active: usize,
     pub content_asset_cdn_base_url: String,
     pub content_asset_signed_url_ttl_seconds: u64,
     pub douyin_live_recording_upload_signed_url_ttl_seconds: u64,
@@ -138,6 +157,27 @@ impl Settings {
                 == Ok("true"),
             content_production_enabled: std::env::var("CONTENT_PRODUCTION_ENABLED").as_deref()
                 == Ok("true"),
+            content_production_runs_enabled: std::env::var("CONTENT_PRODUCTION_RUNS_ENABLED")
+                .as_deref()
+                == Ok("true"),
+            content_ai_studio_enabled: std::env::var("CONTENT_AI_STUDIO_ENABLED").as_deref()
+                == Ok("true"),
+            content_ai_studio_open_access: content_assets::resolve_studio_open_access(),
+            content_ai_studio_enterprise_tag: content_assets::resolve_studio_enterprise_tag(),
+            content_ai_studio_products: content_assets::studio_products_from_env(),
+            content_ai_studio_segment_suggest_enabled: std::env::var(
+                "CONTENT_AI_STUDIO_SEGMENT_SUGGEST_ENABLED",
+            )
+            .as_deref()
+                == Ok("true"),
+            content_ai_studio_segment_suggest_max_assets:
+                content_assets::resolve_segment_suggest_max_assets(),
+            content_ai_studio_remix_enabled: std::env::var("CONTENT_AI_STUDIO_REMIX_ENABLED")
+                .as_deref()
+                == Ok("true"),
+            content_ai_studio_remix_max_seconds: content_assets::resolve_remix_max_seconds(),
+            content_ai_studio_remix_max_per_batch: content_assets::resolve_remix_max_per_batch(),
+            content_ai_studio_remix_max_active: content_assets::resolve_remix_max_active(),
             douyin_live_recording_upload_signed_url_ttl_seconds: content_assets
                 .live_recording_upload_signed_url_ttl_seconds,
             tos_access_key_id: content_assets.tos_access_key_id,

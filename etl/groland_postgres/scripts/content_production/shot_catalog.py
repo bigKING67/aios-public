@@ -60,6 +60,11 @@ def partition(duration_ms: int, candidates: list[int], min_shot_ms: int = 250) -
     return list(zip(cuts[:-1], cuts[1:]))
 
 
+def scene_filter(threshold: float) -> str:
+    """FFmpeg scene-change filter whose showinfo lines `parse_boundaries` reads."""
+    return f"select=gt(scene\\,{threshold}),showinfo"
+
+
 def parse_boundaries(log: str) -> list[int]:
     # Only showinfo frame lines, never duration/progress timestamps.
     return [round(float(value) * 1000) for value in re.findall(r"\[Parsed_showinfo_[^\]]+\].*?\bpts_time:([0-9]+(?:\.[0-9]+)?)", log)]
@@ -85,7 +90,7 @@ def build_catalog(source: Path, output: Path, asset_id: str, *, ffmpeg: str, ffp
         log_path = staging / "detection.log"
         with log_path.open("wb") as log:
             run([ffmpeg, "-nostdin", "-xerror", "-hide_banner", "-i", str(source), "-map", f"0:{metadata['streamIndex']}",
-                 "-vf", f"select=gt(scene\\,{threshold}),showinfo", "-an", "-f", "null", "-"], timeout=300, stderr=log)
+                 "-vf", scene_filter(threshold), "-an", "-f", "null", "-"], timeout=300, stderr=log)
         if log_path.stat().st_size > 8 * 1024 * 1024:
             raise ValueError("Unexpected detector output size")
         ranges = partition(metadata["durationMs"], parse_boundaries(log_path.read_text(errors="replace")))

@@ -1,0 +1,405 @@
+/*
+ * 框架混剪 form, preview, and output styles. Cards, fields, tables, and links
+ * reuse ai-studio.module.css and segment-annotation.module.css; the two-column
+ * workbench comes from studio-workbench.module.css. This module owns the mode
+ * switch, the slot editor, the structure timeline, preview metrics and candidate
+ * segments; 成片 cards live in remix-outputs.module.css.
+ */
+
+.modeTabs {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+}
+
+.modeTab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.modeTab:hover {
+  color: var(--brand-text-strong);
+  text-decoration: none;
+}
+
+.modeTab:focus-visible,
+.slotRow button:focus-visible,
+.gapLink:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Same "you are here" fill as the active rail item, so the chosen mode reads at a glance. */
+.modeTabActive,
+.modeTabActive:hover {
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.modeTabActive:hover {
+  background: var(--brand-dark);
+}
+
+.headerEnd {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+/* Structure as an ordered row of slots with their candidate counts. */
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.slot {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: 36px;
+  padding: var(--spacing-1) var(--spacing-3) var(--spacing-1) var(--spacing-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--bg-card);
+  font-size: var(--font-size-sm);
+}
+
+.slotOrdinal {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--border-radius-full);
+  color: var(--brand-text-strong);
+  background: var(--brand-secondary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.slotName {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.slotCount {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.slotGap {
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+}
+
+.slotGap .slotOrdinal {
+  color: var(--status-warning-strong);
+  background: var(--bg-card);
+}
+
+.slotGap .slotCount {
+  color: var(--status-warning-strong);
+}
+
+.candidateGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  --remix-material-ink-a780: rgba(26, 26, 26, 0.78);
+}
+
+.candidateHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-2);
+  align-items: baseline;
+  font-size: var(--font-size-sm);
+}
+
+.candidateNote {
+  color: var(--status-warning-strong);
+  font-size: var(--font-size-xs);
+}
+
+/* One horizontally scrolling row per framework. */
+.candidateStrip {
+  display: flex;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0 0 var(--spacing-1);
+  overflow-x: auto;
+  list-style: none;
+  overscroll-behavior-x: contain;
+}
+
+.candidate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: 76px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.candidate:focus-visible {
+  border-radius: var(--border-radius-md);
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.candidateCover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-tertiary);
+  background: var(--bg-subtle);
+}
+
+.candidateCover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.candidatePlay {
+  position: absolute;
+  color: var(--bg-card);
+  font-size: var(--font-size-2xl);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.candidate:hover .candidatePlay,
+.candidate:focus-visible .candidatePlay {
+  opacity: 0.9;
+}
+
+.candidateDuration {
+  position: absolute;
+  right: var(--spacing-1);
+  bottom: var(--spacing-1);
+  padding: 0 var(--spacing-1);
+  border-radius: var(--border-radius-sm);
+  color: var(--bg-card);
+  background: var(--remix-material-ink-a780);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.candidateTitle {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.candidateVideo {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  max-height: 70svh;
+  border-radius: var(--border-radius-lg);
+  object-fit: contain;
+  background: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candidatePlay {
+    transition: none;
+  }
+}
+
+.slotArrow {
+  color: var(--text-tertiary);
+}
+
+.gapLink {
+  color: var(--brand-text-strong);
+  font-size: var(--font-size-sm);
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-2);
+  margin: 0;
+}
+
+
+/* Product and structure source side by side, each at a readable width. */
+.setupRow {
+  display: grid;
+  grid-template-columns: minmax(220px, 360px) auto;
+  gap: var(--spacing-3) var(--spacing-6);
+  align-items: end;
+  justify-content: start;
+}
+
+.steps {
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.steps li {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.steps .stepDone {
+  color: var(--text-primary);
+}
+
+.stepDone :global(.anticon) {
+  color: var(--status-success);
+}
+
+.stepDot {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+}
+
+.fieldLabel {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+.slotList {
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slotRow {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr) auto;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-width: 0;
+}
+
+.slotIndex {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+}
+
+.metric {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius-lg);
+}
+
+.metric dt {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.metric dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.outputVideo {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  max-height: 70svh;
+  border-radius: var(--border-radius-lg);
+  object-fit: contain;
+  background: var(--text-primary);
+}
+
+@media (max-width: 680px) {
+  .setupRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .slotRow {
+    grid-template-columns: 3ch minmax(0, 1fr);
+  }
+
+  .slotRow > :last-child {
+    grid-column: 2;
+  }
+}
+
+.recentStructure {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

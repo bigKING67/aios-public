@@ -208,7 +208,8 @@ function assertBundleBudgetDocs(documentSource, budgetConfig, findings) {
       findings,
       `${FRONTEND_QUALITY_DOC_PATH} must list every configured bundle budget description`,
     );
-    if (Number.isFinite(targetRatio) && targetRatio > 0 && targetRatio <= MAX_BUNDLE_TARGET_RATIO) {
+    // Hard-only budgets have no strict target to document.
+    if (budgetEntry.enforcement !== 'hard' && Number.isFinite(targetRatio) && targetRatio > 0 && targetRatio <= MAX_BUNDLE_TARGET_RATIO) {
       const strictTarget = Math.ceil(budgetEntry.bytes * targetRatio) - 1;
       assertDocumentIncludes(
         documentSource,

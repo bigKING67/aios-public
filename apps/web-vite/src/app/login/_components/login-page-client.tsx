@@ -96,7 +96,7 @@ export function LoginPageClient() {
               />
             </div>
             <h1 className={styles.loginTitle}>
-              Groland AIOS
+              AGI AIOS
             </h1>
             <p className={styles.loginSubtitle}>
               AI 驱动的业务生产力系统

@@ -30,7 +30,7 @@ export function docsAffectedRule(file) {
     };
   }
 
-  if (AGENT_WORKFLOW_CONTRACT_DOCS.has(file)) {
+  if (AGENT_WORKFLOW_CONTRACT_DOCS.has(file) || file === 'CLAUDE.md' || file.endsWith('/CLAUDE.md')) {
     return {
       gates: [...DOCS_DRIFT_GATES, 'verify:repo:agent-workflow'],
       reason: `${file}: agent planning and review contract change`,

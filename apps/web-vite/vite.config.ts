@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { createBundleModuleReportPlugin } from '../../scripts/build/vite-bundle-module-report';
 import { resolveCssModulesOptions } from '../../scripts/build/vite-css-module-scoped-name';
 
@@ -132,11 +133,14 @@ function resolveApplicationStyleChunk(id: string): string | null {
   if (normalizedId.includes('/app/reports/special/')) {
     return 'styles-special-report';
   }
-  if (normalizedId.includes('/app/marketing/content-assets/_components/content-assets-inspector')) {
-    return 'styles-content-assets-inspector';
-  }
+  // Keep CSS module maps with their consuming route so unused keys can be
+  // eliminated. A forced shared JS chunk retains every exported class map.
   if (normalizedId.includes('/app/marketing/content-assets/')) {
-    return 'styles-content-assets';
+    return null;
+  }
+  // The immersive-rail account entry is only used inside the lazy AI 创作中心 routes.
+  if (normalizedId.includes('/components/rail-user-menu')) {
+    return null;
   }
   if (normalizedId.includes('/app/dashboard/creator/')) {
     return null;
@@ -193,7 +197,7 @@ export default defineConfig(({ mode }) => {
   return {
     root: __dirname,
     publicDir: path.resolve(projectRoot, 'public'),
-    plugins: [react(), bundleModuleReportPlugin].filter((plugin) => plugin !== null),
+    plugins: [react(), tailwindcss(), bundleModuleReportPlugin].filter((plugin) => plugin !== null),
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),

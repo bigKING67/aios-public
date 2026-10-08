@@ -1,0 +1,171 @@
+/*
+ * Shared two-column workbench for AI 分析 and AI 剪辑: the working card on the
+ * left, a sticky side column on the right with a launch card and a list of
+ * recent runs. Cards themselves come from ai-studio.module.css.
+ */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: var(--spacing-4);
+  align-items: stretch;
+  /* Fill the screen below the one-row page header (header with actions + shell
+     padding), so a short left card still leaves the recent list room. */
+  min-height: calc(100dvh - var(--spacing-12) * 2 - var(--spacing-10));
+}
+
+/* The recent list does not size the row (see .recentBody), so the side column ends
+   level with the left card; the cap only matters for a left card taller than the
+   screen, where the column sticks. */
+.side {
+  position: sticky;
+  top: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+  max-height: calc(100dvh - var(--spacing-8));
+}
+
+.launch {
+  flex: none;
+  gap: var(--spacing-4);
+}
+
+.launchHead {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.launchHead h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.launchMeta {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.infoIcon {
+  margin-left: var(--spacing-1);
+  color: var(--text-tertiary);
+  cursor: help;
+}
+
+.infoIcon:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.launchFoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.estimate {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  font-variant-numeric: tabular-nums;
+}
+
+.recentCard {
+  flex: 1 1 auto;
+  gap: var(--spacing-3);
+  min-height: 200px;
+}
+
+.recentBody {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  contain: size;
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recentList li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--spacing-2) 0;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.recentList li:last-child {
+  border-bottom: 0;
+}
+
+.recentList .recentNew {
+  margin: 0 calc(var(--spacing-2) * -1);
+  padding-inline: var(--spacing-2);
+  border-radius: var(--border-radius-md);
+  background: var(--brand-secondary);
+}
+
+.recentHead,
+.recentFoot {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.recentTitle {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--font-size-sm);
+}
+
+.recentFoot {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .side {
+    position: static;
+    max-height: none;
+  }
+
+  .recentBody {
+    flex: none;
+    overflow: visible;
+    contain: none;
+  }
+}

@@ -73,6 +73,38 @@ const PROTECTED_ROUTE_SOURCE_OWNERS = {
     importedProtectedComponent:
       'apps/web-vite/src/app/content/live-center/_components/live-center-analysis-result-client.tsx',
   },
+  [ROUTE_PATHS.contentAiStudio]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioAssets]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/assets/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioSegments]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/segments/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioOutputs]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/outputs/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioAnalysis]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/analysis/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioEditing]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/editing/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioEditingRun]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/editing/[runId]/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioTrends]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/trends/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
   [ROUTE_PATHS.marketingContentAssetDetail]: {
     page: 'apps/web-vite/src/app/marketing/content-assets/[assetId]/page.tsx',
     importedProtectedComponent:

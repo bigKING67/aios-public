@@ -10,6 +10,8 @@ export interface DocsPageLink {
   href: string;
   label: string;
   helper: string;
+  /** Sub-pages listed under this section in the sidebar while it is active. */
+  children?: NavItem[];
 }
 
 export interface DocsRow {
@@ -38,6 +40,21 @@ export interface DocsTable {
   rows: string[][];
 }
 
+/** A screenshot or diagram served from `public/`; `src` is an absolute site path. */
+export interface DocsFigure {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+/** A walkthrough video served from `public/`; captions are burned into the picture. */
+export interface DocsVideo {
+  src: string;
+  poster: string;
+  title: string;
+  caption?: string;
+}
+
 export interface DocsSection {
   id: string;
   title: string;
@@ -47,6 +64,8 @@ export interface DocsSection {
   steps?: DocsStep[];
   rows?: DocsRow[];
   tables?: DocsTable[];
+  figures?: DocsFigure[];
+  video?: DocsVideo;
 }
 
 export interface DocsPageModel {

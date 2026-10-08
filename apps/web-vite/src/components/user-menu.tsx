@@ -10,24 +10,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Dropdown, Button } from 'antd';
-import {
-  LogoutOutlined,
-  UserOutlined,
-  SafetyOutlined,
-} from '@ant-design/icons';
-import { useAuth } from '@/hooks/use-auth';
+import { UserOutlined } from '@ant-design/icons';
+import { useUserMenuItems } from './user-menu-items';
 import styles from './user-menu.module.css';
 
 export function UserMenu() {
-  const navigate = useNavigate();
-  const { user, isAuthenticated, isLoading, signOut } = useAuth();
+  const { user, isAuthenticated, isLoading, items, goToLogin } = useUserMenuItems();
   const [open, setOpen] = useState(false);
 
   if (isLoading || !isAuthenticated) {
     return (
-      <Button type="primary" className={styles.headerLoginButton} onClick={() => navigate('/login')}>
+      <Button type="primary" className={styles.headerLoginButton} onClick={goToLogin}>
         登 录
       </Button>
     );
@@ -36,53 +30,6 @@ export function UserMenu() {
   if (!user) {
     return null;
   }
-
-  /**
-   * 处理登出
-   */
-  const handleLogout = async () => {
-    await signOut();
-  };
-
-  /**
-   * 菜单项
-   */
-  const items = [
-    {
-      key: 'user-info',
-      label: (
-        <div className={styles.userInfo}>
-          <div className={styles.username}>{user.username}</div>
-          <div className={styles.email}>{user.email}</div>
-        </div>
-      ),
-      disabled: true,
-    },
-    {
-      type: 'divider' as const,
-    },
-    {
-      key: 'profile',
-      label: (
-        <span>
-          <SafetyOutlined /> 个人信息
-        </span>
-      ),
-      onClick: () => navigate('/profile'),
-    },
-    {
-      type: 'divider' as const,
-    },
-    {
-      key: 'logout',
-      label: (
-        <span className={styles.logoutItem}>
-          <LogoutOutlined /> 退出登录
-        </span>
-      ),
-      onClick: handleLogout,
-    },
-  ];
 
   return (
     <Dropdown

@@ -48,7 +48,7 @@ export const productionKeys = {
   detail: (id: string | null) => ['content-production', 'project', id] as const,
 };
 export async function fetchProductionCapabilities() {
-  return (await apiClient.get<{ enabled: boolean; canWrite: boolean; planningEnabled: boolean; shotExtractionEnabled: boolean; semanticsEnabled: boolean }>(`${base}/capabilities`)).data;
+  return (await apiClient.get<{ enabled: boolean; canWrite: boolean; planningEnabled: boolean; persistentPlansEnabled?: boolean; autonomousEditingEnabled?: boolean; shotExtractionEnabled: boolean; semanticsEnabled: boolean }>(`${base}/capabilities`)).data;
 }
 export async function fetchProductionProjects() {
   return (await apiClient.get<{ items: ProductionProject[] }>(`${base}/projects`)).data.items;

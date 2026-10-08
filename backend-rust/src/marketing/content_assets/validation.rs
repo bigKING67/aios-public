@@ -50,6 +50,9 @@ pub(super) fn normalize_query(query: ContentAssetQuery) -> AppResult<NormalizedC
         lifecycle_status: normalize_optional_text(query.lifecycle_status, 40),
         external_only: normalize_optional_bool(query.external_only)?,
         todo: normalize_todo_filter(query.todo)?,
+        segment_status: normalize_segment_status_filter(query.segment_status)?,
+        segment_preset: normalize_segment_preset_filter(query.segment_preset)?,
+        studio_outputs: normalize_studio_outputs_filter(query.studio_outputs)?,
         page: query.page.unwrap_or(1).clamp(1, 10_000),
         page_size: query
             .page_size
@@ -76,6 +79,38 @@ fn normalize_todo_filter(value: Option<String>) -> AppResult<Option<String>> {
         "内容待办筛选不合法",
     )
     .map(Some)
+}
+
+fn normalize_segment_status_filter(value: Option<String>) -> AppResult<Option<String>> {
+    let Some(value) = normalize_optional_text(value, 24) else {
+        return Ok(None);
+    };
+    normalize_enum(
+        Some(value),
+        &["unlabeled", "suggested", "confirmed"],
+        "片段标注状态筛选不合法",
+    )
+    .map(Some)
+}
+
+fn normalize_segment_preset_filter(value: Option<String>) -> AppResult<Option<String>> {
+    let Some(value) = normalize_optional_text(value, 64) else {
+        return Ok(None);
+    };
+    if !value
+        .chars()
+        .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_' || c == '-')
+    {
+        return Err(AppError::bad_request("片段预设筛选不合法"));
+    }
+    Ok(Some(value))
+}
+
+fn normalize_studio_outputs_filter(value: Option<String>) -> AppResult<Option<String>> {
+    let Some(value) = normalize_optional_text(value, 16) else {
+        return Ok(None);
+    };
+    normalize_enum(Some(value), &["exclude", "only"], "成片筛选不合法").map(Some)
 }
 
 pub(super) fn normalize_processing_job_query(
@@ -495,7 +530,7 @@ fn normalize_enum(
 fn normalize_tags(values: Vec<String>) -> Vec<String> {
     let mut tags = Vec::new();
     for value in values {
-        if let Some(tag) = normalize_optional_text(Some(value), 40) {
+        if let Some(tag) = normalize_optional_text(Some(value), 40).map(canonical_enterprise_tag) {
             if !tags.contains(&tag) {
                 tags.push(tag);
             }
@@ -505,6 +540,21 @@ fn normalize_tags(values: Vec<String>) -> Vec<String> {
         }
     }
     tags
+}
+
+/// `企业：百雀羚` / `企业 : 百雀羚` → `企业:百雀羚`, the AI 创作中心 enterprise
+/// scope tag, so a full-width colon typed in the library still matches.
+fn canonical_enterprise_tag(tag: String) -> String {
+    match tag.strip_prefix("企业") {
+        Some(rest) => {
+            let rest = rest.trim_start();
+            match rest.strip_prefix(':').or_else(|| rest.strip_prefix('：')) {
+                Some(name) if !name.trim().is_empty() => format!("企业:{}", name.trim()),
+                _ => tag,
+            }
+        }
+        None => tag,
+    }
 }
 
 fn normalize_query_tags(tag: Option<String>, tags: Option<String>) -> Vec<String> {
@@ -604,7 +654,21 @@ fn normalize_sort(value: Option<String>) -> ContentAssetSort {
 
 #[cfg(test)]
 mod tests {
-    use super::{normalize_query, ContentAssetQuery};
+    use super::{normalize_query, normalize_tags, ContentAssetQuery};
+
+    #[test]
+    fn canonicalizes_enterprise_scope_tags() {
+        assert_eq!(
+            normalize_tags(vec![
+                "企业：百雀羚".into(),
+                " 企业 : 百雀羚 ".into(),
+                "企业:百雀羚".into(),
+                "企业文化".into(),
+                "企业：".into(),
+            ]),
+            vec!["企业:百雀羚", "企业文化", "企业："]
+        );
+    }
 
     #[test]
     fn normalizes_content_asset_query_tags_from_single_and_list_params() {

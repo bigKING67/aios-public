@@ -11,11 +11,11 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import type { ReactNode } from 'react';
+import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 
 export type ContentAssetsModuleKey =
   | 'home'
   | 'assets'
-  | 'production'
   | 'ai'
   | 'video'
   | 'review'
@@ -25,11 +25,10 @@ export type ContentAssetsModuleKey =
   | 'stats'
   | 'settings';
 
-interface ContentAssetsModuleNavItem {
-  key: ContentAssetsModuleKey;
-  label: string;
-  icon: ReactNode;
-}
+// AI editing moved to the AI studio; the library keeps a transitional link for one release.
+type ContentAssetsModuleNavItem =
+  | { key: ContentAssetsModuleKey; label: string; icon: ReactNode; href?: undefined }
+  | { key: 'production'; label: string; icon: ReactNode; href: string };
 
 export const CONTENT_ASSETS_MODULE_GROUPS: Array<{
   title: string;
@@ -40,7 +39,7 @@ export const CONTENT_ASSETS_MODULE_GROUPS: Array<{
     items: [
       { key: 'home', label: '首页', icon: <HomeOutlined /> },
       { key: 'assets', label: '素材库', icon: <FileImageOutlined /> },
-      { key: 'production', label: '视频创作', icon: <VideoCameraOutlined /> },
+      { key: 'production', label: 'AI 剪辑', icon: <VideoCameraOutlined />, href: ROUTE_PATHS.contentAiStudioEditing },
     ],
   },
   {
@@ -64,5 +63,5 @@ export const CONTENT_ASSETS_MODULE_GROUPS: Array<{
 ];
 
 export const CONTENT_ASSETS_NAV_OPTIONS = CONTENT_ASSETS_MODULE_GROUPS.flatMap((group) =>
-  group.items.map((item) => ({ label: item.label, value: item.key }))
+  group.items.flatMap((item) => (item.href === undefined ? [{ label: item.label, value: item.key }] : []))
 );

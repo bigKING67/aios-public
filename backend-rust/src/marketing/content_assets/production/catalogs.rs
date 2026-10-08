@@ -110,8 +110,12 @@ pub(super) async fn load_bound(
     let value:Value=sqlx::query_scalar("SELECT snapshot FROM ads.content_production_shot_catalogs WHERE catalog_id=$1 AND owner_user_id=$2").bind(id).bind(&user.user_id).fetch_optional(&state.pool).await.map_err(db_error)?.ok_or(AppError::NotFound)?;
     let stored: Stored = serde_json::from_value(value).map_err(|_| AppError::Internal)?;
     let snapshot = Snapshot {
+        derived_assets: Vec::new(),
+        render_binding: None,
+        edit_document: None,
         title: "镜头目录".into(),
         aspect: "portrait".into(),
+        output_profile: super::types::OutputProfile::LegacyV1,
         clips: stored.clips,
         assets: vec![stored.source],
         rights_confirmed: true,

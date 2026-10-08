@@ -15,7 +15,7 @@ import {
   runQianchuanProductionMigrationReconciliation,
 } from '../../lib/migrations/aios-qianchuan-production-migration-reconciliation.mjs';
 
-const EXPECTED_MIGRATION_INVENTORY = 206;
+const EXPECTED_MIGRATION_INVENTORY = 214;
 
 class FakeClient {
   constructor({ failOn = null, ledgerRows = null, presence = new Map() } = {}) {
@@ -71,6 +71,22 @@ assert.equal(
 
 const staticAnalyses = analyzeAiosMigrationStaticEvidence(records);
 assert.equal(staticAnalyses.length, records.length, 'static analysis must emit exactly one record per migration');
+const productionRunsStatic = staticAnalyses.find((entry) => (
+  entry.namespace === 'backend' && entry.version === '026'
+));
+assert.equal(productionRunsStatic?.executionMode, 'transactional');
+assert.deepEqual(
+  productionRunsStatic.catalogEffects.filter((effect) => effect.kind === 'relation').map((effect) => effect.key),
+  [
+    'relation:ads.content_production_runs',
+    'relation:ads.content_production_plan_attempts',
+    'relation:ads.content_production_plans',
+  ],
+  'reconciliation must discover all three additive production task/plan tables',
+);
+const runRendersStatic = staticAnalyses.find((entry) => entry.namespace === 'backend' && entry.version === '027');
+assert.equal(runRendersStatic?.executionMode, 'transactional');
+assert.ok(runRendersStatic.catalogEffects.some((effect) => effect.key === 'relation:ads.content_production_run_renders'));
 const taobaoSchemaContractStatic = staticAnalyses.find((entry) => (
   entry.namespace === 'warehouse' && entry.version === '20260806_1900'
 ));
@@ -160,6 +176,9 @@ assert.equal(
   true,
   'all unquoted catalog identifiers must fit PostgreSQL storage semantics',
 );
+const planningQueueStatic = staticAnalyses.find((entry) => entry.namespace === 'backend' && entry.version === '028');
+assert.equal(planningQueueStatic?.executionMode, 'transactional');
+
 
 const presentNonTargetEffect = staticAnalyses
   .filter((entry) => entry !== targetStatic)

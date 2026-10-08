@@ -1,0 +1,10 @@
+{
+  "contractVersion": 1,
+  "rendererLockSha256": "e0409723fc07839312301074c7437466bd4a5647e4210e8d6ab22c7305202068",
+  "engine": "@hyperframes/producer",
+  "engineVersion": "0.8.53",
+  "captionFont": {
+    "profile": "noto-sans-sc-v1",
+    "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+  }
+}

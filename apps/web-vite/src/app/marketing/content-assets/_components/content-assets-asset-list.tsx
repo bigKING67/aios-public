@@ -16,6 +16,7 @@ import {
 } from '../_lib/content-assets-formatters';
 import { ContentAssetGridCard } from './content-assets-asset-grid-card';
 import {
+  type AssetCardPill,
   type IntelligencePillState,
   resolveIntelligencePills,
 } from './content-assets-asset-intelligence';
@@ -34,11 +35,15 @@ export function ContentAssetsGrid({
   processingJobs,
   onOpen,
   onSourceUploadOpen,
+  resolvePills,
+  openLabel,
 }: {
   items: ContentAssetItem[];
   processingJobs: ContentAssetProcessingJob[];
   onOpen: (asset: ContentAssetItem) => void;
-  onSourceUploadOpen: (asset: ContentAssetItem) => void;
+  onSourceUploadOpen?: (asset: ContentAssetItem) => void;
+  resolvePills?: (asset: ContentAssetItem) => AssetCardPill[];
+  openLabel?: string;
 }) {
   const [activePreviewAssetId, setActivePreviewAssetId] = useState<string | null>(null);
   const visibleAssetIds = useMemo(() => new Set(items.map((item) => item.assetId)), [items]);
@@ -67,6 +72,8 @@ export function ContentAssetsGrid({
               setActivePreviewAssetId((current) => (current === assetId ? null : current));
             }}
             onSourceUploadOpen={onSourceUploadOpen}
+            resolvePills={resolvePills}
+            openLabel={openLabel}
           />
         );
       })}

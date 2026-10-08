@@ -1,0 +1,338 @@
+/* Library card: label strip, toolbar and results share one surface. */
+
+.libraryCard {
+  gap: var(--spacing-4);
+}
+
+.labelStrip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.stripHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+}
+
+.stripProduct {
+  min-width: 220px;
+}
+
+.stripNote {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.stripSkeleton {
+  height: 56px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 96px;
+  min-height: 56px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  color: var(--text-primary);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.chip:hover {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.chipName {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.chipCount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+}
+
+.chipActive,
+.chipActive:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.chipActive .chipName {
+  color: var(--brand-on-primary-muted);
+}
+
+.chipGap {
+  border-style: dashed;
+  border-color: var(--status-warning-border);
+  background: var(--status-warning-bg);
+}
+
+.chipGap .chipCount {
+  color: var(--status-warning-strong);
+  font-size: var(--font-size-base);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--divider-color);
+}
+
+.resultCount {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbarFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.toolbarSelect {
+  min-width: 120px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Segment cards */
+
+.segmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: var(--spacing-3);
+}
+
+.segmentCard {
+  --segment-library-material-ink-a780: rgba(26, 26, 26, 0.78);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.segmentCard:hover {
+  border-color: var(--brand-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.segmentCard:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.segmentCardSelected {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 1px var(--brand-primary);
+}
+
+.segmentCover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--bg-subtle);
+}
+
+.coverMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.segmentDuration {
+  position: absolute;
+  right: var(--spacing-2);
+  bottom: var(--spacing-2);
+  z-index: 2;
+  padding: 2px var(--spacing-2);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-inverse);
+  background: var(--segment-library-material-ink-a780);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+}
+
+.selectBox {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-md);
+  background: var(--bg-card);
+}
+
+.segmentBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+  padding: var(--spacing-2) var(--spacing-3) var(--spacing-3);
+}
+
+.segmentHeadline {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  min-width: 0;
+}
+
+.segmentHeadline strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.segmentHeadline span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.segmentSource {
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segmentPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+  margin-top: var(--spacing-1);
+}
+
+.segmentPill {
+  padding: 1px var(--spacing-2);
+  border-radius: var(--border-radius-full);
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.pillReady {
+  color: var(--brand-text-strong);
+  background: var(--brand-secondary);
+}
+
+.pillActive {
+  color: var(--brand-text);
+  background: var(--brand-secondary);
+}
+
+.pillWarning {
+  color: var(--status-warning-strong);
+  background: var(--status-warning-bg);
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+  margin-top: var(--spacing-1);
+}
+
+.productSelect {
+  min-width: 140px;
+}
+
+/* Toolbar */
+
+.surfaceHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bulkBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--border-radius-md);
+  background: var(--brand-secondary);
+}
+
+@media (max-width: 560px) {
+  .segmentGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-2);
+  }
+
+  .chip {
+    min-width: 76px;
+    min-height: 48px;
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+
+  .segmentHeadline {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .stripProduct {
+    min-width: 0;
+    width: 100%;
+  }
+}

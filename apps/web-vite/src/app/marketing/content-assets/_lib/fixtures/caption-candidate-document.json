@@ -1,0 +1,22 @@
+{
+  "summary": "candidate",
+  "narrationCaptions": {
+    "assetId": "a",
+    "sourceSha256": "hash",
+    "cues": [
+      {
+        "id": "c",
+        "startMs": 0,
+        "endMs": 1000,
+        "text": "原样式",
+        "style": {
+          "fontHeight": 0.035,
+          "centerY": 0.6875,
+          "color": "#ffffff",
+          "strokeWidth": 0.0015,
+          "weight": 900
+        }
+      }
+    ]
+  }
+}

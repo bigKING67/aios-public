@@ -98,6 +98,26 @@ expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.marketingContentAssets}/asset-f
   kind: 'content_assets',
   path: `${ROUTE_PATHS.marketingContentAssets}/:assetId`,
 });
+expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.contentAiStudio), {
+  kind: 'authenticated',
+  path: ROUTE_PATHS.contentAiStudio,
+});
+expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.contentAiStudioSegments}?label=street`), {
+  kind: 'authenticated',
+  path: ROUTE_PATHS.contentAiStudioSegments,
+});
+expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.contentAiStudioEditing), {
+  kind: 'authenticated',
+  path: ROUTE_PATHS.contentAiStudioEditing,
+});
+expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.contentAiStudioEditing}/run-fixture-001`), {
+  kind: 'authenticated',
+  path: `${ROUTE_PATHS.contentAiStudioEditing}/:runId`,
+});
+expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.contentLiveCenter), {
+  kind: 'authenticated',
+  path: ROUTE_PATHS.contentLiveCenter,
+});
 
 assertEqual(
   findRoutePolicyEntry('/not-registered'),

@@ -91,3 +91,5 @@ pub fn router() -> Router<Arc<AppState>> {
 pub(crate) fn spawn_content_asset_stale_upload_cleanup(state: Arc<AppState>) {
     content_assets::spawn_stale_upload_cleanup(state);
 }
+
+pub(crate) use content_assets::spawn_content_planner;

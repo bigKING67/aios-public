@@ -18,6 +18,16 @@ pub async fn call_chat_completion(
     settings: &Settings,
     options: LlmCallOptions,
 ) -> anyhow::Result<LlmCallResult> {
+    call_chat_completion_capped(client, settings, options, u32::MAX).await
+}
+
+// Per-workflow output ceiling; existing callers retain their configured limit.
+pub(crate) async fn call_chat_completion_capped(
+    client: &Client,
+    settings: &Settings,
+    options: LlmCallOptions,
+    output_token_limit: u32,
+) -> anyhow::Result<LlmCallResult> {
     let LlmCallOptions {
         provider,
         model,
@@ -45,7 +55,8 @@ pub async fn call_chat_completion(
         provider_config.provider.as_str(),
         resolved_model.as_str(),
         thinking_enabled,
-    );
+    )
+    .min(output_token_limit);
 
     let resolved_scope = request_scope
         .as_deref()

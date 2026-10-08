@@ -4,12 +4,42 @@ import hashlib
 import hmac
 import mimetypes
 import os
+import re
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, Mapping, Tuple
 
 import requests
+
+MB = 1024 * 1024
+# Cross-border VPS -> TOS uploads run on a lossy ~200ms link where a single TCP
+# stream crawls (observed ~17 KB/s); large files go multipart with parallel parts,
+# every request is retried, and the whole upload has a deadline so a job fails
+# visibly instead of hanging.
+REQUEST_TIMEOUT = (10, 120)
+
+
+@dataclass(frozen=True)
+class UploadTuning:
+  multipart_threshold_bytes: int = 16 * MB
+  part_size_bytes: int = 8 * MB
+  concurrency: int = 4
+  attempts: int = 3
+  deadline_seconds: float = 1800.0
+
+  @classmethod
+  def from_env(cls) -> "UploadTuning":
+    return cls(
+      multipart_threshold_bytes=_env_number("TOS_UPLOAD_MULTIPART_THRESHOLD_MB", 16, 5, 1024) * MB,
+      part_size_bytes=_env_number("TOS_UPLOAD_PART_SIZE_MB", 8, 5, 512) * MB,
+      concurrency=_env_number("TOS_UPLOAD_CONCURRENCY", 4, 1, 16),
+      attempts=_env_number("TOS_UPLOAD_ATTEMPTS", 3, 1, 10),
+      deadline_seconds=float(_env_number("TOS_UPLOAD_DEADLINE_SECONDS", 1800, 60, 86400)),
+    )
 
 
 @dataclass(frozen=True)
@@ -36,17 +66,111 @@ class TosStorageConfig:
 
 
 class TosStorageClient:
-  def __init__(self, config: TosStorageConfig):
+  def __init__(self, config: TosStorageConfig, tuning: UploadTuning | None = None):
     self.config = config
+    self.tuning = tuning or UploadTuning.from_env()
     self.session = requests.Session()
+    self._part_sessions = threading.local()
 
   def upload_file(self, object_key: str, path: Path, content_type: str = "") -> None:
     content_type = content_type or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
-    url, headers = self._signed_url_and_headers("PUT", object_key, {"content-type": content_type})
-    with path.open("rb") as file_obj:
-      response = self.session.put(url, data=file_obj, headers=headers, timeout=300)
-    if response.status_code not in (200, 201):
-      raise RuntimeError(f"TOS 上传失败 key={object_key} HTTP {response.status_code}: {response.text[:240]}")
+    deadline = time.monotonic() + self.tuning.deadline_seconds
+    size = path.stat().st_size
+    if size >= self.tuning.multipart_threshold_bytes:
+      self._upload_multipart(object_key, path, size, content_type, deadline)
+      return
+
+    def put() -> requests.Response:
+      url, headers = self._signed_url_and_headers("PUT", object_key, {"content-type": content_type})
+      with path.open("rb") as file_obj:
+        return self.session.put(url, data=file_obj, headers=headers, timeout=REQUEST_TIMEOUT)
+
+    self._with_retries(put, (200, 201), f"TOS 上传失败 key={object_key}", deadline)
+
+  def _upload_multipart(self, object_key: str, path: Path, size: int, content_type: str, deadline: float) -> None:
+    def initiate() -> requests.Response:
+      url, headers = self._signed_url_and_headers(
+        "POST", object_key, {"content-type": content_type}, query_params={"uploads": ""})
+      return self.session.post(url, headers=headers, timeout=REQUEST_TIMEOUT)
+
+    response = self._with_retries(initiate, (200,), f"TOS 分片上传初始化失败 key={object_key}", deadline)
+    upload_id = _xml_text(response.text, "UploadId")
+    if not upload_id:
+      raise RuntimeError(f"TOS 分片上传初始化失败 key={object_key}: 响应缺少 UploadId")
+    part_size = self.tuning.part_size_bytes
+    ranges = [(number, offset, min(part_size, size - offset))
+              for number, offset in enumerate(range(0, size, part_size), start=1)]
+    try:
+      with ThreadPoolExecutor(max_workers=min(self.tuning.concurrency, len(ranges))) as pool:
+        etags = list(pool.map(
+          lambda part: self._upload_part(object_key, upload_id, path, *part, deadline=deadline), ranges))
+      body = "<CompleteMultipartUpload>" + "".join(
+        f"<Part><PartNumber>{number}</PartNumber><ETag>{etag}</ETag></Part>"
+        for (number, _, _), etag in zip(ranges, etags)) + "</CompleteMultipartUpload>"
+
+      def complete() -> requests.Response:
+        url, headers = self._signed_url_and_headers(
+          "POST", object_key, {"content-type": "application/xml"}, query_params={"uploadId": upload_id})
+        return self.session.post(url, data=body.encode("utf-8"), headers=headers, timeout=REQUEST_TIMEOUT)
+
+      response = self._with_retries(complete, (200,), f"TOS 分片上传合并失败 key={object_key}", deadline)
+      if "<Error>" in response.text:
+        raise RuntimeError(f"TOS 分片上传合并失败 key={object_key}: {response.text[:240]}")
+    except BaseException:
+      self._abort_multipart(object_key, upload_id)
+      raise
+
+  def _upload_part(self, object_key: str, upload_id: str, path: Path, number: int, offset: int,
+                   length: int, deadline: float) -> str:
+    session = getattr(self._part_sessions, "session", None)
+    if session is None:
+      session = self._part_sessions.session = self._new_part_session()
+
+    def put() -> requests.Response:
+      with path.open("rb") as file_obj:
+        file_obj.seek(offset)
+        data = file_obj.read(length)
+      url, headers = self._signed_url_and_headers(
+        "PUT", object_key, {}, query_params={"partNumber": str(number), "uploadId": upload_id})
+      return session.put(url, data=data, headers=headers, timeout=REQUEST_TIMEOUT)
+
+    response = self._with_retries(put, (200,), f"TOS 分片上传失败 key={object_key} part={number}", deadline)
+    etag = response.headers.get("ETag", "")
+    if not etag:
+      raise RuntimeError(f"TOS 分片上传失败 key={object_key} part={number}: 响应缺少 ETag")
+    return etag
+
+  def _new_part_session(self) -> requests.Session:
+    session = requests.Session()
+    session.trust_env = self.session.trust_env
+    session.verify = self.session.verify
+    return session
+
+  def _abort_multipart(self, object_key: str, upload_id: str) -> None:
+    try:
+      url, headers = self._signed_url_and_headers("DELETE", object_key, {}, query_params={"uploadId": upload_id})
+      self.session.delete(url, headers=headers, timeout=REQUEST_TIMEOUT)
+    except requests.RequestException:
+      pass  # Best effort: a leftover upload only keeps invisible, billable parts.
+
+  def _with_retries(self, send, ok_statuses: Tuple[int, ...], message: str, deadline: float) -> requests.Response:
+    last_error = ""
+    for attempt in range(1, self.tuning.attempts + 1):
+      if time.monotonic() >= deadline:
+        raise RuntimeError(f"{message}: 超过上传时限 {self.tuning.deadline_seconds:.0f}s（{last_error or '未开始'}）")
+      try:
+        response = send()
+      except requests.RequestException as error:
+        last_error = f"{type(error).__name__}: {str(error)[:160]}"
+      else:
+        if response.status_code in ok_statuses:
+          return response
+        last_error = f"HTTP {response.status_code}: {response.text[:240]}"
+        if response.status_code < 500 and response.status_code not in (408, 429):
+          break
+      if attempt < self.tuning.attempts:
+        time.sleep(min(2 ** attempt, 10))
+    raise RuntimeError(f"{message} {last_error}")
 
   def get_bucket_cors(self) -> str:
     url, headers = self._signed_url_and_headers("GET", "", {}, query_params={"cors": ""})
@@ -278,3 +402,21 @@ def _signing_key(secret_key: str, date_stamp: str, region: str) -> bytes:
   for value in (date_stamp, region, "s3", "aws4_request"):
     key = hmac.new(key, value.encode("utf-8"), hashlib.sha256).digest()
   return key
+
+
+def _xml_text(document: str, tag: str) -> str:
+  match = re.search(rf"<{tag}>([^<]*)</{tag}>", document)
+  return match.group(1).strip() if match else ""
+
+
+def _env_number(name: str, default: int, minimum: int, maximum: int) -> int:
+  raw = (os.getenv(name) or "").strip()
+  if not raw:
+    return default
+  try:
+    value = int(raw)
+  except ValueError as error:
+    raise RuntimeError(f"{name} 必须是整数，当前为 {raw!r}") from error
+  if not minimum <= value <= maximum:
+    raise RuntimeError(f"{name} 必须在 {minimum}–{maximum} 之间，当前为 {value}")
+  return value

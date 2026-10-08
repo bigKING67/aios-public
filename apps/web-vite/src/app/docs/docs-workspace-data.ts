@@ -24,10 +24,14 @@ import {
   DOUYIN_INDUSTRY_SELLING_POINTS_PAGE,
   DOUYIN_INDUSTRY_SELLING_POINTS_PATH,
 } from './analysis-plans/douyin-industry-selling-points';
+import { GUIDE_AI_STUDIO_PAGE, GUIDE_AI_STUDIO_PATH } from './guide/ai-studio';
+import { GUIDE_DASHBOARD_REPORTS_PAGE, GUIDE_DASHBOARD_REPORTS_PATH } from './guide/dashboard-reports';
+import { GUIDE_DATAOPS_PAGE, GUIDE_DATAOPS_PATH } from './guide/dataops';
 import type { DocsCard, DocsPageKey, DocsPageLink, DocsPageModel, DocsTable } from './docs-workspace-contracts';
 
 export type {
   DocsCard,
+  DocsFigure,
   DocsPageKey,
   DocsPageLink,
   DocsPageModel,
@@ -41,14 +45,24 @@ export type {
 
 export const DOCS_PAGE_LINKS: DocsPageLink[] = [
   { key: 'home', href: ROUTE_PATHS.docs, label: '文档中心', helper: '产品、方法和资料入口' },
-  { key: 'guide', href: ROUTE_PATHS.docsGuide, label: '使用指南', helper: '按功能完成上手' },
+  {
+    key: 'guide',
+    href: ROUTE_PATHS.docsGuide,
+    label: '使用指南',
+    helper: '按功能完成上手',
+    children: [
+      { href: GUIDE_AI_STUDIO_PATH, label: 'AI 创作中心' },
+      { href: GUIDE_DASHBOARD_REPORTS_PATH, label: '看板与报告' },
+      { href: GUIDE_DATAOPS_PATH, label: '运维排障（管理员）' },
+    ],
+  },
   { key: 'analysis-frameworks', href: ROUTE_PATHS.docsAnalysisFrameworks, label: '分析框架', helper: '稳定诊断方法论' },
   { key: 'analysis-plans', href: ROUTE_PATHS.docsAnalysisPlans, label: '分析方案', helper: '场景化执行路径' },
   { key: 'references', href: ROUTE_PATHS.docsReferences, label: '参考资料', helper: '源文档与口径依据' },
 ];
 
 export const VALUE_ROWS = [
-  { label: '先用产品', value: '新成员先看使用指南，明确看板、周报、月报和 DataOps 的入口与顺序。' },
+  { label: '先用产品', value: '新成员先看使用指南，按自己负责的模块（AI 创作中心、看板与报告等）上手。' },
   { label: '再用方法', value: '分析人员再看分析框架，把商品、渠道、漏斗、因子和评分口径统一起来。' },
   { label: '最后落动作', value: '业务复盘时进入分析方案，把异常定位、汇报产出和动作 SLA 串成闭环。' },
   { label: '需要追溯', value: '口径或方法被质疑时，进入参考资料查看源文档、边界和历史依据。' },
@@ -57,7 +71,7 @@ export const VALUE_ROWS = [
 export const DOCS_HOME_CARDS: DocsCard[] = [
   {
     title: '使用指南',
-    desc: '从“怎么打开、怎么看、先看哪里”开始，覆盖看板、周报、月报、AI 总结和 DataOps 排障。',
+    desc: '按模块讲清“怎么打开、怎么用、先看哪里”，覆盖 AI 创作中心、看板与报告和运维排障。',
     href: ROUTE_PATHS.docsGuide,
     action: '进入指南',
     meta: '上手入口',
@@ -135,64 +149,42 @@ export const DOCS_PAGES: Record<DocsPageKey, DocsPageModel> = {
     path: ROUTE_PATHS.docsGuide,
     eyebrow: 'User Guide',
     title: '使用指南',
-    subtitle: '回答“AIOS 怎么用”：从看板发现问题，到周报归因、月报复盘、AI 摘要和 DataOps 排障。',
-    primaryAction: {
-      href: ROUTE_PATHS.dashboard,
-      label: '打开看板',
-    },
+    subtitle: '按模块上手 AIOS：先找到你负责的模块，再按页面里的步骤操作。',
     sections: [
       {
         id: 'guide-quick-start',
         title: '快速开始',
-        lead: '新成员优先按入口上手，不需要先阅读完整方法论。',
+        steps: [
+          { title: '登录', desc: '使用管理员分配的账号登录 AIOS；没有账号或缺少权限时联系管理员。' },
+          { title: '从顶部导航进入模块', desc: '看板、报告、营销、内容中台、样品库和导出都在顶部导航；文档随时从右上角「文档」打开。' },
+          { title: '按模块阅读下面的指南', desc: '每个模块一页，包含操作步骤、界面截图和常见问题。' },
+        ],
+      },
+      {
+        id: 'guide-modules',
+        title: '模块指南',
         cards: [
-          { title: '看板监控', desc: '先看核心 KPI 和平台趋势，识别异常波动。', href: ROUTE_PATHS.dashboard, action: '打开看板' },
-          { title: '周报归因', desc: '按“商品 → 渠道 → 因子”定位周度涨跌原因。', href: ROUTE_PATHS.reportsWeekly, action: '进入周报' },
-          { title: '月报复盘', desc: '观察趋势稳定性、平台结构变化和策略延续性。', href: ROUTE_PATHS.reportsMonthly, action: '进入月报' },
-          { title: '运维排障', desc: '检查 ETL 链路、目标表水位和通知链路状态。', href: ROUTE_PATHS.opsDataops, action: '进入运维' },
-        ],
-      },
-      {
-        id: 'guide-dashboard',
-        title: '看板怎么读',
-        paragraphs: [
-          '看板用于实时浏览核心经营指标，适合“先看全局、再下钻”的日常管理动作。',
-          '建议先看 GMV、退款、访客、转化等主指标，再进入商品、平台或达人等专项页面确认异常来自哪里。',
-        ],
-      },
-      {
-        id: 'guide-weekly',
-        title: '周报阅读顺序',
-        lead: '周报适合复盘一周内的经营变化，阅读顺序应从结论进入证据，而不是先翻表格。',
-        steps: [
-          { title: '先看 GMV 波动归因', desc: '确认本周涨跌来自哪个平台、商品或主要经营变量。' },
-          { title: '再看商品与渠道定位', desc: '锁定贡献或拖累最大的商品，再看该商品在哪些渠道发生变化。' },
-          { title: '最后看漏斗和量化归因', desc: '用流量、转化、客单、费用和 ROI 等因子解释渠道变化。' },
-        ],
-      },
-      {
-        id: 'guide-monthly',
-        title: '月报使用建议',
-        paragraphs: [
-          '月报用于月度复盘与策略回顾，重点关注趋势稳定性、平台结构变化和策略延续性。',
-          '不要把月报当成周报的放大版；月报应更关注结构性变化和下月动作优先级。',
-        ],
-      },
-      {
-        id: 'guide-ai-summary',
-        title: 'AI 总结使用建议',
-        paragraphs: [
-          'AI 总结用于提炼结论，不替代指标核对。建议先完成业务口径确认再触发 AI 生成。',
-          '出现异常结论时，回到看板、漏斗与量化归因复核，不直接把 AI 输出写成最终判断。',
-        ],
-      },
-      {
-        id: 'guide-dataops',
-        title: 'DataOps 排障顺序',
-        steps: [
-          { title: '先看 ADS 目标表', desc: '确认报告或看板读取的目标表是否已经刷新。' },
-          { title: '再看 DWD / ODS 水位', desc: '如果 ADS 未更新，继续检查上游源表时间戳和行数。' },
-          { title: '最后看失败节点', desc: '按 DataOps 面板里的失败节点、运行 ID 和通知链路逐层回溯。' },
+          {
+            title: 'AI 创作中心',
+            desc: '上传原片，AI 切段打框架标签，人工确认后批量混剪或精剪出成片。',
+            href: GUIDE_AI_STUDIO_PATH,
+            action: '查看指南',
+            meta: '内容中台 · 内容运营',
+          },
+          {
+            title: '看板与报告',
+            desc: '从看板发现问题，到周报归因、月报复盘和 AI 总结。',
+            href: GUIDE_DASHBOARD_REPORTS_PATH,
+            action: '查看指南',
+            meta: '经营分析',
+          },
+          {
+            title: '运维排障',
+            desc: '数据没有按时更新时，按 ADS → DWD / ODS → 失败节点的顺序排查。',
+            href: GUIDE_DATAOPS_PATH,
+            action: '查看指南',
+            meta: '管理员',
+          },
         ],
       },
     ],
@@ -423,6 +415,9 @@ export const DOCS_PAGES: Record<DocsPageKey, DocsPageModel> = {
 };
 
 export const DOCS_DETAIL_PAGES: Record<string, DocsPageModel> = {
+  [GUIDE_AI_STUDIO_PATH]: GUIDE_AI_STUDIO_PAGE,
+  [GUIDE_DASHBOARD_REPORTS_PATH]: GUIDE_DASHBOARD_REPORTS_PAGE,
+  [GUIDE_DATAOPS_PATH]: GUIDE_DATAOPS_PAGE,
   [DOUYIN_BRAND_STRATEGY_PATH]: DOUYIN_BRAND_STRATEGY_PAGE,
   [DOUYIN_INDUSTRY_SELLING_POINTS_PATH]: DOUYIN_INDUSTRY_SELLING_POINTS_PAGE,
   [DOUYIN_QIANCHUAN_PRODUCT_SHORTVIDEO_AI_ANALYSIS_PATH]: DOUYIN_QIANCHUAN_PRODUCT_SHORTVIDEO_AI_ANALYSIS_PAGE,

@@ -28,6 +28,7 @@ mod repository_filters;
 mod repository_options;
 mod row_mapping;
 mod source_upload;
+mod studio;
 mod text_normalization;
 mod types;
 mod upload_verification;
@@ -104,9 +105,13 @@ pub(crate) const CONTENT_ASSET_ANALYSIS_IMMEDIATE_LIMIT: i64 =
     prefect_trigger::CONTENT_ASSET_ANALYSIS_IMMEDIATE_LIMIT;
 
 pub(super) fn router() -> axum::Router<std::sync::Arc<crate::state::AppState>> {
-    handlers::router().merge(production::router())
+    handlers::router()
+        .merge(production::router())
+        .merge(studio::router())
 }
 
 pub(super) fn spawn_stale_upload_cleanup(state: std::sync::Arc<crate::state::AppState>) {
     cleanup::spawn_stale_upload_cleanup(state);
 }
+
+pub(crate) use production::spawn_planner as spawn_content_planner;

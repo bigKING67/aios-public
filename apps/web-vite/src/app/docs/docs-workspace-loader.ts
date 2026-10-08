@@ -1,5 +1,6 @@
 import type {
   DocsCard,
+  DocsFigure,
   DocsPageKey,
   DocsPageLink,
   DocsPageModel,
@@ -7,10 +8,12 @@ import type {
   DocsSection,
   DocsStep,
   DocsTable,
+  DocsVideo,
   DocsWorkspaceSnapshot,
+  NavItem,
 } from './docs-workspace-contracts';
 
-export const DOCS_WORKSPACE_SNAPSHOT_URL = '/docs/workspace-v1.json?v=aios-20260920';
+export const DOCS_WORKSPACE_SNAPSHOT_URL = '/docs/workspace-v1.json?v=aios-20261002b';
 
 const DOCS_PAGE_KEYS: DocsPageKey[] = [
   'home',
@@ -122,6 +125,33 @@ function parseTable(value: unknown, context: string): DocsTable {
   };
 }
 
+function parseFigure(value: unknown, context: string): DocsFigure {
+  const record = readRecord(value, context);
+  return {
+    src: readString(record, 'src', context),
+    alt: readString(record, 'alt', context),
+    caption: readOptionalString(record, 'caption', context),
+  };
+}
+
+function parseVideo(value: unknown, context: string): DocsVideo {
+  const record = readRecord(value, context);
+  return {
+    src: readString(record, 'src', context),
+    poster: readString(record, 'poster', context),
+    title: readString(record, 'title', context),
+    caption: readOptionalString(record, 'caption', context),
+  };
+}
+
+function parseNavItem(value: unknown, context: string): NavItem {
+  const record = readRecord(value, context);
+  return {
+    href: readString(record, 'href', context),
+    label: readString(record, 'label', context),
+  };
+}
+
 function parseSection(value: unknown, context: string): DocsSection {
   const record = readRecord(value, context);
   const paragraphs = record.paragraphs === undefined
@@ -136,6 +166,8 @@ function parseSection(value: unknown, context: string): DocsSection {
     steps: readOptionalArray(record, 'steps', context, parseStep),
     rows: readOptionalArray(record, 'rows', context, parseRow),
     tables: readOptionalArray(record, 'tables', context, parseTable),
+    figures: readOptionalArray(record, 'figures', context, parseFigure),
+    video: record.video === undefined ? undefined : parseVideo(record.video, `${context}.video`),
   };
 }
 
@@ -180,6 +212,7 @@ function parsePageLink(value: unknown, context: string): DocsPageLink {
     href: readString(record, 'href', context),
     label: readString(record, 'label', context),
     helper: readString(record, 'helper', context),
+    children: readOptionalArray(record, 'children', context, parseNavItem),
   };
 }
 

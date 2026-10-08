@@ -235,6 +235,53 @@
   gap: 18px;
 }
 
+/* Screenshots: full content width, click opens the original. */
+.figureList {
+  margin-top: 16px;
+  display: grid;
+  gap: 18px;
+}
+
+.figure {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.figureLink {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-subtle);
+}
+
+.figureLink:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.figureLink img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 16px;
+  border-radius: var(--border-radius-lg);
+  background: var(--text-primary);
+}
+
+.figure figcaption {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
 .dataTableBlock {
   min-width: 0;
 }

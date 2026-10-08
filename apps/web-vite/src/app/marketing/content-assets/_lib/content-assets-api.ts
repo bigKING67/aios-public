@@ -71,6 +71,9 @@ export function buildContentAssetParams(
   if (query.lifecycleStatus) params.lifecycle_status = query.lifecycleStatus;
   if (query.externalOnly !== undefined) params.external_only = String(query.externalOnly);
   if (query.todo) params.todo = query.todo;
+  if (query.segmentStatus) params.segment_status = query.segmentStatus;
+  if (query.segmentStatus && query.segmentPreset) params.segment_preset = query.segmentPreset;
+  if (query.studioOutputs) params.studio_outputs = query.studioOutputs;
   return params;
 }
 

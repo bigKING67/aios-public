@@ -51,11 +51,11 @@
         },
         {
           "path": "etl/groland_postgres/scripts/marketing_content_assets/analysis_processor.py",
-          "maxLines": 2320,
+          "maxLines": 2346,
           "owner": "content-assets-dataops",
           "expiresOn": "2026-10-31",
           "remediationTask": "07-22-aios-quality-performance-architecture-governance",
-          "reason": "Frozen analysis worker debt; continue separating provider, normalization, repository, and orchestration seams."
+          "reason": "Frozen analysis worker debt; continue separating provider, normalization, repository, and orchestration seams. Cap raised 2320->2346 to admit 081afde5 (AI editing workflow); shrink back when that debt is paid."
         }
       ]
     },

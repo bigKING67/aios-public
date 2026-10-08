@@ -141,7 +141,7 @@ export function HomePage() {
 
           <div className={heroStyles.heroContent}>
             <div className={heroStyles.heroTag}>AI-DRIVEN BUSINESS PRODUCTIVITY</div>
-            <h1 className={heroStyles.heroTitle}>Groland AIOS</h1>
+            <h1 className={heroStyles.heroTitle}>AGI AIOS</h1>
             <p className={heroStyles.heroLead}>AI 驱动的业务生产力系统</p>
 
             <div className={heroStyles.heroActions}>

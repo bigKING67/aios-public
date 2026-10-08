@@ -15,6 +15,14 @@ const LiveCenterPage = lazy(() => import('@/app/content/live-center/page'));
 const LiveCenterAnalysisResultPage = lazy(
   () => import('@/app/content/live-center/[sessionId]/analysis/[analysisId]/page'),
 );
+const AiStudioHomePage = lazy(() => import('@/app/content/ai-studio/page'));
+const AiStudioAssetsPage = lazy(() => import('@/app/content/ai-studio/assets/page'));
+const AiStudioSegmentsPage = lazy(() => import('@/app/content/ai-studio/segments/page'));
+const AiStudioOutputsPage = lazy(() => import('@/app/content/ai-studio/outputs/page'));
+const AiStudioAnalysisPage = lazy(() => import('@/app/content/ai-studio/analysis/page'));
+const AiStudioEditingPage = lazy(() => import('@/app/content/ai-studio/editing/page'));
+const AiStudioEditingRunPage = lazy(() => import('@/app/content/ai-studio/editing/[runId]/page'));
+const AiStudioTrendsPage = lazy(() => import('@/app/content/ai-studio/trends/page'));
 const DocsPage = lazy(() => import('@/app/docs/page'));
 const ExportsPage = lazy(() => import('@/app/exports/page'));
 const ProfilePage = lazy(() => import('@/app/profile/page'));
@@ -70,8 +78,17 @@ export function AppRoutes() {
         <Route path={ROUTE_PATHS.content} element={<Navigate to={ROUTE_PATHS.contentLiveCenter} replace />} />
         <Route path={ROUTE_PATHS.contentLiveCenter} element={<LiveCenterPage />} />
         <Route path={ROUTE_PATHS.contentLiveCenterAnalysis} element={<LiveCenterAnalysisResultPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudio} element={<AiStudioHomePage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioAssets} element={<AiStudioAssetsPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioSegments} element={<AiStudioSegmentsPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioOutputs} element={<AiStudioOutputsPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioAnalysis} element={<AiStudioAnalysisPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioEditing} element={<AiStudioEditingPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioEditingRun} element={<AiStudioEditingRunPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioTrends} element={<AiStudioTrendsPage />} />
         <Route path={ROUTE_PATHS.docs} element={<DocsPage />} />
         <Route path={ROUTE_PATHS.docsGuide} element={<DocsPage />} />
+        <Route path={`${ROUTE_PATHS.docsGuide}/:slug`} element={<DocsPage />} />
         <Route path={ROUTE_PATHS.docsAnalysisFrameworks} element={<DocsPage />} />
         <Route path={ROUTE_PATHS.docsAnalysisPlans} element={<DocsPage />} />
         <Route path={`${ROUTE_PATHS.docsAnalysisPlans}/:slug`} element={<DocsPage />} />

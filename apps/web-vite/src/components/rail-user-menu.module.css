@@ -1,0 +1,71 @@
+/* Account entry pinned to the bottom of an immersive console rail. */
+.slot {
+  margin-top: auto;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--divider-color);
+}
+
+.trigger {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:hover,
+.trigger[aria-expanded='true'] {
+  border-color: var(--brand-border);
+  background-color: var(--bg-hover);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--spacing-6);
+  height: var(--spacing-6);
+  border-radius: var(--border-radius-full);
+  background-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+.name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hint {
+  flex: none;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+/* The console rail (content-assets-console.module.css) collapses to a 76px icon column at 1280px. */
+@media (max-width: 1280px) {
+  .trigger {
+    justify-content: center;
+    padding: 6px 0;
+  }
+
+  .name,
+  .hint {
+    display: none;
+  }
+}

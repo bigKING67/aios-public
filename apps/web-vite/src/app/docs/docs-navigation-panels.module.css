@@ -135,6 +135,49 @@
   color: var(--brand-text);
 }
 
+/* Sub-pages of the active section (e.g. 使用指南 modules). */
+.subNavList {
+  display: grid;
+  gap: 2px;
+  margin: 2px 4px 6px 14px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-color);
+}
+
+.subNavLink {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  text-decoration: none;
+}
+
+.subNavLink:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.subNavLinkActive,
+.subNavLinkActive:hover {
+  background: var(--brand-secondary);
+  color: var(--brand-dark);
+  font-weight: 620;
+}
+
+.navLink:focus-visible,
+.subNavLink:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 1px;
+}
+
+@media (min-width: 1181px) {
+  .pageNavGroup {
+    display: none;
+  }
+}
+
 .tocPanel {
   padding: 14px 16px 12px 18px;
   background: var(--bg-card);

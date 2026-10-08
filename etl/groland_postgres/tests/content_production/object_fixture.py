@@ -6,6 +6,7 @@ import hmac
 from pathlib import Path
 import ssl
 import threading
+import uuid
 from urllib.parse import parse_qsl, quote, unquote, urlsplit
 
 
@@ -20,9 +21,13 @@ def signature(secret, scope, stamp, canonical):
     return hmac.new(key, message.encode(), sha256).hexdigest()
 
 
-def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, secret: str):
+def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, secret: str, extra_sources: dict | None = None):
     counts = {"get": 0, "put": 0, "rejected": 0}
-    objects = {"source.mp4": source}
+    objects = {"source.mp4": source, **(extra_sources or {})}
+    count_lock = threading.Lock()
+    def record(event):
+        with count_lock:
+            counts[event] += 1
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_args):
             pass  # Presigned query strings and authorization headers never enter logs.
@@ -59,7 +64,7 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
             except (KeyError, ValueError, AttributeError, TypeError):
                 valid = False
             if not valid:
-                counts["rejected"] += 1
+                record("rejected")
                 self.send_error(403)
             return valid
 
@@ -72,7 +77,7 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
                 self.send_error(404)
                 return
             data = file.read_bytes()
-            counts["get"] += 1
+            record("get")
             self.send_response(200)
             self.send_header("Content-Type", "video/mp4")
             self.send_header("Content-Length", str(len(data)))
@@ -91,10 +96,10 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
             if len(data) != length:
                 self.send_error(400)
                 return
-            file = root / f"output-{counts['put']}.mp4"
+            file = root / f"output-{uuid.uuid4().hex}.mp4"
             file.write_bytes(data)
             objects[name] = file
-            counts["put"] += 1
+            record("put")
             self.send_response(200)
             self.send_header("Content-Length", "0")
             self.end_headers()

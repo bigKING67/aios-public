@@ -1,4 +1,3 @@
-import { ContentProductionWorkbench } from './content-production-workbench';
 import { Button } from 'antd';
 import {
   AppstoreOutlined,
@@ -115,8 +114,6 @@ export function ContentAssetsWorkspacePanel({
   onUnmatchedStatsMatchTypeChange,
   onUploadOpen,
 }: ContentAssetsWorkspacePanelProps) {
-  if (activeModule === 'production') return <ContentProductionWorkbench />;
-
   if (activeModule === 'home') {
     return (
       <section className={styles.workspacePanel}>

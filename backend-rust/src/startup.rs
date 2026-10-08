@@ -55,6 +55,7 @@ pub(crate) async fn run() -> anyhow::Result<()> {
         settings: Arc::clone(&settings),
     });
     if startup_policy.spawn_background_tasks {
+        marketing::spawn_content_planner(Arc::clone(&state));
         reports::spawn_report_cache_warmup(Arc::clone(&state));
         marketing::spawn_content_asset_stale_upload_cleanup(Arc::clone(&state));
         content_live_center::spawn_stale_upload_cleanup(Arc::clone(&state));

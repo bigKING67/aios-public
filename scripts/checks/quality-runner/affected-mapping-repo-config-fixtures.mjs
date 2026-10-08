@@ -519,6 +519,9 @@ export function assertRepoConfigAffectedMapping({
   assertTrue(plans.names.includes('verify:repo:agent-workflow'), 'PLANS changes should select the agent workflow doctor');
   assertTrue(plans.names.includes('verify:design:docs'), 'PLANS changes should keep docs drift coverage');
 
+  const claudeMd = selectAffectedGates(registry, ['CLAUDE.md']);
+  assertTrue(claudeMd.names.includes('verify:repo:agent-workflow'), 'CLAUDE.md changes should select the agent workflow doctor');
+
   const trellisSpec = selectAffectedGates(registry, ['.trellis/spec/repo/quality-gates.md']);
   assertTrue(trellisSpec.names.includes('verify:design:docs'), 'Trellis spec changes should keep docs drift coverage');
   assertTrue(

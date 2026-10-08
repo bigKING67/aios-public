@@ -27,6 +27,12 @@ pub(super) struct ContentAssetQuery {
     pub(super) lifecycle_status: Option<String>,
     pub(super) external_only: Option<String>,
     pub(super) todo: Option<String>,
+    /// AI 创作中心 annotation filter: unlabeled | suggested | confirmed.
+    pub(super) segment_status: Option<String>,
+    /// Restricts `segment_status` to one segment preset key (for example `framework`).
+    pub(super) segment_preset: Option<String>,
+    /// AI 创作中心 remix outputs (`source_type = 'ai_studio_output'`): exclude | only.
+    pub(super) studio_outputs: Option<String>,
     pub(super) page: Option<i64>,
     pub(super) page_size: Option<i64>,
     pub(super) sort: Option<String>,
@@ -48,6 +54,9 @@ pub(super) struct NormalizedContentAssetQuery {
     pub(super) lifecycle_status: Option<String>,
     pub(super) external_only: Option<bool>,
     pub(super) todo: Option<String>,
+    pub(super) segment_status: Option<String>,
+    pub(super) segment_preset: Option<String>,
+    pub(super) studio_outputs: Option<String>,
     pub(super) page: i64,
     pub(super) page_size: i64,
     pub(super) sort: ContentAssetSort,

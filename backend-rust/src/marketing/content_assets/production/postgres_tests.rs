@@ -75,3 +75,55 @@ async fn project_versions_are_owner_scoped_and_reject_stale_writes() {
         "version two"
     );
 }
+
+#[tokio::test]
+#[ignore = "requires a disposable CONTENT_PRODUCTION_TEST_DATABASE_URL with production migration"]
+async fn project_output_profile_survives_reopen_and_keeps_old_json_immutable() {
+    use super::types::OutputProfile;
+    let pool = PgPoolOptions::new()
+        .connect(&std::env::var("CONTENT_PRODUCTION_TEST_DATABASE_URL").unwrap())
+        .await
+        .unwrap();
+    for profile in [OutputProfile::LegacyV1, OutputProfile::Hd1080V1] {
+        let value = json!({"title":"profile","aspect":"portrait","outputProfile":profile,"clips":[],"assets":[],"rightsConfirmed":true});
+        let first = repository::save(
+            &pool,
+            "profile-owner",
+            None,
+            None,
+            serde_json::from_value(value).unwrap(),
+        )
+        .await
+        .unwrap();
+        if profile == OutputProfile::LegacyV1 {
+            sqlx::query("UPDATE ads.content_production_revisions SET snapshot=snapshot-'outputProfile' WHERE project_id=$1")
+                .bind(first.project_id).execute(&pool).await.unwrap();
+        }
+        let old: serde_json::Value = sqlx::query_scalar("SELECT snapshot FROM ads.content_production_revisions WHERE project_id=$1 AND revision=1")
+            .bind(first.project_id).fetch_one(&pool).await.unwrap();
+        let mut edited: Snapshot = serde_json::from_value(old.clone()).unwrap();
+        edited.aspect = "landscape".into();
+        edited.output_profile = if profile == OutputProfile::LegacyV1 {
+            OutputProfile::Hd1080V1
+        } else {
+            OutputProfile::LegacyV1
+        };
+        repository::save(
+            &pool,
+            "profile-owner",
+            Some(first.project_id),
+            Some(1),
+            edited,
+        )
+        .await
+        .unwrap();
+        let next = repository::snapshot(&pool, "profile-owner", first.project_id, 2)
+            .await
+            .unwrap();
+        assert_eq!(next.output_profile, profile);
+        assert_eq!(next.aspect, "landscape");
+        let original: serde_json::Value = sqlx::query_scalar("SELECT snapshot FROM ads.content_production_revisions WHERE project_id=$1 AND revision=1")
+            .bind(first.project_id).fetch_one(&pool).await.unwrap();
+        assert_eq!(original, old);
+    }
+}

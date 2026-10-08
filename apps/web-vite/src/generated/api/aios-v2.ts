@@ -322,6 +322,14 @@ export interface paths {
     /** GET /v2/marketing/content-assets/production/capabilities */
     get: operations["content_production_get_marketing_content_assets_production_capabilities"];
   };
+  "/v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize": {
+    /** POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize */
+    post: operations["content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize"];
+  };
+  "/v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize-worker": {
+    /** POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize-worker */
+    post: operations["content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize_worker"];
+  };
   "/v2/marketing/content-assets/production/clips": {
     /** GET /v2/marketing/content-assets/production/clips */
     get: operations["content_production_get_marketing_content_assets_production_clips"];
@@ -349,6 +357,72 @@ export interface paths {
   "/v2/marketing/content-assets/production/projects/{project_id}/renders/{job_id}/cancel": {
     /** POST /v2/marketing/content-assets/production/projects/{project_id}/renders/{job_id}/cancel */
     post: operations["content_production_post_marketing_content_assets_production_projects_project_id_renders_job_id_cancel"];
+  };
+  "/v2/marketing/content-assets/production/runs": {
+    /** GET /v2/marketing/content-assets/production/runs */
+    get: operations["content_production_get_marketing_content_assets_production_runs"];
+    /** POST /v2/marketing/content-assets/production/runs */
+    post: operations["content_production_post_marketing_content_assets_production_runs"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}": {
+    /** GET /v2/marketing/content-assets/production/runs/{run_id} */
+    get: operations["content_production_get_marketing_content_assets_production_runs_run_id"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/adopt-plan": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/adopt-plan */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_adopt_plan"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/apply-replacement": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/apply-replacement */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_apply_replacement"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/cancel": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/cancel */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_cancel"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/pause": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/pause */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_pause"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/plan": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/plan */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_plan"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/plan-revisions": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/plan-revisions */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_plan_revisions"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/plans/{revision}": {
+    /** GET /v2/marketing/content-assets/production/runs/{run_id}/plans/{revision} */
+    get: operations["content_production_get_marketing_content_assets_production_runs_run_id_plans_revision"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/produce": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/produce */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_produce"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/repair-replacement": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/repair-replacement */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_repair_replacement"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/replacement-candidates": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/replacement-candidates */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_replacement_candidates"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/result": {
+    /** GET /v2/marketing/content-assets/production/runs/{run_id}/result */
+    get: operations["content_production_get_marketing_content_assets_production_runs_run_id_result"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/resume": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/resume */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_resume"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/select-replacement": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/select-replacement */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_select_replacement"];
+  };
+  "/v2/marketing/content-assets/production/runs/{run_id}/selected-revision-draft": {
+    /** POST /v2/marketing/content-assets/production/runs/{run_id}/selected-revision-draft */
+    post: operations["content_production_post_marketing_content_assets_production_runs_run_id_selected_revision_draft"];
   };
   "/v2/marketing/content-assets/production/semantic-jobs": {
     /** GET /v2/marketing/content-assets/production/semantic-jobs */
@@ -387,6 +461,80 @@ export interface paths {
   "/v2/marketing/content-assets/production/visual-clips": {
     /** GET /v2/marketing/content-assets/production/visual-clips */
     get: operations["content_production_get_marketing_content_assets_production_visual_clips"];
+  };
+  "/v2/marketing/content-assets/studio/asset-segment-summaries": {
+    /** GET /v2/marketing/content-assets/studio/asset-segment-summaries */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_asset_segment_summaries"];
+  };
+  "/v2/marketing/content-assets/studio/capabilities": {
+    /** GET /v2/marketing/content-assets/studio/capabilities */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_capabilities"];
+  };
+  "/v2/marketing/content-assets/studio/overview": {
+    /** GET /v2/marketing/content-assets/studio/overview */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_overview"];
+  };
+  "/v2/marketing/content-assets/studio/presets": {
+    /** GET /v2/marketing/content-assets/studio/presets */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_presets"];
+  };
+  "/v2/marketing/content-assets/studio/remix-batches": {
+    /** GET /v2/marketing/content-assets/studio/remix-batches */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_remix_batches"];
+    /** POST /v2/marketing/content-assets/studio/remix-batches */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_batches"];
+  };
+  "/v2/marketing/content-assets/studio/remix-batches:preview": {
+    /** POST /v2/marketing/content-assets/studio/remix-batches:preview */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_batches_preview"];
+  };
+  "/v2/marketing/content-assets/studio/remix-batches/{batch_id}": {
+    /** GET /v2/marketing/content-assets/studio/remix-batches/{batch_id} */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_remix_batches_batch_id"];
+  };
+  "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel": {
+    /** POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_cancel"];
+  };
+  "/v2/marketing/content-assets/studio/remix-edits": {
+    /** POST /v2/marketing/content-assets/studio/remix-edits */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_edits"];
+  };
+  "/v2/marketing/content-assets/studio/remix-edits:check": {
+    /** POST /v2/marketing/content-assets/studio/remix-edits:check */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_edits_check"];
+  };
+  "/v2/marketing/content-assets/studio/segment-pool": {
+    /** GET /v2/marketing/content-assets/studio/segment-pool */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_segment_pool"];
+  };
+  "/v2/marketing/content-assets/studio/segment-products": {
+    /** GET /v2/marketing/content-assets/studio/segment-products */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_segment_products"];
+  };
+  "/v2/marketing/content-assets/studio/segment-suggestions": {
+    /** GET /v2/marketing/content-assets/studio/segment-suggestions */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_segment_suggestions"];
+    /** POST /v2/marketing/content-assets/studio/segment-suggestions */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_segment_suggestions"];
+  };
+  "/v2/marketing/content-assets/studio/segment-suggestions/{job_id}": {
+    /** GET /v2/marketing/content-assets/studio/segment-suggestions/{job_id} */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_segment_suggestions_job_id"];
+  };
+  "/v2/marketing/content-assets/studio/segments": {
+    /** GET /v2/marketing/content-assets/studio/segments */
+    get: operations["content_ai_studio_get_marketing_content_assets_studio_segments"];
+    /** POST /v2/marketing/content-assets/studio/segments */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_segments"];
+  };
+  "/v2/marketing/content-assets/studio/segments:confirm": {
+    /** POST /v2/marketing/content-assets/studio/segments:confirm */
+    post: operations["content_ai_studio_post_marketing_content_assets_studio_segments_confirm"];
+  };
+  "/v2/marketing/content-assets/studio/segments/{segment_id}": {
+    /** PATCH /v2/marketing/content-assets/studio/segments/{segment_id} */
+    patch: operations["content_ai_studio_patch_marketing_content_assets_studio_segments_segment_id"];
   };
   "/v2/marketing/content-assets/summary": {
     /** GET /v2/marketing/content-assets/summary */
@@ -1621,6 +1769,380 @@ export interface components {
     LiveCenterAnalysisCreateRequest: {
       model?: string | null;
       analysisProfile?: string | null;
+    };
+    StudioCapabilitiesResponse: {
+      enabled: boolean;
+      openAccess: boolean;
+      canWrite: boolean;
+      segmentSuggestEnabled: boolean;
+      segmentSuggestMaxAssets: number;
+      remixEnabled: boolean;
+      remixMaxPerBatch: number;
+      remixMaxSeconds: number;
+      remixMaxActive: number;
+      enterpriseTag: string | null;
+      products: string[];
+      canUpload: boolean;
+    };
+    SegmentPresetLabel: {
+      key: string;
+      name: string;
+      definition: string;
+      minDurationSec?: number | null;
+    };
+    SegmentPreset: {
+      presetKey: string;
+      version: number;
+      dimension: string;
+      name: string;
+      labels: components["schemas"]["SegmentPresetLabel"][];
+      status: string;
+    };
+    SegmentPresetListResponse: {
+      items: components["schemas"]["SegmentPreset"][];
+    };
+    ContentSegment: {
+      /** Format: uuid */
+      segmentId: string;
+      ownerUserId: string;
+      /** Format: uuid */
+      assetId: string;
+      assetTitle: string;
+      sourceContentHash: string;
+      sourceCurrent: boolean;
+      sourceDurationMs: number | null;
+      startMs: number;
+      endMs: number;
+      presetKey: string;
+      presetVersion: number;
+      labelKey: string;
+      productName: string | null;
+      origin: string;
+      status: string;
+      evidence: unknown;
+      revision: number;
+      confirmedBy: string | null;
+      confirmedAt: string | null;
+      createdAt: string;
+      updatedAt: string;
+      coverUrl: string | null;
+    };
+    SegmentAssetCover: {
+      /** Format: uuid */
+      assetId: string;
+      coverUrl: string | null;
+    };
+    ContentSegmentListResponse: {
+      items: components["schemas"]["ContentSegment"][];
+      nextCursor: string | null;
+      assets: components["schemas"]["SegmentAssetCover"][];
+    };
+    CreateContentSegmentRequest: {
+      /** Format: uuid */
+      assetId: string;
+      presetKey: string;
+      presetVersion: number;
+      labelKey: string;
+      startMs: number;
+      endMs: number;
+      productName?: string | null;
+      sourceContentHash?: string | null;
+      draft?: boolean;
+    };
+    UpdateContentSegmentRequest: {
+      expectedRevision: number;
+      startMs?: number | null;
+      endMs?: number | null;
+      labelKey?: string | null;
+      productName?: string | null;
+      status?: string | null;
+    };
+    ConfirmContentSegmentItem: {
+      /** Format: uuid */
+      segmentId: string;
+      expectedRevision: number;
+    };
+    ConfirmContentSegmentsRequest: {
+      items: components["schemas"]["ConfirmContentSegmentItem"][];
+    };
+    ConfirmContentSegmentsResponse: {
+      items: components["schemas"]["ContentSegment"][];
+    };
+    ContentSegmentConflictResponse: {
+      detail: string;
+      code: string;
+      segmentIds: string[];
+    };
+    CreateSegmentSuggestionsRequest: {
+      assetIds: string[];
+      presetKey: string;
+      presetVersion: number;
+      labelKeys?: string[] | null;
+    };
+    SegmentSuggestionJob: {
+      /** Format: uuid */
+      jobId: string;
+      ownerUserId: string;
+      /** Format: uuid */
+      assetId: string;
+      assetTitle: string;
+      sourceContentHash: string;
+      sourceCurrent: boolean;
+      presetKey: string;
+      presetVersion: number;
+      labelKeys: string[];
+      status: string;
+      stage: string;
+      attempt: number;
+      errorCode: string | null;
+      errorMessage: string | null;
+      model: string | null;
+      promptVersion: string | null;
+      usage: unknown;
+      resultSummary: unknown;
+      createdAt: string;
+      startedAt: string | null;
+      finishedAt: string | null;
+    };
+    CreateSegmentSuggestionsResponse: {
+      items: components["schemas"]["SegmentSuggestionJob"][];
+      reusedJobIds: string[];
+      labelKeyMismatchJobIds: string[];
+    };
+    SegmentSuggestionJobListResponse: {
+      items: components["schemas"]["SegmentSuggestionJob"][];
+    };
+    AssetSegmentSummary: {
+      /** Format: uuid */
+      assetId: string;
+      suggestedCount: number;
+      confirmedCount: number;
+      suggestionActive: boolean;
+    };
+    AssetSegmentSummaryListResponse: {
+      items: components["schemas"]["AssetSegmentSummary"][];
+    };
+    SegmentPoolCell: {
+      productName: string | null;
+      labelKey: string;
+      confirmedCount: number;
+    };
+    SegmentPoolResponse: {
+      presetKey: string;
+      presetVersion: number;
+      items: components["schemas"]["SegmentPoolCell"][];
+    };
+    StudioOverviewResponse: {
+      period: components["schemas"]["StudioOverviewPeriod"];
+      costs: components["schemas"]["StudioOverviewCosts"];
+      pipeline: components["schemas"]["StudioOverviewPipeline"];
+      recent: components["schemas"]["StudioOverviewActivity"][];
+      scope: string;
+    };
+    StudioOverviewPeriod: {
+      key: string;
+      from: string;
+      to: string;
+    };
+    StudioOverviewCosts: {
+      modelAnalysis: components["schemas"]["StudioModelAnalysisCost"];
+      cloudComposition: components["schemas"]["StudioCloudCompositionCost"];
+      totalCny: number;
+    };
+    StudioModelAnalysisCost: {
+      calls: number;
+      inputTokens: number;
+      audioInputTokens: number;
+      cachedTokens: number;
+      outputTokens: number;
+      estimatedCny: number;
+      unpricedCalls: number;
+      pricing: components["schemas"]["StudioModelPricing"];
+    };
+    StudioModelPricing: {
+      model: string;
+      tier: string;
+      inputPerMillion: number;
+      audioInputPerMillion: number;
+      cachedPerMillion: number;
+      outputPerMillion: number;
+      verifiedOn: string;
+    };
+    StudioCloudCompositionCost: {
+      tasks: number;
+      outputSeconds: number;
+      byResolution: components["schemas"]["StudioResolutionUsage"][];
+      estimatedCny: number;
+      basePerMinute: number;
+      verifiedOn: string;
+    };
+    StudioResolutionUsage: {
+      resolution: string;
+      seconds: number;
+      coefficient: number;
+      estimatedCny: number;
+    };
+    StudioOverviewPipeline: {
+      readyAssets: number;
+      analysisActive: number;
+      analysisSucceeded: number;
+      analysisFailed: number;
+      segmentsSuggested: number;
+      segmentsConfirmed: number;
+      remixBatchesRunning: number;
+      remixBatchesFailed: number;
+      outputs: number;
+    };
+    StudioOverviewActivity: {
+      kind: string;
+      /** Format: uuid */
+      id: string;
+      title: string;
+      status: string;
+      detail: string | null;
+      createdAt: string;
+    };
+    RemixBatchPreviewRequest: {
+      presetKey: string;
+      presetVersion: number;
+      labels?: string[] | null;
+      sourceAssetId?: string | null;
+      productName: string;
+      count: number;
+    };
+    CreateRemixBatchRequest: {
+      idempotencyKey: string;
+      presetKey: string;
+      presetVersion: number;
+      labels?: string[] | null;
+      sourceAssetId?: string | null;
+      productName: string;
+      count: number;
+    };
+    RemixSlotAvailability: {
+      ordinal: number;
+      labelKey: string;
+      candidateCount: number;
+    };
+    RemixBatchPreviewResponse: {
+      labels: string[];
+      sourceAssetId: string | null;
+      productName: string;
+      slots: components["schemas"]["RemixSlotAvailability"][];
+      missingLabels: string[];
+      excludedAssetCount: number;
+      theoreticalCombinations: number;
+      availableCombinations: number;
+      availableIsLowerBound: boolean;
+      previouslyUsedCombinations: number;
+      referenceCombinationExcluded: boolean;
+      requestedCount: number;
+      plannableCount: number;
+      shortfallReason: string | null;
+      seed: number;
+    };
+    RemixBatchSegment: {
+      /** Format: uuid */
+      segmentId: string;
+      /** Format: uuid */
+      assetId: string;
+      assetTitle: string;
+      labelKey: string;
+      startMs: number;
+      endMs: number;
+    };
+    RemixBatchItem: {
+      ordinal: number;
+      /** Format: uuid */
+      runId: string;
+      combinationHash: string;
+      outcome: string;
+      runStatus: string;
+      runStage: string;
+      waitingReason: string | null;
+      jobStatus: string | null;
+      jobError: string | null;
+      outputAssetId: string | null;
+      outputCoverUrl: string | null;
+      durationMs: number;
+      segments: components["schemas"]["RemixBatchSegment"][];
+    };
+    RemixBatch: {
+      /** Format: uuid */
+      batchId: string;
+      mode: string;
+      ownerUserId: string;
+      ownerName: string | null;
+      ownedByCurrentUser: boolean;
+      presetKey: string;
+      presetVersion: number;
+      labels: string[];
+      sourceAssetId: string | null;
+      productName: string;
+      requestedCount: number;
+      plannedCount: number;
+      seed: number;
+      status: string;
+      shortfallReason: string | null;
+      succeededCount: number;
+      failedCount: number;
+      runningCount: number;
+      cancelledCount: number;
+      coverUrls: string[];
+      failureReason: string | null;
+      createdAt: string;
+      updatedAt: string;
+    };
+    RemixBatchDetail: {
+      batch: components["schemas"]["RemixBatch"];
+      items: components["schemas"]["RemixBatchItem"][];
+    };
+    RemixBatchListResponse: {
+      items: components["schemas"]["RemixBatch"][];
+    };
+    RemixProduct: {
+      productName: string;
+      confirmedSegmentCount: number;
+    };
+    RemixProductListResponse: {
+      items: components["schemas"]["RemixProduct"][];
+    };
+    RemixEditClip: {
+      /** Format: uuid */
+      segmentId: string;
+      startMs: number;
+      endMs: number;
+    };
+    RemixEditCheckRequest: {
+      presetKey: string;
+      presetVersion: number;
+      clips: components["schemas"]["RemixEditClip"][];
+    };
+    CreateRemixEditRequest: {
+      idempotencyKey: string;
+      presetKey: string;
+      presetVersion: number;
+      clips: components["schemas"]["RemixEditClip"][];
+      allowDuplicate?: boolean;
+    };
+    RemixEditMatch: {
+      /** Format: uuid */
+      batchId: string;
+      ordinal: number;
+      mode: string;
+      productName: string;
+      outcome: string;
+      outputAssetId: string | null;
+      outputCoverUrl: string | null;
+      durationMs: number;
+      overlap: number;
+      createdAt: string;
+    };
+    RemixEditCheckResponse: {
+      productName: string;
+      durationMs: number;
+      exact: components["schemas"]["RemixEditMatch"][];
+      similar: components["schemas"]["RemixEditMatch"][];
     };
     IndustryMaterialInspirationResponse: {
       tab: string;
@@ -4175,6 +4697,62 @@ export interface operations {
       };
     };
   };
+  /** POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize */
+  content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize: {
+    parameters: {
+      path: {
+        job_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize-worker */
+  content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize_worker: {
+    parameters: {
+      path: {
+        job_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
   /** GET /v2/marketing/content-assets/production/clips */
   content_production_get_marketing_content_assets_production_clips: {
     responses: {
@@ -4357,6 +4935,473 @@ export interface operations {
       path: {
         project_id: string;
         job_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/production/runs */
+  content_production_get_marketing_content_assets_production_runs: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs */
+  content_production_post_marketing_content_assets_production_runs: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/production/runs/{run_id} */
+  content_production_get_marketing_content_assets_production_runs_run_id: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/adopt-plan */
+  content_production_post_marketing_content_assets_production_runs_run_id_adopt_plan: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/apply-replacement */
+  content_production_post_marketing_content_assets_production_runs_run_id_apply_replacement: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/cancel */
+  content_production_post_marketing_content_assets_production_runs_run_id_cancel: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/pause */
+  content_production_post_marketing_content_assets_production_runs_run_id_pause: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/plan */
+  content_production_post_marketing_content_assets_production_runs_run_id_plan: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/plan-revisions */
+  content_production_post_marketing_content_assets_production_runs_run_id_plan_revisions: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/production/runs/{run_id}/plans/{revision} */
+  content_production_get_marketing_content_assets_production_runs_run_id_plans_revision: {
+    parameters: {
+      path: {
+        run_id: string;
+        revision: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/produce */
+  content_production_post_marketing_content_assets_production_runs_run_id_produce: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/repair-replacement */
+  content_production_post_marketing_content_assets_production_runs_run_id_repair_replacement: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/replacement-candidates */
+  content_production_post_marketing_content_assets_production_runs_run_id_replacement_candidates: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/production/runs/{run_id}/result */
+  content_production_get_marketing_content_assets_production_runs_run_id_result: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/resume */
+  content_production_post_marketing_content_assets_production_runs_run_id_resume: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/select-replacement */
+  content_production_post_marketing_content_assets_production_runs_run_id_select_replacement: {
+    parameters: {
+      path: {
+        run_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/production/runs/{run_id}/selected-revision-draft */
+  content_production_post_marketing_content_assets_production_runs_run_id_selected_revision_draft: {
+    parameters: {
+      path: {
+        run_id: string;
       };
     };
     responses: {
@@ -4643,6 +5688,604 @@ export interface operations {
       401: {
         content: {
           "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/asset-segment-summaries */
+  content_ai_studio_get_marketing_content_assets_studio_asset_segment_summaries: {
+    parameters: {
+      query: {
+        assetIds: string;
+        presetKey?: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AssetSegmentSummaryListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/capabilities */
+  content_ai_studio_get_marketing_content_assets_studio_capabilities: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StudioCapabilitiesResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/overview */
+  content_ai_studio_get_marketing_content_assets_studio_overview: {
+    parameters: {
+      query?: {
+        period?: "last7" | "last30" | "month";
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StudioOverviewResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/presets */
+  content_ai_studio_get_marketing_content_assets_studio_presets: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentPresetListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/remix-batches */
+  content_ai_studio_get_marketing_content_assets_studio_remix_batches: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/remix-batches */
+  content_ai_studio_post_marketing_content_assets_studio_remix_batches: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRemixBatchRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchDetail"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/remix-batches:preview */
+  content_ai_studio_post_marketing_content_assets_studio_remix_batches_preview: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RemixBatchPreviewRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchPreviewResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/remix-batches/{batch_id} */
+  content_ai_studio_get_marketing_content_assets_studio_remix_batches_batch_id: {
+    parameters: {
+      path: {
+        batch_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchDetail"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel */
+  content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_cancel: {
+    parameters: {
+      path: {
+        batch_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchDetail"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/remix-edits */
+  content_ai_studio_post_marketing_content_assets_studio_remix_edits: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRemixEditRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixBatchDetail"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/remix-edits:check */
+  content_ai_studio_post_marketing_content_assets_studio_remix_edits_check: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RemixEditCheckRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixEditCheckResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/segment-pool */
+  content_ai_studio_get_marketing_content_assets_studio_segment_pool: {
+    parameters: {
+      query?: {
+        presetKey?: string;
+        presetVersion?: number;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentPoolResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/segment-products */
+  content_ai_studio_get_marketing_content_assets_studio_segment_products: {
+    parameters: {
+      query?: {
+        presetKey?: string;
+        presetVersion?: number;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RemixProductListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/segment-suggestions */
+  content_ai_studio_get_marketing_content_assets_studio_segment_suggestions: {
+    parameters: {
+      query?: {
+        assetId?: string;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentSuggestionJobListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/segment-suggestions */
+  content_ai_studio_post_marketing_content_assets_studio_segment_suggestions: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSegmentSuggestionsRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateSegmentSuggestionsResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/segment-suggestions/{job_id} */
+  content_ai_studio_get_marketing_content_assets_studio_segment_suggestions_job_id: {
+    parameters: {
+      path: {
+        job_id: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentSuggestionJob"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** GET /v2/marketing/content-assets/studio/segments */
+  content_ai_studio_get_marketing_content_assets_studio_segments: {
+    parameters: {
+      query?: {
+        assetId?: string;
+        presetKey?: string;
+        labelKey?: string;
+        productName?: string;
+        withoutProduct?: boolean;
+        status?: "suggested" | "confirmed" | "rejected" | "stale";
+        origin?: "ai" | "human";
+        cursor?: string;
+        limit?: number;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentListResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/segments */
+  content_ai_studio_post_marketing_content_assets_studio_segments: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateContentSegmentRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ContentSegment"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** POST /v2/marketing/content-assets/studio/segments:confirm */
+  content_ai_studio_post_marketing_content_assets_studio_segments_confirm: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ConfirmContentSegmentsRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ConfirmContentSegmentsResponse"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** PATCH /v2/marketing/content-assets/studio/segments/{segment_id} */
+  content_ai_studio_patch_marketing_content_assets_studio_segments_segment_id: {
+    parameters: {
+      path: {
+        segment_id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateContentSegmentRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ContentSegment"];
+        };
+      };
+      /** @description Authentication required */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict with a machine-readable code */
+      409: {
+        content: {
+          "application/json": components["schemas"]["ContentSegmentConflictResponse"];
         };
       };
       /** @description Internal server error */

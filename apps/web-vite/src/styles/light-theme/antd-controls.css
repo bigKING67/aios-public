@@ -180,26 +180,27 @@
 }
 
 /* ============ 按钮 ============ */
+/* Danger buttons keep the AntD danger colors (colorError); see DESIGN.md Buttons. */
 
-.ant-btn-primary {
+.ant-btn-primary:not(.ant-btn-dangerous) {
   background-color: var(--brand-primary) !important;
   border-color: var(--brand-primary) !important;
   color: var(--brand-on-primary) !important;
 }
 
-.ant-btn-primary:hover {
+.ant-btn-primary:not(.ant-btn-dangerous):hover {
   background-color: var(--brand-dark) !important;
   border-color: var(--brand-dark) !important;
   color: var(--brand-on-primary) !important;
 }
 
-.ant-btn-default {
+.ant-btn-default:not(.ant-btn-dangerous) {
   background-color: var(--bg-card) !important;
   border-color: var(--border-color) !important;
   color: var(--text-primary) !important;
 }
 
-.ant-btn-default:hover {
+.ant-btn-default:not(.ant-btn-dangerous):hover {
   border-color: var(--border-color-hover) !important;
   background-color: var(--bg-hover) !important;
 }

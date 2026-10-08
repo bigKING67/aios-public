@@ -20,6 +20,8 @@ export type ContentAssetTodoFilter =
   | 'authorization_unknown'
   | 'repurpose_unknown';
 
+export type ContentAssetSegmentStatusFilter = 'unlabeled' | 'suggested' | 'confirmed';
+
 export interface ContentAssetQueryParams {
   keyword?: string;
   platform?: string;
@@ -35,6 +37,12 @@ export interface ContentAssetQueryParams {
   lifecycleStatus?: string;
   externalOnly?: boolean;
   todo?: ContentAssetTodoFilter;
+  /** AI 创作中心 annotation state; ignored by the 素材库 workspace. */
+  segmentStatus?: ContentAssetSegmentStatusFilter;
+  /** Scopes `segmentStatus` to one segment preset key. */
+  segmentPreset?: string;
+  /** AI 创作中心 remix outputs (`source_type = ai_studio_output`). */
+  studioOutputs?: 'exclude' | 'only';
   page: number;
   pageSize: number;
   sort: ContentAssetSort;

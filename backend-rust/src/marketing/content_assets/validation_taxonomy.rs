@@ -70,7 +70,18 @@ pub(super) fn normalize_product_name_list(values: Option<Vec<String>>) -> Vec<St
     normalized
 }
 
+/// Enterprise catalog products (`CONTENT_AI_STUDIO_PRODUCTS`), read once.
+fn enterprise_products() -> &'static [String] {
+    static PRODUCTS: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
+    PRODUCTS.get_or_init(crate::config::studio_products_from_env)
+}
+
 pub(super) fn normalize_product_name(value: Option<String>) -> Option<String> {
+    normalize_product_name_in(value, enterprise_products())
+}
+
+/// Built-in products (with their aliases) plus the enterprise catalog, verbatim.
+fn normalize_product_name_in(value: Option<String>, catalog: &[String]) -> Option<String> {
     let value = normalize_optional_text(value, 120)?;
     match value.as_str() {
         PRODUCT_REVIVAL_SERUM | PRODUCT_REVIVAL_SERUM_LEGACY_TYPO | "小绿瓶" => {
@@ -86,7 +97,7 @@ pub(super) fn normalize_product_name(value: Option<String>) -> Option<String> {
         PRODUCT_SHAMPOO_DRY => Some(PRODUCT_SHAMPOO_DRY.to_string()),
         // The legacy generic shampoo value cannot be mapped to oily/dry reliably.
         "洗发水" => None,
-        _ => None,
+        _ => catalog.iter().find(|product| **product == value).cloned(),
     }
 }
 
@@ -261,9 +272,9 @@ fn validate_common_scene_group(
 #[cfg(test)]
 mod tests {
     use super::{
-        normalize_content_scene_fields, normalize_product_name, normalize_video_type,
-        PRODUCT_HAIRLINE_SERUM_20ML, PRODUCT_PLATINUM_SERUM_60ML, PRODUCT_REVIVAL_SERUM,
-        PRODUCT_SHAMPOO_DRY, PRODUCT_SHAMPOO_OILY, VIDEO_TYPE_KOC_SEEDING,
+        normalize_content_scene_fields, normalize_product_name, normalize_product_name_in,
+        normalize_video_type, PRODUCT_HAIRLINE_SERUM_20ML, PRODUCT_PLATINUM_SERUM_60ML,
+        PRODUCT_REVIVAL_SERUM, PRODUCT_SHAMPOO_DRY, PRODUCT_SHAMPOO_OILY, VIDEO_TYPE_KOC_SEEDING,
         VIDEO_TYPE_KOC_SHOPPABLE, VIDEO_TYPE_KOL_SEEDING, VIDEO_TYPE_STORE_LIVE,
     };
 
@@ -315,6 +326,13 @@ mod tests {
         );
         assert!(normalize_product_name(Some("洗发水".to_string())).is_none());
         assert!(normalize_product_name(Some("旧产品".to_string())).is_none());
+        let catalog = vec!["【测试】百雀羚样片".to_string()];
+        assert_eq!(
+            normalize_product_name_in(Some(" 【测试】百雀羚样片 ".to_string()), &catalog)
+                .as_deref(),
+            Some("【测试】百雀羚样片")
+        );
+        assert!(normalize_product_name_in(Some("别的产品".to_string()), &catalog).is_none());
     }
 
     #[test]

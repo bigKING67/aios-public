@@ -1,7 +1,7 @@
 'use client';
 
 import type { RefObject } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { DocsPageKey, DocsPageLink, NavItem } from './docs-workspace-contracts';
 import { extractHashId } from './docs-workspace-model';
 import styles from './docs-navigation-panels.module.css';
@@ -33,6 +33,8 @@ export function DocsSidebar({
   sidebarRef,
   sectionNav,
 }: DocsSidebarProps) {
+  const { pathname } = useLocation();
+  const currentPath = pathname.replace(/\/+$/, '');
   return (
     <aside className={styles.sidebarPanel}>
       <Link to="/docs" className={styles.sidebarBrand}>
@@ -51,22 +53,43 @@ export function DocsSidebar({
             {pageLinks.map((item) => {
               const isActive = pageKey === item.key;
 
+              const isCurrent = isActive && currentPath === item.href;
+
               return (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={`${styles.navLink} ${styles.routeNavLink} ${isActive ? styles.navLinkActive : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <span>{item.label}</span>
-                  <small>{item.helper}</small>
-                </Link>
+                <div key={item.href} className={styles.navList}>
+                  <Link
+                    to={item.href}
+                    className={`${styles.navLink} ${styles.routeNavLink} ${isActive ? styles.navLinkActive : ''}`}
+                    aria-current={isCurrent ? 'page' : undefined}
+                  >
+                    <span>{item.label}</span>
+                    <small>{item.helper}</small>
+                  </Link>
+                  {isActive && item.children ? (
+                    <div className={styles.subNavList}>
+                      {item.children.map((child) => {
+                        const isChildActive = currentPath === child.href;
+                        return (
+                          <Link
+                            key={child.href}
+                            to={child.href}
+                            className={`${styles.subNavLink} ${isChildActive ? styles.subNavLinkActive : ''}`}
+                            aria-current={isChildActive ? 'page' : undefined}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
               );
             })}
           </div>
         </div>
 
-        <div className={styles.navGroup}>
+        {/* Only shown when the right-hand 在此页面 panel is hidden (narrow screens). */}
+        <div className={`${styles.navGroup} ${styles.pageNavGroup}`}>
           <p className={styles.navGroupTitle}>本页内容</p>
           <div className={styles.navList}>
             {sectionNav.map((item) => {

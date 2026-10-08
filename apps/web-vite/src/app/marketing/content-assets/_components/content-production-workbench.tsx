@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, App, Button, Checkbox, Empty, Input, Select, Spin, Tag } from 'antd';
+import { Alert, App, Button, Checkbox, Empty, Select, Spin, Tag } from 'antd';
 import { cancelProductionRender, enqueueProductionRender, fetchProductionCapabilities, fetchProductionProject, fetchProductionProjects, productionKeys, saveProductionProject, type ProductionDraft, type ProductionProject } from '../_lib/content-production-api';
-import { applyProductionCommand, emptyProductionDraft } from '../_lib/content-production-edit';
+import { emptyProductionDraft } from '../_lib/content-production-edit';
 import { ContentProductionCatalogs } from './content-production-catalogs';
-import { ContentProductionPlanner } from './content-production-planner';
 import { ContentProductionSearch } from './content-production-search';
 import { ContentProductionTimeline } from './content-production-timeline';
 import styles from './content-production.module.css';
@@ -14,7 +13,7 @@ const statusLabels: Record<string, string> = { queued: '排队中', running: '�
 // Only send editable fields back; server-bound source identities stay on the server.
 const editable = (snapshot: ProductionDraft): ProductionDraft => ({ title: snapshot.title, aspect: snapshot.aspect, clips: snapshot.clips, rightsConfirmed: snapshot.rightsConfirmed });
 
-export function ContentProductionWorkbench() {
+export function ContentProductionWorkbench({ initialProjectId, onBack }: { initialProjectId?: string; onBack?: () => void } = {}) {
   const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
   const [project, setProject] = useState<ProductionProject | null>(null);
@@ -22,12 +21,24 @@ export function ContentProductionWorkbench() {
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState('');
-  const [command, setCommand] = useState('');
   const capabilities = useQuery({ queryKey: productionKeys.capabilities, queryFn: fetchProductionCapabilities });
   const enabled = capabilities.data?.enabled === true;
   const canWrite = enabled && capabilities.data?.canWrite === true;
   const projects = useQuery({ queryKey: productionKeys.projects, queryFn: fetchProductionProjects, enabled });
   const detail = useQuery({ queryKey: productionKeys.detail(project?.projectId ?? null), queryFn: () => fetchProductionProject(project!.projectId), enabled: enabled && Boolean(project), refetchInterval: (query) => query.state.data?.jobs.some((job) => activeStatuses.includes(job.status)) ? 3000 : false });
+  useEffect(() => {
+    if (!initialProjectId) return;
+    let cancelled = false;
+    setBusy(true);
+    void fetchProductionProject(initialProjectId).then((result) => {
+      if (cancelled) return;
+      if (!result.project.snapshot) throw new Error('工程内容为空');
+      setProject(result.project); setDraft(editable(result.project.snapshot)); setDirty(false);
+      queryClient.setQueryData(productionKeys.detail(initialProjectId), result);
+    }).catch((error: unknown) => { if (!cancelled) setFailure(error instanceof Error ? error.message : '工程未加载'); })
+      .finally(() => { if (!cancelled) setBusy(false); });
+    return () => { cancelled = true; };
+  }, [initialProjectId, queryClient]);
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => { if (dirty) { event.preventDefault(); event.returnValue = ''; } };
     window.addEventListener('beforeunload', warn);
@@ -62,11 +73,12 @@ export function ContentProductionWorkbench() {
     await queryClient.invalidateQueries({ queryKey: productionKeys.detail(project.projectId) });
     void message.success('已加入制作队列');
   });
-  if (capabilities.isPending) return <Spin aria-label="加载视频创作" />;
-  if (capabilities.isError) return <Alert type="error" showIcon title="无法加载视频创作" description={capabilities.error.message} action={<Button onClick={() => void capabilities.refetch()}>重试</Button>} />;
-  if (!enabled) return <Empty description="视频创作尚未启用，启用后可在这里选片、编辑和导出。" />;
+  if (capabilities.isPending) return <Spin aria-label="加载工程精修" />;
+  if (capabilities.isError) return <Alert type="error" showIcon title="无法加载工程" description={capabilities.error.message} action={<Button onClick={() => void capabilities.refetch()}>重试</Button>} />;
+  if (!enabled) return <Empty description="工程精修尚未启用。">{onBack && <Button onClick={onBack}>返回 AI 剪辑</Button>}</Empty>;
   return <div className={styles.workbench}>
-    <header className={styles.heading}><div><h1>视频创作</h1><p className={styles.helper}>从已有素材选取片段，保存工程，再制作预览或成片。</p></div><Tag>{dirty ? '有未保存修改' : project ? `版本 ${project.revision}` : '新工程'}</Tag></header>
+    {onBack && <div><Button disabled={busy} onClick={() => { if (dirty) modal.confirm({ title: '放弃尚未保存的工程修改？', okText: '放弃并返回', cancelText: '继续编辑', onOk: onBack }); else onBack(); }}>返回 AI 剪辑</Button></div>}
+    <header className={styles.heading}><div><h1>工程精修</h1><p className={styles.helper}>从已有素材选取片段，保存工程，再制作预览或成片。</p></div><Tag>{dirty ? '有未保存修改' : project ? `版本 ${project.revision}` : '新工程'}</Tag></header>
     <div className={styles.actions}>
       <Select aria-label="打开已保存工程" className={styles.projectSelect} placeholder="打开已保存工程" loading={projects.isFetching} value={project?.projectId} disabled={busy} onChange={(id) => openProject(id)} options={projects.data?.map((item) => ({ value: item.projectId, label: `${item.title} · v${item.revision}` }))} />
       <Button disabled={busy} onClick={() => openProject(null)}>新建工程</Button>
@@ -75,17 +87,12 @@ export function ContentProductionWorkbench() {
     </div>
     {!canWrite && <Alert type="info" title="当前账号可查看，素材复剪需要内容编辑权限。" />}
     {(failure || projects.isError || detail.isError) && <Alert type="error" showIcon title="操作未完成" description={failure || projects.error?.message || detail.error?.message} />}
-    <ContentProductionPlanner key={project?.projectId ?? "new"} enabled={capabilities.data?.planningEnabled === true} disabled={!canWrite || busy} draft={draft} onApply={(clips) => edit({ ...draft, clips, rightsConfirmed: false })} />
     <ContentProductionCatalogs semanticsEnabled={capabilities.data?.semanticsEnabled === true} extractionEnabled={capabilities.data?.shotExtractionEnabled === true} assetIds={[...new Set(draft.clips.map((clip) => clip.assetId))]} disabled={!canWrite || busy || draft.clips.length >= 100} onAdd={(clip) => edit({ ...draft, rightsConfirmed: false, clips: [...draft.clips, clip] })} />
     <div className={styles.columns}>
       <ContentProductionSearch disabled={!canWrite || busy || draft.clips.length >= 100} onAdd={(hit) => edit({ ...draft, clips: [...draft.clips, { id: crypto.randomUUID(), assetId: hit.assetId, startMs: hit.startMs, endMs: hit.endMs, caption: '', volume: 1 }] })} />
       <div className={styles.workbench}>
         <ContentProductionTimeline draft={draft} disabled={!canWrite || busy} onChange={edit} />
-        <section className={styles.panel} aria-label="编辑指令">
-          <h2>快捷编辑指令</h2><p className={styles.helper}>支持：把第2段移到开头、删除第2段、第2段静音。修改后需保存。</p>
-          <Input.Search aria-label="编辑指令" placeholder="把第2段移到开头" value={command} onChange={(event) => setCommand(event.target.value)} disabled={!canWrite || busy} enterButton="执行" onSearch={() => {
-            try { const result = applyProductionCommand(draft.clips, command); edit({ ...draft, clips: result.clips }); setCommand(''); void message.success(result.summary); } catch (error) { setFailure(error instanceof Error ? error.message : '指令执行失败'); }
-          }} />
+        <section className={styles.panel} aria-label="素材使用确认">
           <Checkbox checked={draft.rightsConfirmed} disabled={!canWrite || busy} onChange={(event) => edit({ ...draft, rightsConfirmed: event.target.checked })}>我已确认所选素材可用于本次制作；素材档案中的明确限制仍然生效。</Checkbox>
         </section>
       </div>

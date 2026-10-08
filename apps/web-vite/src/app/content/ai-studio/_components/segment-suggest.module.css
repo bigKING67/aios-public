@@ -1,0 +1,221 @@
+/*
+ * AI 分析 page details. The two-column workbench and the recent list come from
+ * studio-workbench.module.css; cards, tables and links reuse ai-studio.module.css
+ * and segment-annotation.module.css. This module owns the selected-asset list,
+ * label chips and job-specific states.
+ */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+
+
+.selectedBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.selectedHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.selectedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.selectedEmpty {
+  margin: 0;
+  padding: var(--spacing-4) var(--spacing-3);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.selectedCover {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 32px;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-subtle);
+  object-fit: cover;
+}
+
+.selectedTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.selectedList li {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-subtle);
+  font-size: var(--font-size-sm);
+}
+
+.selectedList li > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assetText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.assetTitleWrap {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-primary);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.assetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.jobError {
+  color: var(--status-danger);
+  font-size: var(--font-size-sm);
+}
+
+.labelPicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.labelLegend {
+  padding: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.labelChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.labelChip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.labelChip:hover {
+  border-color: var(--brand-border);
+  color: var(--brand-text-strong);
+}
+
+.labelChip:has(.labelChipInput:focus-visible) {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.labelChipOn,
+.labelChipOn:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-text-strong);
+  background: var(--brand-secondary);
+}
+
+/* A check rather than a solid fill, so the launch button stays the strongest element. */
+.labelChipOn::before {
+  margin-right: var(--spacing-1);
+  content: '✓';
+}
+
+.labelChipDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.labelChipInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.labelSummary {
+  border-radius: var(--border-radius-sm);
+  cursor: help;
+}
+
+.labelSummary:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.headingMeta {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.fieldLabel {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.historyRow td {
+  color: var(--text-tertiary);
+}
+
+.historyToggle {
+  align-self: flex-start;
+  padding-inline: 0;
+}

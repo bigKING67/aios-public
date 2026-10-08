@@ -5,6 +5,7 @@ description = "PostgreSQL assets and Prefect-based orchestration for groland"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
+  "jieba==0.42.1",
   "prefect==3.7.8",
   "psycopg2-binary>=2.9.9,<3.0",
   "python-dotenv>=1.0.0,<2.0",

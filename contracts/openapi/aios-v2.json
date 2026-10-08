@@ -4796,6 +4796,124 @@
         "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
       }
     },
+    "/v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize",
+        "operationId": "content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize-worker": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/caption-preflight-jobs/{job_id}/authorize-worker",
+        "operationId": "content_production_post_marketing_content_assets_production_caption_preflight_jobs_job_id_authorize_worker",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
     "/v2/marketing/content-assets/production/clips": {
       "get": {
         "tags": [
@@ -5183,6 +5301,995 @@
           },
           {
             "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs": {
+      "get": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "GET /v2/marketing/content-assets/production/runs",
+        "operationId": "content_production_get_marketing_content_assets_production_runs",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      },
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs",
+        "operationId": "content_production_post_marketing_content_assets_production_runs",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "GET /v2/marketing/content-assets/production/runs/{run_id}",
+        "operationId": "content_production_get_marketing_content_assets_production_runs_run_id",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/adopt-plan": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/adopt-plan",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_adopt_plan",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/apply-replacement": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/apply-replacement",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_apply_replacement",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/cancel": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/cancel",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_cancel",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/pause": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/pause",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_pause",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/plan": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/plan",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_plan",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/plan-revisions": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/plan-revisions",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_plan_revisions",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/plans/{revision}": {
+      "get": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "GET /v2/marketing/content-assets/production/runs/{run_id}/plans/{revision}",
+        "operationId": "content_production_get_marketing_content_assets_production_runs_run_id_plans_revision",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "revision",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/produce": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/produce",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_produce",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/repair-replacement": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/repair-replacement",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_repair_replacement",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/replacement-candidates": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/replacement-candidates",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_replacement_candidates",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/result": {
+      "get": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "GET /v2/marketing/content-assets/production/runs/{run_id}/result",
+        "operationId": "content_production_get_marketing_content_assets_production_runs_run_id_result",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/resume": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/resume",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_resume",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/select-replacement": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/select-replacement",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_select_replacement",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/production/runs/{run_id}/selected-revision-draft": {
+      "post": {
+        "tags": [
+          "content-production"
+        ],
+        "summary": "POST /v2/marketing/content-assets/production/runs/{run_id}/selected-revision-draft",
+        "operationId": "content_production_post_marketing_content_assets_production_runs_run_id_selected_revision_draft",
+        "parameters": [
+          {
+            "name": "run_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -5803,6 +6910,1387 @@
         ],
         "x-aios-contract-maturity": "route-inventory",
         "x-aios-rust-source": "backend-rust/src/marketing/content_assets/production/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/asset-segment-summaries": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/asset-segment-summaries",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_asset_segment_summaries",
+        "parameters": [
+          {
+            "name": "assetIds",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 3800
+            }
+          },
+          {
+            "name": "presetKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetSegmentSummaryListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/capabilities": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/capabilities",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_capabilities",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioCapabilitiesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/overview": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/overview",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_overview",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "last7",
+                "last30",
+                "month"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudioOverviewResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/presets": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/presets",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_presets",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentPresetListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/remix-batches",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_remix_batches",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-batches",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_batches",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemixBatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches:preview": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-batches:preview",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_batches_preview",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemixBatchPreviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchPreviewResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/remix-batches/{batch_id}",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_remix_batches_batch_id",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_cancel",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-edits": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-edits",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_edits",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemixEditRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-edits:check": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-edits:check",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_edits_check",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemixEditCheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixEditCheckResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segment-pool": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/segment-pool",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_segment_pool",
+        "parameters": [
+          {
+            "name": "presetKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "presetVersion",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentPoolResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segment-products": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/segment-products",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_segment_products",
+        "parameters": [
+          {
+            "name": "presetKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "presetVersion",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixProductListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segment-suggestions": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/segment-suggestions",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_segment_suggestions",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentSuggestionJobListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/segment-suggestions",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_segment_suggestions",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSegmentSuggestionsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSegmentSuggestionsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segment-suggestions/{job_id}": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/segment-suggestions/{job_id}",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_segment_suggestions_job_id",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentSuggestionJob"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segments": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/segments",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_segments",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "presetKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "labelKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "productName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "withoutProduct",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "suggested",
+                "confirmed",
+                "rejected",
+                "stale"
+              ]
+            }
+          },
+          {
+            "name": "origin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ai",
+                "human"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/segments",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_segments",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContentSegmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegment"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segments:confirm": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/segments:confirm",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_segments_confirm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmContentSegmentsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmContentSegmentsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/segments/{segment_id}": {
+      "patch": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "PATCH /v2/marketing/content-assets/studio/segments/{segment_id}",
+        "operationId": "content_ai_studio_patch_marketing_content_assets_studio_segments_segment_id",
+        "parameters": [
+          {
+            "name": "segment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContentSegmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegment"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict with a machine-readable code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
       }
     },
     "/v2/marketing/content-assets/summary": {
@@ -16731,6 +19219,1857 @@
           }
         }
       },
+      "StudioCapabilitiesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "openAccess": {
+            "type": "boolean"
+          },
+          "canWrite": {
+            "type": "boolean"
+          },
+          "segmentSuggestEnabled": {
+            "type": "boolean"
+          },
+          "segmentSuggestMaxAssets": {
+            "type": "integer"
+          },
+          "remixEnabled": {
+            "type": "boolean"
+          },
+          "remixMaxPerBatch": {
+            "type": "integer"
+          },
+          "remixMaxSeconds": {
+            "type": "integer"
+          },
+          "remixMaxActive": {
+            "type": "integer"
+          },
+          "enterpriseTag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "canUpload": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "openAccess",
+          "canWrite",
+          "segmentSuggestEnabled",
+          "segmentSuggestMaxAssets",
+          "remixEnabled",
+          "remixMaxPerBatch",
+          "remixMaxSeconds",
+          "remixMaxActive",
+          "enterpriseTag",
+          "products",
+          "canUpload"
+        ]
+      },
+      "SegmentPresetLabel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "definition": {
+            "type": "string"
+          },
+          "minDurationSec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "definition"
+        ]
+      },
+      "SegmentPreset": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "presetKey": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentPresetLabel"
+            }
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "presetKey",
+          "version",
+          "dimension",
+          "name",
+          "labels",
+          "status"
+        ]
+      },
+      "SegmentPresetListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentPreset"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "ContentSegment": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "segmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerUserId": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assetTitle": {
+            "type": "string"
+          },
+          "sourceContentHash": {
+            "type": "string"
+          },
+          "sourceCurrent": {
+            "type": "boolean"
+          },
+          "sourceDurationMs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "startMs": {
+            "type": "integer"
+          },
+          "endMs": {
+            "type": "integer"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labelKey": {
+            "type": "string"
+          },
+          "productName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "origin": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "evidence": {},
+          "revision": {
+            "type": "integer"
+          },
+          "confirmedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confirmedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "segmentId",
+          "ownerUserId",
+          "assetId",
+          "assetTitle",
+          "sourceContentHash",
+          "sourceCurrent",
+          "sourceDurationMs",
+          "startMs",
+          "endMs",
+          "presetKey",
+          "presetVersion",
+          "labelKey",
+          "productName",
+          "origin",
+          "status",
+          "evidence",
+          "revision",
+          "confirmedBy",
+          "confirmedAt",
+          "createdAt",
+          "updatedAt",
+          "coverUrl"
+        ]
+      },
+      "SegmentAssetCover": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "coverUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "assetId",
+          "coverUrl"
+        ]
+      },
+      "ContentSegmentListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentSegment"
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentAssetCover"
+            }
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor",
+          "assets"
+        ]
+      },
+      "CreateContentSegmentRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labelKey": {
+            "type": "string"
+          },
+          "startMs": {
+            "type": "integer"
+          },
+          "endMs": {
+            "type": "integer"
+          },
+          "productName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceContentHash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "assetId",
+          "presetKey",
+          "presetVersion",
+          "labelKey",
+          "startMs",
+          "endMs"
+        ]
+      },
+      "UpdateContentSegmentRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedRevision": {
+            "type": "integer"
+          },
+          "startMs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endMs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labelKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "expectedRevision"
+        ]
+      },
+      "ConfirmContentSegmentItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "segmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedRevision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "segmentId",
+          "expectedRevision"
+        ]
+      },
+      "ConfirmContentSegmentsRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConfirmContentSegmentItem"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "ConfirmContentSegmentsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentSegment"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "ContentSegmentConflictResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "segmentIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "detail",
+          "code",
+          "segmentIds"
+        ]
+      },
+      "CreateSegmentSuggestionsRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labelKeys": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "assetIds",
+          "presetKey",
+          "presetVersion"
+        ]
+      },
+      "SegmentSuggestionJob": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerUserId": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assetTitle": {
+            "type": "string"
+          },
+          "sourceContentHash": {
+            "type": "string"
+          },
+          "sourceCurrent": {
+            "type": "boolean"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labelKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "attempt": {
+            "type": "integer"
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "promptVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "usage": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resultSummary": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "jobId",
+          "ownerUserId",
+          "assetId",
+          "assetTitle",
+          "sourceContentHash",
+          "sourceCurrent",
+          "presetKey",
+          "presetVersion",
+          "labelKeys",
+          "status",
+          "stage",
+          "attempt",
+          "errorCode",
+          "errorMessage",
+          "model",
+          "promptVersion",
+          "usage",
+          "resultSummary",
+          "createdAt",
+          "startedAt",
+          "finishedAt"
+        ]
+      },
+      "CreateSegmentSuggestionsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentSuggestionJob"
+            }
+          },
+          "reusedJobIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "labelKeyMismatchJobIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "items",
+          "reusedJobIds",
+          "labelKeyMismatchJobIds"
+        ]
+      },
+      "SegmentSuggestionJobListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentSuggestionJob"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "AssetSegmentSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "suggestedCount": {
+            "type": "integer"
+          },
+          "confirmedCount": {
+            "type": "integer"
+          },
+          "suggestionActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "assetId",
+          "suggestedCount",
+          "confirmedCount",
+          "suggestionActive"
+        ]
+      },
+      "AssetSegmentSummaryListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetSegmentSummary"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "SegmentPoolCell": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labelKey": {
+            "type": "string"
+          },
+          "confirmedCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "productName",
+          "labelKey",
+          "confirmedCount"
+        ]
+      },
+      "SegmentPoolResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentPoolCell"
+            }
+          }
+        },
+        "required": [
+          "presetKey",
+          "presetVersion",
+          "items"
+        ]
+      },
+      "StudioOverviewResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "period": {
+            "$ref": "#/components/schemas/StudioOverviewPeriod"
+          },
+          "costs": {
+            "$ref": "#/components/schemas/StudioOverviewCosts"
+          },
+          "pipeline": {
+            "$ref": "#/components/schemas/StudioOverviewPipeline"
+          },
+          "recent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudioOverviewActivity"
+            }
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "period",
+          "costs",
+          "pipeline",
+          "recent",
+          "scope"
+        ]
+      },
+      "StudioOverviewPeriod": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "from",
+          "to"
+        ]
+      },
+      "StudioOverviewCosts": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "modelAnalysis": {
+            "$ref": "#/components/schemas/StudioModelAnalysisCost"
+          },
+          "cloudComposition": {
+            "$ref": "#/components/schemas/StudioCloudCompositionCost"
+          },
+          "totalCny": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "modelAnalysis",
+          "cloudComposition",
+          "totalCny"
+        ]
+      },
+      "StudioModelAnalysisCost": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "calls": {
+            "type": "integer"
+          },
+          "inputTokens": {
+            "type": "integer"
+          },
+          "audioInputTokens": {
+            "type": "integer"
+          },
+          "cachedTokens": {
+            "type": "integer"
+          },
+          "outputTokens": {
+            "type": "integer"
+          },
+          "estimatedCny": {
+            "type": "number"
+          },
+          "unpricedCalls": {
+            "type": "integer"
+          },
+          "pricing": {
+            "$ref": "#/components/schemas/StudioModelPricing"
+          }
+        },
+        "required": [
+          "calls",
+          "inputTokens",
+          "audioInputTokens",
+          "cachedTokens",
+          "outputTokens",
+          "estimatedCny",
+          "unpricedCalls",
+          "pricing"
+        ]
+      },
+      "StudioModelPricing": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "inputPerMillion": {
+            "type": "number"
+          },
+          "audioInputPerMillion": {
+            "type": "number"
+          },
+          "cachedPerMillion": {
+            "type": "number"
+          },
+          "outputPerMillion": {
+            "type": "number"
+          },
+          "verifiedOn": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "model",
+          "tier",
+          "inputPerMillion",
+          "audioInputPerMillion",
+          "cachedPerMillion",
+          "outputPerMillion",
+          "verifiedOn"
+        ]
+      },
+      "StudioCloudCompositionCost": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tasks": {
+            "type": "integer"
+          },
+          "outputSeconds": {
+            "type": "number"
+          },
+          "byResolution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudioResolutionUsage"
+            }
+          },
+          "estimatedCny": {
+            "type": "number"
+          },
+          "basePerMinute": {
+            "type": "number"
+          },
+          "verifiedOn": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tasks",
+          "outputSeconds",
+          "byResolution",
+          "estimatedCny",
+          "basePerMinute",
+          "verifiedOn"
+        ]
+      },
+      "StudioResolutionUsage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resolution": {
+            "type": "string"
+          },
+          "seconds": {
+            "type": "number"
+          },
+          "coefficient": {
+            "type": "number"
+          },
+          "estimatedCny": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "resolution",
+          "seconds",
+          "coefficient",
+          "estimatedCny"
+        ]
+      },
+      "StudioOverviewPipeline": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "readyAssets": {
+            "type": "integer"
+          },
+          "analysisActive": {
+            "type": "integer"
+          },
+          "analysisSucceeded": {
+            "type": "integer"
+          },
+          "analysisFailed": {
+            "type": "integer"
+          },
+          "segmentsSuggested": {
+            "type": "integer"
+          },
+          "segmentsConfirmed": {
+            "type": "integer"
+          },
+          "remixBatchesRunning": {
+            "type": "integer"
+          },
+          "remixBatchesFailed": {
+            "type": "integer"
+          },
+          "outputs": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "readyAssets",
+          "analysisActive",
+          "analysisSucceeded",
+          "analysisFailed",
+          "segmentsSuggested",
+          "segmentsConfirmed",
+          "remixBatchesRunning",
+          "remixBatchesFailed",
+          "outputs"
+        ]
+      },
+      "StudioOverviewActivity": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "status",
+          "detail",
+          "createdAt"
+        ]
+      },
+      "RemixBatchPreviewRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labels": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "presetKey",
+          "presetVersion",
+          "productName",
+          "count"
+        ]
+      },
+      "CreateRemixBatchRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idempotencyKey": {
+            "type": "string"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labels": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "presetKey",
+          "presetVersion",
+          "productName",
+          "count"
+        ]
+      },
+      "RemixSlotAvailability": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ordinal": {
+            "type": "integer"
+          },
+          "labelKey": {
+            "type": "string"
+          },
+          "candidateCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ordinal",
+          "labelKey",
+          "candidateCount"
+        ]
+      },
+      "RemixBatchPreviewResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "type": "string"
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixSlotAvailability"
+            }
+          },
+          "missingLabels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excludedAssetCount": {
+            "type": "integer"
+          },
+          "theoreticalCombinations": {
+            "type": "integer"
+          },
+          "availableCombinations": {
+            "type": "integer"
+          },
+          "availableIsLowerBound": {
+            "type": "boolean"
+          },
+          "previouslyUsedCombinations": {
+            "type": "integer"
+          },
+          "referenceCombinationExcluded": {
+            "type": "boolean"
+          },
+          "requestedCount": {
+            "type": "integer"
+          },
+          "plannableCount": {
+            "type": "integer"
+          },
+          "shortfallReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "seed": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "labels",
+          "sourceAssetId",
+          "productName",
+          "slots",
+          "missingLabels",
+          "excludedAssetCount",
+          "theoreticalCombinations",
+          "availableCombinations",
+          "availableIsLowerBound",
+          "previouslyUsedCombinations",
+          "referenceCombinationExcluded",
+          "requestedCount",
+          "plannableCount",
+          "shortfallReason",
+          "seed"
+        ]
+      },
+      "RemixBatchSegment": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "segmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assetTitle": {
+            "type": "string"
+          },
+          "labelKey": {
+            "type": "string"
+          },
+          "startMs": {
+            "type": "integer"
+          },
+          "endMs": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "segmentId",
+          "assetId",
+          "assetTitle",
+          "labelKey",
+          "startMs",
+          "endMs"
+        ]
+      },
+      "RemixBatchItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ordinal": {
+            "type": "integer"
+          },
+          "runId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "combinationHash": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "runStatus": {
+            "type": "string"
+          },
+          "runStage": {
+            "type": "string"
+          },
+          "waitingReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jobStatus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jobError": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outputAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outputCoverUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "durationMs": {
+            "type": "integer"
+          },
+          "segments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixBatchSegment"
+            }
+          }
+        },
+        "required": [
+          "ordinal",
+          "runId",
+          "combinationHash",
+          "outcome",
+          "runStatus",
+          "runStage",
+          "waitingReason",
+          "jobStatus",
+          "jobError",
+          "outputAssetId",
+          "outputCoverUrl",
+          "durationMs",
+          "segments"
+        ]
+      },
+      "RemixBatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "batchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "ownerUserId": {
+            "type": "string"
+          },
+          "ownerName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ownedByCurrentUser": {
+            "type": "boolean"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "type": "string"
+          },
+          "requestedCount": {
+            "type": "integer"
+          },
+          "plannedCount": {
+            "type": "integer"
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "shortfallReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "succeededCount": {
+            "type": "integer"
+          },
+          "failedCount": {
+            "type": "integer"
+          },
+          "runningCount": {
+            "type": "integer"
+          },
+          "cancelledCount": {
+            "type": "integer"
+          },
+          "coverUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "failureReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "batchId",
+          "mode",
+          "ownerUserId",
+          "ownerName",
+          "ownedByCurrentUser",
+          "presetKey",
+          "presetVersion",
+          "labels",
+          "sourceAssetId",
+          "productName",
+          "requestedCount",
+          "plannedCount",
+          "seed",
+          "status",
+          "shortfallReason",
+          "succeededCount",
+          "failedCount",
+          "runningCount",
+          "cancelledCount",
+          "coverUrls",
+          "failureReason",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "RemixBatchDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "batch": {
+            "$ref": "#/components/schemas/RemixBatch"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixBatchItem"
+            }
+          }
+        },
+        "required": [
+          "batch",
+          "items"
+        ]
+      },
+      "RemixBatchListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixBatch"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "RemixProduct": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productName": {
+            "type": "string"
+          },
+          "confirmedSegmentCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "productName",
+          "confirmedSegmentCount"
+        ]
+      },
+      "RemixProductListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixProduct"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "RemixEditClip": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "segmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startMs": {
+            "type": "integer"
+          },
+          "endMs": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "segmentId",
+          "startMs",
+          "endMs"
+        ]
+      },
+      "RemixEditCheckRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "clips": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixEditClip"
+            }
+          }
+        },
+        "required": [
+          "presetKey",
+          "presetVersion",
+          "clips"
+        ]
+      },
+      "CreateRemixEditRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idempotencyKey": {
+            "type": "string"
+          },
+          "presetKey": {
+            "type": "string"
+          },
+          "presetVersion": {
+            "type": "integer"
+          },
+          "clips": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixEditClip"
+            }
+          },
+          "allowDuplicate": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "presetKey",
+          "presetVersion",
+          "clips"
+        ]
+      },
+      "RemixEditMatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "batchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ordinal": {
+            "type": "integer"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "outputAssetId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outputCoverUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "durationMs": {
+            "type": "integer"
+          },
+          "overlap": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "batchId",
+          "ordinal",
+          "mode",
+          "productName",
+          "outcome",
+          "outputAssetId",
+          "outputCoverUrl",
+          "durationMs",
+          "overlap",
+          "createdAt"
+        ]
+      },
+      "RemixEditCheckResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productName": {
+            "type": "string"
+          },
+          "durationMs": {
+            "type": "integer"
+          },
+          "exact": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixEditMatch"
+            }
+          },
+          "similar": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixEditMatch"
+            }
+          }
+        },
+        "required": [
+          "productName",
+          "durationMs",
+          "exact",
+          "similar"
+        ]
+      },
       "IndustryMaterialInspirationResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -19157,6 +23496,9 @@
       "name": "auth"
     },
     {
+      "name": "content-ai-studio"
+    },
+    {
       "name": "content-assets"
     },
     {
@@ -19195,9 +23537,9 @@
   ],
   "x-aios-contract": {
     "generatedFrom": "rust-router-and-serde-source",
-    "operationCount": 190,
-    "routeSourceCount": 14,
-    "typedOperationCount": 87,
+    "operationCount": 229,
+    "routeSourceCount": 15,
+    "typedOperationCount": 107,
     "v1RemovalAuthorized": false
   }
 }

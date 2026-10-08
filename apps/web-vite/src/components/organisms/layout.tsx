@@ -86,7 +86,7 @@ function DefaultLayoutChrome({
               <Link to={ROUTE_PATHS.home} aria-label="返回首页" className="inline-flex items-center">
                 <img
                   src="/home-brand-crop.png"
-                  alt="Groland 数据中枢"
+                  alt="AGI AIOS"
                   width={180}
                   height={48}
                   className="h-8 sm:h-10 w-auto object-contain"
@@ -131,7 +131,7 @@ function DefaultLayoutChrome({
         <Footer
           className={styles.footer}
         >
-          Groland AIOS ©2026 · AI 驱动的业务生产力系统
+          AGI AIOS ©2026 · AI 驱动的业务生产力系统
         </Footer>
       )}
     </AntLayout>

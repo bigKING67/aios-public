@@ -1,4 +1,5 @@
 use super::super::permissions::ensure_content_asset_edit_permission;
+use super::super::repository::query_asset_by_id;
 use super::types::{BoundAsset, SaveRequest, Snapshot};
 use crate::{
     auth::CurrentUser,
@@ -30,6 +31,58 @@ fn check_rights(asset: &super::super::types::ContentAssetItem) -> AppResult<()> 
     Ok(())
 }
 
+/// Whether `bind_source` requires the caller's content-asset edit permission.
+/// Production (`bind_assets`) always enforces it; only the AI 创作中心 open-access
+/// mode skips it. Skipping never relaxes the rights window, readiness, bucket,
+/// raw key/hash or duration checks.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(in crate::marketing::content_assets) enum SourcePermission {
+    Enforce,
+    Skip,
+}
+
+/// Edit permission (unless skipped), rights window, readiness, bucket, raw
+/// key/hash and duration of one source asset — the per-asset contract of
+/// `bind_assets`.
+pub(super) async fn bind_source(
+    pool: &sqlx::PgPool,
+    bucket: &str,
+    user: &CurrentUser,
+    asset_id: uuid::Uuid,
+    permission: SourcePermission,
+) -> AppResult<BoundAsset> {
+    let asset = match permission {
+        SourcePermission::Enforce => {
+            ensure_content_asset_edit_permission(pool, user, asset_id).await?
+        }
+        SourcePermission::Skip => query_asset_by_id(pool, asset_id)
+            .await?
+            .ok_or(AppError::NotFound)?,
+    };
+    check_rights(&asset)?;
+    if asset.external_only || asset.asset_status != "ready" || asset.bucket != bucket {
+        return Err(AppError::bad_request("素材必须是当前资产桶内已就绪的原片"));
+    }
+    let key = asset
+        .raw_object_key
+        .filter(|s| !s.trim().is_empty())
+        .ok_or_else(|| AppError::bad_request("素材缺少原片"))?;
+    let sha = asset
+        .raw_sha256
+        .filter(|s| s.len() == 64 && s.bytes().all(|c| c.is_ascii_hexdigit()))
+        .ok_or_else(|| AppError::bad_request("素材缺少已验证的原片摘要"))?;
+    let duration = asset
+        .duration_seconds
+        .filter(|v| v.is_finite() && *v > 0.0 && *v <= 1800.0)
+        .ok_or_else(|| AppError::bad_request("素材时长缺失或超过 30 分钟"))?;
+    Ok(BoundAsset {
+        asset_id,
+        object_key: key,
+        sha256: sha.to_ascii_lowercase(),
+        duration_ms: (duration * 1000.0).floor() as u32,
+    })
+}
+
 pub(super) async fn bind_assets(
     state: &AppState,
     user: &CurrentUser,
@@ -42,48 +95,49 @@ pub(super) async fn bind_assets(
         if !seen.insert(clip.asset_id) {
             continue;
         }
-        let asset = ensure_content_asset_edit_permission(&state.pool, user, clip.asset_id).await?;
-        check_rights(&asset)?;
-        if asset.external_only
-            || asset.asset_status != "ready"
-            || asset.bucket != state.settings.tos_bucket
-        {
-            return Err(AppError::bad_request("素材必须是当前资产桶内已就绪的原片"));
-        }
-        let key = asset
-            .raw_object_key
-            .filter(|s| !s.trim().is_empty())
-            .ok_or_else(|| AppError::bad_request("素材缺少原片"))?;
-        let sha = asset
-            .raw_sha256
-            .filter(|s| s.len() == 64 && s.bytes().all(|c| c.is_ascii_hexdigit()))
-            .ok_or_else(|| AppError::bad_request("素材缺少已验证的原片摘要"))?;
-        let duration = asset
-            .duration_seconds
-            .filter(|v| v.is_finite() && *v > 0.0 && *v <= 1800.0)
-            .ok_or_else(|| AppError::bad_request("素材时长缺失或超过 30 分钟"))?;
-        let duration_ms = (duration * 1000.0).floor() as u32;
+        let bound = bind_source(
+            &state.pool,
+            &state.settings.tos_bucket,
+            user,
+            clip.asset_id,
+            SourcePermission::Enforce,
+        )
+        .await?;
         if request
             .clips
             .iter()
-            .any(|c| c.asset_id == clip.asset_id && c.end_ms > duration_ms)
+            .any(|c| c.asset_id == clip.asset_id && c.end_ms > bound.duration_ms)
         {
             return Err(AppError::bad_request("片段切点超出原片范围"));
         }
-        assets.push(BoundAsset {
-            asset_id: clip.asset_id,
-            object_key: key,
-            sha256: sha.to_ascii_lowercase(),
-            duration_ms,
-        });
+        assets.push(bound);
     }
-    Ok(Snapshot {
-        title: request.title.trim().to_string(),
-        aspect: request.aspect,
-        clips: request.clips,
+    Ok(snapshot(
+        request.title.trim().to_string(),
+        request.aspect,
+        request.clips,
+        assets,
+    ))
+}
+
+/// New legacy-clip snapshot bound to today's render package and the HD profile.
+pub(super) fn snapshot(
+    title: String,
+    aspect: String,
+    clips: Vec<super::types::Clip>,
+    assets: Vec<BoundAsset>,
+) -> Snapshot {
+    Snapshot {
+        derived_assets: Vec::new(),
+        render_binding: Some(super::render_binding::current()),
+        edit_document: None,
+        title,
+        aspect,
+        output_profile: super::types::OutputProfile::Hd1080V1,
+        clips,
         assets,
         rights_confirmed: true,
-    })
+    }
 }
 
 pub(super) async fn revalidate(

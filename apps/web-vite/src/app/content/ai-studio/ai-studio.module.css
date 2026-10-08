@@ -1,0 +1,485 @@
+/*
+ * AI studio route styles. The console rail geometry and nav item states are
+ * reused from the content-asset console module; this file only owns the page
+ * viewport, the narrow-viewport nav, and the studio panels.
+ */
+
+.pageShell {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  margin: 0 auto;
+  padding: var(--spacing-3);
+  background: var(--bg-global);
+}
+
+/* Global `a:hover` underlines links; studio navigation and cards are link surfaces. */
+.railNavLink:hover,
+.compactNavItem:hover,
+.flowLink:hover,
+.activityLink:hover,
+.actionLink:hover {
+  text-decoration: none;
+}
+
+/* Narrow screens: page tabs scroll sideways, the account stays pinned on the right. */
+.compactBar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--divider-color);
+  background: var(--bg-card);
+}
+
+.compactNav {
+  position: relative; /* offsetParent for centring the active item */
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  overflow-x: auto;
+}
+
+.compactNavItem {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.compactNavItem:hover {
+  border-color: var(--brand-border);
+  color: var(--brand-text-strong);
+  background: var(--brand-secondary);
+}
+
+.compactNavItem:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.compactNavItemActive,
+.compactNavItemActive:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+/*
+ * Page title sits directly on the canvas (no card): title, one summary line
+ * under it, actions on the right. Cards below are the page's content.
+ */
+.pageHeader {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 var(--spacing-1);
+}
+
+.pageHeader > div:first-child {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-title);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.pageHeader p {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Rail brand without its card frame, so the rail reads as one surface. */
+.railBrand.railBrand {
+  padding: 0 4px;
+  border-color: transparent;
+  background: transparent;
+}
+
+.placeholderGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding: var(--spacing-5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+}
+
+.card h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.card > p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.plannedList {
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding-left: var(--spacing-5);
+  list-style: disc outside;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.nextAction {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+}
+
+.nextAction span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 var(--spacing-4);
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--border-radius-md);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.actionLink:hover {
+  border-color: var(--brand-dark);
+  color: var(--brand-on-primary);
+  background: var(--brand-dark);
+}
+
+.actionLink:focus-visible,
+.flowLink:focus-visible,
+.activityLink:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.flowList {
+  display: grid;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flowLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-height: 56px;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius-lg);
+  color: inherit;
+  background: var(--bg-card);
+  text-decoration: none;
+}
+
+.flowLink:hover {
+  border-color: var(--brand-border);
+  background: var(--brand-secondary);
+}
+
+.flowCopy {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.flowCopy strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.flowCopy span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.flowChevron {
+  color: var(--text-tertiary);
+}
+
+.cardHeading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* Direct children only: a nested heading row (费用估算 scope + period) holds a Segmented. */
+.cardHeading > span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.costGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+}
+
+.costTile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+  padding: var(--spacing-4);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius-lg);
+}
+
+.costTile dt {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.costTile dd {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.costTile .costValue {
+  margin-bottom: var(--spacing-1);
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-title);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+}
+
+.card > .costNote {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--spacing-4);
+  align-items: start;
+}
+
+.activityList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activityList li + li {
+  border-top: 1px solid var(--divider-color);
+}
+
+.activityLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-height: 52px;
+  padding: var(--spacing-2) var(--spacing-2);
+  border-radius: var(--border-radius-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+.activityLink:hover {
+  background: var(--brand-secondary);
+}
+
+.activityCopy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.activityCopy strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activityCopy span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+@media (max-width: 980px) {
+  .pageShell {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .placeholderGrid,
+  .overviewGrid,
+  .costGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .pageShell {
+    padding: var(--spacing-2);
+  }
+
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .flowLink {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .flowLink .flowChevron {
+    display: none;
+  }
+}
+
+.guideSteps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guideSteps li {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.guideIndex {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--border-radius-full);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.guideCopy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.guideCopy a {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.guideCopy span {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.guideNotes {
+  display: grid;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding-left: var(--spacing-5);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+@media (max-width: 980px) {
+  .guideSteps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Touch screens: every studio button is at least a 44px target (small AntD buttons are 24-32px). */
+@media (pointer: coarse) {
+  .pageShell :global(.ant-btn) {
+    min-height: 44px;
+  }
+}

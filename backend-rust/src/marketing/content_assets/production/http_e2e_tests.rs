@@ -15,6 +15,9 @@ const ASSET: &str = "11111111-1111-1111-1111-111111111111";
 async fn real_http_worker_render_and_signed_delivery() {
     let required = |key| std::env::var(key).expect(key);
     let db = required("CONTENT_PRODUCTION_TEST_DATABASE_URL");
+    let fixture_url = reqwest::Url::parse(&db).unwrap();
+    assert_eq!(fixture_url.host_str(), Some("127.0.0.1"));
+    assert_eq!(fixture_url.path(), "/content_production_e2e");
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(&db)
@@ -29,13 +32,32 @@ async fn real_http_worker_render_and_signed_delivery() {
     .await
     .unwrap();
     let source = std::fs::read(required("CONTENT_PRODUCTION_TEST_SOURCE")).unwrap();
+    sqlx::raw_sql(include_str!(
+        "../../../../../sql/migrations/026_content_production_runs.sql"
+    ))
+    .execute(&pool)
+    .await
+    .unwrap();
     let source_hash = format!("{:x}", Sha256::digest(&source));
+    sqlx::raw_sql(include_str!(
+        "../../../../../sql/migrations/027_content_production_run_renders.sql"
+    ))
+    .execute(&pool)
+    .await
+    .unwrap();
+    sqlx::raw_sql(include_str!(
+        "../../../../../sql/migrations/028_content_production_planning_queue.sql"
+    ))
+    .execute(&pool)
+    .await
+    .unwrap();
     sqlx::query("INSERT INTO ads.marketing_content_assets (asset_id,title,asset_status,bucket,raw_object_key,raw_sha256,duration_seconds,repurpose_allowed,authorization_status,authorization_starts_at,authorization_expires_at) VALUES ($1::UUID,'真实素材隔离验收','ready','127','source.mp4',$2,3,TRUE,'authorized',CURRENT_DATE-1,CURRENT_DATE+1)")
         .bind(ASSET).bind(&source_hash).execute(&pool).await.unwrap();
     sqlx::query("INSERT INTO ads.marketing_content_asset_transcripts (transcript_id,asset_id,source_object_key,status,transcript_text,segments) VALUES ($1,$2::UUID,'source.mp4','active','验收片段',$3)")
         .bind(uuid::Uuid::new_v4()).bind(ASSET).bind(json!([{"start_ms":0,"end_ms":1000,"text":"验收片段"}])).execute(&pool).await.unwrap();
     let mut settings = fixture_settings(db);
     settings.content_production_enabled = true;
+    settings.content_production_runs_enabled = true;
     settings.content_production_shot_extraction_enabled = true;
     settings.content_production_semantics_enabled = true;
     let (model_server, model_calls) = super::planning_http_fixture::model(&mut settings).await;
@@ -60,7 +82,8 @@ async fn real_http_worker_render_and_signed_delivery() {
         http_client: reqwest::Client::new(),
         settings: settings.clone(),
     });
-    let app = build_app(state, build_cors_layer(&settings).unwrap());
+    let disabled_state = (*state).clone();
+    let app = build_app(Arc::clone(&state), build_cors_layer(&settings).unwrap());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let base = format!(
         "http://{}/v1/marketing/content-assets/production",
@@ -76,6 +99,35 @@ async fn real_http_worker_render_and_signed_delivery() {
         .build()
         .unwrap();
     let token = access_token();
+    if std::env::var_os("CONTENT_PRODUCTION_TEST_REPLAY").is_some() {
+        super::runs::replay_http_fixture::exercise(
+            &state,
+            &client,
+            &base,
+            &token,
+            ASSET,
+            &source_hash,
+            &model_calls,
+        )
+        .await;
+        server.abort();
+        model_server.abort();
+        return;
+    }
+    if std::env::var_os("CONTENT_PRODUCTION_TEST_BATCH_COUNT").is_some() {
+        super::runs::batch_http_fixture::exercise(
+            Arc::clone(&state),
+            &client,
+            &base,
+            ASSET,
+            &model_calls,
+        )
+        .await;
+        server.abort();
+        model_server.abort();
+        return;
+    }
+    super::runs::http_fixture::disabled(disabled_state, &client, &token).await;
     assert_eq!(
         client
             .get(format!("{base}/capabilities"))
@@ -97,6 +149,8 @@ async fn real_http_worker_render_and_signed_delivery() {
         .await
         .unwrap();
     assert_eq!(capabilities["enabled"], true);
+    assert_eq!(capabilities["persistentPlansEnabled"], true);
+    assert_eq!(capabilities["autonomousEditingEnabled"], false);
     let hits: Value = client
         .get(format!("{base}/clips"))
         .bearer_auth(&token)
@@ -123,8 +177,30 @@ async fn real_http_worker_render_and_signed_delivery() {
         .unwrap();
     assert_eq!(format!("{:x}", Sha256::digest(&original)), source_hash);
     super::planning_http_fixture::exercise(&client, &base, &token, ASSET, &model_calls).await;
-    model_server.abort();
+    super::runs::http_fixture::exercise(&state, &client, &base, &token, ASSET, &model_calls).await;
+    super::runs::render_http_fixture::exercise(&state, &client, &base, &token, ASSET).await;
+    super::runs::background_http_fixture::exercise(&state, &client, &base, &token, ASSET).await;
     super::visual_http_fixture::exercise(&pool, &client, &base, &token, ASSET, &source_hash).await;
+    super::runs::evidence_http_fixture::exercise(
+        &state,
+        &client,
+        &base,
+        &token,
+        ASSET,
+        &source_hash,
+        &model_calls,
+    )
+    .await;
+    super::runs::picture_http_fixture::exercise(
+        &state,
+        &client,
+        &base,
+        &token,
+        ASSET,
+        &source_hash,
+    )
+    .await;
+    model_server.abort();
     super::catalog_http_fixture::exercise(&pool, &client, &base, &token, ASSET, &source_hash).await;
     super::shot_jobs_http_fixture::exercise(&pool, &client, &base, &token, ASSET).await;
     super::semantic_http_fixture::exercise(&pool, &client, &base, &token, ASSET).await;

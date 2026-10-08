@@ -1,7 +1,7 @@
 //! Transcript-grounded planning. Model output never owns source identity or cut points.
 use super::{
     assets, search,
-    types::{Clip, ClipHit, SaveRequest},
+    types::{Clip, ClipHit, SaveRequest, Snapshot},
 };
 use crate::{
     auth::CurrentUser,
@@ -11,19 +11,19 @@ use crate::{
 };
 use axum::{extract::State, Json};
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::json;
 use std::{collections::HashSet, sync::Arc};
 use uuid::Uuid;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct PlanRequest {
-    brief: String,
-    search_text: String,
-    asset_ids: Vec<Uuid>,
-    target_seconds: u32,
-    model_call_confirmed: bool,
-    rights_confirmed: bool,
+    pub(super) brief: String,
+    pub(super) search_text: String,
+    pub(super) asset_ids: Vec<Uuid>,
+    pub(super) target_seconds: u32,
+    pub(super) model_call_confirmed: bool,
+    pub(super) rights_confirmed: bool,
 }
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -39,12 +39,26 @@ struct ModelShot {
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct PlannedShot {
-    clip: Clip,
+pub(super) struct PlannedShot {
+    pub(super) clip: Clip,
     transcript_id: Uuid,
     source_title: String,
     evidence: String,
-    reason: String,
+    pub(super) reason: String,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct PlanResponse {
+    pub(super) brief: String,
+    search_text: String,
+    target_seconds: u32,
+    provider: String,
+    model: String,
+    basis: String,
+    pub(super) shots: Vec<PlannedShot>,
+    pub(super) gaps: Vec<String>,
+    source_duration_ms: u32,
 }
 fn invalid() -> AppError {
     AppError::bad_request("分镜模型返回了无效或超出素材范围的方案，请调整目标后重试")
@@ -119,16 +133,45 @@ pub(super) async fn create(
     State(state): State<Arc<AppState>>,
     user: CurrentUser,
     Json(request): Json<PlanRequest>,
-) -> AppResult<Json<Value>> {
-    super::guard(&state, &user, true)?;
+) -> AppResult<Json<PlanResponse>> {
+    Ok(Json(generate(&state, &user, request, false).await?))
+}
+
+pub(super) async fn generate(
+    state: &AppState,
+    user: &CurrentUser,
+    request: PlanRequest,
+    whole_scope: bool,
+) -> AppResult<PlanResponse> {
+    let prepared = prepare(state, user, request, whole_scope).await?;
+    complete(state, user, prepared).await
+}
+
+pub(super) struct PreparedPlan {
+    request: PlanRequest,
+    binding: Snapshot,
+    candidates: Vec<ClipHit>,
+}
+
+pub(super) async fn prepare(
+    state: &AppState,
+    user: &CurrentUser,
+    request: PlanRequest,
+    whole_scope: bool,
+) -> AppResult<PreparedPlan> {
+    super::guard(state, user, true)?;
     if !state.settings.content_production_planning_enabled {
         return Err(AppError::ServiceUnavailable("分镜规划尚未启用".into()));
     }
-    validate_request(&request)?;
+    // The legacy endpoint requires a search term. Runs can plan from the entire
+    // explicitly bounded scope without making users invent a retrieval query.
+    if !whole_scope {
+        validate_request(&request)?;
+    }
     // Check the whole selected scope before sending any transcript to a provider.
     let binding = assets::bind_assets(
-        &state,
-        &user,
+        state,
+        user,
         SaveRequest {
             expected_revision: None,
             title: "分镜素材校验".into(),
@@ -150,8 +193,11 @@ pub(super) async fn create(
         },
     )
     .await?;
-    let candidates =
-        search::search_scoped(&state, &user, &request.search_text, &request.asset_ids).await?;
+    let candidates = if whole_scope {
+        search::planning_candidates(state, user, &request.asset_ids).await?
+    } else {
+        search::search_scoped(state, user, &request.search_text, &request.asset_ids).await?
+    };
     let candidates: Vec<_> = candidates
         .into_iter()
         .filter(|h| {
@@ -166,6 +212,23 @@ pub(super) async fn create(
             "所选素材中没有匹配的原片台词片段；请调整检索词，不会调用模型",
         ));
     }
+    Ok(PreparedPlan {
+        request,
+        binding,
+        candidates,
+    })
+}
+
+pub(super) async fn complete(
+    state: &AppState,
+    user: &CurrentUser,
+    prepared: PreparedPlan,
+) -> AppResult<PlanResponse> {
+    let PreparedPlan {
+        request,
+        binding,
+        candidates,
+    } = prepared;
     let input:Vec<_>=candidates.iter().enumerate().map(|(i,h)| json!({"candidateId":i,"title":h.title,"text":h.text,"durationMs":h.end_ms-h.start_ms})).collect();
     let result=call_chat_completion(&state.http_client,&state.settings,LlmCallOptions {
         provider:None,model:None,thinking_enabled:false,request_scope:Some("content-production-plan".into()),
@@ -181,10 +244,19 @@ pub(super) async fn create(
     let plan: ModelPlan = serde_json::from_str(&result.content).map_err(|_| invalid())?;
     let gaps = plan.gaps.clone();
     let shots = ground(plan, &candidates, request.target_seconds)?;
-    assets::revalidate(&state, &user, &binding).await?;
-    Ok(Json(
-        json!({"brief":request.brief,"searchText":request.search_text,"targetSeconds":request.target_seconds,"provider":result.provider,"model":result.model,"basis":"raw-transcript","shots":shots,"gaps":gaps,"sourceDurationMs":shots.iter().map(|s| s.clip.end_ms-s.clip.start_ms).sum::<u32>()}),
-    ))
+    assets::revalidate(state, user, &binding).await?;
+    let source_duration_ms = shots.iter().map(|s| s.clip.end_ms - s.clip.start_ms).sum();
+    Ok(PlanResponse {
+        brief: request.brief,
+        search_text: request.search_text,
+        target_seconds: request.target_seconds,
+        provider: result.provider,
+        model: result.model,
+        basis: "raw-transcript".into(),
+        shots,
+        gaps,
+        source_duration_ms,
+    })
 }
 
 #[cfg(test)]

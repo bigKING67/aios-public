@@ -212,8 +212,8 @@ export function runAiosApiContractBehaviorFixtures({
   );
   assertEqual(
     document['x-aios-contract'].typedOperationCount,
-    87,
-    'typed operation count should include reports and sample inventory caller seams',
+    107,
+    'typed operation count should include reports, sample inventory and AI studio remix edits',
   );
   assertEqual(
     document.paths['/v2/sample-inventory/samples'].get
@@ -292,6 +292,89 @@ export function runAiosApiContractBehaviorFixtures({
     !('content' in document.paths['/v2/dashboard/notes/{id}'].delete.responses[204]),
     'dashboard note deletion should expose an empty 204 success response',
   );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/segments:confirm'].post.responses[409]
+      .content['application/json'].schema.$ref,
+    '#/components/schemas/ContentSegmentConflictResponse',
+    'AI studio segment writes should declare the structured 409 conflict body',
+  );
+  assertTrue(
+    !('409' in document.paths['/v2/marketing/content-assets/studio/segments'].get.responses),
+    'operations without a conflict override should not gain a 409 response',
+  );
+  assertTrue(
+    document.paths['/v2/marketing/content-assets/studio/segments'].get.parameters
+      .some((parameter) => parameter.name === 'origin'),
+    'AI studio segment listing should expose the server-side origin filter',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/segment-suggestions'].post
+      .responses[200].content['application/json'].schema.$ref,
+    '#/components/schemas/CreateSegmentSuggestionsResponse',
+    'AI studio segment suggestion creation should expose its Rust-derived response schema',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/remix-batches'].post.responses[409]
+      .content['application/json'].schema.$ref,
+    '#/components/schemas/ContentSegmentConflictResponse',
+    'AI studio remix batch creation should declare the structured 409 conflict body',
+  );
+  assertTrue(
+    !('409' in document.paths['/v2/marketing/content-assets/studio/remix-batches:preview'].post.responses),
+    'read-only remix preview should not declare a conflict response',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel'].post
+      .responses[200].content['application/json'].schema.$ref,
+    '#/components/schemas/RemixBatchDetail',
+    'AI studio remix batch cancel should return the batch detail',
+  );
+  for (const [suffix, request, response] of [
+    ['remix-edits', 'CreateRemixEditRequest', 'RemixBatchDetail'],
+    ['remix-edits:check', 'RemixEditCheckRequest', 'RemixEditCheckResponse'],
+  ]) {
+    const operation = document.paths[`/v2/marketing/content-assets/studio/${suffix}`].post;
+    assertEqual(
+      operation.requestBody.content['application/json'].schema.$ref,
+      `#/components/schemas/${request}`,
+      `${suffix} should expose its Rust-derived request`,
+    );
+    assertEqual(
+      operation.responses[200].content['application/json'].schema.$ref,
+      `#/components/schemas/${response}`,
+      `${suffix} should expose its Rust-derived success response`,
+    );
+    assertEqual(
+      operation.responses[409].content['application/json'].schema.$ref,
+      '#/components/schemas/ContentSegmentConflictResponse',
+      `${suffix} should preserve structured source/idempotency conflicts`,
+    );
+    assertEqual(document.components.schemas[request].additionalProperties, false, `${request} should reject unknown fields`);
+    assertEqual(
+      document.components.schemas[request].properties.clips.items.$ref,
+      '#/components/schemas/RemixEditClip',
+      `${request} should retain typed ordered clip inputs`,
+    );
+  }
+  assertDeepEqual(
+    document.components.schemas.RemixEditClip.required,
+    ['segmentId', 'startMs', 'endMs'],
+    'remix edit clips should require identity and both interval bounds',
+  );
+  assertEqual(document.components.schemas.RemixEditClip.additionalProperties, false, 'remix edit clips should reject unknown fields');
+  assertDeepEqual(
+    document.components.schemas.CreateRemixEditRequest.required,
+    ['idempotencyKey', 'presetKey', 'presetVersion', 'clips'],
+    'remix edit creation should require idempotency and preset while leaving allowDuplicate optional',
+  );
+  assertEqual(document.components.schemas.CreateRemixEditRequest.properties.allowDuplicate.type, 'boolean', 'allowDuplicate should remain boolean');
+  for (const field of ['exact', 'similar']) {
+    assertEqual(
+      document.components.schemas.RemixEditCheckResponse.properties[field].items.$ref,
+      '#/components/schemas/RemixEditMatch',
+      `duplicate check ${field} matches should retain their typed response`,
+    );
+  }
   assertDeepEqual(
     document.paths['/v2/reports'].get.parameters.map((parameter) => parameter.name),
     ['report_type', 'limit', 'offset'],

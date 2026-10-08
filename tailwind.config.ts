@@ -209,9 +209,6 @@ const config: Config = {
       },
     },
   },
-  corePlugins: {
-    preflight: true,
-  },
   plugins: [
     plugin(function ({ addBase, addComponents }) {
       // 基础样式 - 与 design-tokens.css 对齐

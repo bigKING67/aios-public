@@ -31,7 +31,7 @@ export {
   REQUIRED_QUALITY_WORKFLOW_REMOTE_CACHE_ENV,
 } from './quality-workflow-contract-core.mjs';
 
-export const REQUIRED_FULL_LINT_SCRIPT = 'eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer --cache --cache-location .cache/eslint/full/ --cache-strategy content';
+export const REQUIRED_FULL_LINT_SCRIPT = 'eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer etl/groland_postgres/tests/content_production/browser_candidate_fixture.mjs etl/groland_postgres/tests/content_production/browser_candidate_fixture.tsx --cache --cache-location .cache/eslint/full/ --cache-strategy content';
 export const LINTABLE_SOURCE_FILE_EXTENSIONS = Object.freeze(['cjs', 'js', 'jsx', 'mjs', 'ts', 'tsx']);
 export const LINTABLE_SOURCE_FILE_PATTERN = new RegExp(`\\.(?:${LINTABLE_SOURCE_FILE_EXTENSIONS.join('|')})$`, 'u');
 export const FULL_LINT_SURFACE_PATTERNS = Object.freeze([
@@ -43,6 +43,7 @@ export const FULL_LINT_SURFACE_PATTERNS = Object.freeze([
   /^backend-rust\/scripts\//u,
   /^scripts\//u,
   /^docker\/content-production\/renderer\//u,
+  /^etl\/groland_postgres\/tests\/content_production\/browser_candidate_fixture\.(?:mjs|tsx)$/u,
   /^tailwind\.config\.ts$/u,
   /^eslint\.config\.mjs$/u,
   /^postcss\.config\.js$/u,

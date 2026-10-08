@@ -101,7 +101,7 @@ function fixtureScripts(overrides = {}) {
     ...QUALITY_ENTRYPOINT_SCRIPTS,
     ...QUALITY_RUNNER_SLICE_PACKAGE_SCRIPTS,
     'verify:quality-runner': QUALITY_RUNNER_BEHAVIOR_COMMAND,
-    lint: 'eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer --cache --cache-location .cache/eslint/full/ --cache-strategy content',
+    lint: 'eslint apps/web-vite/src apps/web-vite/vite.config.ts apps/web-vite/vitest.config.ts apps/web-vite/vitest.coverage.config.ts .pi/extensions/trellis/index.ts tailwind.config.ts eslint.config.mjs postcss.config.js scripts backend-rust/scripts docker/content-production/renderer etl/groland_postgres/tests/content_production/browser_candidate_fixture.mjs etl/groland_postgres/tests/content_production/browser_candidate_fixture.tsx --cache --cache-location .cache/eslint/full/ --cache-strategy content',
     'lint:scripts': 'eslint scripts eslint.config.mjs backend-rust/scripts --cache --cache-location .cache/eslint/scripts/ --cache-strategy content',
     build: 'npm run build:vite',
     'build:vite': 'vite build --config apps/web-vite/vite.config.ts && node scripts/build/write-frontend-build-manifest.mjs',

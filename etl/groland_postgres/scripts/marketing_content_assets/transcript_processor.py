@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 import uuid
 from datetime import datetime, timezone
@@ -18,6 +19,7 @@ from .asr_client import (
   transcript_excerpt,
   word_count,
 )
+from .seed_asr import SeedAsrClient, prepare_seed_input, reserve_submission
 from .repository import connect_pg
 from .tos_storage import TosStorageClient, TosStorageConfig, build_object_key
 from .worker_runtime import classify_processing_error as _classify_processing_error
@@ -63,6 +65,26 @@ def enqueue_transcript_jobs(
   }
 
 
+def transcript_client_for_job(job):
+  if _job_metadata(job).get("caption_required") is True or os.getenv("CONTENT_ASSET_TRANSCRIPT_CAPTIONS") == "true":
+    revision_calls = int(os.getenv("AIOS_CAPTION_REVISION_CALLS", "0"))
+    if not 0 <= revision_calls <= 2:
+      raise ValueError("AIOS_CAPTION_REVISION_CALLS must be 0..2")
+    mode = os.getenv("AIOS_CAPTION_OUTPUT_MODE", "boundaries")
+    repair_calls = int(os.getenv("AIOS_CAPTION_REPAIR_CALLS", "0"))
+    if mode == "boundaries" and repair_calls:
+      raise ValueError("boundary mode does not support text layout repair")
+    if not 0 <= repair_calls <= 2:
+      raise ValueError("AIOS_CAPTION_REPAIR_CALLS must be 0..2")
+    # Validate subtitle configuration before spending on ASR, without an API call.
+    from content_production.semantic_captions import chat_completion_callback
+    chat_completion_callback(base_url=os.getenv("AIOS_CAPTION_BASE_URL", ""),
+      api_key=os.getenv("AIOS_CAPTION_API_KEY", ""), model=os.getenv("AIOS_CAPTION_MODEL", ""), protocol="responses", output_mode=mode)
+  if _job_metadata(job).get("caption_required") is True or os.getenv("CONTENT_ASSET_TRANSCRIPT_PROVIDER", "ark_video") == "seed_asr":
+    return SeedAsrClient(os.getenv("DOUBAO_ASR_API_KEY", ""))
+  return ArkVideoTranscriptClient(TranscriptConfig.from_env())
+
+
 def process_content_asset_transcript_jobs(limit: int = 10, temp_root: Optional[Path] = None) -> Dict[str, int]:
   stats = {
     "claimed": 0,
@@ -71,7 +93,6 @@ def process_content_asset_transcript_jobs(limit: int = 10, temp_root: Optional[P
     "empty": 0,
   }
   storage = TosStorageClient(TosStorageConfig.from_env())
-  client = ArkVideoTranscriptClient(TranscriptConfig.from_env())
   signed_url_ttl = _env_int("CONTENT_ASSET_TRANSCRIPT_SIGNED_URL_TTL_SECONDS", 3600)
   url_max_bytes = _env_int("CONTENT_ASSET_TRANSCRIPT_URL_MAX_BYTES", 50_000_000)
   proxy_target_bytes = _env_int("CONTENT_ASSET_TRANSCRIPT_PROXY_TARGET_BYTES", 45_000_000)
@@ -86,6 +107,7 @@ def process_content_asset_transcript_jobs(limit: int = 10, temp_root: Optional[P
         break
       stats["claimed"] += 1
       try:
+        client = transcript_client_for_job(job)
         _process_transcript_job(
           storage=storage,
           client=client,
@@ -236,6 +258,7 @@ def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional
         asset.bucket,
         asset.raw_object_key,
         asset.preview_object_key,
+        asset.raw_sha256,
         asset.file_ext,
         asset.mime_type,
         asset.duration_seconds,
@@ -268,7 +291,7 @@ def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional
 def _process_transcript_job(
   *,
   storage: TosStorageClient,
-  client: ArkVideoTranscriptClient,
+  client: ArkVideoTranscriptClient | SeedAsrClient,
   job: dict[str, Any],
   work_dir: Path,
   signed_url_ttl: int,
@@ -279,34 +302,56 @@ def _process_transcript_job(
   input_object_key, input_role = _resolve_transcript_input(job, transcript_source)
   update_stage = _stage_updater(job)
   update_stage("preparing_input", "准备脚本输入", 14, {"inputRole": input_role})
-  video_input = prepare_video_model_input(
-    storage=storage,
-    job=job,
-    work_dir=work_dir,
-    input_role=input_role,
-    input_object_key=input_object_key,
-    signed_url_ttl=signed_url_ttl,
-    url_max_bytes=url_max_bytes,
-    proxy_target_bytes=proxy_target_bytes,
-    proxy_created_by="content-assets-transcript-worker",
-    on_stage=update_stage,
-  )
-  update_stage(
-    "calling_model",
-    "调用模型生成脚本",
-    58,
-    {"model": client.config.model, "modelInputRole": video_input["model_input_role"]},
-  )
-  result = client.transcribe_video(
-    video_input["video_url"],
-    asset_context=_asset_context(
-      job,
+  if isinstance(client, SeedAsrClient):
+    if input_role != "raw":
+      raise RuntimeError("逐字 ASR 必须使用原片")
+    audio, duration_ms, _source_hash = prepare_seed_input(storage, job, work_dir)
+    with connect_pg() as conn:
+      request_id = reserve_submission(conn, job)
+    update_stage("calling_model", "调用语音识别", 58, {"model": client.config.model})
+    result = client.transcribe(audio, request_id, duration_ms)
+    if _job_metadata(job).get("caption_required") is True or os.getenv("CONTENT_ASSET_TRANSCRIPT_CAPTIONS") == "true":
+      from .transcript_captions import prepare
+      try:
+        result.raw_response["captionPlan"] = prepare(result, job, duration_ms,
+          repair_calls=int(os.getenv("AIOS_CAPTION_REPAIR_CALLS", "0")),
+          revision_calls=int(os.getenv("AIOS_CAPTION_REVISION_CALLS", "0")),
+          output_mode=os.getenv("AIOS_CAPTION_OUTPUT_MODE", "boundaries"))
+      except Exception:
+        # Preserve successful ASR even if caption configuration/model/validation fails.
+        # Do not retain provider messages or silently claim captions were generated.
+        result.raw_response["captionError"] = "caption_preparation_failed"
+    video_input = {"model_input_role": "raw", "model_input_object_key": input_object_key,
+                   "strategy": "seed_asr_original_audio", "source_size_bytes": job.get("file_size_bytes")}
+  else:
+    video_input = prepare_video_model_input(
+      storage=storage,
+      job=job,
+      work_dir=work_dir,
       input_role=input_role,
       input_object_key=input_object_key,
-      model_input_role=str(video_input["model_input_role"]),
-      model_input_object_key=str(video_input["model_input_object_key"]),
-    ),
-  )
+      signed_url_ttl=signed_url_ttl,
+      url_max_bytes=url_max_bytes,
+      proxy_target_bytes=proxy_target_bytes,
+      proxy_created_by="content-assets-transcript-worker",
+      on_stage=update_stage,
+    )
+    update_stage(
+      "calling_model",
+      "调用模型生成脚本",
+      58,
+      {"model": client.config.model, "modelInputRole": video_input["model_input_role"]},
+    )
+    result = client.transcribe_video(
+      video_input["video_url"],
+      asset_context=_asset_context(
+        job,
+        input_role=input_role,
+        input_object_key=input_object_key,
+        model_input_role=str(video_input["model_input_role"]),
+        model_input_object_key=str(video_input["model_input_object_key"]),
+      ),
+    )
   update_stage("parsing_result", "解析脚本结果", 80, {"responseId": result.response_id})
   if not result.script_text:
     raise RuntimeError("视频脚本结果缺少 script_text")
@@ -333,6 +378,10 @@ def _process_transcript_job(
     "scriptText": result.script_text,
     "srtText": result.srt_text,
     "segments": result.segments,
+    "captionPlan": result.raw_response.get("captionPlan"),
+    "captionError": result.raw_response.get("captionError"),
+    "wordTiming": result.raw_response.get("wordTiming"),
+    "sourceSha256": job.get("raw_sha256") if result.provider == "seed_asr" else None,
     "confidence": result.confidence,
     "usage": result.usage,
     "responseId": result.response_id,
@@ -390,6 +439,10 @@ def _complete_transcript_job(
   object_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"content-asset-object:{asset_id}:transcript:{transcript_key}"))
   transcript_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"content-asset-transcript:{asset_id}:{transcript_key}"))
   metadata = {
+    "caption_plan": result.raw_response.get("captionPlan"),
+    "caption_error": result.raw_response.get("captionError"),
+    "word_timing": result.raw_response.get("wordTiming"),
+    "source_sha256": job.get("raw_sha256") if result.provider == "seed_asr" else None,
     "provider": result.provider,
     "model": result.model,
     "response_id": result.response_id,
@@ -406,6 +459,11 @@ def _complete_transcript_job(
     "processing_stage_updated_at": datetime.now(timezone.utc).isoformat(),
   }
   with conn.cursor() as cur:
+    if result.provider == "seed_asr":
+      cur.execute("SELECT raw_object_key, raw_sha256 FROM ads.marketing_content_assets WHERE asset_id = %s FOR UPDATE", (asset_id,))
+      current = cur.fetchone()
+      if not current or tuple(current) != (input_object_key, job.get("raw_sha256")):
+        raise RuntimeError("ASR 处理期间原片版本已变化，拒绝写回旧时间戳")
     cur.execute(
       """
       UPDATE ads.marketing_content_asset_objects

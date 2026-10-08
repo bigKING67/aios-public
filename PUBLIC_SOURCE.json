@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "03d87c5328dab486428cfa890037222f72f31382",
-  "policySha256": "62cc385b9fbe665669b63bbd39aaf3770ac180346d734e3c7c11551aea6c3093",
-  "fileCount": 3816,
-  "contentSha256": "bee9fc52a1ffdc00b8d19144a4b44881dd2fb8010c1b3ddb367b433e4625fb60",
+  "sourceCommit": "6b3df601391b8cf991671cb177d5380e9c3d1e20",
+  "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
+  "fileCount": 4252,
+  "contentSha256": "49ad85ddf90e6902aee2c5c05a7627947e7a68abbb51d680d024062b18834ada",
   "files": [
     {
       "path": ".dockerignore",
       "mode": "100644",
-      "size": 885,
-      "sha256": "1f59fde3d30871bd1ce10279c3aa5f4c2672ac507ae58f6fe4149a4c35f62e4d"
+      "size": 938,
+      "sha256": "a8dd89ffa31901e09be1041f89b2699d880765b2e19ad1f097b43586a7f1ffec"
     },
     {
       "path": ".env.example",
@@ -55,10 +55,16 @@
       "sha256": "3e0a2afa2817931467364e76f82272b3a40b18d6ecd445d9ca3a291d026d07ff"
     },
     {
+      "path": "apps/web-vite/CLAUDE.md",
+      "mode": "100644",
+      "size": 11,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+    },
+    {
       "path": "apps/web-vite/index.html",
       "mode": "100644",
-      "size": 513,
-      "sha256": "ebdc31efbd8051405b7d954def016efaeb715ca7a693c02db69e5b9255294df4"
+      "size": 509,
+      "sha256": "c49b1b46f76cb9f2ea254ec22d2c4acb571c6bf2a6e05d6b3dde88a65f24548d"
     },
     {
       "path": "apps/web-vite/src/App.tsx",
@@ -69,8 +75,8 @@
     {
       "path": "apps/web-vite/src/app/_components/home-page.tsx",
       "mode": "100644",
-      "size": 10373,
-      "sha256": "faf601f18c71c093159843c18b243a26346da42b03cfcfde14c92456c2e39de2"
+      "size": 10369,
+      "sha256": "29e055af5de19fefcb3293993363e6a9f9469b145aedbfbc693dd07cb0732a29"
     },
     {
       "path": "apps/web-vite/src/app/_shared/route-query.ts",
@@ -317,6 +323,678 @@
       "mode": "100644",
       "size": 17707,
       "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-assets-view.module.css",
+      "mode": "100644",
+      "size": 807,
+      "sha256": "fc9e786b35bd3654003af59d9acf48607caa5151b7e1e6cde68fe5c64b11a619"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-assets-view.tsx",
+      "mode": "100644",
+      "size": 12728,
+      "sha256": "02a5fe9b3625cf86958ab0b0b5d2bc2e0bbd0e957b826736fdc1700e69ff42c8"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-capability-gate.test.tsx",
+      "mode": "100644",
+      "size": 2522,
+      "sha256": "bcca42bb0b391066c9fd95c99625d0c6496accac38266d31847fd03479f39dc2"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-capability-gate.tsx",
+      "mode": "100644",
+      "size": 2468,
+      "sha256": "6daa67c7e0b9d222a3383c5d454a6f073d9b99327debd589fb197215252e5f53"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-home.test.tsx",
+      "mode": "100644",
+      "size": 7469,
+      "sha256": "62c478c2b69d4d915837e4fe4c8691a95e72cd0f2bd6f318b0cb2ba5325b20c3"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-home.tsx",
+      "mode": "100644",
+      "size": 10992,
+      "sha256": "128e24fc8171056e84525a9590f7cb6544191fb1f8e6ffda9c9a31d2a282c4ae"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav-config.tsx",
+      "mode": "100644",
+      "size": 1472,
+      "sha256": "8f388223c7c586e010c5312af9ac445b1530305dad7fccc9011971ef86d93749"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav.test.tsx",
+      "mode": "100644",
+      "size": 2757,
+      "sha256": "62d3e4bf304b9892f79c526a5b2e74ed453911b4ffb5ccf4ddb978e5f4fe62ca"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav.tsx",
+      "mode": "100644",
+      "size": 2450,
+      "sha256": "72a028138a4b194722d11aba6566de35a698d1f490b2a539481ce4bb9ef6b80a"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-placeholder.tsx",
+      "mode": "100644",
+      "size": 1846,
+      "sha256": "4934cd7d06258240c076d9b0b3c9a8fee41cb335823edf9b04db9aaf24b2d109"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx",
+      "mode": "100644",
+      "size": 2589,
+      "sha256": "2888797f82e58511ab97f2e4b0c3d46793a94f793f72d9c43e7a78645a5cae1c"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/annotation-pill-text.module.css",
+      "mode": "100644",
+      "size": 291,
+      "sha256": "db199baef57e683b32414fda3d43c7969e16e9fc9d7d4f6fb0b521d6759c7b0a"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/annotation-pill-text.tsx",
+      "mode": "100644",
+      "size": 641,
+      "sha256": "4c592469429bfc058fbaa31aa480c75d3da8b3707308a0c5b4589c80c754d687"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/editing-mode-tabs.tsx",
+      "mode": "100644",
+      "size": 963,
+      "sha256": "57091995ad3afc1b8fa0b1d05354314255f159f2d22c38b94f74ac6cdcb97943"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-form.tsx",
+      "mode": "100644",
+      "size": 12901,
+      "sha256": "7cade42627195972f2a5de92ec15541635918b805e68704297568df474669c7e"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-panel.test.tsx",
+      "mode": "100644",
+      "size": 14830,
+      "sha256": "8bb33faae19905b5ffd38fea48fe1fd036047a483021c65b1b92b4fb85a88c76"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-panel.tsx",
+      "mode": "100644",
+      "size": 1958,
+      "sha256": "b9d7e0ffb2cfc578ddb853fa082c8879bde5671e8df5ed1e5f5aee38458e69f2"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-preview.tsx",
+      "mode": "100644",
+      "size": 4466,
+      "sha256": "218b1bc3be36e4509825e95113ad3921931ef581c698269c5f41b6def87d7e64"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-structure.tsx",
+      "mode": "100644",
+      "size": 4561,
+      "sha256": "eb3af460d95133bbf5e9254cc25861ff6a2d1f137c743f02a1876cea86ae0e91"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-batch-detail.tsx",
+      "mode": "100644",
+      "size": 10693,
+      "sha256": "3fdd00745cd10cd5d75fbc4d20aba4a9a77d6b49975e3b2b3d8545d8592d451d"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-candidates.tsx",
+      "mode": "100644",
+      "size": 7441,
+      "sha256": "42d00d1a94bab3abccb2f70ce5e64f1813621218e860e3a7d529cded6c48b7b4"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-output-player.tsx",
+      "mode": "100644",
+      "size": 2038,
+      "sha256": "7b91012e5306988fc924e0dd9a1a490c6f76e721f2c030a2b6b329dfc356915b"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs-view.test.tsx",
+      "mode": "100644",
+      "size": 16526,
+      "sha256": "b0299906c21309a8cd7004c397fa809dc7ca8395ddd0e44da3c77f06d3ca9c86"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs-view.tsx",
+      "mode": "100644",
+      "size": 8645,
+      "sha256": "562ffaa2b9398e5bf2db188978b7b1e55e6857e9d2d1bd278875b1a6ac131c51"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs.module.css",
+      "mode": "100644",
+      "size": 5014,
+      "sha256": "ad3bc207df658a3946b813106eaf6c5194aecc0a0539542fb2cb5041bfd695db"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-recent-batches.tsx",
+      "mode": "100644",
+      "size": 5237,
+      "sha256": "b68b7f692ca14cc3a241538330005a90eebef65358f466ab06f405d3858d97d1"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-reference-picker.module.css",
+      "mode": "100644",
+      "size": 2076,
+      "sha256": "fd4dd85d158b1379290ca657f0b360882ebf4fcec114b45519e0090339c47156"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-reference-picker.tsx",
+      "mode": "100644",
+      "size": 4658,
+      "sha256": "dc8bfb1af931576163349435c64c0829ff0f5f220850dd9341036d51300baf66"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix.module.css",
+      "mode": "100644",
+      "size": 8063,
+      "sha256": "e9371ababee760054ac77973987137f527601d8c1f574f4b12843aa896865870"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation-view.test.tsx",
+      "mode": "100644",
+      "size": 10599,
+      "sha256": "fe2827c691abe8673a23719f920b420e93a0cc58b5f881365417726f83addbb7"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation-view.tsx",
+      "mode": "100644",
+      "size": 12165,
+      "sha256": "476b2a0b71a79df1348029bebd1c94cbfa12196b1b09a2d618d042126d367b77"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation.module.css",
+      "mode": "100644",
+      "size": 9854,
+      "sha256": "2e83a5727503dc3a876fe58715e1378f2b2c7ff35e6232f9134e63f312dd9f1a"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-card.test.tsx",
+      "mode": "100644",
+      "size": 2442,
+      "sha256": "0a62094a7d36ee3e6fb1bfee1c8ced53dfb8d6b31b71298f1718c62943a99633"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-card.tsx",
+      "mode": "100644",
+      "size": 7300,
+      "sha256": "ea98a6234c5001cb2094aacf16e8b5188107d21accd6e0d493a94a20bd4b00dc"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-create-form.tsx",
+      "mode": "100644",
+      "size": 5323,
+      "sha256": "6c1e0168f8eae40c91240aeea71180561d3148f9dd80e55cf22f16499fef52db"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-edit-modal.tsx",
+      "mode": "100644",
+      "size": 4465,
+      "sha256": "cea220ad91c041aaa145aac1814f1bb22ef133367cc0d85730918c364458f353"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-forms.test.tsx",
+      "mode": "100644",
+      "size": 3538,
+      "sha256": "ec626c961eb563b919557e94b097e7eeca9130149763a5c829d6c8e3b1b907df"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-label-strip.tsx",
+      "mode": "100644",
+      "size": 4044,
+      "sha256": "d5fce560ec00f23054418ef3b99a0268e2a5b251154d6de4d163f33f2d01fb3b"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library-view.tsx",
+      "mode": "100644",
+      "size": 16323,
+      "sha256": "27a483597ff4ab3aecfc082a69e17304ef2b85ceed23f16a607088ef69ea86d3"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library.module.css",
+      "mode": "100644",
+      "size": 6534,
+      "sha256": "80d23be0cd392d31e200ec4b6615e37d0250a2a01c3013d3ba39cacd103a6803"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-source-player.tsx",
+      "mode": "100644",
+      "size": 4562,
+      "sha256": "449677a11ab5abf1da459fb996979bb0a6649d34220ed9417afc46f55f3c6167"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-panel.test.tsx",
+      "mode": "100644",
+      "size": 13017,
+      "sha256": "9d84f25304f41e4559b6016b5a10559d40d00722c0bb1e48cd4f8918cffdc967"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-panel.tsx",
+      "mode": "100644",
+      "size": 1840,
+      "sha256": "4ae927fc1aeb5941cc46ebfb13d213b6d35243cb28d5d10a542c549008292659"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-workspace.tsx",
+      "mode": "100644",
+      "size": 12921,
+      "sha256": "7a8d222f719202064472297340888e5573ff11819a8f2ccbcd16ed5b7e381ea7"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest.module.css",
+      "mode": "100644",
+      "size": 4272,
+      "sha256": "e54dc66a33ac523e639d2fa306ce611fa6bc5d50ec6ff24eead4837c4edb646a"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-table.test.tsx",
+      "mode": "100644",
+      "size": 2743,
+      "sha256": "a9f8a133ea64a5fac4d0f62a2093a7f592eec4aba019a57001b470a801fad1ff"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-table.tsx",
+      "mode": "100644",
+      "size": 7301,
+      "sha256": "2012cf043e100e04cb1b13009ab69e695bb22baf1232f83931cf27022769d4e5"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-timeline.test.tsx",
+      "mode": "100644",
+      "size": 2844,
+      "sha256": "4528f65b0d69d745694b7d4bdd67d58522ba4bc2580e95b3e97c48f56a3ed9ec"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-timeline.tsx",
+      "mode": "100644",
+      "size": 7911,
+      "sha256": "a79bed6f55688499f89cd8f41e243bd15f7c28beccfe5b32027dc1ce680c59be"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segments-workspace.tsx",
+      "mode": "100644",
+      "size": 2912,
+      "sha256": "1de531af2abcb2ebba5492c51437c33394a8131d0640073f4082dd63316415ca"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-launch.tsx",
+      "mode": "100644",
+      "size": 6714,
+      "sha256": "48b07a449147248fb9b878a13137d0bb00fc0c72c2c835f229704ec39fb43186"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-pickers.tsx",
+      "mode": "100644",
+      "size": 12158,
+      "sha256": "cb4483ba4a9e4f6f5a5cda913a5d0f05e0757d482f0a9289a402d69183b24eaf"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-timeline.tsx",
+      "mode": "100644",
+      "size": 9036,
+      "sha256": "302b965d687cbec6d87b71d761436ef0ab8290967b40857cbd5a2414042cd273"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-workbench.test.tsx",
+      "mode": "100644",
+      "size": 11544,
+      "sha256": "ba903cb82fe9ad3da33319cfd0992f4705ab629a5b21bae7d9127256359f1037"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-workbench.tsx",
+      "mode": "100644",
+      "size": 15223,
+      "sha256": "78638ef11a2ea88d3a613aee773fdd39c32eb3f9f3544142574be20876c80e83"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit.module.css",
+      "mode": "100644",
+      "size": 8701,
+      "sha256": "062665efdc79af709f977eb520d7f36ebc6e2c33674c55f1a313a7cf658c6d80"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/studio-upload-modal.module.css",
+      "mode": "100644",
+      "size": 1285,
+      "sha256": "52328ffd37702f4f7ad89703cb8e4c78cd5da0e92bf83a241986c7c561db45c9"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/studio-upload-modal.test.tsx",
+      "mode": "100644",
+      "size": 3023,
+      "sha256": "b4f54f10653aebf46d76e94c5fbad98d7207fe1fa9b4206de335df73adc0e4a8"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/studio-upload-modal.tsx",
+      "mode": "100644",
+      "size": 8630,
+      "sha256": "c21904ad911974ca0fed358fbd15a61d00a97c6e1f9f2bb18bc72486bf7c7a24"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/studio-workbench.module.css",
+      "mode": "100644",
+      "size": 3441,
+      "sha256": "7b5ce551edbe690b1bc5f7a77ebcc97df515b1f695466965599f56a17e9b85c3"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/suggestion-asset-picker.tsx",
+      "mode": "100644",
+      "size": 9073,
+      "sha256": "70530001f320242555e03f616950bc239e2fe97299985d3cfe5da61964e8f81f"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/suggestion-job-table.tsx",
+      "mode": "100644",
+      "size": 6268,
+      "sha256": "b414e812f402479063985e30b5760018f9f57a87a199152307902495193fd888"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/suggestion-label-picker.tsx",
+      "mode": "100644",
+      "size": 2635,
+      "sha256": "4895e24bee6d084e705b74dc48f5477413799fa62a79a6c07e8da0a8303c61d2"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-ai-studio-queries.ts",
+      "mode": "100644",
+      "size": 1092,
+      "sha256": "662065f40a60a8d341339885b4140af10e7b6129344a98084e8139d3fd4d2fee"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-asset-annotation-summaries.ts",
+      "mode": "100644",
+      "size": 849,
+      "sha256": "b50a738afaff09f1eedbc98815fdfc5e11e01fc25e3958fcc0e0bdce1ecf5463"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-range-playback.test.tsx",
+      "mode": "100644",
+      "size": 1779,
+      "sha256": "084ee9ed35f61c162b38c8a8b82a24786deb0f4b54ae38d232de2b3fd26eb3a7"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-range-playback.ts",
+      "mode": "100644",
+      "size": 2272,
+      "sha256": "6b6c2e1fec3f90df1a395a3ac35c6453be2dd79400d31b163fa15eabdacc1182"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-remix-batches.ts",
+      "mode": "100644",
+      "size": 8638,
+      "sha256": "e094756409e56eb6439cafcad6198f2288142bd3dbf53b3b7a664d5d718418ed"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-annotation.test.tsx",
+      "mode": "100644",
+      "size": 4582,
+      "sha256": "4201fe4c701bb63803a838b965f6dd089ff8aeef102e52889a1d0a52b77ccf54"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-annotation.ts",
+      "mode": "100644",
+      "size": 5786,
+      "sha256": "d3524269756606c4f3fd63fc1b069a97921e82d7b7c6b1a96f3271d5e99a6ffb"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-bulk-actions.ts",
+      "mode": "100644",
+      "size": 3321,
+      "sha256": "c4015243983a0e001fe51cc335feec1898b5e10c3bf9a4e1121db6ffabb8966b"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-suggestions.ts",
+      "mode": "100644",
+      "size": 2762,
+      "sha256": "944379a2c0942abe9349c1c09f60ce7bde6dfc75ac7f07e959082dd644ccb1ff"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/ai-studio-api.test.ts",
+      "mode": "100644",
+      "size": 3294,
+      "sha256": "9667ad3a83caf5200ea8823ee9df67800ee99bda576ae8aa1bbb33142139efcb"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/ai-studio-api.ts",
+      "mode": "100644",
+      "size": 7387,
+      "sha256": "685889e715db6e89b24fd4128094ff9efa718b6c15c1266244e894c8c930e70b"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/analysis-dimension.test.ts",
+      "mode": "100644",
+      "size": 1226,
+      "sha256": "36bd23acf4d871a760b82ce039bdabb6db066747e0aa0fc91f8fd932fb643176"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/analysis-dimension.ts",
+      "mode": "100644",
+      "size": 1842,
+      "sha256": "13968c8fa575b3f363066d8eb342cb49f08e8737f9f737655836255d778ee022"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/asset-annotation.test.ts",
+      "mode": "100644",
+      "size": 2129,
+      "sha256": "6d3e2496e8d9ddc503158a186de30085a41b9c166c326944cfc40e242ff2e960"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/asset-annotation.ts",
+      "mode": "100644",
+      "size": 1975,
+      "sha256": "e7ac034c150102c14e37fdbcaabdb9950628bbc28a8d083b6aab327538cff30c"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-api.ts",
+      "mode": "100644",
+      "size": 7581,
+      "sha256": "011f14f0606adc9e231bf83b3add35e2b108466c77a558ec2b93c75cc6ee5e08"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-edit.test.ts",
+      "mode": "100644",
+      "size": 5612,
+      "sha256": "ec93d0965691aaedca57338b18e04bd369f857472ca7e2f41438ba184598492d"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-edit.ts",
+      "mode": "100644",
+      "size": 9260,
+      "sha256": "73c58fc64af8647f941ced9d83739df91e0dc2bd900948ed53ec9d37d7f8c34d"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-form.test.ts",
+      "mode": "100644",
+      "size": 2556,
+      "sha256": "32fa016c8e3d41f38ff9b11e5a7c7e0bafd3d6f3d2f8da8f786a9cec73a4eb91"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-form.ts",
+      "mode": "100644",
+      "size": 6577,
+      "sha256": "3f142b623f47a5644b1adc0c98c2865e16919823f1b101763d6f12f03b71fd0f"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-routes.ts",
+      "mode": "100644",
+      "size": 1999,
+      "sha256": "af159ececd93864b63781e02362c9b1789987edf9c26b37aabc68c37bc45e40d"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-display.test.ts",
+      "mode": "100644",
+      "size": 3386,
+      "sha256": "480d41eddaf1b9136b88aac289643d94fa364924b4417fdbbb719b93eb882bd0"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-display.ts",
+      "mode": "100644",
+      "size": 4550,
+      "sha256": "ddd3a33ffab30d8923c6cc71fae0ca60e557578b88254dbc811c7bfed296854c"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-errors.test.ts",
+      "mode": "100644",
+      "size": 6420,
+      "sha256": "e582801e831982574be8df9c9aaba8fa0cde495c9e81002c336b1415bce67cf8"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-errors.ts",
+      "mode": "100644",
+      "size": 6676,
+      "sha256": "f980868cd7a625d87bf652ca084af68a7515cea33f44df75b44b7b8ece3fb0c0"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-form.test.ts",
+      "mode": "100644",
+      "size": 1990,
+      "sha256": "9e42a4b8d58e4339ad114b9b8ec5e1772a46f158801990992de2e7bb5afa9b0e"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-form.ts",
+      "mode": "100644",
+      "size": 3094,
+      "sha256": "c04b72632a2b93ec827e6daffb7fa11d37a5abd9e86ce38e7f524a5aeef877a0"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pills.test.ts",
+      "mode": "100644",
+      "size": 1542,
+      "sha256": "d3887cf4610b69aab7ebb7299e5a47191366135eeb8c6a0b4b038e50a9a73b51"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pills.ts",
+      "mode": "100644",
+      "size": 1160,
+      "sha256": "7db09bc2ce4b3b9a09da13570fedd8802ad2fde90af5c95c5ff130e76a48bab5"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pool.test.ts",
+      "mode": "100644",
+      "size": 2162,
+      "sha256": "7d4abe7fb12ccff196d1d303b6d04ac4ae51bb812020b01e303debfa60d3fc54"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pool.ts",
+      "mode": "100644",
+      "size": 2410,
+      "sha256": "1d66cd715e2b7d715d7df20b2df9cbd5316cc1fc6e3ad3a0fddc20d48f6ff7ed"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-routes.ts",
+      "mode": "100644",
+      "size": 399,
+      "sha256": "a7f747fb9561221671cae4c45d201addd2277fbe87427f503581d8d4fd27583f"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-suggestion-api.test.ts",
+      "mode": "100644",
+      "size": 3998,
+      "sha256": "8a41db93b344e5d1274cdaf1a5b13d4e97464e4073efa551305b4576c2b9e874"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-suggestion-api.ts",
+      "mode": "100644",
+      "size": 6731,
+      "sha256": "4da862a2d9d012a10fecf2068cca73182933a3bfb7310605b8d512887bc9443d"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-time.test.ts",
+      "mode": "100644",
+      "size": 2689,
+      "sha256": "1705508cc553090d83ae4617a661a5a890e53378ac19300375e53cf99b2a75dc"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-time.ts",
+      "mode": "100644",
+      "size": 4095,
+      "sha256": "e71d0562b69ef402d5ba0deddc57a0570d930d2e2738745a9832ef4cedbed85f"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/studio-overview.ts",
+      "mode": "100644",
+      "size": 5476,
+      "sha256": "a95e433cd1f47eb61a25ca0a630978ed0b560577de42060dd643160605848c27"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/studio-products.ts",
+      "mode": "100644",
+      "size": 523,
+      "sha256": "2c6d3a340cb5f8f8e3eb3042a83e2e67f986dd2b90b8d4cbf39b037afcfb577a"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_lib/studio-time.ts",
+      "mode": "100644",
+      "size": 390,
+      "sha256": "bfc4fa62384302395a4e72595cba78bcd844e9c0723e6f098d0e0efdf88fb4ca"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/ai-studio.module.css",
+      "mode": "100644",
+      "size": 10255,
+      "sha256": "6d757ba152c519af561c7384ff3c6818ccec00b2db8c5c745dc8c58536d052d2"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/analysis/page.tsx",
+      "mode": "100644",
+      "size": 677,
+      "sha256": "2c16140009e12266b52464ba2af9181a9daf0a1e017a08b4bff9eb2e9926c281"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/assets/page.tsx",
+      "mode": "100644",
+      "size": 824,
+      "sha256": "e3ffad90774f7a97f4ffd9dbf5e0054dee7117388a879a361cb981a2d3668d11"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/editing/[runId]/page.tsx",
+      "mode": "100644",
+      "size": 904,
+      "sha256": "ff763c9f69d0388c05900abafd10094d79e3bac55c4cace74cc5445010b96b5b"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/editing/editing-run-redirect.test.tsx",
+      "mode": "100644",
+      "size": 1677,
+      "sha256": "e39e18a86f1463bd75c0481f9bb1a0686e4b3f8b575ec0fa15a04dd7125b15e1"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/editing/page.tsx",
+      "mode": "100644",
+      "size": 3014,
+      "sha256": "ac5d4e2a361616db0175ea0533ce794ea14a2d54144b5541f86033e4bdfa2e26"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/outputs/page.tsx",
+      "mode": "100644",
+      "size": 646,
+      "sha256": "3a01ec42daa77ab64db7001272524cbb1dce7ccf6fc39e2787c947ee5f31b477"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/page.tsx",
+      "mode": "100644",
+      "size": 267,
+      "sha256": "18f885c451f05c6444e49012c6d6830b0a43e2d34dcce991d76302164ba2b56e"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/segments/page.tsx",
+      "mode": "100644",
+      "size": 779,
+      "sha256": "bb2d6b70520d58b001fc9845b1832b3c7165854b2aa5aa4c9cb2c7d465ff1801"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/trends/page.tsx",
+      "mode": "100644",
+      "size": 758,
+      "sha256": "de194a0f56256852f9445885f42eab2fdec1c4974e0e61a0a6a7e170c5eb8b70"
     },
     {
       "path": "apps/web-vite/src/app/content/live-center/_components/live-center-analysis-panel.tsx",
@@ -3249,14 +3927,14 @@
     {
       "path": "apps/web-vite/src/app/docs/docs-navigation-panels.module.css",
       "mode": "100644",
-      "size": 4154,
-      "sha256": "3bea21a216a34c0da17685157607bbdad4ea8e2bc20bccf81d94b89bcac2d250"
+      "size": 4988,
+      "sha256": "279afcf8267b66e6956383d91844b77ebfd6367223c59efe9ebb9a7ea9353edc"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-navigation-panels.tsx",
       "mode": "100644",
-      "size": 3834,
-      "sha256": "928c4f43fc897256be0d301dd784abf06da0f45aa90f2267634dca7457d5a144"
+      "size": 4990,
+      "sha256": "d481273d0a3668c1b80760a66a5e79912678e56c8a7ffe489b65e0602aa98432"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-scroll-activity.ts",
@@ -3267,44 +3945,62 @@
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace-contracts.ts",
       "mode": "100644",
-      "size": 1239,
-      "sha256": "ce2bd445900779dfcda1580b980054f0b9c8e7cd52b069f53a56518646ceeca9"
+      "size": 1749,
+      "sha256": "dd5327ede13f52a44d7b7f1f76a197b38777d917489700dbbe51c172fe743bf4"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace-data.ts",
       "mode": "100644",
-      "size": 21070,
-      "sha256": "fde47703871459e9a5ba043531aaaef1cab80d11bc01bacaab7d1ee9d5c2e74a"
+      "size": 20066,
+      "sha256": "c7864b04ce9f32e6f77942bd63b8a7a5b925ba023584a3d16278e187c20a9b45"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace-loader.test.ts",
       "mode": "100644",
-      "size": 2192,
-      "sha256": "8ad2a185091f86f4662288d10641db008d04a33534786979a54c24409c7b6dd5"
+      "size": 3848,
+      "sha256": "cc212ef813fb91b1f4140c007dca7805b636cef14a0c8aa9e01c8ed0b3acd80b"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace-loader.ts",
       "mode": "100644",
-      "size": 7212,
-      "sha256": "807ac16f704aae8de3c6abff4c9718471b7f67979ef6db9f282fc56013eb7c9b"
+      "size": 8343,
+      "sha256": "a5147cdae617761b7a6bd205d568be6bc9905773bd728e9fec9b50fab8d48c1f"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace-model.ts",
       "mode": "100644",
-      "size": 1494,
-      "sha256": "05db64bc65c3ccff0461ae3eded3572dc9980008bb30373c4acee0e2d64aa98d"
+      "size": 1491,
+      "sha256": "9fc9190aa739f5ede3d59dcce1aa7ee803527fc731ff494a9ae48ddf66228228"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs-workspace.tsx",
       "mode": "100644",
-      "size": 10279,
-      "sha256": "e9de8af76e485f15b394b4f1d2499120de2d375e0552e6f231a6cc4789a7e411"
+      "size": 11442,
+      "sha256": "604a27e5c24764224c0e2448638e1f78c6bb111971c48a450c7b22a672c683ae"
     },
     {
       "path": "apps/web-vite/src/app/docs/docs.module.css",
       "mode": "100644",
-      "size": 10154,
-      "sha256": "8c360b0d5a7ea60e614db496a3c3f3c1af8f6e1ac6d51ab2bda99ecab6d80a2f"
+      "size": 10978,
+      "sha256": "1194f360c5195ce03f6de42e4a47d336d67beb32c961e9971b998114e1f6186b"
+    },
+    {
+      "path": "apps/web-vite/src/app/docs/guide/ai-studio.ts",
+      "mode": "100644",
+      "size": 8835,
+      "sha256": "7e358c23df4a244af9edc9ba4ddc054045714240ddad8fee2c38da2700a40cb4"
+    },
+    {
+      "path": "apps/web-vite/src/app/docs/guide/dashboard-reports.ts",
+      "mode": "100644",
+      "size": 2268,
+      "sha256": "6c9989161fd6d6d5afbd26483c769b9dcd6bcc98741c0d74dd10c648af4333c6"
+    },
+    {
+      "path": "apps/web-vite/src/app/docs/guide/dataops.ts",
+      "mode": "100644",
+      "size": 1046,
+      "sha256": "e68d98e57e5178c1de6959bd56fc6d112a31fc4ad25960eaba55099ec5526af5"
     },
     {
       "path": "apps/web-vite/src/app/docs/page.tsx",
@@ -3339,8 +4035,8 @@
     {
       "path": "apps/web-vite/src/app/login/_components/login-page-client.tsx",
       "mode": "100644",
-      "size": 5166,
-      "sha256": "d73e4931c5ef537873d71b3ca6c5e535533211052d87493164d67eda1797116c"
+      "size": 5162,
+      "sha256": "3017cefaf5520972a92f00a8734e1a16e58689b21e0a80510c3d62254c27a380"
     },
     {
       "path": "apps/web-vite/src/app/login/login.module.css",
@@ -3471,26 +4167,26 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-asset-grid-card.tsx",
       "mode": "100644",
-      "size": 7262,
-      "sha256": "fe7b63c771ed46266549d66f37f70ab62821ad46323f912046fe5cd89cc02613"
+      "size": 7649,
+      "sha256": "b1909fe52b0985f2d287124063ce509427d291d90a342365d96fb3b3a6e64808"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-asset-intelligence.ts",
       "mode": "100644",
-      "size": 2391,
-      "sha256": "92526b9babab086ab19707cf086dbb0cf206885c708a4dab9d4e05a377ae0b2f"
+      "size": 2468,
+      "sha256": "83bc90b5e39cdc5061d02f36e0c2bba0aacd7a582b56e27485b18bf533cfbb20"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-asset-list.module.css",
       "mode": "100644",
-      "size": 12078,
-      "sha256": "e5c61ee22b158323f3bd159070c51e6f7acad97c8e3e79c8c7f8186cba955347"
+      "size": 12480,
+      "sha256": "c852fd1238fd091672646ceb246ec60a329a59618b69b79a1e50c082b196c329"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-asset-list.tsx",
       "mode": "100644",
-      "size": 6765,
-      "sha256": "c5b3e7a2da6d5177f409c91d48440024440970541edf60fd33302ae1d7d568a0"
+      "size": 6976,
+      "sha256": "455a8da54068bd6e01b63c6f22b7656b5727348a3b240fcc1f32e05069aee663"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-client.tsx",
@@ -3501,8 +4197,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-console.module.css",
       "mode": "100644",
-      "size": 12523,
-      "sha256": "8f9f1c51c8c2f895e419e609defd15e36d927aa7e6b6633ccf6573ff754bc3c6"
+      "size": 12183,
+      "sha256": "46283348ee27b8956bea6f6bdcd72bd4b5a2f2414c32041be18f4d50e4d0ace0"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-controls.module.css",
@@ -3693,14 +4389,14 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-module-nav-config.tsx",
       "mode": "100644",
-      "size": 1839,
-      "sha256": "c3d415dbe6db5e7ebf95f6468c8244134482cbdbe305714032ae6f2de68de801"
+      "size": 2135,
+      "sha256": "68e0e1fcbab52327c43037130e6382f47518104cfec5e92feafc866bdadae5a9"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-module-nav.tsx",
       "mode": "100644",
-      "size": 2431,
-      "sha256": "8beeb40e143bebca43d04351242856e3878e8282dd65c42559f6231a36f1703b"
+      "size": 2642,
+      "sha256": "558ce2295b642034b01d032237469738d669749d949428ce927e5eff91dde2ff"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-module-readiness.ts",
@@ -3807,8 +4503,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-workspace-config.tsx",
       "mode": "100644",
-      "size": 9530,
-      "sha256": "e9f909e554054b2a98e0a65fd93bb3582e7e37329dfc293fa6dcfb49d7fe5bbf"
+      "size": 9500,
+      "sha256": "3f84e3e769528333d5db91fdb00c08b1f1b3264397ef9aea294950f2c88f6fc6"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-workspace-options.ts",
@@ -3825,14 +4521,86 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-workspace-panels.tsx",
       "mode": "100644",
-      "size": 12772,
-      "sha256": "ef6ae32158d26d0e1431e7a59669dce96ed8547c669518837a923f34a3108503"
+      "size": 12618,
+      "sha256": "046d53ea578cff290abc3f1362d91564dd17a248981c9f615efdfedd518192c2"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-workspace-types.ts",
       "mode": "100644",
       "size": 904,
       "sha256": "3787eb26cd3db5dc60c21f12d0606271b5e8514719aa2881bdb5d49ad11042fd"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-automatic-repair.test.tsx",
+      "mode": "100644",
+      "size": 2341,
+      "sha256": "f4d416de1b25d6caf840b6ceb87f1852e4f01b9662f2c9a1240ff86002e8cc9d"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-automatic-repair.tsx",
+      "mode": "100644",
+      "size": 2251,
+      "sha256": "0d4eb2682af32bcb792af99b6ae038443964db9343e4499c2446e4eedcb23397"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-caption-candidate.test.tsx",
+      "mode": "100644",
+      "size": 2048,
+      "sha256": "f5918366a475e5e454b28e8160953c59bb70db7fb57fa0eacd4b81b7c0f06d10"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-caption-candidate.tsx",
+      "mode": "100644",
+      "size": 2771,
+      "sha256": "046d900a42205f756d52de21570cf8c2a5c4f38a725d0d423785b4d6c5a1b567"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-detail.tsx",
+      "mode": "100644",
+      "size": 5324,
+      "sha256": "38ef5a946cf1141f788d8446042968d8723cd5d3e20a3df25ebd15f47cc5cac1"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-plan.tsx",
+      "mode": "100644",
+      "size": 5022,
+      "sha256": "ccfb651dce76a7e151cbbbbccff720ea16647964b9047ecb17ae3a779a8fc296"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-result.tsx",
+      "mode": "100644",
+      "size": 3475,
+      "sha256": "03dfd46b3748f5b028a805416573f8e954953e3029b1565fc5802c4967262409"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-selected-review.test.tsx",
+      "mode": "100644",
+      "size": 3558,
+      "sha256": "86337708b670ab6748870b156a54c7ce98938a403f442638d12bda1d8e77f9be"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-selected-review.tsx",
+      "mode": "100644",
+      "size": 2627,
+      "sha256": "0674d73d503f29ca5e9b7f542f4b2f7ef0c770fbcb51cac5547e31414120a97b"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing-workspace.tsx",
+      "mode": "100644",
+      "size": 3978,
+      "sha256": "7eab5632b8e34380b8f65728741f08a1132e6c1d42adae69ab6b75c25236872c"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing.module.css",
+      "mode": "100644",
+      "size": 3148,
+      "sha256": "0b724fb6daec84a6a5a19af083404e33b921ca63fda788616571b9e6a5e6556e"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-editing.test.tsx",
+      "mode": "100644",
+      "size": 11440,
+      "sha256": "8b9a2a59395573a4f661ebe2a950b9031d4dff5d453de43ea5ea1511ea29935b"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-production-catalogs.tsx",
@@ -3867,14 +4635,14 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-production-timeline.tsx",
       "mode": "100644",
-      "size": 3543,
-      "sha256": "cc9cf1ac7536c7d62de7d89490e4d9d0fe1d639f491f404048b20f803348e9de"
+      "size": 4024,
+      "sha256": "9fb1874155ad114ba8c55351ec46ed683f0f089be2b8d8ace5397723d28580fe"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-production-workbench.tsx",
       "mode": "100644",
-      "size": 10470,
-      "sha256": "caf85239970540d4e75d69aa300e54b9c0744c1a25cefb9f1e4464ff0dcec5b9"
+      "size": 10496,
+      "sha256": "fb51aae3396b97e9dcc898e71061219a0614e09721a1df5ec3a14f13dce03d23"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-production.module.css",
@@ -3885,14 +4653,20 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/use-content-assets-action-mutations.ts",
       "mode": "100644",
-      "size": 14993,
-      "sha256": "86e4ac54f1d283b8c827936ad6594cf178bd66fa9aab3bd98d225f78ec946dbe"
+      "size": 13515,
+      "sha256": "6c5976f0ce45ac59f40603e496110b40049ed58c75a7da167ca3375a81f76504"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/use-content-assets-client-state.ts",
       "mode": "100644",
       "size": 8500,
       "sha256": "1a9787e54c96f24bb3933f52583ec6d1563a86e7bcea15f68aa92d51533cc68a"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_components/use-content-editing.ts",
+      "mode": "100644",
+      "size": 3041,
+      "sha256": "6bc9a84f0aff9d20550e5541e5c42279902b3c191e05510f542c99bc62f17be3"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-ai-eligibility.ts",
@@ -3921,8 +4695,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-api.ts",
       "mode": "100644",
-      "size": 13594,
-      "sha256": "6ff4594915ccc6cec4bbb46c0a707d49991d87b9b544ee63347ec382b95146b6"
+      "size": 13833,
+      "sha256": "272ff315890f354e16808390e0d5037b1362b0a22daf4abfa40a3a8ac9fd1d95"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-display.ts",
@@ -3981,8 +4755,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-types.ts",
       "mode": "100644",
-      "size": 24986,
-      "sha256": "ede453249c7c361a6eda19665001a3352101e857d402e6e1926771b4d4c0de19"
+      "size": 25402,
+      "sha256": "83491b4e26494bcb0aacb16fcef10c562976f036211e8085982c580245c4ecb6"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-ui-helpers.ts",
@@ -3991,16 +4765,40 @@
       "sha256": "9e02d9860a88b35b65e5bf21e3b94a50ef86ee4ed58576d949d57577e6eafbd5"
     },
     {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-upload.ts",
+      "mode": "100644",
+      "size": 1819,
+      "sha256": "59b64a12b4836491fa256f727bdee3a1fd6b71eb316b540afd1b7fd4b97daab7"
+    },
+    {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-video-link-preview.ts",
       "mode": "100644",
       "size": 5975,
       "sha256": "c8c9bd2f6692627ad8706762f4763f03b6d229eed5c0cd56191a9cd0a6a82214"
     },
     {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-editing-api.test.ts",
+      "mode": "100644",
+      "size": 2814,
+      "sha256": "d6895657e38b5e3e1ce40fe52c3ed427ea5e0656a19d4f3f869c6d8dd4c9dd1f"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-editing-api.ts",
+      "mode": "100644",
+      "size": 4915,
+      "sha256": "7c2f410ca5e0f5f834e9771d10bb6762555b4abfc82a5722e07c8494f50318b8"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-editing-state.ts",
+      "mode": "100644",
+      "size": 3725,
+      "sha256": "c11c738a8d6c90f2d755710f89c0f44e842aeabe1f742715a5e569d92f9b9197"
+    },
+    {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-production-api.ts",
       "mode": "100644",
-      "size": 6791,
-      "sha256": "9a6fe1f1df8d4d12889e374a5b8dbd6ede04b19a03f2d07f64cb8611e3a9e692"
+      "size": 6861,
+      "sha256": "f5c5ef1e26e7d9eb97b679fd685a0d1f487ac9518ff22d2e6d24f450643fdd28"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-production-edit.test.ts",
@@ -4015,10 +4813,22 @@
       "sha256": "35bb2b42069ca4b7505deae7e92010467ecd8f36b701643ced80a50eac94f1d7"
     },
     {
+      "path": "apps/web-vite/src/app/marketing/content-assets/_lib/fixtures/caption-candidate-document.json",
+      "mode": "100644",
+      "size": 412,
+      "sha256": "871d7d054addda008e2800dd181af8128cbcf2acb45c6aa94dc49ff736955df0"
+    },
+    {
       "path": "apps/web-vite/src/app/marketing/content-assets/[assetId]/page.tsx",
       "mode": "100644",
       "size": 465,
       "sha256": "4b713f045381f93b4a9614a022671f31059b517dfc2b2f9c5de3dba5c7609fba"
+    },
+    {
+      "path": "apps/web-vite/src/app/marketing/content-assets/content-assets-ai-editing-migration.test.tsx",
+      "mode": "100644",
+      "size": 3093,
+      "sha256": "6ff569f4ad985a6b3be166e4d60d6a964591d8187c898b1e3fc30d790aa556e0"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/content-assets.module.css",
@@ -4029,8 +4839,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/page.tsx",
       "mode": "100644",
-      "size": 173,
-      "sha256": "2e22a236781735c347c0457a03832ee2b2c2ddb20340169fce3103714f8f78cd"
+      "size": 643,
+      "sha256": "14ae37f6e59e189ec8e79c57f65bbb6007947bbad2dd057760e4343323c970a2"
     },
     {
       "path": "apps/web-vite/src/app/marketing/creator-library/_components/creator-library-assign-bd-modal.tsx",
@@ -7885,6 +8695,12 @@
       "sha256": "10a7f350321d535be13a80baa8b4298d047edb12108622170e04ddfa79f6b9ed"
     },
     {
+      "path": "apps/web-vite/src/components/organisms/layout-navigation-model-ai-studio.test.tsx",
+      "mode": "100644",
+      "size": 2162,
+      "sha256": "0739ac98614c72b91eb675ccd64eea879adb83494fc9b2c46baf875ceb96c410"
+    },
+    {
       "path": "apps/web-vite/src/components/organisms/layout-navigation-model.test.tsx",
       "mode": "100644",
       "size": 1669,
@@ -7893,8 +8709,8 @@
     {
       "path": "apps/web-vite/src/components/organisms/layout-navigation-model.tsx",
       "mode": "100644",
-      "size": 9413,
-      "sha256": "3c1b0e2212e3174c3fed40fa057f20b34891202e1a7bf19f9bad5e66557158ab"
+      "size": 9759,
+      "sha256": "d07c91d294281fbe932214b62862306d9d0d9ab6127b331b3d9cedb6bb390959"
     },
     {
       "path": "apps/web-vite/src/components/organisms/layout-route-selection.test.ts",
@@ -7917,8 +8733,8 @@
     {
       "path": "apps/web-vite/src/components/organisms/layout.tsx",
       "mode": "100644",
-      "size": 4473,
-      "sha256": "57751e7b75e08251e56c81032fe5ee6c337aa7df125bd243acd4c57d8b7781f0"
+      "size": 4457,
+      "sha256": "bd77aa41754beb5ced823465030eacca9196986e63fe757e181a762695575005"
     },
     {
       "path": "apps/web-vite/src/components/organisms/line-chart-model.ts",
@@ -8047,6 +8863,18 @@
       "sha256": "949a0b75c6550b27ad31bd5ccfdb3683b34662c9914a99bb0bfa12802e49e18a"
     },
     {
+      "path": "apps/web-vite/src/components/rail-user-menu.module.css",
+      "mode": "100644",
+      "size": 1411,
+      "sha256": "41762bed08181dd9381dfee990ad50c6247fbd9ec17189c1b4d7d2e167f3ce5e"
+    },
+    {
+      "path": "apps/web-vite/src/components/rail-user-menu.tsx",
+      "mode": "100644",
+      "size": 1322,
+      "sha256": "3d59bc7617a4689c88ceefd58efb380fee64a7855b6b2fca9345c06b4c5b60fa"
+    },
+    {
       "path": "apps/web-vite/src/components/states/empty-state.tsx",
       "mode": "100644",
       "size": 601,
@@ -8071,6 +8899,12 @@
       "sha256": "5cfe1ef9185f3637d2c2677237325409553ab3024df9a54edc85d607d3df1a70"
     },
     {
+      "path": "apps/web-vite/src/components/user-menu-items.tsx",
+      "mode": "100644",
+      "size": 1695,
+      "sha256": "78c42c02a8dd8567539e7aa42fb5e5972302acfaf76617aa8587600353a1941b"
+    },
+    {
       "path": "apps/web-vite/src/components/user-menu.module.css",
       "mode": "100644",
       "size": 1888,
@@ -8079,8 +8913,8 @@
     {
       "path": "apps/web-vite/src/components/user-menu.tsx",
       "mode": "100644",
-      "size": 2353,
-      "sha256": "d91eebdc6325886fd43063aca1387436ac7ee3048e20019b8d49509252ff6588"
+      "size": 1381,
+      "sha256": "68fbae2927e840557bce255d5dd69de595ae41f88739b08a8c9d8e2250f32bd3"
     },
     {
       "path": "apps/web-vite/src/config/dataops-feishu-sync.ts",
@@ -8205,8 +9039,8 @@
     {
       "path": "apps/web-vite/src/generated/api/aios-v2.ts",
       "mode": "100644",
-      "size": 213631,
-      "sha256": "9cab7b2afdf60ea250b10ac8c5bcd2c8c073f546fa6938e1cd951cb1f7b92ace"
+      "size": 264915,
+      "sha256": "9afc5326bf95e8a0242bc916776d4c9cc4953957fdc5bcb70e9843dbfa087268"
     },
     {
       "path": "apps/web-vite/src/hooks/use-auth.ts",
@@ -8309,6 +9143,12 @@
       "mode": "100644",
       "size": 878,
       "sha256": "7bb9a5d2837de65595bf42d2a2c92213c341827c9986fca4475a1585fd0899f6"
+    },
+    {
+      "path": "apps/web-vite/src/lib/auth-navigation.ai-studio-access.test.ts",
+      "mode": "100644",
+      "size": 2035,
+      "sha256": "6e61ace6c9149f2a02ba54d80640fab8fef243f13f69194548488678484d4d4c"
     },
     {
       "path": "apps/web-vite/src/lib/auth-navigation.retired-agent.test.ts",
@@ -8415,8 +9255,8 @@
     {
       "path": "apps/web-vite/src/lib/generated-api-contract.ts",
       "mode": "100644",
-      "size": 28368,
-      "sha256": "0c4a840ed3575f73127e18a6b81ec9408149893461c20a398fc345d6f4b57612"
+      "size": 35986,
+      "sha256": "23cf3d9013e9ff353e344be077ecf7be8748c42b6c426b2bf496a52377d40b53"
     },
     {
       "path": "apps/web-vite/src/lib/list-payload.ts",
@@ -8511,14 +9351,14 @@
     {
       "path": "apps/web-vite/src/lib/route-policy-governance.ts",
       "mode": "100644",
-      "size": 5036,
-      "sha256": "83da88afb7b39ea64a500e5e6fa32f822c33b9fe5f1ac8d8c18938f839756c40"
+      "size": 6824,
+      "sha256": "26e7f79959ddd1290bfe3ed25adebf5efb8f8bca75ea2275b8b12c83cffc4baa"
     },
     {
       "path": "apps/web-vite/src/lib/route-policy-registry.ts",
       "mode": "100644",
-      "size": 8155,
-      "sha256": "48e57e72b19ec956aededb6d338cc3fab8072f9ba2d96118735803ffc562be27"
+      "size": 9642,
+      "sha256": "47574a6e680c7a460c19fa45623f8375c8888fb59af28f3949489e1294da0b66"
     },
     {
       "path": "apps/web-vite/src/lib/super-admin.ts",
@@ -8547,8 +9387,8 @@
     {
       "path": "apps/web-vite/src/routes.tsx",
       "mode": "100644",
-      "size": 5540,
-      "sha256": "cec4c2e8acfaf8faf54f95545e08d18458f05f1026f30630beb30099ca94a7dc"
+      "size": 7073,
+      "sha256": "e63446b1262334ce3119f85e5e79f929126edf365e6b6daf4553aab6aae76a1f"
     },
     {
       "path": "apps/web-vite/src/stores/auth.store.ts",
@@ -8601,8 +9441,8 @@
     {
       "path": "apps/web-vite/src/styles/globals.css",
       "mode": "100644",
-      "size": 2512,
-      "sha256": "fc2b37ecbb809df4f5ff1a174b97fb4d1a917687409082d1529a769341c1d998"
+      "size": 2893,
+      "sha256": "a6c16826eea3343cdc7141775f37949e45a95a91d701aaf9953f0173903cb6e3"
     },
     {
       "path": "apps/web-vite/src/styles/light-theme.css",
@@ -8613,8 +9453,8 @@
     {
       "path": "apps/web-vite/src/styles/light-theme/antd-controls.css",
       "mode": "100644",
-      "size": 5226,
-      "sha256": "cdf3872975d887866cbd460a06f4dae9704d05eb355b3737752966b937c650da"
+      "size": 5408,
+      "sha256": "7b7902728549211ed98c5d1e34c140b13ece8c631775b3161e43bba32754600a"
     },
     {
       "path": "apps/web-vite/src/styles/light-theme/base.css",
@@ -8713,6 +9553,12 @@
       "sha256": "91a3c8962a0edcb956206a501d943fe99e1c78c6d4d8b5c9a948a3362c75978c"
     },
     {
+      "path": "apps/web-vite/src/test/tailwind-css-pipeline.test.ts",
+      "mode": "100644",
+      "size": 2548,
+      "sha256": "5be139f0d4af46c6a16d8972afb7128541907d8810b47ddc8a7ad6dbfe5b7f91"
+    },
+    {
       "path": "apps/web-vite/src/test/vite-css-module-scoped-name.test.ts",
       "mode": "100644",
       "size": 2490,
@@ -8805,8 +9651,8 @@
     {
       "path": "apps/web-vite/vite.config.ts",
       "mode": "100644",
-      "size": 9501,
-      "sha256": "f2d3ac6aa1e7b20900e617de425ff3867de955ed906eab8294847c541e0fe0d9"
+      "size": 9715,
+      "sha256": "a7afbbf7c06595ceba25562ea8d900c45b3b246e843ac1875b2b3228e6636807"
     },
     {
       "path": "apps/web-vite/vitest.config.ts",
@@ -8851,6 +9697,12 @@
       "sha256": "b896dd003d44c030d35bcb3a30452440d1a31565c3293ea143348c30183d6701"
     },
     {
+      "path": "backend-rust/CLAUDE.md",
+      "mode": "100644",
+      "size": 11,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+    },
+    {
       "path": "backend-rust/Dockerfile",
       "mode": "100644",
       "size": 803,
@@ -8887,6 +9739,12 @@
       "sha256": "443318265815c7cd72de23bfa90d4b11cb98b4598e98d56ac1696377452e503c"
     },
     {
+      "path": "backend-rust/scripts/test-caption-preflight-bridge.sh",
+      "mode": "100644",
+      "size": 2205,
+      "sha256": "5268c18933a8bf37ef24169833a929e418dcf642e929cc27641355ec20a63c73"
+    },
+    {
       "path": "backend-rust/scripts/test-content-production-e2e.sh",
       "mode": "100644",
       "size": 1226,
@@ -8895,8 +9753,8 @@
     {
       "path": "backend-rust/scripts/test-content-production-postgres.sh",
       "mode": "100644",
-      "size": 2158,
-      "sha256": "84c4799c2ae91664f2f6ed8de53c82d1d62b076c01e773486c490acba5b2cf68"
+      "size": 4324,
+      "sha256": "2b3606efa8081782e6c9e37fc6f6b4450c11f0fb8d46172f2dca5fbea10c7f47"
     },
     {
       "path": "backend-rust/scripts/test-sample-inventory-postgres.sh",
@@ -9039,8 +9897,8 @@
     {
       "path": "backend-rust/src/auth/mod.rs",
       "mode": "100644",
-      "size": 2288,
-      "sha256": "fc3a15b4772339ea5c94fcc2c31efb97138d55f37ed2d1d9e4a3c6c0390a8da7"
+      "size": 2312,
+      "sha256": "d930785b87c8023e2f2c6b8f924d72dd167d9f7b06c3adf8fcd3a40590850056"
     },
     {
       "path": "backend-rust/src/auth/storage/grants/mod.rs",
@@ -9231,8 +10089,8 @@
     {
       "path": "backend-rust/src/config/mod.rs",
       "mode": "100644",
-      "size": 108,
-      "sha256": "11da2e641feefff6db0dffc3e0ff0b36cc577b5add551d57d2440f01db7dad73"
+      "size": 159,
+      "sha256": "15c102749b4e2406aa25e9f20a9f2d7599240aa80855217663d713ed653c7163"
     },
     {
       "path": "backend-rust/src/config/network.rs",
@@ -9249,8 +10107,8 @@
     {
       "path": "backend-rust/src/config/settings/content_assets.rs",
       "mode": "100644",
-      "size": 1968,
-      "sha256": "5ef28d87cf76338da9836c11660e12bf4143c1ab144f08af1ea79cb8c5a063e7"
+      "size": 6221,
+      "sha256": "84ccaa94490d3b319dae46ca341a290ec58b2c0f175c8582e71dc7bee22061e6"
     },
     {
       "path": "backend-rust/src/config/settings/dashboard.rs",
@@ -9279,8 +10137,8 @@
     {
       "path": "backend-rust/src/config/settings/mod.rs",
       "mode": "100644",
-      "size": 6730,
-      "sha256": "2d30e31846735ba584e7c85b24dbdde21abf114bd38926cee5d2d3014a812c7a"
+      "size": 9182,
+      "sha256": "9dc78067d81c070817a120ce6be0bb3555a006522d97b9b2261d2c09afc356c4"
     },
     {
       "path": "backend-rust/src/config/settings/reports.rs",
@@ -11445,8 +12303,8 @@
     {
       "path": "backend-rust/src/llm/mod.rs",
       "mode": "100644",
-      "size": 4140,
-      "sha256": "52bdf9f79e8f571f85fc8ef5ee56a1a8451a94ae72f21b704b432b1ecbc0d8dd"
+      "size": 4517,
+      "sha256": "a7d42c5a0c81f4aa656625d2d760734aaeef6336f317e0a75290977c544d35a4"
     },
     {
       "path": "backend-rust/src/llm/request.rs",
@@ -11505,8 +12363,8 @@
     {
       "path": "backend-rust/src/marketing.rs",
       "mode": "100644",
-      "size": 2708,
-      "sha256": "445766245391b12cb9eea9109baae200d3e50db9bc0c8d1c7adebb8e20f258fc"
+      "size": 2763,
+      "sha256": "bd5409bcbde455eaa4b838f9711187ec281ee6db1c172153858c19685f0e670a"
     },
     {
       "path": "backend-rust/src/marketing/anchor_tags.rs",
@@ -11601,8 +12459,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/delivery.rs",
       "mode": "100644",
-      "size": 11594,
-      "sha256": "a92251e5ae413df04e68eef4f411c26d2c186aa07df1cb229273cde66eac6ddb"
+      "size": 11784,
+      "sha256": "de07bc8fba84d7d6899cdf46e7dd0583c1e8444dd96f33aca6a78ac664afce11"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/detail_types.rs",
@@ -11655,8 +12513,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/handlers/qianchuan_http_route_tests.rs",
       "mode": "100644",
-      "size": 24806,
-      "sha256": "fe6410de66e136fc77e0344dd4005a9c072f16d19d1ac79a9bc95fb0caf1edf8"
+      "size": 25350,
+      "sha256": "6cf1cbbc217a8672f9b3515440f1dc5901f1eaab381ba7f98201591f540df23f"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/identity_lookup.rs",
@@ -11685,8 +12543,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/mod.rs",
       "mode": "100644",
-      "size": 3128,
-      "sha256": "1b6c6f42cc86b912278326532cbed02fdab7b30ef69efc8ef67017d54be0c93e"
+      "size": 3250,
+      "sha256": "2ce036916975496df2cf2499756f86ab4218c5d51f280b7a3bf1d725c4df4927"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/mutation_types.rs",
@@ -11775,8 +12633,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/assets.rs",
       "mode": "100644",
-      "size": 4041,
-      "sha256": "240bd18f781c94bd59a1f0c82bbe881f5a7e7de1d925a5ea97f7cf08479cb7e8"
+      "size": 5605,
+      "sha256": "59a0bc619e27fc2cf6e59ef5b578431318733b6b1a6df66294319368c7d8ab92"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/catalog_domain.rs",
@@ -11793,8 +12651,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/catalogs.rs",
       "mode": "100644",
-      "size": 5041,
-      "sha256": "cb1db1c8198c510960ceb693b86826d6bcd4131883748eb79b4802f1b778db50"
+      "size": 5199,
+      "sha256": "59a15eda955f97381b8ffa502d8e8d75fa91be279ef9ad0c9bd96aab2639abaa"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/domain.rs",
@@ -11805,8 +12663,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/http_e2e_tests.rs",
       "mode": "100644",
-      "size": 12895,
-      "sha256": "caf60ad12c0d7b6993de751607efc972b4dcf0a59e391646f7194f67ff89eba2"
+      "size": 15247,
+      "sha256": "48b4aaf66c1a0b1adc3827c225736e2d35f563efe8d1c2e9e91c338b415667ab"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/jobs.rs",
@@ -11817,38 +12675,536 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/mod.rs",
       "mode": "100644",
-      "size": 5427,
-      "sha256": "d9ab2db66670dbfd5a570e6f1e50c301cd1411cb5a870f70649f06becd89e771"
+      "size": 7581,
+      "sha256": "f83e5630eead9d246de4bd100b7e267c3594a31ac40b4bd20e7a7ff4febd97dd"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/planning_http_fixture.rs",
       "mode": "100644",
-      "size": 3738,
-      "sha256": "97a02bc5eb22646b710ecddb042982c67ee51cf99f3228dea1768c5bbe6e8d6d"
+      "size": 7488,
+      "sha256": "73614d70df8e3a1606378eb7d9497f34e30e01286e500d953bb42e7e89b77c76"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/planning.rs",
       "mode": "100644",
-      "size": 9739,
-      "sha256": "16256d7385edddc42b1ea58406b5dea9f7f558366b319579209af649cea5f150"
+      "size": 11483,
+      "sha256": "a570f20d9570f3486ae5e6510f5fa1c8ab73cb7b9bb6e1f73c369fadb76b7d7c"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/postgres_tests.rs",
       "mode": "100644",
-      "size": 2233,
-      "sha256": "ca6c306c97823066bae21a85884de03e4725276f7d0e320c434182f0670d42c5"
+      "size": 4497,
+      "sha256": "eec9098185af5f2a5b3ca80918ececc9d9431048dd3c0aa59be22cb574d3a407"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/render_binding.rs",
+      "mode": "100644",
+      "size": 2725,
+      "sha256": "f4bd03bd7b5c1d3b9102f31a2f1214c27fc0c9cacf1b597a1280d4e7886839c7"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/render-binding.json",
+      "mode": "100644",
+      "size": 324,
+      "sha256": "edc0195ae2bbe784c43497ce50bc7d90a5744926dd357e6c92d67f9f73e6fab5"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/repository.rs",
       "mode": "100644",
-      "size": 4005,
-      "sha256": "4bbb00245350f6691bbf111dfc64a325b5891273983047e0d754ea047e499e73"
+      "size": 5014,
+      "sha256": "01dc2d222b107a3951d15af9f628367c98f8b6596133be3b2738bd3b60f59d46"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/adopt.rs",
+      "mode": "100644",
+      "size": 3290,
+      "sha256": "2a02b73ab150d5630bc88af4536dd8cf7f71af04aebc9c4c81586f21202e2d46"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/attempts.rs",
+      "mode": "100644",
+      "size": 4632,
+      "sha256": "bf274fe5c88f54ed25fad6b0ba9c273badbcb5537ed4bdac09d8d5947c70e6fe"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/automatic_repair_browser_fixture.rs",
+      "mode": "100644",
+      "size": 3478,
+      "sha256": "aa1087f27194eed47712be256a928d7b911e986d39d2ab1bf2c1c42b1a9a907b"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/automatic_repair_host_fixture.rs",
+      "mode": "100644",
+      "size": 3174,
+      "sha256": "cbda4faa19724b9dc92e726b3384a0fb98a8ee1a082943b2723fc91baf5ad763"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/automatic_repair_tests.rs",
+      "mode": "100644",
+      "size": 1085,
+      "sha256": "0a1744626c1c7373a516bdfff9c7aa0915e1f18d39f7460f73b68b0b1a0a93a6"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/automatic_repair.rs",
+      "mode": "100644",
+      "size": 4903,
+      "sha256": "f7a9174e22358507c6bcc573ec2cf9f7defadf56f832cea101b0836214e733c3"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/background_http_fixture.rs",
+      "mode": "100644",
+      "size": 10131,
+      "sha256": "1a0389a18e608593338e71571124ac86f30e23ce58f9e6a553f8a8cf306d0e77"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/batch_http_fixture.rs",
+      "mode": "100644",
+      "size": 12762,
+      "sha256": "e2051f14ee64e7892abb08c88b1e5db03eee838e7690aa538230e7117875cdb3"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_browser_fixture.rs",
+      "mode": "100644",
+      "size": 1873,
+      "sha256": "5c30935a37b417df11a1feb786c5794d2e7b466691ffd70fe9e0c2823856eabe"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_http_fixture.rs",
+      "mode": "100644",
+      "size": 5458,
+      "sha256": "301cc207ce32bcf7ed96a417d41198c23f3b414e09178599a5e78aef1c507ada"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate_rerender_fixture.rs",
+      "mode": "100644",
+      "size": 3305,
+      "sha256": "941c9c40bceee9afa27c2ee01885f31290f30018460b22bc54eb929fee78c396"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate.rs",
+      "mode": "100644",
+      "size": 7586,
+      "sha256": "45553081f3f6b2d4d11febb4e0da79374712b08ab49e28e8e8b6c570deef6a05"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_candidate/tests.rs",
+      "mode": "100644",
+      "size": 10344,
+      "sha256": "ac4f6696be4576f030a1e08e2bb8fa7928250875f64aa41717db23e66019727a"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_dependency.rs",
+      "mode": "100644",
+      "size": 4729,
+      "sha256": "756aacea8940c8b60d5123bbca45769eff7d3161235962c546f70a5f913b626e"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_freeze.rs",
+      "mode": "100644",
+      "size": 2618,
+      "sha256": "d531b1db9b72cb488fcb032dfea0d106a832c417744798449a60504fd772af47"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_http_fixture.rs",
+      "mode": "100644",
+      "size": 9891,
+      "sha256": "490b6ceb21fe99ec4f51323cec801efe2f53252068f3f66f788be1d7cb133d95"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight_planning.rs",
+      "mode": "100644",
+      "size": 9590,
+      "sha256": "6539088d21c9db79187feeb0fa82f8008a0f5a40bda4eb245687eb6979fa40fc"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight_tests.rs",
+      "mode": "100644",
+      "size": 12754,
+      "sha256": "7ea944424e34e943f0e7d2c2ccab3b1e41784517b2236086563f69b210ba6e08"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_preflight.rs",
+      "mode": "100644",
+      "size": 5497,
+      "sha256": "30985ff91d9e251a0b41d8a275198521d378bbcb4ccb8f3c3f8e56c423bb0577"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_render_fixture.rs",
+      "mode": "100644",
+      "size": 3168,
+      "sha256": "f9b6653d616917d440a163617e378e9f2238126c5b98565f93fd47b51d3ab770"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_review_window.rs",
+      "mode": "100644",
+      "size": 5371,
+      "sha256": "4ce07ae78a1587791b823295aac00e012c95d4a47858ecf389d9c0362ac2c229"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_source.rs",
+      "mode": "100644",
+      "size": 3796,
+      "sha256": "1cb0461f90a048f478e97a552fdedd562dd2314e1aa509d435f49f8602017447"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_windows.rs",
+      "mode": "100644",
+      "size": 16605,
+      "sha256": "bbabe849d8371581ad306dec32f98b674bdfeedf8677677018793588d762430a"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/caption_worker_bridge_tests.rs",
+      "mode": "100644",
+      "size": 11090,
+      "sha256": "e0b860e2c7df2b0956adc43722594f4dd258421c5791a1acab8c48054dcadac9"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/captions.rs",
+      "mode": "100644",
+      "size": 9069,
+      "sha256": "f66643ba62bb80858a548b650284cc056922d131c2cc918781733167ec6606e4"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/domain.rs",
+      "mode": "100644",
+      "size": 6465,
+      "sha256": "b1ecd789ca8e22af82b91267a98737da2cd7164162f8ff03ec449e7d00ef963f"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/evidence_candidates.rs",
+      "mode": "100644",
+      "size": 4825,
+      "sha256": "455d69b6539e6a060cbdf337d1b2293013eb2b4e0e4b9cf339b28b9937efff1b"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/evidence_http_fixture.rs",
+      "mode": "100644",
+      "size": 11126,
+      "sha256": "2c5a30453ab90074e3191a13a140b2770283803baeed1595a9aab25c8c91bf1a"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/evidence_planning.rs",
+      "mode": "100644",
+      "size": 13908,
+      "sha256": "8602c79a7da511daa0a97045517f1a2b6959cf60acb35f6f62672bd22913845d"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/evidence_tests.rs",
+      "mode": "100644",
+      "size": 10084,
+      "sha256": "8c79d6b940649472b5d549f84ef07ce61123a9697d81106efa3648ab8056d5de"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/execution_tests.rs",
+      "mode": "100644",
+      "size": 7722,
+      "sha256": "6a12701457c29483ba264357c269e992582406f1037ce539bf8a32a9a8d16474"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/execution.rs",
+      "mode": "100644",
+      "size": 6401,
+      "sha256": "bd9a195483dccbf02e719a787c800460160495d1e7f40c8d1efc411e75bc4cd0"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/framework_remix.rs",
+      "mode": "100644",
+      "size": 11233,
+      "sha256": "e3c2c8c0c2d8cb278f32fb4973d4233544829eadb287aa099170d82e7c17fa87"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/full_service_fixture.rs",
+      "mode": "100644",
+      "size": 13633,
+      "sha256": "c81c247836112a9da8eb16465b73f7f34ce912dd76cd033b293918d4a3eda7fd"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/http_fixture.rs",
+      "mode": "100644",
+      "size": 11286,
+      "sha256": "16baa930747789f39c0d6260490197507adede101327ce4666b7280c9a773baf"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/media_daemon_fixture.rs",
+      "mode": "100644",
+      "size": 2744,
+      "sha256": "d2b92d66d05efbebd8ba4ee7b9fb1867f9f6494908c244c63ddb193b8dbb07be"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/mod.rs",
+      "mode": "100644",
+      "size": 9784,
+      "sha256": "7efd0d1762ad0433182c053c6af755e3e7bca001d0adf38761165f421e5649b6"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/output.rs",
+      "mode": "100644",
+      "size": 7005,
+      "sha256": "c5c14ca15922ebdc244213f1aed429119cd443355f1a86dd256283208df42913"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/picture_http_fixture.rs",
+      "mode": "100644",
+      "size": 13415,
+      "sha256": "84b504f99aa4d963547471f96e80b13a038b1d5477f1b46f40cdb5ba4f12e1b8"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/picture_remix.rs",
+      "mode": "100644",
+      "size": 8722,
+      "sha256": "23b30a252b61a01291c9e4f28c88eaa337b3f84f24e0f2b260c7dec1e0137f56"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/picture_slots.rs",
+      "mode": "100644",
+      "size": 30761,
+      "sha256": "d1226dc343570b59b3df318cea9c4b3b6b2bb8cdb5abe3961e355f3962b25c4d"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/picture_tests.rs",
+      "mode": "100644",
+      "size": 7700,
+      "sha256": "b24e84239872021026fe84feac68348a59867861cb8221ecd76cd0caeb989633"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planner.rs",
+      "mode": "100644",
+      "size": 6250,
+      "sha256": "4c379fe7792cb5238c3acb606ce1f64fdf06f0cef7f65db820f4f2bf8357fdc7"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planning_continuation.rs",
+      "mode": "100644",
+      "size": 3203,
+      "sha256": "1bd8874ba67f45101e7e95877bd68d26a4b6319309486ac9ab3ca41a6dcb8fa0"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planning_fallback.rs",
+      "mode": "100644",
+      "size": 3497,
+      "sha256": "e0a00551196df887881c074c3b68b301e332ca8665a77c16425356f1adad2571"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planning_queue_tests.rs",
+      "mode": "100644",
+      "size": 8953,
+      "sha256": "b15bcf55a38b118372c4c701a6d50a68ccbce05744eb997b8df535d6412fab02"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planning_queue.rs",
+      "mode": "100644",
+      "size": 5462,
+      "sha256": "c3dc88fbf8cc83f8ddae15c542d106f653ef89fd84e491b925967100bde726ad"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/planning_repair.rs",
+      "mode": "100644",
+      "size": 12243,
+      "sha256": "d91717a210a2bd735265d7c99ac8474220a84dfbf26889380b4cc7bd45aac504"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/preservation_probe.rs",
+      "mode": "100644",
+      "size": 17196,
+      "sha256": "9050b87de9c13bcb84d322d32df32fd9ead7ccca1a72935ec4a6e9d391f5ce13"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_dispatch_tests.rs",
+      "mode": "100644",
+      "size": 8038,
+      "sha256": "e2cd685016c0fab4276322808e93d0b674c1c45fc5386473595eeac20a7c6587"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_evidence_fixture.rs",
+      "mode": "100644",
+      "size": 5058,
+      "sha256": "61fdfcdd0929ada0f438872cff1877fb2d7653f7e95eb60939c5d3c1fbd938ca"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/real_media_planner_fixture.rs",
+      "mode": "100644",
+      "size": 7635,
+      "sha256": "3a463e90a1d9cf6d5472722227f8d52479bcc54872c9c98b81561748b9e92476"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/real_selection_probe.rs",
+      "mode": "100644",
+      "size": 11397,
+      "sha256": "732f2d85f2d14c357fad5525d46566147c2c890f6090fa9f0873e02105a8039f"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/render_binding_http_fixture.rs",
+      "mode": "100644",
+      "size": 3558,
+      "sha256": "d2a8cd71c2a085bdd649d27e160363a64267a6021ae60c40142a42d012fdd33d"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/render_http_fixture.rs",
+      "mode": "100644",
+      "size": 8149,
+      "sha256": "4ba9e1a7e6bfb896935283db4f493a224f2ad0bb2d133d300fff5debb2a34899"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_apply_fixture.rs",
+      "mode": "100644",
+      "size": 16981,
+      "sha256": "9869014c7cacbe4b9a8c81df065653c8ea0f5161c6ee961eee2fa90331d5efdb"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_apply.rs",
+      "mode": "100644",
+      "size": 4234,
+      "sha256": "1641359cfee12e33cded2b2318d3fa14118f91f374156ef851efdd2c7118bd43"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_candidates.rs",
+      "mode": "100644",
+      "size": 8808,
+      "sha256": "e7871fbc339bbc354ee5b8fbb2d6606225e3ce067133c61d5a242327fcfe26c5"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_repair.rs",
+      "mode": "100644",
+      "size": 2989,
+      "sha256": "9a9eb81ef051a3a9521a1c25a0d3a93affac058a9a4e74852841b34f60c9c810"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_selection_fixture.rs",
+      "mode": "100644",
+      "size": 10200,
+      "sha256": "234c3d55809d31a08534a4370be4bce2059e6ea4499bc677507380832d7c7847"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_selection.rs",
+      "mode": "100644",
+      "size": 17670,
+      "sha256": "52c3ca20cac5b111a26d881064dfff92ccb51f873844d8d9b4a7a5961fe10bab"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replacement_text_review.rs",
+      "mode": "100644",
+      "size": 7375,
+      "sha256": "97b16c70db63c3b7fc1c3ed0f4b0f53a2e40ffbfe8c0542eb7736963f4b8b5fa"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/replay_http_fixture.rs",
+      "mode": "100644",
+      "size": 7275,
+      "sha256": "45fbe873232cd42361e629bb4965b627f0708134bb7da896a11349ce668342bb"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/repository.rs",
+      "mode": "100644",
+      "size": 6970,
+      "sha256": "1fb3b0681426cbe78c4e53789c6f144e8df39d728994ce0f86dc456c0338b8cb"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/selected_review_http_fixture.rs",
+      "mode": "100644",
+      "size": 14756,
+      "sha256": "7ebd4c484981340650b27079716011f43527a915542c9383c35c64d7e44132a8"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/selected_review.rs",
+      "mode": "100644",
+      "size": 12911,
+      "sha256": "e07af9423c11e9ad84872753ac400ddfbd5bf0f581fc7042a6141347bd53c9b9"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/selected_revision.rs",
+      "mode": "100644",
+      "size": 8758,
+      "sha256": "9204c7af64b22dd04459d6b13c1f15baf592fbc4066037c5e0ca9b8323c3ed36"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/selection_context.rs",
+      "mode": "100644",
+      "size": 9276,
+      "sha256": "f58f049835a92b11d2c12e1981b539872c5396c0c1a560adb4d777619085118f"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/selection_review.rs",
+      "mode": "100644",
+      "size": 12344,
+      "sha256": "6fe068142ea76de9aedddb35fcecf304923d570265a3673f18b81ebda2080269"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/service_process_fixture.rs",
+      "mode": "100644",
+      "size": 5727,
+      "sha256": "128dcf168f5d9f5375ae5df3251424c34161d45309b9a816ab5d7de846a3e95e"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/tests.rs",
+      "mode": "100644",
+      "size": 13134,
+      "sha256": "6f4a3a752dabf03a53375475b66f3ff122689a69b28fc9e417ccc6b6c7304503"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/transitions.rs",
+      "mode": "100644",
+      "size": 5028,
+      "sha256": "32a1340dc7427bd0a4c8ee8ec124ffffbb33e7bf883ee0796413860c100d98d7"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/treated_caption_automation_fixture.rs",
+      "mode": "100644",
+      "size": 2888,
+      "sha256": "1644c1c41958854a9801c8286796b6764ac4202da7b580f0721971c72909e4fe"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/treated_caption_http_fixture.rs",
+      "mode": "100644",
+      "size": 10190,
+      "sha256": "5e45b185c5a4c0c9b88695867dc87c653a0b912d735de2f137c68058b3cac03b"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/treated_captions.rs",
+      "mode": "100644",
+      "size": 4208,
+      "sha256": "87660e725230313d981e696ee0f8e19421988634be2fe2f421779266231695ec"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/treated_captions/tests.rs",
+      "mode": "100644",
+      "size": 4302,
+      "sha256": "3e99e8334f18b7716a3a2577443a2c532851f7e9eb0b3c5b92c7dcb9ce44a04a"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/treatment_http_fixture.rs",
+      "mode": "100644",
+      "size": 3385,
+      "sha256": "65e17e9bf17a327d0d50d83ded96aae715a2a0a1729afe58fc28adc5f66002c2"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/types.rs",
+      "mode": "100644",
+      "size": 3406,
+      "sha256": "9acb29f5006d79f131fd8078d6a5fd7916e35d96e6d6899990698077b3fa4606"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/visual_caption_evidence.rs",
+      "mode": "100644",
+      "size": 3676,
+      "sha256": "bf973c287c4d643aab6897d05c658574985b08f04a574e7896581563b613aae4"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/visual_review_http_fixture.rs",
+      "mode": "100644",
+      "size": 7364,
+      "sha256": "2974d454f67b94dcd052848500b91a8ee9a0e72beedf5c39038f3ea263cf3c2d"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/runs/visual_review.rs",
+      "mode": "100644",
+      "size": 10349,
+      "sha256": "bf7bd06522aecba38fa963f6b3baba5f0abe70e0155a7b179dab0d5d05824acf"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/search.rs",
       "mode": "100644",
-      "size": 3325,
-      "sha256": "e5ca7ce6b03b38164e9b97d8d7cb1783ceac9b207859c95ed7e47f53dc12e1c9"
+      "size": 5192,
+      "sha256": "530ce4f2d2cea7f70798181789c43a58576458521de65d3002dd11d369e3502c"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/semantic_http_fixture.rs",
@@ -11877,8 +13233,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/types.rs",
       "mode": "100644",
-      "size": 2182,
-      "sha256": "6c3f9ce3336c55d71842325db2d45f83af90cf818a20a3482ac63a8ae5b913e4"
+      "size": 4574,
+      "sha256": "72083fb892b9de138b97b057226a97ba54e378ccd1de7ffb26f185e36aefca80"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/production/visible_text.rs",
+      "mode": "100644",
+      "size": 15998,
+      "sha256": "268500d8cd37075fff3d0c01bd36e0a0fb9d892173f15df66521fb5dd1476440"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/visual_http_fixture.rs",
@@ -11889,8 +13251,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/visual_search.rs",
       "mode": "100644",
-      "size": 7166,
-      "sha256": "e5a87a9ef70e3bec8d1e69d37d3f5ea51eb2502518be4f1e6e390467d9c8a43f"
+      "size": 12632,
+      "sha256": "ebc82fca242a782c27c03bbcb64d6fef8fcc681ac860dd98796ff2de2ec8f6df"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/README.md",
@@ -11907,8 +13269,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/repository_filters.rs",
       "mode": "100644",
-      "size": 9544,
-      "sha256": "c0f00a7bba08de05a79de853068abe3abf5ac353be1f4487cea4d88d31e041a5"
+      "size": 11098,
+      "sha256": "b1083cca5045721a7a1cce27fc04e066582eb6f2788e1003bfa9f3c74743602d"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/repository_options.rs",
@@ -11935,6 +13297,156 @@
       "sha256": "5cd4670fb30ad4132e43d9871dba377db2d3eeab9f04185d910b6a5f0688fd11"
     },
     {
+      "path": "backend-rust/src/marketing/content_assets/studio/access_postgres_tests.rs",
+      "mode": "100644",
+      "size": 9327,
+      "sha256": "bcb1824939d59d19010aab5ae257b3dcc640d3388c94d69ff539958cc437f537"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/access.rs",
+      "mode": "100644",
+      "size": 2918,
+      "sha256": "ca6cbca04e4788bc98032447b0fc4dd13f2d77d22cc30ea2d1d00546037f8043"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/asset_summaries.rs",
+      "mode": "100644",
+      "size": 7681,
+      "sha256": "4191587e70470fd5474bd9ed8a62c76b62f159b6c8d049140e7da3a9677631f9"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/asset_summary_postgres_tests.rs",
+      "mode": "100644",
+      "size": 10233,
+      "sha256": "3eef84736d9a01d5b4331e241c9df6d5333334690f7305fcf39697b44d868e9b"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/domain.rs",
+      "mode": "100644",
+      "size": 8651,
+      "sha256": "15335ebb515c319cc3f2637a3825a968720991a6a6eb98d69ffa513d81da5a37"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/enterprise_postgres_tests.rs",
+      "mode": "100644",
+      "size": 4661,
+      "sha256": "d99d2d2e611d7a564c181bcd0fbd7bbcaacf188aa4a43cb0300ae6cc6154303e"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/error.rs",
+      "mode": "100644",
+      "size": 5903,
+      "sha256": "6c0c7ffbc54818e13bfe2c6e79eb253bf48396ca55a1e085daf51bc307b7e8f7"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/mod.rs",
+      "mode": "100644",
+      "size": 14467,
+      "sha256": "329ad03d0665d47c81b5ad5d72a968095ce9f5b2a589edbb6331b55ee5c19fbd"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/overview_postgres_tests.rs",
+      "mode": "100644",
+      "size": 4510,
+      "sha256": "6e1195bb7027d90dfedef1ea29843e892e97c884d35eeb4496aaf90f3b505c29"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/overview_types.rs",
+      "mode": "100644",
+      "size": 3967,
+      "sha256": "4da585fd2511c5b0ac5ff1a61e38529aa342a1316c54d8bb6b2ea50d3365ed2a"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/overview.rs",
+      "mode": "100644",
+      "size": 14692,
+      "sha256": "1ee3fdc8c26c6ad1c65e2f746ec5611eb83c8ce4410ce750cfdd0d8ff34de901"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/postgres_tests.rs",
+      "mode": "100644",
+      "size": 22676,
+      "sha256": "bd24ab145421f13c8c509ac4dce209421826ebf8c79d03573bf2d49db069cb3f"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_cancel.rs",
+      "mode": "100644",
+      "size": 3194,
+      "sha256": "1ab01bbda14630a2f043bcf7e6cb4fe1a8618f73e38e78062e5bb4a0ef850452"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_combos.rs",
+      "mode": "100644",
+      "size": 12069,
+      "sha256": "880e6b0eb6c245810e259804264c1d378b0aeb0bc29ff4fc13896b02f8951480"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_edit_postgres_tests.rs",
+      "mode": "100644",
+      "size": 11893,
+      "sha256": "33326ca22e8051cc14bef73eafd83bc86aec4f7455f0ae623b71277ef6cc5bf6"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_edit.rs",
+      "mode": "100644",
+      "size": 26267,
+      "sha256": "439d984289ab480219afd3a872b6eb001a579f5729f409ffe3646f7c1a7f9471"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_postgres_tests.rs",
+      "mode": "100644",
+      "size": 24589,
+      "sha256": "d5cfb782a36cdf8477eab3f8b4a60f1d433170a9754051c1345a517f68c54945"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_read.rs",
+      "mode": "100644",
+      "size": 16581,
+      "sha256": "dc6c0f99a813c90b94e607a0fad9de50e2d6e654f2f9106f45234da0a09a27c0"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_types.rs",
+      "mode": "100644",
+      "size": 9430,
+      "sha256": "6d0ce7aab96047d0d0b4c43acbc389841b371603b0ee82f1d085c0074ea05022"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix.rs",
+      "mode": "100644",
+      "size": 26470,
+      "sha256": "1deb3348e14fe37b6c0d6d11e8df8bc0188dccf76c710a55362866aecf0bd0ef"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/repository.rs",
+      "mode": "100644",
+      "size": 23094,
+      "sha256": "0bc9a059bdb6de10d4a6579091a5e0d84db5e44fff98f24ad9ccf9cd85cdcfe5"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/route_tests.rs",
+      "mode": "100644",
+      "size": 4702,
+      "sha256": "aa7656e44e4763988dfa3f20a35dae5d74b3d155b492ec7c5ec1067a79275186"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/suggestion_postgres_tests.rs",
+      "mode": "100644",
+      "size": 11805,
+      "sha256": "2499460529859dcea65cd0eaa5267a56ba7f54aaeff65bc211133166dbff218e"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/suggestions.rs",
+      "mode": "100644",
+      "size": 13343,
+      "sha256": "a7cdde535bb009297ea8b9e78b9954438ea6210cea4395147fd1372d81fb91f2"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/types.rs",
+      "mode": "100644",
+      "size": 12770,
+      "sha256": "6a49fffc9f4015337c9c6a468241ea5989ca119e01d1ffce41d9527cb2a174ec"
+    },
+    {
       "path": "backend-rust/src/marketing/content_assets/text_normalization.rs",
       "mode": "100644",
       "size": 2654,
@@ -11943,8 +13455,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/types.rs",
       "mode": "100644",
-      "size": 23149,
-      "sha256": "16a34185ccc74f8603b175b12d3de366c73f8c17cf14b0b3c7b870c6c661bd18"
+      "size": 23689,
+      "sha256": "5ebe6fa0eef1f817d1ea4ea053e5de2bd779468e2f1833bc1f60f4e9f93d0d42"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/upload_verification.rs",
@@ -11955,8 +13467,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/validation_taxonomy.rs",
       "mode": "100644",
-      "size": 16305,
-      "sha256": "41214fa147d19cc30f3c132a5d462cd51c164d37e1905df62c7ae534220c49ee"
+      "size": 17275,
+      "sha256": "38351a509b5f43328efec2fca1a6ad425995d419a01d36efb3dbc786bddd33c6"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/validation_text.rs",
@@ -11967,8 +13479,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/validation.rs",
       "mode": "100644",
-      "size": 24921,
-      "sha256": "92eae2332cab7b9b0309a18c0fbb705ff6909c56f8d1d99a0f48226fae8199a4"
+      "size": 27249,
+      "sha256": "277889e7321737606c3b8175b45584a1b125497c9e6f4b8910a82e60f0c4cf19"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/video_link_import.rs",
@@ -14205,8 +15717,8 @@
     {
       "path": "backend-rust/src/startup.rs",
       "mode": "100644",
-      "size": 4074,
-      "sha256": "c7ea4a6f0f6f65d7f2cce3db2e2e5d8e81bb380034ff7c4ff0a5c77ee0809240"
+      "size": 4136,
+      "sha256": "da1483b62c4c183ea1fa86a53211c4419b0936d250846e1107f33afbf70c8b93"
     },
     {
       "path": "backend-rust/src/state.rs",
@@ -14421,8 +15933,8 @@
     {
       "path": "contracts/openapi/aios-v2.json",
       "mode": "100644",
-      "size": 488789,
-      "sha256": "a04592a7c8f3566aa274bae3f559da382d6b0bc4162d36f8f2cc68eef94930ca"
+      "size": 601523,
+      "sha256": "abb8c99c00bfe175b13e2237c27abc354067cc88228bcf5d1d5f76b382cd5679"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -14439,14 +15951,14 @@
     {
       "path": "DESIGN.md",
       "mode": "100644",
-      "size": 109136,
-      "sha256": "e049eaa93338d838c1bc4ab8969b2129d3857c768effbbab110fce98e386c2ac"
+      "size": 110082,
+      "sha256": "32afac115300cb1abc6301b3a7f14db9716f631ad21a73654b3a3f5a0edeb3ac"
     },
     {
       "path": "docker-compose.content-production.yml",
       "mode": "100644",
-      "size": 1354,
-      "sha256": "5ae6a7f217ff5ddc108a72295cdfd0ef1b10ee501a7d44149bdfac9ebfd10efe"
+      "size": 2755,
+      "sha256": "8218e0eb0949fb940a560b7af3efb5d44628f237951d077a776332d528359d53"
     },
     {
       "path": "docker-compose.dragonfly.yml",
@@ -14457,8 +15969,8 @@
     {
       "path": "docker-compose.yml",
       "mode": "100644",
-      "size": 8185,
-      "sha256": "e6f0ddf8042b210c23bb3bc13ddca8600f5f7ada0c8ea5ee522b4862adf2c615"
+      "size": 9085,
+      "sha256": "a82877391d8628be3b0b9a120f1a8d30d6c512a3732ba41d0bccb533f8ceb7cc"
     },
     {
       "path": "docker/content-production/Dockerfile",
@@ -14473,6 +15985,12 @@
       "sha256": "b3390cdbcb2060a72ff785d9d5f3db712336bf344fbd931502445713aa470715"
     },
     {
+      "path": "docker/content-production/renderer/caption-font.mjs",
+      "mode": "100644",
+      "size": 5856,
+      "sha256": "0a47ace4c381e72db8294fd373f24ecdf2061f45da6d9811e5811ca870c079b8"
+    },
+    {
       "path": "docker/content-production/renderer/cli.mjs",
       "mode": "100644",
       "size": 2257,
@@ -14481,8 +15999,32 @@
     {
       "path": "docker/content-production/renderer/composition.mjs",
       "mode": "100644",
-      "size": 3724,
-      "sha256": "3ea8fdb59cec75ec1706824695590bea9947d6a2f74238665468f903cb3ea9ec"
+      "size": 4741,
+      "sha256": "4743859e6ea6d58123c98143c66d1b908aaf56e16f88c08aaf815f0cf7b868d3"
+    },
+    {
+      "path": "docker/content-production/renderer/copy-file.mjs",
+      "mode": "100644",
+      "size": 404,
+      "sha256": "74872928c762397b925f13d403e405d42f9f5765204f6875f9b5fd4d84b81916"
+    },
+    {
+      "path": "docker/content-production/renderer/fonts/manifest.json",
+      "mode": "100644",
+      "size": 490,
+      "sha256": "fc8b7241497cc286416c15696c1157cf3057e237d47b212d8cb852ef7e21e1ff"
+    },
+    {
+      "path": "docker/content-production/renderer/fonts/NotoSansSC.ttf",
+      "mode": "100644",
+      "size": 17772300,
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+    },
+    {
+      "path": "docker/content-production/renderer/fonts/OFL.txt",
+      "mode": "100644",
+      "size": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
     },
     {
       "path": "docker/content-production/renderer/LICENSE",
@@ -14505,20 +16047,32 @@
     {
       "path": "docker/content-production/renderer/project.mjs",
       "mode": "100644",
-      "size": 10498,
-      "sha256": "201e513905bdca00559eb2e6bb2b683d3503f66aa43aa7591d2cab39a49402c1"
+      "size": 11371,
+      "sha256": "a66278144f55d2792235a3ff6bc9605a890bd168947717d060fbdf8786d69372"
     },
     {
       "path": "docker/content-production/renderer/render.mjs",
       "mode": "100644",
-      "size": 4564,
-      "sha256": "1b28f3618263a76d38661271877bcdffb862501e42daa267378ec45c22c5d816"
+      "size": 5138,
+      "sha256": "daf3673766678025187c5b8859eb9e15393c6a54ed90daf42cb84a7a15385c4a"
+    },
+    {
+      "path": "docker/content-production/renderer/tests/copy-file.test.mjs",
+      "mode": "100644",
+      "size": 933,
+      "sha256": "034ad80384e28625a3a01439d08cc510f346a0534356e428c87fd76f4cf0414d"
     },
     {
       "path": "docker/content-production/requirements.txt",
       "mode": "100644",
-      "size": 181,
-      "sha256": "f92b137e03a5a152419a614eb531398526cbe2a01c006e940c75d00337593de6"
+      "size": 195,
+      "sha256": "f0d43fc3e0e6765bc15229912082728d718bea738058e3224860086278527b46"
+    },
+    {
+      "path": "docker/content-production/worker.env.example",
+      "mode": "100644",
+      "size": 2468,
+      "sha256": "fd909f2e1954963f8eff366b05382b068ac02e712b577c23fce5d0c1bbe781e4"
     },
     {
       "path": "docker/nginx-vite.conf",
@@ -14645,6 +16199,12 @@
       "mode": "100644",
       "size": 1425,
       "sha256": "d8895c049d04e85f6cf5e98faf2b79ab72874387c5e228d04b6194bd72999ce3"
+    },
+    {
+      "path": "etl/groland_postgres/CLAUDE.md",
+      "mode": "100644",
+      "size": 11,
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
     },
     {
       "path": "etl/groland_postgres/dataops/feishu_sync/feishu_data_hub/__init__.py",
@@ -14823,8 +16383,8 @@
     {
       "path": "etl/groland_postgres/pyproject.toml",
       "mode": "100644",
-      "size": 469,
-      "sha256": "db1f5327ad031ba13b4c68083e1773350521ea42a7641d3b7d0ee0b466116d47"
+      "size": 488,
+      "sha256": "cd775d24be78ffcc8e55de71cb9524c9954aafd84940b0279fccca2753951543"
     },
     {
       "path": "etl/groland_postgres/README.md",
@@ -14893,22 +16453,304 @@
       "sha256": "e1bbeb0b93b337cb50b8ed58e7e4e08b81971d8931c685fd32293e59cfee01ac"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/benchmark.py",
+      "mode": "100644",
+      "size": 10053,
+      "sha256": "361bb6eee7d4f6c433832f55fefc0d06f92a584d2192be8d4899805ab4bc6697"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_boundary_layout.py",
+      "mode": "100644",
+      "size": 2698,
+      "sha256": "86be4048dbaeb42a2223071e5e3babfc388d907d7d79d9689358dca0027ca28d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_boundary_search.py",
+      "mode": "100644",
+      "size": 3510,
+      "sha256": "edfd83ec484000808d8f995d80f35bf039708e90898b9120b57f6638c15b46de"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_candidate_render.py",
+      "mode": "100644",
+      "size": 2725,
+      "sha256": "925062f6930cb5dff4c7bb70731ad1cc5b6017607707b58e52dcc4a51d28d5cc"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_execution.py",
+      "mode": "100644",
+      "size": 2019,
+      "sha256": "57972bf00b3b6a6ea2698bcf24b3c71832b9999234f2269e1eba4e482376547e"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_group_repair.py",
+      "mode": "100644",
+      "size": 4021,
+      "sha256": "962da37e16134a714d946a586833913b032e7dad8abf643ab75701aeb7d888a3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_layout.py",
+      "mode": "100644",
+      "size": 2651,
+      "sha256": "80f80491f0485ee120c94ed9eaf4910fb34fcd7c2a342d7dd425dddff8a22ac3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_overlay.py",
+      "mode": "100644",
+      "size": 1802,
+      "sha256": "0e55555b0498647e71167ffc1726b02d21380efe0780da652cb9247f61cdd8e3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_planning.py",
+      "mode": "100644",
+      "size": 5144,
+      "sha256": "112a2ffca400643a28c7e296fe55f1bc7a288093711cdacaaf4f81d1b795f734"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_preflight_api.py",
+      "mode": "100644",
+      "size": 2947,
+      "sha256": "caa7eb54d85a9cf1d4e598563fa840e678e49ac0f5e3d468812a4380a1338305"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_preflight_queue.py",
+      "mode": "100644",
+      "size": 8879,
+      "sha256": "590a536aea43d9667ef1c9ef21f0114121ea702299c53522a0f302099b72d2cf"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_preflight_run.py",
+      "mode": "100644",
+      "size": 3369,
+      "sha256": "843f9b6f7961306b1b146d3bf63a898e1a0da8773a48f6d53473033b6196e91b"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_preflight_worker.py",
+      "mode": "100644",
+      "size": 5046,
+      "sha256": "d0ebfeca0b7b29926f57cd559d4cab291735c6ee74655142b571ddc1032b2a8a"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_preparation.py",
+      "mode": "100644",
+      "size": 3608,
+      "sha256": "86e82364fbede56c02129b37f70cc06949399c73382a50fdccfeddb983b550d3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_quality.py",
+      "mode": "100644",
+      "size": 4357,
+      "sha256": "a8e9fd5eedbc1ce245518e262ef5bcfac06c9c6b7d7a9fdb9cbd2d0f65f117f9"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_review_revision.py",
+      "mode": "100644",
+      "size": 6792,
+      "sha256": "8bf6ca5bd55fda67d7c36a1e3a631cf6bc281ff088017cf2c0ded09cbc11b84d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_review.py",
+      "mode": "100644",
+      "size": 8089,
+      "sha256": "8196e1b6daad7a948887a8652d4936034077208e7014f1ca06c1dbd582ae970d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_revision.py",
+      "mode": "100644",
+      "size": 10532,
+      "sha256": "ea7715019159a0ade6710e7cd163d49224fb07992f0cd9424d36b68339e30f96"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_run.py",
+      "mode": "100644",
+      "size": 5880,
+      "sha256": "39216560c68ca5bb8930c9fbcfda1334e96843627a18b07856b9d25e25844b56"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_visual_evidence.py",
+      "mode": "100644",
+      "size": 4408,
+      "sha256": "a481998ba9300c1929af78fb87d7ceb41b3497a53f624ff946a706079cb83033"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/caption_worker.py",
+      "mode": "100644",
+      "size": 5471,
+      "sha256": "d4ce1169bbde61d3e23ec13e33f505fca6205fc5a7c87762a0a22e184340dd92"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/creative-craft.lock.json",
       "mode": "100644",
-      "size": 638,
-      "sha256": "55c3fed2df56c1a7d7f9f54ec40d5d099fff4140b3a2b895cd820fcf17a8c096"
+      "size": 1239,
+      "sha256": "e0409723fc07839312301074c7437466bd4a5647e4210e8d6ab22c7305202068"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/derived_assets.py",
+      "mode": "100644",
+      "size": 4140,
+      "sha256": "b453d06e967a32481965409a2653a4bf43a7fa46b6747acb8e0332b4578271ac"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/edit_document.py",
+      "mode": "100644",
+      "size": 14514,
+      "sha256": "8a6ab91d88230fa331cd17121196adf33faa5086ff2065a1ac8b82a5c6c491c8"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/execution.py",
       "mode": "100644",
-      "size": 4614,
-      "sha256": "fa669d31727ee765161857d744c3982da019494102e1e3bf832c6aafbb0fedbe"
+      "size": 7227,
+      "sha256": "63a022981838aafbf804c738729c2518a1e366363f5a9f7951bd30e9533bcfa6"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/indexed_captions.py",
+      "mode": "100644",
+      "size": 4001,
+      "sha256": "c24daea0e866734b89149db47a77f25dad203f1aad597304cc02cb537c042285"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/inspection.py",
+      "mode": "100644",
+      "size": 4246,
+      "sha256": "10d63d40b0ba8895f031afffc72768d2a065ff9400981909a4ce5d4e8372d48d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/mediakit_client.py",
+      "mode": "100644",
+      "size": 5058,
+      "sha256": "a4545db0abcc58e3f009df5f9658ab8a0c87ee41f44f25d22e24b5b39afab358"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/mediakit_erasure.py",
+      "mode": "100644",
+      "size": 2552,
+      "sha256": "b7df0b7b64bd2dd31e27c7e6fb08eaa07aa0260d31eb056d88ee18e87ed52f38"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/output_profile.py",
+      "mode": "100644",
+      "size": 979,
+      "sha256": "1113a2de209eb381a3eea7e078d225ed31f7e22b1f22e83b59ce0d2517a55882"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/queue.py",
       "mode": "100644",
-      "size": 3935,
-      "sha256": "5a47607b80731e1bf265b554f82ee6465469b911c6d939bf96dabb3c4f21ec76"
+      "size": 5225,
+      "sha256": "33532fb6f1c92adf60219b2ab3aae51d08c0b9266c14a0f71005eb6c7fb838fe"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/reference_edit.py",
+      "mode": "100644",
+      "size": 4437,
+      "sha256": "db49bdc46b2327a8b9715c65fc0f62ab8f2166659430be17a4907668b29c8a57"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/remix_mediakit.py",
+      "mode": "100644",
+      "size": 12520,
+      "sha256": "bfde2c139464e7f36854d0eaebf0ab71736f1725608f1a12b792e7acae30a0c0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/remix_normalization.py",
+      "mode": "100644",
+      "size": 19645,
+      "sha256": "917365a4cc308b71e6c8275a067b5030a1d4c98c4cce03ced485d559ddcb3974"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/remix_output.py",
+      "mode": "100644",
+      "size": 12497,
+      "sha256": "41e0a2ca22e3f55f27c5d9661c800c0e7fc6063743a3a1e487b56c5d6c6d2a2f"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/render_binding.py",
+      "mode": "100644",
+      "size": 4202,
+      "sha256": "2bd3bdc4e2023611db6d4a01258daf233d27ff002a25b61ca6caec43835fa04c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/render_document.py",
+      "mode": "100644",
+      "size": 4813,
+      "sha256": "8c7afd18aea7527a2d69f79cda76e0b14841ebfcf220a37210b91618fdefed26"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/run_bridge.py",
+      "mode": "100644",
+      "size": 5687,
+      "sha256": "d0ba3ed0c76f275dae1dfdb6f817442da362d8af0c1d9553daa73d939564f3e0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_covers.py",
+      "mode": "100644",
+      "size": 6611,
+      "sha256": "5f0e70335d8a4d74b73d3e97a5303768bac9262d56bb22bd583fc1f02bc8d0ac"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_shot_hints.py",
+      "mode": "100644",
+      "size": 10481,
+      "sha256": "2ecf117ba9106d5b7a9eb63b3af10f8d356c057be8cb4022039e4086fa8639f0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_contract.py",
+      "mode": "100644",
+      "size": 22790,
+      "sha256": "90291d0d216a3579d532abb2f060b24b5b5b11aef4ab3a1047964235077fb234"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_provider.py",
+      "mode": "100644",
+      "size": 9123,
+      "sha256": "c9b7d00ce2d9c4e5c3ccbed11b80b320e5ea1c9d6e6ddd13cf7bd91a48adfb7a"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_queue.py",
+      "mode": "100644",
+      "size": 11102,
+      "sha256": "b93061326658f42cf175f9e055704ee59bc3c391fe4f25159fe4dbc399089e1b"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_worker.py",
+      "mode": "100644",
+      "size": 18545,
+      "sha256": "17eff764b8af88ddcdc83b71b6b8c3eac0e6ef063811cb0585210761d5d0dfef"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/segment_transcript.py",
+      "mode": "100644",
+      "size": 6240,
+      "sha256": "a6b166e7b712dd50b33f49093008f4303aea2c185eb63ae862bdffc90556e8da"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selected_review_actions.py",
+      "mode": "100644",
+      "size": 3241,
+      "sha256": "3f213998448f7499240fb083184676384aa166ad619796180ee4a1124d633843"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selected_semantic_review.py",
+      "mode": "100644",
+      "size": 12971,
+      "sha256": "94a38eafef45ee99dd60ecc05186beaefbb1401491c79ae1cd5caa5fa2107652"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selected_source_quality.py",
+      "mode": "100644",
+      "size": 5874,
+      "sha256": "aa7ec79984c90f7c06a4632aa105d8f9752094597158442f64142c2da00e9e50"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selected_text_review.py",
+      "mode": "100644",
+      "size": 8237,
+      "sha256": "ab06370ddee9868c2dc22510f65389d83df0f9e0fba4c4e4531fcaf3193edc27"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/semantic_captions.py",
+      "mode": "100644",
+      "size": 21503,
+      "sha256": "4e8a2ac90cd90577d87dc29008d9d861a7165dafece0a2387b57f58614bd7bc1"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/semantic_queue.py",
@@ -14925,8 +16767,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/shot_catalog.py",
       "mode": "100644",
-      "size": 8024,
-      "sha256": "45731d381ae5dec5a33326d747e2cc46426fc15d1b83bf001d9a860113ed10ce"
+      "size": 8188,
+      "sha256": "0f0eeec3b61457935c0ba48d617235ccedc81cd08b75e41bf79304f6f9ddd91b"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/shot_queue.py",
@@ -14953,10 +16795,118 @@
       "sha256": "ef45c17b6bd019e85d93bc281cfa6741e0ace883330e0d7ffabcefd8c024b6b2"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_boundaries.py",
+      "mode": "100644",
+      "size": 7702,
+      "sha256": "e1714ed57de6cc65a48af277d462dd0a18d964e084be2d1677145c03ebf53ded"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_coverage.py",
+      "mode": "100644",
+      "size": 10527,
+      "sha256": "bf2b91724d3438431a11805f556f0a4217b7e8d1f4b8e9207e5a3724b227496d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_groups.py",
+      "mode": "100644",
+      "size": 12410,
+      "sha256": "9a549b354d4ead9ddaabf6fc999449bd04384ab7df13d4d798d84772485def0c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_input.py",
+      "mode": "100644",
+      "size": 6241,
+      "sha256": "8158e8933774a5bd833dcf7bf6c7f20b5302f74f6f1e58259b00297a3b31c5c6"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_reference.py",
+      "mode": "100644",
+      "size": 14859,
+      "sha256": "8d9b64a425a491822536fd1d6cd85cef642141a7d6f075d0140c982167d2eb10"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_caption_style_probe.py",
+      "mode": "100644",
+      "size": 8771,
+      "sha256": "1a12495187cf26189653c63442255fd7eb48d43dc5b4e455304e49d3c0434e35"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_text_analysis.py",
+      "mode": "100644",
+      "size": 2099,
+      "sha256": "0bbf7bc0b4c6e659fdd0954d5f1c977cf0a43e22cf18bdc01355d0e2d6b2f19d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_text_compatibility.py",
+      "mode": "100644",
+      "size": 3095,
+      "sha256": "12ccadf35d35c83461410ec1e4ec104e56f50f600b5d1aa2c3a7d665092c6b8d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_text_ocr.py",
+      "mode": "100644",
+      "size": 4526,
+      "sha256": "b67b2b1ebfee6344eff07470ff1e38302f9e73dcb7513cfb80fff1be6dabc984"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_text_plan.py",
+      "mode": "100644",
+      "size": 5377,
+      "sha256": "87fe6081329b1e719afbe1fb0ec97a5909a6fdb0fa0364d9d89cae61cda74f00"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_treatment_adoption.py",
+      "mode": "100644",
+      "size": 9781,
+      "sha256": "155f44458ee1824671187bec80a2296411a05d85c8f98645af0b7057b9b1653c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_treatment_captions.py",
+      "mode": "100644",
+      "size": 4272,
+      "sha256": "436a69a6bf1bd99258e94d05dfaf1513c940acf4a3ce2e3d8e7f68f2b984c6a7"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_treatment_media.py",
+      "mode": "100644",
+      "size": 4593,
+      "sha256": "bbdc247b9ab46cdf56f2cfefeaf27fc701bc00ecd9f4ff763895e5b60dd12d4a"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_treatment_review.py",
+      "mode": "100644",
+      "size": 12876,
+      "sha256": "0c3f27c8d4061a6709bf2ba3e46215b486e01998abd7e25016c95b48fce288d4"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/source_treatment.py",
+      "mode": "100644",
+      "size": 12712,
+      "sha256": "754d690bf3d7ffc44afeb4baf7be34cfc8f20fbc05f8ef42429b9996ecdee984"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/treatment_visual_input.py",
+      "mode": "100644",
+      "size": 7650,
+      "sha256": "77cb288b45cd9894d22d13ebb3ffc7c2657f03b432fa1b9aeb1262cc070393a0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/treatment_visual_worker.py",
+      "mode": "100644",
+      "size": 9030,
+      "sha256": "87b17ffbbd7ed889511eddd0b458828ecadc9e853607dec9ccefe1f7d8e91319"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/worker.py",
       "mode": "100644",
-      "size": 5730,
-      "sha256": "85616f03e3d4b9383eb233c8fbc9e58887694a42320e04968320b08e9571bcec"
+      "size": 14719,
+      "sha256": "fe0829536df554040989f6fa1a3d7a88427c1e1feb1920ffd5d49b722650b9c2"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/workspace.py",
+      "mode": "100644",
+      "size": 4209,
+      "sha256": "40a1fdde7f674605f6476db68da2155e86cd042f616820ef192bfd81c6ad2062"
     },
     {
       "path": "etl/groland_postgres/scripts/daily_business_brief/__init__.py",
@@ -15093,8 +17043,8 @@
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/analysis_processor.py",
       "mode": "100644",
-      "size": 90336,
-      "sha256": "23a8003d37575d3cf67aa288554c180bd3df396b71bbd34b5deae9bc3ea22752"
+      "size": 91737,
+      "sha256": "48e4d2d9eb2c84f52894c252708dceb75afa5edc20d8808117804badd892234c"
     },
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/analysis_runtime_policy.py",
@@ -15111,8 +17061,8 @@
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/ark_responses.py",
       "mode": "100644",
-      "size": 68419,
-      "sha256": "03139cce36de68b5e595fe3909b646d1681ce1f049d84072cf39dd28835d8b9d"
+      "size": 69057,
+      "sha256": "e7d7ff3554609d03825908348c41cbc1c6e44969ca155e0f71244db94eebee9a"
     },
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/asr_client.py",
@@ -15205,6 +17155,12 @@
       "sha256": "b4e8bc23e32747a95dbedf9fa741c9183ce7e92f66460fe81928dc8aa734a5d7"
     },
     {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/seed_asr.py",
+      "mode": "100644",
+      "size": 7953,
+      "sha256": "393a5557c9a51a2dee74abd5c053494ed9b486b728218cf09e50438877670d04"
+    },
+    {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/sync.py",
       "mode": "100644",
       "size": 13097,
@@ -15213,14 +17169,20 @@
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/tos_storage.py",
       "mode": "100644",
-      "size": 10716,
-      "sha256": "46234eba6e901e3c8bae9fad447cb3ccc7c5678d8fa8cd4ec7da3a4e3ee18eef"
+      "size": 17165,
+      "sha256": "71bd4d1d10720f03ed177c6babba2b17d8b4f1fb684ae5e187d9fd69682503bf"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/transcript_captions.py",
+      "mode": "100644",
+      "size": 2387,
+      "sha256": "efd74f54e785a129be81f8b34dc206124a582b50db9e423e91c716287329cb16"
     },
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/transcript_processor.py",
       "mode": "100644",
-      "size": 23412,
-      "sha256": "4d64e54eacaec506199d9c126bffef923f5d48a49539d43e86bee663a7b1150d"
+      "size": 27210,
+      "sha256": "8bf4682ce36d5905b7f57aa99b01c3eaded5eb6980624e972a21628e8ecc73a3"
     },
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/video_processing.py",
@@ -15233,6 +17195,12 @@
       "mode": "100644",
       "size": 14636,
       "sha256": "3633de54c1158fc1410af1e9acc8ba759adaf432ca56b95f246351fde15b1b71"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/marketing_content_assets/visible_text_contract.py",
+      "mode": "100644",
+      "size": 4774,
+      "sha256": "2c992a601c22e13ad8547e5da4f29cb65728af775969d77f6771e045c375dfa1"
     },
     {
       "path": "etl/groland_postgres/scripts/marketing_content_assets/worker_runtime.py",
@@ -16843,28 +18811,436 @@
       "sha256": "61e62f3feff9881ac0cfa864f436e583392b732db2e16f385c411caa0737ef7b"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/audit_replacement_frames.py",
+      "mode": "100644",
+      "size": 3364,
+      "sha256": "971e9d140d53b8139f7485558488d65469cc1fe98e00fccd6e65537f869b3e5c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/batch_measurement.py",
+      "mode": "100644",
+      "size": 5041,
+      "sha256": "8b5b788fc838514e51a5db4ca807447be7ebbc107e99e2b0ac0ef4a1e36caad2"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/browser_candidate_fixture.mjs",
+      "mode": "100644",
+      "size": 4263,
+      "sha256": "e9f2d68fdf1a0832da20e977d6bb7138e5b40754c798ee9067b5f78b5d6f9a65"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/browser_candidate_fixture.tsx",
+      "mode": "100644",
+      "size": 1727,
+      "sha256": "98b573aa938f80ee3a395b6e80fe37e08c61513f64a65092eb5be309e221b87f"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/caption_provider_fixture.py",
+      "mode": "100644",
+      "size": 2375,
+      "sha256": "f2d55760e544811a2f1a338443ba8f138b8b3ff41e5d7fa3f36f59f6d4ee2115"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/caption_render_bridge_fixture.py",
+      "mode": "100644",
+      "size": 11588,
+      "sha256": "2fc115be4119847c7690974788d3703359c4da0092ede76f398bcfb0226e482e"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/caption_run_http_fixture.py",
+      "mode": "100644",
+      "size": 1226,
+      "sha256": "f6cf941ca55f3e3d2c5d59c172ef8e6ad1455f192334deeeaa5604542416048d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/caption_worker_bridge_fixture.py",
+      "mode": "100644",
+      "size": 2512,
+      "sha256": "1fd731d852aa89b8e77d3a8264a3409232e3ec6144b10e6fa50c60b4dafe8db8"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/check_real_media_replay.py",
+      "mode": "100644",
+      "size": 3208,
+      "sha256": "cd9b32e76eeaa4656bb1a57b5bd0130e80ddf49423aeda5766f26c0c371c204d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/edit_document_fixture.py",
+      "mode": "100644",
+      "size": 1873,
+      "sha256": "0ca5d173ae99f356764355d9be0a14ec5128456a7c329cee804897c5feb71400"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/multi_source_text_probe.py",
+      "mode": "100644",
+      "size": 7043,
+      "sha256": "10527473a19dfe6c09b6b62e204ef24cc7e4ab24690a98d8334a2a5677d02042"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/object_fixture.py",
       "mode": "100644",
-      "size": 4797,
-      "sha256": "2d691e3bff92a3809d84e4a4a62d516b6dfd66773a676d75be6ce8e3280dc5e8"
+      "size": 4970,
+      "sha256": "2870fca291f43185abcb8c71031b4d073bbdb0936fffbf4c79ae535941515a26"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/real_media_worker_replay.py",
+      "mode": "100644",
+      "size": 3824,
+      "sha256": "9f5d5b4149344f26292d5bd0f36d3b05563f1fdba5f3ab082a8c93200012ca70"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/render_white_gold_pilot.py",
+      "mode": "100644",
+      "size": 7487,
+      "sha256": "0d345b23c485f09a5b4ad454ca5462f75944285c10b081ddb98a54e90f359930"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/replacement_text_contract_probe.py",
+      "mode": "100644",
+      "size": 3332,
+      "sha256": "7a11704fb1dea28ddefe060d21fe471c3cd2f0a9dbac596e159fc418c733e5ab"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/run_e2e.py",
       "mode": "100644",
-      "size": 5711,
-      "sha256": "4788206dc32d2d67862ccbe70126987d262842486ba551c9b760a3243d60071e"
+      "size": 17815,
+      "sha256": "36c929192446dee831dd4834a7b2b5c72083ca5fb41ee9a54e39bcba7e120455"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/run_edit_document_e2e.py",
+      "mode": "100644",
+      "size": 6146,
+      "sha256": "81b60f0327173450956561f5fe00dbf1f104d71c763c9da97fe56c0794161110"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/selected_replacement_real_probe.py",
+      "mode": "100644",
+      "size": 6054,
+      "sha256": "3e2d897df4bcfec0fdd34497936cb44343fe16e5d7b536b10d2f492b12c7ed92"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/selected_semantic_contrast_probe.py",
+      "mode": "100644",
+      "size": 5335,
+      "sha256": "284002e90e5c7ec88013268b4523a2a0697b0302367fdc3a475901fc42fc2a05"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/selected_semantic_split_probe.py",
+      "mode": "100644",
+      "size": 4967,
+      "sha256": "b269110b1aa15727febec265cb49b25a3b358f9915df0d19b7996b713afbfe70"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/selected_text_contrast_probe.py",
+      "mode": "100644",
+      "size": 5239,
+      "sha256": "43f8d3df2dd8b21a78d7b434415371789c7cd2533b15cabfdbac1c709c29f85c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_batch_measurement.py",
+      "mode": "100644",
+      "size": 961,
+      "sha256": "d5f7b62db3d190ad81c654ea99fc3511dfe5427c9f83746d02fa9efa5cc9b3d7"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_benchmark.py",
+      "mode": "100644",
+      "size": 6893,
+      "sha256": "0dec7f2433a04945fbad957e1d4f2d88818c375673c2eda6b4168edb51859897"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_candidate_render.py",
+      "mode": "100644",
+      "size": 4811,
+      "sha256": "9a09e62ddae145d03fd475612b559ac0282ac43bdeef8913bd8a78ecdf7c8b7a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_display_revision.py",
+      "mode": "100644",
+      "size": 4261,
+      "sha256": "ed2e1bef31936d95be29a5da3d97944cf65a299d8185e57c865a0f6161196c12"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_display.py",
+      "mode": "100644",
+      "size": 3784,
+      "sha256": "5fde92c57103c12d0025bff3187ea412318d81c2eaf0f86830ef5669640cf1e1"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_execution.py",
+      "mode": "100644",
+      "size": 3534,
+      "sha256": "6a361a1b415ea1454f23b725c71b4be5710dc10daa432a9451c95023a9fb1678"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_group_repair.py",
+      "mode": "100644",
+      "size": 3455,
+      "sha256": "2748b89ff1dde9eb97f81452ebeee4483cc6e2c710470befeb726712461b4008"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_layout.py",
+      "mode": "100644",
+      "size": 1872,
+      "sha256": "a12c6854e3a01ffbc7e4732d8702e6151cd6671e0cfabd5eea7879ebe1cf8c7c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_overlay.py",
+      "mode": "100644",
+      "size": 4160,
+      "sha256": "18cace425747049dbc62e5ebc4066c5869e88dcec043fbfdc0813595e6f4b690"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_planning.py",
+      "mode": "100644",
+      "size": 3593,
+      "sha256": "929a354848afcd9c11291de6cb1bf697a2c72074983bb8efa8107ec7d52cd57a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_preflight_api.py",
+      "mode": "100644",
+      "size": 3688,
+      "sha256": "728e8323e3082dc1debf7d02a33ff7b369afc0ea9c1312a00f5643373e737dbd"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_preflight_queue_postgres.py",
+      "mode": "100644",
+      "size": 16123,
+      "sha256": "752acce510dc9bf6e7d51cd1d27594afe4ccafcb44f2bccf16789c5429d04700"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_preflight_queue.py",
+      "mode": "100644",
+      "size": 5663,
+      "sha256": "430e9cd4133faa88e534a7e701d085e3ae3c1324fb5f0e4c7fad27154079b332"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_preflight_worker.py",
+      "mode": "100644",
+      "size": 3702,
+      "sha256": "977821ed7f6e5e86ddb0c08fec6553953cdeaa7c84581d2b6cdaa9a041ccda15"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_preparation.py",
+      "mode": "100644",
+      "size": 2819,
+      "sha256": "ef8683cc2b436bfb9be26dc9057fb91c3a811a890fd0277bfd57577fa29cab4a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_quality.py",
+      "mode": "100644",
+      "size": 2188,
+      "sha256": "3b51051d4380431a764a0e48d2ad61232b6c4f4c2ef6083787a9e0e4f65548e9"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_review_revision.py",
+      "mode": "100644",
+      "size": 5171,
+      "sha256": "8f997389fb5e55466b33c775e6e2eeae6ac526e5a7ced163cfc8064f34d1e55a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_review.py",
+      "mode": "100644",
+      "size": 6109,
+      "sha256": "bb11fcab57eafa265883ecc19583230787a4603ce0876882f498b3cb591f2bee"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_revision.py",
+      "mode": "100644",
+      "size": 4821,
+      "sha256": "7ba8d2ae55d59828d1a4a79e224856fe939bd2efa6195d1b958f24ea65b2bb46"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_run.py",
+      "mode": "100644",
+      "size": 5848,
+      "sha256": "198974fe53ad513fd518a3728a765d2bdd17a55b5777c6cb805c47958b0fe8de"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_caption_worker.py",
+      "mode": "100644",
+      "size": 5227,
+      "sha256": "afb72b1ca70166fc49fe7c7efec3bf04f04febf462773e5ec1cd00154ef4735d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_edit_document.py",
+      "mode": "100644",
+      "size": 9521,
+      "sha256": "383c042fbbf138864aff8ca006e7450b0535fd4a99b7406400d4276ea9099fa9"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_execution.py",
       "mode": "100644",
-      "size": 2148,
-      "sha256": "72b2f31ca2399da5d22e44cee007441ccada4c8cd15a17d7ece4df64670e1c31"
+      "size": 3845,
+      "sha256": "949672541020f6dc5cbd72d0ce954135b4ecded91faaf0aac940a712627944fc"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_indexed_captions.py",
+      "mode": "100644",
+      "size": 4089,
+      "sha256": "50e998bd2557a06d4c1495d10b52a0997c1c65be8efc526959f017274b8b9275"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_inspection.py",
+      "mode": "100644",
+      "size": 2921,
+      "sha256": "b4aaa4e7016009224aa1eb6a5b2f69a3372ef4387c282c794a88c538558e3ec5"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_mediakit_client.py",
+      "mode": "100644",
+      "size": 2464,
+      "sha256": "b3c53b942333291ad5dad45d4e662d9e084040812cedc52035486497d5161bdf"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_mediakit_erasure.py",
+      "mode": "100644",
+      "size": 4651,
+      "sha256": "73c257c4c76c9b7ece9feab1746bc5f065c257ca9d172771694284c473b74233"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_object_fixture.py",
+      "mode": "100644",
+      "size": 2643,
+      "sha256": "98a3c0cc0fb72a4d8e5f69cdcb03da6ea2067746b50f0f8e1bf20bcb41aefa1e"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_output_profile.py",
+      "mode": "100644",
+      "size": 2026,
+      "sha256": "23a914cfd423e63dca32e42838cc3cac9b9c80aad3bb7e4dc8e8950e0dcec7e2"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_queue_postgres.py",
       "mode": "100644",
       "size": 3257,
       "sha256": "662256f16ed64356cda4b046983e60e85d779ba3eb6e5c5f094db63d330a5dae"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_reference_edit.py",
+      "mode": "100644",
+      "size": 3683,
+      "sha256": "3330ae92debf1b34917dcd4cdd6fbd41b381a48eacb2996159ec334687dd8319"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_remix_mediakit.py",
+      "mode": "100644",
+      "size": 12489,
+      "sha256": "a1f32984e354a6ae3d43ff817e2a483e01695a1656561906d088d0c223db831b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_remix_normalization.py",
+      "mode": "100644",
+      "size": 19017,
+      "sha256": "825b43e28a880530172c43fe63d8bfbfa59a9ab1faf73043411b61835d9407bf"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_remix_output_keys.py",
+      "mode": "100644",
+      "size": 1244,
+      "sha256": "83ce6fe6dcc3a9e750d1d5ae9b6137f943d674e77ef661576b7b5594ac8876c0"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_remix_output_postgres.py",
+      "mode": "100644",
+      "size": 14515,
+      "sha256": "e3cb358f4abf08f3f5e0926304a2b84bd8259e315bd0ce22398620a5390ce3f6"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_render_binding.py",
+      "mode": "100644",
+      "size": 5284,
+      "sha256": "0c4ff6b31ef6876a44fa91b8ea7ae9f513c2dc5edf4ea38a5da4a6f2e0cc90e9"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_render_document.py",
+      "mode": "100644",
+      "size": 2544,
+      "sha256": "6bb7de0dd935183db268d265d094f4bbf79972d34047c3793e0195afc785ec3f"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_renderer_scratch.py",
+      "mode": "100644",
+      "size": 2083,
+      "sha256": "9ef2cca09b558802c8d2909f88df665b6a63c2466cfa22791460f56ebfd43c2d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_run_bridge_postgres.py",
+      "mode": "100644",
+      "size": 19240,
+      "sha256": "d5e233b2d34f81b79bafc96005d87739e410bcd194b8c524adb5d20a281e66a9"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_covers_postgres.py",
+      "mode": "100644",
+      "size": 7234,
+      "sha256": "d8556170252bbdf9087e009a68d7eec63cf9561c7e92086d78ddca7534549567"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_shot_hints.py",
+      "mode": "100644",
+      "size": 10259,
+      "sha256": "df23e53820886969a166792a802c6567e50203236e2f2ef883d4ee8a08f59ca6"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_contract.py",
+      "mode": "100644",
+      "size": 22450,
+      "sha256": "c2a0eb64208f3e177db9de4d23f365d6c23e13306830a3f13fbe2adf064e7b18"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_postgres.py",
+      "mode": "100644",
+      "size": 23682,
+      "sha256": "931d4b3071930dab1377d45ffbb663163d349e445b849c1cd964f7398e58f062"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_provider.py",
+      "mode": "100644",
+      "size": 6071,
+      "sha256": "bf96759d1c976715e1d5829b89c92e11734d5faf2568753e024e9d343e81db90"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_worker.py",
+      "mode": "100644",
+      "size": 8076,
+      "sha256": "c9cd40f7291567f2b652d2d49a89bfe92efd374c236217e6e928ea9c7c20a770"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_segment_transcript.py",
+      "mode": "100644",
+      "size": 7098,
+      "sha256": "dbde70ed5b2c2fc718e788c07d6037dfb34e532524b0d6e29896296f7d9c3c8d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selected_review_actions.py",
+      "mode": "100644",
+      "size": 3637,
+      "sha256": "7cee98bad3ed6c73694d740695013e686149213dbda8b01fdeb0150713675489"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selected_semantic_review.py",
+      "mode": "100644",
+      "size": 9673,
+      "sha256": "82022fbaa1f0be00dcc2fcc3d642f840825d06744ecac23730af54d4adaac642"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selected_semantic_split_probe.py",
+      "mode": "100644",
+      "size": 4264,
+      "sha256": "1a4e5c598fa801eeead1fd7b184ca4cff085bef10a0ccbb97ac9b8823ab250ec"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selected_source_quality.py",
+      "mode": "100644",
+      "size": 3802,
+      "sha256": "5a2bbe23b2221e07b6ea8cc7ee6d94444a259effae68ace203d5e221383aea16"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_semantic_captions.py",
+      "mode": "100644",
+      "size": 10781,
+      "sha256": "b33f2c9ba196a321e2b0db339936abacae5e2aa59cfbef09e8b5fea5116b31ce"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_semantic_queue_postgres.py",
@@ -16897,6 +19273,114 @@
       "sha256": "439696aba6c57380010923d97ff58e5c44c7780f4385b9991e0d77d828b0a6e7"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_boundaries.py",
+      "mode": "100644",
+      "size": 6945,
+      "sha256": "c77ab94b3d0ef6c7c8a48bcb9172e43750b5e45f957e97a558c14bac141001d3"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_coverage.py",
+      "mode": "100644",
+      "size": 10888,
+      "sha256": "0703905c38f41605c991253e6da67ba57454668a0eebbc4e2b8e0ae48af3d1a8"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_groups.py",
+      "mode": "100644",
+      "size": 9248,
+      "sha256": "3a8ff06e631181e92dc4f2e76d7bc92796856798fca807856e6083f0b81d3a32"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_input.py",
+      "mode": "100644",
+      "size": 6495,
+      "sha256": "ece85f74cd7f9a2e197b8ed54aec1edc848734484ad856adecf66f9bac04f747"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_reference.py",
+      "mode": "100644",
+      "size": 7413,
+      "sha256": "e9456f7ad6c49f9dd44830628915b6c1c1f9e2d78aafe6a765e44a61fbe4add8"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_caption_style_probe.py",
+      "mode": "100644",
+      "size": 3332,
+      "sha256": "72c79c61ef66be2e4ea4bb62fe89ce0e117f81dec565f5ea0dc7a8b897db5d8f"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_text_analysis.py",
+      "mode": "100644",
+      "size": 2963,
+      "sha256": "2ac562e61622fcdbbef230b3db9f36f6f19a9fa45db8bfead7065af23e26eccd"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_text_compatibility.py",
+      "mode": "100644",
+      "size": 3333,
+      "sha256": "9ac37f42d63f107ede2ade41dc517793a28d5ace7ecdacb16506ec5ab0245281"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_text_ocr.py",
+      "mode": "100644",
+      "size": 3105,
+      "sha256": "b43ba38f84d2ac79e06666e82ac03a59b2900b95b934465eb6597d75d74d0d42"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_text_plan.py",
+      "mode": "100644",
+      "size": 4257,
+      "sha256": "dbf06efd9819dbac7a37c9055448d2b588433057ca5d0af7b3bc305ee9c8d281"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_treatment_review.py",
+      "mode": "100644",
+      "size": 11554,
+      "sha256": "39505689243d949728e3dfbf59c069176b9f6c764e39d46658b8ed2d7770fcfc"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_source_treatment.py",
+      "mode": "100644",
+      "size": 11366,
+      "sha256": "dba3e86049968b5f2699beb277ee4b30a1e3c44333100e6efc6d1210bd5490a4"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_treatment_adoption_postgres.py",
+      "mode": "100644",
+      "size": 10267,
+      "sha256": "680eb13606930f7f9e97db9fc3b76249727c7abfa65f56c2d97df747be8a4b25"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_treatment_visual_worker.py",
+      "mode": "100644",
+      "size": 13032,
+      "sha256": "1fb55ef1d8f4fdd0453b85bbed2e44977929685f0911ea38e42495c5cb434a98"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_worker_workspace.py",
+      "mode": "100644",
+      "size": 5888,
+      "sha256": "a49c4875e58b1dc75bf2cfe6b34f3c30127d7785fbb9d0e5f226142d680c2461"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_workspace.py",
+      "mode": "100644",
+      "size": 4496,
+      "sha256": "c84534600d698718c63ad922c4f6714a78e5a641b676d188d36a792449d84537"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/treatment_http_fixture.py",
+      "mode": "100644",
+      "size": 3835,
+      "sha256": "56d6921be53c3a374579073988fd6955f53cb1e6ee39481b0d7e9e39f68711df"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/visual_provider_fixture.py",
+      "mode": "100644",
+      "size": 4167,
+      "sha256": "d6e50e8cf688b7ed069152f4af9382ec89328fa92934dcc048d2a77a9bc88d79"
+    },
+    {
       "path": "etl/groland_postgres/tests/sql/all_trade_overview_check.sql",
       "mode": "100644",
       "size": 9298,
@@ -16925,6 +19409,12 @@
       "mode": "100644",
       "size": 3354,
       "sha256": "c9fb4475a3b3157afa7ed73ac9e5d2942d952c0d9d52c55b23702ae98ffbe0bd"
+    },
+    {
+      "path": "etl/groland_postgres/tests/sql/content_production_runs_contract.sql",
+      "mode": "100644",
+      "size": 2181,
+      "sha256": "1af9b5a5e8add130ea0a0f7c75d6114fab0498d32d9bb9e90e03794f274b3431"
     },
     {
       "path": "etl/groland_postgres/tests/sql/creator_live_dashboard_check.sql",
@@ -17295,8 +19785,8 @@
     {
       "path": "etl/groland_postgres/tests/test_marketing_content_analysis_processor.py",
       "mode": "100644",
-      "size": 32061,
-      "sha256": "b9dfc1558c616cb32edc44875522de99ab4c52346c68ef45acd4abf11e0ce9a9"
+      "size": 33943,
+      "sha256": "5c1b4bdca7635280c19cad2cd867aeb336a12e2a098a1ad5455439d6440c0952"
     },
     {
       "path": "etl/groland_postgres/tests/test_marketing_content_ark_responses.py",
@@ -17329,6 +19819,12 @@
       "sha256": "390be88964f6b213ac6f98715240bbe45a0618fb9023671938a5081d7e5c1b78"
     },
     {
+      "path": "etl/groland_postgres/tests/test_marketing_content_tos_upload.py",
+      "mode": "100644",
+      "size": 6155,
+      "sha256": "bd01c5406cfbeb7c81be7e5975ba2ee9e671eec28ff91c4a6640d134259518a5"
+    },
+    {
       "path": "etl/groland_postgres/tests/test_marketing_content_yuntu_archive.py",
       "mode": "100644",
       "size": 4034,
@@ -17351,6 +19847,18 @@
       "mode": "100644",
       "size": 3869,
       "sha256": "6aedba34ca57132b8e615a366ef53c97088d72492d2b9632e9e15002d650a398"
+    },
+    {
+      "path": "etl/groland_postgres/tests/test_marketing_seed_asr.py",
+      "mode": "100644",
+      "size": 9430,
+      "sha256": "e1e2688579495d8eb2925c7245a6ebf587f82168b6510d5f09b888315cdecc3c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/test_marketing_visible_text.py",
+      "mode": "100644",
+      "size": 3891,
+      "sha256": "0d401507f49141318853c28881f827088e745f58741a1ae3c01de074d391c6ef"
     },
     {
       "path": "etl/groland_postgres/tests/test_overview_source_readiness.py",
@@ -17427,8 +19935,8 @@
     {
       "path": "etl/groland_postgres/uv.lock",
       "mode": "100644",
-      "size": 185235,
-      "sha256": "3fb2dc22d99f835d40839fcc0529c72443953bb714e933f67728898833754f94"
+      "size": 185689,
+      "sha256": "d7f39cdd35531a24fa8a4105a06540c5feb9fec24c5b4cf2c74155e8628f723a"
     },
     {
       "path": "LICENSE",
@@ -17439,20 +19947,20 @@
     {
       "path": "package-lock.json",
       "mode": "100644",
-      "size": 340054,
-      "sha256": "e90d2a893fd8512f398aa4981d076f2dfd920c4ef53859b14122b931baaca2bd"
+      "size": 341031,
+      "sha256": "a18ccc9fcd0602fab5a826cdc6da42d8b0fac8f8116bbfce5787cc274d5d195f"
     },
     {
       "path": "package.json",
       "mode": "100644",
-      "size": 54479,
-      "sha256": "860034199d20d623e0eae9c288370925f57297305f8c436cf71db4b1abf6e9e4"
+      "size": 54684,
+      "sha256": "9e90b2737f204a90c8c5cce8bab1d9f740b3894ffed86abcb9f4bda99519fbc1"
     },
     {
       "path": "postcss.config.js",
       "mode": "100644",
-      "size": 61,
-      "sha256": "36f25fa065015c5ee75d7f27e115e5f45e89f14804478cb2df8a077738c97028"
+      "size": 114,
+      "sha256": "687b19e6e3fc8231c167587182f6ad8967e9214883525304b99249711f7397d8"
     },
     {
       "path": "public/apple-touch-icon.png",
@@ -17461,10 +19969,58 @@
       "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
     },
     {
+      "path": "public/docs-media/ai-studio/annotation.webp",
+      "mode": "100644",
+      "size": 46602,
+      "sha256": "59ceb2aff68f0a04f852e7908e0959dfca96544fbb73ffd57871484cd3db30c8"
+    },
+    {
+      "path": "public/docs-media/ai-studio/assets.webp",
+      "mode": "100644",
+      "size": 67768,
+      "sha256": "0d9d07742c4a4d269c7c26fe5b6c525aefb17b32e6c2599726c0f449206574cf"
+    },
+    {
+      "path": "public/docs-media/ai-studio/home.webp",
+      "mode": "100644",
+      "size": 67450,
+      "sha256": "3e3981488679fec15e892648fa34ee6d06f7e2c19050b2b2fa90bcf6b8c6bc94"
+    },
+    {
+      "path": "public/docs-media/ai-studio/intro-poster.webp",
+      "mode": "100644",
+      "size": 25592,
+      "sha256": "f5128d1b282b539a591e92bece68f095c8f8489a41733eee04a450195adbfc6e"
+    },
+    {
+      "path": "public/docs-media/ai-studio/intro.mp4",
+      "mode": "100644",
+      "size": 12479424,
+      "sha256": "70bdbea6fbe691bf799de201c6197703b349cbfbe91f0bde9ced2a02be872c2e"
+    },
+    {
+      "path": "public/docs-media/ai-studio/outputs.webp",
+      "mode": "100644",
+      "size": 44948,
+      "sha256": "192e8566556312a63c674c4c6971f51fc813a1c6a4d63ac58789ac9857af0977"
+    },
+    {
+      "path": "public/docs-media/ai-studio/remix.webp",
+      "mode": "100644",
+      "size": 83640,
+      "sha256": "488a3f0137abae699975cf209d3311a8483eaddb8fd3f35b000a488634ba9ac9"
+    },
+    {
+      "path": "public/docs-media/ai-studio/single-edit.webp",
+      "mode": "100644",
+      "size": 45258,
+      "sha256": "0bba4c4adf32ed321111f1add8dbdb211271cd4cd3362778eeeeac2f45d3e706"
+    },
+    {
       "path": "public/docs/workspace-v1.json",
       "mode": "100644",
-      "size": 189311,
-      "sha256": "e72d8282b0c03a2f833bdad114f4b4d60874cc048890edfe0308cf62794becef"
+      "size": 201621,
+      "sha256": "21d4f36a097a21156ca79a72f45616e7abb643b9d6020b54c0397c07c06d7fa3"
     },
     {
       "path": "public/favicon.ico",
@@ -18249,8 +20805,8 @@
     {
       "path": "scripts/checks/frontend-structure/route-policy-registry.behavior.mjs",
       "mode": "100644",
-      "size": 3738,
-      "sha256": "8c2c6c4d741d7a4c6428e43e42b3cd91204f7b2b655b8d1eed7003dc338632cf"
+      "size": 4497,
+      "sha256": "015c60f92b43f8c92dd91757afb954954ec4f49f5031b4b7b52ceb95f8367d58"
     },
     {
       "path": "scripts/checks/frontend-structure/same-dir-alias-imports.behavior.mjs",
@@ -18741,8 +21297,8 @@
     {
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.behavior.mjs",
       "mode": "100644",
-      "size": 22691,
-      "sha256": "952c063994e3a4e2088f8ce00dedb328de7845a5045588126cfc5f58fdc61275"
+      "size": 23739,
+      "sha256": "abc5bbc765601854e6e47a007473097b5ff6fc7044cef5ac735d405d4b056488"
     },
     {
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.mjs",
@@ -19017,8 +21573,8 @@
     {
       "path": "scripts/checks/quality-runner/affected-mapping-repo-config-fixtures.mjs",
       "mode": "100644",
-      "size": 36280,
-      "sha256": "9978ad2dc3ccc87f2231104cdba45311b394e98ab1c801aa9a6a34a73c1923bb"
+      "size": 36476,
+      "sha256": "672e84cabe8a9f57c17aa87f50548d9b68dc2afc8737d936f0cc89194f5205c3"
     },
     {
       "path": "scripts/checks/quality-runner/affected-mapping-runner-affected-action-fixtures.mjs",
@@ -19525,6 +22081,18 @@
       "sha256": "6d722b62d82ab0fdbaca47de26be8572ecd5ed3d1a6baf7a7d18c9d33fd3fc41"
     },
     {
+      "path": "scripts/checks/test_composite_image_repair.py",
+      "mode": "100644",
+      "size": 1368,
+      "sha256": "8aad8cf4a41384a74d049d6014fd8c687b702837fc273ecb3d13449e291c0f9a"
+    },
+    {
+      "path": "scripts/checks/test_micu_image_edit.py",
+      "mode": "100644",
+      "size": 2998,
+      "sha256": "3c97c758b41d11d62d3abb834318eb98620ac4e2a7633d9d87f0a679fc536e31"
+    },
+    {
       "path": "scripts/checks/weekly-douyin-card/leaf-adapter.behavior.mjs",
       "mode": "100644",
       "size": 885,
@@ -19989,8 +22557,8 @@
     {
       "path": "scripts/config/allowlists/css-module-size-allowlist.json",
       "mode": "100644",
-      "size": 1390,
-      "sha256": "df6ff74c69fde2a0876929d395398dec61a464eccfbd3aa5d1de46266f39420f"
+      "size": 1008,
+      "sha256": "cdf32fab7f3cb4d8d60d3386025507e5b7631d22cded40718f3302417ffc9f74"
     },
     {
       "path": "scripts/config/allowlists/css-module-typography-allowlist.json",
@@ -20013,8 +22581,8 @@
     {
       "path": "scripts/config/allowlists/marketing-content-assets-python-size-allowlist.json",
       "mode": "100644",
-      "size": 1668,
-      "sha256": "147f40c75101835ea5e7e4902d086bfc8af4b2334ab25c09360ab50426c801a2"
+      "size": 1744,
+      "sha256": "5771bc9fb3522fd9b0511eaf8ce1ae59e38a3c29153b1e067827d11e29868790"
     },
     {
       "path": "scripts/config/allowlists/shared-inline-visual-style-allowlist.json",
@@ -20037,8 +22605,8 @@
     {
       "path": "scripts/config/contracts/aios-api-contract.mjs",
       "mode": "100644",
-      "size": 36389,
-      "sha256": "d9b676068435d98fb51efa17776a970be3a7af95fcdd58fbc7894eb89a92a13b"
+      "size": 43668,
+      "sha256": "962753adef24a0c21e398d7500f02c44706194692ade52a6e0c528f2e01920d7"
     },
     {
       "path": "scripts/config/design/token-color-sync.config.json",
@@ -20049,8 +22617,8 @@
     {
       "path": "scripts/config/frontend/bundle-budget.json",
       "mode": "100644",
-      "size": 4455,
-      "sha256": "d3388311fade68974a1a8ae42233fe88b2136cd01ab06e7346695bf569f1da94"
+      "size": 5363,
+      "sha256": "6ae38f0735bd7a3ac5d4a6d39d52b9b48d6e201c003c1abf8f44f3bdd2735324"
     },
     {
       "path": "scripts/config/frontend/coverage-ratchet.json",
@@ -20061,8 +22629,8 @@
     {
       "path": "scripts/config/frontend/smoke-routes.json",
       "mode": "100644",
-      "size": 6152,
-      "sha256": "c54510450fbd7ff6474f12eef039d1e4d03218a8e547f8f4fcbc93d225a9c244"
+      "size": 6128,
+      "sha256": "22710d62f400b60394e3b2f5d40eb3601d9a61fd48e758a02cb349fad3beb654"
     },
     {
       "path": "scripts/config/migrations/aios-migrations.json",
@@ -20091,8 +22659,8 @@
     {
       "path": "scripts/config/repo/source-size-governance.json",
       "mode": "100644",
-      "size": 4622,
-      "sha256": "f8563670eb5e9408bc65f716ccc9046f051250529fd59c79b84b827c5b60e10f"
+      "size": 4721,
+      "sha256": "f9d7e2cf1916223c1d05a9d72f015e62f0e223c6083f586dac587f0c1786cd92"
     },
     {
       "path": "scripts/config/reports/special-smoke-inputs.mjs",
@@ -20373,14 +22941,14 @@
     {
       "path": "scripts/lib/ci/package-wiring-behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 18895,
-      "sha256": "cf98831349e6973957c1366d2ee9e85e1db831983cfe35444b2bcbc30e13dff1"
+      "size": 19047,
+      "sha256": "7bcaf4b6d35a98c43a180a2e1cd800cd652621d314bd1ac92f58a2b9f5fedf5e"
     },
     {
       "path": "scripts/lib/ci/package-wiring-core.mjs",
       "mode": "100644",
-      "size": 7153,
-      "sha256": "650390f5a452d14a760fecd1317487b25b7966d6104e7a59e0d5148373449cbf"
+      "size": 7402,
+      "sha256": "7939005cf47aa86899dc29d708978269d552c16a973c1a6f878c26b7f0623a91"
     },
     {
       "path": "scripts/lib/ci/quality-stats-step-summary.mjs",
@@ -20445,14 +23013,14 @@
     {
       "path": "scripts/lib/contracts/aios-api-contract-behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 26488,
-      "sha256": "ea4387f34c4d41352f184b1d0a009c7bcd4a25d953feaaafcb10c34b3d4bfff6"
+      "size": 30600,
+      "sha256": "b8e757a8b709839c9d691fb622d2027feb671f88ad8677dcf2838e5b5740c622"
     },
     {
       "path": "scripts/lib/contracts/aios-openapi-core.mjs",
       "mode": "100644",
-      "size": 5250,
-      "sha256": "d3c4df2c19c0a81f0d38ad538df82e695950a6dfb532c6259b2609a9eea243f5"
+      "size": 5459,
+      "sha256": "6eb5eaed745685cffb007c7d487c1da664da0756c0c2b168690f0b273b362938"
     },
     {
       "path": "scripts/lib/contracts/openapi-typescript-runner.mjs",
@@ -20787,14 +23355,14 @@
     {
       "path": "scripts/lib/frontend/frontend-bundle-budget-behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 14202,
-      "sha256": "9cbff3bee78535d2c419407594a3db3623c42a9d660b310859e4dab3781d1bdf"
+      "size": 17426,
+      "sha256": "ac5190d70786511f970ea7cf5bf8cc0c537d3ce9bac7a605e3d214525d2ddb94"
     },
     {
       "path": "scripts/lib/frontend/frontend-bundle-budget-core.mjs",
       "mode": "100644",
-      "size": 13258,
-      "sha256": "8c2860bbefeee4b774f3adf7337e34024b77483159578c732a45414d172a2f69"
+      "size": 15962,
+      "sha256": "bd8ed50d24aaf07e92b0154e6dceccb5ec2bb10695a85b804a2fda24cc5f3aff"
     },
     {
       "path": "scripts/lib/frontend/frontend-component-size-behavior-fixtures.mjs",
@@ -20949,8 +23517,8 @@
     {
       "path": "scripts/lib/frontend/frontend-quality-docs-drift-core.mjs",
       "mode": "100644",
-      "size": 18540,
-      "sha256": "a8c62d6df322d3d7a6650fbe7b39b0f89318835812ca25c5d3247e9903813c0f"
+      "size": 18638,
+      "sha256": "33b33aac3320330e36dd6e78fae18b79a1150282d43d47bdd891c23181384b0f"
     },
     {
       "path": "scripts/lib/frontend/frontend-report-api-contract-behavior-fixtures.mjs",
@@ -21021,8 +23589,8 @@
     {
       "path": "scripts/lib/frontend/protected-navigation-consistency-check.mjs",
       "mode": "100644",
-      "size": 18041,
-      "sha256": "25667b4449301b77cb1d574a7110e000fbe57dda5451aa443c19cc2589616144"
+      "size": 18581,
+      "sha256": "c292bead68a5fa64b3baaf3d2c957ed019253bd53e7d6566032e5037db22fef1"
     },
     {
       "path": "scripts/lib/frontend/protected-navigation-consistency-core.mjs",
@@ -21897,8 +24465,8 @@
     {
       "path": "scripts/lib/quality/quality-affected-doc-rules.mjs",
       "mode": "100644",
-      "size": 1615,
-      "sha256": "d18dc68572453c06c92abccda8c4e06cfc6fc13583a0a86968a4b371fcc9c627"
+      "size": 1670,
+      "sha256": "fd945417cd8505b24f85e96621ff25a460ad2bdd627bc5a6d3c298e6fd4005bd"
     },
     {
       "path": "scripts/lib/quality/quality-affected-explain.mjs",
@@ -22879,10 +25447,58 @@
       "sha256": "fb04a71acdd74bc8aa735cc39ac90c9fb0b1cec4f1c9a74259ea4910b5c17cf4"
     },
     {
+      "path": "sql/migrations/026_content_production_runs.sql",
+      "mode": "100644",
+      "size": 2662,
+      "sha256": "8cbe9321c29988689a3fcec6591fffc64c04dcc9da3e1169b90961616a6ff4a1"
+    },
+    {
+      "path": "sql/migrations/027_content_production_run_renders.sql",
+      "mode": "100644",
+      "size": 1598,
+      "sha256": "fa013a9331882969be785fd6399093d15d3f8bdd3a06af80daf02df6a5736b40"
+    },
+    {
+      "path": "sql/migrations/028_content_production_planning_queue.sql",
+      "mode": "100644",
+      "size": 521,
+      "sha256": "7b3abbeb92b6dbfe61a7f612d83b12e778e1a3806fdd705fb4baa38a326c8a78"
+    },
+    {
+      "path": "sql/migrations/029_content_ai_studio_segments.sql",
+      "mode": "100644",
+      "size": 4270,
+      "sha256": "fd25a7949438c7123804fbd3ad94ab80d6b92a2b0699bb36c4a41e05fd13abcd"
+    },
+    {
+      "path": "sql/migrations/030_content_ai_studio_segment_suggestions.sql",
+      "mode": "100644",
+      "size": 3042,
+      "sha256": "8f36faba030ff3645976429a5e002ab88c946b564ca92b17be82aebc351c1e79"
+    },
+    {
+      "path": "sql/migrations/031_content_ai_studio_remix_batches.sql",
+      "mode": "100644",
+      "size": 4141,
+      "sha256": "be363909a9c5c97e275e832f5e3e6884b37793da5be39dd0fe4737ee63983767"
+    },
+    {
+      "path": "sql/migrations/032_content_ai_studio_remix_batch_cancel.sql",
+      "mode": "100644",
+      "size": 616,
+      "sha256": "232cd8e50e890e89b04438f717267de1b5017dc12898763798a650e93ac27f75"
+    },
+    {
+      "path": "sql/migrations/033_content_ai_studio_framework_preset_v2.sql",
+      "mode": "100644",
+      "size": 2176,
+      "sha256": "888b0819f58e56b775451cf0f6365eca8d7b4a6650339df301122375c5d1183a"
+    },
+    {
       "path": "tailwind.config.ts",
       "mode": "100644",
-      "size": 11730,
-      "sha256": "79e38098d2119a6b4d1d81e9d92be42230f87ff9a6825636e2501797aa595632"
+      "size": 11687,
+      "sha256": "e36f7dae2d642c01634a1445d5940ae0306db62b6badbe7a2dc0257411fa752a"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",

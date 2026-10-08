@@ -10,12 +10,13 @@ import requests
 
 from .ark_json_parser import parse_analysis_json as _parse_analysis_json
 from .brand_resolution_provider import request_video_brand_resolution
+from . import visible_text_contract
 
 
 DEFAULT_ARK_RESPONSES_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3/responses"
-DEFAULT_ARK_CONTENT_ANALYSIS_MODEL = "doubao-seed-2-0-lite-260428"
+DEFAULT_ARK_CONTENT_ANALYSIS_MODEL = "doubao-seed-2-1-lite-260915"
 DEFAULT_CONTENT_ASSET_ANALYSIS_SCHEMA_VERSION = "2.1"
-DEFAULT_CONTENT_ASSET_VIDEO_UNDERSTANDING_PROMPT_VERSION = "v1"
+DEFAULT_CONTENT_ASSET_VIDEO_UNDERSTANDING_PROMPT_VERSION = "v2-visible-text"
 DEFAULT_CONTENT_ASSET_FUSION_ANALYSIS_PROMPT_VERSION = "v1"
 CONTENT_ASSET_SCORE_KEYS = (
   "data_performance_score",
@@ -228,6 +229,9 @@ class ArkResponsesClient:
     response = self._post(payload)
     output_text = extract_output_text(response)
     analysis = parse_analysis_json(output_text)
+    understanding = analysis.get("video_understanding")
+    if isinstance(understanding, dict) and "visible_text" in understanding:
+      understanding["visible_text"] = visible_text_contract.normalize_provider(understanding["visible_text"])
     prompt_version = _analysis_prompt_version(
       self.config.fusion_analysis_prompt_version,
       self.config.analysis_schema_version,
@@ -311,6 +315,8 @@ def build_content_asset_analysis_prompt(asset_context: Dict[str, Any]) -> str:
 
 业务档案：
 {context_json}
+
+{visible_text_contract.PROMPT}
 
 如果业务档案中包含 transcript，请以 transcript.scriptText / transcript.segments 作为口播文案真相源；视频画面仍以 input_video 为准。若画面和口播冲突，需要在 timeline 或 risk_flags 中说明。
 如果业务档案中包含 constraints，请把 constraints 视为高优先级边界：delivery_mode、objective、boost_metrics_policy、live_acceptance_policy、product_card_acceptance_policy 不能被视频观感覆盖。
@@ -935,6 +941,7 @@ def content_asset_analysis_json_schema() -> Dict[str, Any]:
         "type": "object",
         "additionalProperties": False,
         "required": [
+          "visible_text",
           "hook",
           "timeline",
           "visual",
@@ -944,6 +951,7 @@ def content_asset_analysis_json_schema() -> Dict[str, Any]:
           "risk_flags",
         ],
         "properties": {
+          "visible_text": visible_text_contract.schema(),
           "hook": {
             "type": "object",
             "additionalProperties": False,
@@ -1229,6 +1237,9 @@ def parse_analysis_json(text: str) -> Dict[str, Any]:
 def normalize_content_asset_analysis_contract(analysis: Dict[str, Any]) -> Dict[str, Any]:
   if not isinstance(analysis.get("video_understanding"), dict):
     analysis["video_understanding"] = _derive_video_understanding(analysis)
+  visible = analysis['video_understanding'].setdefault('visible_text', {'coverage':'unknown','observations':[]})
+  if visible is not None:
+    visible_text_contract.validate(visible)
   if _normalized_text(analysis.get("primary_decision")) not in PRIMARY_DECISION_VALUES:
     analysis["primary_decision"] = _derive_primary_decision(analysis)
   current_ai_analysis = analysis.get("current_ai_analysis")
@@ -1745,9 +1756,9 @@ def _bounded_fps(value: float) -> float:
 
 def _analysis_prompt_version(prompt_version: str, schema_version: str) -> str:
   normalized = (prompt_version or "v1").strip()
-  if normalized.startswith("content_asset_analysis:"):
-    return normalized
-  return f"content_asset_analysis:{normalized}:schema:{schema_version}"
+  if not normalized.startswith("content_asset_analysis:"):
+    normalized = f"content_asset_analysis:{normalized}:schema:{schema_version}"
+  return visible_text_contract.prompt_version(normalized)
 
 
 def _redact_sensitive(value: str) -> str:

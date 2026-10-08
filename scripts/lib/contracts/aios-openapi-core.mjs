@@ -100,6 +100,12 @@ function buildOperation(operation) {
     } : {}),
     responses: {
       ...successResponses(override),
+      ...(override?.conflictResponse ? {
+        409: {
+          description: 'Conflict with a machine-readable code',
+          content: responseContent(override.conflictResponse),
+        },
+      } : {}),
       401: {
         description: 'Authentication required',
         content: responseContent('ErrorResponse'),

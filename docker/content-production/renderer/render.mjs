@@ -3,6 +3,8 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { digest, probe, readProject, safePath, verifyAssets, run } from './project.mjs';
 import { compose, webVtt } from './composition.mjs';
+import { copyCaptionFont } from './caption-font.mjs';
+import { copyImmutable } from './copy-file.mjs';
 
 const require = createRequire(import.meta.url);
 export async function renderProject(root, destination, { revision, preview = false, onProgress = () => {}, signal } = {}) {
@@ -20,6 +22,9 @@ export async function renderProject(root, destination, { revision, preview = fal
     revision: project.revision, engine: '@hyperframes/producer', engine_version: '0.8.53', preview,
     started_at: new Date().toISOString(), assets: project.assets.map(({ id, sha256 }) => ({ id, sha256 })),
     inspection: { structure: 'pending', decode: 'pending', visual: 'unverified', listening: 'unverified' } };
+  receipt.caption_font = project.caption_font ? { ...project.caption_font, integrity: 'passed',
+    glyph_coverage: 'passed', runtime_load: compiled.cues.length ? 'pending' : 'not_required', source_match: 'unverified' } :
+    { profile: 'legacy-system-fonts', runtime_load: 'unverified', source_match: 'unverified' };
   const writeReceipt = async () => {
     const temp = path.join(destination, '.receipt.json');
     await fs.writeFile(temp, JSON.stringify(receipt, null, 2) + '\n');
@@ -30,14 +35,15 @@ export async function renderProject(root, destination, { revision, preview = fal
     signal?.throwIfAborted();
     await fs.writeFile(path.join(destination, 'project.json'), JSON.stringify(project, null, 2) + '\n', { flag: 'wx' });
     receipt.project_sha256 = await digest(path.join(destination, 'project.json'));
+    await copyCaptionFont(root, destination, project);
     await fs.mkdir(path.join(destination, 'assets'));
     for (const asset of project.assets) {
       const target = path.join(destination, asset.file);
-      try { await fs.copyFile(await safePath(path.join(root, asset.file)), target, 1); }
+      try { await copyImmutable(await safePath(path.join(root, asset.file)), target); }
       catch (error) { if (error.code !== 'EEXIST') throw error; }
       if (await digest(target) !== asset.sha256) throw new Error('Asset changed while preparing render');
     }
-    await fs.copyFile(require.resolve('gsap/dist/gsap.min.js'), path.join(destination, 'gsap.min.js'), 1);
+    await copyImmutable(require.resolve('gsap/dist/gsap.min.js'), path.join(destination, 'gsap.min.js'));
     await fs.writeFile(path.join(destination, 'index.html'), compiled.html, { flag: 'wx' });
     receipt.composition_sha256 = await digest(path.join(destination, 'index.html'));
     await fs.writeFile(path.join(destination, 'captions.vtt'), webVtt(compiled.cues), { flag: 'wx' });
@@ -47,6 +53,7 @@ export async function renderProject(root, destination, { revision, preview = fal
     const output = path.join(destination, 'video.mp4');
     await executeRenderJob(job, destination, output, (state, message) => onProgress({ status: state.status, progress: state.progress, message }), signal);
     if (job.status !== 'complete' || job.warnings.length) throw new Error(`Unqualified render outcome: ${job.status}`);
+    if (project.caption_font && compiled.cues.length) receipt.caption_font.runtime_load = 'passed';
     const media = await probe(output);
     const expectsAudio = project.clips.some(c => c.volume > 0 && project.assets.find(a => a.id === c.asset_id)?.audio) ||
       project.audio.some(a => a.volume > 0 && a.start_frame < compiled.frames);

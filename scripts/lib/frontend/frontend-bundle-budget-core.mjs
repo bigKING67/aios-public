@@ -5,6 +5,12 @@
  * gzip sizes against scripts/config/frontend/bundle-budget.json. It intentionally
  * fails when dist is missing so CI and local runs do not accidentally green
  * light a stale or absent production bundle.
+ *
+ * Each budget is `strict` (actual must stay within targetRatio of the hard
+ * ceiling) or `hard` (only the ceiling applies). Initial JS — the entry script
+ * and modulepreload chunks referenced by dist/index.html — is what every
+ * visitor downloads, so it carries the strict target; the all-routes JS total
+ * includes lazy chunks most visitors never load and is hard-ceiling only.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -23,7 +29,13 @@ const BUDGET_PATH = 'scripts/config/frontend/bundle-budget.json';
 const BYTE_UNITS = Object.freeze(['B', 'KiB', 'MiB']);
 const MAX_TARGET_RATIO = 0.9;
 
+const ENFORCEMENTS = Object.freeze(['strict', 'hard']);
 const METRIC_CONFIGS = Object.freeze([
+  {
+    key: 'initialJsGzipBytes',
+    label: 'initial JS gzip',
+    budgetKey: 'initialJsGzipBytes',
+  },
   {
     key: 'maxJsChunkGzipBytes',
     label: 'max JS chunk gzip',
@@ -162,6 +174,9 @@ function readBudget(repoRoot, fail, io) {
     if (typeof entry.reason !== 'string' || entry.reason.trim() === '') {
       fail(`${BUDGET_PATH} budgets.${metric.budgetKey}.reason must be a non-empty string.`);
     }
+    if (entry.enforcement !== undefined && !ENFORCEMENTS.includes(entry.enforcement)) {
+      fail(`${BUDGET_PATH} budgets.${metric.budgetKey}.enforcement must be "strict" or "hard".`);
+    }
   }
 
   return budget;
@@ -279,7 +294,32 @@ function sumGzipBytes(assets) {
   return assets.reduce((total, asset) => total + asset.gzipBytes, 0);
 }
 
-function computeMetrics(collectedAssets, fail) {
+/** Entry script plus modulepreload chunks referenced by dist/index.html. */
+function collectInitialJsAssets(repoRoot, jsAssets, fail, io) {
+  const htmlPath = path.join(repoRoot, DIST_PATH, 'index.html');
+  if (!io.exists(htmlPath) || !io.isFile(htmlPath)) {
+    fail(`${DIST_PATH}/index.html not found. Run npm run build before npm run verify:frontend:bundle-budget.`);
+  }
+  const html = String(io.readFile(htmlPath));
+  const references = [
+    ...html.matchAll(/<script\b[^>]*\btype="module"[^>]*\bsrc="([^"]+\.js)"/g),
+    ...html.matchAll(/<link\b[^>]*\brel="modulepreload"[^>]*\bhref="([^"]+\.js)"/g),
+  ].map((match) => match[1]);
+  if (references.length === 0) {
+    fail(`${DIST_PATH}/index.html does not reference an entry module script.`);
+  }
+  const byPath = new Map(jsAssets.map((asset) => [asset.relativePath, asset]));
+  return [...new Set(references)].map((reference) => {
+    const relativePath = `${DIST_PATH}/${reference.replace(/^\/+/, '')}`;
+    const asset = byPath.get(relativePath);
+    if (!asset) {
+      fail(`${DIST_PATH}/index.html references ${reference}, which is not an emitted JavaScript asset.`);
+    }
+    return asset;
+  });
+}
+
+function computeMetrics(collectedAssets, initialJsAssets, fail) {
   const { cssAssets, jsAssets } = collectedAssets;
   const vendorEchartsAssets = jsAssets.filter((asset) => (
     path.basename(asset.relativePath).startsWith('vendor-echarts-')
@@ -293,6 +333,10 @@ function computeMetrics(collectedAssets, fail) {
   const largestCssAsset = maxAsset(cssAssets);
 
   return {
+    initialJsGzipBytes: {
+      bytes: sumGzipBytes(initialJsAssets),
+      detail: `${initialJsAssets.length} entry/modulepreload JS assets`,
+    },
     maxCssAssetGzipBytes: {
       bytes: largestCssAsset.gzipBytes,
       detail: largestCssAsset.relativePath,
@@ -327,16 +371,19 @@ function targetPercentage(targetRatio) {
 function metricAssessments(metrics, budget) {
   return METRIC_CONFIGS.map((metric) => {
     const actual = metrics[metric.key];
-    const hardLimit = budget.budgets[metric.budgetKey].bytes;
+    const entry = budget.budgets[metric.budgetKey];
+    const hardLimit = entry.bytes;
+    const enforcement = entry.enforcement ?? 'strict';
     const strictTarget = strictTargetBytes(hardLimit, budget.targetRatio);
     const headroomPercentage = ((hardLimit - actual.bytes) / hardLimit) * 100;
 
     return {
       actual,
+      enforcement,
       hardLimit,
       headroomPercentage,
       label: metric.label,
-      passed: actual.bytes <= strictTarget,
+      passed: actual.bytes <= (enforcement === 'hard' ? hardLimit : strictTarget),
       strictTarget,
     };
   });
@@ -348,7 +395,9 @@ function formatAssessment(assessment, targetRatio) {
     `- ${status} ${assessment.label}:`,
     `actual ${formatBytes(assessment.actual.bytes)} (${assessment.actual.bytes} B);`,
     `hard limit ${formatBytes(assessment.hardLimit)} (${assessment.hardLimit} B);`,
-    `strict ${targetPercentage(targetRatio)} target ${formatBytes(assessment.strictTarget)} (${assessment.strictTarget} B);`,
+    assessment.enforcement === 'hard'
+      ? 'hard ceiling only (no strict target);'
+      : `strict ${targetPercentage(targetRatio)} target ${formatBytes(assessment.strictTarget)} (${assessment.strictTarget} B);`,
     `headroom ${assessment.headroomPercentage.toFixed(2)}%;`,
     `detail ${assessment.actual.detail}`,
   ].join(' ');
@@ -364,17 +413,22 @@ export function checkFrontendBundleBudget(repoRoot = getRepoRoot(), options = {}
     const budget = readBudget(repoRoot, fail, io);
     const collectedAssets = collectAssets(repoRoot, fail, io);
     const manifest = verifyBuildManifest(repoRoot, fail, io, options);
-    const metrics = computeMetrics(collectedAssets, fail);
+    const initialJsAssets = collectInitialJsAssets(repoRoot, collectedAssets.jsAssets, fail, io);
+    const metrics = computeMetrics(collectedAssets, initialJsAssets, fail);
     const assessments = metricAssessments(metrics, budget);
     const metricLines = assessments.map((assessment) => formatAssessment(assessment, budget.targetRatio));
-    const failed = assessments.some((assessment) => !assessment.passed);
+    const failed = assessments.filter((assessment) => !assessment.passed);
 
-    if (failed) {
+    if (failed.length > 0) {
+      const headers = [
+        failed.some((assessment) => assessment.enforcement === 'strict') ? 'Strict bundle target exceeded' : null,
+        failed.some((assessment) => assessment.enforcement === 'hard') ? 'Bundle hard ceiling exceeded' : null,
+      ].filter(Boolean);
       return {
         status: 1,
         stdout: '',
         stderr: [
-          `[${GUARD_NAME}] Strict bundle target exceeded:`,
+          `[${GUARD_NAME}] ${headers.join('; ')}:`,
           ...metricLines,
           '',
           'Run npm run build, inspect apps/web-vite/dist/assets, and reduce bundle usage. Do not raise hard ceilings to recover target headroom.',

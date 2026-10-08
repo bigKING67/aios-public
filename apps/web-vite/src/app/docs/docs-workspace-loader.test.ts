@@ -5,6 +5,7 @@ import {
   loadDocsWorkspaceSnapshot,
   parseDocsWorkspaceSnapshot,
 } from './docs-workspace-loader';
+import { resolveDocsPage, resolveDocsPageKey } from './docs-workspace-model';
 
 const pageKeys: DocsPageKey[] = [
   'home',
@@ -49,6 +50,34 @@ describe('docs workspace snapshot boundary', () => {
     const parsed = parseDocsWorkspaceSnapshot(validSnapshot());
     expect(parsed.pages.home.path).toBe('/docs');
     expect(parsed.detailPages['/docs/analysis-plans/detail'].sections).toHaveLength(1);
+  });
+
+  it('keeps guide sub-pages, sidebar children and figures', () => {
+    const snapshot = validSnapshot();
+    snapshot.pageLinks[1] = { ...snapshot.pageLinks[1], children: [{ href: '/docs/guide/module', label: 'Module' }] } as never;
+    (snapshot.detailPages as Record<string, DocsPageModel>)['/docs/guide/module'] = {
+      ...page('guide'),
+      path: '/docs/guide/module',
+      sections: [{
+        id: 'module',
+        title: 'Module',
+        figures: [{ src: '/docs-media/x.webp', alt: 'Screen' }],
+        video: { src: '/docs-media/intro.mp4', poster: '/docs-media/intro.webp', title: 'Intro' },
+      }],
+    };
+    const parsed = parseDocsWorkspaceSnapshot(snapshot);
+    expect(parsed.pageLinks[1].children).toEqual([{ href: '/docs/guide/module', label: 'Module' }]);
+    expect(resolveDocsPageKey(parsed, '/docs/guide/module/')).toBe('guide');
+    expect(resolveDocsPage(parsed, '/docs/guide/module').sections[0].figures).toEqual([
+      { src: '/docs-media/x.webp', alt: 'Screen', caption: undefined },
+    ]);
+    expect(resolveDocsPage(parsed, '/docs/guide/module').sections[0].video?.src).toBe('/docs-media/intro.mp4');
+    // An unknown guide sub-page falls back to the guide overview.
+    expect(resolveDocsPage(parsed, '/docs/guide/missing').path).toBe('/docs/guide');
+
+    const invalid = validSnapshot();
+    invalid.pages.home.sections[0] = { id: 'bad', title: 'Bad', figures: [{ src: '/x.webp' }] } as never;
+    expect(() => parseDocsWorkspaceSnapshot(invalid)).toThrow('docsWorkspace.pages.home.sections[0].figures[0].alt must be a string');
   });
 
   it('rejects invalid nested table rows', () => {

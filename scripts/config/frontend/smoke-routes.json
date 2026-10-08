@@ -7,7 +7,7 @@
       "description": "Home page should render the public product entry surface.",
       "minBodyTextLength": 120,
       "expectedText": [
-        "Groland AIOS",
+        "AGI AIOS",
         "核心能力矩阵",
         "快速入口"
       ],
@@ -27,7 +27,7 @@
       "description": "Login page should render the form, not only an empty shell.",
       "minBodyTextLength": 20,
       "expectedText": [
-        "Groland AIOS",
+        "AGI AIOS",
         "用户名",
         "密码",
         "登 录"
@@ -36,7 +36,7 @@
         "authState": "authenticated",
         "minBodyTextLength": 120,
         "expectedText": [
-          "Groland AIOS",
+          "AGI AIOS",
           "核心能力矩阵",
           "快速入口"
         ],
@@ -162,7 +162,7 @@
         "expectedFinalPath": "/reports/weekly"
       },
       "expectedText": [
-        "Groland AIOS",
+        "AGI AIOS",
         "用户名",
         "密码"
       ],
@@ -178,7 +178,7 @@
       "enabledByDefault": false,
       "minBodyTextLength": 20,
       "expectedText": [
-        "Groland AIOS",
+        "AGI AIOS",
         "用户名",
         "密码"
       ],
@@ -194,7 +194,7 @@
       "enabledByDefault": false,
       "minBodyTextLength": 20,
       "expectedText": [
-        "Groland AIOS",
+        "AGI AIOS",
         "用户名",
         "密码"
       ],

@@ -21,9 +21,10 @@ export function resolveDocsPageKey(
   const homePath = snapshot.pages.home.path;
   const normalizedPath = normalizePath(pathname, homePath);
   const exactMatch = snapshot.pageLinks.find((item) => item.href === normalizedPath);
-  const analysisPlansPath = snapshot.pages['analysis-plans'].path;
-  if (normalizedPath.startsWith(`${analysisPlansPath}/`)) {
-    return 'analysis-plans';
+  for (const key of ['guide', 'analysis-plans'] as const) {
+    if (normalizedPath.startsWith(`${snapshot.pages[key].path}/`)) {
+      return key;
+    }
   }
 
   return exactMatch?.key ?? 'home';

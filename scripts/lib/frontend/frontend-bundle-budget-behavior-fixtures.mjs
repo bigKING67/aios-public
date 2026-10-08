@@ -30,6 +30,12 @@ function assertIncludes(...args) {
 
 const BUDGET_PATH = 'scripts/config/frontend/bundle-budget.json';
 const DIST_ASSETS_PATH = 'apps/web-vite/dist/assets';
+const DIST_INDEX_PATH = 'apps/web-vite/dist/index.html';
+const DEFAULT_INDEX_HTML = [
+  '<script type="module" crossorigin src="/assets/app-fixture.js"></script>',
+  '<link rel="modulepreload" crossorigin href="/assets/app-fixture.js">',
+  '',
+].join('\n');
 const FIXTURE_REPO_ROOT = '/fixture';
 
 function gzipSize(text) {
@@ -48,6 +54,7 @@ function hardLimitWithExactStrictTarget(strictTarget, targetRatio = TARGET_RATIO
 
 function budgetJson(budgets, options = {}) {
   const {
+    enforcement = {},
     targetRatio = TARGET_RATIO,
     writeTargetRatio = true,
   } = options;
@@ -56,6 +63,7 @@ function budgetJson(budgets, options = {}) {
       key,
       {
         bytes,
+        ...(enforcement[key] ? { enforcement: enforcement[key] } : {}),
         description: `fixture ${key}`,
         reason: `fixture reason for ${key}`,
       },
@@ -95,6 +103,8 @@ function fixtureMetrics(sources = fixtureSources()) {
   const cssSizes = cssEntries.map(([, source]) => gzipSize(source));
 
   return {
+    // DEFAULT_INDEX_HTML references app-fixture.js twice; it is counted once.
+    initialJsGzipBytes: gzipSize(sources['app-fixture.js'] ?? ''),
     maxCssAssetGzipBytes: Math.max(...cssSizes),
     maxJsChunkGzipBytes: Math.max(...jsSizes),
     totalCssGzipBytes: cssSizes.reduce((total, size) => total + size, 0),
@@ -168,6 +178,8 @@ function createMemoryIo(files) {
 function createFixtureFiles(options = {}) {
   const {
     budgets,
+    enforcement,
+    indexHtml = DEFAULT_INDEX_HTML,
     sources = fixtureSources(),
     targetRatio = TARGET_RATIO,
     writeBudget = true,
@@ -187,6 +199,7 @@ function createFixtureFiles(options = {}) {
 
   if (writeBudget) {
     files[BUDGET_PATH] = `${budgetJson(budgets ?? passingBudgets(sources), {
+      enforcement,
       targetRatio,
       writeTargetRatio,
     })}\n`;
@@ -195,6 +208,9 @@ function createFixtureFiles(options = {}) {
   if (writeDist) {
     for (const [fileName, source] of Object.entries(sources)) {
       files[path.join(DIST_ASSETS_PATH, fileName).split(path.sep).join('/')] = source;
+    }
+    if (indexHtml !== null) {
+      files[DIST_INDEX_PATH] = indexHtml;
     }
   }
 
@@ -419,5 +435,75 @@ export function runFrontendBundleBudgetBehaviorFixtures(assertions) {
     },
   );
 
-  return 'missing dist/budget/target/vendor, manifest freshness, strict boundary, output detail, passing baseline, and over-budget behavior checks passed.';
+  const totalJs = fixtureMetrics().totalJsGzipBytes;
+  withFixture(
+    {
+      budgets: { ...passingBudgets(), totalJsGzipBytes: totalJs },
+      enforcement: { totalJsGzipBytes: 'hard' },
+    },
+    (result) => {
+      assertEqual(result.status, 0, 'hard-only budget at exactly the ceiling should pass despite exceeding the 90% target');
+      assertIncludes(result.stdout, 'hard ceiling only', 'hard-only budget should say it has no strict target');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: { ...passingBudgets(), totalJsGzipBytes: totalJs },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'the same bytes under strict enforcement should fail the 90% target');
+      assertIncludes(result.stderr, 'Strict bundle target exceeded', 'strict failure header');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: { ...passingBudgets(), totalJsGzipBytes: totalJs - 1 },
+      enforcement: { totalJsGzipBytes: 'hard' },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'one byte over a hard-only ceiling should fail');
+      assertIncludes(result.stderr, 'Bundle hard ceiling exceeded', 'hard-only failure header');
+    },
+  );
+
+  withFixture(
+    {
+      enforcement: { totalJsGzipBytes: 'loose' },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'unknown enforcement should fail');
+      assertIncludes(result.stderr, 'enforcement must be "strict" or "hard"', 'unknown enforcement should be reported');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: { ...passingBudgets(), initialJsGzipBytes: hardLimitWithExactStrictTarget(fixtureMetrics().initialJsGzipBytes - 1) },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'initial JS one byte over its strict target should fail');
+      assertIncludes(result.stderr, 'initial JS gzip', 'initial JS failure should name the metric');
+      assertIncludes(result.stderr, 'entry/modulepreload', 'initial JS detail should describe its source');
+    },
+  );
+
+  withFixture(
+    { indexHtml: null },
+    (result) => {
+      assertEqual(result.status, 1, 'missing dist index.html should fail');
+      assertIncludes(result.stderr, 'index.html not found', 'missing index.html should be reported');
+    },
+  );
+
+  withFixture(
+    { indexHtml: '<script type="module" src="/assets/missing.js"></script>\n' },
+    (result) => {
+      assertEqual(result.status, 1, 'index.html referencing a missing asset should fail');
+      assertIncludes(result.stderr, 'not an emitted JavaScript asset', 'dangling initial reference should be reported');
+    },
+  );
+
+  return 'missing dist/budget/target/vendor, manifest freshness, strict boundary, output detail, passing baseline, over-budget, hard-only enforcement and initial JS behavior checks passed.';
 }

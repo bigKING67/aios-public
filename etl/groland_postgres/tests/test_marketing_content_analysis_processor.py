@@ -29,6 +29,43 @@ PRODUCT_OBJECTIVE = "product_all_domain_shortvideo"
 LIVE_OBJECTIVE = "live_all_domain_shortvideo"
 
 
+
+class CaptionPreflightIsolationTests(unittest.TestCase):
+  def test_wrong_consumer_rejects_before_media_or_provider_work(self):
+    from unittest.mock import Mock
+    storage, client = Mock(), Mock()
+    job = {'job_id': 'job', 'attempts': 1,
+           'metadata': {'operation': analysis_processor.CAPTION_PREFLIGHT_OPERATION}}
+    with self.assertRaisesRegex(ValueError, '独立子操作'):
+      analysis_processor._process_analysis_job(storage=storage, client=client, job=job,
+        work_dir=Path('/unused'), signed_url_ttl=60, url_max_bytes=100, proxy_target_bytes=100)
+    self.assertEqual(storage.mock_calls, [])
+    self.assertEqual(client.mock_calls, [])
+    cursor = FakeCursor()
+    conn = FakeConnection(cursor)
+    analysis_processor._fail_analysis_job(conn, job, 'provider detail must not enter asset state')
+    self.assertEqual(len(cursor.statements), 1)
+    sql, params = cursor.statements[0]
+    self.assertIn("status='failed'", sql)
+    self.assertIn("attempts=%s", sql)
+    self.assertNotIn('marketing_content_asset_analysis', sql)
+    self.assertNotIn('UPDATE ads.marketing_content_assets ', sql)
+    self.assertNotIn('provider detail', sql)
+    self.assertEqual(params, ('job', 1))
+    self.assertEqual(conn.commits, 1)
+
+  def test_regular_claim_excludes_only_the_preflight_suboperation(self):
+    from unittest.mock import MagicMock
+    conn = MagicMock()
+    cur = conn.cursor.return_value.__enter__.return_value
+    cur.fetchone.return_value = None
+    self.assertIsNone(analysis_processor._claim_next_analysis_job(conn))
+    sql = cur.execute.call_args.args[0]
+    self.assertIn("IS DISTINCT FROM 'source_caption_preflight_v1'", sql)
+    for metadata in [None, {}, {'operation': 'hydrate_video_understanding_cache'}, {'operation': 'other'}]:
+      self.assertFalse(analysis_processor._is_caption_preflight_job({'metadata': metadata}))
+
+
 class FakeCursor:
   def __init__(self, *, tables_exist: bool = True) -> None:
     self.tables_exist = tables_exist
@@ -511,7 +548,7 @@ class MarketingContentAnalysisProcessorContractTest(unittest.TestCase):
     self.assertEqual(completed["score"], 8.2)
     self.assertEqual(completed["model_name"], "doubao-seed-2-0-lite-260428")
     self.assertEqual(completed["result"].response_id, "resp_cached")
-    self.assertEqual(completed["request_settings"]["prompt_version"], "content_asset_analysis:v9:schema:2.1")
+    self.assertEqual(completed["request_settings"]["prompt_version"], "content_asset_analysis:v9:schema:2.1:visible-text:v2")
     self.assertTrue(fake_storage.uploads)
     self.assertIn("model_cache_hit", [stage[0] for stage in stages])
 

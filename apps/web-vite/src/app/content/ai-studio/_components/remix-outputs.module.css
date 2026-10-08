@@ -1,0 +1,256 @@
+/*
+ * 成片 page: batch cards with output thumbnails, and one batch as a grid of
+ * output cards. Cards, headings and links come from ai-studio.module.css and
+ * segment-annotation.module.css.
+ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  --remix-outputs-material-ink-a780: rgba(26, 26, 26, 0.78);
+}
+
+.batchCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  height: 100%;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  color: inherit;
+  background: var(--bg-card);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.batchCard:hover {
+  border-color: var(--brand-border);
+  color: inherit;
+  text-decoration: none;
+}
+
+.batchCard:focus-visible,
+.outputCover:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 2px;
+}
+
+.covers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-1);
+}
+
+.cover {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--border-radius-md);
+  color: var(--text-tertiary);
+  background: var(--bg-subtle);
+}
+
+.cover img,
+.outputCover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.head {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.structure {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--spacing-2);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.failure {
+  color: var(--status-danger);
+  font-size: var(--font-size-xs);
+}
+
+.toggle {
+  align-self: flex-start;
+  padding-inline: 0;
+}
+
+.summary {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.outputGrid {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.output {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  background: var(--bg-card);
+}
+
+.outputCover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 100%;
+  height: 260px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius-lg);
+  color: var(--bg-card);
+  background: var(--text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.outputCover:disabled {
+  color: var(--text-tertiary);
+  background: var(--bg-subtle);
+  cursor: default;
+}
+
+.outputCover img {
+  object-fit: contain;
+}
+
+.play {
+  position: absolute;
+  font-size: var(--font-size-3xl);
+  opacity: 0.85;
+}
+
+.duration {
+  position: absolute;
+  right: var(--spacing-2);
+  bottom: var(--spacing-2);
+  padding: 0 var(--spacing-1);
+  border-radius: var(--border-radius-sm);
+  color: var(--bg-card);
+  background: var(--remix-outputs-material-ink-a780);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineage {
+  display: grid;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+/* Two lines per segment: framework + source, then the source interval. */
+.lineage li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--spacing-1);
+  align-items: baseline;
+  min-width: 0;
+}
+
+.lineage strong {
+  flex: none;
+}
+
+/* Scoped under .lineage so the shared link style cannot undo the block box the ellipsis needs. */
+.lineage .lineageSource {
+  display: block;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lineageWhen {
+  display: inline-flex;
+  flex-basis: 100%;
+  gap: var(--spacing-1);
+  align-items: baseline;
+}
+
+.lineage strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.lineageTime {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 680px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Two narrow columns for several outputs; a single output keeps the full width. */
+  .outputGrid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--spacing-2);
+  }
+
+  .outputCover {
+    height: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .batchCard {
+    transition: none;
+  }
+}

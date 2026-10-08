@@ -1,4 +1,9 @@
+/* Self-contained so the grid also renders outside the 素材库 page shell (AI 创作中心). */
 .assetGrid {
+  --marketing-content-assets-material-white-a960: rgba(255, 255, 255, 0.96);
+  --marketing-content-assets-material-brand-a080: rgba(47, 110, 234, 0.08);
+  --marketing-content-assets-material-neutral-a720: rgba(245, 245, 245, 0.72);
+  --marketing-content-assets-material-ink-a780: rgba(26, 26, 26, 0.78);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
   gap: 14px;

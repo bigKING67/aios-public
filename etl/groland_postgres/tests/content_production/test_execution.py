@@ -5,9 +5,10 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import unittest
+import tempfile
 from unittest.mock import patch
 
-from content_production.execution import build_spec, renderer_env, verify_module
+from content_production.execution import build_spec, renderer_env, verify_module, verify_caption_font_receipt
 
 
 class ExecutionTests(unittest.TestCase):
@@ -41,3 +42,27 @@ class ExecutionTests(unittest.TestCase):
     def test_missing_module_fails_closed(self):
         with self.assertRaises(RuntimeError):
             verify_module(Path("/missing-creative-craft-fixture"))
+
+    def test_font_receipt_requires_matching_bytes_and_successful_runtime_load(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "fonts").mkdir()
+            sha = hashlib.sha256(b"test font bytes").hexdigest()
+            font = root / "fonts" / f"{sha}.ttf"
+            font.write_bytes(b"test font bytes")
+            (root / "fonts/manifest.json").write_text(json.dumps({"profile": "fixture", "sha256": sha}))
+            spec = {"canvas": {"fps": 30}, "clips": [{"in_seconds": 0, "frames": 30,
+                    "captions": [{"from": 0, "to": 1, "text": "字幕"}]}]}
+            binding = {"profile": "fixture", "sha256": sha, "file": f"fonts/{sha}.ttf", "integrity": "passed",
+                       "glyph_coverage": "passed", "runtime_load": "passed", "source_match": "unverified"}
+            verify_caption_font_receipt(root, spec, root, {"caption_font": binding})
+            for invalid in [None, {**binding, "runtime_load": "pending"}, {**binding, "source_match": "passed"}]:
+                with self.assertRaisesRegex(RuntimeError, "字体"):
+                    verify_caption_font_receipt(root, spec, root, {"caption_font": invalid})
+            font.write_bytes(b"different font")
+            with self.assertRaisesRegex(RuntimeError, "字体"):
+                verify_caption_font_receipt(root, spec, root, {"caption_font": binding})
+
+    def test_no_new_caption_does_not_require_a_font(self):
+        spec = {"canvas": {"fps": 30}, "clips": [{"in_seconds": 0, "frames": 30, "captions": []}]}
+        verify_caption_font_receipt(Path("/unused"), spec, Path("/unused"), {})

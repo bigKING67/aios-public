@@ -63,6 +63,7 @@ export const AIOS_RUST_ROUTE_SOURCES = Object.freeze([
   { file: 'backend-rust/src/marketing/handlers/mod.rs', prefix: '/marketing/creator-library', tag: 'creator-library' },
   { file: 'backend-rust/src/marketing/content_assets/production/mod.rs', prefix: '/marketing/content-assets', tag: 'content-production' },
   { file: 'backend-rust/src/marketing/content_assets/handlers.rs', prefix: '/marketing/content-assets', tag: 'content-assets' },
+  { file: 'backend-rust/src/marketing/content_assets/studio/mod.rs', prefix: '/marketing/content-assets', tag: 'content-ai-studio' },
   { file: 'backend-rust/src/marketing/industry_news/handlers.rs', prefix: '/marketing/industry-news', tag: 'industry-news' },
   { file: 'backend-rust/src/permissions/mod.rs', prefix: '/permissions', tag: 'permissions' },
   { file: 'backend-rust/src/roles/mod.rs', prefix: '/roles', tag: 'roles' },
@@ -232,6 +233,67 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
       'LiveCenterPlaybackUrlResponse',
       'LiveCenterRecordingSegmentCleanupResponse',
       { name: 'LiveCenterAnalysisCreateRequest', request: true },
+    ],
+  },
+  {
+    file: 'backend-rust/src/marketing/content_assets/studio/types.rs',
+    names: [
+      'StudioCapabilitiesResponse',
+      'SegmentPresetLabel',
+      'SegmentPreset',
+      'SegmentPresetListResponse',
+      'ContentSegment',
+      'SegmentAssetCover',
+      'ContentSegmentListResponse',
+      { name: 'CreateContentSegmentRequest', request: true },
+      { name: 'UpdateContentSegmentRequest', request: true },
+      { name: 'ConfirmContentSegmentItem', request: true },
+      { name: 'ConfirmContentSegmentsRequest', request: true },
+      'ConfirmContentSegmentsResponse',
+      'ContentSegmentConflictResponse',
+      { name: 'CreateSegmentSuggestionsRequest', request: true },
+      'SegmentSuggestionJob',
+      'CreateSegmentSuggestionsResponse',
+      'SegmentSuggestionJobListResponse',
+      'AssetSegmentSummary',
+      'AssetSegmentSummaryListResponse',
+      'SegmentPoolCell',
+      'SegmentPoolResponse',
+    ],
+  },
+  {
+    file: 'backend-rust/src/marketing/content_assets/studio/overview_types.rs',
+    names: [
+      'StudioOverviewResponse',
+      'StudioOverviewPeriod',
+      'StudioOverviewCosts',
+      'StudioModelAnalysisCost',
+      'StudioModelPricing',
+      'StudioCloudCompositionCost',
+      'StudioResolutionUsage',
+      'StudioOverviewPipeline',
+      'StudioOverviewActivity',
+    ],
+  },
+  {
+    file: 'backend-rust/src/marketing/content_assets/studio/remix_types.rs',
+    names: [
+      { name: 'RemixBatchPreviewRequest', request: true },
+      { name: 'CreateRemixBatchRequest', request: true },
+      'RemixSlotAvailability',
+      'RemixBatchPreviewResponse',
+      'RemixBatchSegment',
+      'RemixBatchItem',
+      'RemixBatch',
+      'RemixBatchDetail',
+      'RemixBatchListResponse',
+      'RemixProduct',
+      'RemixProductListResponse',
+      { name: 'RemixEditClip', request: true },
+      { name: 'RemixEditCheckRequest', request: true },
+      { name: 'CreateRemixEditRequest', request: true },
+      'RemixEditMatch',
+      'RemixEditCheckResponse',
     ],
   },
   {
@@ -763,6 +825,130 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
   'POST /v2/content/live-center/sessions/{session_id}/analysis': {
     request: 'LiveCenterAnalysisCreateRequest',
     response: 'LiveCenterAnalysisJob',
+  },
+  'GET /v2/marketing/content-assets/studio/capabilities': {
+    response: 'StudioCapabilitiesResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/overview': {
+    queryParameters: [
+      { name: 'period', in: 'query', required: false, schema: { type: 'string', enum: ['last7', 'last30', 'month'] } },
+    ],
+    response: 'StudioOverviewResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/presets': {
+    response: 'SegmentPresetListResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/asset-segment-summaries': {
+    queryParameters: [
+      { name: 'assetIds', in: 'query', required: true, schema: { type: 'string', maxLength: 3800 } },
+      { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
+    ],
+    response: 'AssetSegmentSummaryListResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/segment-pool': {
+    queryParameters: [
+      { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
+      { name: 'presetVersion', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } },
+    ],
+    response: 'SegmentPoolResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/segments': {
+    queryParameters: [
+      { name: 'assetId', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
+      { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
+      { name: 'labelKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
+      { name: 'productName', in: 'query', required: false, schema: { type: 'string', maxLength: 200 } },
+      { name: 'withoutProduct', in: 'query', required: false, schema: { type: 'boolean' } },
+      {
+        name: 'status',
+        in: 'query',
+        required: false,
+        schema: { type: 'string', enum: ['suggested', 'confirmed', 'rejected', 'stale'] },
+      },
+      {
+        name: 'origin',
+        in: 'query',
+        required: false,
+        schema: { type: 'string', enum: ['ai', 'human'] },
+      },
+      { name: 'cursor', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
+      {
+        name: 'limit',
+        in: 'query',
+        required: false,
+        schema: { type: 'integer', minimum: 1, maximum: 200 },
+      },
+    ],
+    response: 'ContentSegmentListResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/segments': {
+    request: 'CreateContentSegmentRequest',
+    response: 'ContentSegment',
+    conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'PATCH /v2/marketing/content-assets/studio/segments/{segment_id}': {
+    request: 'UpdateContentSegmentRequest',
+    response: 'ContentSegment',
+    conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/segments:confirm': {
+    request: 'ConfirmContentSegmentsRequest',
+    response: 'ConfirmContentSegmentsResponse',
+    conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/segment-suggestions': {
+    queryParameters: [
+      { name: 'assetId', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
+      {
+        name: 'limit',
+        in: 'query',
+        required: false,
+        schema: { type: 'integer', minimum: 1, maximum: 50 },
+      },
+    ],
+    response: 'SegmentSuggestionJobListResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/segment-suggestions': {
+    request: 'CreateSegmentSuggestionsRequest',
+    response: 'CreateSegmentSuggestionsResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/segment-suggestions/{job_id}': {
+    response: 'SegmentSuggestionJob',
+  },
+  'GET /v2/marketing/content-assets/studio/segment-products': {
+    queryParameters: [
+      { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
+      { name: 'presetVersion', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } },
+    ],
+    response: 'RemixProductListResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/remix-batches': {
+    response: 'RemixBatchListResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-batches': {
+    request: 'CreateRemixBatchRequest',
+    response: 'RemixBatchDetail',
+    conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-batches:preview': {
+    request: 'RemixBatchPreviewRequest',
+    response: 'RemixBatchPreviewResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/remix-batches/{batch_id}': {
+    response: 'RemixBatchDetail',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel': {
+    response: 'RemixBatchDetail',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-edits': {
+    request: 'CreateRemixEditRequest',
+    response: 'RemixBatchDetail',
+    conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-edits:check': {
+    request: 'RemixEditCheckRequest',
+    response: 'RemixEditCheckResponse',
+    conflictResponse: 'ContentSegmentConflictResponse',
   },
   'GET /v2/sample-inventory/access-policy': {
     response: 'SampleInventoryAccessPolicyResponse',

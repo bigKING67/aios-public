@@ -1,12 +1,19 @@
 /* ========== 导入设计系统与样式 ========== */
+@import 'tailwindcss/theme.css' layer(theme);
 @import './design-tokens.css';  /* AIOS 设计 Token 系统 */
 @import './design-system-globals.css';  /* 基础元素与工具类 */
 @import './echarts.css';        /* ECharts 主题与样式 */
 @import './light-theme.css';
+/* Preserve the existing unlayered cascade with AntD and CSS Modules. */
+@import 'tailwindcss/preflight.css';
+@import 'tailwindcss/utilities.css' source(none);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config '../../../../tailwind.config.ts';
+
+/* v3 default border color; explicit semantic border utilities still win. */
+*, ::before, ::after, ::backdrop, ::file-selector-button {
+  border-color: var(--color-gray-200, currentColor);
+}
 
 /* ========== 全局基础样式 ========== */
 

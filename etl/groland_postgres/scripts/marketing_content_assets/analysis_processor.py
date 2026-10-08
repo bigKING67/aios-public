@@ -25,6 +25,7 @@ from .ark_responses import (
   DEFAULT_CONTENT_ASSET_FUSION_ANALYSIS_PROMPT_VERSION,
   DEFAULT_CONTENT_ASSET_VIDEO_UNDERSTANDING_PROMPT_VERSION,
 )
+from .visible_text_contract import prompt_version as visible_text_prompt_version
 from .analysis_runtime_policy import (
   AnalysisSource,
   analysis_model_stage_label,
@@ -80,6 +81,7 @@ PRODUCT_CARD_ACCEPTANCE_ALLOWED_BRIDGE_STATUSES = (
   "matched_title_date_amount_order",
 )
 VIDEO_UNDERSTANDING_CACHE_HYDRATION_OPERATION = "hydrate_video_understanding_cache"
+CAPTION_PREFLIGHT_OPERATION = "source_caption_preflight_v1"
 
 
 def enqueue_analysis_jobs(
@@ -225,6 +227,7 @@ def _query_analysis_candidates(
           FROM ads.marketing_content_asset_processing_jobs job
           WHERE job.asset_id = asset.asset_id
             AND job.job_type = 'analysis'
+          AND job.metadata->>'operation' IS DISTINCT FROM 'source_caption_preflight_v1'
             AND job.status IN ('queued', 'running')
         )
       ORDER BY
@@ -308,6 +311,7 @@ def _claim_next_analysis_job(conn: psycopg2.extensions.connection) -> Optional[d
         WHERE job.status = 'queued'
           AND job.attempts < job.max_attempts
           AND job.job_type = 'analysis'
+          AND job.metadata->>'operation' IS DISTINCT FROM 'source_caption_preflight_v1'
           AND asset.is_deleted = FALSE
           AND asset.external_only = FALSE
           AND (
@@ -417,6 +421,8 @@ def _process_analysis_job(
   url_max_bytes: int,
   proxy_target_bytes: int,
 ) -> None:
+  if _is_caption_preflight_job(job):
+    raise ValueError("字幕预检必须由独立子操作消费者执行，不能进入普通素材分析")
   if _is_video_understanding_cache_hydration_job(job):
     _process_video_understanding_cache_hydration_job(
       storage=storage,
@@ -569,6 +575,23 @@ def _process_analysis_job(
       model_input_object_key=str(video_input["model_input_object_key"]),
       input_strategy=str(video_input["strategy"]),
     )
+
+
+def _is_caption_preflight_job(job: dict[str, Any]) -> bool:
+  return _mapping_value(job.get("metadata")).get("operation") == CAPTION_PREFLIGHT_OPERATION
+
+
+def _fail_caption_preflight_dispatch(conn, job):
+  # Never send the ordinary failure path into asset/cache/event updates or retries.
+  with conn.cursor() as cur:
+    cur.execute("""UPDATE ads.marketing_content_asset_processing_jobs
+      SET status='failed', finished_at=CURRENT_TIMESTAMP, updated_at=CURRENT_TIMESTAMP,
+          error_message='caption_preflight_wrong_consumer',
+          metadata=COALESCE(metadata,'{}'::jsonb) || '{"processing_stage":"failed"}'::jsonb
+      WHERE job_id=%s AND status='running' AND attempts=%s
+        AND metadata->>'operation'='source_caption_preflight_v1'""",
+      (job['job_id'], job['attempts']))
+  conn.commit()
 
 
 def _is_video_understanding_cache_hydration_job(job: Mapping[str, Any]) -> bool:
@@ -1124,7 +1147,7 @@ def _has_live_acceptance(
 
 def _analysis_request_settings(config: ArkResponsesConfig, analysis_profile: str) -> dict[str, Any]:
   profile = config.analysis_profile(analysis_profile)
-  prompt_version = f"content_asset_analysis:{config.fusion_analysis_prompt_version}:schema:{config.analysis_schema_version}"
+  prompt_version = visible_text_prompt_version(f"content_asset_analysis:{config.fusion_analysis_prompt_version}:schema:{config.analysis_schema_version}")
   return {
     **profile.request_settings(),
     "model": config.model,
@@ -1153,6 +1176,9 @@ def _fail_analysis_job(
   analysis_schema_version: str = DEFAULT_CONTENT_ASSET_ANALYSIS_SCHEMA_VERSION,
   prompt_version: str = DEFAULT_CONTENT_ASSET_FUSION_ANALYSIS_PROMPT_VERSION,
 ) -> None:
+  if _is_caption_preflight_job(job):
+    _fail_caption_preflight_dispatch(conn, job)
+    return
   error_message = error_message[:1000]
   non_retryable = _is_non_retryable_analysis_error(error_message)
   attempts = _int_job_value(job, "attempts", 0)

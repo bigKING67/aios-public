@@ -30,6 +30,14 @@ const REPORT_MONTHLY_PATH =
   '/reports/monthly/{month_period}' satisfies GatewayPathFor<'/v2/reports/monthly/{month_period}'>;
 const REPORT_MONTHLY_METADATA_PATH =
   '/reports/monthly/{month_period}/meta' satisfies GatewayPathFor<'/v2/reports/monthly/{month_period}/meta'>;
+const CONTENT_STUDIO_SEGMENT_PATH =
+  '/marketing/content-assets/studio/segments/{segment_id}' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/segments/{segment_id}'>;
+const CONTENT_STUDIO_SEGMENT_SUGGESTION_PATH =
+  '/marketing/content-assets/studio/segment-suggestions/{job_id}' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/segment-suggestions/{job_id}'>;
+const CONTENT_STUDIO_REMIX_BATCH_PATH =
+  '/marketing/content-assets/studio/remix-batches/{batch_id}' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}'>;
+const CONTENT_STUDIO_REMIX_BATCH_CANCEL_PATH =
+  '/marketing/content-assets/studio/remix-batches/{batch_id}/cancel' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel'>;
 const SAMPLE_INVENTORY_SAMPLE_PATH =
   '/sample-inventory/samples/{sample_id}' satisfies GatewayPathFor<'/v2/sample-inventory/samples/{sample_id}'>;
 const SAMPLE_INVENTORY_SAMPLE_ADJUSTMENT_PATH =
@@ -66,6 +74,27 @@ export const AIOS_API_PATHS = {
   dashboardDateBounds: '/dashboard/date-bounds',
   dashboardNotes: '/dashboard/notes',
   dashboardNote: (noteId: ApiPathIdentifier) => interpolatePath(DASHBOARD_NOTE_PATH, 'id', noteId),
+  contentStudioCapabilities: '/marketing/content-assets/studio/capabilities',
+  contentStudioPresets: '/marketing/content-assets/studio/presets',
+  contentStudioOverview: '/marketing/content-assets/studio/overview',
+  contentStudioAssetSegmentSummaries: '/marketing/content-assets/studio/asset-segment-summaries',
+  contentStudioSegmentPool: '/marketing/content-assets/studio/segment-pool',
+  contentStudioSegments: '/marketing/content-assets/studio/segments',
+  contentStudioSegmentsConfirm: '/marketing/content-assets/studio/segments:confirm',
+  contentStudioSegment: (segmentId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_SEGMENT_PATH, 'segment_id', segmentId),
+  contentStudioSegmentSuggestions: '/marketing/content-assets/studio/segment-suggestions',
+  contentStudioSegmentSuggestion: (jobId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_SEGMENT_SUGGESTION_PATH, 'job_id', jobId),
+  contentStudioSegmentProducts: '/marketing/content-assets/studio/segment-products',
+  contentStudioRemixBatches: '/marketing/content-assets/studio/remix-batches',
+  contentStudioRemixBatchesPreview: '/marketing/content-assets/studio/remix-batches:preview',
+  contentStudioRemixBatch: (batchId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_REMIX_BATCH_PATH, 'batch_id', batchId),
+  contentStudioRemixBatchCancel: (batchId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_REMIX_BATCH_CANCEL_PATH, 'batch_id', batchId),
+  contentStudioRemixEdits: '/marketing/content-assets/studio/remix-edits',
+  contentStudioRemixEditsCheck: '/marketing/content-assets/studio/remix-edits:check',
   industryMaterialInspiration: '/dashboard/industry-material-inspiration',
   industryNewsArticles: '/marketing/industry-news/articles',
   industryNewsSources: '/marketing/industry-news/sources',
@@ -152,6 +181,23 @@ export const AIOS_API_PATHS = {
   dashboardDateBounds: GatewayPathFor<'/v2/dashboard/date-bounds'>;
   dashboardNotes: GatewayPathFor<'/v2/dashboard/notes'>;
   dashboardNote: (noteId: ApiPathIdentifier) => string;
+  contentStudioCapabilities: GatewayPathFor<'/v2/marketing/content-assets/studio/capabilities'>;
+  contentStudioPresets: GatewayPathFor<'/v2/marketing/content-assets/studio/presets'>;
+  contentStudioOverview: GatewayPathFor<'/v2/marketing/content-assets/studio/overview'>;
+  contentStudioAssetSegmentSummaries: GatewayPathFor<'/v2/marketing/content-assets/studio/asset-segment-summaries'>;
+  contentStudioSegmentPool: GatewayPathFor<'/v2/marketing/content-assets/studio/segment-pool'>;
+  contentStudioSegments: GatewayPathFor<'/v2/marketing/content-assets/studio/segments'>;
+  contentStudioSegmentsConfirm: GatewayPathFor<'/v2/marketing/content-assets/studio/segments:confirm'>;
+  contentStudioSegment: (segmentId: ApiPathIdentifier) => string;
+  contentStudioSegmentSuggestions: GatewayPathFor<'/v2/marketing/content-assets/studio/segment-suggestions'>;
+  contentStudioSegmentSuggestion: (jobId: ApiPathIdentifier) => string;
+  contentStudioSegmentProducts: GatewayPathFor<'/v2/marketing/content-assets/studio/segment-products'>;
+  contentStudioRemixBatches: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches'>;
+  contentStudioRemixBatchesPreview: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches:preview'>;
+  contentStudioRemixBatch: (batchId: ApiPathIdentifier) => string;
+  contentStudioRemixBatchCancel: (batchId: ApiPathIdentifier) => string;
+  contentStudioRemixEdits: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-edits'>;
+  contentStudioRemixEditsCheck: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-edits:check'>;
   industryMaterialInspiration: GatewayPathFor<'/v2/dashboard/industry-material-inspiration'>;
   industryNewsArticles: GatewayPathFor<'/v2/marketing/industry-news/articles'>;
   industryNewsSources: GatewayPathFor<'/v2/marketing/industry-news/sources'>;
@@ -235,6 +281,48 @@ export type DashboardCreateNoteRequest =
   paths['/v2/dashboard/notes']['post']['requestBody']['content']['application/json'];
 export type DashboardUpdateNoteRequest =
   paths['/v2/dashboard/notes/{id}']['patch']['requestBody']['content']['application/json'];
+export type StudioCapabilitiesResponse = components['schemas']['StudioCapabilitiesResponse'];
+export type StudioOverviewResponse = components['schemas']['StudioOverviewResponse'];
+export type StudioOverviewActivity = components['schemas']['StudioOverviewActivity'];
+export type StudioOverviewPeriodKey = NonNullable<
+  NonNullable<paths['/v2/marketing/content-assets/studio/overview']['get']['parameters']['query']>['period']
+>;
+export type StudioSegmentPreset = components['schemas']['SegmentPreset'];
+export type StudioSegmentPresetLabel = components['schemas']['SegmentPresetLabel'];
+export type StudioSegmentPresetListResponse = components['schemas']['SegmentPresetListResponse'];
+export type StudioAssetSegmentSummary = components['schemas']['AssetSegmentSummary'];
+export type StudioAssetSegmentSummaryListResponse = components['schemas']['AssetSegmentSummaryListResponse'];
+export type StudioSegmentPoolCell = components['schemas']['SegmentPoolCell'];
+export type StudioSegmentPoolResponse = components['schemas']['SegmentPoolResponse'];
+export type StudioSegmentAssetCover = components['schemas']['SegmentAssetCover'];
+export type StudioContentSegment = components['schemas']['ContentSegment'];
+export type StudioContentSegmentListResponse = components['schemas']['ContentSegmentListResponse'];
+export type StudioContentSegmentListQuery = NonNullable<
+  paths['/v2/marketing/content-assets/studio/segments']['get']['parameters']['query']
+>;
+export type StudioCreateContentSegmentRequest = components['schemas']['CreateContentSegmentRequest'];
+export type StudioUpdateContentSegmentRequest = components['schemas']['UpdateContentSegmentRequest'];
+export type StudioConfirmContentSegmentsRequest = components['schemas']['ConfirmContentSegmentsRequest'];
+export type StudioConfirmContentSegmentsResponse = components['schemas']['ConfirmContentSegmentsResponse'];
+export type StudioContentSegmentConflictResponse = components['schemas']['ContentSegmentConflictResponse'];
+export type StudioCreateSegmentSuggestionsRequest = components['schemas']['CreateSegmentSuggestionsRequest'];
+export type StudioCreateSegmentSuggestionsResponse = components['schemas']['CreateSegmentSuggestionsResponse'];
+export type StudioSegmentSuggestionJob = components['schemas']['SegmentSuggestionJob'];
+export type StudioSegmentSuggestionJobListResponse = components['schemas']['SegmentSuggestionJobListResponse'];
+export type StudioRemixBatchPreviewRequest = components['schemas']['RemixBatchPreviewRequest'];
+export type StudioRemixBatchPreviewResponse = components['schemas']['RemixBatchPreviewResponse'];
+export type StudioCreateRemixBatchRequest = components['schemas']['CreateRemixBatchRequest'];
+export type StudioRemixBatch = components['schemas']['RemixBatch'];
+export type StudioRemixBatchItem = components['schemas']['RemixBatchItem'];
+export type StudioRemixBatchSegment = components['schemas']['RemixBatchSegment'];
+export type StudioRemixBatchDetail = components['schemas']['RemixBatchDetail'];
+export type StudioRemixBatchListResponse = components['schemas']['RemixBatchListResponse'];
+export type StudioRemixProductListResponse = components['schemas']['RemixProductListResponse'];
+export type StudioRemixEditClip = components['schemas']['RemixEditClip'];
+export type StudioRemixEditCheckRequest = components['schemas']['RemixEditCheckRequest'];
+export type StudioCreateRemixEditRequest = components['schemas']['CreateRemixEditRequest'];
+export type StudioRemixEditMatch = components['schemas']['RemixEditMatch'];
+export type StudioRemixEditCheckResponse = components['schemas']['RemixEditCheckResponse'];
 export type IndustryMaterialInspirationResponse = components['schemas']['IndustryMaterialInspirationResponse'];
 export type IndustryMaterialBrandAiBackfillRequest =
   IndustryMaterialBrandAiBackfillOperation['requestBody']['content']['application/json'];

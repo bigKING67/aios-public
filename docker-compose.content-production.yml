@@ -1,4 +1,8 @@
 # Opt-in independent workers. Do not enable before ledger migrations and runtime acceptance.
+# Own compose project: the main stack deploy runs `up --remove-orphans` in
+# project `aios`, which would otherwise delete these workers. COMPOSE_PROJECT_NAME
+# in .env.vps overrides this, so VPS commands must pass -p aios-content-production.
+name: aios-content-production
 x-worker: &worker
   image: ${AIOS_CONTENT_PRODUCTION_IMAGE:-aios-content-production:local}
   build:
@@ -20,8 +24,9 @@ x-worker: &worker
     - /work:rw,nosuid,nodev,size=2g,uid=10001,gid=10001,mode=0700
   env_file:
     - ${CONTENT_PRODUCTION_ENV_FILE:?set dedicated private worker env file}
-  environment:
+  environment: &worker-environment
     CONTENT_PRODUCTION_ENABLED: ${CONTENT_PRODUCTION_ENABLED:-false}
+    CONTENT_PRODUCTION_RUNS_ENABLED: ${CONTENT_PRODUCTION_RUNS_ENABLED:-false}
     CONTENT_PRODUCTION_SHOT_EXTRACTION_ENABLED: ${CONTENT_PRODUCTION_SHOT_EXTRACTION_ENABLED:-false}
     CONTENT_PRODUCTION_SEMANTICS_ENABLED: ${CONTENT_PRODUCTION_SEMANTICS_ENABLED:-false}
   stop_grace_period: 45s
@@ -30,6 +35,13 @@ services:
   aios-content-render:
     <<: *worker
     command: [python, -m, content_production.worker]
+    # Chromium renders of 3-4 minute clips were OOM-killed at 2g (2026-09-30).
+    mem_limit: 3g
+    # Render scratch uses disk; each render worker requires its own volume.
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=256m,mode=1777
+    volumes:
+      - content-render-work:/work
   aios-content-extract:
     <<: *worker
     command: [python, -m, content_production.shot_worker]
@@ -37,3 +49,18 @@ services:
     <<: *worker
     profiles: [content-production-semantics]
     command: [python, -m, content_production.semantic_worker]
+  # AI 创作中心 AI 切段打标. Needs migration 030; paid Ark calls additionally
+  # require CONTENT_AI_STUDIO_SEGMENT_SUGGEST_LIVE=1 (checked before claiming).
+  # Disabled or without a usable provider it logs one warning and idles.
+  aios-content-segment-suggest:
+    <<: *worker
+    profiles: [content-ai-studio-segment-suggest]
+    command: [python, -m, content_production.segment_suggestion_worker]
+    environment:
+      <<: *worker-environment
+      CONTENT_AI_STUDIO_ENABLED: ${CONTENT_AI_STUDIO_ENABLED:-false}
+      CONTENT_AI_STUDIO_SEGMENT_SUGGEST_ENABLED: ${CONTENT_AI_STUDIO_SEGMENT_SUGGEST_ENABLED:-false}
+      CONTENT_AI_STUDIO_SEGMENT_SUGGEST_LIVE: ${CONTENT_AI_STUDIO_SEGMENT_SUGGEST_LIVE:-0}
+
+volumes:
+  content-render-work:
