@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import re
+import os
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,6 +12,23 @@ ETL_ROOT = Path(__file__).resolve().parents[1]
 
 
 class PrefectDependencyContractTest(unittest.TestCase):
+  def test_server_places_ui_cache_in_writable_state_and_preserves_override(self) -> None:
+    with tempfile.TemporaryDirectory() as temporary:
+      root = Path(temporary)
+      probe = root / "prefect-probe"
+      probe.write_text('#!/bin/bash\nset -eu\nprintf "%s" "$PREFECT_UI_STATIC_DIRECTORY"\ntest -w "$PREFECT_UI_STATIC_DIRECTORY"\n')
+      probe.chmod(0o755)
+      for override in (None, str(root / "custom-ui")):
+        with self.subTest(override=override):
+          env = {**os.environ, "PROJECT_ROOT": str(root), "PREFECT_HOME": str(root / "state"),
+                 "PYTHON_BIN": "/usr/bin/true", "PREFECT_BIN": str(probe)}
+          env.pop("PREFECT_UI_STATIC_DIRECTORY", None)
+          if override is not None:
+            env["PREFECT_UI_STATIC_DIRECTORY"] = override
+          result = subprocess.run(["bash", str(ETL_ROOT / "scripts/start_prefect_server.sh")],
+                                  env=env, text=True, capture_output=True, check=True)
+          self.assertEqual(result.stdout, override or str(root / "state/ui-static"))
+
   def test_pyproject_lock_and_patch_support_the_same_exact_version(self) -> None:
     pyproject = (ETL_ROOT / "pyproject.toml").read_text(encoding="utf-8")
     lock = (ETL_ROOT / "uv.lock").read_text(encoding="utf-8")
