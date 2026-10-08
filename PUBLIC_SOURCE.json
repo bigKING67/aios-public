@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "15fde5490ea1f95e3ffafa184a7984bdb05227fd",
+  "sourceCommit": "d659a1715336ee04d55171bfd986a12ee5f5ec42",
   "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
-  "fileCount": 4256,
-  "contentSha256": "482c1f153e1267d2766ca90917b3ca54c0f4a20e5e3f16d10e3612b9162cea4e",
+  "fileCount": 4259,
+  "contentSha256": "92c9d137de934c7d8c33ce5d970c4ce48dd13a6e54dbf5dcd37beed123af5bbb",
   "files": [
     {
       "path": ".dockerignore",
@@ -19972,13 +19972,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 332004,
-      "sha256": "eb6562069805f4ae397839ae1241feb68ee4aacb349375bfa6d411c39d31efe1"
+      "sha256": "beaf6e113eb1282a90a3b1f41b2fd9c245e4049e106bcf4084ff83dc2229d5ff"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54827,
-      "sha256": "c8d0c1a808c8d32890dfd449e3fc5fe936fbea9002b54e7d3bdf0a229973d235"
+      "sha256": "97ca9837a0345132d54e8d8994c91e40dc90ee797ff3e59028f64a094dd5a205"
     },
     {
       "path": "postcss.config.js",
@@ -22117,6 +22117,12 @@
       "sha256": "3c97c758b41d11d62d3abb834318eb98620ac4e2a7633d9d87f0a679fc536e31"
     },
     {
+      "path": "scripts/checks/test_vps_build_cache_maintenance.py",
+      "mode": "100644",
+      "size": 7898,
+      "sha256": "123a179db336736e1f6112ff54e219a81b3b1cad5fda5a84c6b22bddc2e7a63d"
+    },
+    {
       "path": "scripts/checks/weekly-douyin-card/leaf-adapter.behavior.mjs",
       "mode": "100644",
       "size": 885,
@@ -22697,6 +22703,18 @@
       "mode": "100644",
       "size": 79,
       "sha256": "49798c64a721cd73668171a49beaa5bc7d5219a25daf806a0ad6d9bdf6249eb4"
+    },
+    {
+      "path": "scripts/config/systemd/aios-build-cache-maintenance.service",
+      "mode": "100644",
+      "size": 497,
+      "sha256": "cccc5729e93bcc402d4f4b78315a8fa01c23e5aaa09d6b998439e918a8a871d9"
+    },
+    {
+      "path": "scripts/config/systemd/aios-build-cache-maintenance.timer",
+      "mode": "100644",
+      "size": 214,
+      "sha256": "de5b8f27cb0928100710532288f259588cea7d01c2d763ecc9029d0b4c3160dc"
     },
     {
       "path": "scripts/contracts/generate-aios-openapi.mjs",

@@ -1,0 +1,20 @@
+[Unit]
+Description=Budgeted shared VPS Docker build cache maintenance
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /usr/local/libexec/aios-build-cache-maintenance.py --apply
+TimeoutStartSec=2h
+Nice=10
+IOSchedulingClass=idle
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/aios-build-cache-maintenance
+StateDirectory=aios-build-cache-maintenance
+StateDirectoryMode=0700
+PrivateTmp=true

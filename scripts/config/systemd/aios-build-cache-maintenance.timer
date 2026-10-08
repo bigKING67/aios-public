@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly shared VPS Docker build cache budget check
+
+[Timer]
+OnCalendar=Sun *-*-* 04:00:00 Asia/Shanghai
+Persistent=true
+Unit=aios-build-cache-maintenance.service
+
+[Install]
+WantedBy=timers.target
