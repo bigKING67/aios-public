@@ -346,7 +346,13 @@ def finalize(video: Path, receipt: dict, snapshot: dict, clips: list[dict], sett
         raise NormalizationError("统一编码后帧数、画幅或音轨与渲染产物不一致")
     frames = int(out_videos[0]["nb_read_packets"])
     if out_audios and abs(float(out_audios[0]["duration"]) - frames / FPS) > 2 / FPS:
-        raise NormalizationError("统一编码后音频时长与画面不一致")
+        raise NormalizationError(
+            "统一编码后音频时长与画面不一致 "
+            f"(input_audio={audios[0].get('duration')}s, "
+            f"output_audio={out_audios[0]['duration']}s, "
+            f"video={frames / FPS:.6f}s, frames={frames}, "
+            f"normalization={None if loudnorm is None else loudnorm.get('normalizationType', loudnorm.get('status'))})"
+        )
     digest = file_hash(output)
     duration = float(after["format"]["duration"])
     record = {

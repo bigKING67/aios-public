@@ -119,6 +119,30 @@ class GainTests(unittest.TestCase):
                                                      {"task_type": "framework_remix"}))
 
 
+class DurationGuardTests(unittest.TestCase):
+    def test_duration_mismatch_keeps_guard_and_reports_stream_evidence(self):
+        for duration in ("7.900000", "8.100000"):
+            with self.subTest(duration=duration), tempfile.TemporaryDirectory() as scratch:
+                work = Path(scratch)
+                source = work / "source.mp4"
+                source.write_bytes(b"fixture")
+                receipt = {"status": "completed", "output": {"sha256": rn.file_hash(source)}}
+                video = {"codec_type": "video", "codec_name": "h264", "width": 1080,
+                         "height": 1920, "nb_read_packets": "240"}
+                before = {"streams": [video, {"codec_type": "audio", "duration": "8.000000"}]}
+                after = {"streams": [video, {"codec_type": "audio", "duration": duration}]}
+                with mock.patch.object(rn, "probe", side_effect=[before, after]), \
+                        mock.patch.object(rn, "run_ffmpeg", return_value=""), \
+                        mock.patch.object(rn, "parse_loudnorm", return_value=None):
+                    with self.assertRaises(rn.NormalizationError) as raised:
+                        rn.finalize(source, receipt, {"aspect": "portrait", "outputProfile": "hd_1080_v1"},
+                                    [{"renderedFrames": 240, "linearGain": 1.0}], rn.Settings(), work,
+                                    lambda: None, copy_video=True)
+                self.assertIn("input_audio=8.000000s", str(raised.exception))
+                self.assertIn(f"output_audio={duration}s", str(raised.exception))
+                self.assertIn("video=8.000000s, frames=240, normalization=silent", str(raised.exception))
+
+
 class RealMediaTests(unittest.TestCase):
     """Two sources 12 dB apart, concatenated like the renderer, then normalized."""
 
