@@ -1,5 +1,7 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+
+import { installDelayedUiTestTimers } from "@/test/delayed-ui-test-timers";
 
 import { SettingsModal } from "./sample-inventory-operation-dialogs";
 
@@ -20,7 +22,7 @@ beforeAll(() => {
 });
 
 afterAll(() => vi.unstubAllGlobals());
-afterEach(cleanup);
+installDelayedUiTestTimers();
 
 describe("SettingsModal", () => {
   it("keeps inventory freshness automatic and submits only the low-stock threshold", async () => {

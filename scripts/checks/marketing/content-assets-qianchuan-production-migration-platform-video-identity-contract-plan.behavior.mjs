@@ -134,8 +134,8 @@ class FakeClient {
   indexRow(identity) {
     const canonicalPresent = this.state !== 'precontract';
     const legacyPresent = this.state !== 'postcontract';
-    let present = false;
-    let definition = null;
+    let present;
+    let definition;
     if (identity === PLATFORM_VIDEO_IDENTITY_INDEXES.canonicalExternalVideo) {
       present = canonicalPresent;
       definition = canonicalExternalVideoDefinition(identity.split('.')[1]);

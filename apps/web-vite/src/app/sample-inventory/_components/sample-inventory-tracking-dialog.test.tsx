@@ -1,5 +1,7 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+
+import { installDelayedUiTestTimers } from "@/test/delayed-ui-test-timers";
 
 import type { SampleInventoryOutboundView } from "../_lib/sample-inventory-types";
 import { SampleInventoryTrackingDialog } from "./sample-inventory-tracking-dialog";
@@ -30,7 +32,7 @@ beforeAll(() => {
   );
 });
 
-afterEach(cleanup);
+installDelayedUiTestTimers();
 afterAll(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();

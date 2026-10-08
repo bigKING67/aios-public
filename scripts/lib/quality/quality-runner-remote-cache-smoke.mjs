@@ -166,7 +166,7 @@ function printSmoke(report, options = {}) {
 
 export async function remoteCacheSmoke(options = {}) {
   const repoRoot = mkdtempSync(path.join(tmpdir(), 'aios-quality-remote-smoke-'));
-  let report = null;
+  let report;
   try {
     writeText(path.join(repoRoot, 'scripts/cache-probe.mjs'), [
       'import { mkdirSync, writeFileSync } from "node:fs";',

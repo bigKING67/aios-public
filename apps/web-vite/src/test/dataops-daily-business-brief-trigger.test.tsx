@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Form } from 'antd';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+
+import { installDelayedUiTestTimers } from './delayed-ui-test-timers';
 
 import { DATAOPS_OPS_PIPELINES } from '@/config/dataops-hub-ops-pipelines';
 import { getDataOpsTriggerParameterSpecs } from '@/config/dataops-trigger-params';
@@ -16,7 +18,7 @@ import {
 
 const DAILY_BRIEF_SPECS = getDataOpsTriggerParameterSpecs('daily_business_brief');
 
-afterEach(cleanup);
+installDelayedUiTestTimers();
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

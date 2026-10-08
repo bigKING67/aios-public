@@ -11,7 +11,7 @@ export function parseTsMirrorSource(content, tokenTsPath = TOKEN_TS_PATH) {
   try {
     return JSON.parse(match[1]);
   } catch (error) {
-    throw new Error(`${tokenTsPath} designTokens object parse failed: ${error.message}`);
+    throw new Error(`${tokenTsPath} designTokens object parse failed: ${error.message}`, { cause: error });
   }
 }
 

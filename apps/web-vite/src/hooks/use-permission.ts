@@ -12,7 +12,7 @@
 import React from 'react';
 
 import { useMemo } from 'react';
-import { useAuthStore } from '@/stores/auth.store';
+import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
 import {
   hasEffectivePermission,
   hasAllPermissionCodes,
@@ -49,7 +49,7 @@ export function usePermission(
 ): boolean {
   const user = useAuthStore((state) => state.user);
   const permissions = useAuthStore((state) => state.permissions);
-  const userRoles = useAuthStore((state) => state.user?.roles || []);
+  const userRoles = useAuthStore(selectUserRoles);
 
   return useMemo(() => {
     return hasEffectivePermission({
@@ -94,7 +94,7 @@ export function usePermission(
 export function usePermissions(codes: string[]) {
   const user = useAuthStore((state) => state.user);
   const permissions = useAuthStore((state) => state.permissions);
-  const userRoles = useAuthStore((state) => state.user?.roles || []);
+  const userRoles = useAuthStore(selectUserRoles);
 
   return useMemo(() => {
     const accessContext = {
@@ -184,7 +184,7 @@ export function PermissionCheck({
 export function useRole() {
   const user = useAuthStore((state) => state.user);
   const permissions = useAuthStore((state) => state.permissions);
-  const userRoles = useAuthStore((state) => state.user?.roles || []);
+  const userRoles = useAuthStore(selectUserRoles);
 
   return useMemo(() => {
     return inferPermissionRole({

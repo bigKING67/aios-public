@@ -36,7 +36,7 @@ export async function assertAuthenticatedSession(baseUrl, rawCookieHeader) {
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
-    throw new Error(`Authenticated smoke session check failed: /v1/auth/session/me was not reachable (${detail}).`);
+    throw new Error(`Authenticated smoke session check failed: /v1/auth/session/me was not reachable (${detail}).`, { cause: error });
   }
 
   if (response.status !== 200) {
@@ -74,6 +74,7 @@ export async function assertFrontendServiceReachable(baseUrl) {
         'Override the target when needed:',
         '  FRONTEND_SMOKE_BASE_URL=http://localhost:<port> npm run test:frontend:smoke',
       ].join('\n'),
+      { cause: error },
     );
   }
 }

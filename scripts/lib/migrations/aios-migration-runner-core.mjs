@@ -30,7 +30,7 @@ async function readLedger(client) {
     return { exists: true, rows: result.rows ?? [], schema };
   } catch (error) {
     if (isUndefinedTable(error)) {
-      throw new Error('Migration ledger changed after schema inspection; retry from a stable database state.');
+      throw new Error('Migration ledger changed after schema inspection; retry from a stable database state.', { cause: error });
     }
     throw error;
   }

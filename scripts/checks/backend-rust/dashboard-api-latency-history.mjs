@@ -112,7 +112,7 @@ export function readHistoryRecords(historyJsonl) {
       try {
         return JSON.parse(line);
       } catch (error) {
-        throw new Error(`invalid JSON at ${historyJsonl}:${index + 1}: ${error.message}`);
+        throw new Error(`invalid JSON at ${historyJsonl}:${index + 1}: ${error.message}`, { cause: error });
       }
     });
 }

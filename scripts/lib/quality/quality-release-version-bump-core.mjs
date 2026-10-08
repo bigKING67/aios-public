@@ -76,7 +76,7 @@ function parseJson(source, label) {
   try {
     return JSON.parse(source);
   } catch (error) {
-    throw new Error(`${label} is not valid JSON: ${error.message}`);
+    throw new Error(`${label} is not valid JSON: ${error.message}`, { cause: error });
   }
 }
 
@@ -169,7 +169,7 @@ export function createEndpointFileReader(repoRoot, endpoint, options = {}) {
       return cache.get(file);
     }
 
-    let source = '';
+    let source;
     try {
       source = ref ? readGit(repoRoot, ref, file) : readRepo(repoRoot, file);
     } catch {

@@ -295,7 +295,7 @@ function assertRuntimeTokenMirror(tokenMirrorSource, canonicalTokens, findings) 
   const fontMatch = tokenMirrorSource.match(
     new RegExp(`export\\s+const\\s+${TOKEN_RUNTIME_FONT_FAMILY_CONST}\\s*=\\s*([^;]+);`),
   );
-  let actualFontFamily = null;
+  let actualFontFamily;
   try {
     actualFontFamily = fontMatch ? JSON.parse(fontMatch[1]) : null;
   } catch {

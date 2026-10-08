@@ -152,7 +152,7 @@ function readDefaultRouteExpectations() {
     config = JSON.parse(readFileSync(SMOKE_ROUTES_PATH, 'utf8'));
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to read ${SMOKE_ROUTES_PATH}: ${detail}`);
+    throw new Error(`Failed to read ${SMOKE_ROUTES_PATH}: ${detail}`, { cause: error });
   }
 
   if (config?.version !== 1 || !Array.isArray(config.routes) || config.routes.length === 0) {

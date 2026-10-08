@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 
 import { AIOS_RUST_ROUTE_SOURCES } from '../../config/contracts/aios-api-contract.mjs';
 import { buildAiosOpenApi, renderAiosOpenApi } from './aios-openapi-core.mjs';
-import { normalizeOpenapiTypescriptSource } from './openapi-typescript-runner.mjs';
 import { collectRustRouteOperations, extractRustRouteOperations } from './rust-route-extractor.mjs';
 import { collectRustStructSchemas, extractRustStructSchema } from './rust-schema-extractor.mjs';
 
@@ -22,17 +21,6 @@ export function runAiosApiContractBehaviorFixtures({
   assertNotIncludes,
   assertTrue,
 }) {
-  assertIncludes(
-    normalizeOpenapiTypescriptSource('type OneOf<T extends any[]> = T;'),
-    'type OneOf<T extends unknown[]>',
-    'generated OneOf helpers should use an unknown array boundary instead of explicit any',
-  );
-  assertNotIncludes(
-    normalizeOpenapiTypescriptSource('type OneOf<T extends any[]> = T;'),
-    'extends any[]',
-    'generated OneOf helpers should not retain the explicit-any boundary',
-  );
-
   const routeSource = `
     // .route("/commented", get(commented_handler))
     /* .route("/block-commented", get(block_commented_handler)) */

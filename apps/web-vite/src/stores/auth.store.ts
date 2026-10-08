@@ -207,3 +207,7 @@ export const selectHasSessionChecked = (state: AuthState) => state.hasSessionChe
  * 获取错误信息
  */
 export const selectError = (state: AuthState) => state.error;
+
+// Stable fallback is required by Zustand 5's useSyncExternalStore snapshots.
+const EMPTY_ROLES: string[] = [];
+export const selectUserRoles = (state: AuthState) => state.user?.roles ?? EMPTY_ROLES;

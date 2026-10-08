@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layout as AntLayout, Menu } from 'antd';
 import UserMenu from '@/components/user-menu';
-import { useAuthStore } from '@/stores/auth.store';
+import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import {
   buildLayoutMenuItems,
@@ -50,7 +50,7 @@ function DefaultLayoutChrome({
 }) {
   const permissions = useAuthStore((state) => state.permissions);
   const user = useAuthStore((state) => state.user);
-  const roles = useAuthStore((state) => state.user?.roles || []);
+  const roles = useAuthStore(selectUserRoles);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const menuItems = useMemo<LayoutMenuItems>(

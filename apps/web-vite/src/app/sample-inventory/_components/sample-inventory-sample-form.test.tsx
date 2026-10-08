@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import { installDelayedUiTestTimers } from "@/test/delayed-ui-test-timers";
+
 import { SampleFormModal } from "./sample-inventory-dialogs";
 import {
   availableSample,
@@ -8,6 +10,7 @@ import {
 } from "./sample-inventory-workspace.test-support";
 
 installSampleInventoryWorkspaceTestEnvironment();
+installDelayedUiTestTimers();
 
 describe("SampleFormModal manual reservation", () => {
   it("creates a sample with bounded reservation and a live available quantity", async () => {

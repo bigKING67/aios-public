@@ -1,7 +1,7 @@
 import { Layout } from '@/components/organisms/layout';
 import { ProtectedRoute } from '@/components/protected-route';
 import { canAccessPath } from '@/lib/auth-navigation';
-import { useAuthStore } from '@/stores/auth.store';
+import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
 import styles from '../marketing.module.css';
 import { MarketingModuleCard } from './marketing-module-card';
 import { MarketingPageHero } from './marketing-page-hero';
@@ -10,7 +10,7 @@ import { MARKETING_MODULES } from './marketing-workspace-data';
 export function MarketingPageContent() {
   const permissions = useAuthStore((state) => state.permissions);
   const user = useAuthStore((state) => state.user);
-  const roles = useAuthStore((state) => state.user?.roles || []);
+  const roles = useAuthStore(selectUserRoles);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const routeAccessIdentity = user
     ? {

@@ -276,7 +276,9 @@ export default defineConfig(({ mode }) => {
               },
               {
                 name: 'vendor-ui-initial',
-                test: (id) => resolveAntdFamilyChunk(id) !== null,
+                // React/router/query and the UI provider always load together.
+                // Share their compression window while keeping route-only modules lazy.
+                test: (id) => resolveAntdFamilyChunk(id) !== null || resolveVendorChunk(id) === 'vendor-react-query',
                 tags: ['$initial'],
                 priority: 90,
               },

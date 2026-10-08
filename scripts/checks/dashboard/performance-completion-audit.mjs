@@ -195,7 +195,7 @@ function parseJsonLine(line, filePath) {
   try {
     return JSON.parse(line);
   } catch (error) {
-    throw new Error(`${filePath}: failed to parse JSONL line: ${error.message}`);
+    throw new Error(`${filePath}: failed to parse JSONL line: ${error.message}`, { cause: error });
   }
 }
 
