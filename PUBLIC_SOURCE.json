@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "6c7e78403ccb1ec65296007e5102fac83084a828",
+  "sourceCommit": "59496eb5b623e3ac9976ef4311dfade288ad4361",
   "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
-  "fileCount": 4252,
-  "contentSha256": "0b0a16c6ca3f973f9f839898e2737ef9cb55d6659f1cd16e1477cb2fe4b30968",
+  "fileCount": 4253,
+  "contentSha256": "539f91a5cea4ea5fc6028caf40d7fe488c750daae782deab8876bc8bebbc0046",
   "files": [
     {
       "path": ".dockerignore",
@@ -16066,7 +16066,7 @@
       "path": "docker/content-production/requirements.txt",
       "mode": "100644",
       "size": 195,
-      "sha256": "f0d43fc3e0e6765bc15229912082728d718bea738058e3224860086278527b46"
+      "sha256": "e1dd34f27b22b408b14c9d03a5fde3ea2c64b09da1a2188dc4999da3f9cb1e87"
     },
     {
       "path": "docker/content-production/worker.env.example",
@@ -19357,6 +19357,12 @@
       "sha256": "1fb55ef1d8f4fdd0453b85bbed2e44977929685f0911ea38e42495c5cb434a98"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_worker_dependency_closure.py",
+      "mode": "100644",
+      "size": 996,
+      "sha256": "1fc7b4e2691b69d1feb8042ba12218f79b0189069050d07d0716a13a5dfe28d9"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_worker_workspace.py",
       "mode": "100644",
       "size": 5888,
@@ -19948,13 +19954,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 341031,
-      "sha256": "9c6e286b1e5ac71e7e1b70f02fc403f535e4793c1a7c0c35ad23461f069ae165"
+      "sha256": "99eec5c425484036057eb4dab50e2e9d096e03ce4f8cc9e31094bfc7f4e799cc"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54684,
-      "sha256": "8cb6e6c1fa6af1280e8f1d737db976f1d392ffd42e2f30682ef36a6919449c03"
+      "sha256": "bd496ac38fb61c0f24df7d00bedd1be6daf31789d8ebc7c0389cd699f2cb4e47"
     },
     {
       "path": "postcss.config.js",

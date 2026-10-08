@@ -5,4 +5,4 @@ idna==3.18
 jieba==0.42.1
 psycopg2-binary==2.9.12
 requests==2.34.2
-urllib3==2.7.0
+urllib3==2.8.0
