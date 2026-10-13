@@ -49,13 +49,49 @@ def preset_labels(labels):
             if minimum is None or not 0 < minimum <= 3600:
                 raise ValueError('Invalid preset label minDurationSec')
             entry['minDurationMs'] = round(minimum * 1000)
+        if label.get('absorbInto') is not None:
+            targets = label['absorbInto']
+            if not isinstance(targets, list) or not targets or not all(isinstance(t, str) and t.strip() for t in targets):
+                raise ValueError('Invalid preset label absorbInto')
+            targets = [t.strip() for t in targets]
+            # Only meaningful with a minimum span, and never pointing at itself.
+            if len(set(targets)) != len(targets) or 'minDurationMs' not in entry or entry['key'] in targets:
+                raise ValueError('Invalid preset label absorbInto')
+            entry['absorbInto'] = targets
+        if label.get('absorbBetweenMaxSec') is not None:
+            bridge = _number(label['absorbBetweenMaxSec'])
+            if bridge is None or not 0 < bridge <= 3600:
+                raise ValueError('Invalid preset label absorbBetweenMaxSec')
+            entry['absorbBetweenMaxMs'] = round(bridge * 1000)
         result.append(entry)
+    if any(t not in seen for entry in result for t in entry.get('absorbInto', ())):
+        raise ValueError('Preset label absorbInto must reference preset label keys')
     return result
 
 
 def label_minimums(labels):
     """`{key: minDurationMs}` for labels whose preset sets a minimum span."""
     return {label['key']: label['minDurationMs'] for label in labels if label.get('minDurationMs')}
+
+
+def label_absorb_targets(labels):
+    """`{key: frozenset(target keys)}`: labels a too-short span of `key` may be relabeled to.
+
+    `labels` is the job's label set: targets outside it are dropped, and a label left
+    without targets falls back to the unrestricted rule instead of never absorbing.
+    """
+    keys = {label['key'] for label in labels}
+    result = {}
+    for label in labels:
+        targets = frozenset(label.get('absorbInto') or ()) & keys
+        if targets:
+            result[label['key']] = targets
+    return result
+
+
+def label_bridges(labels):
+    """`{key: maxMs}`: a span this short between two touching `key` spans becomes `key`."""
+    return {label['key']: label['absorbBetweenMaxMs'] for label in labels if label.get('absorbBetweenMaxMs')}
 
 
 def job_labels(labels, request_settings):
@@ -119,7 +155,6 @@ _V4_EXTRA = """
 # v5: adds the timed voice-over transcript (segment_transcript) as advisory input.
 _V5_EXTRA = """
 9. 口播字幕只作辅助：说话方式改变（旁白转为出镜人物自己讲，或反过来）、说话人更换、口播主题明显转变时，往往是段落边界；字幕时间可能有几百毫秒偏差，边界位置以画面和声音为准，没有口播的段落按画面判断。"""
-
 
 def build_prompt(preset_name, labels, version=DEFAULT_PROMPT_VERSION, shot_hint=None, transcript=None):
     """Prompt for one job. Labels and definitions always come from the preset.
@@ -310,12 +345,16 @@ def _merge(segments, merged_counter, person_split_labels=()):
     return result
 
 
-def _absorb_short(segments, label_min_ms, counter):
+def _absorb_short(segments, label_min_ms, counter, absorb_into=None):
     """Relabels a span shorter than its label's preset minimum to an adjacent label.
 
     Both touching neighbours sharing a label win; otherwise the longer touching
-    neighbour; a span with no touching neighbour is kept as the model said.
+    neighbour; a span with no touching neighbour is kept as the model said. When
+    the preset restricts targets (`absorb_into`), only neighbours with a target
+    label or the span's own label count, so a short span next to anything else
+    keeps its label.
     """
+    absorb_into = absorb_into or {}
     result = [dict(segment) for segment in segments]
     for index, segment in enumerate(result):
         minimum = label_min_ms.get(segment['label_key'])
@@ -323,6 +362,9 @@ def _absorb_short(segments, label_min_ms, counter):
             continue
         neighbours = [n for n in (result[index - 1] if index else None, result[index + 1] if index + 1 < len(result) else None)
                       if n and abs((segment['start_ms'] - n['end_ms']) if n['end_ms'] <= segment['start_ms'] else (n['start_ms'] - segment['end_ms'])) <= MERGE_GAP_MS]
+        allowed = absorb_into.get(segment['label_key'])
+        if allowed is not None:
+            neighbours = [n for n in neighbours if n['label_key'] in allowed or n['label_key'] == segment['label_key']]
         if not neighbours:
             continue
         if len(neighbours) == 2 and neighbours[0]['label_key'] == neighbours[1]['label_key']:
@@ -337,14 +379,45 @@ def _absorb_short(segments, label_min_ms, counter):
     return result
 
 
-def postprocess(payload, duration_ms, label_keys, min_segment_ms=DEFAULT_MIN_SEGMENT_MS, label_min_ms=None):
+def _bridge(segments, bridge_ms, counter, merged_counter):
+    """Relabels a span between two touching spans of a bridging label to that label.
+
+    Applies when the span is no longer than the label's `absorbBetweenMaxMs`; repeats
+    on the merged result until nothing changes.
+    """
+    result = [dict(segment) for segment in segments]
+    changed = True
+    while changed:
+        changed = False
+        for index in range(1, len(result) - 1):
+            before, segment, after = result[index - 1], result[index], result[index + 1]
+            label = before['label_key']
+            limit = bridge_ms.get(label)
+            if (limit and after['label_key'] == label != segment['label_key']
+                    and segment['end_ms'] - segment['start_ms'] <= limit
+                    and segment['start_ms'] - before['end_ms'] <= MERGE_GAP_MS
+                    and after['start_ms'] - segment['end_ms'] <= MERGE_GAP_MS):
+                segment['label_key'] = label
+                segment['reason'] = f"{segment['reason']}（夹在同类段之间，并入两侧）"[:MAX_REASON_CHARS]
+                counter[0] += 1
+                result = _merge(result, merged_counter)
+                changed = True
+                break
+    return result
+
+
+def postprocess(payload, duration_ms, label_keys, min_segment_ms=DEFAULT_MIN_SEGMENT_MS, label_min_ms=None,
+                absorb_into=None, bridge_ms=None):
     """Normalizes model segments into non-overlapping source-relative millisecond intervals.
 
     Order: drop unknown labels / invalid numbers -> clamp to [0, duration] -> sort ->
     trim overlaps (later start = earlier end) -> merge touching same-label spans ->
     drop spans shorter than min_segment_ms -> merge again -> relabel spans shorter
     than their label's preset minimum (`label_min_ms`) to a touching neighbour ->
-    merge again. Returns (segments, stats).
+    merge again -> relabel short spans between two touching spans of a label with
+    `absorbBetweenMaxSec` (`bridge_ms`) to that label -> merge. `absorb_into`
+    restricts which neighbours a too-short span may be relabeled to. Returns
+    (segments, stats).
 
     When the model reports `same_person_as_previous` (v4), the merges before the
     minimum check keep a person change as a boundary for labels with a minimum, so
@@ -405,7 +478,10 @@ def postprocess(payload, duration_ms, label_keys, min_segment_ms=DEFAULT_MIN_SEG
     result = _merge(long_enough, merged, split)
     absorbed = [0]
     if label_min_ms:
-        result = _merge(_absorb_short(result, label_min_ms, absorbed), merged)
+        result = _merge(_absorb_short(result, label_min_ms, absorbed, absorb_into), merged)
+    bridged = [0]
+    if bridge_ms:
+        result = _bridge(result, bridge_ms, bridged, merged)
     for segment in result:
         segment.pop('same_person', None)
     if len(result) > MAX_SEGMENTS:
@@ -414,6 +490,11 @@ def postprocess(payload, duration_ms, label_keys, min_segment_ms=DEFAULT_MIN_SEG
     stats = {'received': len(items), 'kept': len(result), 'merged': merged[0],
              'dropped': dropped, 'unknownLabels': unknown_labels,
              'minSegmentMs': min_segment_ms, 'durationMs': duration_ms}
+    if bridge_ms:
+        stats['bridged'] = bridged[0]
+        stats['labelBridgeMs'] = dict(bridge_ms)
+    if absorb_into:
+        stats['labelAbsorbInto'] = {key: sorted(targets) for key, targets in absorb_into.items()}
     if label_min_ms:
         stats['absorbedShort'] = absorbed[0]
         stats['personSplits'] = person_splits

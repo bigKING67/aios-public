@@ -19307,6 +19307,29 @@
                 "type": "null"
               }
             ]
+          },
+          "absorbInto": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "absorbBetweenMaxSec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [

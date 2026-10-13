@@ -308,6 +308,89 @@ class LabelMinimumTests(unittest.TestCase):
                 preset_labels([{'key': 'live', 'name': '实拍', 'definition': '', 'minDurationSec': bad}])
 
 
+class PresetAbsorbRuleTests(unittest.TestCase):
+    """2026-10-13 holdout (25 蜜粉 films): `absorbInto` and `absorbBetweenMaxSec`."""
+    keys = {'mix', 'live', 'street', 'promo'}
+
+    def run_pp(self, segs, minimums=None, absorb_into=None, bridge=None, duration=200_000):
+        payload = {'segments': [{'start_sec': a, 'end_sec': b, 'label_key': k, 'confidence': 0.9, 'reason': 'r'} for a, b, k in segs]}
+        result, stats = postprocess(payload, duration, self.keys, 1000, minimums, absorb_into, bridge)
+        return [(s['start_ms'] / 1000, s['end_ms'] / 1000, s['label_key']) for s in result], stats
+
+    def test_short_span_only_joins_allowed_neighbours(self):
+        # 蜜粉-002: a 19s single-person demo after the street interview ends the film; it is not montage.
+        segs = [(0, 15, 'mix'), (15, 57, 'live'), (57, 68, 'mix'), (68, 74, 'street'), (74, 93, 'live')]
+        result, _ = self.run_pp(segs, {'live': 30_000})
+        self.assertEqual(result[-1], (68, 93, 'street'))
+        result, stats = self.run_pp(segs, {'live': 30_000}, {'live': frozenset({'mix'})})
+        self.assertEqual(result, [(0, 15, 'mix'), (15, 57, 'live'), (57, 68, 'mix'), (68, 74, 'street'), (74, 93, 'live')])
+        self.assertEqual((stats['absorbedShort'], stats['labelAbsorbInto']), (0, {'live': ['mix']}))
+        # Next to an allowed label it is still absorbed.
+        result, _ = self.run_pp([(0, 50, 'mix'), (50, 60, 'live'), (60, 70, 'street')], {'live': 30_000}, {'live': frozenset({'mix'})})
+        self.assertEqual(result, [(0, 60, 'mix'), (60, 70, 'street')])
+
+    def test_restricted_absorb_still_picks_the_longer_of_target_and_own_label(self):
+        # 蜜粉-024 run 2: the model reported a person change inside one demo; the longer own-label
+        # neighbour wins, so the 21.6s piece stays live.
+        payload = {'segments': [
+            {'start_sec': 0, 'end_sec': 14.4, 'label_key': 'mix', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False},
+            {'start_sec': 14.4, 'end_sec': 36, 'label_key': 'live', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False},
+            {'start_sec': 36, 'end_sec': 117.2, 'label_key': 'live', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False}]}
+        result, _ = postprocess(payload, 200_000, self.keys, 1000, {'live': 30_000}, {'live': frozenset({'mix'})})
+        self.assertEqual([(s['start_ms'], s['end_ms'], s['label_key']) for s in result], [(0, 14400, 'mix'), (14400, 117200, 'live')])
+
+    def test_restricted_absorb_folds_short_different_people_next_to_montage(self):
+        # 整片-004 pattern: two different people, each under 30s, inside the montage -> both montage.
+        payload = {'segments': [
+            {'start_sec': a, 'end_sec': b, 'label_key': k, 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False}
+            for a, b, k in ((0, 40, 'mix'), (40, 60, 'live'), (60, 85, 'live'), (85, 100, 'street'))]}
+        result, stats = postprocess(payload, 200_000, self.keys, 1000, {'live': 30_000}, {'live': frozenset({'mix'})})
+        self.assertEqual([(s['start_ms'] // 1000, s['end_ms'] // 1000, s['label_key']) for s in result], [(0, 85, 'mix'), (85, 100, 'street')])
+        self.assertEqual(stats['absorbedShort'], 2)
+
+    def test_short_span_between_bridging_label_joins_it(self):
+        # 蜜粉-011: the closing promotion block has model faces in the middle; business labels it all 机制.
+        segs = [(0, 17.6, 'mix'), (17.6, 80.5, 'live'), (80.5, 96.4, 'mix'), (96.4, 101.4, 'promo'),
+                (101.4, 112.6, 'mix'), (112.6, 115.5, 'promo')]
+        result, stats = self.run_pp(segs, bridge={'promo': 12_000})
+        self.assertEqual(result, [(0, 17.6, 'mix'), (17.6, 80.5, 'live'), (80.5, 96.4, 'mix'), (96.4, 115.5, 'promo')])
+        self.assertEqual((stats['bridged'], stats['labelBridgeMs']), (1, {'promo': 12_000}))
+        # Bridging merges are counted: promo/mix/promo/mix/promo collapses into one span.
+        result, stats = self.run_pp([(0, 5, 'promo'), (5, 10, 'mix'), (10, 15, 'promo'), (15, 20, 'mix'), (20, 25, 'promo')],
+                                    bridge={'promo': 12_000})
+        self.assertEqual(result, [(0, 25, 'promo')])
+        self.assertEqual((stats['bridged'], stats['merged']), (2, 4))
+
+    def test_bridge_does_not_apply_to_other_labels_or_long_spans(self):
+        # A short promo between montage spans is not bridged into montage (montage has no bridge).
+        segs = [(0, 30, 'mix'), (30, 35, 'promo'), (35, 60, 'mix')]
+        self.assertEqual(self.run_pp(segs, bridge={'promo': 12_000})[0], [(0, 30, 'mix'), (30, 35, 'promo'), (35, 60, 'mix')])
+        segs = [(0, 10, 'promo'), (10, 23, 'mix'), (23, 30, 'promo')]
+        self.assertEqual(self.run_pp(segs, bridge={'promo': 12_000})[0], segs)
+        result, stats = self.run_pp(segs)
+        self.assertEqual(result, segs)
+        self.assertNotIn('bridged', stats)
+
+    def test_preset_absorb_fields_are_validated(self):
+        from content_production.segment_suggestion_contract import label_absorb_targets, label_bridges
+        labels = preset_labels([
+            {'key': 'live', 'name': '实拍', 'definition': '', 'minDurationSec': 30, 'absorbInto': ['mix']},
+            {'key': 'mix', 'name': '混剪', 'definition': ''},
+            {'key': 'promo', 'name': '机制', 'definition': '', 'absorbBetweenMaxSec': 12}])
+        self.assertEqual(label_absorb_targets(labels), {'live': frozenset({'mix'})})
+        self.assertEqual(label_bridges(labels), {'promo': 12_000})
+        # A job whose label subset has no target keeps the unrestricted rule.
+        self.assertEqual(label_absorb_targets([labels[0], labels[2]]), {})
+        for bad in ({'absorbInto': []}, {'absorbInto': 'mix'}, {'absorbInto': ['mix', 'mix']}, {'absorbInto': ['mix', ' mix']},
+                    {'absorbInto': ['nope']}, {'absorbInto': ['live']}, {'absorbBetweenMaxSec': 0}, {'absorbBetweenMaxSec': 'x'},
+                    {'absorbBetweenMaxSec': 4000}):
+            with self.assertRaises(ValueError):
+                preset_labels([{'key': 'live', 'name': '实拍', 'definition': '', 'minDurationSec': 30, **bad},
+                               {'key': 'mix', 'name': '混剪', 'definition': ''}])
+        with self.assertRaises(ValueError):  # absorbInto without a minimum has no effect
+            preset_labels([{'key': 'live', 'name': '实拍', 'definition': '', 'absorbInto': ['mix']}, {'key': 'mix', 'name': '混剪', 'definition': ''}])
+
+
 class DegenerateAnswerTests(unittest.TestCase):
     KEYS = ['mixed_voiceover', 'live_demo', 'street_interview']
 

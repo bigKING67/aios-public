@@ -142,12 +142,31 @@ mod tests {
         );
     }
 
+    #[test]
+    fn preset_label_absorb_rules_are_optional_and_round_trip() {
+        let value = serde_json::json!({
+            "key": "live_demo", "name": "实拍内容", "definition": "", "minDurationSec": 30.0,
+            "absorbInto": ["mixed_voiceover"]
+        });
+        let live: SegmentPresetLabel = serde_json::from_value(value.clone()).unwrap();
+        assert_eq!(live.absorb_into, Some(vec!["mixed_voiceover".to_string()]));
+        assert_eq!(serde_json::to_value(&live).unwrap(), value);
+        let promo: SegmentPresetLabel = serde_json::from_value(serde_json::json!({
+            "key": "promotion", "name": "机制", "definition": "", "absorbBetweenMaxSec": 12
+        }))
+        .unwrap();
+        assert_eq!(promo.absorb_between_max_sec, Some(12.0));
+        assert_eq!(promo.absorb_into, None);
+    }
+
     fn label(key: &str) -> SegmentPresetLabel {
         SegmentPresetLabel {
             key: key.into(),
             name: key.into(),
             definition: String::new(),
             min_duration_sec: None,
+            absorb_into: None,
+            absorb_between_max_sec: None,
         }
     }
 

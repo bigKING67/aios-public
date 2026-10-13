@@ -46,6 +46,14 @@ pub(super) struct SegmentPresetLabel {
     /// label are folded into an adjacent segment by the worker post-processor.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub(super) min_duration_sec: Option<f64>,
+    /// Optional label keys a span shorter than `minDurationSec` may be folded
+    /// into; next to any other label it keeps its own label.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(super) absorb_into: Option<Vec<String>>,
+    /// Optional maximum span (seconds) of another label that is relabeled to
+    /// this label when spans of this label touch it on both sides.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(super) absorb_between_max_sec: Option<f64>,
 }
 
 #[derive(Debug, Serialize)]

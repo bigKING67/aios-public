@@ -4283,6 +4283,8 @@ export interface components {
             name: string;
             definition: string;
             minDurationSec?: number | null;
+            absorbInto?: string[] | null;
+            absorbBetweenMaxSec?: number | null;
         };
         SegmentPreset: {
             presetKey: string;

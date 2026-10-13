@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "d659a1715336ee04d55171bfd986a12ee5f5ec42",
+  "sourceCommit": "af17ea67f8077b74efbe0b28faccaf55e7c1d89b",
   "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
-  "fileCount": 4259,
-  "contentSha256": "92c9d137de934c7d8c33ce5d970c4ce48dd13a6e54dbf5dcd37beed123af5bbb",
+  "fileCount": 4260,
+  "contentSha256": "69f9ec299af34a09f9cc2623447156b704993910566d9da7711bf4c812269556",
   "files": [
     {
       "path": ".dockerignore",
@@ -9039,8 +9039,8 @@
     {
       "path": "apps/web-vite/src/generated/api/aios-v2.ts",
       "mode": "100644",
-      "size": 454422,
-      "sha256": "d8a32eb35c3d7121a9691292534338d6fdd0467027481fedba935300dc3f4843"
+      "size": 454513,
+      "sha256": "cb826e2321ab149cda21d203848a9f02e87a67d9da5294c976ddecf30ae05556"
     },
     {
       "path": "apps/web-vite/src/hooks/use-auth.ts",
@@ -13341,8 +13341,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/domain.rs",
       "mode": "100644",
-      "size": 8651,
-      "sha256": "15335ebb515c319cc3f2637a3825a968720991a6a6eb98d69ffa513d81da5a37"
+      "size": 9552,
+      "sha256": "4ed1a2d32ac089def3d9bd275a4adaa51ab1a4c332ac3c4ecbb7b04f0caa17b6"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/enterprise_postgres_tests.rs",
@@ -13455,14 +13455,14 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/suggestions.rs",
       "mode": "100644",
-      "size": 13503,
-      "sha256": "ad51fc7791f478b067bf3b3e5c1167ca599196d5196622a02fdbb05c0c7ea002"
+      "size": 13584,
+      "sha256": "0d90ad60cc9ef94c1a9c8dbbe94a6eccd63d7acc4159eac1e76738708118b477"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/types.rs",
       "mode": "100644",
-      "size": 12770,
-      "sha256": "6a49fffc9f4015337c9c6a468241ea5989ca119e01d1ffce41d9527cb2a174ec"
+      "size": 13284,
+      "sha256": "bdeb4a7156dd6a51b6ff8a63492751913ed4e0593ba9d6ee5c50e178a51d1a72"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/text_normalization.rs",
@@ -15951,8 +15951,8 @@
     {
       "path": "contracts/openapi/aios-v2.json",
       "mode": "100644",
-      "size": 601523,
-      "sha256": "abb8c99c00bfe175b13e2237c27abc354067cc88228bcf5d1d5f76b382cd5679"
+      "size": 602022,
+      "sha256": "31e95312a2e1c7bc491929b2392ae4293b68b75eee3d65e886b9c049b64b14e9"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -16713,8 +16713,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_contract.py",
       "mode": "100644",
-      "size": 22790,
-      "sha256": "90291d0d216a3579d532abb2f060b24b5b5b11aef4ab3a1047964235077fb234"
+      "size": 26979,
+      "sha256": "81bd3792954e980c8378757267ac60d287f93c6ab5c72a4eec394cf82b255289"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_provider.py",
@@ -16731,8 +16731,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_worker.py",
       "mode": "100644",
-      "size": 18545,
-      "sha256": "17eff764b8af88ddcdc83b71b6b8c3eac0e6ef063811cb0585210761d5d0dfef"
+      "size": 18673,
+      "sha256": "6e6e597747282757841788b916cdab6b7fe72d67767cde3557d36af175ffdcea"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_transcript.py",
@@ -19203,8 +19203,8 @@
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_contract.py",
       "mode": "100644",
-      "size": 22450,
-      "sha256": "c2a0eb64208f3e177db9de4d23f365d6c23e13306830a3f13fbe2adf064e7b18"
+      "size": 28964,
+      "sha256": "baf29f788b1d13c8a00a39eb4e3f87dffe5e2d04e23bc25b84fdacc173da0616"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_postgres.py",
@@ -19972,13 +19972,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 332004,
-      "sha256": "beaf6e113eb1282a90a3b1f41b2fd9c245e4049e106bcf4084ff83dc2229d5ff"
+      "sha256": "3a89d8a36dc7f3dd3969a101884eff35d9107d05a39e70b6bb38460168752b0e"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54827,
-      "sha256": "97ca9837a0345132d54e8d8994c91e40dc90ee797ff3e59028f64a094dd5a205"
+      "sha256": "dddef03d5d8317b47276163d5466116cdcbea26526ded8a52c882c9498bdd077"
     },
     {
       "path": "postcss.config.js",
@@ -25535,6 +25535,12 @@
       "mode": "100644",
       "size": 2176,
       "sha256": "888b0819f58e56b775451cf0f6365eca8d7b4a6650339df301122375c5d1183a"
+    },
+    {
+      "path": "sql/migrations/034_content_ai_studio_framework_preset_absorb_rules.sql",
+      "mode": "100644",
+      "size": 1652,
+      "sha256": "faba9f58a7c80af3a41fb767e0f776a22be66960095b8a4f731db76526d66c4d"
     },
     {
       "path": "tailwind.config.ts",

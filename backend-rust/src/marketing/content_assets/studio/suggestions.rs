@@ -247,6 +247,8 @@ mod tests {
                 name: key.to_uppercase(),
                 definition: String::new(),
                 min_duration_sec: None,
+                absorb_into: None,
+                absorb_between_max_sec: None,
             })
             .collect()
     }

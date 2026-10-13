@@ -30,7 +30,7 @@ import psycopg2.errors
 from marketing_content_assets.repository import connect_pg
 from .execution import Cancelled, file_hash, renderer_env
 from .segment_suggestion_contract import (
-    DEFAULT_MIN_SEGMENT_MS, DEFAULT_PROMPT_VERSION, PROMPT_V1, PROMPT_V5, build_prompt, degenerate_label, job_labels, label_minimums,
+    DEFAULT_MIN_SEGMENT_MS, DEFAULT_PROMPT_VERSION, PROMPT_V1, PROMPT_V5, build_prompt, degenerate_label, job_labels, label_absorb_targets, label_bridges, label_minimums,
     merge_usage, postprocess, preset_labels, prompt_version_from_env, snap_boundaries, snap_points,
     response_schema,
 )
@@ -229,7 +229,8 @@ def _suggest(conn, job, provider, fetcher, work, *, billed, min_ms, proxy_limit,
     stage[0] = '写入建议片段'
     heartbeat(conn, job, stage[0])
     try:
-        segments, stats = postprocess(result.payload, duration_ms, set(label_keys), min_ms, label_minimums(labels))
+        segments, stats = postprocess(result.payload, duration_ms, set(label_keys), min_ms, label_minimums(labels),
+                                      label_absorb_targets(labels), label_bridges(labels))
     except ValueError as error:
         raise SuggestionError('invalid_response', '模型返回结构无效', usage) from error
     snap_summary = {'enabled': False}
