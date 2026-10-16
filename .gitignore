@@ -91,6 +91,8 @@ Desktop.ini
 /.cache/
 /.prefect_home/
 core.*
+# Third-party Rust module source is not a crash dump.
+!backend-rust/vendor/**/src/core.rs
 etl/groland_postgres/.prefect_home/
 etl/groland_postgres/.prefect_logs/
 etl/groland_postgres/.venv/
