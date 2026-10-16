@@ -147,6 +147,7 @@ export function inferGateInputPatterns(name, group, command) {
       'scripts/config/backend-cargo-cache.json',
       'backend-rust/Cargo.toml',
       'backend-rust/Cargo.lock',
+      'backend-rust/vendor/**',
       'scripts/backend-rust/cargo-with-cache.sh',
       'scripts/checks/security/evaluate-rust-dependency-audit.mjs',
       'scripts/checks/security/list-rust-audit-exceptions.mjs',
@@ -545,6 +546,7 @@ export function inferGateInputPatterns(name, group, command) {
       'scripts/lib/deploy/deploy-config-core.mjs',
       ...(name.endsWith('-behavior') ? [
         'scripts/lib/deploy/deploy-config-behavior-fixtures.mjs',
+        'scripts/lib/deploy/deploy-config-baseline-fixture.mjs',
         'scripts/lib/deploy/api-deploy-proof-fixtures.mjs',
         'scripts/lib/deploy/api-deploy-proof.sh',
         'scripts/lib/deploy/sample-inventory-public-access-preflight-fixtures.mjs',
@@ -556,11 +558,13 @@ export function inferGateInputPatterns(name, group, command) {
   }
   if (name === 'verify:deploy:vps-git-state:smoke') {
     return [
+      '.github/workflows/deploy-vps.yml',
       'scripts/checks/deploy/vps-git-state.smoke.mjs',
       'scripts/lib/deploy/vps-git-state-behavior-fixtures.mjs',
       'scripts/lib/deploy/vps-git-state.sh',
       'scripts/lib/deploy/vps-remote-git-sync.sh',
       'scripts/ops/vps-hotfix.sh',
+      'scripts/ops/integrate-vps-hotfix.sh',
       '.trellis/.gitignore',
       '.trellis/config.yaml',
       '.trellis/scripts/**',

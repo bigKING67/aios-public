@@ -37,3 +37,10 @@ governed by their own licenses and notices.
 Some separately licensed components may permit organizational or commercial
 use under their own terms. That permission does not grant any right to use
 AIOS-owned material for an organizational or commercial purpose.
+
+## XLSX compatibility source copies
+
+- `backend-rust/vendor/calamine-0.36.1/`: calamine 0.36.1, MIT; license in `LICENSE-MIT.md`.
+- `backend-rust/vendor/rust_xlsxwriter-0.99.1/`: rust_xlsxwriter 0.99.1, MIT OR Apache-2.0; licenses in `LICENSE_MIT` and `LICENSE_Apache2.0`.
+
+These copies retain upstream notices and include local ZIP 9 compatibility patches. Archive checksums, changes and removal criteria are recorded alongside the sources in `AIOS-PATCH.json` and `backend-rust/vendor/README.md`. Their original licenses continue to apply.

@@ -169,6 +169,7 @@ function permissionPolicyInputs(_name, { checkGuardHelperInputs, shared }) {
     'apps/web-vite/src/app/admin/roles/_components/role-permission-helpers.ts',
     'apps/web-vite/src/app/admin/permissions/_components/permissions-page-client.tsx',
     'apps/web-vite/src/app/admin/audit-logs/_components/audit-logs-page-client.tsx',
+    'apps/web-vite/src/app/admin/recruiting/_components/recruiting-page-client.tsx',
     'scripts/checks/frontend-structure/permission-policy.behavior.mjs',
     'scripts/lib/frontend/frontend-permission-policy-behavior-fixtures.mjs',
     ...checkGuardHelperInputs,

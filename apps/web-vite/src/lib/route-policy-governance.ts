@@ -137,6 +137,10 @@ const PROTECTED_ROUTE_SOURCE_OWNERS = {
     page: 'apps/web-vite/src/app/admin/audit-logs/page.tsx',
     importedProtectedComponent: 'apps/web-vite/src/app/admin/audit-logs/_components/audit-logs-page-client.tsx',
   },
+  [ROUTE_PATHS.adminRecruiting]: {
+    page: 'apps/web-vite/src/app/admin/recruiting/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/admin/recruiting/_components/recruiting-page-client.tsx',
+  },
 } as const satisfies Record<ProtectedRoutePath, ProtectedRouteSourceOwner>;
 
 export type ProtectedRouteGovernanceEntry = ProtectedRoutePolicyEntry & ProtectedRouteSourceOwner;

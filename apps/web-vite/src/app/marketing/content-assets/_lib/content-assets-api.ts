@@ -45,6 +45,9 @@ import { normalizeContentAssetTagList } from './content-assets-tags';
 import { normalizeContentAssetVideoTypeValue } from './content-assets-ui-helpers';
 
 const BASE_PATH = '/v1/marketing/content-assets';
+// Link import resolves the source (dtk sidecar, then fallbacks) and downloads the
+// video inside one request, so it outlives the default 30s request timeout.
+const VIDEO_LINK_IMPORT_TIMEOUT_MS = 90_000;
 
 export function buildContentAssetParams(
   query: ContentAssetQueryParams
@@ -292,7 +295,8 @@ export async function importContentAssetFromVideoLink(
 ): Promise<ContentAssetVideoLinkImportResponse> {
   const response = await apiClient.post<ContentAssetVideoLinkImportResponse>(
     `${BASE_PATH}/video-link/import`,
-    payload
+    payload,
+    { timeout: VIDEO_LINK_IMPORT_TIMEOUT_MS }
   );
   return response.data;
 }

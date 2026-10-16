@@ -241,6 +241,24 @@ fn extract_video_id_from_url(url: &Url) -> Option<String> {
         .captures(url.as_str())
         .and_then(|captures| captures.get(1))
         .map(|matched| matched.as_str().to_string())
+        .or_else(|| extract_modal_video_id(url))
+}
+
+/// Web pages that open a post in a modal (`/jingxuan`, `/discover`, search,
+/// user pages) carry the id as `?modal_id=<digits>` instead of `/video/<id>`.
+fn extract_modal_video_id(url: &Url) -> Option<String> {
+    if !matches!(
+        normalized_host(url).as_deref(),
+        Some("douyin.com" | "www.douyin.com")
+    ) {
+        return None;
+    }
+    url.query_pairs()
+        .find(|(key, _)| key == "modal_id")
+        .map(|(_, value)| value.into_owned())
+        .filter(|value| {
+            (10..=24).contains(&value.len()) && value.bytes().all(|byte| byte.is_ascii_digit())
+        })
 }
 
 async fn preview_douyin_video_link(
@@ -427,6 +445,31 @@ mod tests {
             extract_video_id_from_url(&url).as_deref(),
             Some("7649697971252261370")
         );
+    }
+
+    #[test]
+    fn extracts_video_id_from_modal_id_query() {
+        let url = extract_supported_douyin_url(
+            "看这个 https://www.douyin.com/jingxuan?modal_id=7664552833663896874 ",
+        )
+        .expect("jingxuan modal URL should parse");
+
+        assert_eq!(
+            extract_video_id_from_url(&url).as_deref(),
+            Some("7664552833663896874")
+        );
+    }
+
+    #[test]
+    fn ignores_modal_id_that_is_not_a_douyin_video_id() {
+        for input in [
+            "https://www.douyin.com/jingxuan?modal_id=abc",
+            "https://www.douyin.com/jingxuan?modal_id=123",
+            "https://www.iesdouyin.com/share?modal_id=7664552833663896874",
+        ] {
+            let url = Url::parse(input).unwrap();
+            assert_eq!(extract_video_id_from_url(&url), None, "{input}");
+        }
     }
 
     #[test]

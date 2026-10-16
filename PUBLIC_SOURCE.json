@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "af17ea67f8077b74efbe0b28faccaf55e7c1d89b",
-  "policySha256": "b49dc886e2e0ebd45a240cf2e39b341a84f7ea42f78a340ac9a3250b42af3778",
-  "fileCount": 4260,
-  "contentSha256": "69f9ec299af34a09f9cc2623447156b704993910566d9da7711bf4c812269556",
+  "sourceCommit": "3f93b52351276631a17cf9ffa5112c80fe9dd881",
+  "policySha256": "7fa3525c4e454919a58f5d4d7fa27fa9d503bfed90a74f744d30494548ad9983",
+  "fileCount": 4416,
+  "contentSha256": "b401f87da06f7fc1e4a3a508c0f8b265ee6ad76f1d22fe764fa36427db588815",
   "files": [
     {
       "path": ".dockerignore",
@@ -167,6 +167,54 @@
       "mode": "100644",
       "size": 162,
       "sha256": "d1023d57dd5ffe1178329efbe09b80f8f881d96ecdf89a0e53f6e4b43ee4e1c2"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_components/recruiting-page-client.tsx",
+      "mode": "100644",
+      "size": 5269,
+      "sha256": "029104d6e597eb073b44977735a02117c9cf1a6adde9ae55ff0d3277daee15cb"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_components/recruiting-review-panel.tsx",
+      "mode": "100644",
+      "size": 5785,
+      "sha256": "ba833fbfeeed0b251b396ce593cad8fd310ddc07818f0b13c359945d10cb4570"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_components/recruiting-submission-drawer.tsx",
+      "mode": "100644",
+      "size": 6810,
+      "sha256": "c8f2b488a2dcca6428a668aa51ddd13aad6ae005860b2ad42faf128460f10cc0"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_lib/recruiting-api.ts",
+      "mode": "100644",
+      "size": 2292,
+      "sha256": "2b9519cea5c6c734ac7b3a00e266bfdc19bccd84ae7d33d2810c1a1e5654aead"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_lib/recruiting-classes.ts",
+      "mode": "100644",
+      "size": 2164,
+      "sha256": "e5e7df30d10ed8d897fb81604cdf7e7723906102d94be6dbea55772e32bf6d08"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_lib/recruiting-review-model.test.ts",
+      "mode": "100644",
+      "size": 1529,
+      "sha256": "b6c9b611beb1ccb6eef8cf3d0071fdd41fd9ceb13126aff1edeb9659dc8870c3"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/_lib/recruiting-review-model.ts",
+      "mode": "100644",
+      "size": 3641,
+      "sha256": "7a35d5e3f7de0c05d825fb0adb15e5535bf2dcfebe84b06bc84da0a002855a86"
+    },
+    {
+      "path": "apps/web-vite/src/app/admin/recruiting/page.tsx",
+      "mode": "100644",
+      "size": 158,
+      "sha256": "296e1b55851969f057ddef8af94d57f5f05e253e98b598d41732b6d2f9ea3975"
     },
     {
       "path": "apps/web-vite/src/app/admin/roles/_components/default-role-templates.ts",
@@ -4033,6 +4081,72 @@
       "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
     },
     {
+      "path": "apps/web-vite/src/app/join/ai-intern/_components/ai-intern-test-form.tsx",
+      "mode": "100644",
+      "size": 10962,
+      "sha256": "579262b567328534a87561928ce0d1bf2e9a0f3fd6380d246864f06d4ae2e7fe"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_components/ai-intern-test-page.tsx",
+      "mode": "100644",
+      "size": 2240,
+      "sha256": "4c78f268ced49ce00cd164122767a2758182caeef11f4f280047ba8bfee4dbce"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_components/test-materials.tsx",
+      "mode": "100644",
+      "size": 1485,
+      "sha256": "83837da2aea5f4671276556963a4d2bfa4b1c926e35525d792aa66c57593ec86"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_components/video-task-question.tsx",
+      "mode": "100644",
+      "size": 1939,
+      "sha256": "ee1a54dbe466dbe5ebf34fb8729aa7958645896af76119f2b34fd8962989e973"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_lib/ai-intern-test-api.ts",
+      "mode": "100644",
+      "size": 504,
+      "sha256": "0f9ac0542c177275cc9241bb23e68bcbad7053e4c3dab39c669eadf498ea2b48"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_lib/ai-intern-test-copywriting.ts",
+      "mode": "100644",
+      "size": 52,
+      "sha256": "8f973cd475877d90e8a3217ee4b4cc85520651b201a2574a19cc1b4af0776d03"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_lib/ai-intern-test-draft.test.ts",
+      "mode": "100644",
+      "size": 1961,
+      "sha256": "a4fea4ce135b442acbe516be4f5ee48404c43d0d525e05e1a86781ae54526834"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_lib/ai-intern-test-draft.ts",
+      "mode": "100644",
+      "size": 2368,
+      "sha256": "319867c106f9adf19f0a50cbffc71b95726edc924608ffce8738517a04fe0425"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/_lib/ai-intern-test-legacy-copywriting.ts",
+      "mode": "100644",
+      "size": 51,
+      "sha256": "37b6866a85b1fb44b03ffc41e9c688231508b838aeec57e81f7923fdf3daeeed"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/ai-intern-test.module.css",
+      "mode": "100644",
+      "size": 4421,
+      "sha256": "89a2e374239f416fc266de4538a6235d4e36ec798e68022f3d99d2f4c29fda76"
+    },
+    {
+      "path": "apps/web-vite/src/app/join/ai-intern/page.tsx",
+      "mode": "100644",
+      "size": 149,
+      "sha256": "386a056f55383771dc3d4b56c6888b077dd8f19a3a960e79375193b32a8dfcf2"
+    },
+    {
       "path": "apps/web-vite/src/app/login/_components/login-page-client.tsx",
       "mode": "100644",
       "size": 5162,
@@ -4695,8 +4809,8 @@
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-api.ts",
       "mode": "100644",
-      "size": 13833,
-      "sha256": "272ff315890f354e16808390e0d5037b1362b0a22daf4abfa40a3a8ac9fd1d95"
+      "size": 14085,
+      "sha256": "05828e8c41651e7db927d08fca32defd2d670a4cc99fa7a7d22e23742ba1676e"
     },
     {
       "path": "apps/web-vite/src/app/marketing/content-assets/_lib/content-assets-display.ts",
@@ -8325,8 +8439,8 @@
     {
       "path": "apps/web-vite/src/app/sample-inventory/_components/sample-inventory-tables.tsx",
       "mode": "100644",
-      "size": 11637,
-      "sha256": "d0c139669f7a8a353d8c154c1a22b723a8a74a6c3b5451e221cd1d7213fdbb22"
+      "size": 11020,
+      "sha256": "7c346b4e54e34ced76a408538af0d2ac6513e0e2df93bbd49c11566f5174359b"
     },
     {
       "path": "apps/web-vite/src/app/sample-inventory/_components/sample-inventory-tracking-dialog.test.tsx",
@@ -8709,8 +8823,8 @@
     {
       "path": "apps/web-vite/src/components/organisms/layout-navigation-model.tsx",
       "mode": "100644",
-      "size": 9759,
-      "sha256": "d07c91d294281fbe932214b62862306d9d0d9ab6127b331b3d9cedb6bb390959"
+      "size": 9945,
+      "sha256": "ab6349cb70631725e0b9a45dd7b3572dfa59b1d505a58a3c059eccb32afb07b3"
     },
     {
       "path": "apps/web-vite/src/components/organisms/layout-route-selection.test.ts",
@@ -9039,8 +9153,8 @@
     {
       "path": "apps/web-vite/src/generated/api/aios-v2.ts",
       "mode": "100644",
-      "size": 454513,
-      "sha256": "cb826e2321ab149cda21d203848a9f02e87a67d9da5294c976ddecf30ae05556"
+      "size": 466618,
+      "sha256": "ef34e241f8a3d82cc9c18bd333445f473e57d74eebe5f523776705ff3de61bb5"
     },
     {
       "path": "apps/web-vite/src/hooks/use-auth.ts",
@@ -9151,6 +9265,12 @@
       "sha256": "6e61ace6c9149f2a02ba54d80640fab8fef243f13f69194548488678484d4d4c"
     },
     {
+      "path": "apps/web-vite/src/lib/auth-navigation.recruiting-access.test.ts",
+      "mode": "100644",
+      "size": 701,
+      "sha256": "66ce7c0a9c779256a41e10965cfe81381fa2cdab1cebc66e83d9b757043d9c15"
+    },
+    {
       "path": "apps/web-vite/src/lib/auth-navigation.retired-agent.test.ts",
       "mode": "100644",
       "size": 783,
@@ -9203,6 +9323,12 @@
       "mode": "100644",
       "size": 2349,
       "sha256": "1d564d64c7c5d3cd5d00c326dc66dc11dcbceea56e02489c1ef6638fc0175840"
+    },
+    {
+      "path": "apps/web-vite/src/lib/copy-text.ts",
+      "mode": "100644",
+      "size": 745,
+      "sha256": "401a06766cac98467d6252655c7d6b10ad1c2c821c00f9e2189e86cbea2a07c9"
     },
     {
       "path": "apps/web-vite/src/lib/dataops-notification-trace-slo-risk.ts",
@@ -9261,8 +9387,8 @@
     {
       "path": "apps/web-vite/src/lib/generated-api-contract.ts",
       "mode": "100644",
-      "size": 35986,
-      "sha256": "23cf3d9013e9ff353e344be077ecf7be8748c42b6c426b2bf496a52377d40b53"
+      "size": 38067,
+      "sha256": "0fb61c61cceabe64ad3eadd3102a9cc6463eb75e8d661d199931433321d3e4bb"
     },
     {
       "path": "apps/web-vite/src/lib/list-payload.ts",
@@ -9293,6 +9419,30 @@
       "mode": "100644",
       "size": 6808,
       "sha256": "f305bf628512cfe4bad53e629261fa610f41ab75112cb0f85167909ca19bbeeb"
+    },
+    {
+      "path": "apps/web-vite/src/lib/recruiting/current-questions.ts",
+      "mode": "100644",
+      "size": 2300,
+      "sha256": "e69bda8eb2bdb3249e608602e2cd988c49cff3014b47e6625fe776e40f9268f7"
+    },
+    {
+      "path": "apps/web-vite/src/lib/recruiting/legacy-questions.ts",
+      "mode": "100644",
+      "size": 5151,
+      "sha256": "63cf2f8e70a88c2008837bb8818f7545999ae05d7201d4f0afc49c2fdfe8f165"
+    },
+    {
+      "path": "apps/web-vite/src/lib/recruiting/question-history.ts",
+      "mode": "100644",
+      "size": 1495,
+      "sha256": "d437fa18d531b9f2fd7d447c97f7957ac6134d66b4679aeb66e87b8b6110ee8d"
+    },
+    {
+      "path": "apps/web-vite/src/lib/recruiting/v2-questions.ts",
+      "mode": "100644",
+      "size": 4058,
+      "sha256": "f90547930e9f02de5b0740f506b5ae807fbb639f8dbe15c7490f38e586662e0d"
     },
     {
       "path": "apps/web-vite/src/lib/report-api/monthly.ts",
@@ -9357,14 +9507,14 @@
     {
       "path": "apps/web-vite/src/lib/route-policy-governance.ts",
       "mode": "100644",
-      "size": 6824,
-      "sha256": "26e7f79959ddd1290bfe3ed25adebf5efb8f8bca75ea2275b8b12c83cffc4baa"
+      "size": 7038,
+      "sha256": "c8faefd4abf4f3a4ef4d683faec9da9dc78525fd7ee46882f6c1588afd172a9c"
     },
     {
       "path": "apps/web-vite/src/lib/route-policy-registry.ts",
       "mode": "100644",
-      "size": 9642,
-      "sha256": "47574a6e680c7a460c19fa45623f8375c8888fb59af28f3949489e1294da0b66"
+      "size": 9887,
+      "sha256": "a8ce3c140f332670c53ea00fa21b7e6395e4fd70a9e411359ae1726ee6709b1c"
     },
     {
       "path": "apps/web-vite/src/lib/super-admin.ts",
@@ -9393,8 +9543,8 @@
     {
       "path": "apps/web-vite/src/routes.tsx",
       "mode": "100644",
-      "size": 7073,
-      "sha256": "e63446b1262334ce3119f85e5e79f929126edf365e6b6daf4553aab6aae76a1f"
+      "size": 7384,
+      "sha256": "8fb3c7ec60fdf597ac7bd21e637569c0eb7e8abca374c9555a3d1449a753be18"
     },
     {
       "path": "apps/web-vite/src/stores/auth-store.test.tsx",
@@ -9669,8 +9819,8 @@
     {
       "path": "apps/web-vite/vite.config.ts",
       "mode": "100644",
-      "size": 9935,
-      "sha256": "50422df6e61c2999539f4c6f7f81e77760a6be850f1b9a3fed537418b60095e9"
+      "size": 10084,
+      "sha256": "1f11828d2fab55adc6dd010c2e88f39799b6bf0f951fd9c9189ee6156c755fa1"
     },
     {
       "path": "apps/web-vite/vitest.config.ts",
@@ -9705,14 +9855,14 @@
     {
       "path": "backend-rust/Cargo.lock",
       "mode": "100644",
-      "size": 75616,
-      "sha256": "3c7a733fc6b8c1c6f4e2f7473f385fef613e468cd31e92a421f0b50746df76f5"
+      "size": 75594,
+      "sha256": "c8bf73c669b3054e8fc609612b18e9de73f47dd1f9ad56169722c91c66febeda"
     },
     {
       "path": "backend-rust/Cargo.toml",
       "mode": "100644",
-      "size": 1436,
-      "sha256": "2fcb72f76d67fc49921d48e39bbbe1e0c59737fb76bdaaeb42133afa3d48f5cd"
+      "size": 1651,
+      "sha256": "c283d9d3ff756bd86fb605402dc9e5098570453cd255ec70b453c2c453b86f53"
     },
     {
       "path": "backend-rust/CLAUDE.md",
@@ -9723,8 +9873,8 @@
     {
       "path": "backend-rust/Dockerfile",
       "mode": "100644",
-      "size": 814,
-      "sha256": "7ffd43fd507ea25348483fb65ee786e05f64885539a3784f186604821d54a1b5"
+      "size": 835,
+      "sha256": "c15da23882aebb705131917ed74cc844ce51e318d63b9f7a1446cc24fe8476a9"
     },
     {
       "path": "backend-rust/README.md",
@@ -9773,6 +9923,12 @@
       "mode": "100644",
       "size": 4324,
       "sha256": "2b3606efa8081782e6c9e37fc6f6b4450c11f0fb8d46172f2dca5fbea10c7f47"
+    },
+    {
+      "path": "backend-rust/scripts/test-recruiting-postgres.sh",
+      "mode": "100755",
+      "size": 1740,
+      "sha256": "b7beefb909aa57373e2c03d7a1343a5eac2aab26a7fe00c9b6ef9ceb2c394628"
     },
     {
       "path": "backend-rust/scripts/test-sample-inventory-postgres.sh",
@@ -10107,8 +10263,8 @@
     {
       "path": "backend-rust/src/config/mod.rs",
       "mode": "100644",
-      "size": 159,
-      "sha256": "15c102749b4e2406aa25e9f20a9f2d7599240aa80855217663d713ed653c7163"
+      "size": 217,
+      "sha256": "af2725ae4922524e6b81691c443aad76041676fdc1fb17adefc1e69229748c88"
     },
     {
       "path": "backend-rust/src/config/network.rs",
@@ -10125,8 +10281,8 @@
     {
       "path": "backend-rust/src/config/settings/content_assets.rs",
       "mode": "100644",
-      "size": 6221,
-      "sha256": "84ccaa94490d3b319dae46ca341a290ec58b2c0f175c8582e71dc7bee22061e6"
+      "size": 8312,
+      "sha256": "e96cfeca11ba9a7dca092aecc74ea5538ac40213dde0124f02f5e223c2976f2d"
     },
     {
       "path": "backend-rust/src/config/settings/dashboard.rs",
@@ -10155,8 +10311,8 @@
     {
       "path": "backend-rust/src/config/settings/mod.rs",
       "mode": "100644",
-      "size": 9182,
-      "sha256": "9dc78067d81c070817a120ce6be0bb3555a006522d97b9b2261d2c09afc356c4"
+      "size": 9240,
+      "sha256": "592a350c22fba33e90a66c7cb16d14786f4f8a5da3178cf20cede6cd9c246a1a"
     },
     {
       "path": "backend-rust/src/config/settings/reports.rs",
@@ -10251,8 +10407,8 @@
     {
       "path": "backend-rust/src/cors.rs",
       "mode": "100644",
-      "size": 1487,
-      "sha256": "49bde132e3dad04cd244ec95c1a622913fa37de55450a99d350dd9ff93a97633"
+      "size": 2172,
+      "sha256": "6f3cdbeaec9d9a644ff5a87400a424b3d9e569b4ae1a92fa74819da96088ab08"
     },
     {
       "path": "backend-rust/src/dashboard.rs",
@@ -12375,8 +12531,8 @@
     {
       "path": "backend-rust/src/main.rs",
       "mode": "100644",
-      "size": 489,
-      "sha256": "47dca986386fb437f052160ea6692ee4c8a6b4d119f689ed1b938e665db35740"
+      "size": 521,
+      "sha256": "c66908b024763f80b72c3df2084b30c457b787a7eb81ab7fb6afc0b7490ea388"
     },
     {
       "path": "backend-rust/src/marketing.rs",
@@ -12489,14 +12645,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/douyin_video_link.rs",
       "mode": "100644",
-      "size": 21831,
-      "sha256": "4b3028c27b0dcbb6068693abb2ce9b86ebc729b576750ce38230ddc65226220f"
+      "size": 23316,
+      "sha256": "4479645292e3e5a50c8992ed24a9130cb4ffb173c0cbeacee54afe5bb059fd17"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/douyin_video_source.rs",
       "mode": "100644",
-      "size": 19146,
-      "sha256": "9c4664c5de61073de3e11a0455ff9d837bbffbadfd49cf2ec401b8599c69ab52"
+      "size": 20755,
+      "sha256": "fb74b5c3471e677039d1b4e78d32c8fbc50b4ecd281ddee14d9a5288793d596c"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/douyin_video_source/dtk_client.rs",
+      "mode": "100644",
+      "size": 6499,
+      "sha256": "56cb2cab71999bc24cb499f53c9df5afbb0a7f0cb0d19943337f650da28286fe"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/douyin_video_source/page_fallback.rs",
@@ -14059,6 +14221,60 @@
       "sha256": "6d43d433512b7d3b8c2ecf0a005ff18c8fa7058231b7623ed371a46b4cc57c34"
     },
     {
+      "path": "backend-rust/src/rate_limit.rs",
+      "mode": "100644",
+      "size": 917,
+      "sha256": "b31f5ce1f92119f898d307e047af82176a9333b5bfa2f3ac0a2d58ecc1ccfc55"
+    },
+    {
+      "path": "backend-rust/src/recruiting/domain.rs",
+      "mode": "100644",
+      "size": 14864,
+      "sha256": "8cf68fae5b650fda353297be0eb0c7694b9b4fe65ea75cb4d470f65805542a01"
+    },
+    {
+      "path": "backend-rust/src/recruiting/handlers.rs",
+      "mode": "100644",
+      "size": 5761,
+      "sha256": "0fe992e138596832a740e1f8d39c5f1fe607dffd2dec9da3d1a79f096196c1a7"
+    },
+    {
+      "path": "backend-rust/src/recruiting/intake_guard.rs",
+      "mode": "100644",
+      "size": 3106,
+      "sha256": "10f3595612d7fde191098f9e4aa17c35c16d7d97fb31243bf317f5338a827fb2"
+    },
+    {
+      "path": "backend-rust/src/recruiting/mod.rs",
+      "mode": "100644",
+      "size": 1082,
+      "sha256": "a3021d2e2be3ae9315f897b3ccb8c261ad32a1f399fcfeb8ba724bc3caf07a51"
+    },
+    {
+      "path": "backend-rust/src/recruiting/postgres_tests.rs",
+      "mode": "100644",
+      "size": 9262,
+      "sha256": "584c60b5c4f6616a718ef09a9bb16787c0db4653f187c446820923e487fc9402"
+    },
+    {
+      "path": "backend-rust/src/recruiting/repository.rs",
+      "mode": "100644",
+      "size": 7606,
+      "sha256": "e0cc721d6197db5f333b8f5df086aa7a34cfc239bd7d20440a404d99af685099"
+    },
+    {
+      "path": "backend-rust/src/recruiting/rubric.rs",
+      "mode": "100644",
+      "size": 9467,
+      "sha256": "0f8fb4c04579203df4f40c33b21e975b6f6d4238d5d8f08c1185cf5dd23db3aa"
+    },
+    {
+      "path": "backend-rust/src/recruiting/types.rs",
+      "mode": "100644",
+      "size": 5485,
+      "sha256": "71f1151ff485ab9d7a7c99ae67b6d50a78106578e46e01b5699fe9a05cfd80ad"
+    },
+    {
       "path": "backend-rust/src/reports/cache_runtime/detail/background.rs",
       "mode": "100644",
       "size": 5026,
@@ -14601,8 +14817,8 @@
     {
       "path": "backend-rust/src/reports/summary_generation/rate_limit.rs",
       "mode": "100644",
-      "size": 1256,
-      "sha256": "88733d2413e9dd280ab5ef0185e3b67ffa8109fa56c6c398b88e3f892ef64028"
+      "size": 834,
+      "sha256": "4c02b9301a35ca44bf7b1d805d6232975cb435974342d435a8db1625391326d9"
     },
     {
       "path": "backend-rust/src/reports/summary_generation/records.rs",
@@ -15531,14 +15747,14 @@
     {
       "path": "backend-rust/src/routes.rs",
       "mode": "100644",
-      "size": 4164,
-      "sha256": "18d7860ede77ea6b4c0e91bf7d2d53717348e6485a08b3f9a439a7686a7b2cb9"
+      "size": 4227,
+      "sha256": "82e1061a71bb389401247f94a968d5afffd214b9fb8e848160214d62ca9881db"
     },
     {
       "path": "backend-rust/src/sample_inventory/access.rs",
       "mode": "100644",
-      "size": 13487,
-      "sha256": "c5b849adce47f4490e48f8fb30482cf029b3287582c7c188c083fb13b81280cb"
+      "size": 12593,
+      "sha256": "b62c183940eaa58ccfc2b6da5a7147d329c7cc3c2ed65d8b1a448d57c6edc59c"
     },
     {
       "path": "backend-rust/src/sample_inventory/handlers.rs",
@@ -15949,10 +16165,646 @@
       "sha256": "ab560d5a729dd9461baefad71f65e795d0e9f5768fc33ab064ef6902be2ba624"
     },
     {
+      "path": "backend-rust/vendor/calamine-0.36.1/AIOS-PATCH.json",
+      "mode": "100644",
+      "size": 752,
+      "sha256": "122f8226309d35ad13bcd3fba662089af53ff71a8b7889ee6ecec171039fa99c"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/Cargo.toml",
+      "mode": "100644",
+      "size": 2216,
+      "sha256": "1be5784840a9437581a68e80ffbc683226355e9c834c9fcbf3f5d3720a813745"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/Cargo.toml.orig",
+      "mode": "100644",
+      "size": 1624,
+      "sha256": "165384bdc16e6e742fd772cd877d66a2a26f54e2895023fb9d22f1292e435d22"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/Changelog.md",
+      "mode": "100644",
+      "size": 26919,
+      "sha256": "252b2f7374f59f398457199a38d091992abc098ece475dfd07619958fafe1e80"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/LICENSE-MIT.md",
+      "mode": "100644",
+      "size": 1082,
+      "sha256": "f0cf9b1c62bbe3bd3a69f5f79c7158f513f612b4940a0a812d1db39d605318bc"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/README.md",
+      "mode": "100644",
+      "size": 13296,
+      "sha256": "97340d41949b5f9f813cae99027b5fdfb47cb9d8c918c2e455f54f7d31e0cbf0"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/attrs.rs",
+      "mode": "100644",
+      "size": 13168,
+      "sha256": "b9f209188ef11fcc46512616bcfaa9fd1f5f0f902d4b114019067c96d9e22e15"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/auto.rs",
+      "mode": "100644",
+      "size": 6638,
+      "sha256": "95668ad39a54361097deb6d1e6dc335db4515532b856cc91a09bc026fd9ce776"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/cfb.rs",
+      "mode": "100644",
+      "size": 15754,
+      "sha256": "6d9adef1a0dd6ee7fa98c8c8a9ac65d82a423ec8dbf05e185bb1f009fde21302"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/changelog.rs",
+      "mode": "100644",
+      "size": 147,
+      "sha256": "d790e6ccc6e9ffe84cf1bfcb290cfb71bd3309c4af1e2fedf956da7278ef9d9f"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/datatype.rs",
+      "mode": "100644",
+      "size": 54735,
+      "sha256": "135d44007614c3f1652c1ca06b54097e9a569cc678393ea7102048f11e89ec36"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/de.rs",
+      "mode": "100644",
+      "size": 27082,
+      "sha256": "14f5e61767c9a6d6f15ab83ea61794642ceb44491c4ee09b18e56504f4f91a13"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/errors.rs",
+      "mode": "100644",
+      "size": 2085,
+      "sha256": "7178a0178222a65240a4dc2a2575eceb49d99bb694f21454873004364fab1a8a"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/formats.rs",
+      "mode": "100644",
+      "size": 7396,
+      "sha256": "9174b40fb2944ddac8566b22598de7d1c4373459c49cffaf3a407cf1b93bb791"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/lib.rs",
+      "mode": "100644",
+      "size": 75922,
+      "sha256": "47b3969117b43fdbaf5d69d7a9667450f06cd0d55368ade13c4ec41d087c13a0"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/ods.rs",
+      "mode": "100644",
+      "size": 29876,
+      "sha256": "a07ef76e39c74375c6885847d3a65703ef7a663ed7f30acb80f00591a97f1da5"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/utils.rs",
+      "mode": "100644",
+      "size": 27212,
+      "sha256": "9af0570acb66db984c9373e655313026a05642e85bef7d8571deeb7bb4f47c80"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/vba.rs",
+      "mode": "100644",
+      "size": 15742,
+      "sha256": "e0cbc3fb858376860d74c6635fb15523f8e20ee7c9b1888c3f7fadf04be8bf45"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/xls.rs",
+      "mode": "100644",
+      "size": 67037,
+      "sha256": "6ae49e3bab0212643df127ad885777b14a0beabfdf2548c464055e6f8edcdd48"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/xlsb/cells_reader.rs",
+      "mode": "100644",
+      "size": 7753,
+      "sha256": "d23f6d59151c8a9989aa3971f6f7271ea53789723053d4ca468409404ff852ad"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/xlsb/mod.rs",
+      "mode": "100644",
+      "size": 38066,
+      "sha256": "5c81321e6f28306fafda0d582d52cfe1d440043ab6c0235913edf0b582b509b5"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/xlsx/cells_reader.rs",
+      "mode": "100644",
+      "size": 27268,
+      "sha256": "4ef9fa0e275932424b5643d65376948ce4c0b77b5dfffbdabaf3da3b458a8bf8"
+    },
+    {
+      "path": "backend-rust/vendor/calamine-0.36.1/src/xlsx/mod.rs",
+      "mode": "100644",
+      "size": 167259,
+      "sha256": "82b44a4032d10a274bca979fc996b1543343c768494b5e3b51ab2d64347ce200"
+    },
+    {
+      "path": "backend-rust/vendor/README.md",
+      "mode": "100644",
+      "size": 1830,
+      "sha256": "1d4fd166db0070f5575edef1752daf46908279e114563b6c4b34b48f8adf6eb5"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/AIOS-PATCH.json",
+      "mode": "100644",
+      "size": 682,
+      "sha256": "d37dda9eb3218226124fa7b2e9bd38b5a02f2fc1a522f2a319dbfaacf0963b33"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/Cargo.toml",
+      "mode": "100644",
+      "size": 4129,
+      "sha256": "0399bbd4c930e20ea38c56e39a68e74484214f920ba6c37d1d64553f2031f52e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/Cargo.toml.orig",
+      "mode": "100644",
+      "size": 13273,
+      "sha256": "05017d315b961e8f45dd31cdcb8b05c212d8a33e6149c0d26f828d23770da5bc"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/CHANGELOG.md",
+      "mode": "100644",
+      "size": 93966,
+      "sha256": "9b5452ed975f04f6cee07090f9145b73b09ab6a6cf70315d139883e6ec9e39e9"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/LICENSE_Apache2.0",
+      "mode": "100644",
+      "size": 11369,
+      "sha256": "ee48b3189afd8d84e225382c82097ddd9e99aae1de1edf4df79994a2dd4842ce"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/LICENSE_MIT",
+      "mode": "100644",
+      "size": 1092,
+      "sha256": "0c76bbedcdfdd5619ca8e7d60422350e7fdc9e04f9d9394c16ee5aac3aab057f"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/README.md",
+      "mode": "100644",
+      "size": 8997,
+      "sha256": "8be0a97f7cb2647867e9151887444967d28556816fe50b6b2225195aa1f4654a"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/app.rs",
+      "mode": "100644",
+      "size": 7513,
+      "sha256": "17996cc28151a44be83e0d2e6e1d5ce50761c86f7ffd4106f13d678f8c5d63ec"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/app/tests.rs",
+      "mode": "100644",
+      "size": 5980,
+      "sha256": "9a518a9b4b2e70c53ba76a66936b7bff3e5e55ee1775a180cc101cf4c64a5a1d"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/button.rs",
+      "mode": "100644",
+      "size": 11070,
+      "sha256": "b3463f3fe359cfab2c007a3c7493f0f3cefc87f15b34c407780ab25e3265037c"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/changelog.rs",
+      "mode": "100644",
+      "size": 98,
+      "sha256": "454a8515e41ea610f0ac58a0939d328c3fc0a6646aa995f3dadafd25b579fcb0"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/chart.rs",
+      "mode": "100644",
+      "size": 612813,
+      "sha256": "d45b948b9690a94d4eacadef9fd74d9123d4f65a45e1a4494165cce54b77a827"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/chart/tests.rs",
+      "mode": "100644",
+      "size": 12699,
+      "sha256": "7a521a3b5b5e13d514d622e2e7905cc25791619f12a662d16973b6e03f9bf5aa"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/color.rs",
+      "mode": "100644",
+      "size": 20710,
+      "sha256": "d7fd977d841c373f56acfed949b852135a6b500de7a18ac2a94475fe07756b2b"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/color/tests.rs",
+      "mode": "100644",
+      "size": 1445,
+      "sha256": "aac1eb9cf40a84fa10163af83d53c16d99f000296afcc8530d0f446b8a68990d"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/comment.rs",
+      "mode": "100644",
+      "size": 6566,
+      "sha256": "18f7cbf3e2497a27de901d41cb8ee8c0d8c65a3ccf475e6556bbec9a344ae409"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/conditional_format.rs",
+      "mode": "100644",
+      "size": 277901,
+      "sha256": "b8d44ab4d20f810cc0b95c27379cd5f7b31991924671b3f73436d4f44dab135c"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/conditional_format/tests.rs",
+      "mode": "100644",
+      "size": 223144,
+      "sha256": "82387b03395173fb7b89642d8a8b518d87285367b8950acea700c20ce2767bfe"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/content_types.rs",
+      "mode": "100644",
+      "size": 8229,
+      "sha256": "26d5417d68b343ba81e9af6074f7975dd05d4200436b1958ac9e1a6088f4e5c8"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/content_types/tests.rs",
+      "mode": "100644",
+      "size": 2419,
+      "sha256": "a8b7b5396cb7fe617405e6352cc5016905abac71f847f4ab9ef8b67d664361ae"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/cookbook.rs",
+      "mode": "100644",
+      "size": 259990,
+      "sha256": "494c079aa782b704669cc419d70a9d0b08f9886b9ae3c925866b93878fca7a41"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/core/tests.rs",
+      "mode": "100644",
+      "size": 1586,
+      "sha256": "2c1e1e2a4311068025213f4d0f007a488f02edd98ad4225b6f8428b95aa04503"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/custom.rs",
+      "mode": "100644",
+      "size": 3808,
+      "sha256": "8cebdea7f5f3d452f878e9d0fae9f5d854f3de96d5f8114fd354430654fdbe47"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/custom/tests.rs",
+      "mode": "100644",
+      "size": 3873,
+      "sha256": "187a0b0f14aa2a7b053637a20d7c673f1a5b2dfd0b63809b92d77660989ce751"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/data_validation.rs",
+      "mode": "100644",
+      "size": 59085,
+      "sha256": "16e8c4f6b8ee0ac6aa1a608a3f3f8f5c821eac0eec461654f3c56a4fa432a50f"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/data_validation/tests.rs",
+      "mode": "100644",
+      "size": 68678,
+      "sha256": "02acb7411b93cd8ae0a7e215c0c1bab7af11e724997229f34b5aa6d1ff1e7892"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/datetime.rs",
+      "mode": "100644",
+      "size": 58372,
+      "sha256": "8043657ca41a886ff9dd3b8b87244a70c3604b30c53d5b98f471c55fcf417c8e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/datetime/tests.rs",
+      "mode": "100644",
+      "size": 112335,
+      "sha256": "8eaa22e0f237c71733be2ac60f943a97de4a00e21a9f71007f03bf2c5b635f7a"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/drawing.rs",
+      "mode": "100644",
+      "size": 43157,
+      "sha256": "da18c1639f1c8dfd1102592fe837d5bf4336d1e6522e72a909cce89369544bd3"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/drawing/tests.rs",
+      "mode": "100644",
+      "size": 3423,
+      "sha256": "07aee5e5402b494dc467ddca0df1773523952cf78ab7563a052e32d01c90a9d8"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/error.rs",
+      "mode": "100644",
+      "size": 15357,
+      "sha256": "a989671f38f08e5e28e7391e65d3b365edbbe6543bf3becf35086cf8019c08b0"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/error/tests.rs",
+      "mode": "100644",
+      "size": 3299,
+      "sha256": "2c68a9a394b2ad56d7bc982c7d000ec5d10a3a365f3679ec44450281d6316360"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/feature_property_bag.rs",
+      "mode": "100644",
+      "size": 4750,
+      "sha256": "f74fc4fefe7d2f6d51c75ef33f072b92ec924e18bf98d113d94b2a6904a1bc2a"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/filter.rs",
+      "mode": "100644",
+      "size": 33120,
+      "sha256": "651bea7fea7b1115f4824f06721ebcbedbc413a1faa2c855345b352782a4fa06"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/format.rs",
+      "mode": "100644",
+      "size": 106098,
+      "sha256": "83ee75d87ea66532b8a3e8898110a43aabb39248c0ad540bb30171d03de8bdcd"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/format/tests.rs",
+      "mode": "100644",
+      "size": 5326,
+      "sha256": "d1b5f6f508d0ec46bb763e8b7b0d801087a60f533da981c58d27682e04b01004"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/formula.rs",
+      "mode": "100644",
+      "size": 46429,
+      "sha256": "b166feae72c4a2ac7a46b64ce574a9a720620ff8a55985a7033ae6e82764e344"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/formula/tests.rs",
+      "mode": "100644",
+      "size": 13365,
+      "sha256": "586c58514b687b32b053c80f5490a584a5d41efb8f0a012cfd9330f6f805e142"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/image.rs",
+      "mode": "100644",
+      "size": 44655,
+      "sha256": "34a9dd231c730fb6b1d03b5c8876cfce995a53cc39c24dc37d0337d76effadfd"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/image/tests.rs",
+      "mode": "100644",
+      "size": 9221,
+      "sha256": "5eef7fb5fe6c010bf533280e511a3612099388305855dd69e6a41d4c2373a834"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/lib.rs",
+      "mode": "100644",
+      "size": 13844,
+      "sha256": "c69532c517648a5fe8ee5e0a2d6f3468531dc12a733c45c7e5fca43142327819"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/macros.rs",
+      "mode": "100644",
+      "size": 9570,
+      "sha256": "8339c0182277c6ffb40d3bf3bdd81a827e8915205c3181581e3a31925698e5e3"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/metadata.rs",
+      "mode": "100644",
+      "size": 8585,
+      "sha256": "dad338178e859c2e29980be26d84654f9573ac7bc92e2fa7af7807e540471f0e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/note.rs",
+      "mode": "100644",
+      "size": 23592,
+      "sha256": "a52270eff5cd278944f3254ad67873633dd697f08547039cc2a468b05d3185b3"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/packager.rs",
+      "mode": "100644",
+      "size": 37877,
+      "sha256": "a326e11c905e1b75fe7744d66c68a370aae124e008d05686743a2c812ee39379"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/performance.rs",
+      "mode": "100644",
+      "size": 13302,
+      "sha256": "ab42c32f0bccd2d82934841e8df2ca3d6ab0b599e09fda4e15b1d9f4f4a40020"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/properties.rs",
+      "mode": "100644",
+      "size": 28611,
+      "sha256": "9be8c89908729bf252c1cdaec9067a6066364b93ad8de48aaf9896d0652ad4a2"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/protection.rs",
+      "mode": "100644",
+      "size": 5015,
+      "sha256": "685b581463cd0a6ef61060683542ef1e7422a200168d7960ccd34f6ecb192860"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/relationship.rs",
+      "mode": "100644",
+      "size": 3819,
+      "sha256": "6dc2e42bcfdcaeb1b1c01f05ecfc1d9a989d66f1ee1d85bb205d4ebef223b32b"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/relationship/tests.rs",
+      "mode": "100644",
+      "size": 1985,
+      "sha256": "69223463f8ec2ea7dcf3a840dadf8c16097274828caa0328cd165570e17a09f5"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/rich_value_rel.rs",
+      "mode": "100644",
+      "size": 2180,
+      "sha256": "21327049a6f6b3400c99d4c7f8d4daadaacf9332bc51ee92766401bbb1e1a5b0"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/rich_value_structure.rs",
+      "mode": "100644",
+      "size": 2580,
+      "sha256": "64ed1038df57aa55fb084d0fe8ef20da94ccf196123be2a4e677842914ff358d"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/rich_value_types.rs",
+      "mode": "100644",
+      "size": 3613,
+      "sha256": "76088c2fe0744a0f0d588b40ec73cd94f3f37fbcbdff6c019fb5ee604e416a6d"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/rich_value.rs",
+      "mode": "100644",
+      "size": 2610,
+      "sha256": "4da6c1aac3852faae28c9dba581f760b56302c5abb585ac7d17c9d5aa9c1caf1"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/serializer.rs",
+      "mode": "100644",
+      "size": 139918,
+      "sha256": "0a2b08625c8b2250be74cd213debf99b631733de4534263a5e2ffead9f03a0f1"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/shape.rs",
+      "mode": "100644",
+      "size": 111216,
+      "sha256": "9c6c3129e05e9b0cf60bf4b46979e43ec11337d187485e0731c4e42daa597ae7"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/shared_strings_table.rs",
+      "mode": "100644",
+      "size": 1850,
+      "sha256": "09faee6595b718c10b3e1a48524ccfdde77fcbea3a68874b43959d0acc5ea19d"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/shared_strings_table/tests.rs",
+      "mode": "100644",
+      "size": 1078,
+      "sha256": "9c659d087bbf9ab307ce5cf98a3c6d2e6d18c1d696fded2e032b683ea4c1c367"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/shared_strings.rs",
+      "mode": "100644",
+      "size": 2891,
+      "sha256": "5f632ca3d35b3e26069ecf2d9e9014048aa8735fb4cde248fa4f1439b427e151"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/shared_strings/tests.rs",
+      "mode": "100644",
+      "size": 3005,
+      "sha256": "373b89d9420cdd4492999c03aed4daebbf96a8f9729fa3f07da615e365c72fe9"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/sparkline.rs",
+      "mode": "100644",
+      "size": 52719,
+      "sha256": "dac680ccd09558522f90d06d4a9aba9940fc69e1c01167cc85c632af9a824173"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/sparkline/tests.rs",
+      "mode": "100644",
+      "size": 131244,
+      "sha256": "c51aace4991ee2caf53adf446b29447d1291712da259cafe1d4e4f9ef6595def"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/styles.rs",
+      "mode": "100644",
+      "size": 29923,
+      "sha256": "1c53165e8263d07dd30ff4c31256c9606045465ed563a375f7b0f55ec13581ea"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/styles/tests.rs",
+      "mode": "100644",
+      "size": 2680,
+      "sha256": "7cf348dd7c6284669753a567272f6f3153cd41763faba41431f0591018a496a9"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/table.rs",
+      "mode": "100644",
+      "size": 85420,
+      "sha256": "56ee7cea4a06a4ce02b38eaaec32d36ef23619d130ef6619a49693ffce4e5a4e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/table/tests.rs",
+      "mode": "100644",
+      "size": 21593,
+      "sha256": "547d6ef7d7f32b1087538ae77eeeb84d8ebd677acb18b51e8f219cfa62e07ac3"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/test_functions.rs",
+      "mode": "100644",
+      "size": 1269,
+      "sha256": "83648303eb1ab41faa939db7d015f4ff9bbb53f3234932bfe6043bfe2c02054b"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/theme.rs",
+      "mode": "100644",
+      "size": 24381,
+      "sha256": "d32f71b91320443de8429d04aa9e3ff5dbf0bf410a914f81e8e6c2082a672f8e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/theme/tests.rs",
+      "mode": "100644",
+      "size": 11996,
+      "sha256": "7687babef1d8679d85fe2245af21c8d1beab126a57fb78ed6ef9665240d73c83"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/tutorial.rs",
+      "mode": "100644",
+      "size": 24238,
+      "sha256": "934fd5fea93459b38da34f2822925d3105c23e762243d7471ec5e5e82225f2b5"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/url.rs",
+      "mode": "100644",
+      "size": 20275,
+      "sha256": "2901fd0f4611e1a2d497d17bffb11d37213dff813b27ccf09bce4226febf42ed"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/url/tests.rs",
+      "mode": "100644",
+      "size": 2115,
+      "sha256": "24aaa5cc61fbf241660a7b188587f5d2807cb72cb7b5c477621707b87a7b6b86"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/utility.rs",
+      "mode": "100644",
+      "size": 51269,
+      "sha256": "4c562f386c77cd605325513ac24a2de59c6ee51b51b5843093e1c203e3ea00ed"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/utility/tests.rs",
+      "mode": "100644",
+      "size": 24629,
+      "sha256": "032b4028e003fb89364a7fcea2baca2a83c44a9518dddd382493053e9a70c4fc"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/vml.rs",
+      "mode": "100644",
+      "size": 21854,
+      "sha256": "b97166351455ce755c7f424558607ad85ae36e3688a75b400f88442fefab85a5"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/vml/tests.rs",
+      "mode": "100644",
+      "size": 5749,
+      "sha256": "324aced063331e19cd77276a4eba0840071a20d97f1ddcf340c4601e6b78dca0"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/workbook.rs",
+      "mode": "100644",
+      "size": 127966,
+      "sha256": "e0ec5a846c3a8a3ccc6e3d93da6e817144249e563c022e8a91ca4f16cbfb36e1"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/workbook/tests.rs",
+      "mode": "100644",
+      "size": 8136,
+      "sha256": "a3a7f9efdd3297eeb122a402f404a2b9cbb38271861c5c72e2c06f516df9a216"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/worksheet.rs",
+      "mode": "100644",
+      "size": 771929,
+      "sha256": "69d00b5d534827edf1b57d11d3dfce1ad8178a6471678feb4bc51abb3a9b261c"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/worksheet/tests.rs",
+      "mode": "100644",
+      "size": 30916,
+      "sha256": "c4d5f94f00be6e3db0f84c50b2612465bbdb758ed8732c7ff886c4a1402f5df4"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/xmlwriter.rs",
+      "mode": "100644",
+      "size": 10956,
+      "sha256": "6c13d707c9dd68fb8d8beff8d3b55e2a38e81d96cd90ee8fb55cac30e6de072e"
+    },
+    {
+      "path": "backend-rust/vendor/rust_xlsxwriter-0.99.1/src/xmlwriter/tests.rs",
+      "mode": "100644",
+      "size": 9835,
+      "sha256": "b736b8d9b6a85260b23b8440e87aaa6430f9a117333b4cc00abe5ed5dac63e73"
+    },
+    {
       "path": "contracts/openapi/aios-v2.json",
       "mode": "100644",
-      "size": 602022,
-      "sha256": "31e95312a2e1c7bc491929b2392ae4293b68b75eee3d65e886b9c049b64b14e9"
+      "size": 621288,
+      "sha256": "9dd6f7974fcde44b43c0a3ad709c512ae61aca5a346c7c28bbddbfdbd0353d0e"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -15969,8 +16821,8 @@
     {
       "path": "DESIGN.md",
       "mode": "100644",
-      "size": 110082,
-      "sha256": "32afac115300cb1abc6301b3a7f14db9716f631ad21a73654b3a3f5a0edeb3ac"
+      "size": 111483,
+      "sha256": "612c64f0e72b7a28ac7ce95934bd0d0a9644b85a8585e6ac323e23de15d970ad"
     },
     {
       "path": "docker-compose.content-production.yml",
@@ -15987,8 +16839,8 @@
     {
       "path": "docker-compose.yml",
       "mode": "100644",
-      "size": 9085,
-      "sha256": "a82877391d8628be3b0b9a120f1a8d30d6c512a3732ba41d0bccb533f8ceb7cc"
+      "size": 9187,
+      "sha256": "48ab2cab0e68df945ba4b349542a79ba329202a608ebcfaec1d8bf415b4ca22b"
     },
     {
       "path": "docker/content-production/Dockerfile",
@@ -16091,6 +16943,18 @@
       "mode": "100644",
       "size": 2468,
       "sha256": "fd909f2e1954963f8eff366b05382b068ac02e712b577c23fce5d0c1bbe781e4"
+    },
+    {
+      "path": "docker/dtk/compose.host.yml",
+      "mode": "100644",
+      "size": 744,
+      "sha256": "255e6d541ddc4b7c592bffb46ec7994a9249d6a4aa2442e1f7dd59a8c9d0cda6"
+    },
+    {
+      "path": "docker/dtk/upstream.lock.json",
+      "mode": "100644",
+      "size": 422,
+      "sha256": "d6642d2f0e1b502194dde82b3e461dd0df4bff7d632f5726e8d6a2ca07b1231f"
     },
     {
       "path": "docker/nginx-vite.conf",
@@ -19579,6 +20443,30 @@
       "sha256": "18dc2afd4a491dcf4370873bad15b459ce7f12cc51c345dce9ad77dad37d714f"
     },
     {
+      "path": "etl/groland_postgres/tests/sql/recruiting_candidate_major_contract.sql",
+      "mode": "100644",
+      "size": 423,
+      "sha256": "9e58d03c24f40f87ddb8ee0c37892cabc8553e0874e8a1dc34131e44bc910bff"
+    },
+    {
+      "path": "etl/groland_postgres/tests/sql/recruiting_question_set_v2_contract.sql",
+      "mode": "100644",
+      "size": 1196,
+      "sha256": "847925e792a080abf292840aca2edadfa418187c3e604bb1744854a79e33c24c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/sql/recruiting_question_set_v3_contract.sql",
+      "mode": "100644",
+      "size": 1201,
+      "sha256": "0893d92fcb564613a35c7a193dd21e15b1a5aa26c7c374763d4708ffb3ab6a0b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/sql/recruiting_test_submissions_contract.sql",
+      "mode": "100644",
+      "size": 2142,
+      "sha256": "77a3395419cfbe9437f56a01c606af1b036029a9dc1f56b205817b980115ce1e"
+    },
+    {
       "path": "etl/groland_postgres/tests/sql/report_all_trade_month_consistency_check.sql",
       "mode": "100644",
       "size": 2314,
@@ -19971,14 +20859,14 @@
     {
       "path": "package-lock.json",
       "mode": "100644",
-      "size": 332004,
-      "sha256": "3a89d8a36dc7f3dd3969a101884eff35d9107d05a39e70b6bb38460168752b0e"
+      "size": 332006,
+      "sha256": "c9bdb97967701075d729da020bbce602211cbab1764e57f68b1083216c1e4544"
     },
     {
       "path": "package.json",
       "mode": "100644",
-      "size": 54827,
-      "sha256": "dddef03d5d8317b47276163d5466116cdcbea26526ded8a52c882c9498bdd077"
+      "size": 54828,
+      "sha256": "9529a1407385bbdb0ae4f8762301a1f0f7a974cbc6869b3530bbe316a92570b2"
     },
     {
       "path": "postcss.config.js",
@@ -19991,6 +20879,30 @@
       "mode": "100644",
       "size": 17707,
       "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
+    },
+    {
+      "path": "public/assets/recruiting/shot-v1/aios-shot-materials.zip",
+      "mode": "100644",
+      "size": 17098520,
+      "sha256": "c859cc59396662c22693c9e67af8f38d973a7946d978bd292a865e8e9a453831"
+    },
+    {
+      "path": "public/assets/recruiting/shot-v1/sample-01.mp4",
+      "mode": "100644",
+      "size": 7013532,
+      "sha256": "04c0ee8168d5036ec23da590aa950776f944fff6ff8fd44f4f6e5df480fb84f2"
+    },
+    {
+      "path": "public/assets/recruiting/shot-v1/sample-02.mp4",
+      "mode": "100644",
+      "size": 5349935,
+      "sha256": "5c80223bd9e1f3a3b784a3b2a395d09a5b9a11a3c22ee2b90f1eb21e95940202"
+    },
+    {
+      "path": "public/assets/recruiting/shot-v1/sample-03.mp4",
+      "mode": "100644",
+      "size": 4842347,
+      "sha256": "0ab8b41fac4a765efa8c004828ab3404f873cc36e2f961a8eef795de43015051"
     },
     {
       "path": "public/docs-media/ai-studio/annotation.webp",
@@ -21322,7 +22234,7 @@
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.behavior.mjs",
       "mode": "100644",
       "size": 23739,
-      "sha256": "abc5bbc765601854e6e47a007473097b5ff6fc7044cef5ac735d405d4b056488"
+      "sha256": "fc8e9e65e735278f60a27178c78e54c986015225403fbf54aba2b2a30cb3e43e"
     },
     {
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.mjs",
@@ -21507,8 +22419,8 @@
     {
       "path": "scripts/checks/quality-runner/affected-mapping-deploy-fixtures.mjs",
       "mode": "100644",
-      "size": 8273,
-      "sha256": "eecba9ada0a38c20d25f4e889852b6ea82b1085f75a562e6af2e0f619872d6c8"
+      "size": 8334,
+      "sha256": "5273de2e964108a253440b85ceeb02b94a5780967f4b9dc86b1addd723c51bec"
     },
     {
       "path": "scripts/checks/quality-runner/affected-mapping-fallback-fixtures.mjs",
@@ -21843,8 +22755,8 @@
     {
       "path": "scripts/checks/quality-runner/hook.mjs",
       "mode": "100644",
-      "size": 7486,
-      "sha256": "37b2fe66e89d32b22d31c738ee3c033ecd08bbd5c4801c1d53088e6113f95e2f"
+      "size": 10203,
+      "sha256": "4a6162055fd8c609d7c319016b77e1015ba316c0cb8d07e8b64fadfa2c53ee93"
     },
     {
       "path": "scripts/checks/quality-runner/manifest.mjs",
@@ -21909,8 +22821,8 @@
     {
       "path": "scripts/checks/quality-runner/registry-deploy-fixtures.mjs",
       "mode": "100644",
-      "size": 3615,
-      "sha256": "f4dbf65367232d2b6fbd02c6afccf9a775d3f6b88eab7b1961997d24c0a90d8e"
+      "size": 4166,
+      "sha256": "aca55175d6ca0c3e5fa84736a884603f690dc63fecac1c2dbe7269fc35af897e"
     },
     {
       "path": "scripts/checks/quality-runner/registry-design-input-fixtures.mjs",
@@ -21927,8 +22839,8 @@
     {
       "path": "scripts/checks/quality-runner/registry-frontend-delivery-fixtures.mjs",
       "mode": "100644",
-      "size": 47090,
-      "sha256": "3048078c386229cf9eade2f526edd28e51d590159a5828344d7428cee5741292"
+      "size": 47120,
+      "sha256": "f9df09ffa5c57c4004776284deec4ff021314a9863e592d69cf2d5934d21e43e"
     },
     {
       "path": "scripts/checks/quality-runner/registry-frontend-permission-fixtures.mjs",
@@ -22635,8 +23547,8 @@
     {
       "path": "scripts/config/contracts/aios-api-contract.mjs",
       "mode": "100644",
-      "size": 43668,
-      "sha256": "962753adef24a0c21e398d7500f02c44706194692ade52a6e0c528f2e01920d7"
+      "size": 45139,
+      "sha256": "d09af4d632ed87208ad1b7e1c55c9a4e5f000c5f7cf0e628a5c98b2db2007a5d"
     },
     {
       "path": "scripts/config/design/token-color-sync.config.json",
@@ -23055,14 +23967,14 @@
     {
       "path": "scripts/lib/contracts/aios-api-contract-behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 30091,
-      "sha256": "962859a3077b2f2dc5fe523584565a92e918dd6b168f186a14d442761ba23f2d"
+      "size": 30597,
+      "sha256": "dc8c4699b497105bac9326a1a34bbbc1a4c6ee837a7502dec7769cb2fa5e917f"
     },
     {
       "path": "scripts/lib/contracts/aios-openapi-core.mjs",
       "mode": "100644",
-      "size": 5459,
-      "sha256": "6eb5eaed745685cffb007c7d487c1da664da0756c0c2b168690f0b273b362938"
+      "size": 5743,
+      "sha256": "fcfe9bc089d8aa2363a2ad1326fddf29ce1c175bfce5f7a579600bb27c60a5b9"
     },
     {
       "path": "scripts/lib/contracts/openapi-typescript-runner.mjs",
@@ -23505,8 +24417,8 @@
     {
       "path": "scripts/lib/frontend/frontend-permission-policy-behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 15124,
-      "sha256": "37e2da40b866b6856bb922e9569fef848280f04064c45ca1a734a41933c4deff"
+      "size": 15209,
+      "sha256": "25976bf851be03cd40c5e2302ce743e4e9760d5f521f1370202cccd4074cd9e8"
     },
     {
       "path": "scripts/lib/frontend/frontend-preflight-cache-command.mjs",
@@ -24453,8 +25365,8 @@
     {
       "path": "scripts/lib/quality/gate-inputs/frontend-structure-inputs.mjs",
       "mode": "100644",
-      "size": 14813,
-      "sha256": "a699a6c5c89eaf46542806843c3779b054507fd14b12576d8e325593d4b2a81b"
+      "size": 14898,
+      "sha256": "2acb8dc3017e083b5ed6d03cd7f91137d730fc02f0fd2d20dd174f99fba2d8db"
     },
     {
       "path": "scripts/lib/quality/gate-inputs/weekly-inputs.mjs",
@@ -24633,8 +25545,8 @@
     {
       "path": "scripts/lib/quality/quality-affected-support-rules.mjs",
       "mode": "100644",
-      "size": 28440,
-      "sha256": "075670b1be2042dcf1aa86f5c531931c08d2a4c20e829d2567e7d6f66dd4f12b"
+      "size": 28499,
+      "sha256": "557a036a5af0d678e629eb4ad926f06ea94a17c909ed07ccb2ac7987eb96f44c"
     },
     {
       "path": "scripts/lib/quality/quality-affected-weekly-rules.mjs",
@@ -24759,8 +25671,8 @@
     {
       "path": "scripts/lib/quality/quality-gate-inputs.mjs",
       "mode": "100644",
-      "size": 22883,
-      "sha256": "a05a74b4c1361f65687aaca94022b55d621c956b411e6c9efe72bcaf741282de"
+      "size": 23067,
+      "sha256": "97b54466a52eff46bc84a88725a1e542b48af7f7859160964fd093bbe93198c6"
     },
     {
       "path": "scripts/lib/quality/quality-gate-named-inputs.mjs",
@@ -25543,6 +26455,30 @@
       "sha256": "faba9f58a7c80af3a41fb767e0f776a22be66960095b8a4f731db76526d66c4d"
     },
     {
+      "path": "sql/migrations/036_recruiting_test_submissions.sql",
+      "mode": "100644",
+      "size": 1720,
+      "sha256": "6ea735fc91acd7a085ec55bfa24e05b96ab42b6e9f13fd455a5ead787355e496"
+    },
+    {
+      "path": "sql/migrations/037_recruiting_question_set_v2.sql",
+      "mode": "100644",
+      "size": 1177,
+      "sha256": "aabb49589a978bad5b8eaa8491861a445eac74f86bcb7dae059d42ace318c2e0"
+    },
+    {
+      "path": "sql/migrations/038_recruiting_video_practice_v3.sql",
+      "mode": "100644",
+      "size": 1248,
+      "sha256": "48f28bf79a2c68a62ef7d6b936a8dca702b4da3e9add4918a23a55c862cf567c"
+    },
+    {
+      "path": "sql/migrations/039_recruiting_candidate_major.sql",
+      "mode": "100644",
+      "size": 172,
+      "sha256": "5aa139e5a727b076f3ea2c4621b7d847a785172164221b87399292549f4f0bab"
+    },
+    {
       "path": "tailwind.config.ts",
       "mode": "100644",
       "size": 11687,
@@ -25551,8 +26487,8 @@
     {
       "path": "THIRD_PARTY_NOTICES.md",
       "mode": "100644",
-      "size": 1863,
-      "sha256": "9e8d24e280f56b8267fa02bfb280b418ae16fdccdc7664ea9d7631c8297cbb96"
+      "size": 2406,
+      "sha256": "bf666c063f632d7c7aa9adeba77220ca26bea45e13c30423302127beb665d822"
     },
     {
       "path": "tsconfig.frontend.json",

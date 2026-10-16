@@ -1,0 +1,28 @@
+# AIOS host override for dtk v5 on the 4-core / 8 GiB, swapless VPS.
+# Used beside the upstream checkout: see docker/dtk/README.md.
+#
+# - Ceilings follow upstream docker/README.md "Small hosts"; browser-rpc and
+#   downloader profiles are never enabled here.
+# - api is published on loopback only (console via SSH tunnel) and joins the
+#   AIOS internal network so aios-api reaches it as http://dtk-api:8000.
+services:
+  postgres:
+    mem_limit: 1g
+  redis:
+    mem_limit: 320m
+  api:
+    mem_limit: 448m
+    cpus: 1.5
+    ports: !override
+      - "127.0.0.1:18700:8000"
+    networks:
+      aios-internal:
+        aliases:
+          - dtk-api
+  worker:
+    mem_limit: 448m
+
+networks:
+  aios-internal:
+    external: true
+    name: aios-internal

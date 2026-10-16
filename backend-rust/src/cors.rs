@@ -1,9 +1,12 @@
-use axum::http::{HeaderValue, Method};
+use axum::http::{HeaderMap, HeaderValue, Method};
 use http::header;
 use tower_http::cors::CorsLayer;
 use tracing::warn;
 
-use crate::config::Settings;
+use crate::{
+    config::Settings,
+    error::{AppError, AppResult},
+};
 
 pub(crate) fn build_cors_layer(settings: &Settings) -> anyhow::Result<CorsLayer> {
     let allowed_origins: Vec<HeaderValue> = settings
@@ -45,4 +48,27 @@ pub(crate) fn build_cors_layer(settings: &Settings) -> anyhow::Result<CorsLayer>
             header::HeaderName::from_static("x-expected-updated-at"),
         ])
         .allow_credentials(true))
+}
+
+/// Browser mutations must come from a configured CORS origin; requests
+/// without an Origin header (scripts, cross-site forms) are refused.
+pub(crate) fn validate_mutation_origin(
+    allowed_origins: &[String],
+    headers: &HeaderMap,
+) -> AppResult<()> {
+    let origin = headers
+        .get(header::ORIGIN)
+        .and_then(|value| value.to_str().ok())
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .ok_or(AppError::Forbidden)?;
+
+    if allowed_origins
+        .iter()
+        .any(|allowed| allowed.trim() == origin)
+    {
+        Ok(())
+    } else {
+        Err(AppError::Forbidden)
+    }
 }

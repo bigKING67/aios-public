@@ -10023,6 +10023,326 @@
         "x-aios-rust-source": "backend-rust/src/permissions/mod.rs"
       }
     },
+    "/v2/recruiting/public/submissions": {
+      "post": {
+        "tags": [
+          "recruiting"
+        ],
+        "summary": "POST /v2/recruiting/public/submissions",
+        "operationId": "recruiting_post_recruiting_public_submissions",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicSubmissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSubmissionResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/recruiting/mod.rs"
+      }
+    },
+    "/v2/recruiting/rubric": {
+      "get": {
+        "tags": [
+          "recruiting"
+        ],
+        "summary": "GET /v2/recruiting/rubric",
+        "operationId": "recruiting_get_recruiting_rubric",
+        "parameters": [
+          {
+            "name": "questionSetVersion",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RubricResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/recruiting/mod.rs"
+      }
+    },
+    "/v2/recruiting/submissions": {
+      "get": {
+        "tags": [
+          "recruiting"
+        ],
+        "summary": "GET /v2/recruiting/submissions",
+        "operationId": "recruiting_get_recruiting_submissions",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/recruiting/mod.rs"
+      }
+    },
+    "/v2/recruiting/submissions/{submission_id}": {
+      "get": {
+        "tags": [
+          "recruiting"
+        ],
+        "summary": "GET /v2/recruiting/submissions/{submission_id}",
+        "operationId": "recruiting_get_recruiting_submissions_submission_id",
+        "parameters": [
+          {
+            "name": "submission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/recruiting/mod.rs"
+      }
+    },
+    "/v2/recruiting/submissions/{submission_id}/review": {
+      "put": {
+        "tags": [
+          "recruiting"
+        ],
+        "summary": "PUT /v2/recruiting/submissions/{submission_id}/review",
+        "operationId": "recruiting_put_recruiting_submissions_submission_id_review",
+        "parameters": [
+          {
+            "name": "submission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/recruiting/mod.rs"
+      }
+    },
     "/v2/reports": {
       "get": {
         "tags": [
@@ -15080,6 +15400,477 @@
           "total",
           "page",
           "page_size"
+        ]
+      },
+      "PublicSubmissionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testKey": {
+            "type": "string"
+          },
+          "questionSetVersion": {
+            "type": "integer"
+          },
+          "candidate": {
+            "$ref": "#/components/schemas/CandidateInput"
+          },
+          "answers": {
+            "$ref": "#/components/schemas/SubmissionAnswers"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "submissionId",
+          "testKey",
+          "questionSetVersion",
+          "candidate",
+          "answers"
+        ]
+      },
+      "CandidateInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "schoolAndGrade": {
+            "type": "string"
+          },
+          "major": {
+            "type": "string"
+          },
+          "weeklyAvailability": {
+            "type": "string"
+          },
+          "earliestStart": {
+            "type": "string"
+          },
+          "portfolioUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "schoolAndGrade",
+          "major",
+          "weeklyAvailability",
+          "earliestStart",
+          "portfolioUrl"
+        ]
+      },
+      "SubmissionAnswers": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "project": {
+            "type": "string"
+          },
+          "videoTaskCode": {
+            "type": "string"
+          },
+          "videoTaskNotes": {
+            "type": "string"
+          },
+          "aiUsage": {
+            "type": "string"
+          },
+          "remixPlan": {
+            "type": "string"
+          },
+          "workflow": {
+            "type": "string"
+          },
+          "workflowRules": {
+            "type": "string"
+          },
+          "agentPlan": {
+            "type": "string"
+          },
+          "videoPractice": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "project",
+          "videoTaskCode",
+          "videoTaskNotes",
+          "aiUsage",
+          "remixPlan",
+          "workflow",
+          "workflowRules",
+          "agentPlan",
+          "videoPractice"
+        ]
+      },
+      "PublicSubmissionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "submittedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "submissionId",
+          "submittedAt"
+        ]
+      },
+      "ReviewScores": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "project": {
+            "type": "integer"
+          },
+          "asyncLogic": {
+            "type": "integer"
+          },
+          "robustness": {
+            "type": "integer"
+          },
+          "design": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "project",
+          "asyncLogic",
+          "robustness",
+          "design"
+        ]
+      },
+      "ReviewSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scores": {
+            "$ref": "#/components/schemas/ReviewScores"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "verdict": {
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scores",
+          "total",
+          "verdict",
+          "note",
+          "reviewedBy",
+          "reviewedAt"
+        ]
+      },
+      "SubmissionListItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "candidateName": {
+            "type": "string"
+          },
+          "schoolAndGrade": {
+            "type": "string"
+          },
+          "submittedAt": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReviewSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "submissionId",
+          "candidateName",
+          "schoolAndGrade",
+          "submittedAt",
+          "durationSeconds",
+          "review"
+        ]
+      },
+      "SubmissionListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubmissionListItem"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "pageSize"
+        ]
+      },
+      "SubmissionDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "testKey": {
+            "type": "string"
+          },
+          "questionSetVersion": {
+            "type": "integer"
+          },
+          "candidate": {
+            "$ref": "#/components/schemas/CandidateInput"
+          },
+          "answers": {
+            "$ref": "#/components/schemas/SubmissionAnswers"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "submittedAt": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReviewSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "submissionId",
+          "testKey",
+          "questionSetVersion",
+          "candidate",
+          "answers",
+          "startedAt",
+          "submittedAt",
+          "durationSeconds",
+          "review"
+        ]
+      },
+      "SaveReviewRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scores": {
+            "$ref": "#/components/schemas/ReviewScores"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "scores"
+        ]
+      },
+      "RubricDimension": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "max": {
+            "type": "integer"
+          },
+          "guidance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "max",
+          "guidance"
+        ]
+      },
+      "RubricThresholds": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "advanceMin": {
+            "type": "integer"
+          },
+          "holdMin": {
+            "type": "integer"
+          },
+          "videoTaskMin": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "advanceMin",
+          "holdMin",
+          "videoTaskMin"
+        ]
+      },
+      "RubricResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RubricDimension"
+            }
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/RubricThresholds"
+          },
+          "videoTaskCheckpoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strongSignals": {
+            "type": "string"
+          },
+          "averageSignals": {
+            "type": "string"
+          },
+          "weakSignals": {
+            "type": "string"
+          },
+          "interviewFollowUp": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dimensions",
+          "thresholds",
+          "videoTaskCheckpoints",
+          "strongSignals",
+          "averageSignals",
+          "weakSignals",
+          "interviewFollowUp"
         ]
       },
       "SampleInventoryAccessPolicyResponse": {
@@ -23546,6 +24337,9 @@
       "name": "permissions"
     },
     {
+      "name": "recruiting"
+    },
+    {
       "name": "reports"
     },
     {
@@ -23560,9 +24354,9 @@
   ],
   "x-aios-contract": {
     "generatedFrom": "rust-router-and-serde-source",
-    "operationCount": 229,
-    "routeSourceCount": 15,
-    "typedOperationCount": 107,
+    "operationCount": 234,
+    "routeSourceCount": 16,
+    "typedOperationCount": 112,
     "v1RemovalAuthorized": false
   }
 }

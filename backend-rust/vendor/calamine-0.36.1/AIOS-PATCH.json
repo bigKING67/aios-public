@@ -1,0 +1,13 @@
+{
+  "upstream_crate": "calamine",
+  "version": "0.36.1",
+  "archive_sha256": "5fa68281b1a76b54a62156474adb06bb380a67e07dd60656e3217152b42183f3",
+  "source": "https://crates.io/api/v1/crates/calamine/0.36.1/download",
+  "retained": "src, licenses, README, compile-time changelog, original manifest; production library only",
+  "patches": [
+    "Cargo.toml: remove example/bench/test targets whose assets are omitted; pin zip =9.0.3",
+    "src/utils.rs: consume successful file_names entries from ZIP 9 fallible iterator (calamine PR #741 equivalent)."
+  ],
+  "remove_when": "A compatible upstream release depends on a supported, non-yanked zip version and passes AIOS XLSX tests.",
+  "upstream_reference": "https://github.com/tafia/calamine/pull/741"
+}

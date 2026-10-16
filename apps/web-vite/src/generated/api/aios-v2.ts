@@ -2441,6 +2441,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/recruiting/public/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/recruiting/public/submissions */
+        post: operations["recruiting_post_recruiting_public_submissions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/recruiting/rubric": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/recruiting/rubric */
+        get: operations["recruiting_get_recruiting_rubric"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/recruiting/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/recruiting/submissions */
+        get: operations["recruiting_get_recruiting_submissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/recruiting/submissions/{submission_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/recruiting/submissions/{submission_id} */
+        get: operations["recruiting_get_recruiting_submissions_submission_id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/recruiting/submissions/{submission_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** PUT /v2/recruiting/submissions/{submission_id}/review */
+        put: operations["recruiting_put_recruiting_submissions_submission_id_review"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/reports": {
         parameters: {
             query?: never;
@@ -3507,6 +3592,106 @@ export interface components {
             total: number;
             page: number;
             page_size: number;
+        };
+        PublicSubmissionRequest: {
+            /** Format: uuid */
+            submissionId: string;
+            testKey: string;
+            questionSetVersion: number;
+            candidate: components["schemas"]["CandidateInput"];
+            answers: components["schemas"]["SubmissionAnswers"];
+            startedAt?: string | null;
+            website?: string | null;
+        };
+        CandidateInput: {
+            name: string;
+            contact: string;
+            schoolAndGrade: string;
+            major: string;
+            weeklyAvailability: string;
+            earliestStart: string;
+            portfolioUrl: string | null;
+        };
+        SubmissionAnswers: {
+            project: string;
+            videoTaskCode: string;
+            videoTaskNotes: string;
+            aiUsage: string;
+            remixPlan: string;
+            workflow: string;
+            workflowRules: string;
+            agentPlan: string;
+            videoPractice: string;
+        };
+        PublicSubmissionResponse: {
+            /** Format: uuid */
+            submissionId: string;
+            submittedAt: string;
+        };
+        ReviewScores: {
+            project: number;
+            asyncLogic: number;
+            robustness: number;
+            design: number;
+        };
+        ReviewSummary: {
+            scores: components["schemas"]["ReviewScores"];
+            total: number;
+            verdict: string;
+            note: string | null;
+            reviewedBy: string | null;
+            reviewedAt: string;
+        };
+        SubmissionListItem: {
+            /** Format: uuid */
+            submissionId: string;
+            candidateName: string;
+            schoolAndGrade: string;
+            submittedAt: string;
+            durationSeconds: number | null;
+            review: components["schemas"]["ReviewSummary"] | null;
+        };
+        SubmissionListResponse: {
+            items: components["schemas"]["SubmissionListItem"][];
+            total: number;
+            page: number;
+            pageSize: number;
+        };
+        SubmissionDetail: {
+            /** Format: uuid */
+            submissionId: string;
+            testKey: string;
+            questionSetVersion: number;
+            candidate: components["schemas"]["CandidateInput"];
+            answers: components["schemas"]["SubmissionAnswers"];
+            startedAt: string | null;
+            submittedAt: string;
+            durationSeconds: number | null;
+            review: components["schemas"]["ReviewSummary"] | null;
+        };
+        SaveReviewRequest: {
+            scores: components["schemas"]["ReviewScores"];
+            note?: string | null;
+        };
+        RubricDimension: {
+            key: string;
+            label: string;
+            max: number;
+            guidance: string;
+        };
+        RubricThresholds: {
+            advanceMin: number;
+            holdMin: number;
+            videoTaskMin: number;
+        };
+        RubricResponse: {
+            dimensions: components["schemas"]["RubricDimension"][];
+            thresholds: components["schemas"]["RubricThresholds"];
+            videoTaskCheckpoints: string[];
+            strongSignals: string;
+            averageSignals: string;
+            weakSignals: string;
+            interviewFollowUp: string;
         };
         SampleInventoryAccessPolicyResponse: {
             mode: string;
@@ -11683,6 +11868,213 @@ export interface operations {
                     "application/json": components["schemas"]["PermissionListResponse"] | {
                         [key: string]: components["schemas"]["PermissionItem"][];
                     };
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    recruiting_post_recruiting_public_submissions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublicSubmissionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSubmissionResponse"];
+                };
+            };
+            /** @description Rate limited */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    recruiting_get_recruiting_rubric: {
+        parameters: {
+            query?: {
+                questionSetVersion?: 1 | 2;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RubricResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    recruiting_get_recruiting_submissions: {
+        parameters: {
+            query?: {
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionListResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    recruiting_get_recruiting_submissions_submission_id: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionDetail"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    recruiting_put_recruiting_submissions_submission_id_review: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionDetail"];
                 };
             };
             /** @description Authentication required */

@@ -15,7 +15,7 @@ import {
   runQianchuanProductionMigrationReconciliation,
 } from '../../lib/migrations/aios-qianchuan-production-migration-reconciliation.mjs';
 
-const EXPECTED_MIGRATION_INVENTORY = 214;
+const EXPECTED_MIGRATION_INVENTORY = 219;
 
 class FakeClient {
   constructor({ failOn = null, ledgerRows = null, presence = new Map() } = {}) {

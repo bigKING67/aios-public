@@ -17,6 +17,7 @@ const DEPLOY_CONFIG_HELPER_FILES = new Set([
 ]);
 
 const DEPLOY_CONFIG_BEHAVIOR_FIXTURE_FILES = new Set([
+  'scripts/lib/deploy/deploy-config-baseline-fixture.mjs',
   'scripts/lib/deploy/deploy-config-behavior-fixtures.mjs',
   'scripts/lib/deploy/api-deploy-proof-fixtures.mjs',
   'scripts/lib/deploy/api-deploy-proof.sh',

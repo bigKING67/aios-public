@@ -66,6 +66,7 @@ export const AIOS_RUST_ROUTE_SOURCES = Object.freeze([
   { file: 'backend-rust/src/marketing/content_assets/studio/mod.rs', prefix: '/marketing/content-assets', tag: 'content-ai-studio' },
   { file: 'backend-rust/src/marketing/industry_news/handlers.rs', prefix: '/marketing/industry-news', tag: 'industry-news' },
   { file: 'backend-rust/src/permissions/mod.rs', prefix: '/permissions', tag: 'permissions' },
+  { file: 'backend-rust/src/recruiting/mod.rs', prefix: '/recruiting', tag: 'recruiting' },
   { file: 'backend-rust/src/roles/mod.rs', prefix: '/roles', tag: 'roles' },
   { file: 'backend-rust/src/users/handlers/mod.rs', prefix: '/users', tag: 'users' },
   { file: 'backend-rust/src/reports/handlers.rs', prefix: '/reports', tag: 'reports' },
@@ -120,6 +121,24 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
   {
     file: 'backend-rust/src/audit_logs/types.rs',
     names: ['AuditLogItem', 'AuditLogListResponse'],
+  },
+  {
+    file: 'backend-rust/src/recruiting/types.rs',
+    names: [
+      { name: 'PublicSubmissionRequest', request: true },
+      'CandidateInput',
+      'SubmissionAnswers',
+      'PublicSubmissionResponse',
+      'ReviewScores',
+      'ReviewSummary',
+      'SubmissionListItem',
+      'SubmissionListResponse',
+      'SubmissionDetail',
+      { name: 'SaveReviewRequest', request: true },
+      'RubricDimension',
+      'RubricThresholds',
+      'RubricResponse',
+    ],
   },
   {
     file: 'backend-rust/src/sample_inventory/types.rs',
@@ -599,6 +618,32 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
         },
       ],
     },
+  },
+  'POST /v2/recruiting/public/submissions': {
+    anonymous: true,
+    request: 'PublicSubmissionRequest',
+    response: 'PublicSubmissionResponse',
+    successStatus: 201,
+  },
+  'GET /v2/recruiting/submissions': {
+    queryParameters: [
+      { name: 'page', in: 'query', required: false, schema: { type: 'integer' } },
+      { name: 'pageSize', in: 'query', required: false, schema: { type: 'integer' } },
+    ],
+    response: 'SubmissionListResponse',
+  },
+  'GET /v2/recruiting/submissions/{submission_id}': {
+    response: 'SubmissionDetail',
+  },
+  'PUT /v2/recruiting/submissions/{submission_id}/review': {
+    request: 'SaveReviewRequest',
+    response: 'SubmissionDetail',
+  },
+  'GET /v2/recruiting/rubric': {
+    queryParameters: [
+      { name: 'questionSetVersion', in: 'query', required: false, schema: { type: 'integer', enum: [1, 2] } },
+    ],
+    response: 'RubricResponse',
   },
   'GET /v2/audit-logs': {
     queryParameters: [

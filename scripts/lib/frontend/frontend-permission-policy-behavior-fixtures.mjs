@@ -64,6 +64,7 @@ function assertUsesSharedPermissionPolicy() {
     'apps/web-vite/src/app/admin/roles/_components/roles-page-client.tsx',
     'apps/web-vite/src/app/admin/permissions/_components/permissions-page-client.tsx',
     'apps/web-vite/src/app/admin/audit-logs/_components/audit-logs-page-client.tsx',
+    'apps/web-vite/src/app/admin/recruiting/_components/recruiting-page-client.tsx',
   ].map((filePath) => [filePath, readFileSync(filePath, 'utf8')]);
 
   assertIncludes(

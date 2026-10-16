@@ -53,6 +53,11 @@ const SAMPLE_INVENTORY_OUTBOUND_TRANSITION_PATH =
 const SAMPLE_INVENTORY_OUTBOUND_TRACKING_PATH =
   '/sample-inventory/outbound-requests/{request_id}/tracking' satisfies GatewayPathFor<'/v2/sample-inventory/outbound-requests/{request_id}/tracking'>;
 
+const RECRUITING_SUBMISSION_PATH =
+  '/recruiting/submissions/{submission_id}' satisfies GatewayPathFor<'/v2/recruiting/submissions/{submission_id}'>;
+const RECRUITING_SUBMISSION_REVIEW_PATH =
+  '/recruiting/submissions/{submission_id}/review' satisfies GatewayPathFor<'/v2/recruiting/submissions/{submission_id}/review'>;
+
 function interpolatePath(template: string, parameter: string, value: ApiPathIdentifier): string {
   return template.replace(`{${parameter}}`, String(value));
 }
@@ -143,6 +148,13 @@ export const AIOS_API_PATHS = {
   sampleInventoryOutboundBatchTransition: '/sample-inventory/outbound-requests/batch-transition',
   sampleInventoryOutboundBatchArchive: '/sample-inventory/outbound-requests/batch-archive',
   sampleInventoryOutboundExport: '/sample-inventory/outbound-requests/export.xlsx',
+  recruitingPublicSubmissions: '/recruiting/public/submissions',
+  recruitingSubmissions: '/recruiting/submissions',
+  recruitingSubmission: (submissionId: ApiPathIdentifier) =>
+    interpolateEncodedPath(RECRUITING_SUBMISSION_PATH, 'submission_id', submissionId),
+  recruitingSubmissionReview: (submissionId: ApiPathIdentifier) =>
+    interpolateEncodedPath(RECRUITING_SUBMISSION_REVIEW_PATH, 'submission_id', submissionId),
+  recruitingRubric: '/recruiting/rubric',
   reportWeeklyByPeriod: '/reports/weekly/by-period',
   reportWeeklyLatestPeriod: '/reports/weekly/latest-period',
   reportWeeklyAllPeriods: '/reports/weekly/all-periods',
@@ -239,6 +251,11 @@ export const AIOS_API_PATHS = {
   sampleInventoryOutboundBatchTransition: GatewayPathFor<'/v2/sample-inventory/outbound-requests/batch-transition'>;
   sampleInventoryOutboundBatchArchive: GatewayPathFor<'/v2/sample-inventory/outbound-requests/batch-archive'>;
   sampleInventoryOutboundExport: GatewayPathFor<'/v2/sample-inventory/outbound-requests/export.xlsx'>;
+  recruitingPublicSubmissions: GatewayPathFor<'/v2/recruiting/public/submissions'>;
+  recruitingSubmissions: GatewayPathFor<'/v2/recruiting/submissions'>;
+  recruitingSubmission: (submissionId: ApiPathIdentifier) => string;
+  recruitingSubmissionReview: (submissionId: ApiPathIdentifier) => string;
+  recruitingRubric: GatewayPathFor<'/v2/recruiting/rubric'>;
   reportWeeklyByPeriod: GatewayPathFor<'/v2/reports/weekly/by-period'>;
   reportWeeklyLatestPeriod: GatewayPathFor<'/v2/reports/weekly/latest-period'>;
   reportWeeklyAllPeriods: GatewayPathFor<'/v2/reports/weekly/all-periods'>;
@@ -260,6 +277,17 @@ export const AIOS_API_PATHS = {
   userRoles: (userId: ApiPathIdentifier) => string;
 };
 
+export type RecruitingPublicSubmissionRequest = components['schemas']['PublicSubmissionRequest'];
+export type RecruitingPublicSubmissionResponse = components['schemas']['PublicSubmissionResponse'];
+export type RecruitingCandidate = components['schemas']['CandidateInput'];
+export type RecruitingAnswers = components['schemas']['SubmissionAnswers'];
+export type RecruitingReviewScores = components['schemas']['ReviewScores'];
+export type RecruitingReviewSummary = components['schemas']['ReviewSummary'];
+export type RecruitingSubmissionListItem = components['schemas']['SubmissionListItem'];
+export type RecruitingSubmissionListResponse = components['schemas']['SubmissionListResponse'];
+export type RecruitingSubmissionDetail = components['schemas']['SubmissionDetail'];
+export type RecruitingSaveReviewRequest = components['schemas']['SaveReviewRequest'];
+export type RecruitingRubric = components['schemas']['RubricResponse'];
 export type SessionLoginRequest = components['schemas']['LoginRequest'];
 export type SessionLoginResponse = components['schemas']['SessionLoginResponse'];
 export type SessionLogoutResponse = components['schemas']['SessionLogoutResponse'];

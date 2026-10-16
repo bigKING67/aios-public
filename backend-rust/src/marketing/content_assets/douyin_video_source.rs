@@ -7,10 +7,15 @@ use reqwest::{
 };
 use serde_json::Value;
 
-use crate::error::{AppError, AppResult};
+use crate::{
+    config::douyin_dtk_settings_from_env,
+    error::{AppError, AppResult},
+};
 
+mod dtk_client;
 mod page_fallback;
 
+use dtk_client::fetch_douyin_detail_via_dtk;
 use page_fallback::fetch_douyin_video_page_source;
 
 const DOUYIN_SOURCE_USER_AGENT: &str =
@@ -45,6 +50,7 @@ struct PlayAddressCandidate {
     width: i64,
     source_rank: i64,
     watermarked: bool,
+    redirecting: bool,
 }
 
 pub(super) async fn resolve_douyin_remote_video_source(
@@ -57,8 +63,17 @@ pub(super) async fn resolve_douyin_remote_video_source(
         .build()
         .map_err(|_| AppError::Internal)?;
 
-    let mut last_status: Option<u16> = None;
     let mut detail_source_error: Option<AppError> = None;
+    if let Some(settings) = douyin_dtk_settings_from_env() {
+        if let Some(detail) = fetch_douyin_detail_via_dtk(&settings, &aweme_id).await {
+            match build_douyin_remote_video_source_from_detail(&aweme_id, &detail) {
+                Ok(source) => return Ok(source),
+                Err(error) => detail_source_error = Some(error),
+            }
+        }
+    }
+
+    let mut last_status: Option<u16> = None;
     let mut detail_filter_error: Option<String> = None;
     for aid in DOUYIN_DETAIL_AID_CANDIDATES {
         let detail = fetch_douyin_detail(
@@ -294,6 +309,7 @@ fn select_best_candidate_url(mut candidates: Vec<PlayAddressCandidate>) -> Optio
             candidate.source_rank,
             -candidate.bit_rate,
             -candidate.width,
+            candidate.redirecting,
         )
     });
     candidates.into_iter().next().map(|candidate| candidate.url)
@@ -383,6 +399,7 @@ fn collect_urls_from_play_addr_inner(
         }
         candidates.push(PlayAddressCandidate {
             watermarked: is_watermarked_media_url(url.as_str()),
+            redirecting: is_redirecting_play_url(&url),
             url,
             bit_rate,
             width,
@@ -427,6 +444,12 @@ fn is_likely_video_media_url(url: &Url) -> bool {
         || url.query_pairs().any(|(key, value)| {
             key.eq_ignore_ascii_case("mime_type") && value.to_ascii_lowercase().starts_with("video")
         })
+}
+
+/// `www.douyin.com/aweme/v1/play/...` answers 302 to the CDN, and the importer
+/// never follows redirects; prefer the direct CDN URL of the same gear.
+fn is_redirecting_play_url(url: &Url) -> bool {
+    url.path().starts_with("/aweme/v1/play")
 }
 
 fn is_watermarked_media_url(value: &str) -> bool {
@@ -498,6 +521,28 @@ mod tests {
         let url = select_best_play_url(&video).expect("best URL should resolve");
 
         assert!(url.as_str().contains("high-clean.mp4"));
+    }
+
+    #[test]
+    fn prefers_direct_cdn_url_over_redirecting_play_url_in_same_gear() {
+        let video = serde_json::json!({
+            "bit_rate": [
+                {
+                    "bit_rate": 4000,
+                    "play_addr": {
+                        "width": 1920,
+                        "url_list": [
+                            "https://www.douyin.com/aweme/v1/play/?video_id=v0&line=0",
+                            "https://v3-dy-o.zjcdn.com/abc/video/tos/cn/high.mp4?mime_type=video_mp4"
+                        ]
+                    }
+                }
+            ]
+        });
+
+        let url = select_best_play_url(&video).expect("best URL should resolve");
+
+        assert_eq!(url.host_str(), Some("v3-dy-o.zjcdn.com"));
     }
 
     #[test]

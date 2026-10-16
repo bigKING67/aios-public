@@ -15,7 +15,9 @@ use uuid::Uuid;
 use crate::{
     auth::{resolve_optional_current_user, CurrentUser},
     config::SampleInventoryAccessMode,
+    cors::validate_mutation_origin,
     error::{AppError, AppResult},
+    rate_limit::increment_window,
     state::AppState,
 };
 
@@ -156,24 +158,6 @@ fn resolve_actor_after_auth(
     ))
 }
 
-fn validate_mutation_origin(allowed_origins: &[String], headers: &HeaderMap) -> AppResult<()> {
-    let origin = headers
-        .get(header::ORIGIN)
-        .and_then(|value| value.to_str().ok())
-        .map(str::trim)
-        .filter(|value| !value.is_empty())
-        .ok_or(AppError::Forbidden)?;
-
-    if allowed_origins
-        .iter()
-        .any(|allowed| allowed.trim() == origin)
-    {
-        Ok(())
-    } else {
-        Err(AppError::Forbidden)
-    }
-}
-
 async fn enforce_rate_limit(
     state: &AppState,
     actor: &SampleInventoryActor,
@@ -184,13 +168,7 @@ async fn enforce_rate_limit(
     let minute_bucket = Utc::now().timestamp() / 60;
     let actor_hash = hash_actor_for_cache(actor.actor_user_id(), &state.settings.secret_key);
     let key = format!("rl:sample-inventory:{category}:{actor_hash}:{minute_bucket}");
-    let mut connection = state.dragonfly_connection.clone();
-
-    let count: i64 = match dragonfly_client::cmd("INCR")
-        .arg(key.as_str())
-        .query_async(&mut connection)
-        .await
-    {
+    let count = match increment_window(state, &key, 90).await {
         Ok(value) => value,
         Err(error) => {
             warn!(
@@ -208,20 +186,6 @@ async fn enforce_rate_limit(
             };
         }
     };
-
-    if count == 1 {
-        if let Err(error) = dragonfly_client::cmd("EXPIRE")
-            .arg(key.as_str())
-            .arg(90)
-            .query_async::<()>(&mut connection)
-            .await
-        {
-            warn!(
-                ?error,
-                category, "sample inventory rate limiter expiry failed"
-            );
-        }
-    }
 
     if count > limit {
         return Err(AppError::TooManyRequests);

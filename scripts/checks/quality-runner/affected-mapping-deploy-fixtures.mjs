@@ -184,6 +184,7 @@ export function assertDeployAffectedMapping({
   );
 
   for (const file of [
+    'scripts/lib/deploy/deploy-config-baseline-fixture.mjs',
     'scripts/lib/deploy/api-deploy-proof.sh',
     'scripts/lib/deploy/api-deploy-proof-fixtures.mjs',
   ]) {

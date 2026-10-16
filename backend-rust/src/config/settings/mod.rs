@@ -1,6 +1,8 @@
 mod auth;
 mod content_assets;
-pub(crate) use content_assets::studio_products_from_env;
+pub(crate) use content_assets::{
+    douyin_dtk_settings_from_env, studio_products_from_env, DouyinDtkSettings,
+};
 mod dashboard;
 mod db;
 mod env_file;

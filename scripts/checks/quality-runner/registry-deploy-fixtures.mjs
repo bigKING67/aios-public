@@ -28,6 +28,7 @@ export function assertRegistryDeployInputs({ assertTrue, registry }) {
     ['scripts/checks/deploy/config.mjs', 'paired deploy config production checker'],
     ['scripts/checks/deploy/config.behavior.mjs', 'its own behavior checker'],
     ['scripts/lib/deploy/deploy-config-behavior-fixtures.mjs', 'split behavior fixtures'],
+    ['scripts/lib/deploy/deploy-config-baseline-fixture.mjs', 'deploy baseline configuration specimens'],
     ['scripts/lib/deploy/api-deploy-proof-fixtures.mjs', 'API recovery fixtures'],
     ['scripts/lib/deploy/api-deploy-proof.sh', 'API recovery implementation'],
     [
@@ -44,6 +45,14 @@ export function assertRegistryDeployInputs({ assertTrue, registry }) {
   assertTrue(
     registry.byName.get('verify:deploy:vps-git-state:smoke')?.inputs.includes('scripts/lib/deploy/vps-git-state-behavior-fixtures.mjs'),
     'VPS Git state smoke cache key should include its runtime fixtures',
+  );
+  assertTrue(
+    registry.byName.get('verify:deploy:vps-git-state:smoke')?.inputs.includes('.github/workflows/deploy-vps.yml'),
+    'VPS Git state smoke cache key should include the executed GitHub source gate',
+  );
+  assertTrue(
+    registry.byName.get('verify:deploy:vps-git-state:smoke')?.inputs.includes('scripts/ops/integrate-vps-hotfix.sh'),
+    'VPS Git state smoke cache key should include the CNB hotfix integration entrypoint',
   );
   assertTrue(
     registry.byName.get('verify:deploy:vps-git-state:smoke')?.inputs.includes('scripts/ops/vps-hotfix.sh'),

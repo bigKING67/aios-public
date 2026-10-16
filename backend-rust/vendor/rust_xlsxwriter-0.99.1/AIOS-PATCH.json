@@ -1,0 +1,12 @@
+{
+  "upstream_crate": "rust_xlsxwriter",
+  "version": "0.99.1",
+  "archive_sha256": "34f2d2cda7223168a14fb86bc7411dbc3379bd7d49749ecc53b91ed98585b6b0",
+  "source": "https://crates.io/api/v1/crates/rust_xlsxwriter/0.99.1/download",
+  "retained": "src, licenses, README, compile-time changelog, original manifest; production library only",
+  "patches": [
+    "Cargo.toml: remove example/bench/test targets whose assets are omitted; pin zip =9.0.3",
+    "CHANGELOG.md and LICENSE_MIT: remove trailing blank lines only; text and license terms unchanged."
+  ],
+  "remove_when": "A compatible upstream release depends on a supported, non-yanked zip version and passes AIOS XLSX tests."
+}

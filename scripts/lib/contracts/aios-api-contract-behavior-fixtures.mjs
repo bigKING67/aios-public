@@ -198,10 +198,18 @@ export function runAiosApiContractBehaviorFixtures({
     '#/components/schemas/CreatorLibraryXlsxParseResponse',
     'creator library XLSX parsing should expose its Rust-derived response schema',
   );
+  const recruitingSubmission = document.paths['/v2/recruiting/public/submissions'].post;
+  assertEqual(recruitingSubmission.security.length, 0, 'the anonymous recruiting submission should not require auth');
+  assertEqual(recruitingSubmission.responses[401], undefined, 'the anonymous recruiting submission should not document 401');
+  assertEqual(
+    document.paths['/v2/recruiting/submissions'].get.security.length,
+    2,
+    'recruiting admin reads should keep the auth requirement',
+  );
   assertEqual(
     document['x-aios-contract'].typedOperationCount,
-    107,
-    'typed operation count should include reports, sample inventory and AI studio remix edits',
+    112,
+    'typed operation count should include reports, sample inventory, AI studio remix edits and recruiting',
   );
   assertEqual(
     document.paths['/v2/sample-inventory/samples'].get

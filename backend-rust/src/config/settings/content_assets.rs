@@ -91,6 +91,38 @@ fn parse_studio_products(value: Option<&str>) -> Vec<String> {
     products
 }
 
+/// Self-hosted dtk sidecar used to resolve Douyin video sources.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) struct DouyinDtkSettings {
+    pub(crate) base_url: String,
+    pub(crate) api_key: String,
+}
+
+/// dtk sidecar (`DOUYIN_DTK_BASE_URL`, `DOUYIN_DTK_API_KEY`). Disabled unless
+/// both are set and the base URL is a plain http(s) origin.
+pub(crate) fn douyin_dtk_settings_from_env() -> Option<DouyinDtkSettings> {
+    parse_douyin_dtk_settings(
+        std::env::var("DOUYIN_DTK_BASE_URL").ok().as_deref(),
+        std::env::var("DOUYIN_DTK_API_KEY").ok().as_deref(),
+    )
+}
+
+fn parse_douyin_dtk_settings(
+    base_url: Option<&str>,
+    api_key: Option<&str>,
+) -> Option<DouyinDtkSettings> {
+    let base_url = base_url?.trim().trim_end_matches('/');
+    let api_key = api_key?.trim();
+    let valid_base = (base_url.starts_with("http://") || base_url.starts_with("https://"))
+        && !base_url.contains(['?', '#', ' ']);
+    (valid_base && !api_key.is_empty() && !api_key.chars().any(char::is_control)).then(|| {
+        DouyinDtkSettings {
+            base_url: base_url.to_string(),
+            api_key: api_key.to_string(),
+        }
+    })
+}
+
 /// AI 创作中心 enterprise tag `企业:<name>`; a blank, over-long or already
 /// namespaced name disables scoping rather than guessing.
 pub(super) fn resolve_studio_enterprise_tag() -> Option<String> {
@@ -125,7 +157,35 @@ fn env_u64_clamped(key: &str, default_value: u64, min_value: u64, max_value: u64
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_studio_enterprise_tag, parse_studio_open_access, parse_studio_products};
+    use super::{
+        parse_douyin_dtk_settings, parse_studio_enterprise_tag, parse_studio_open_access,
+        parse_studio_products,
+    };
+
+    #[test]
+    fn douyin_dtk_settings_require_http_origin_and_key() {
+        let settings = parse_douyin_dtk_settings(Some(" http://dtk-api:8000/ "), Some(" k "))
+            .expect("configured");
+        assert_eq!(settings.base_url, "http://dtk-api:8000");
+        assert_eq!(settings.api_key, "k");
+        assert_eq!(parse_douyin_dtk_settings(None, Some("k")), None);
+        assert_eq!(
+            parse_douyin_dtk_settings(Some("http://dtk-api:8000"), None),
+            None
+        );
+        assert_eq!(
+            parse_douyin_dtk_settings(Some("http://dtk-api:8000"), Some(" ")),
+            None
+        );
+        assert_eq!(
+            parse_douyin_dtk_settings(Some("ftp://dtk-api"), Some("k")),
+            None
+        );
+        assert_eq!(
+            parse_douyin_dtk_settings(Some("http://dtk?x=1"), Some("k")),
+            None
+        );
+    }
 
     #[test]
     fn studio_products_split_trim_and_dedupe() {

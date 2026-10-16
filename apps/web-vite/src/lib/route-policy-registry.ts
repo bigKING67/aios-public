@@ -73,6 +73,8 @@ export const ROUTE_PATHS = {
   adminRoles: '/admin/roles',
   adminPermissions: '/admin/permissions',
   adminAuditLogs: '/admin/audit-logs',
+  adminRecruiting: '/admin/recruiting',
+  joinAiIntern: '/join/ai-intern',
 } as const;
 
 export const PUBLIC_ROUTE_POLICY_ENTRIES = [
@@ -84,6 +86,7 @@ export const PUBLIC_ROUTE_POLICY_ENTRIES = [
   { path: ROUTE_PATHS.docsAnalysisFrameworks, kind: 'public' },
   { path: ROUTE_PATHS.docsAnalysisPlans, kind: 'public' },
   { path: ROUTE_PATHS.docsReferences, kind: 'public' },
+  { path: ROUTE_PATHS.joinAiIntern, kind: 'public' },
 ] as const satisfies readonly PublicRoutePolicyEntry[];
 
 export const PROTECTED_ROUTE_POLICY_ENTRIES = [
@@ -239,6 +242,11 @@ export const PROTECTED_ROUTE_POLICY_ENTRIES = [
     path: ROUTE_PATHS.adminAuditLogs,
     kind: 'admin',
     layoutMenuPath: ROUTE_PATHS.adminAuditLogs,
+  },
+  {
+    path: ROUTE_PATHS.adminRecruiting,
+    kind: 'admin',
+    layoutMenuPath: ROUTE_PATHS.adminRecruiting,
   },
 ] as const satisfies readonly ProtectedRoutePolicyEntry[];
 

@@ -171,6 +171,10 @@ function resolveApplicationStyleChunk(id: string): string | null {
   if (normalizedId.includes('/app/docs/')) {
     return null;
   }
+  // Public candidate pages load alone; keep their styles out of the shared shell.
+  if (normalizedId.includes('/app/join/')) {
+    return null;
+  }
   if (normalizedId.includes('/components/')) {
     return 'styles-shared-shell';
   }

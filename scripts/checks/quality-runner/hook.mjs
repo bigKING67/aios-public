@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
 
 import { createCheckGuard } from '../../lib/shared/guard-utils.mjs';
@@ -114,6 +114,7 @@ export function runQualityRunnerHookBehaviorCheck(options = {}) {
     const fixtureEnv = { ...process.env };
     delete fixtureEnv.AIOS_QUALITY_REMOTE_CACHE_URL;
     delete fixtureEnv.AIOS_QUALITY_REMOTE_CACHE_MODE;
+    delete fixtureEnv.AIOS_QUALITY_PREPUSH_REMOTE_CACHE_AUTO;
     const result = runFixtureCommand(fixture, 'bash', ['.githooks/pre-push', 'origin', ''], {
       check: false,
       env: fixtureEnv,
@@ -143,6 +144,35 @@ export function runQualityRunnerHookBehaviorCheck(options = {}) {
     assertIncludes(disabledResult.stdout, 'remote cache auto disabled fixture', 'pre-push should pass through opt-out state to the runner');
     assertIncludes(disabledResult.stdout, 'prepush changed files:', 'pre-push opt-out path should still run verify script');
     assertNotIncludes(disabledResult.stdout, 'remote cache auto env enabled mode=read', 'pre-push should not auto-enable remote cache when opt-out is set');
+
+    const sha = runFixtureCommand(fixture, 'git', ['rev-parse', 'HEAD']).stdout.trim();
+    const base = runFixtureCommand(fixture, 'git', ['rev-parse', 'HEAD~1']).stdout.trim();
+    const zero = '0'.repeat(40);
+    const cnbUrl = 'https://cnb.cool/bql_huayue/aios.git';
+    const ref = 'refs/heads/feat/member-a/example';
+    const push = (input, url = cnbUrl) => runFixtureCommand(fixture, 'bash', ['.githooks/pre-push', 'team', url], {
+      check: false, env: fixtureEnv, input,
+    });
+    assertEqual(push(`${ref} ${sha} refs/heads/main ${base}\n`).status, 1, 'CNB main direct push must be rejected regardless of alias');
+    assertEqual(push(`${ref} ${sha} refs/tags/v1 ${zero}\n`).status, 1, 'CNB member tag publication must be rejected');
+    assertEqual(push(`${ref} ${sha} ${ref} ${base}\n`).status, 1, 'CNB verification must reject a dirty checkout');
+    rmSync(path.join(fixture.repoRoot, 'apps/web-vite/src/app/dirty.module.css'));
+    runFixtureCommand(fixture, 'git', ['config', 'user.name', 'Member A']);
+    runFixtureCommand(fixture, 'git', ['config', 'user.email', 'member-a@example.invalid']);
+    assertEqual(push(`${ref} ${base} ${ref} ${zero}\n`).status, 1, 'cannot test current HEAD as evidence for another commit');
+    assertEqual(push(`${ref} ${sha} ${ref} ${zero}\n`).status, 1, 'new branch must have a known main baseline');
+    runFixtureCommand(fixture, 'git', ['update-ref', 'refs/remotes/team/main', base]);
+    fixtureEnv.AIOS_QUALITY_REMOTE_CACHE_URL = 'file:///must-not-use-inherited-cache';
+    fixtureEnv.AIOS_QUALITY_REMOTE_CACHE_MODE = 'readwrite';
+    const memberPush = push(`${ref} ${sha} ${ref} ${zero}\n`);
+    assertEqual(memberPush.status, 0, `clean CNB task push should pass local checks: ${memberPush.stderr}`);
+    assertIncludes(memberPush.stdout, `--base ${base} --head ${sha}`, 'new branch checks the full main-to-HEAD diff');
+    assertNotIncludes(memberPush.stdout, 'fixture VPS coordination guard', 'members do not need VPS access');
+    assertIncludes(memberPush.stdout, 'remote cache auto disabled fixture', 'members do not discover a VPS remote cache');
+    assertEqual(push(`${ref} ${sha} ${ref} ${base}\n${ref} ${sha} refs/heads/fix/member-a/other ${base}\n`).status, 1, 'multi-ref pushes cannot reuse one checkout as evidence');
+    assertEqual(push(`${ref} ${sha} ${ref} ${base}\n`, 'https://cnb.cool/wrong/repo.git').status, 1, 'unknown CNB destination must not fall through to legacy checks');
+    runFixtureCommand(fixture, 'git', ['config', 'user.name', '']);
+    assertEqual(push(`${ref} ${sha} ${ref} ${base}\n`).status, 1, 'missing personal Git identity must be rejected');
   });
 }
 

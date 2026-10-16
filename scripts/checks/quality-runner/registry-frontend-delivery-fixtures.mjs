@@ -61,6 +61,7 @@ export function assertRegistryFrontendDeliveryInputs({
   for (const input of [
     'backend-rust/Cargo.lock',
     'backend-rust/Cargo.toml',
+    'backend-rust/vendor/**',
     'scripts/checks/security/evaluate-rust-dependency-audit.mjs',
     'scripts/config/security/dependency-audit-exceptions.json',
     'scripts/lib/security/rust-dependency-audit-core.mjs',

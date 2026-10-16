@@ -277,6 +277,15 @@ Value semantics for static-report charts:
 - Use utility-first tables/forms, clear destructive states, and explicit confirmation affordances.
 - Avoid chart styling, marketing copy, and page-specific type scales.
 
+### Public Candidate Forms
+
+- Scope: anonymous long-form pages such as the intern online test (`/join/ai-intern`).
+- Primary job: let an outside candidate read questions and write long answers calmly; no app navigation, no scores or internal rubric.
+- Layout: single reading column (max-width 760px) on a white tokenized surface; one assignment title, compact candidate information before the complete brief (task, materials, requirements, delivery), followed by submission and AI workflow sections separated by quiet rules, candidate fields first, labels above inputs, monospace (`--font-family-mono`) only for code blocks and code inputs; one primary submit action at the end.
+- Disclosure: keep assignment requirements and delivery instructions visible at body size; only optional rule-file inputs use native details. Group downloadable samples into one compact neutral surface with filename, muted duration/size and a separate download action; do not load video until requested. Retain all question wording. Use modest auto-growing textareas, readable body text and a compact metadata row.
+- States: required-field errors inline, draft-saved status near the submit action, explicit submit error with a retry path, and a success result that replaces the form.
+- The reviewer side (`/admin/recruiting`) follows the Admin Pages archetype: table list plus a task drawer with a sticky scoring column.
+
 ### Home / Marketing Shells
 
 - Primary job: orientation and entry-point clarity.

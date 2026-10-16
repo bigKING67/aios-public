@@ -14,7 +14,7 @@ use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use crate::{
     audit_logs, auth, content_live_center, dashboard, dataops,
     health::{health, ready, root},
-    marketing, permissions, reports, roles, sample_inventory,
+    marketing, permissions, recruiting, reports, roles, sample_inventory,
     state::AppState,
     users,
 };
@@ -29,6 +29,7 @@ fn build_api_router(state: Arc<AppState>) -> Router<Arc<AppState>> {
         .nest("/marketing", marketing::router())
         .nest("/sample-inventory", sample_inventory::router(state))
         .nest("/permissions", permissions::router())
+        .nest("/recruiting", recruiting::router())
         .nest("/roles", roles::router())
         .nest("/users", users::router())
         .nest("/reports", reports::router())

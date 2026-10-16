@@ -21,6 +21,7 @@ import {
   compareSampleInventoryTimestamp,
 } from "../_lib/sample-inventory-table-sorters";
 import { SampleInventoryColumnTitle } from "./sample-inventory-column-title";
+import { copyText } from "@/lib/copy-text";
 import { SampleInventoryOutboundRowActions } from "./sample-inventory-outbound-row-actions";
 import { sampleInventoryTableComponents } from "./sample-inventory-table-cells";
 import styles from "../sample-inventory.module.css";
@@ -205,7 +206,7 @@ export function OutboundTable({
               aria-label="复制地址"
               title="复制地址"
               onClick={() => {
-                void copyAddress(value).then((copied) => {
+                void copyText(value).then((copied) => {
                   if (copied) message.success("地址已复制");
                   else message.error("复制失败，请手动复制");
                 });
@@ -320,30 +321,4 @@ export function OutboundTable({
       />
     </div>
   );
-}
-
-async function copyAddress(value: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(value);
-      return true;
-    }
-  } catch {
-    // Fall through to the legacy copy path for restricted browser contexts.
-  }
-
-  const textarea = document.createElement("textarea");
-  textarea.value = value;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    return document.execCommand("copy");
-  } catch {
-    return false;
-  } finally {
-    textarea.remove();
-  }
 }

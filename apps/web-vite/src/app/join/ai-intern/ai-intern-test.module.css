@@ -1,0 +1,190 @@
+/* Public recruiting: a calm reading and writing surface. */
+.page {
+  min-height: 100dvh;
+  background: var(--bg-card);
+  padding: var(--spacing-12) var(--spacing-6) var(--spacing-16);
+}
+.shell {
+  max-width: 760px;
+  margin: var(--spacing-0) auto;
+}
+.header {
+  padding-bottom: var(--spacing-10);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-10);
+}
+.brand,
+.eyebrow,
+.facts {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+.eyebrow {
+  margin: var(--spacing-0) var(--spacing-0) var(--spacing-3);
+}
+.title,
+.sectionTitle {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-title);
+}
+.title {
+  margin: var(--spacing-0) var(--spacing-0) var(--spacing-4);
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+.lead {
+  max-width: 640px;
+  margin: var(--spacing-0);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-prose);
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-5);
+  list-style: none;
+  padding: var(--spacing-0);
+  margin: var(--spacing-6) var(--spacing-0) var(--spacing-0);
+}
+.section {
+  padding: var(--spacing-8) var(--spacing-0);
+  border-top: 1px solid var(--border-color);
+}
+.sectionTitle {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-snug);
+  margin: var(--spacing-0) var(--spacing-0) var(--spacing-5);
+}
+.questionBody {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+  margin-bottom: var(--spacing-5);
+}
+.questionBody p {
+  margin: var(--spacing-0) var(--spacing-0) var(--spacing-3);
+}
+.rulesDisclosure summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+.rulesDisclosure summary:hover {
+  color: var(--text-primary);
+}
+.rulesDisclosure summary:focus-visible {
+  outline: 2px solid var(--brand-focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--border-radius-sm);
+}
+.promptList {
+  padding-left: var(--spacing-5);
+  margin: var(--spacing-4) var(--spacing-0);
+  list-style: decimal;
+}
+.promptList li + li {
+  margin-top: var(--spacing-2);
+}
+.questionNote,
+.sectionHint,
+.draftStatus {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.rulesDisclosure {
+  margin-bottom: var(--spacing-6);
+}
+.rulesDisclosure[open] summary {
+  margin-bottom: var(--spacing-4);
+}
+.sectionHint {
+  margin: var(--spacing-3) var(--spacing-0) var(--spacing-6);
+}
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--spacing-5);
+}
+.form :global(.ant-input),
+.form :global(.ant-input-textarea) {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-prose);
+}
+.form :global(.ant-input-textarea-show-count) {
+  margin-bottom: var(--spacing-4);
+}
+.submitBar {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--spacing-6);
+}
+.submitRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+.draftStatus {
+  margin: var(--spacing-0);
+}
+.submitBar .sectionHint {
+  margin-bottom: var(--spacing-0);
+}
+@media (max-width: 640px) {
+  .page {
+    padding: var(--spacing-6) var(--spacing-5) var(--spacing-10);
+  }
+  .brand {
+    margin-bottom: var(--spacing-8);
+  }
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+  .lead {
+    font-size: var(--font-size-base);
+  }
+  .header {
+    padding-bottom: var(--spacing-6);
+  }
+  .section {
+    padding: var(--spacing-6) var(--spacing-0);
+  }
+  .fieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .submitRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.materials {
+  background: var(--bg-subtle);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
+  margin: var(--spacing-6) var(--spacing-0);
+}
+.materialRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-1) var(--spacing-0);
+}
+.materials small {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-left: var(--spacing-3);
+}
+.subheading {
+  font-weight: var(--font-weight-title);
+  margin: var(--spacing-6) var(--spacing-0) var(--spacing-3);
+}

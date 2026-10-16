@@ -106,16 +106,24 @@ function buildOperation(operation) {
           content: responseContent(override.conflictResponse),
         },
       } : {}),
-      401: {
-        description: 'Authentication required',
-        content: responseContent('ErrorResponse'),
-      },
+      ...(override?.anonymous ? {
+        429: {
+          description: 'Rate limited',
+          content: responseContent('ErrorResponse'),
+        },
+      } : {
+        401: {
+          description: 'Authentication required',
+          content: responseContent('ErrorResponse'),
+        },
+      }),
       500: {
         description: 'Internal server error',
         content: responseContent('ErrorResponse'),
       },
     },
-    security: [{ bearerAuth: [] }, { cookieAuth: [] }],
+    // Anonymous operations opt out of the document-wide auth requirement.
+    security: override?.anonymous ? [] : [{ bearerAuth: [] }, { cookieAuth: [] }],
     'x-aios-contract-maturity': override ? 'typed' : 'route-inventory',
     'x-aios-rust-source': operation.file,
   };

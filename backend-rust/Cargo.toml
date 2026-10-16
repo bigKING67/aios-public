@@ -41,3 +41,8 @@ debug = "line-tables-only"
 lto = true
 codegen-units = 1
 opt-level = 3
+
+# Temporary compatibility patches; provenance and removal criteria in vendor/README.md.
+[patch.crates-io]
+calamine = { path = "vendor/calamine-0.36.1" }
+rust_xlsxwriter = { path = "vendor/rust_xlsxwriter-0.99.1" }

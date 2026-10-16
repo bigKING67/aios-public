@@ -16,6 +16,7 @@ import {
   RobotOutlined,
   SafetyOutlined,
   SettingOutlined,
+  SolutionOutlined,
   TeamOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
@@ -291,6 +292,9 @@ export function buildLayoutMenuItems({
   }
   if (canAccess(ROUTE_PATHS.adminAuditLogs)) {
     adminChildren.push(createSubmenuLinkItem(ROUTE_PATHS.adminAuditLogs, '审计日志', <FileSearchOutlined />));
+  }
+  if (canAccess(ROUTE_PATHS.adminRecruiting)) {
+    adminChildren.push(createSubmenuLinkItem(ROUTE_PATHS.adminRecruiting, '招聘测评', <SolutionOutlined />));
   }
 
   if (adminChildren.length > 0) {

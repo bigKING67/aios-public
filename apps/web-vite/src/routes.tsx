@@ -30,6 +30,8 @@ const UsersPage = lazy(() => import('@/app/admin/users/page'));
 const RolesPage = lazy(() => import('@/app/admin/roles/page'));
 const PermissionsPage = lazy(() => import('@/app/admin/permissions/page'));
 const AuditLogsPage = lazy(() => import('@/app/admin/audit-logs/page'));
+const RecruitingPage = lazy(() => import('@/app/admin/recruiting/page'));
+const JoinAiInternPage = lazy(() => import('@/app/join/ai-intern/page'));
 const IndustryMaterialInspirationPage = lazy(() => import('@/app/dashboard/industry-material-inspiration/page'));
 const CreatorLiveDashboardPage = lazy(() => import('@/app/dashboard/creator/live/page'));
 const CreatorShortVideoDashboardPage = lazy(() => import('@/app/dashboard/creator/short-video/page'));
@@ -57,6 +59,7 @@ export function AppRoutes() {
       <Routes>
         <Route path={ROUTE_PATHS.home} element={<HomePage />} />
         <Route path={ROUTE_PATHS.login} element={<LoginPage />} />
+        <Route path={ROUTE_PATHS.joinAiIntern} element={<JoinAiInternPage />} />
         <Route path={ROUTE_PATHS.dashboard} element={<DashboardPage />} />
         <Route path={ROUTE_PATHS.dashboardIndustryMaterialInspiration} element={<IndustryMaterialInspirationPage />} />
         <Route
@@ -100,6 +103,7 @@ export function AppRoutes() {
         <Route path={ROUTE_PATHS.adminRoles} element={<RolesPage />} />
         <Route path={ROUTE_PATHS.adminPermissions} element={<PermissionsPage />} />
         <Route path={ROUTE_PATHS.adminAuditLogs} element={<AuditLogsPage />} />
+        <Route path={ROUTE_PATHS.adminRecruiting} element={<RecruitingPage />} />
         <Route path="*" element={<Navigate to={ROUTE_PATHS.home} replace />} />
       </Routes>
     </Suspense>

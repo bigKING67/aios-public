@@ -10,6 +10,8 @@ mod health;
 mod llm;
 mod marketing;
 mod permissions;
+mod rate_limit;
+mod recruiting;
 mod reports;
 mod roles;
 mod routes;
