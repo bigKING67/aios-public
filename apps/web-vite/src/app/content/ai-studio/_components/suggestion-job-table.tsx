@@ -113,7 +113,7 @@ export function SuggestionJobTable({ jobs, presets, loading, highlightIds }: Sug
                   {suggestionPromptLabel(job.promptVersion) ? ` · 提示词 ${suggestionPromptLabel(job.promptVersion)}` : ''}
                 </span>
                 {job.status === 'succeeded' ? (
-                  <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(job.assetId)}>
+                  <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(job.assetId, undefined, job.presetKey)}>
                     审核建议片段
                   </RouterLink>
                 ) : null}

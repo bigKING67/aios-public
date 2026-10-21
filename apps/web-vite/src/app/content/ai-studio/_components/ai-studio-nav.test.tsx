@@ -21,7 +21,7 @@ describe('AI studio navigation', () => {
     const nav = renderRail(ROUTE_PATHS.contentAiStudio);
     const labels = within(nav).getAllByRole('link').map((link) => link.textContent);
 
-    expect(labels).toEqual(['首页', '原片', '片段素材', '成片', 'AI 分析', 'AI 剪辑']);
+    expect(labels).toEqual(['首页', '原片', '框架片段', '卖点片段', '成片', 'AI 分析', 'AI 剪辑']);
     expect(within(nav).getByText('核心工作台')).toBeInTheDocument();
     expect(within(nav).getByText('处理链路')).toBeInTheDocument();
     expect(within(nav).queryByText('行业热点')).not.toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('AI studio navigation', () => {
   it('highlights the matching sub-page instead of home', () => {
     const nav = renderRail(`${ROUTE_PATHS.contentAiStudioSegments}?label=street`);
 
-    expect(within(nav).getByRole('link', { name: '片段素材' })).toHaveAttribute('aria-current', 'page');
+    expect(within(nav).getByRole('link', { name: '框架片段' })).toHaveAttribute('aria-current', 'page');
     expect(within(nav).getByRole('link', { name: '首页' })).not.toHaveAttribute('aria-current');
   });
 

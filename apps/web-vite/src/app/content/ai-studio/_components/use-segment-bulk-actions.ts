@@ -11,7 +11,7 @@ import { findPreset, labelName } from '../_lib/segment-display';
 import { describeSegmentMutationError } from '../_lib/segment-errors';
 import type { AnnotationNotice } from './use-segment-annotation';
 
-type BulkAction =
+export type BulkAction =
   | { kind: 'confirm'; items: StudioContentSegment[] }
   | { kind: 'reject'; items: StudioContentSegment[] }
   | { kind: 'product'; items: StudioContentSegment[]; productName: string };

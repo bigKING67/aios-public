@@ -1,5 +1,6 @@
 use std::{sync::Arc, time::Instant};
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -26,6 +27,7 @@ use super::response::build_goods_payload;
 
 pub(in crate::dashboard) async fn get_goods(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<GoodsQueryParams>,
 ) -> Response {
     let mut timing = DashboardTiming::start();

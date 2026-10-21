@@ -1,6 +1,7 @@
+import { LinkOutlined } from '@ant-design/icons';
 import { type MouseEvent, useState } from 'react';
 import type { StudioContentSegment, StudioSegmentPreset } from '../_lib/ai-studio-api';
-import { findPreset, labelName, type LabelToneSeries, labelToneSeries, segmentStatusView } from '../_lib/segment-display';
+import { segmentLabelName, findPreset, type LabelToneSeries, labelToneSeries, segmentStatusView } from '../_lib/segment-display';
 import { cutPoints, formatRulerTime, formatSegmentTime, rulerTicks } from '../_lib/segment-time';
 import styles from './segment-annotation.module.css';
 
@@ -14,6 +15,11 @@ interface SegmentTimelineProps {
   onSelect: (segment: StudioContentSegment) => void;
   /** Plays from a time picked on the ruler; absent when the source cannot play. */
   onSeek?: (ms: number) => void;
+  /**
+   * Read-only reference lane above the editable ones, e.g. the confirmed
+   * framework segments a selling-point segment must fall inside.
+   */
+  context?: { title: string; segments: readonly StudioContentSegment[] };
 }
 
 const TONE_CLASSES: Record<LabelToneSeries, string | undefined> = {
@@ -55,6 +61,7 @@ export function SegmentTimeline({
   highlightedIds,
   onSelect,
   onSeek,
+  context,
 }: SegmentTimelineProps) {
   // Time under the pointer, shown on the ruler with a guide line through the lanes.
   const [hoverMs, setHoverMs] = useState<number | null>(null);
@@ -111,6 +118,27 @@ export function SegmentTimeline({
             ) : null}
           </div>
         </div>
+        {context && context.segments.length > 0 ? (
+          <div className={styles.timelineLane}>
+            <span className={styles.timelineLaneTitle}>{context.title}</span>
+            <div className={styles.timelineTrack} {...hoverProps}>
+              {context.segments.map((segment) => {
+                const name = segmentLabelName(findPreset(presets, segment.presetKey, segment.presetVersion), segment);
+                const range = `${formatSegmentTime(segment.startMs)}–${formatSegmentTime(segment.endMs)}`;
+                return (
+                  <span
+                    key={segment.segmentId}
+                    className={`${styles.timelineBlock} ${styles.timelineContextBlock}`}
+                    style={{ left: percent(segment.startMs, durationMs), width: percent(segment.endMs - segment.startMs, durationMs) }}
+                    title={`${context.title} · ${name} · ${range}`}
+                  >
+                    <span>{name}</span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
         {lanes.map((lane) => (
           <div className={styles.timelineLane} key={lane.key}>
             <span className={styles.timelineLaneTitle}>{lane.title}</span>
@@ -126,14 +154,16 @@ export function SegmentTimeline({
               ) : null}
               {lane.items.map((segment) => {
                 const preset = findPreset(presets, segment.presetKey, segment.presetVersion);
-                const name = labelName(preset, segment.labelKey);
+                const name = segmentLabelName(preset, segment);
                 const status = segmentStatusView(segment.status).label;
+                const joined = segment.continuesPrevious ? '，连着上一段' : '';
                 const className = [
                   styles.timelineBlock,
                   TONE_CLASSES[labelToneSeries(preset, segment.labelKey)],
                   segment.status !== 'confirmed' ? styles.timelineBlockPending : '',
                   segment.status === 'stale' ? styles.timelineBlockStale : '',
                   segment.segmentId === activeSegmentId ? styles.timelineBlockActive : '',
+                  segment.continuesPrevious ? styles.timelineBlockJoined : '',
                   highlightedIds.has(segment.segmentId) ? styles.timelineBlockConflict : '',
                 ].filter(Boolean).join(' ');
                 return (
@@ -145,11 +175,14 @@ export function SegmentTimeline({
                       left: percent(segment.startMs, durationMs),
                       width: percent(segment.endMs - segment.startMs, durationMs),
                     }}
-                    aria-label={`${name} ${formatSegmentTime(segment.startMs)} 至 ${formatSegmentTime(segment.endMs)}，${status}`}
-                    title={`${name} · ${formatSegmentTime(segment.startMs)}–${formatSegmentTime(segment.endMs)} · ${status}`}
+                    aria-label={`${name} ${formatSegmentTime(segment.startMs)} 至 ${formatSegmentTime(segment.endMs)}，${status}${joined}`}
+                    title={`${name} · ${formatSegmentTime(segment.startMs)}–${formatSegmentTime(segment.endMs)} · ${status}${joined}`}
                     onClick={() => onSelect(segment)}
                   >
-                    <span>{name}</span>
+                    <span>
+                      {segment.continuesPrevious ? <LinkOutlined aria-hidden /> : null}
+                      {name}
+                    </span>
                   </button>
                 );
               })}

@@ -103,7 +103,7 @@ export function editBlocker(
   const missing = clips.filter((clip) => !segments.has(clip.segmentId)).length;
   if (missing > 0) return `${missing} 段已不可用（取消确认或原片更新），请删除或替换。`;
   const products = new Set(clips.map((clip) => segments.get(clip.segmentId)?.productName?.trim() || ''));
-  if (products.has('')) return '有片段没有标注产品，请先在片段素材里补全产品或替换。';
+  if (products.has('')) return '有片段没有标注产品，请先在框架片段里补全产品或替换。';
   if (products.size > 1) return '一条成片只能使用同一产品的片段。';
   if (clips.length > MAX_EDIT_CLIPS) return `一条成片最多 ${MAX_EDIT_CLIPS} 段。`;
   if (clips.some((clip) => clip.endMs - clip.startMs < MIN_EDIT_CLIP_MS)) return '每段至少 1 秒。';

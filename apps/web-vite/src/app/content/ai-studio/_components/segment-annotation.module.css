@@ -368,6 +368,36 @@
   box-shadow: 0 0 0 2px var(--status-danger);
 }
 
+/* Joined to the previous selling-point segment: square inner edge plus a link glyph. */
+.timelineBlockJoined {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.timelineBlockJoined :global(.anticon) {
+  display: inline-block;
+  margin-right: 2px;
+}
+
+.timelineContextBlock {
+  display: flex;
+  align-items: center;
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  cursor: default;
+}
+
+.labelCell {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.labelCell small {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
 /* Forms */
 
 .createForm,

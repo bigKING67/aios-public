@@ -1,5 +1,6 @@
 use std::{sync::Arc, time::Instant};
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -29,6 +30,7 @@ use super::common::{as_of_date_from_rows, validate_traffic_query, ValidatedTraff
 
 pub(in crate::dashboard) async fn get_traffic_goods(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<TrafficQueryParams>,
 ) -> Response {
     let mut timing = DashboardTiming::start();

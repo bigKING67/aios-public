@@ -55,7 +55,7 @@ assertEqual(
 );
 
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.dashboard), {
-  kind: 'public',
+  kind: 'authenticated',
   path: ROUTE_PATHS.dashboard,
 });
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.dashboardCreator), {

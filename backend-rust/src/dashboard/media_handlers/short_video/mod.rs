@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -27,6 +28,7 @@ mod request;
 
 pub(crate) async fn get_short_video(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<LiveQueryParams>,
 ) -> Response {
     let dates = match validate_short_video_query(query) {

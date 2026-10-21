@@ -48,3 +48,14 @@ describe('poolScopeCounts', () => {
     expect(poolScopeCounts(rows, { kind: 'product', productName: '未知' })).toEqual({ total: 0, counts: {} });
   });
 });
+
+
+it('counts a physical span once in all while exposing each selling point', () => {
+  const rows = buildSegmentPoolRows([
+    { productName: '蜜粉', labelKey: 'moisturizing', confirmedCount: 1 },
+    { productName: '蜜粉', labelKey: 'skincare', confirmedCount: 1 },
+  ], [{ key: 'moisturizing' }, { key: 'skincare' }], [{ productName: '蜜粉', confirmedCount: 1 }]);
+  expect(poolScopeCounts(rows, { kind: 'all' })).toEqual({
+    total: 1, counts: { moisturizing: 1, skincare: 1 },
+  });
+});

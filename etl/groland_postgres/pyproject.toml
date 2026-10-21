@@ -14,6 +14,16 @@ dependencies = [
   "pyyaml>=6.0,<7.0",
   "requests>=2.31.0,<3.0",
   "schedule>=1.2.0,<2.0",
+  "opencv-python-headless==4.14.0.94",
+]
+
+[project.optional-dependencies]
+# Framework split v2 on the GPU node (content_production/framework_v2). OCR runs on CUDA through
+# torch; the Linux torch wheels bundle the CUDA runtime, the node only needs the NVIDIA driver.
+framework-v2 = [
+  "scenedetect==0.7.2",
+  "rapidocr==3.10.0",
+  "torch==2.14.1",
 ]
 
 [tool.uv]

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Modal, Skeleton } from 'antd';
+import { useEffect, useRef } from 'react';
 import { createContentAssetPlaybackUrl } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import { resolveContentAssetRequestError } from '@/app/marketing/content-assets/_lib/content-assets-ui-helpers';
 import styles from './segment-annotation.module.css';
@@ -9,11 +10,13 @@ interface RemixOutputPlayerProps {
   /** Output library asset; null closes the dialog. */
   assetId: string | null;
   title: string;
+  startMs?: number;
   onClose: () => void;
 }
 
 /** Plays a registered remix output through the library's signed playback URL. */
-export function RemixOutputPlayer({ assetId, title, onClose }: RemixOutputPlayerProps) {
+export function RemixOutputPlayer({ assetId, title, startMs = 0, onClose }: RemixOutputPlayerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const playback = useQuery({
     queryKey: ['content-ai-studio', 'remix-output-playback', assetId],
     queryFn: () => createContentAssetPlaybackUrl(assetId!, 'raw'),
@@ -24,6 +27,10 @@ export function RemixOutputPlayer({ assetId, title, onClose }: RemixOutputPlayer
     refetchOnWindowFocus: false,
     retry: false,
   });
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && video.readyState >= 1) video.currentTime = Math.min(startMs / 1000, video.duration);
+  }, [assetId, startMs, playback.data?.url]);
 
   return (
     <Modal open={assetId !== null} title={title} onCancel={onClose} footer={null} destroyOnHidden width={520}>
@@ -33,7 +40,8 @@ export function RemixOutputPlayer({ assetId, title, onClose }: RemixOutputPlayer
       ) : null}
       {playback.data ? (
         <div className={remixStyles.stack}>
-          <video className={remixStyles.outputVideo} src={playback.data.url} controls preload="metadata">
+          <video ref={videoRef} className={remixStyles.outputVideo} src={playback.data.url} controls preload="metadata"
+            onLoadedMetadata={(event) => { event.currentTarget.currentTime = Math.min(startMs / 1000, event.currentTarget.duration); }}>
             <track kind="captions" />
           </video>
           <a className={styles.tableLink} href={playback.data.url} target="_blank" rel="noreferrer" download>

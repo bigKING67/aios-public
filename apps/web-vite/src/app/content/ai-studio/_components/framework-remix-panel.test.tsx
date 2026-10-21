@@ -49,8 +49,8 @@ function capabilities(extra: Partial<StudioCapabilitiesResponse> = {}): StudioCa
 
 function preview(extra: Partial<StudioRemixBatchPreviewResponse> = {}): StudioRemixBatchPreviewResponse {
   return {
-    labels: ['voice', 'demo'], sourceAssetId: null, productName: '精华',
-    slots: [{ ordinal: 1, labelKey: 'voice', candidateCount: 2 }, { ordinal: 2, labelKey: 'demo', candidateCount: 1 }],
+    mode: 'framework', labels: ['voice', 'demo'], sourceAssetId: null, productName: '精华',
+    slots: [{ ordinal: 1, labelKey: 'voice', candidateCount: 2, sellingPoints: null, fallback: null }, { ordinal: 2, labelKey: 'demo', candidateCount: 1, sellingPoints: null, fallback: null }],
     missingLabels: [], excludedAssetCount: 1, theoreticalCombinations: 2, availableCombinations: 2,
     availableIsLowerBound: false, previouslyUsedCombinations: 0, referenceCombinationExcluded: false, requestedCount: 3, plannableCount: 2,
     shortfallReason: '可用组合只有 2 种，少于请求的 3 条', seed: 7, ...extra,
@@ -173,7 +173,7 @@ describe('框架混剪 panel', () => {
   it('disables submit when nothing can be generated and for read-only users', async () => {
     vi.mocked(previewRemixBatch).mockResolvedValue(preview({
       plannableCount: 0, missingLabels: ['demo'], shortfallReason: 'x',
-      slots: [{ ordinal: 1, labelKey: 'voice', candidateCount: 2 }, { ordinal: 2, labelKey: 'demo', candidateCount: 0 }],
+      slots: [{ ordinal: 1, labelKey: 'voice', candidateCount: 2, sellingPoints: null, fallback: null }, { ordinal: 2, labelKey: 'demo', candidateCount: 0, sellingPoints: null, fallback: null }],
     }));
     renderPanel(capabilities());
     await fillManualForm();
@@ -198,6 +198,7 @@ describe('框架混剪 workbench', () => {
     expect(screen.getByText('框架标签 v1')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /成片$/ })).toBeDisabled();
     expect(screen.getByRole('link', { name: '单条剪辑' })).toHaveAttribute('href', '/content/ai-studio/editing?mode=single');
+    expect(screen.getByRole('link', { name: '卖点混剪' })).toHaveAttribute('href', '/content/ai-studio/editing?mode=sellingPoint');
   });
 
   it('takes the product from the picked reference original', async () => {

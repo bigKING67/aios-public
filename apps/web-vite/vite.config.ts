@@ -156,6 +156,10 @@ function resolveApplicationStyleChunk(id: string): string | null {
   if (normalizedId.includes('/app/content/live-center/')) {
     return 'styles-live-center';
   }
+  // AI 创作中心 is a lazy workbench: one stylesheet loaded with its routes, not the shared shell.
+  if (normalizedId.includes('/app/content/ai-studio/')) {
+    return 'styles-ai-studio';
+  }
   if (normalizedId.includes('/app/reports/')) {
     return null;
   }
@@ -215,8 +219,6 @@ export default defineConfig(({ mode }) => {
         VITE_API_GATEWAY_TARGET: env.VITE_API_GATEWAY_TARGET || 'http://localhost:8000',
         VITE_REPORT_API: env.VITE_REPORT_API || 'http://localhost:8000/v1',
         VITE_API_URL: env.VITE_API_URL || 'http://localhost:8000/v1',
-        VITE_SAMPLE_INVENTORY_ACCESS_MODE:
-          env.VITE_SAMPLE_INVENTORY_ACCESS_MODE || 'authenticated',
         VITE_SUPER_ADMIN_ACCOUNTS: env.VITE_SUPER_ADMIN_ACCOUNTS || '',
         VITE_DASHBOARD_MAX_QUERY_DAYS: env.VITE_DASHBOARD_MAX_QUERY_DAYS || '',
         VITE_FORCE_FRESH_DATA: env.VITE_FORCE_FRESH_DATA || '0',

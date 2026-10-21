@@ -10,16 +10,19 @@ import {
   remixBatchOwnerLabel,
   remixBatchStatusView,
   remixItemStatusView,
+  remixModeLabel,
+  remixTierLabel,
   type StudioRemixBatchDetail,
   type StudioRemixBatchItem,
 } from '../_lib/remix-api';
 import { shortAssetTitle } from '../_lib/remix-form';
 import { buildContentAssetDetailPath, buildEditFromOutputPath, buildEditingRunPath } from '../_lib/remix-routes';
-import { findPreset, labelName } from '../_lib/segment-display';
+import { findPreset, labelName, SELLING_POINT_PRESET_KEY, sellingPointNames } from '../_lib/segment-display';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
 import { formatShortTimestamp } from '../_lib/studio-time';
 import { RemixOutputPlayer } from './remix-output-player';
+import { RemixPictureReview } from './remix-picture-review';
 import pageStyles from '../ai-studio.module.css';
 import styles from './segment-annotation.module.css';
 import outputStyles from './remix-outputs.module.css';
@@ -51,7 +54,15 @@ function ItemStatus({ item }: { item: StudioRemixBatchItem }) {
   );
 }
 
-function Lineage({ item, preset }: { item: StudioRemixBatchItem; preset: StudioSegmentPreset | undefined }) {
+function Lineage({
+  item,
+  preset,
+  presets,
+}: {
+  item: StudioRemixBatchItem;
+  preset: StudioSegmentPreset | undefined;
+  presets: readonly StudioSegmentPreset[];
+}) {
   return (
     <ol className={outputStyles.lineage} aria-label={`第 ${item.ordinal} 条的片段组成`}>
       {item.segments.map((segment) => (
@@ -59,7 +70,8 @@ function Lineage({ item, preset }: { item: StudioRemixBatchItem; preset: StudioS
           <strong>{labelName(preset, segment.labelKey)}</strong>
           <RouterLink
             className={`${styles.tableLink} ${outputStyles.lineageSource}`}
-            to={buildSegmentAnnotationPath(segment.assetId, segment.segmentId)}
+            // A 卖点混剪 block (not 整段替换) starts at a selling-point segment.
+            to={buildSegmentAnnotationPath(segment.assetId, segment.segmentId, segment.tier && !segment.fallback ? SELLING_POINT_PRESET_KEY : undefined)}
             title={segment.assetTitle}
           >
             {shortAssetTitle(segment.assetTitle || '原片')}
@@ -79,6 +91,14 @@ function Lineage({ item, preset }: { item: StudioRemixBatchItem; preset: StudioS
               <ExportOutlined aria-hidden />
             </RouterLink>
           </span>
+          {remixTierLabel(segment.tier, segment.fallback) ? (
+            <span className={outputStyles.lineagePlan}>
+              {[
+                segment.sellingPoints?.length ? sellingPointNames(presets, segment.sellingPoints).join(' + ') : null,
+                remixTierLabel(segment.tier, segment.fallback),
+              ].filter(Boolean).join(' · ')}
+            </span>
+          ) : null}
         </li>
       ))}
     </ol>
@@ -89,12 +109,15 @@ interface OutputCardProps {
   batchId: string;
   item: StudioRemixBatchItem;
   preset: StudioSegmentPreset | undefined;
+  presets: readonly StudioSegmentPreset[];
+  /** 卖点混剪 outputs are made of selling-point segments that single editing cannot load. */
+  editable: boolean;
   /** Runs task pages are owner-only; another user's Runs would open as not found. */
   showRunLinks: boolean;
-  onPlay: () => void;
+  onPlay: (startMs?: number) => void;
 }
 
-function OutputCard({ batchId, item, preset, showRunLinks, onPlay }: OutputCardProps) {
+function OutputCard({ batchId, item, preset, presets, editable, showRunLinks, onPlay }: OutputCardProps) {
   const view = remixItemStatusView(item);
   const playable = Boolean(item.outputAssetId);
   return (
@@ -103,7 +126,7 @@ function OutputCard({ batchId, item, preset, showRunLinks, onPlay }: OutputCardP
         type="button"
         className={outputStyles.outputCover}
         disabled={!playable}
-        onClick={onPlay}
+        onClick={() => onPlay()}
         aria-label={playable ? `播放第 ${item.ordinal} 条成片` : `第 ${item.ordinal} 条：${view.label}`}
       >
         {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : playable ? null : <span>{view.label}</span>}
@@ -114,16 +137,19 @@ function OutputCard({ batchId, item, preset, showRunLinks, onPlay }: OutputCardP
         <strong>第 {item.ordinal} 条</strong>
         <ItemStatus item={item} />
       </div>
-      <Lineage item={item} preset={preset} />
+      {!editable ? <RemixPictureReview item={item} onPlay={onPlay} /> : null}
+      <Lineage item={item} preset={preset} presets={presets} />
       <div className={outputStyles.actions}>
         {playable ? (
           <>
-            <Button size="small" onClick={onPlay}>
+            <Button size="small" onClick={() => onPlay()}>
               播放 / 下载
             </Button>
-            <RouterLink className={styles.tableLink} to={buildEditFromOutputPath(batchId, item.ordinal)} title="在单条剪辑里载入这条成片的片段和入出点">
-              以此为起点编辑
-            </RouterLink>
+            {editable ? (
+              <RouterLink className={styles.tableLink} to={buildEditFromOutputPath(batchId, item.ordinal)} title="在单条剪辑里载入这条成片的片段和入出点">
+                以此为起点编辑
+              </RouterLink>
+            ) : null}
             <RouterLink
               className={styles.tableLink}
               to={buildContentAssetDetailPath(item.outputAssetId!)}
@@ -163,6 +189,7 @@ export function RemixBatchDetailView({
   pollPaused = false,
 }: RemixBatchDetailViewProps) {
   const [playing, setPlaying] = useState<StudioRemixBatchItem | null>(null);
+  const [startMs, setStartMs] = useState(0);
   const back = (
     <RouterLink className={styles.backLink} to={ROUTE_PATHS.contentAiStudioOutputs}>
       <ArrowLeftOutlined aria-hidden /> 全部批次
@@ -202,7 +229,7 @@ export function RemixBatchDetailView({
             {batch.productName} · {batch.labels.map((key) => labelName(preset, key)).join(' → ')}
           </h2>
           <span className={styles.rowActions}>
-            {batch.mode === 'edit' ? <Badge status="neutral">单条剪辑</Badge> : null}
+            {batch.mode !== 'framework' ? <Badge status="neutral">{remixModeLabel(batch.mode)}</Badge> : null}
             <Badge status={status.tone}>{status.label}</Badge>
             {cancellable ? (
               <Popconfirm
@@ -226,10 +253,18 @@ export function RemixBatchDetailView({
         <p className={outputStyles.summary}>{summary}</p>
         {batch.shortfallReason ? <Alert type="warning" showIcon title={`只生成了 ${batch.plannedCount} 条：${batch.shortfallReason}`} /> : null}
         {cancelError ? <Alert type="error" showIcon title="取消未完成成片失败" description={cancelError} /> : null}
-        <ul className={`${outputStyles.grid} ${outputStyles.outputGrid}`} aria-label="成片">
+        <ul className={`${outputStyles.grid} ${batch.mode === 'sellingPoint' ? '' : outputStyles.outputGrid}`} aria-label="成片">
           {items.map((item) => (
             <li key={item.runId}>
-              <OutputCard batchId={batch.batchId} item={item} preset={preset} showRunLinks={showRunLinks} onPlay={() => setPlaying(item)} />
+              <OutputCard
+                batchId={batch.batchId}
+                item={item}
+                preset={preset}
+                presets={presets}
+                editable={batch.mode !== 'sellingPoint'}
+                showRunLinks={showRunLinks}
+                onPlay={(position = 0) => { setStartMs(position); setPlaying(item); }}
+              />
             </li>
           ))}
         </ul>
@@ -245,6 +280,7 @@ export function RemixBatchDetailView({
       <RemixOutputPlayer
         assetId={playing?.outputAssetId ?? null}
         title={playing ? `第 ${playing.ordinal} 条成片` : ''}
+        startMs={startMs}
         onClose={() => setPlaying(null)}
       />
     </div>

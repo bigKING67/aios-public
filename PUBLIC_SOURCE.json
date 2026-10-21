@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "fefb409f15dd715250ec3a40a627e942a6b61463",
-  "policySha256": "7fa3525c4e454919a58f5d4d7fa27fa9d503bfed90a74f744d30494548ad9983",
-  "fileCount": 4417,
-  "contentSha256": "afa46b66a12ee2ff54e5552cf3b9172df14f0ec7193cdfca9a442092c297c94b",
+  "sourceCommit": "7ea44f24fbe3782af43ea79b107e03cdf52de6da",
+  "policySha256": "02368763579b240c67083716dbdfd347142b74cf92b84c202f9207b0d2128905",
+  "fileCount": 4574,
+  "contentSha256": "d034baee796efd81b27a3fa8b7900d385553e8454a98e324c7089cb3763e56fc",
   "files": [
     {
       "path": ".dockerignore",
@@ -33,8 +33,8 @@
     {
       "path": ".gitignore",
       "mode": "100644",
-      "size": 2348,
-      "sha256": "7615126a5f29ce6ceedad8b12f28d07bed9b9df532afd13e5d91e66705e64df6"
+      "size": 2492,
+      "sha256": "2c0c8cb663a75bfc5eba7bd788c3d11355279de8090c9d7fc52a8ef71aca56a1"
     },
     {
       "path": ".gitleaks.toml",
@@ -379,10 +379,16 @@
       "sha256": "fc9e786b35bd3654003af59d9acf48607caa5151b7e1e6cde68fe5c64b11a619"
     },
     {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-assets-view.test.tsx",
+      "mode": "100644",
+      "size": 2624,
+      "sha256": "a5bc8763cbc3ea4d50e899e910e447ea51210841c5a973bbc6145bedbf9e9e52"
+    },
+    {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-assets-view.tsx",
       "mode": "100644",
-      "size": 12728,
-      "sha256": "02a5fe9b3625cf86958ab0b0b5d2bc2e0bbd0e957b826736fdc1700e69ff42c8"
+      "size": 13008,
+      "sha256": "18661eff814fc2259683ba2b72aa091f6c0754d2918a2ea5810de0d3a96fa406"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-capability-gate.test.tsx",
@@ -399,26 +405,26 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-home.test.tsx",
       "mode": "100644",
-      "size": 7469,
-      "sha256": "62c478c2b69d4d915837e4fe4c8691a95e72cd0f2bd6f318b0cb2ba5325b20c3"
+      "size": 7709,
+      "sha256": "1ce8c4c1c8d8431e3a8a1cb4ef1fca6da36d07d62204a08967ae0738f21546f3"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-home.tsx",
       "mode": "100644",
-      "size": 10992,
-      "sha256": "128e24fc8171056e84525a9590f7cb6544191fb1f8e6ffda9c9a31d2a282c4ae"
+      "size": 11007,
+      "sha256": "ee45b796f8924441a184e95f070a0cfa764cffcbcb22a404e205a3695e85638c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav-config.tsx",
       "mode": "100644",
-      "size": 1472,
-      "sha256": "8f388223c7c586e010c5312af9ac445b1530305dad7fccc9011971ef86d93749"
+      "size": 1593,
+      "sha256": "f1bcb8863930f0b1918a204afa38a2ef0549b49c4d42a5e93e597e481b622313"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav.test.tsx",
       "mode": "100644",
-      "size": 2757,
-      "sha256": "62d3e4bf304b9892f79c526a5b2e74ed453911b4ffb5ccf4ddb978e5f4fe62ca"
+      "size": 2773,
+      "sha256": "dd48d70bae98eeb7d883054077b31bf0cb3f640c7d461c292fa58aedb69e50d2"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/ai-studio-nav.tsx",
@@ -453,32 +459,32 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/editing-mode-tabs.tsx",
       "mode": "100644",
-      "size": 963,
-      "sha256": "57091995ad3afc1b8fa0b1d05354314255f159f2d22c38b94f74ac6cdcb97943"
+      "size": 1090,
+      "sha256": "5516683595849b04ed2a1f175d6270125348a4e535dce767c3c51b03e010da7a"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-form.tsx",
       "mode": "100644",
-      "size": 12901,
-      "sha256": "7cade42627195972f2a5de92ec15541635918b805e68704297568df474669c7e"
+      "size": 14147,
+      "sha256": "7ca228eccda7060615fc8363606b344dee0392053059a55db0d424608321085b"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-panel.test.tsx",
       "mode": "100644",
-      "size": 14830,
-      "sha256": "8bb33faae19905b5ffd38fea48fe1fd036047a483021c65b1b92b4fb85a88c76"
+      "size": 15133,
+      "sha256": "a9a2685d40720d61090e39eb3a25a6ae65fcdd9c2ad3c2012abd7256283ff176"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-panel.tsx",
       "mode": "100644",
-      "size": 1958,
-      "sha256": "b9d7e0ffb2cfc578ddb853fa082c8879bde5671e8df5ed1e5f5aee38458e69f2"
+      "size": 2253,
+      "sha256": "765849ad221364ba20f44bc629ebe2421feedddfe1d5bbf312eafc919dac453a"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-preview.tsx",
       "mode": "100644",
-      "size": 4466,
-      "sha256": "218b1bc3be36e4509825e95113ad3921931ef581c698269c5f41b6def87d7e64"
+      "size": 5708,
+      "sha256": "4d21319a2ab9b87b7e9bce0e1e748e8a9a06d1ed8b2f069d0ffee8e1278d6d53"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/framework-remix-structure.tsx",
@@ -489,44 +495,56 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-batch-detail.tsx",
       "mode": "100644",
-      "size": 10693,
-      "sha256": "3fdd00745cd10cd5d75fbc4d20aba4a9a77d6b49975e3b2b3d8545d8592d451d"
+      "size": 12182,
+      "sha256": "9d39769621fdc4e24771bbd08a51f073d3846fe55d4e411a954c80d57291f2b8"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-candidates.tsx",
       "mode": "100644",
       "size": 7441,
-      "sha256": "42d00d1a94bab3abccb2f70ce5e64f1813621218e860e3a7d529cded6c48b7b4"
+      "sha256": "7a794d0338f969846dab9769c81f14fe400a8b09acc473fb9e233ff885c3c7dd"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-output-player.tsx",
       "mode": "100644",
-      "size": 2038,
-      "sha256": "7b91012e5306988fc924e0dd9a1a490c6f76e721f2c030a2b6b329dfc356915b"
+      "size": 2520,
+      "sha256": "4c4d7f1cca9ff9013cdeb43c5cf458eb3029097162e75fa5499bd84d063ea0d0"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs-view.test.tsx",
       "mode": "100644",
-      "size": 16526,
-      "sha256": "b0299906c21309a8cd7004c397fa809dc7ca8395ddd0e44da3c77f06d3ca9c86"
+      "size": 16684,
+      "sha256": "8116705e085bd8daaee6e9ce5e2b08a7730baac51fce964c8932b536939bcced"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs-view.tsx",
       "mode": "100644",
-      "size": 8645,
-      "sha256": "562ffaa2b9398e5bf2db188978b7b1e55e6857e9d2d1bd278875b1a6ac131c51"
+      "size": 8743,
+      "sha256": "0e09a39cf78e0823c59c6ae42d9cda51669a5e9f265035e6f1988367bf00ec40"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-outputs.module.css",
       "mode": "100644",
-      "size": 5014,
-      "sha256": "ad3bc207df658a3946b813106eaf6c5194aecc0a0539542fb2cb5041bfd695db"
+      "size": 5083,
+      "sha256": "80e0844c408fdebc789ede39450abb5aeca8f9df01b41185cdc116398a510e17"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-picture-review.test.tsx",
+      "mode": "100644",
+      "size": 3485,
+      "sha256": "23f475e6e2729e607205466885e00372c4daad8822f8cd385ecd607dfed9bf58"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-picture-review.tsx",
+      "mode": "100644",
+      "size": 1977,
+      "sha256": "1dbd3a5d6093cc4004cdba8439ddffa91a5f91fd60e51a066c4f9b25dffae34f"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-recent-batches.tsx",
       "mode": "100644",
-      "size": 5237,
-      "sha256": "b68b7f692ca14cc3a241538330005a90eebef65358f466ab06f405d3858d97d1"
+      "size": 5380,
+      "sha256": "be603342322e2654043501336d4acc447d00faecc1012e7d2ae1bc578e213d3c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix-reference-picker.module.css",
@@ -543,26 +561,26 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/remix.module.css",
       "mode": "100644",
-      "size": 8063,
-      "sha256": "e9371ababee760054ac77973987137f527601d8c1f574f4b12843aa896865870"
+      "size": 8552,
+      "sha256": "a8fac706ec676e50569ee28bdf2ab63571ac090a09826ef44cff3bad0558499c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation-view.test.tsx",
       "mode": "100644",
-      "size": 10599,
-      "sha256": "fe2827c691abe8673a23719f920b420e93a0cc58b5f881365417726f83addbb7"
+      "size": 14690,
+      "sha256": "8e781f8ce8229c210dedd2d5611059ba5995e9b6ec47f1d87605b00436f7397d"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation-view.tsx",
       "mode": "100644",
-      "size": 12165,
-      "sha256": "476b2a0b71a79df1348029bebd1c94cbfa12196b1b09a2d618d042126d367b77"
+      "size": 14805,
+      "sha256": "c29a7cb56a4dc376b8e843ad45a732423a90197040352b19b7ec77c569fbca85"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-annotation.module.css",
       "mode": "100644",
-      "size": 9854,
-      "sha256": "2e83a5727503dc3a876fe58715e1378f2b2c7ff35e6232f9134e63f312dd9f1a"
+      "size": 10458,
+      "sha256": "b9c421d7b13640595d934c10b563be17737c20998f67056fe63d2580472c40b3"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-card.test.tsx",
@@ -573,38 +591,50 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-card.tsx",
       "mode": "100644",
-      "size": 7300,
-      "sha256": "ea98a6234c5001cb2094aacf16e8b5188107d21accd6e0d493a94a20bd4b00dc"
+      "size": 7604,
+      "sha256": "190c7071cbfa80116c48c32937c196e535db370b1f8e2814d70f094c2d3a0f91"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-create-form.tsx",
       "mode": "100644",
-      "size": 5323,
-      "sha256": "6c1e0168f8eae40c91240aeea71180561d3148f9dd80e55cf22f16499fef52db"
+      "size": 6883,
+      "sha256": "cd946c1d509ee196a542d7ee627d9abd556826013e3b170c8bc0a8dd1f6b0ca2"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-edit-modal.tsx",
       "mode": "100644",
-      "size": 4465,
-      "sha256": "cea220ad91c041aaa145aac1814f1bb22ef133367cc0d85730918c364458f353"
+      "size": 5415,
+      "sha256": "d625314f5baf48a7e500d9f5a96fde1eb52c8056a5e147fa1278ad161de2655d"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-forms.test.tsx",
       "mode": "100644",
-      "size": 3538,
-      "sha256": "ec626c961eb563b919557e94b097e7eeca9130149763a5c829d6c8e3b1b907df"
+      "size": 5623,
+      "sha256": "d730005d2463a2357bc41034e72fcd03690a0fe4768d5d820e7d4e805498fdf8"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-label-strip.tsx",
       "mode": "100644",
-      "size": 4044,
-      "sha256": "d5fce560ec00f23054418ef3b99a0268e2a5b251154d6de4d163f33f2d01fb3b"
+      "size": 4075,
+      "sha256": "8aa2820c8952bdafed8a167e73256ca93125908eeeaf993459082eeca1c42153"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library-bulk-bar.tsx",
+      "mode": "100644",
+      "size": 3128,
+      "sha256": "29e5b34de0ab7357379634ecd8696559f6278a13b247f7dfc43e5ed4c347e494"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library-table.tsx",
+      "mode": "100644",
+      "size": 3515,
+      "sha256": "b5f9a6673d704230dbef9b4d1af40f7a07cc68909d171ff51987f7b1b1d3ab8d"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library-view.tsx",
       "mode": "100644",
-      "size": 16323,
-      "sha256": "27a483597ff4ab3aecfc082a69e17304ef2b85ceed23f16a607088ef69ea86d3"
+      "size": 13566,
+      "sha256": "ed3a2a25c37b825a623e5cfd14541be2056d79ff9ce96dfd42102c71c5ebbb9c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-library.module.css",
@@ -621,20 +651,20 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-panel.test.tsx",
       "mode": "100644",
-      "size": 13017,
-      "sha256": "9d84f25304f41e4559b6016b5a10559d40d00722c0bb1e48cd4f8918cffdc967"
+      "size": 13037,
+      "sha256": "7f26a49e9fdc88b651d96bb8ddc216827cb45b73e0a81755ab04907e285419b6"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-panel.tsx",
       "mode": "100644",
-      "size": 1840,
-      "sha256": "4ae927fc1aeb5941cc46ebfb13d213b6d35243cb28d5d10a542c549008292659"
+      "size": 1870,
+      "sha256": "931ab93f972f65dd455c1e2e527d67b03de30a91d24b19b7ae535c1aa4fceabc"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest-workspace.tsx",
       "mode": "100644",
-      "size": 12921,
-      "sha256": "7a8d222f719202064472297340888e5573ff11819a8f2ccbcd16ed5b7e381ea7"
+      "size": 12936,
+      "sha256": "753823da37cc91bd25606f7f6757362e5532737c89cd9fe8c5256d7682ff23b1"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-suggest.module.css",
@@ -645,44 +675,44 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-table.test.tsx",
       "mode": "100644",
-      "size": 2743,
-      "sha256": "a9f8a133ea64a5fac4d0f62a2093a7f592eec4aba019a57001b470a801fad1ff"
+      "size": 2789,
+      "sha256": "c20589f2edbee80e1ca352492c0651d46bcc2d3e0837461494296eff00b749cb"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-table.tsx",
       "mode": "100644",
-      "size": 7301,
-      "sha256": "2012cf043e100e04cb1b13009ab69e695bb22baf1232f83931cf27022769d4e5"
+      "size": 7549,
+      "sha256": "5131d3863cd454cb243721f2c04a0edad0c38480dfc3403189a3e0a1b8888970"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-timeline.test.tsx",
       "mode": "100644",
-      "size": 2844,
-      "sha256": "4528f65b0d69d745694b7d4bdd67d58522ba4bc2580e95b3e97c48f56a3ed9ec"
+      "size": 2892,
+      "sha256": "a7e3a75538cdc16c87a670821fd914b2d1756c50814452cfc27bceed365ad291"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segment-timeline.tsx",
       "mode": "100644",
-      "size": 7911,
-      "sha256": "a79bed6f55688499f89cd8f41e243bd15f7c28beccfe5b32027dc1ce680c59be"
+      "size": 9607,
+      "sha256": "3f426a7941c24f3082c792998a5f9704b1852fe17c02a1bd6ffa4932d5fb46fd"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/segments-workspace.tsx",
       "mode": "100644",
-      "size": 2912,
-      "sha256": "1de531af2abcb2ebba5492c51437c33394a8131d0640073f4082dd63316415ca"
+      "size": 4253,
+      "sha256": "989385a62ec5b4875ccd3aba5c31d3408895887af71e16db6b83613d9b33aca8"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-launch.tsx",
       "mode": "100644",
-      "size": 6714,
-      "sha256": "48b07a449147248fb9b878a13137d0bb00fc0c72c2c835f229704ec39fb43186"
+      "size": 6752,
+      "sha256": "9d8b94094f7514e9d3a08af42f0af04b58e438ad6bc58aba0907899a727b4058"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-pickers.tsx",
       "mode": "100644",
-      "size": 12158,
-      "sha256": "cb4483ba4a9e4f6f5a5cda913a5d0f05e0757d482f0a9289a402d69183b24eaf"
+      "size": 12329,
+      "sha256": "7f6a5cf9b60d3f5d6f18994d5dd2da6f0b297e2d519fcc8c527371445ad02bd0"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-timeline.tsx",
@@ -693,14 +723,14 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-workbench.test.tsx",
       "mode": "100644",
-      "size": 11544,
-      "sha256": "ba903cb82fe9ad3da33319cfd0992f4705ab629a5b21bae7d9127256359f1037"
+      "size": 11592,
+      "sha256": "bef738906e5ab533289fc12fa31faff336bec42cb23ec67b61116b6f5c559993"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit-workbench.tsx",
       "mode": "100644",
-      "size": 15223,
-      "sha256": "78638ef11a2ea88d3a613aee773fdd39c32eb3f9f3544142574be20876c80e83"
+      "size": 15505,
+      "sha256": "2d5d5dc11885d65cc4362b003db7e533300f96a55b0bc558e270dc339b71054a"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/single-edit.module.css",
@@ -741,8 +771,8 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/suggestion-job-table.tsx",
       "mode": "100644",
-      "size": 6268,
-      "sha256": "b414e812f402479063985e30b5760018f9f57a87a199152307902495193fd888"
+      "size": 6294,
+      "sha256": "47db4b2f213929fe7a74988145104e5e84808e229dbb24d48a4ba4c7500172d1"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/suggestion-label-picker.tsx",
@@ -789,20 +819,26 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-annotation.ts",
       "mode": "100644",
-      "size": 5786,
-      "sha256": "d3524269756606c4f3fd63fc1b069a97921e82d7b7c6b1a96f3271d5e99a6ffb"
+      "size": 5839,
+      "sha256": "19772035408be5d547bcca005e708004e8202ec0e385062169f607095496dfed"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-bulk-actions.ts",
       "mode": "100644",
-      "size": 3321,
-      "sha256": "c4015243983a0e001fe51cc335feec1898b5e10c3bf9a4e1121db6ffabb8966b"
+      "size": 3328,
+      "sha256": "feaadbc3ba317f8924b529006c5ed4f5f0afab7091fec0fcb00bb50b205c64b3"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_components/use-segment-suggestions.ts",
       "mode": "100644",
       "size": 2762,
       "sha256": "944379a2c0942abe9349c1c09f60ce7bde6dfc75ac7f07e959082dd644ccb1ff"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/_components/use-selling-point-frame-notes.ts",
+      "mode": "100644",
+      "size": 2780,
+      "sha256": "d27e8d8e8a791a4fdb6121504c8d182cfee6e672ddd3ca907a713f6c52ee216f"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/ai-studio-api.test.ts",
@@ -819,14 +855,14 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/analysis-dimension.test.ts",
       "mode": "100644",
-      "size": 1226,
-      "sha256": "36bd23acf4d871a760b82ce039bdabb6db066747e0aa0fc91f8fd932fb643176"
+      "size": 1627,
+      "sha256": "e960757ca32c6a70652fa3370cb1b3ad4e415802491b23de4d94d7dc4c64207c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/analysis-dimension.ts",
       "mode": "100644",
-      "size": 1842,
-      "sha256": "13968c8fa575b3f363066d8eb342cb49f08e8737f9f737655836255d778ee022"
+      "size": 2133,
+      "sha256": "feb480e7c1bf545f293388a9fbf2fb12c731e56411502d1cd652fe9860dc6c33"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/asset-annotation.test.ts",
@@ -843,8 +879,8 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-api.ts",
       "mode": "100644",
-      "size": 7581,
-      "sha256": "011f14f0606adc9e231bf83b3add35e2b108466c77a558ec2b93c75cc6ee5e08"
+      "size": 8436,
+      "sha256": "bddd19ca94f959f704ecdb78d455a001961c4d0017e6ccb57ae97589ec3a5299"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-edit.test.ts",
@@ -856,37 +892,37 @@
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-edit.ts",
       "mode": "100644",
       "size": 9260,
-      "sha256": "73c58fc64af8647f941ced9d83739df91e0dc2bd900948ed53ec9d37d7f8c34d"
+      "sha256": "d3b829710d38dc53d3a95ab4b7d9bcf5bb2a577d076584fae45b6d9897a1d0ad"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-form.test.ts",
       "mode": "100644",
-      "size": 2556,
-      "sha256": "32fa016c8e3d41f38ff9b11e5a7c7e0bafd3d6f3d2f8da8f786a9cec73a4eb91"
+      "size": 3534,
+      "sha256": "b39ce54ab0b13d47d3bc5d01d379933f6ed1507db10260fda8fdbda0e5cc1db5"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-form.ts",
       "mode": "100644",
-      "size": 6577,
-      "sha256": "3f142b623f47a5644b1adc0c98c2865e16919823f1b101763d6f12f03b71fd0f"
+      "size": 7263,
+      "sha256": "cad9988055117cf643fc4ce13e592052e3f43d6fee584eff51a101bfac7192ba"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/remix-routes.ts",
       "mode": "100644",
-      "size": 1999,
-      "sha256": "af159ececd93864b63781e02362c9b1789987edf9c26b37aabc68c37bc45e40d"
+      "size": 2289,
+      "sha256": "15f6f3455d8881c067ce21a246366c558a8a4f205ec0a6b8cca80ac330daf876"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-display.test.ts",
       "mode": "100644",
-      "size": 3386,
-      "sha256": "480d41eddaf1b9136b88aac289643d94fa364924b4417fdbbb719b93eb882bd0"
+      "size": 3920,
+      "sha256": "c4de317bf533e7fa63f945606e58bf71511a6702dcc5a087c7a5652bff9b7dae"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-display.ts",
       "mode": "100644",
-      "size": 4550,
-      "sha256": "ddd3a33ffab30d8923c6cc71fae0ca60e557578b88254dbc811c7bfed296854c"
+      "size": 6413,
+      "sha256": "766f3e035748faf2012ef77e2b639d25d8261bb523cbd34855816eb315eef026"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-errors.test.ts",
@@ -903,14 +939,14 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-form.test.ts",
       "mode": "100644",
-      "size": 1990,
-      "sha256": "9e42a4b8d58e4339ad114b9b8ec5e1772a46f158801990992de2e7bb5afa9b0e"
+      "size": 2738,
+      "sha256": "4641dab8603f2e9db1c227fada06c689bd32b5ebd63aa114c3741c399351381b"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-form.ts",
       "mode": "100644",
-      "size": 3094,
-      "sha256": "c04b72632a2b93ec827e6daffb7fa11d37a5abd9e86ce38e7f524a5aeef877a0"
+      "size": 3871,
+      "sha256": "fbc008c408b477dcffaa522fa58589976431a435b3740d710de52d121809ad60"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pills.test.ts",
@@ -927,20 +963,20 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pool.test.ts",
       "mode": "100644",
-      "size": 2162,
-      "sha256": "7d4abe7fb12ccff196d1d303b6d04ac4ae51bb812020b01e303debfa60d3fc54"
+      "size": 2660,
+      "sha256": "e8fad5aad696da38584dc8bc220b6ace5c160aea69d37b6916e61cde72dcb913"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-pool.ts",
       "mode": "100644",
-      "size": 2410,
-      "sha256": "1d66cd715e2b7d715d7df20b2df9cbd5316cc1fc6e3ad3a0fddc20d48f6ff7ed"
+      "size": 2625,
+      "sha256": "68dfb3a0c5038aca7ff14cbe34688c0c94084951a773b903b8b2f996e9c9f101"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-routes.ts",
       "mode": "100644",
-      "size": 399,
-      "sha256": "a7f747fb9561221671cae4c45d201addd2277fbe87427f503581d8d4fd27583f"
+      "size": 1012,
+      "sha256": "6396702b03930734af7e8671c27496860b4911f78c8fdf23c667c6ba1a8dd8ca"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/segment-suggestion-api.test.ts",
@@ -969,8 +1005,8 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/studio-overview.ts",
       "mode": "100644",
-      "size": 5476,
-      "sha256": "a95e433cd1f47eb61a25ca0a630978ed0b560577de42060dd643160605848c27"
+      "size": 5655,
+      "sha256": "e9278f651764ab05d863cfb1e40be124599c40d6b3140289669f75dbd2ea2d86"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/_lib/studio-products.ts",
@@ -993,8 +1029,8 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/analysis/page.tsx",
       "mode": "100644",
-      "size": 677,
-      "sha256": "2c16140009e12266b52464ba2af9181a9daf0a1e017a08b4bff9eb2e9926c281"
+      "size": 692,
+      "sha256": "a5ef5ef159b177d1cd05a798b590dabb3b849e9adec018d5182890d9445f9113"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/assets/page.tsx",
@@ -1017,8 +1053,8 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/editing/page.tsx",
       "mode": "100644",
-      "size": 3014,
-      "sha256": "ac5d4e2a361616db0175ea0533ce794ea14a2d54144b5541f86033e4bdfa2e26"
+      "size": 3227,
+      "sha256": "628c985cb9b9a6dd196f7e28305b9be3c011169dd6bc3da4d4f7f984ac5adbb9"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/outputs/page.tsx",
@@ -1035,8 +1071,14 @@
     {
       "path": "apps/web-vite/src/app/content/ai-studio/segments/page.tsx",
       "mode": "100644",
-      "size": 779,
-      "sha256": "bb2d6b70520d58b001fc9845b1832b3c7165854b2aa5aa4c9cb2c7d465ff1801"
+      "size": 802,
+      "sha256": "db78842aeeab055f68fffeaad6d0dfb4c13d45b729fd9223f33d52d03b8864b2"
+    },
+    {
+      "path": "apps/web-vite/src/app/content/ai-studio/selling-points/page.tsx",
+      "mode": "100644",
+      "size": 850,
+      "sha256": "ee12e71302ecd0b39c5f970c9aa7f4a2df309d8820464ec2fe0c45078415c11c"
     },
     {
       "path": "apps/web-vite/src/app/content/ai-studio/trends/page.tsx",
@@ -3927,8 +3969,8 @@
     {
       "path": "apps/web-vite/src/app/dashboard/page.tsx",
       "mode": "100644",
-      "size": 930,
-      "sha256": "443ccfbcc1b303892ad23fdaf862e21b5fd4106247ad1a7bf419693631ba1d70"
+      "size": 1048,
+      "sha256": "3baa43fab774816ebac7cf3712b54faf22a3956d5c574aec1e6799b274e61758"
     },
     {
       "path": "apps/web-vite/src/app/docs/analysis-plans/douyin-brand-strategy.ts",
@@ -8313,8 +8355,8 @@
     {
       "path": "apps/web-vite/src/app/sample-inventory/_components/sample-inventory-client.tsx",
       "mode": "100644",
-      "size": 2090,
-      "sha256": "bed3ae5047cc97db34b7013e62cd5d50b1939e16a262e64018a9878f85e29379"
+      "size": 385,
+      "sha256": "b551949310d986c49ac5944730a8605226a2c1ddf7eabb98d6679419b2abb7c7"
     },
     {
       "path": "apps/web-vite/src/app/sample-inventory/_components/sample-inventory-column-title.tsx",
@@ -8583,8 +8625,8 @@
     {
       "path": "apps/web-vite/src/app/sample-inventory/_lib/sample-inventory-api.ts",
       "mode": "100644",
-      "size": 15518,
-      "sha256": "3dc338c08016dc28d12b92078bafb83ce9880bfe8d1a3d000db4efe24dd310bc"
+      "size": 15245,
+      "sha256": "5f953947b403e80e38f6c433243d24284112fa297f3424892eff452da45e8b3c"
     },
     {
       "path": "apps/web-vite/src/app/sample-inventory/_lib/sample-inventory-downloads.ts",
@@ -9153,8 +9195,8 @@
     {
       "path": "apps/web-vite/src/generated/api/aios-v2.ts",
       "mode": "100644",
-      "size": 466618,
-      "sha256": "ef34e241f8a3d82cc9c18bd333445f473e57d74eebe5f523776705ff3de61bb5"
+      "size": 467829,
+      "sha256": "80eefc8719835693fa3fa7e9d79b5417982e20861092e8923937c11024d70d37"
     },
     {
       "path": "apps/web-vite/src/hooks/use-auth.ts",
@@ -9261,8 +9303,14 @@
     {
       "path": "apps/web-vite/src/lib/auth-navigation.ai-studio-access.test.ts",
       "mode": "100644",
-      "size": 2035,
-      "sha256": "6e61ace6c9149f2a02ba54d80640fab8fef243f13f69194548488678484d4d4c"
+      "size": 2079,
+      "sha256": "4556d804b3c80b0e18f088471f0850f02d99d6265e73b7a549c892676f4e8ae2"
+    },
+    {
+      "path": "apps/web-vite/src/lib/auth-navigation.anonymous-access.test.ts",
+      "mode": "100644",
+      "size": 754,
+      "sha256": "a809ce84b4079254cdbed1f86e90c6c582a6666909cd7231ace91f61c9573331"
     },
     {
       "path": "apps/web-vite/src/lib/auth-navigation.recruiting-access.test.ts",
@@ -9277,16 +9325,10 @@
       "sha256": "7bc975b91a83a07c4b1d2e63e5a50e93e7bcca5c1dfdffea0a74e9080c155bbb"
     },
     {
-      "path": "apps/web-vite/src/lib/auth-navigation.sample-inventory-access.test.ts",
-      "mode": "100644",
-      "size": 1101,
-      "sha256": "5950728485d2d3f81eba4b6a4b45e82dc721376d96834bd1a820b6bae90c096c"
-    },
-    {
       "path": "apps/web-vite/src/lib/auth-navigation.ts",
       "mode": "100644",
-      "size": 6043,
-      "sha256": "c379c4d81fe24ef6553776fc461c7800753d2f3198cfc146976bb313ffc7d20f"
+      "size": 5943,
+      "sha256": "62a7c4fccfe09bd188dfa4f0bcaa0175169341c862fe81d0aa2ce1e867eb6b96"
     },
     {
       "path": "apps/web-vite/src/lib/auth-refresh-failure.ts",
@@ -9375,8 +9417,8 @@
     {
       "path": "apps/web-vite/src/lib/frontend-env.ts",
       "mode": "100644",
-      "size": 2023,
-      "sha256": "b9082b5a924f02b3733270302f3ae48b86045238da66cae05cf8af6b08ca72e5"
+      "size": 1456,
+      "sha256": "48a58fdf66488aa300ed95bccb5993bf0203e0a847f6785455b180e1f65c88ea"
     },
     {
       "path": "apps/web-vite/src/lib/generated-api-contract.test.ts",
@@ -9507,14 +9549,14 @@
     {
       "path": "apps/web-vite/src/lib/route-policy-governance.ts",
       "mode": "100644",
-      "size": 7038,
-      "sha256": "c8faefd4abf4f3a4ef4d683faec9da9dc78525fd7ee46882f6c1588afd172a9c"
+      "size": 7363,
+      "sha256": "f56d38a37d2490a9815ab7208f6d46b0b7f22166ef5be649c36407a934c79904"
     },
     {
       "path": "apps/web-vite/src/lib/route-policy-registry.ts",
       "mode": "100644",
-      "size": 9887,
-      "sha256": "a8ce3c140f332670c53ea00fa21b7e6395e4fd70a9e411359ae1726ee6709b1c"
+      "size": 10154,
+      "sha256": "f8be5e0483710de2bd67e4346b6bc1eb001a1ceae08055eab4bef549eaf4d694"
     },
     {
       "path": "apps/web-vite/src/lib/super-admin.ts",
@@ -9543,8 +9585,8 @@
     {
       "path": "apps/web-vite/src/routes.tsx",
       "mode": "100644",
-      "size": 7384,
-      "sha256": "8fb3c7ec60fdf597ac7bd21e637569c0eb7e8abca374c9555a3d1449a753be18"
+      "size": 7591,
+      "sha256": "7d14ff8481d68e42c88335f5b90859bc301c95886863339aa4f2c319595bbb9f"
     },
     {
       "path": "apps/web-vite/src/stores/auth-store.test.tsx",
@@ -9663,8 +9705,8 @@
     {
       "path": "apps/web-vite/src/test/frontend-env.test.ts",
       "mode": "100644",
-      "size": 3757,
-      "sha256": "01f6a94187406e0c0017290dddee880663cdc6c486c1ed14c565de5a7e0ef883"
+      "size": 3246,
+      "sha256": "b69f7713058ee067544bb89b8454ad7db0bb0b23bc36cb41ec4cc31eba746993"
     },
     {
       "path": "apps/web-vite/src/test/request-client-compatibility.test.ts",
@@ -9819,8 +9861,8 @@
     {
       "path": "apps/web-vite/vite.config.ts",
       "mode": "100644",
-      "size": 10084,
-      "sha256": "1f11828d2fab55adc6dd010c2e88f39799b6bf0f951fd9c9189ee6156c755fa1"
+      "size": 10169,
+      "sha256": "c85ab70fd9eb89ff24d3544f396b5a93771661561e696a1f5df1d63e6c989d27"
     },
     {
       "path": "apps/web-vite/vitest.config.ts",
@@ -9855,8 +9897,8 @@
     {
       "path": "backend-rust/Cargo.lock",
       "mode": "100644",
-      "size": 75594,
-      "sha256": "c8bf73c669b3054e8fc609612b18e9de73f47dd1f9ad56169722c91c66febeda"
+      "size": 75596,
+      "sha256": "9e03e66b632dad0c76d50b3583c3cd4a3b468607e865491c2c24de2e9dac5c62"
     },
     {
       "path": "backend-rust/Cargo.toml",
@@ -9921,8 +9963,8 @@
     {
       "path": "backend-rust/scripts/test-content-production-postgres.sh",
       "mode": "100644",
-      "size": 4324,
-      "sha256": "2b3606efa8081782e6c9e37fc6f6b4450c11f0fb8d46172f2dca5fbea10c7f47"
+      "size": 5207,
+      "sha256": "0f68181770690112b8c985be3c9124d2314e28848c886b3bb3e16f57decd3a29"
     },
     {
       "path": "backend-rust/scripts/test-recruiting-postgres.sh",
@@ -10263,8 +10305,8 @@
     {
       "path": "backend-rust/src/config/mod.rs",
       "mode": "100644",
-      "size": 217,
-      "sha256": "af2725ae4922524e6b81691c443aad76041676fdc1fb17adefc1e69229748c88"
+      "size": 188,
+      "sha256": "246adb44dd264ba50e214f432810937bb8a012edc4222f1ddc6ac0fcd8c8c6ac"
     },
     {
       "path": "backend-rust/src/config/network.rs",
@@ -10311,20 +10353,14 @@
     {
       "path": "backend-rust/src/config/settings/mod.rs",
       "mode": "100644",
-      "size": 9240,
-      "sha256": "592a350c22fba33e90a66c7cb16d14786f4f8a5da3178cf20cede6cd9c246a1a"
+      "size": 8943,
+      "sha256": "e4309ff1f99f502c3c9db55461eb69af8acd578609985c72c5689861cc6eeb90"
     },
     {
       "path": "backend-rust/src/config/settings/reports.rs",
       "mode": "100644",
       "size": 2104,
       "sha256": "85618e3e5117bb3b450e9048272578fcdc76461962c0719202b03a43674cc6e5"
-    },
-    {
-      "path": "backend-rust/src/config/settings/sample_inventory.rs",
-      "mode": "100644",
-      "size": 1713,
-      "sha256": "f01c80efbbafc551a8d6158b9f68f86aa14b965b3ec69480696fa953485e656c"
     },
     {
       "path": "backend-rust/src/config/settings/server.rs",
@@ -10575,8 +10611,8 @@
     {
       "path": "backend-rust/src/dashboard/date_bounds.rs",
       "mode": "100644",
-      "size": 13637,
-      "sha256": "bfe9e42482186ba0a0cf857ce3ca2d96a32555f06fc664bd4e3e30f082be4caa"
+      "size": 13699,
+      "sha256": "deddac2949f52c065174f5fcd56378e74d2970adff466507be94e3103a342717"
     },
     {
       "path": "backend-rust/src/dashboard/errors/mod.rs",
@@ -10611,8 +10647,8 @@
     {
       "path": "backend-rust/src/dashboard/goods_card_handlers/card.rs",
       "mode": "100644",
-      "size": 2179,
-      "sha256": "20de09e5b4ac0fffd7c2750a7cae8e993fd0853cf31896b7aa9106806394f4f0"
+      "size": 2241,
+      "sha256": "7170e98d8881c3944a3fe11aa72d9b74cd49698af264c0d5d7cc0a03e18174ae"
     },
     {
       "path": "backend-rust/src/dashboard/goods_card_handlers/mod.rs",
@@ -10623,8 +10659,8 @@
     {
       "path": "backend-rust/src/dashboard/goods_card_handlers/traffic.rs",
       "mode": "100644",
-      "size": 5271,
-      "sha256": "0d3fe9627df63c254969e0c460784c7dc8a8670fc4fb17807420f30642aad45b"
+      "size": 5333,
+      "sha256": "567333ac8d2ced1098cc5f0799198c1553723dfe942ebd0a21c9c933a44857a9"
     },
     {
       "path": "backend-rust/src/dashboard/goods_card_handlers/validation.rs",
@@ -10695,8 +10731,8 @@
     {
       "path": "backend-rust/src/dashboard/goods_handlers/handler.rs",
       "mode": "100644",
-      "size": 4697,
-      "sha256": "5961843a6cfc44f9a4ab57f78762663690600f63d890bf2186b6769376762645"
+      "size": 4759,
+      "sha256": "6117f175696e1f966ff1d4da8bb4edd4ad8218e1993c5940e4b8827eefdeb169"
     },
     {
       "path": "backend-rust/src/dashboard/goods_handlers/metrics_query.rs",
@@ -11025,14 +11061,14 @@
     {
       "path": "backend-rust/src/dashboard/media_handlers/live_goods.rs",
       "mode": "100644",
-      "size": 6027,
-      "sha256": "68392a9382e0c71d0f01724fd824a4c861e372f7b5e72a35bd44390aec91634a"
+      "size": 6121,
+      "sha256": "35ef3090b473dcaf0c6adadd5d845458ce324f7395d72562a45b47cf29f08a29"
     },
     {
       "path": "backend-rust/src/dashboard/media_handlers/live.rs",
       "mode": "100644",
-      "size": 5171,
-      "sha256": "f56b9c1f499f403b6ed4163419ce22e1e77f0f9fae2f1ca82068d0c7d3db76ba"
+      "size": 5233,
+      "sha256": "594f3a9b7564500a50bfc34e661ae7a439cca67d0d0c8ade50ba382c2f7e18e5"
     },
     {
       "path": "backend-rust/src/dashboard/media_handlers/mod.rs",
@@ -11043,8 +11079,8 @@
     {
       "path": "backend-rust/src/dashboard/media_handlers/short_video/mod.rs",
       "mode": "100644",
-      "size": 3349,
-      "sha256": "7130d6f988cf2a06b39c76051675fa7e035d3cbcfe65cc26748afe44004c7db7"
+      "size": 3411,
+      "sha256": "824170053e8806d6e3cb50e2855ee6e9e67021a9f83e386b4efb0dd50ce047a2"
     },
     {
       "path": "backend-rust/src/dashboard/media_handlers/short_video/payload.rs",
@@ -11091,8 +11127,8 @@
     {
       "path": "backend-rust/src/dashboard/notes/list.rs",
       "mode": "100644",
-      "size": 4566,
-      "sha256": "b43182d4fcc1fb6e94271455a48ff9b707c30359c68e34c31f3beb6daed1264c"
+      "size": 4628,
+      "sha256": "cfb5486b686ebb4254898bda78c305e33f50e20f88e97846817db43681d33a04"
     },
     {
       "path": "backend-rust/src/dashboard/notes/mod.rs",
@@ -11145,8 +11181,8 @@
     {
       "path": "backend-rust/src/dashboard/overview_handlers/details.rs",
       "mode": "100644",
-      "size": 3354,
-      "sha256": "d99a2de3090ae8663feb174e2b79634578209f2f404eb0a7c2f7a106b5efe6dc"
+      "size": 3416,
+      "sha256": "41ec2d347c3f3709a0ddc12ac0eee0ccd2f12b6824f9a56677bad6b83c62df59"
     },
     {
       "path": "backend-rust/src/dashboard/overview_handlers/mod.rs",
@@ -11157,8 +11193,8 @@
     {
       "path": "backend-rust/src/dashboard/overview_handlers/overview.rs",
       "mode": "100644",
-      "size": 4253,
-      "sha256": "0749800a827522410f6d7a31ea718c6e377ffaf22effa107808d0f3f6098ab20"
+      "size": 4315,
+      "sha256": "48514f08102108359ed9e7c551787d1328062bdfa7606b62c6893978ecad227c"
     },
     {
       "path": "backend-rust/src/dashboard/overview_nowcast_patch/details/amount.rs",
@@ -11319,8 +11355,8 @@
     {
       "path": "backend-rust/src/dashboard/qianchuan/mod.rs",
       "mode": "100644",
-      "size": 31189,
-      "sha256": "bf7f46b50c9c84287b35f5c8aec0ff532d3eee3c409f340e9b3d3ca6fd149da0"
+      "size": 31242,
+      "sha256": "425f4a4b0fa12818e6eb41a6371960a704b68f9ec6c3b94f8c4465b21286bbbd"
     },
     {
       "path": "backend-rust/src/dashboard/query_runtime.rs",
@@ -11505,14 +11541,14 @@
     {
       "path": "backend-rust/src/dashboard/traffic_handlers/traffic_goods.rs",
       "mode": "100644",
-      "size": 6945,
-      "sha256": "1a4360ff948654d62ca3e33483465a29d07cdf0ff2be7cd9fc89b8912b9fce9c"
+      "size": 7007,
+      "sha256": "e29992cd4952fade08259d26fb34a15d07a4f3a2db037294716c7fabebff4cf6"
     },
     {
       "path": "backend-rust/src/dashboard/traffic_handlers/traffic.rs",
       "mode": "100644",
-      "size": 6817,
-      "sha256": "641e27385652fd0b7548f1b7e11f0669048a7b9f1126fb6bd73371b7b68ccfe7"
+      "size": 6879,
+      "sha256": "acfb241f1392cb7e7721da6c4da84e3b189b68079bc4cad570bdc51a9a7a5271"
     },
     {
       "path": "backend-rust/src/dashboard/traffic/mod.rs",
@@ -12693,8 +12729,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/handlers/qianchuan_http_route_tests.rs",
       "mode": "100644",
-      "size": 25350,
-      "sha256": "6cf74e95e8288c8ce90f80fefd3b526a747c16c7b73e25beaa6b9cfa3a01f7f3"
+      "size": 25222,
+      "sha256": "a146e19eb584eab72c0c8eda83bb6253b877324a8c3cc4f78acad9b1d7fe6ee8"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/identity_lookup.rs",
@@ -13089,8 +13125,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/framework_remix.rs",
       "mode": "100644",
-      "size": 11233,
-      "sha256": "e3c2c8c0c2d8cb278f32fb4973d4233544829eadb287aa099170d82e7c17fa87"
+      "size": 11405,
+      "sha256": "835f4e3bfca3adcfba9c52ef93faf54d2d19aa9fab97129642c017d6cbe08d63"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/runs/full_service_fixture.rs",
@@ -13491,8 +13527,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/asset_summaries.rs",
       "mode": "100644",
-      "size": 7681,
-      "sha256": "4191587e70470fd5474bd9ed8a62c76b62f159b6c8d049140e7da3a9677631f9"
+      "size": 8343,
+      "sha256": "ccdc53e76ef096d604cdbfdbc6d3d88aeb31ecf883d63db51cd7b53de7ae360d"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/asset_summary_postgres_tests.rs",
@@ -13501,10 +13537,16 @@
       "sha256": "3eef84736d9a01d5b4331e241c9df6d5333334690f7305fcf39697b44d868e9b"
     },
     {
+      "path": "backend-rust/src/marketing/content_assets/studio/browser_acceptance_tests.rs",
+      "mode": "100644",
+      "size": 7575,
+      "sha256": "55ebf3a936daf47450e919a40ff70b56ca0643b6a8953e4ae59c1f970baaaf77"
+    },
+    {
       "path": "backend-rust/src/marketing/content_assets/studio/domain.rs",
       "mode": "100644",
-      "size": 9552,
-      "sha256": "4ed1a2d32ac089def3d9bd275a4adaa51ab1a4c332ac3c4ecbb7b04f0caa17b6"
+      "size": 10824,
+      "sha256": "4799d05aeb1dbded05ae9bb7eacfdf0c5d064d17db43c3574bc9c767a4b500a1"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/enterprise_postgres_tests.rs",
@@ -13521,8 +13563,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/mod.rs",
       "mode": "100644",
-      "size": 14467,
-      "sha256": "329ad03d0665d47c81b5ad5d72a968095ce9f5b2a589edbb6331b55ee5c19fbd"
+      "size": 14812,
+      "sha256": "f89019151d2d1dcf1ce23d04e06d733245d702f396cb5aa21b74d30455b3e5b2"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/overview_postgres_tests.rs",
@@ -13533,20 +13575,20 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/overview_types.rs",
       "mode": "100644",
-      "size": 3967,
-      "sha256": "4da585fd2511c5b0ac5ff1a61e38529aa342a1316c54d8bb6b2ea50d3365ed2a"
+      "size": 4012,
+      "sha256": "ddb74e8c87cf334da6329d6b6e9dbc709168e7e8756cab8eaa3bba6e7e6e6bcd"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/overview.rs",
       "mode": "100644",
-      "size": 14932,
-      "sha256": "e34adffd847073f2afa22c245fd6936bab9d6391cbbd2bec4a7379ce6d7827f0"
+      "size": 15077,
+      "sha256": "051f1b8427f56758fcaf14e5ee26431771deb3a5f68fd2d9182e033e660a2b9a"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/postgres_tests.rs",
       "mode": "100644",
-      "size": 22672,
-      "sha256": "d7c2cdd7aa1e8090542c81847e0b27d861818aaa26f919abc3f12a58af0c1ea6"
+      "size": 22793,
+      "sha256": "20e8ca13259a00df418e537c8220e3d90fb31a96f72df669c1fd565eb6de5f0a"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_cancel.rs",
@@ -13557,8 +13599,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_combos.rs",
       "mode": "100644",
-      "size": 12065,
-      "sha256": "17ac4d4a349561a2cd496bed50d734ee6b31b3edcdc21d48d22f662bda201348"
+      "size": 12109,
+      "sha256": "5357e4bda08317f1afda66184a443c09028249a4de695a0380de7b8e2cefee7b"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_edit_postgres_tests.rs",
@@ -13573,40 +13615,100 @@
       "sha256": "dcd62b1b4e646eacf1e23f23ea632215b9bc16f1f63f31282f20998060e1b77e"
     },
     {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_picture_review.rs",
+      "mode": "100644",
+      "size": 4004,
+      "sha256": "1559c4aef26988002be1a6f3196cad5f86a6678632587cedb68f6fd5abcbfaab"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_points_media_tests.rs",
+      "mode": "100644",
+      "size": 7999,
+      "sha256": "33501988efcd643b99ce745665d13d5102dd6c34e5f62a73377fd57a5e515a25"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_points_plan.rs",
+      "mode": "100644",
+      "size": 26249,
+      "sha256": "c0fadd74e3eceb3bf346374b9a34d9bc28490c1443a632c5798f3a17a7d61613"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_points_postgres_tests.rs",
+      "mode": "100644",
+      "size": 27380,
+      "sha256": "ba6ea1b74c520cce5abe7b689537844d6ee5648d41746a524dbe31dbeb93b5d6"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_points_voiceover_postgres_tests.rs",
+      "mode": "100644",
+      "size": 2465,
+      "sha256": "489903890b66767f424409a3f676d6ddf00c9e7b0080fe0e850b33fd717a6ac2"
+    },
+    {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_postgres_tests.rs",
       "mode": "100644",
-      "size": 24581,
-      "sha256": "d6f908a7b2ac74354769f3a812ceb384b8d00cc65cc43a3dff071e448cc3bc30"
+      "size": 24623,
+      "sha256": "d68ba4b12aa3098208d2b2bc398cd6ef30d895d8c4a96b57faeccceaafa4f271"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_read.rs",
       "mode": "100644",
-      "size": 16817,
-      "sha256": "382ba86d67f3683939313aa6a8dc172ce65d575d42d8510740c429ab2d5e63c3"
+      "size": 17611,
+      "sha256": "dfb01c2de3d440da7e40f289c3973f8fb02a8d067d19e62da66584732902d6c0"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_selling_points_tests.rs",
+      "mode": "100644",
+      "size": 25995,
+      "sha256": "7a263b3f7753d3dcc0c1fba98b9c499a02b566d123ee12e70d9563d2b1f8126c"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_selling_points_voiceover_tests.rs",
+      "mode": "100644",
+      "size": 4481,
+      "sha256": "b34ff26e0b386b972f3f3f7ad252a290b7bdf641001722f8859f889140c20643"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/remix_selling_points.rs",
+      "mode": "100644",
+      "size": 27365,
+      "sha256": "431197a1e6c2a13df5cc96c5b78fe574a410c580c36ec1adc409c2ac58660c50"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix_types.rs",
       "mode": "100644",
-      "size": 9430,
-      "sha256": "6d0ce7aab96047d0d0b4c43acbc389841b371603b0ee82f1d085c0074ea05022"
+      "size": 11304,
+      "sha256": "0f19e298e324a47b410c51db634d1c3783b72b2c5dd3b9aeae5a918549a7cfdc"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/remix.rs",
       "mode": "100644",
-      "size": 26466,
-      "sha256": "eb1bfcf9638e6b9884bf060b500c70b41870b55c8031f15ccfd59c8c0d5c00cf"
+      "size": 29546,
+      "sha256": "15c0964f949a7e28835da5cfe44c7a63934e36468a73ab34948eb87da6ec270a"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/repository.rs",
       "mode": "100644",
-      "size": 23263,
-      "sha256": "5f0c0b101297072da8e46302167cc5267f0cc29c09625b22312a7dcdb3050010"
+      "size": 26354,
+      "sha256": "507a6e36d684ddb796cd01bb839a87cf7dc10431fc8e0fa03239e80295b46ab9"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/route_tests.rs",
       "mode": "100644",
       "size": 4702,
       "sha256": "aa7656e44e4763988dfa3f20a35dae5d74b3d155b492ec7c5ec1067a79275186"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/segment_multilabel_postgres_tests.rs",
+      "mode": "100644",
+      "size": 6769,
+      "sha256": "7b3eaf6f55a3cb77ef6c4ab03aeec6ad4257d25b5baa8b63d743cea068e4250d"
+    },
+    {
+      "path": "backend-rust/src/marketing/content_assets/studio/selling_point_labels.rs",
+      "mode": "100644",
+      "size": 1212,
+      "sha256": "36891a73470618b1b3c218e0b4a4712ce97eb651fd5c8172960517e7d0a025a7"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/studio/suggestion_postgres_tests.rs",
@@ -13623,8 +13725,8 @@
     {
       "path": "backend-rust/src/marketing/content_assets/studio/types.rs",
       "mode": "100644",
-      "size": 13284,
-      "sha256": "bdeb4a7156dd6a51b6ff8a63492751913ed4e0593ba9d6ee5c50e178a51d1a72"
+      "size": 14380,
+      "sha256": "00b919902785da8956a26d9ec9e12b9025699bae0111d344d1abfec5c754f911"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/text_normalization.rs",
@@ -15753,14 +15855,14 @@
     {
       "path": "backend-rust/src/sample_inventory/access.rs",
       "mode": "100644",
-      "size": 12593,
-      "sha256": "b62c183940eaa58ccfc2b6da5a7147d329c7cc3c2ed65d8b1a448d57c6edc59c"
+      "size": 6859,
+      "sha256": "1bd63901770899f17711347d315ee84f38b3f951e53463a02da1df46ff3a69cc"
     },
     {
       "path": "backend-rust/src/sample_inventory/handlers.rs",
       "mode": "100644",
-      "size": 21346,
-      "sha256": "46f89f2a8557e9d966c6041503b3fd679e2a025cbfb4d204c5ae06ba50de640b"
+      "size": 21144,
+      "sha256": "6473d2409892eb6e9a299217b9eac927c58fee3c1f3c33c53a0ffaacfabee086"
     },
     {
       "path": "backend-rust/src/sample_inventory/mod.rs",
@@ -16809,8 +16911,8 @@
     {
       "path": "contracts/openapi/aios-v2.json",
       "mode": "100644",
-      "size": 621288,
-      "sha256": "9dd6f7974fcde44b43c0a3ad709c512ae61aca5a346c7c28bbddbfdbd0353d0e"
+      "size": 626745,
+      "sha256": "08a9946423102829301c96ca570f3633d1abc7ad8b1e191ec6515a7dc33870cf"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -16827,8 +16929,8 @@
     {
       "path": "DESIGN.md",
       "mode": "100644",
-      "size": 111483,
-      "sha256": "612c64f0e72b7a28ac7ce95934bd0d0a9644b85a8585e6ac323e23de15d970ad"
+      "size": 111929,
+      "sha256": "c9c037e249b4316351acc0e8d9b2c3213d3c4f0d8a6eeb6e57cf525f9d14e6a2"
     },
     {
       "path": "docker-compose.content-production.yml",
@@ -16845,8 +16947,8 @@
     {
       "path": "docker-compose.yml",
       "mode": "100644",
-      "size": 9187,
-      "sha256": "48ab2cab0e68df945ba4b349542a79ba329202a608ebcfaec1d8bf415b4ca22b"
+      "size": 9009,
+      "sha256": "aaefde6ddcdcba7aaa968a48349b8a916a4201ce3fc9759d30e6ab9d6879a4f0"
     },
     {
       "path": "docker/content-production/Dockerfile",
@@ -16941,8 +17043,8 @@
     {
       "path": "docker/content-production/requirements.txt",
       "mode": "100644",
-      "size": 195,
-      "sha256": "82df8a211c99672ab1ddc88a33f6c8370f3e1f907fbbd1bf2c28c9f8fbe7e001"
+      "size": 243,
+      "sha256": "486b9748a99c4731235071ba6e5e726d73da14ce10c054bea1d0a529a50e4f63"
     },
     {
       "path": "docker/content-production/worker.env.example",
@@ -17061,14 +17163,14 @@
     {
       "path": "Dockerfile",
       "mode": "100644",
-      "size": 797,
-      "sha256": "e8d49519590787d4873f854f98dccb977dfe70445410fe30714869d1af104eff"
+      "size": 670,
+      "sha256": "61d994b1b4b9a5b0b2375fe2216b3f9151290cde5e0281829e8dafe01f891d9f"
     },
     {
       "path": "Dockerfile.vite",
       "mode": "100644",
-      "size": 797,
-      "sha256": "e8d49519590787d4873f854f98dccb977dfe70445410fe30714869d1af104eff"
+      "size": 670,
+      "sha256": "61d994b1b4b9a5b0b2375fe2216b3f9151290cde5e0281829e8dafe01f891d9f"
     },
     {
       "path": "eslint.config.mjs",
@@ -17271,8 +17373,8 @@
     {
       "path": "etl/groland_postgres/pyproject.toml",
       "mode": "100644",
-      "size": 598,
-      "sha256": "f42221d014c4163fdca2f12ac2aa8fb2d48fbe4e091788a26fb926c6859b6f47"
+      "size": 947,
+      "sha256": "c84b49502a8047b6e7918286854793113b605ca92030d698d6aa4060867258f2"
     },
     {
       "path": "etl/groland_postgres/README.md",
@@ -17467,6 +17569,54 @@
       "sha256": "d4ce1169bbde61d3e23ec13e33f505fca6205fc5a7c87762a0a22e184340dd92"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/__init__.py",
+      "mode": "100644",
+      "size": 105,
+      "sha256": "4f49a40400872c6a12ecb3923eff10b7c35818c9c3eb3c451184036ea82712ef"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/contract.py",
+      "mode": "100644",
+      "size": 24390,
+      "sha256": "acf39599e1f01bf39813786655a9c738ccca8e4ce82105b1b047440cf8edcedb"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/dedup.py",
+      "mode": "100644",
+      "size": 6071,
+      "sha256": "e0d7125107157816c5be4968ac343b2a05adbd087269ba15ebbfb0fd300fc980"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/evaluation.py",
+      "mode": "100644",
+      "size": 3572,
+      "sha256": "c3daff1ff8ad90ba22549c3e7b80240b0e69be0cb30eac8c6cc3591d76031136"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/offline.py",
+      "mode": "100644",
+      "size": 20562,
+      "sha256": "eb1f2b9f74b1a62b8a4d2c8068b3b6e8e4368915d5c8bfc24c446b3087469f45"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/report.py",
+      "mode": "100644",
+      "size": 15313,
+      "sha256": "eaa6263fe9946b19affad7cec7b83e388794f1e55b8acf6a1b0793a94a5f499c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/stats.py",
+      "mode": "100644",
+      "size": 9833,
+      "sha256": "213e6cebf96e6164138c50fabcd3e6c2713a54eb18df15a2c524c854eb6f675c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/competitor_analysis/taxonomy.py",
+      "mode": "100644",
+      "size": 6319,
+      "sha256": "f7b68404bded19d4529e96f54659bfc15e3502e53a98b6587d05bb1a98c924c8"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/creative-craft.lock.json",
       "mode": "100644",
       "size": 1239,
@@ -17491,6 +17641,348 @@
       "sha256": "63a022981838aafbf804c738729c2518a1e366363f5a9f7951bd30e9533bcfa6"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/framework_annotation_alignment.py",
+      "mode": "100644",
+      "size": 5037,
+      "sha256": "35fbcefa5d9756fe8fce09de808b81ca5e6573815d2e46f9b6c1b0ff3fff8964"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_audit_media.py",
+      "mode": "100644",
+      "size": 4547,
+      "sha256": "81b4cf0ae2ec7abb9bd7cfb8be565969e53d395cbf87de9592b48240becfaeff"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_av_composition.py",
+      "mode": "100644",
+      "size": 9880,
+      "sha256": "391455adbc5f09dad9bce5d9c79ac4e07ac3d7603f3f96f6a7dcb3e7c81778ab"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_boundary_reconcile.py",
+      "mode": "100644",
+      "size": 9146,
+      "sha256": "58dfd90df0b8c65a721114454771398d5dab6ed6cbb5e7b5a2290966da03fe89"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_composition.py",
+      "mode": "100644",
+      "size": 23982,
+      "sha256": "7266ce547ec906684940f772780201dbac699b81211b6ae5e3cb4f7ace983fb7"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_context_coverage.py",
+      "mode": "100644",
+      "size": 3742,
+      "sha256": "ef86419bf9149edbc19209e22f5d006b0a9bfcccfb85ec2801432602fa8ab1fa"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_context_observations.py",
+      "mode": "100644",
+      "size": 1859,
+      "sha256": "5d833f49859d4f3a2d50e8689e372ee32c6a05f944fc4f8fa4c0b0068af80ea4"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_continuity.py",
+      "mode": "100644",
+      "size": 10372,
+      "sha256": "ef15d7aeee031edd9628b19d4405fcda6050d423ed37585e319fe57716570c70"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_detail_source.py",
+      "mode": "100644",
+      "size": 3695,
+      "sha256": "9c3a59773d80c3676598cf8f80b425bae72e80ed2e739463b4cba489bca10ca6"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_edge_ownership.py",
+      "mode": "100644",
+      "size": 2150,
+      "sha256": "334fa9a6f27851a085df0f4111d68cad2b569e036a5cef0ecebaa86215a26933"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_editorial_audit.py",
+      "mode": "100644",
+      "size": 24071,
+      "sha256": "3c7037afdbe5f00bc04d401db636ef59a09e99c64d672e01af19a4433508ea3d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_extent.py",
+      "mode": "100644",
+      "size": 2560,
+      "sha256": "3cce22bde3cc5ab6669ac7e89b4ff0f740bb04d8249b35aee0c7c1a70add3cb2"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_media_rebuild.py",
+      "mode": "100644",
+      "size": 4405,
+      "sha256": "e73ade8e246c5c8d92373d62b6b9587f0698e5469968df525b84e278d9849103"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_media.py",
+      "mode": "100644",
+      "size": 5764,
+      "sha256": "2eb8d4aa387e840b9943b2003d93df475472338300323965a9e572e426b29f64"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_report.py",
+      "mode": "100644",
+      "size": 22213,
+      "sha256": "09f4a3cefa3d19aa4f31cf3c71d628b513f04a7122264746117415db090ef7eb"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_runtime.py",
+      "mode": "100644",
+      "size": 8613,
+      "sha256": "876d98a83160cd3620d6e357532530a78a9a2d71f5bf6bac2f062e83eabfa281"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_eval_snapshot.py",
+      "mode": "100644",
+      "size": 1167,
+      "sha256": "00a2ed7b61231e118a046c069c7db0f42718545e64c5ef6d7969ec325202e6f9"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_evals.py",
+      "mode": "100644",
+      "size": 13384,
+      "sha256": "68d657f9b4f58deb701ac22f3c7111899919d8efd2c4e733674690a2ea685dbd"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_evaluation.py",
+      "mode": "100644",
+      "size": 3312,
+      "sha256": "d45f869b20630100dd75d65ae9ca95c7c6e5d3130e6514aa6f7aa1e3e72b6e82"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_event_observations.py",
+      "mode": "100644",
+      "size": 7843,
+      "sha256": "4175814ec7f932638fa02c4597646ff91ab41c34136adeb7a86c099bd931ac52"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_face_presence.py",
+      "mode": "100644",
+      "size": 2128,
+      "sha256": "40b9cecd4454d4094624d73f39eb09d60c4950f61bd2f538c798b4a64e7439a1"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_failure_queue.py",
+      "mode": "100644",
+      "size": 6257,
+      "sha256": "2a19ce902ffdbed5813a479d468e22bc8be83dd07b76ad310c402687ffa574e2"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_identity_evidence.py",
+      "mode": "100644",
+      "size": 2401,
+      "sha256": "8c675eddabd2dccd126a27537e7d311344f7bc4ea94a0ef388f49ed502ccf082"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_isolated_attachment.py",
+      "mode": "100644",
+      "size": 6811,
+      "sha256": "27eb23103455d1b095af776525e7cf8fa77285612a5a8c403769513541f0db58"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_narrator_return.py",
+      "mode": "100644",
+      "size": 10678,
+      "sha256": "b7b16769c7773986b90e1923613a23d2f571823c15de8aac49e56c4f976bb7da"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_offer_bridge.py",
+      "mode": "100644",
+      "size": 4192,
+      "sha256": "fdd0cb5a9aa6ff629d4044f072cd9789ecae4d78a17009c3ff3f3430347a0628"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_offer_intro.py",
+      "mode": "100644",
+      "size": 5947,
+      "sha256": "238a9d8e82af3175ec522a9910fe91b4f0f8eb731de455bb91daf520e54ecd36"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_offer_tail.py",
+      "mode": "100644",
+      "size": 7580,
+      "sha256": "7bb01db929670ac77c112fd689460764a3e35710d87cfc64502c826fa11ac06a"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_opening_context.py",
+      "mode": "100644",
+      "size": 2833,
+      "sha256": "9ba6ab44c53df885330baafd444017b27b268d0070486d76a62510581538738c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_operation_provenance.py",
+      "mode": "100644",
+      "size": 6206,
+      "sha256": "74afbd9aa5c92e6bb9aed034f23f7d524be1945bd9f9aa7d702b31eda2a684be"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_overlap_repair.py",
+      "mode": "100644",
+      "size": 13247,
+      "sha256": "6e3a3a37d6cbfb8394183816bf4fb142619d9757104c6670014b1ec6f523d0a0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_promotion.py",
+      "mode": "100644",
+      "size": 7264,
+      "sha256": "5cac4a5e1a2dc26efc81c7a6a6d2b4dc03bce666a71abc10aaeb35ad356a51a9"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_recording_groups.py",
+      "mode": "100644",
+      "size": 10317,
+      "sha256": "68dbcfb7c415681d12fb294d5c1960de925ba6f56cfa50d1be3824854267b2f3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_reference_calibration.py",
+      "mode": "100644",
+      "size": 4752,
+      "sha256": "b7ff6db3e2596257215cd5d4996aab9d7fbf767b2bd9a972407cc2f6e48d86ab"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_review_graphics.py",
+      "mode": "100644",
+      "size": 5532,
+      "sha256": "3668de75dfc6c871fe3532ab8f155231105d0483ef8b756380c163810b1c11b0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_review_membership.py",
+      "mode": "100644",
+      "size": 20618,
+      "sha256": "0abcf369ed9e6d2a94c5a3e59c80225fea0b4387ebfe8736e6d8bb7528c33b07"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_review_ownership.py",
+      "mode": "100644",
+      "size": 24322,
+      "sha256": "2eed2e95c6e885a3927202bb3bd1f9a18714b1066c7be3c6919ddc5b19dc721d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_review_partition.py",
+      "mode": "100644",
+      "size": 10746,
+      "sha256": "2bf5280dacff0cf3861a2688f8ad5ce5be0366b16f11544da5dadeb25f7f1938"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_segment_evidence.py",
+      "mode": "100644",
+      "size": 8656,
+      "sha256": "86cbef8acfb0324abd942bc127df6c8c834c87c9c7f1debfd9814706617e1798"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_short_review.py",
+      "mode": "100644",
+      "size": 10166,
+      "sha256": "2eeb744b20905ff7d534788a5bb850738fe70f94c00e0573e4eb1b01874ff918"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_shot_audit.py",
+      "mode": "100644",
+      "size": 22651,
+      "sha256": "386409d9bf43d30153ff1cda0a4264a97fd15d36e8d404899c1b88903293faba"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_shot_evidence.py",
+      "mode": "100644",
+      "size": 5133,
+      "sha256": "2c9708f1884fe9329bd5b6bb37e73ca6cb70a92763fd909ad996b1307d4cd26f"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_shot_verifier.py",
+      "mode": "100644",
+      "size": 13607,
+      "sha256": "9289948138b96227f225ceca342af77cfa18ce90a656b8b0a52e33c7192bae87"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_source_roles.py",
+      "mode": "100644",
+      "size": 7267,
+      "sha256": "f1aadf3928e7bb421370f499ecaa959afd420410dc07a826c762bd6f657102d0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_speaker_evidence.py",
+      "mode": "100644",
+      "size": 6619,
+      "sha256": "f7bae740138e7a967fc26fab332cb5cc4a40aee1561d189506ce8cfc93073ad3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/__init__.py",
+      "mode": "100644",
+      "size": 321,
+      "sha256": "aa8d2446e94568740d4c18a70173ba3b7ad4b92c07133d6f084ba7357117228f"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/frames.py",
+      "mode": "100644",
+      "size": 1827,
+      "sha256": "c4e461952c45b6dfb2d7b2c19c9ecafce975f83a79145c77114107fadbd98d94"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/local_vlm.py",
+      "mode": "100644",
+      "size": 8466,
+      "sha256": "0e3c8fd0cf473b2e1721aba08fb75875634f62f48997370f3059ccca745550fe"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/mouth_probe.py",
+      "mode": "100644",
+      "size": 2957,
+      "sha256": "88c22e1f2df30d769a44fdf47bf484b62da81459e2b64667896684348b9bb1cf"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/mouth.py",
+      "mode": "100644",
+      "size": 2540,
+      "sha256": "1611f2c9921a2d581034a5604d497ca29e045d9f17bfe523a0f2b6be03fbb385"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/ocr.py",
+      "mode": "100644",
+      "size": 2221,
+      "sha256": "321f7fd54ac6cd0de59aed39d3dbeed1eaabced90b1770f7cf95e28a6134f63e"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/persons.py",
+      "mode": "100644",
+      "size": 7352,
+      "sha256": "a341f03bb59631ad3abfcdc6c84469ae44aca10d13900e694886d6f93b96d325"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/pipeline.py",
+      "mode": "100644",
+      "size": 4542,
+      "sha256": "9a1da5f39cf75794f3412611736d57ff05754044d10fcec70f2f43d256295fe3"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/review.py",
+      "mode": "100644",
+      "size": 6533,
+      "sha256": "8e11c836aa084e7fe39babf7b9b02482f3fe45045bf3205fd4256fadaf4e5d7f"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/rules.py",
+      "mode": "100644",
+      "size": 19432,
+      "sha256": "8e38c1539a6fbda7600fbc9500edb401e4fb65ce364ab441f7572a2631760c19"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/shots.py",
+      "mode": "100644",
+      "size": 806,
+      "sha256": "d05b3df1ed1e6fd1250140d8b9faa2688c10b46e982cbeb006b87b388e0276d8"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_window_audit.py",
+      "mode": "100644",
+      "size": 64899,
+      "sha256": "c3c7d7894c243fcaabf7477d7b8d5ab0d1b50240e0ea9c105120348ccf88b810"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/indexed_captions.py",
       "mode": "100644",
       "size": 4001,
@@ -17501,6 +17993,36 @@
       "mode": "100644",
       "size": 4246,
       "sha256": "10d63d40b0ba8895f031afffc72768d2a065ff9400981909a4ce5d4e8372d48d"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/local_asr/__init__.py",
+      "mode": "100644",
+      "size": 102,
+      "sha256": "b9946014b080abece66ef53d5f9271f87755f7621e81d9a8794553cff1945eb4"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/local_asr/aios-asr.service",
+      "mode": "100644",
+      "size": 902,
+      "sha256": "8d62ef775981ff1bfa6bdf0f9a832058b9854e6c4d378fff8cddfdd5833e7e3f"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/local_asr/engine.py",
+      "mode": "100644",
+      "size": 4248,
+      "sha256": "72b9d08df433fb458ae87467bdc9302782db258f57d87b91fb3a0bcd6761aa03"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/local_asr/service.py",
+      "mode": "100644",
+      "size": 4584,
+      "sha256": "b535b23e4e60a198efbdcdf49c0604bae4b949dd907d375861176860b89dfbff"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/local_media_budget.py",
+      "mode": "100644",
+      "size": 2084,
+      "sha256": "35d5bd78b4c80d5cd54d82c0e3a7409956954ad0e35b5fe9fc8d69db9e261549"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/mediakit_client.py",
@@ -17547,8 +18069,14 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/remix_output.py",
       "mode": "100644",
-      "size": 12497,
-      "sha256": "41e0a2ca22e3f55f27c5d9661c800c0e7fc6063743a3a1e487b56c5d6c6d2a2f"
+      "size": 13196,
+      "sha256": "e3052cf3c8372b0c0fd39e74db2d458926c62ae36c4ee97aca9a68037f9f6192"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/remix_similarity.py",
+      "mode": "100644",
+      "size": 7628,
+      "sha256": "4c107c7819c814cc41dd043bb5327c93aada9e4d66b9b0a8e168f4f01ed3c418"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/render_binding.py",
@@ -17565,8 +18093,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/run_bridge.py",
       "mode": "100644",
-      "size": 5687,
-      "sha256": "d0ba3ed0c76f275dae1dfdb6f817442da362d8af0c1d9553daa73d939564f3e0"
+      "size": 6091,
+      "sha256": "4acb6cb16215218940227b5f7c95d526658627c2c2e0914760c5f1b32039b0f0"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_covers.py",
@@ -17577,38 +18105,38 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_shot_hints.py",
       "mode": "100644",
-      "size": 10481,
-      "sha256": "2ecf117ba9106d5b7a9eb63b3af10f8d356c057be8cb4022039e4086fa8639f0"
+      "size": 10556,
+      "sha256": "32367ccd34bf20ec14af58c8336f57f9fea6b5af29b748554999ddbfc4de93b5"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_contract.py",
       "mode": "100644",
-      "size": 26979,
-      "sha256": "81bd3792954e980c8378757267ac60d287f93c6ab5c72a4eec394cf82b255289"
+      "size": 35381,
+      "sha256": "b90210f769ba39eebd2e4338c72191e9c51850c97e9baba61ed781ed65af8925"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_provider.py",
       "mode": "100644",
-      "size": 9123,
-      "sha256": "c9b7d00ce2d9c4e5c3ccbed11b80b320e5ea1c9d6e6ddd13cf7bd91a48adfb7a"
+      "size": 16096,
+      "sha256": "4e7f67ecc20506e47664629b8addeffad2208a4b922c982a563687b92218d5b4"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_queue.py",
       "mode": "100644",
-      "size": 11102,
-      "sha256": "b93061326658f42cf175f9e055704ee59bc3c391fe4f25159fe4dbc399089e1b"
+      "size": 13836,
+      "sha256": "a8112851ad8cfebe8da83206c0d901c8acd385bc82de86bdafb0e1ea46aca7a5"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_worker.py",
       "mode": "100644",
-      "size": 18673,
-      "sha256": "6e6e597747282757841788b916cdab6b7fe72d67767cde3557d36af175ffdcea"
+      "size": 32729,
+      "sha256": "f359f7c879cb11a3bb9e6a3d26989f98664cbe39a63cd33016356fdf7f27b02d"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_transcript.py",
       "mode": "100644",
-      "size": 6240,
-      "sha256": "a6b166e7b712dd50b33f49093008f4303aea2c185eb63ae862bdffc90556e8da"
+      "size": 10170,
+      "sha256": "9bdc5252da08f1754be6eb5d8865e85f72aad7f360f2640c7cfb43a9d3aefd22"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/selected_review_actions.py",
@@ -17633,6 +18161,24 @@
       "mode": "100644",
       "size": 8237,
       "sha256": "ab06370ddee9868c2dc22510f65389d83df0f9e0fba4c4e4531fcaf3193edc27"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selling_point_boundaries.py",
+      "mode": "100644",
+      "size": 8887,
+      "sha256": "e00bbc35594f75b295ab4a793ac7568aa386080bfaa3e9087bb127385ba3be6b"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selling_point_boundary_media.py",
+      "mode": "100644",
+      "size": 2699,
+      "sha256": "a800b00a202d83f2b03d3f69f2e95df51d7b8d9b0a00c1d5a99c694fbe215c30"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/selling_point_suggestion.py",
+      "mode": "100644",
+      "size": 14011,
+      "sha256": "ea2f9c5308db37ef1a5956a344e21b7b44371bd1ed1298aa0b902000fcc812ba"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/semantic_captions.py",
@@ -17787,8 +18333,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/worker.py",
       "mode": "100644",
-      "size": 14719,
-      "sha256": "fe0829536df554040989f6fa1a3d7a88427c1e1feb1920ffd5d49b722650b9c2"
+      "size": 15080,
+      "sha256": "0b1a6ad5765a96c4c20a74506048f5d6f086bdb37477fac74108df96d049fced"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/workspace.py",
@@ -19767,8 +20313,8 @@
     {
       "path": "etl/groland_postgres/tests/content_production/object_fixture.py",
       "mode": "100644",
-      "size": 4970,
-      "sha256": "2870fca291f43185abcb8c71031b4d073bbdb0936fffbf4c79ae535941515a26"
+      "size": 9135,
+      "sha256": "df3f3e0a41a200d311c16cbfc0dd89ad18be07e69cf48efc1c640978cfec297f"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/real_media_worker_replay.py",
@@ -19951,6 +20497,12 @@
       "sha256": "afb72b1ca70166fc49fe7c7efec3bf04f04febf462773e5ec1cd00154ef4735d"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_competitor_analysis.py",
+      "mode": "100644",
+      "size": 16816,
+      "sha256": "c05336529fa83a9a5f21152a762fe9dde59088eea66029ec44d3f906166946ed"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_edit_document.py",
       "mode": "100644",
       "size": 9521,
@@ -19963,6 +20515,300 @@
       "sha256": "949672541020f6dc5cbd72d0ce954135b4ecded91faaf0aac940a712627944fc"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_annotation_alignment.py",
+      "mode": "100644",
+      "size": 6211,
+      "sha256": "9a65fbb9e00a8f0684461cdad963c86d16a810af1546bfddfbf00c237e8418ea"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_av_composition.py",
+      "mode": "100644",
+      "size": 8356,
+      "sha256": "2f0198efc85f5d3977c8bc940dbbde96bb39b1e790d4ab3be31dc0f8ea51aa34"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_boundary_reconcile.py",
+      "mode": "100644",
+      "size": 9255,
+      "sha256": "9df993cb503f9d8556a41a05e33ad17abf2c574d1dca5a2e01b542943acca9bb"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_composition_uncertainty.py",
+      "mode": "100644",
+      "size": 1550,
+      "sha256": "0deffea1ad223e813561683240e1a8ee42b09cfa745e954d057b758c9a458bcf"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_composition.py",
+      "mode": "100644",
+      "size": 25683,
+      "sha256": "cc95201139beca961bb33a3395961baee2fa78b354dabbeaba32c11d2476baf2"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_context_coverage.py",
+      "mode": "100644",
+      "size": 2884,
+      "sha256": "802a5a796ce6a0bcd04e0626056849828e29398ae526f005e56034ffc73df0f5"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_context_observations.py",
+      "mode": "100644",
+      "size": 1357,
+      "sha256": "28078f113e5bbceef47e14362e3d16146bb0e1c582084e31bb5381db30d2f1c3"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_context_repair.py",
+      "mode": "100644",
+      "size": 12764,
+      "sha256": "c3556e6613c70319f4a1a5e6ddd219c64d3368d03f91812a98cc39b4060d734a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_continuity.py",
+      "mode": "100644",
+      "size": 7015,
+      "sha256": "f1c632beb81c3467ed278e3b21ccec68527e971ad06bc9076fcd3496e4f8e342"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_detail_source.py",
+      "mode": "100644",
+      "size": 1342,
+      "sha256": "ba559f1f1398b53f460dfa8730859024495ed3abffd5ab3ee00acb6d12cb5e60"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_edge_ownership.py",
+      "mode": "100644",
+      "size": 3078,
+      "sha256": "63ac2cb5c30be94f6dc9da1a9c5e77a1bf897b0bec32b1a9f9770c10596035e7"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_editorial_audit.py",
+      "mode": "100644",
+      "size": 19151,
+      "sha256": "536caeb67bc9607d1dde25377ca33e1f9f27e08a2a4372f80252dc0349548c76"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_eval_circuit.py",
+      "mode": "100644",
+      "size": 3690,
+      "sha256": "412f2f88d63a0ca131c6070cd161687aa62ad62db6c927fe841880c4e87d985c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_eval_media.py",
+      "mode": "100644",
+      "size": 5228,
+      "sha256": "1e81e7984290453f6afd08d96bc1a465d2ecd8fb1d95575989976eae34898ff5"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_eval_snapshot.py",
+      "mode": "100644",
+      "size": 1632,
+      "sha256": "3047144fa6678209a2a58d52993cbccf74da066b0ea5067415be346a0adc392f"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_evals.py",
+      "mode": "100644",
+      "size": 27990,
+      "sha256": "d582a997ea5f2c6290c08c34d2ade533b8e2a2afa050ddd10283eb8dc1298c7b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_evaluation.py",
+      "mode": "100644",
+      "size": 2271,
+      "sha256": "59abf426c997c00dc4a9d3d94a7c05d4b354b1bb00ce4ae159afad07814673c8"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_event_observations.py",
+      "mode": "100644",
+      "size": 8016,
+      "sha256": "2eaf34d572f91e8034036e901f7b2fae9d5c7c1aec506be9db8fa42e7a6afe11"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_face_presence.py",
+      "mode": "100644",
+      "size": 1875,
+      "sha256": "34b3e36a7352d295db8427a676ea04541120d213f08fbb28e115b3c3c2fcb575"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_fragmented_operations.py",
+      "mode": "100644",
+      "size": 6334,
+      "sha256": "e5ae1c45210936b4f0761399aba45469653eac3df5ad17a7b2db1ad22ed53c60"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_graphics_repair.py",
+      "mode": "100644",
+      "size": 2462,
+      "sha256": "21abd59139318d5bb07cbfe46d713e3fc2787fee1f93b87915152d1fc5737d16"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_identity_evidence.py",
+      "mode": "100644",
+      "size": 3100,
+      "sha256": "de25230be9cf098b8d61854e5d9e30eb153b4d4377493c37aa213f505c65f8f2"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_isolated_attachment.py",
+      "mode": "100644",
+      "size": 5452,
+      "sha256": "00e357357978af287949767c54f2e4babe480cec0e65fe9b9752af3365e10510"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_narrator_return.py",
+      "mode": "100644",
+      "size": 8245,
+      "sha256": "4ebab03f97a5e14ae012c44e84e7a754fe5aede01b0a2837fc188b3cba3643a7"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_offer_bridge.py",
+      "mode": "100644",
+      "size": 2504,
+      "sha256": "0e4092737ce7196dc9523a8c6c3421039b1e61efab7de543e9d8510b440a2fb7"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_offer_intro.py",
+      "mode": "100644",
+      "size": 3782,
+      "sha256": "915a90f411ba23276a8ea172092a31c51d56ffc9097ffd885712a8518dd94506"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_offer_tail.py",
+      "mode": "100644",
+      "size": 3141,
+      "sha256": "0b86973e3bfc4d8749b066532878cd49326108bb65df1af88b7acd1c0ec79058"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_opening_voice_repair.py",
+      "mode": "100644",
+      "size": 1840,
+      "sha256": "2d52f4d031c3463b2c1198703892beebe46975f4b02da042e5325de581df53d1"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_overlap_repair.py",
+      "mode": "100644",
+      "size": 5365,
+      "sha256": "40ee26e9f57026f8962949eab43fdaf0c533ee3bcebeed5dcce2ebb4adde6c79"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_provenance_repair.py",
+      "mode": "100644",
+      "size": 6433,
+      "sha256": "450058f8b6f0986390db0df8f9263f67c9562f9af61e77b7206db80b2ada38d9"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_recording_groups.py",
+      "mode": "100644",
+      "size": 5704,
+      "sha256": "ffc6ebffbb756bb934ed83c1844cda006c6390ee95d0c6dd45ba82efbc77a8cf"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_reference_calibration.py",
+      "mode": "100644",
+      "size": 8081,
+      "sha256": "c60740f848a81223189cb6686a1db9309ff3af0a9c7ae172e9720b5f763a9461"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_review_membership.py",
+      "mode": "100644",
+      "size": 17442,
+      "sha256": "be75298d81f3a24c299ba971cff2cc17af7ebdf2be3a08f19cbc7fea85c36927"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_review_ownership.py",
+      "mode": "100644",
+      "size": 31065,
+      "sha256": "817f11347e48fa6c6bf0275b384417f7dbd2fc9bf43e780ca86df0bf2c6404a2"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_review_partition.py",
+      "mode": "100644",
+      "size": 5874,
+      "sha256": "ff73748578e423a909b036e0482f815fb2a075d31aed95e05c72f07a0df6e7df"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_segment_evidence.py",
+      "mode": "100644",
+      "size": 6858,
+      "sha256": "466fae2691a12f9ddeb3d542702476c5095e6a9700f9e201d081cea7bb1e7d29"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_short_review.py",
+      "mode": "100644",
+      "size": 6837,
+      "sha256": "6761f2f08e4fdf6d8e432ac50a4e8457a40acb1d53987341c3a1758dc6594ab0"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_shot_audit.py",
+      "mode": "100644",
+      "size": 15099,
+      "sha256": "25933f8f353eeb894735bf14cb8a73f1388dbae978d2484e423aa71ec36655e5"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_shot_evidence.py",
+      "mode": "100644",
+      "size": 2760,
+      "sha256": "ac4cdc702ded9e2fb0c581a05d1b2a289daddad08e6ac629ab36744eefd5ccde"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_shot_verifier.py",
+      "mode": "100644",
+      "size": 4687,
+      "sha256": "bfa562619eedd9eeea8d29811708fcaca51aa398ee05ce2e3911fd3ba266dea3"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_source_bindings.py",
+      "mode": "100644",
+      "size": 4337,
+      "sha256": "a78bc2dfe2911a345436e2df7d7cf68be65c3bc7cb94895a030bf054d31b833f"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_source_roles.py",
+      "mode": "100644",
+      "size": 1609,
+      "sha256": "8c2ad7d6a2b627b23376da4ebe0783a0d294be553de95df56962201ce0866e3b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_speaker_evidence.py",
+      "mode": "100644",
+      "size": 3406,
+      "sha256": "c29c19e1b11a5b1844e094a43b587c064c7463cbafb29c8043fc5981d821a786"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_state_repair.py",
+      "mode": "100644",
+      "size": 7361,
+      "sha256": "ad384fdb5c06be88c7fabcc1b920d6a9f9219299b8fb375848bfc6c83fe81282"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_v2.py",
+      "mode": "100644",
+      "size": 18050,
+      "sha256": "2fd846a3b4841c18b6aa20adf9ab3fb835216bcfc810caf1f5291e7c476ece54"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_voice_resolution.py",
+      "mode": "100644",
+      "size": 1674,
+      "sha256": "5358d7b4401307cb6c2f9ca00f70662092e64c3eeddbb52362c8ec92c8769442"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_window_audit.py",
+      "mode": "100644",
+      "size": 32572,
+      "sha256": "9363306d841ffb2fc05b5e26e6190be876fba8044140dda5a45c4c90cf04be67"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_window_completion.py",
+      "mode": "100644",
+      "size": 1834,
+      "sha256": "8c786e2bae0efa3cda448dce1ccb093cbf62199b56191bc0385c7acadc14c87d"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_worker_path.py",
+      "mode": "100644",
+      "size": 5786,
+      "sha256": "2b3700c7e971a3a2b84eddda2a10ddce3956deb7789651480510d188e2751100"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_indexed_captions.py",
       "mode": "100644",
       "size": 4089,
@@ -19973,6 +20819,18 @@
       "mode": "100644",
       "size": 2921,
       "sha256": "b4aaa4e7016009224aa1eb6a5b2f69a3372ef4387c282c794a88c538558e3ec5"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_local_asr.py",
+      "mode": "100644",
+      "size": 10883,
+      "sha256": "e6c02d7db2eee64f9162945948710a220d41679a56d9ed66285b6bfcc5bfa7d4"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_local_media_budget.py",
+      "mode": "100644",
+      "size": 4849,
+      "sha256": "450df713881fbae796b26a6a653f33174b128f5e4e164c5109cb3cdec43e4209"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_mediakit_client.py",
@@ -19989,8 +20847,8 @@
     {
       "path": "etl/groland_postgres/tests/content_production/test_object_fixture.py",
       "mode": "100644",
-      "size": 2643,
-      "sha256": "98a3c0cc0fb72a4d8e5f69cdcb03da6ea2067746b50f0f8e1bf20bcb41aefa1e"
+      "size": 4583,
+      "sha256": "c17a624ee8ca4309a5e695c18c3e72417a5b89b914817285f9541f6e3b113e62"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_output_profile.py",
@@ -20025,14 +20883,20 @@
     {
       "path": "etl/groland_postgres/tests/content_production/test_remix_output_keys.py",
       "mode": "100644",
-      "size": 1244,
-      "sha256": "83ce6fe6dcc3a9e750d1d5ae9b6137f943d674e77ef661576b7b5594ac8876c0"
+      "size": 2056,
+      "sha256": "d5ce9eb01e25487af123a1d2c19a13c894b33b64ca5c15f2fc1ef4b10d2a4b9f"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_remix_output_postgres.py",
       "mode": "100644",
-      "size": 14515,
-      "sha256": "e3cb358f4abf08f3f5e0926304a2b84bd8259e315bd0ce22398620a5390ce3f6"
+      "size": 15388,
+      "sha256": "fb7e948d3f6f685da05d7b677fc975f390f0e32cc4106ad8dec3d82390973e53"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_remix_similarity.py",
+      "mode": "100644",
+      "size": 8952,
+      "sha256": "c1076c958354d617113dfd2a8fd10676a3798e16907f58d767483a9ccd75bd23"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_render_binding.py",
@@ -20073,32 +20937,32 @@
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_contract.py",
       "mode": "100644",
-      "size": 28964,
-      "sha256": "baf29f788b1d13c8a00a39eb4e3f87dffe5e2d04e23bc25b84fdacc173da0616"
+      "size": 32099,
+      "sha256": "34ca1ca417dfcdff69aa8f291da5d7c5352eb080a474794e063793483214f316"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_postgres.py",
       "mode": "100644",
-      "size": 23682,
-      "sha256": "931d4b3071930dab1377d45ffbb663163d349e445b849c1cd964f7398e58f062"
+      "size": 37593,
+      "sha256": "891b2f63e72346347919d98c68c6d642104b4c9fb990d259abf59a27a1a7a4b0"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_provider.py",
       "mode": "100644",
-      "size": 6071,
-      "sha256": "bf96759d1c976715e1d5829b89c92e11734d5faf2568753e024e9d343e81db90"
+      "size": 9507,
+      "sha256": "0a422088537a1f2c6e99a1ca43461ccdc3ea5c991092c6f75aa8750b3f002f20"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_suggestion_worker.py",
       "mode": "100644",
-      "size": 8076,
-      "sha256": "c9cd40f7291567f2b652d2d49a89bfe92efd374c236217e6e928ea9c7c20a770"
+      "size": 8440,
+      "sha256": "1d2ab6ae659c5b20bcd0ae3108bf8fff5bd05c17a597926b95ce1ef18608917c"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_segment_transcript.py",
       "mode": "100644",
-      "size": 7098,
-      "sha256": "dbde70ed5b2c2fc718e788c07d6037dfb34e532524b0d6e29896296f7d9c3c8d"
+      "size": 7987,
+      "sha256": "de744d93efa9eb89d1f2c784c4a28f8fc7107d79f692aead3bc9b9e68793469d"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_selected_review_actions.py",
@@ -20123,6 +20987,24 @@
       "mode": "100644",
       "size": 3802,
       "sha256": "5a2bbe23b2221e07b6ea8cc7ee6d94444a259effae68ace203d5e221383aea16"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selling_point_boundaries.py",
+      "mode": "100644",
+      "size": 6583,
+      "sha256": "c8b9dbba4cd54cd397d34f416b1c068f731fdf0458c118bf49124276d6c97850"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selling_point_business_labels_postgres.py",
+      "mode": "100644",
+      "size": 6169,
+      "sha256": "d1caf26516f25e32217c48de0b228164b660317a7c520593f950c3c8076a99f3"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_selling_point_suggestion.py",
+      "mode": "100644",
+      "size": 8610,
+      "sha256": "ecadd4c8807513f5e0f493e59d1ca10a551a9a918f31335245394662a372c339"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_semantic_captions.py",
@@ -20275,6 +21157,30 @@
       "sha256": "d6e50e8cf688b7ed069152f4af9382ec89328fa92934dcc048d2a77a9bc88d79"
     },
     {
+      "path": "etl/groland_postgres/tests/fixtures/framework-evals/baseline-v16.json",
+      "mode": "100644",
+      "size": 19373,
+      "sha256": "a2c455ce0f82c8a9ff60da5ecb346b2d58e9f4ef626d777980f9ac06a85e77e7"
+    },
+    {
+      "path": "etl/groland_postgres/tests/fixtures/framework-evals/corpus-v1.json",
+      "mode": "100644",
+      "size": 76078,
+      "sha256": "6ee908bafc37af0ecbe0e6efba0809013561e9b604e1d97a30641e5b3f783e76"
+    },
+    {
+      "path": "etl/groland_postgres/tests/fixtures/framework-evals/corpus-v2.json",
+      "mode": "100644",
+      "size": 79755,
+      "sha256": "89128db7bd55e2d50d36f404d7cf7105bd954748380ac07658f8f5811e02bf2b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/fixtures/framework-evals/corpus-v3.json",
+      "mode": "100644",
+      "size": 82805,
+      "sha256": "c21b91d06740c40c1c652ac1834c07d4a4b7e8ce2a4d2d1914593b994c908d5c"
+    },
+    {
       "path": "etl/groland_postgres/tests/sql/all_trade_overview_check.sql",
       "mode": "100644",
       "size": 9298,
@@ -20303,6 +21209,12 @@
       "mode": "100644",
       "size": 3354,
       "sha256": "c9fb4475a3b3157afa7ed73ac9e5d2942d952c0d9d52c55b23702ae98ffbe0bd"
+    },
+    {
+      "path": "etl/groland_postgres/tests/sql/content_ai_studio_selling_points_contract.sql",
+      "mode": "100644",
+      "size": 2996,
+      "sha256": "5750290d3327eb8e578dc713683f14699fa60a4fc2288e1daa66b8dde7673eaf"
     },
     {
       "path": "etl/groland_postgres/tests/sql/content_production_runs_contract.sql",
@@ -20853,8 +21765,8 @@
     {
       "path": "etl/groland_postgres/uv.lock",
       "mode": "100644",
-      "size": 196460,
-      "sha256": "3f2a4ca7534e9aa6e23faae536b93bb9b2ddf5ec403cd362bbb59abd8f1453fc"
+      "size": 247808,
+      "sha256": "2fd6e6b6b04d05291d356abe2dd9025410d31097c32d95af73b840a5f8efd3dc"
     },
     {
       "path": "LICENSE",
@@ -20866,13 +21778,13 @@
       "path": "package-lock.json",
       "mode": "100644",
       "size": 332006,
-      "sha256": "9a88b271ad6bbf335c862f0a11b0602c2754eecf7a91b8ab8c8fe77ac7c16903"
+      "sha256": "d936d59ec5f59f9b5f5ea1427406b7edf39a7485e53d6569f3e364507ecda1d8"
     },
     {
       "path": "package.json",
       "mode": "100644",
       "size": 54828,
-      "sha256": "74d1410da5306abc184649af8ea599491062cac8990ec8458562c015006843c1"
+      "sha256": "ebe5d55c84222dfef295bab164e54e6fafcd1461452b1edf39031e1fd46bab48"
     },
     {
       "path": "postcss.config.js",
@@ -21747,8 +22659,8 @@
     {
       "path": "scripts/checks/frontend-structure/route-policy-registry.behavior.mjs",
       "mode": "100644",
-      "size": 4497,
-      "sha256": "015c60f92b43f8c92dd91757afb954954ec4f49f5031b4b7b52ceb95f8367d58"
+      "size": 4504,
+      "sha256": "e72bbcb64ce06d19ef67df59a6f49b67ddf227cab38a900f2c78ece2d9d2920e"
     },
     {
       "path": "scripts/checks/frontend-structure/same-dir-alias-imports.behavior.mjs",
@@ -22240,7 +23152,7 @@
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.behavior.mjs",
       "mode": "100644",
       "size": 23739,
-      "sha256": "fc8e9e65e735278f60a27178c78e54c986015225403fbf54aba2b2a30cb3e43e"
+      "sha256": "d48df33cf2a541d00496db41ead5e5373bfea0f41403e814ce5c7228a64195df"
     },
     {
       "path": "scripts/checks/marketing/content-assets-qianchuan-production-migration-reconciliation.mjs",
@@ -22425,8 +23337,8 @@
     {
       "path": "scripts/checks/quality-runner/affected-mapping-deploy-fixtures.mjs",
       "mode": "100644",
-      "size": 8334,
-      "sha256": "5273de2e964108a253440b85ceeb02b94a5780967f4b9dc86b1addd723c51bec"
+      "size": 7828,
+      "sha256": "8aefb7b99bc68c0980917d65fff815beb4cbbc14f31a9309d8cadee3b37a43ad"
     },
     {
       "path": "scripts/checks/quality-runner/affected-mapping-fallback-fixtures.mjs",
@@ -22827,8 +23739,8 @@
     {
       "path": "scripts/checks/quality-runner/registry-deploy-fixtures.mjs",
       "mode": "100644",
-      "size": 4166,
-      "sha256": "aca55175d6ca0c3e5fa84736a884603f690dc63fecac1c2dbe7269fc35af897e"
+      "size": 4029,
+      "sha256": "c8648af507b5d8e56f775ddd113b06bea34485c5ddbfe90fbce46be67405c58d"
     },
     {
       "path": "scripts/checks/quality-runner/registry-design-input-fixtures.mjs",
@@ -23553,8 +24465,8 @@
     {
       "path": "scripts/config/contracts/aios-api-contract.mjs",
       "mode": "100644",
-      "size": 45139,
-      "sha256": "d09af4d632ed87208ad1b7e1c55c9a4e5f000c5f7cf0e628a5c98b2db2007a5d"
+      "size": 45226,
+      "sha256": "87f7bf6e7d7b82b00798d21925cb98ed0e8a7e0cadf448edb8a2f127015c445a"
     },
     {
       "path": "scripts/config/design/token-color-sync.config.json",
@@ -23565,8 +24477,8 @@
     {
       "path": "scripts/config/frontend/bundle-budget.json",
       "mode": "100644",
-      "size": 5363,
-      "sha256": "6ae38f0735bd7a3ac5d4a6d39d52b9b48d6e201c003c1abf8f44f3bdd2735324"
+      "size": 5619,
+      "sha256": "8c0d7464ff6ee85b8e02943c38d27f2db7b58c97f339f19f51b44c0dd9bfd4ba"
     },
     {
       "path": "scripts/config/frontend/coverage-ratchet.json",
@@ -23577,8 +24489,8 @@
     {
       "path": "scripts/config/frontend/smoke-routes.json",
       "mode": "100644",
-      "size": 6128,
-      "sha256": "22710d62f400b60394e3b2f5d40eb3601d9a61fd48e758a02cb349fad3beb654"
+      "size": 6663,
+      "sha256": "361fc21250ee102cef0075d7cbaab7a88353e281ac1f48863c58207a977eeb14"
     },
     {
       "path": "scripts/config/migrations/aios-migrations.json",
@@ -24597,8 +25509,8 @@
     {
       "path": "scripts/lib/frontend/smoke/behavior-fixtures.mjs",
       "mode": "100644",
-      "size": 21434,
-      "sha256": "5aa7b6298841b3b64c9d79164c282e044c2eb01add72253f05c7e91ccf614ecf"
+      "size": 21858,
+      "sha256": "b1d265cf22d9ef90549312a913c6fb2672923d68f6c3714b45e640b53f1416f4"
     },
     {
       "path": "scripts/lib/frontend/smoke/chrome-cdp-client.mjs",
@@ -25551,8 +26463,8 @@
     {
       "path": "scripts/lib/quality/quality-affected-support-rules.mjs",
       "mode": "100644",
-      "size": 28499,
-      "sha256": "557a036a5af0d678e629eb4ad926f06ea94a17c909ed07ccb2ac7987eb96f44c"
+      "size": 28421,
+      "sha256": "8ae7b0e9e37c8e9222a585bb8827f9e2be7fb7535650ddd05626e56596ca7af7"
     },
     {
       "path": "scripts/lib/quality/quality-affected-weekly-rules.mjs",
@@ -25677,8 +26589,8 @@
     {
       "path": "scripts/lib/quality/quality-gate-inputs.mjs",
       "mode": "100644",
-      "size": 23067,
-      "sha256": "97b54466a52eff46bc84a88725a1e542b48af7f7859160964fd093bbe93198c6"
+      "size": 22983,
+      "sha256": "abc25b354db367137d9a15ae1ec60593ff19167565914c6f3f050f900b2f3d68"
     },
     {
       "path": "scripts/lib/quality/quality-gate-named-inputs.mjs",
@@ -26461,6 +27373,12 @@
       "sha256": "faba9f58a7c80af3a41fb767e0f776a22be66960095b8a4f731db76526d66c4d"
     },
     {
+      "path": "sql/migrations/035_content_ai_studio_selling_points.sql",
+      "mode": "100644",
+      "size": 2298,
+      "sha256": "4522dd6bb5b72c0feab31be871d3387b6dffbb4b0d3c3733e0a064a8c908b746"
+    },
+    {
       "path": "sql/migrations/036_recruiting_test_submissions.sql",
       "mode": "100644",
       "size": 1720,
@@ -26483,6 +27401,30 @@
       "mode": "100644",
       "size": 172,
       "sha256": "5aa139e5a727b076f3ea2c4621b7d847a785172164221b87399292549f4f0bab"
+    },
+    {
+      "path": "sql/migrations/042_content_ai_studio_selling_point_business_labels.sql",
+      "mode": "100644",
+      "size": 755,
+      "sha256": "8bc66c3afd32cc92a47698bc22f094394a46bae07c5c873462046bc184b4b177"
+    },
+    {
+      "path": "sql/migrations/043_content_ai_studio_makeup_effect_label.sql",
+      "mode": "100644",
+      "size": 843,
+      "sha256": "8a4f7c3c809e905bbb1bff19596eda943365af0dbaf61bc6e6e4d5be22745a3b"
+    },
+    {
+      "path": "sql/migrations/044_content_ai_studio_segment_multilabel.sql",
+      "mode": "100644",
+      "size": 1321,
+      "sha256": "056ee93d1b3a4c2c90ab37a896616fb8ecf14df26309e547469902cca64e64f8"
+    },
+    {
+      "path": "sql/migrations/045_content_ai_studio_endorsement_categories.sql",
+      "mode": "100644",
+      "size": 1894,
+      "sha256": "8f77b139becb8f66330794d07fe0644bba8027de573fb97abf8a671927330e95"
     },
     {
       "path": "tailwind.config.ts",

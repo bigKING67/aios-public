@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import uuid
 
-from content_production.remix_output import derivative_key, output_title
+from content_production.remix_output import _lineage_rows, derivative_key, output_title
 
 
 class DerivativeKeyTests(unittest.TestCase):
@@ -29,7 +29,18 @@ class OutputTitleTests(unittest.TestCase):
 
     def test_edit_batches_have_one_output(self):
         self.assertEqual(output_title("edit", "精华", self.batch, 1), "单条剪辑 · 精华 · 01234567")
+        self.assertEqual(output_title("sellingPoint", "精华", self.batch, 2), "卖点混剪 · 精华 · 01234567-02")
 
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LineageRowTests(unittest.TestCase):
+    def test_selling_point_blocks_write_one_row_per_segment_with_its_own_range(self):
+        block = {"segmentId": "p1", "assetId": "a", "sourceContentHash": "h", "startMs": 0, "endMs": 20000,
+                 "parts": [{"segmentId": "p1", "startMs": 0, "endMs": 10000},
+                           {"segmentId": "p2", "startMs": 10000, "endMs": 20000}]}
+        frame = {"segmentId": "f1", "assetId": "b", "sourceContentHash": "g", "startMs": 5000, "endMs": 9000}
+        self.assertEqual(list(_lineage_rows([block, frame])), [
+            ("p1", "a", "h", 0, 10000), ("p2", "a", "h", 10000, 20000), ("f1", "b", "g", 5000, 9000)])

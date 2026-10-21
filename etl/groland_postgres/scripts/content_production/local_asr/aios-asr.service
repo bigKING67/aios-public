@@ -1,0 +1,23 @@
+# Local FunASR service for the GPU node (systemd user unit; CPU only, 127.0.0.1:8200).
+# Install: copy to ~/.config/systemd/user/, then `systemctl --user daemon-reload && systemctl --user enable --now aios-asr`.
+# Needs ~/aios-asr/.venv (uv venv, Python 3.12: torch CPU + funasr) and the worker code in ~/aios-worker/scripts.
+[Unit]
+Description=AIOS local ASR (FunASR, CPU)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/aios-asr
+Environment=PYTHONPATH=%h/aios-worker/scripts
+Environment=PYTHONUNBUFFERED=1
+Environment=LOCAL_ASR_ALLOWED_ROOT=%h/aios-worker/work
+Environment=LOCAL_ASR_PROCESSES=3
+Environment=LOCAL_ASR_THREADS=4
+ExecStart=%h/aios-asr/.venv/bin/python -m content_production.local_asr.service --port 8200
+Restart=on-failure
+RestartSec=30
+StandardOutput=append:%h/aios-asr/service.log
+StandardError=append:%h/aios-asr/service.log
+
+[Install]
+WantedBy=default.target

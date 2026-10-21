@@ -4,9 +4,9 @@ import type { ColumnsType } from 'antd/es/table';
 import { Badge } from '@/components/atoms/badge';
 import type { StudioContentSegment, StudioSegmentPreset, StudioSegmentStatus } from '../_lib/ai-studio-api';
 import {
+  segmentLabelName,
   findPreset,
   isSegmentReadOnly,
-  labelName,
   readAiSegmentEvidence,
   segmentOriginLabel,
   segmentStatusView,
@@ -70,7 +70,17 @@ export function SegmentTable({
       title: '标签',
       key: 'label',
       width: 104,
-      render: (_, segment) => labelName(findPreset(presets, segment.presetKey, segment.presetVersion), segment.labelKey),
+      render: (_, segment) => {
+        const name = segmentLabelName(findPreset(presets, segment.presetKey, segment.presetVersion), segment);
+        return segment.continuesPrevious ? (
+          <span className={styles.labelCell}>
+            {name}
+            <small>连着上一段</small>
+          </span>
+        ) : (
+          name
+        );
+      },
     },
     { title: '产品', dataIndex: 'productName', key: 'product', width: 150, render: (value: string | null) => value || '--' },
     {

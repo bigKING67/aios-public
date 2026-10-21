@@ -106,7 +106,7 @@ const GUIDE_STORAGE_KEY = 'aiStudio.guideCollapsed';
 const GUIDE_STEPS: readonly { title: string; detail: string; to: string }[] = [
   { title: '上传原片', detail: '在原片页点「上传原片」，选择产品。', to: ROUTE_PATHS.contentAiStudioAssets },
   { title: 'AI 分析', detail: '勾选原片开始分析，AI 按框架给出建议片段。', to: ROUTE_PATHS.contentAiStudioAnalysis },
-  { title: '确认片段', detail: '逐条播放核对，确认或调整；确认后才进入片段素材。', to: ROUTE_PATHS.contentAiStudioSegments },
+  { title: '确认片段', detail: '逐条播放核对，确认或调整；确认后才进入框架片段或卖点片段。', to: ROUTE_PATHS.contentAiStudioSegments },
   { title: 'AI 剪辑', detail: '用框架混剪一次生成多条成片，或用单条剪辑精修一条。', to: ROUTE_PATHS.contentAiStudioEditing },
   { title: '下载成片', detail: '在成片页预览、下载，成片同时回存素材库。', to: ROUTE_PATHS.contentAiStudioOutputs },
 ];
@@ -153,7 +153,7 @@ function StudioGuide() {
             ))}
           </ol>
           <ul className={styles.guideNotes}>
-            <li>只有已确认、带产品的片段会进入混剪；片段素材里显示「待补」的框架，说明还缺这一类片段。</li>
+            <li>只有已确认、带产品的片段会进入混剪；框架片段里显示「待补」的框架，说明还缺这一类片段。</li>
             <li>AI 分析和云端合成按次计费，首页的费用是按公开标价的估算，以火山引擎账单为准。</li>
           </ul>
         </>

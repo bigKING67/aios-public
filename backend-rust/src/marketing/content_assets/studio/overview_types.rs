@@ -106,7 +106,8 @@ pub(super) struct StudioOverviewPipeline {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(super) struct StudioOverviewActivity {
-    /// `analysis` (AI 分析 job), `remix` (框架混剪 batch) or `edit` (单条剪辑 batch).
+    /// `analysis` (AI 分析 job), `remix` (框架混剪 batch), `sellingPoint` (卖点混剪
+    /// batch) or `edit` (单条剪辑 batch).
     pub(super) kind: String,
     pub(super) id: Uuid,
     pub(super) title: String,

@@ -19,6 +19,12 @@ describe('groupPresetsByDimension', () => {
     ]);
   });
 
+  it('puts 卖点分析 right after 框架分析', () => {
+    const groups = groupPresetsByDimension([preset('picture', 1, 'picture'), preset('selling_point', 1, 'selling_point'), preset('framework', 1, 'framework')]);
+    expect(groups.map((group) => group.dimension)).toEqual(['framework', 'selling_point', 'picture']);
+    expect(dimensionCopy('selling_point').title).toBe('卖点分析');
+  });
+
   it('treats unknown dimensions as custom', () => {
     expect(groupPresetsByDimension([preset('x', 1, 'mystery')])[0].dimension).toBe('custom');
     expect(dimensionCopy('mystery').labelNoun).toBe('类别');

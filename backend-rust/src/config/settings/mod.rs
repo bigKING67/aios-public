@@ -8,10 +8,7 @@ mod db;
 mod env_file;
 mod llm;
 mod reports;
-mod sample_inventory;
 mod server;
-
-pub use sample_inventory::SampleInventoryAccessMode;
 
 #[derive(Debug, Clone)]
 pub struct Settings {
@@ -28,7 +25,6 @@ pub struct Settings {
     pub refresh_token_expire_days: i64,
     pub dragonfly_url: String,
     pub cors_origins: Vec<String>,
-    pub sample_inventory_access_mode: SampleInventoryAccessMode,
     pub weekly_report_cache_ttl_seconds: u64,
     pub weekly_period_cache_ttl_seconds: u64,
     pub monthly_report_cache_ttl_seconds: u64,
@@ -97,8 +93,6 @@ impl Settings {
         let dashboard = dashboard::resolve_dashboard_settings();
         let auth = auth::resolve_auth_settings()?;
         let reports = reports::resolve_report_settings();
-        let sample_inventory_access_mode =
-            sample_inventory::resolve_sample_inventory_access_mode()?;
         let llm = llm::resolve_llm_settings();
         let content_assets = content_assets::resolve_content_asset_settings();
 
@@ -116,7 +110,6 @@ impl Settings {
             refresh_token_expire_days: auth.refresh_token_expire_days,
             dragonfly_url: server.dragonfly_url,
             cors_origins: server.cors_origins,
-            sample_inventory_access_mode,
             weekly_report_cache_ttl_seconds: reports.weekly_report_cache_ttl_seconds,
             weekly_period_cache_ttl_seconds: reports.weekly_period_cache_ttl_seconds,
             monthly_report_cache_ttl_seconds: reports.monthly_report_cache_ttl_seconds,

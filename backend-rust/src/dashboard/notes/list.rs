@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use crate::auth::CurrentUser;
 use crate::state::AppState;
 use axum::{
     extract::{Query, State},
@@ -23,6 +24,7 @@ use super::{
 
 pub(crate) async fn list_notes(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<NotesQueryParams>,
 ) -> Response {
     let start_date = get_validated_date_param(query.start_date.as_deref());

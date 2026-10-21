@@ -4497,7 +4497,9 @@ export interface components {
             presetKey: string;
             presetVersion: number;
             labelKey: string;
+            labelKeys: string[];
             productName: string | null;
+            continuesPrevious: boolean;
             origin: string;
             status: string;
             evidence: unknown;
@@ -4524,19 +4526,23 @@ export interface components {
             presetKey: string;
             presetVersion: number;
             labelKey: string;
+            labelKeys?: string[] | null;
             startMs: number;
             endMs: number;
             productName?: string | null;
             sourceContentHash?: string | null;
             draft?: boolean;
+            continuesPrevious?: boolean;
         };
         UpdateContentSegmentRequest: {
             expectedRevision: number;
             startMs?: number | null;
             endMs?: number | null;
             labelKey?: string | null;
+            labelKeys?: string[] | null;
             productName?: string | null;
             status?: string | null;
+            continuesPrevious?: boolean | null;
         };
         ConfirmContentSegmentItem: {
             /** Format: uuid */
@@ -4608,10 +4614,15 @@ export interface components {
             labelKey: string;
             confirmedCount: number;
         };
+        SegmentPoolProductCount: {
+            productName: string | null;
+            confirmedCount: number;
+        };
         SegmentPoolResponse: {
             presetKey: string;
             presetVersion: number;
             items: components["schemas"]["SegmentPoolCell"][];
+            productCounts: components["schemas"]["SegmentPoolProductCount"][];
         };
         StudioOverviewResponse: {
             period: components["schemas"]["StudioOverviewPeriod"];
@@ -4684,6 +4695,7 @@ export interface components {
             createdAt: string;
         };
         RemixBatchPreviewRequest: {
+            mode?: string | null;
             presetKey: string;
             presetVersion: number;
             labels?: string[] | null;
@@ -4693,6 +4705,7 @@ export interface components {
         };
         CreateRemixBatchRequest: {
             idempotencyKey: string;
+            mode?: string | null;
             presetKey: string;
             presetVersion: number;
             labels?: string[] | null;
@@ -4704,8 +4717,11 @@ export interface components {
             ordinal: number;
             labelKey: string;
             candidateCount: number;
+            sellingPoints: string[] | null;
+            fallback: boolean | null;
         };
         RemixBatchPreviewResponse: {
+            mode: string;
             labels: string[];
             sourceAssetId: string | null;
             productName: string;
@@ -4731,6 +4747,11 @@ export interface components {
             labelKey: string;
             startMs: number;
             endMs: number;
+            slot: number | null;
+            tier: string | null;
+            fallback: boolean | null;
+            sellingPoints: string[] | null;
+            segmentIds: string[] | null;
         };
         RemixBatchItem: {
             ordinal: number;
@@ -4747,6 +4768,18 @@ export interface components {
             outputCoverUrl: string | null;
             durationMs: number;
             segments: components["schemas"]["RemixBatchSegment"][];
+            pictureReview?: components["schemas"]["RemixPictureReview"] | null;
+        };
+        RemixPictureReview: {
+            status: string;
+            pairCount: number;
+            pairs: components["schemas"]["RemixPicturePair"][];
+        };
+        RemixPicturePair: {
+            leftClip: number;
+            rightClip: number;
+            leftMs: number;
+            rightMs: number;
         };
         RemixBatch: {
             /** Format: uuid */

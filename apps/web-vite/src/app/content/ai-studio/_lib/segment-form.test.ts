@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { validateSegmentDraft } from './segment-form';
+import type { StudioContentSegment } from './ai-studio-api';
+import { buildSegmentPatch, validateSegmentDraft } from './segment-form';
+
+describe('buildSegmentPatch', () => {
+  const segment = {
+    revision: 4, startMs: 0, endMs: 3_000, labelKey: 'moisturizing', productName: '蜜粉', continuesPrevious: false,
+  } as StudioContentSegment;
+  const same = { startMs: 0, endMs: 3_000, labelKey: 'moisturizing', productName: '蜜粉' };
+
+  it('sends continuesPrevious only when it is given and changed', () => {
+    expect(buildSegmentPatch(segment, same)).toBeNull();
+    expect(buildSegmentPatch(segment, { ...same, continuesPrevious: false })).toBeNull();
+    expect(buildSegmentPatch(segment, { ...same, continuesPrevious: true })).toEqual({ expectedRevision: 4, continuesPrevious: true });
+  });
+});
 
 const base = { startText: '0:01.0', endText: '0:05.0', labelKey: 'street', durationMs: 60_000 };
 

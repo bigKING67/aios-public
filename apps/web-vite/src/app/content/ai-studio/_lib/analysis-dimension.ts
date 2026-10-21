@@ -1,6 +1,6 @@
 import type { StudioSegmentPreset } from './ai-studio-api';
 
-export type AnalysisDimension = 'framework' | 'picture' | 'custom';
+export type AnalysisDimension = 'framework' | 'selling_point' | 'picture' | 'custom';
 
 interface DimensionCopy {
   /** Tab label, e.g. 框架分析. */
@@ -16,6 +16,11 @@ const DIMENSION_COPY: Record<AnalysisDimension, DimensionCopy> = {
     labelNoun: '框架',
     description: '按内容结构切段（混剪口播、实拍内容、街采、机制、KOC），片段较长，用于框架混剪：同框架片段连同原声替换重组。',
   },
+  selling_point: {
+    title: '卖点分析',
+    labelNoun: '卖点',
+    description: '在已确认的框架段内标出卖点片段，并判断相邻卖点能否切开，用于卖点混剪。原片要先确认框架段，否则任务会失败。',
+  },
   picture: {
     title: '画面分析',
     labelNoun: '画面类型',
@@ -28,7 +33,7 @@ const DIMENSION_COPY: Record<AnalysisDimension, DimensionCopy> = {
   },
 };
 
-const DIMENSION_ORDER: readonly AnalysisDimension[] = ['framework', 'picture', 'custom'];
+const DIMENSION_ORDER: readonly AnalysisDimension[] = ['framework', 'selling_point', 'picture', 'custom'];
 
 export function dimensionCopy(dimension: string): DimensionCopy {
   return DIMENSION_COPY[(dimension in DIMENSION_COPY ? dimension : 'custom') as AnalysisDimension];

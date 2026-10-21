@@ -55,25 +55,45 @@
     },
     {
       "path": "/dashboard",
-      "description": "Dashboard is public-readable and should expose the main dashboard shell.",
-      "minBodyTextLength": 80,
+      "description": "Anonymous dashboard access should resolve to the login route with redirect intent.",
+      "authState": "anonymous-redirect",
+      "enabledByDefault": false,
+      "minBodyTextLength": 20,
+      "authenticatedProfile": {
+        "authState": "authenticated",
+        "minBodyTextLength": 80,
+        "expectedText": [
+          "Groland Dashboard",
+          "Overview",
+          "月"
+        ],
+        "expectedFinalPath": "/dashboard"
+      },
       "expectedText": [
-        "Groland Dashboard",
-        "Overview",
-        "月"
+        "AGI AIOS",
+        "用户名",
+        "密码"
       ],
-      "performanceInteractionSelector": "nav[aria-label=\"平台切换\"] button",
-      "performanceBudget": {
-        "maxCls": 0.1,
-        "maxDomContentLoadedMs": 5000,
-        "maxDomNodeCount": 4500,
-        "maxInpMs": 200,
-        "maxLcpMs": 2500,
-        "maxLoadMs": 8000,
-        "maxResourceCount": 100,
-        "maxResourceTransferKb": 2400,
-        "maxScriptTransferKb": 1800
-      }
+      "expectedFinalPath": "/login",
+      "expectedFinalSearchIncludes": [
+        "redirect=%2Fdashboard"
+      ]
+    },
+    {
+      "path": "/sample-inventory",
+      "description": "Anonymous sample inventory access should resolve to the login route with redirect intent.",
+      "authState": "anonymous-redirect",
+      "enabledByDefault": false,
+      "minBodyTextLength": 20,
+      "expectedText": [
+        "AGI AIOS",
+        "用户名",
+        "密码"
+      ],
+      "expectedFinalPath": "/login",
+      "expectedFinalSearchIncludes": [
+        "redirect=%2Fsample-inventory"
+      ]
     },
     {
       "path": "/dashboard?tab=douyin&dimension=live",

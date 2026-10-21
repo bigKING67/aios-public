@@ -14,7 +14,6 @@ use axum::{
 use tracing::warn;
 
 use crate::{
-    config::SampleInventoryAccessMode,
     error::{AppError, AppResult},
     state::AppState,
     xlsx::{validate_xlsx_upload_metadata, xlsx_response},
@@ -131,19 +130,12 @@ pub(crate) fn router(state: Arc<AppState>) -> Router<Arc<AppState>> {
         .merge(domain_routes)
 }
 
-async fn get_access_policy(
-    State(state): State<Arc<AppState>>,
-) -> Json<SampleInventoryAccessPolicyResponse> {
-    let is_public =
-        state.settings.sample_inventory_access_mode == SampleInventoryAccessMode::Public;
+// 样品库存已不支持匿名访问；保留该端点以维持 OpenAPI 契约。
+async fn get_access_policy() -> Json<SampleInventoryAccessPolicyResponse> {
     Json(SampleInventoryAccessPolicyResponse {
-        mode: state
-            .settings
-            .sample_inventory_access_mode
-            .as_str()
-            .to_string(),
-        anonymous_read: is_public,
-        anonymous_write: is_public,
+        mode: "authenticated".to_string(),
+        anonymous_read: false,
+        anonymous_write: false,
     })
 }
 

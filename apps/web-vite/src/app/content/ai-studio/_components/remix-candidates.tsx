@@ -110,7 +110,7 @@ export function RemixCandidates({ preset, preview }: RemixCandidatesProps) {
               <p className={styles.fieldHelp}>
                 还没有可用的「{name}」片段。{' '}
                 <RouterLink className={remixStyles.gapLink} to={ROUTE_PATHS.contentAiStudioSegments}>
-                  去片段素材
+                  去框架片段
                 </RouterLink>
               </p>
             ) : (

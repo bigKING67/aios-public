@@ -21,6 +21,11 @@ MAX_HINT_CHARS = 6000
 AUDIO_TIMEOUT_SECONDS = 180
 # Seed ASR: one submit plus up to 30 polls of 2 s, each request bounded at 60 s.
 ASR_DEADLINE_SECONDS = 300
+# Local FunASR service on the GPU node (content_production.local_asr.service); unset = disabled.
+LOCAL_ASR_URL_ENV = 'CONTENT_AI_STUDIO_LOCAL_ASR_URL'
+LOCAL_ASR_HOTWORDS_ENV = 'CONTENT_AI_STUDIO_LOCAL_ASR_HOTWORDS'
+LOCAL_ASR_DEADLINE_SECONDS = 300
+LOCAL_ORIGIN = 'funasr_local'
 
 
 def audio_command(source, output, ffmpeg='ffmpeg'):
@@ -68,6 +73,21 @@ def cached_utterances(conn, asset_id, source_hash):
     return (utterances, 'library') if utterances else (None, None)
 
 
+def resolve_cached(conn, asset_id, source_hash):
+    """Source-bound advisory context only; a cache miss never submits an ASR request."""
+    try:
+        utterances, origin = cached_utterances(conn, asset_id, source_hash)
+    except Cancelled:
+        raise
+    except Exception as error:
+        conn.rollback()
+        summary = {'status': 'unavailable', 'mode': 'cache_only', 'errorType': type(error).__name__}
+        return None, summary, summary
+    summary = {'status': 'ok' if utterances else 'empty', 'mode': 'cache_only', 'origin': origin,
+               'utterances': len(utterances or [])}
+    return utterances, {**summary, 'utterances': utterances or []}, summary
+
+
 def transcribe(source, duration_ms, env, tick, work, client=None):
     """Seed ASR on the original's audio track; returns utterances. Raises on any failure."""
     from marketing_content_assets.seed_asr import SeedAsrClient
@@ -86,6 +106,71 @@ def transcribe(source, duration_ms, env, tick, work, client=None):
     # Keeps the job lease alive while the ASR call blocks (the lease expires after 2 minutes).
     result = call_with_ticks(lambda: client.transcribe(audio, request_id, audio_ms), tick, ASR_DEADLINE_SECONDS)
     return compact(result.segments)
+
+
+def local_configured():
+    return bool(os.getenv(LOCAL_ASR_URL_ENV, '').strip())
+
+
+def transcribe_local(source, duration_ms, env, tick, work, session=None):
+    """Utterances from the node's local FunASR service; raises on any failure."""
+    import requests
+    if not 0 < duration_ms <= MAX_DURATION_MS:
+        raise ValueError('source longer than the transcript limit')
+    audio = work / 'transcript-audio.wav'
+    if run_media(audio_command(source, audio), env, tick, AUDIO_TIMEOUT_SECONDS):
+        raise ValueError('no readable audio track')
+    url = os.environ[LOCAL_ASR_URL_ENV].rstrip('/') + '/transcribe'
+    payload = {'path': str(audio.resolve()), 'hotword': os.getenv(LOCAL_ASR_HOTWORDS_ENV, '')}
+    client = session or requests.Session()
+    client.trust_env = False  # localhost: never through a proxy
+
+    def call():
+        response = client.post(url, json=payload, timeout=LOCAL_ASR_DEADLINE_SECONDS)
+        response.raise_for_status()
+        return response.json()
+
+    try:
+        body = call_with_ticks(call, tick, LOCAL_ASR_DEADLINE_SECONDS)
+    finally:
+        audio.unlink(missing_ok=True)
+    return compact_rows(body.get('utterances')), body.get('models') or {}
+
+
+def compact_rows(rows):
+    """[(start_ms, end_ms, text)] rows from the local service; drops invalid or empty rows."""
+    result = []
+    for row in rows or []:
+        if isinstance(row, list) and len(row) == 3:
+            start, end, text = row
+            if type(start) is int and type(end) is int and 0 <= start < end and isinstance(text, str) and text.strip():
+                result.append([start, end, ' '.join(text.split())])
+    return result[:MAX_UTTERANCES]
+
+
+def resolve_local(conn, asset_id, source_hash, source, duration_ms, env, tick, work):
+    """(settings for request_settings.transcript, summary) from the local service, or (None, None) when off.
+
+    Stored in the job's request_settings so later jobs of the same source (selling points on the VPS)
+    pick it up through `cached_utterances`. A cached transcript is reused; failures never fail the job."""
+    if not local_configured():
+        return None, None
+    try:
+        utterances, origin = cached_utterances(conn, asset_id, source_hash)
+        models = None
+        if utterances is None:
+            (utterances, models), origin = transcribe_local(source, duration_ms, env, tick, work), LOCAL_ORIGIN
+    except Cancelled:
+        raise
+    except Exception as error:  # Advisory input: continue without it, keep only the error type.
+        conn.rollback()
+        summary = {'status': 'unavailable', 'origin': LOCAL_ORIGIN, 'errorType': type(error).__name__}
+        return summary, summary
+    if not utterances:
+        summary = {'status': 'empty', 'origin': origin}
+        return summary, summary
+    summary = {'status': 'ok', 'origin': origin, 'utterances': len(utterances), **({'models': models} if models else {})}
+    return {**summary, 'utterances': utterances}, summary
 
 
 def _clock(ms):

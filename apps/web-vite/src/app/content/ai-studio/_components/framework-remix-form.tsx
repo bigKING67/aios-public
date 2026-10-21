@@ -3,10 +3,10 @@ import { Alert, Button, InputNumber, Popconfirm, Radio, Select, Skeleton, Toolti
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { StudioCapabilitiesResponse } from '../_lib/ai-studio-api';
-import { newRemixIdempotencyKey } from '../_lib/remix-api';
+import { newRemixIdempotencyKey, type RemixFormMode, remixModeLabel } from '../_lib/remix-api';
 import { buildRemixPreviewRequest, type ReferenceAssetOption, type RemixStructure } from '../_lib/remix-form';
 import { buildRemixBatchPath } from '../_lib/remix-routes';
-import { labelName, pickDefaultPreset, presetDisplayName } from '../_lib/segment-display';
+import { labelName, pickDefaultPreset, presetDisplayName, remixablePresets, sellingPointNames } from '../_lib/segment-display';
 import { FrameworkRemixPreview, FrameworkRemixSummary } from './framework-remix-preview';
 import { FrameworkRemixStructure } from './framework-remix-structure';
 import { RemixCandidates } from './remix-candidates';
@@ -18,8 +18,12 @@ import styles from './segment-annotation.module.css';
 import remixStyles from './remix.module.css';
 import workbenchStyles from './studio-workbench.module.css';
 
-const REMIX_RULES =
-  '按框架顺序从已确认片段中确定性组合，不调用模型选片；每条成片只用同一产品的片段，同一片段不会在一条成片里重复出现，各片段保留原声。';
+const REMIX_RULES = {
+  framework:
+    '按框架顺序从已确认片段中确定性组合，不调用模型选片；每条成片只用同一产品的片段，同一片段不会在一条成片里重复出现，各片段保留原声。',
+  sellingPoint:
+    '以参考原片的框架段为槽位，每段用其他原片已确认的卖点片段拼满（最多 3 块、时长在参考段的 ±20% 内）；优先卖点完全一致，其次多段拼出相同卖点，最后允许卖点有变化。连着的卖点片段整块使用；参考段没有卖点或被一块占满时整段替换。不调用模型选片，各片段保留原声。',
+} as const;
 
 function errorText(error: unknown): string {
   return error instanceof Error && error.message ? error.message : '请求失败，请稍后重试。';
@@ -29,11 +33,21 @@ function errorText(error: unknown): string {
  * 框架混剪 workbench: product and structure on the left with the structure
  * timeline, the generate card and recent batches in the sticky side column.
  */
-export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapabilitiesResponse }) {
+export function FrameworkRemixForm({
+  capabilities,
+  mode = 'framework',
+}: {
+  capabilities: StudioCapabilitiesResponse;
+  mode?: RemixFormMode;
+}) {
   const navigate = useNavigate();
   const presetsQuery = useStudioPresets(true);
   const [presetId, setPresetId] = useState<string | null>(null);
-  const presets = presetsQuery.data ?? [];
+  const allPresets = presetsQuery.data ?? [];
+  const sellingPoint = mode === 'sellingPoint';
+  // Selling-point presets never structure a remix; 卖点混剪 reads them by itself and
+  // takes its slots from framework segments only.
+  const presets = remixablePresets(allPresets).filter((item) => !sellingPoint || item.dimension === 'framework');
   const preset = presets.find((item) => `${item.presetKey}:${item.version}` === presetId) ?? pickDefaultPreset(presets);
   const [structure, setStructure] = useState<RemixStructure>({ mode: 'reference', sourceAssetId: null });
   const [productName, setProductName] = useState<string | null>(null);
@@ -43,7 +57,7 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
   const [idempotencyKey, setIdempotencyKey] = useState(newRemixIdempotencyKey);
 
   const products = useRemixProducts(preset ? { presetKey: preset.presetKey, version: preset.version } : null);
-  const built = buildRemixPreviewRequest(preset, structure, productName, count);
+  const built = buildRemixPreviewRequest(preset, structure, productName, count, mode);
   const request = typeof built === 'string' ? null : built;
   const { query: preview, settled: previewSettled } = useRemixPreview(request);
   const create = useCreateRemixBatch();
@@ -140,23 +154,27 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
           </div>
           <div className={styles.field}>
             <span className={remixStyles.fieldLabel}>框架结构</span>
-            <Radio.Group
-              aria-label="结构来源"
-              optionType="button"
-              value={structure.mode}
-              disabled={!capabilities.canWrite}
-              onChange={(event) =>
-                edit(setStructure)(
-                  event.target.value === 'reference'
-                    ? { mode: 'reference', sourceAssetId: null }
-                    : { mode: 'manual', labels: preview.data?.labels ?? [] },
-                )
-              }
-              options={[
-                { value: 'reference', label: '沿用参考原片' },
-                { value: 'manual', label: '手动排列框架顺序' },
-              ]}
-            />
+            {sellingPoint ? (
+              <p className={styles.fieldHelp}>沿用参考原片的框架段，每段按卖点替换。每条成片必须同时包含滋润保湿和养肤护肤，顺序不限。</p>
+            ) : (
+              <Radio.Group
+                aria-label="结构来源"
+                optionType="button"
+                value={structure.mode}
+                disabled={!capabilities.canWrite}
+                onChange={(event) =>
+                  edit(setStructure)(
+                    event.target.value === 'reference'
+                      ? { mode: 'reference', sourceAssetId: null }
+                      : { mode: 'manual', labels: preview.data?.labels ?? [] },
+                  )
+                }
+                options={[
+                  { value: 'reference', label: '沿用参考原片' },
+                  { value: 'manual', label: '手动排列框架顺序' },
+                ]}
+              />
+            )}
           </div>
         </div>
         <FrameworkRemixStructure
@@ -172,13 +190,14 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
           <FrameworkRemixPreview
             preset={preset}
             preview={request ? preview.data : undefined}
+            pointNames={(keys) => sellingPointNames(allPresets, keys)}
             loading={preview.isFetching || !previewSettled}
             error={preview.isError ? errorText(preview.error) : null}
             incompleteHint={typeof built === 'string' ? built.replace('后显示可用组合', '后显示每一位的可用片段') : null}
           />
         </section>
         ) : null}
-        {request && preview.data && !preview.isError ? (
+        {!sellingPoint && request && preview.data && !preview.isError ? (
           <section className={remixStyles.stack} aria-labelledby="remix-candidates-title">
             <h3 id="remix-candidates-title" className={remixStyles.sectionTitle}>候选片段</h3>
             <RemixCandidates preset={preset} preview={preview.data} />
@@ -192,7 +211,7 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
             <h2 id="remix-launch-title">生成成片</h2>
             <span className={workbenchStyles.launchMeta}>
               框架标签 v{preset.version}
-              <Tooltip title={REMIX_RULES} trigger={['hover', 'focus']}>
+              <Tooltip title={REMIX_RULES[mode]} trigger={['hover', 'focus']}>
                 <InfoCircleOutlined className={workbenchStyles.infoIcon} tabIndex={0} aria-label="混剪规则" />
               </Tooltip>
             </span>
@@ -230,7 +249,7 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
           </div>
           <div className={workbenchStyles.launchFoot}>
             <Popconfirm
-              title={`确认生成 ${plannable} 条框架混剪？`}
+              title={`确认生成 ${plannable} 条${remixModeLabel(mode)}？`}
               description="成片按顺序进入渲染队列（单通道依次处理，可能需要较长时间）。提交后不会自动重试，可在「成片」查看进度。"
               okText="开始生成"
               cancelText="取消"
@@ -247,7 +266,7 @@ export function FrameworkRemixForm({ capabilities }: { capabilities: StudioCapab
           </div>
           {create.isError ? <Alert type="error" showIcon title="批次提交失败" description={errorText(create.error)} /> : null}
         </article>
-        <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode="framework" />
+        <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode={mode} />
       </aside>
     </div>
   );

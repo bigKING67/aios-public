@@ -59,16 +59,29 @@ export function validateSegmentDraft(input: SegmentDraftInput): SegmentDraftVali
   return { ok: true, startMs, endMs };
 }
 
-/** Sends only changed fields plus `expectedRevision`; a blank product clears it. */
+/**
+ * Sends only changed fields plus `expectedRevision`; a blank product clears it.
+ * `continuesPrevious` is set only for selling-point segments (undefined elsewhere).
+ */
 export function buildSegmentPatch(
   segment: StudioContentSegment,
-  next: { startMs: number; endMs: number; labelKey: string; productName: string },
+  next: { startMs: number; endMs: number; labelKey: string; labelKeys?: string[]; productName: string; continuesPrevious?: boolean },
 ): StudioUpdateContentSegmentRequest | null {
   const request: StudioUpdateContentSegmentRequest = { expectedRevision: segment.revision };
   if (next.startMs !== segment.startMs) request.startMs = next.startMs;
   if (next.endMs !== segment.endMs) request.endMs = next.endMs;
-  if (next.labelKey !== segment.labelKey) request.labelKey = next.labelKey;
+  // Multi-select order is not a business priority. Keep the compatibility primary
+  // while it remains selected, so reordering cannot silently clear secondary labels.
+  const primary = next.labelKeys?.includes(segment.labelKey) ? segment.labelKey : next.labelKey;
+  if (primary !== segment.labelKey) request.labelKey = primary;
+  if (next.labelKeys) {
+    const previous = [...(segment.labelKeys ?? [segment.labelKey])].sort();
+    if (JSON.stringify([...next.labelKeys].sort()) !== JSON.stringify(previous)) request.labelKeys = next.labelKeys;
+  }
   const product = next.productName.trim();
   if (product !== (segment.productName ?? '')) request.productName = product;
+  if (next.continuesPrevious !== undefined && next.continuesPrevious !== segment.continuesPrevious) {
+    request.continuesPrevious = next.continuesPrevious;
+  }
   return Object.keys(request).length > 1 ? request : null;
 }

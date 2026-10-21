@@ -121,7 +121,7 @@ export function SegmentSuggestWorkspace({ capabilities }: { capabilities: Studio
               <span className={workbenchStyles.launchMeta}>
                 {preset && !(group && group.presets.length > 1) ? `${copy.labelNoun}标签 v${preset.version}` : null}
                 <Tooltip
-                  title={`结果全部进入「待确认」，人工确认后才进入片段素材。已确认和人工片段不会被改动；同一原片旧的 AI 待确认建议会被新结果替换，与已确认片段重复的建议会被跳过。${
+                  title={`结果全部进入「待确认」，人工确认后才进入框架片段或卖点片段。已确认和人工片段不会被改动；同一原片旧的 AI 待确认建议会被新结果替换，与已确认片段重复的建议会被跳过。${
                     groups.length === 1 && group?.dimension === 'framework' ? ' 画面分析（痛点、上妆、美展、街采、产展）将在评估完成后开放。' : ''
                   }${latestPrompt ? ` 标签版本决定有哪些${copy.labelNoun}；最近一次分析使用的 AI 提示词为 ${latestPrompt}。` : ''}`}
                   trigger={['hover', 'focus']}

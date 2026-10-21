@@ -1,10 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import type { StudioSegmentPreset } from './ai-studio-api';
-import { isSegmentReadOnly, LABEL_TONE_SERIES, labelToneSeries, pickDefaultPreset, presetDisplayName, readAiSegmentEvidence } from './segment-display';
+import { isSegmentReadOnly, LABEL_TONE_SERIES, labelToneSeries, pickDefaultPreset, presetDisplayName, readAiSegmentEvidence, remixablePresets, sellingPointNames } from './segment-display';
 
 function preset(presetKey: string, version: number, status = 'active'): StudioSegmentPreset {
   return { presetKey, version, status, dimension: 'framework', name: presetKey, labels: [{ key: 'a', name: 'A', definition: '' }, { key: 'b', name: 'B', definition: '' }] };
 }
+
+describe('selling-point presets', () => {
+  const points = { ...preset('selling_point', 1), dimension: 'selling_point', labels: [{ key: 'long_wear', name: '持妆', definition: '' }] };
+
+  it('never structure a remix and name their keys', () => {
+    expect(remixablePresets([preset('framework', 1), points]).map((item) => item.presetKey)).toEqual(['framework']);
+    expect(sellingPointNames([preset('framework', 1), points], ['long_wear', 'unknown'])).toEqual(['持妆', 'unknown']);
+  });
+});
 
 describe('segment display helpers', () => {
   it('picks the newest active framework preset by default', () => {

@@ -1,11 +1,19 @@
 import type { StudioSegmentPreset } from './ai-studio-api';
-import type { StudioRemixBatch, StudioRemixBatchPreviewRequest } from './remix-api';
+import type { RemixFormMode, StudioRemixBatch, StudioRemixBatchPreviewRequest } from './remix-api';
 import { findPreset, labelName } from './segment-display';
 
 export const MAX_REMIX_SLOTS = 30;
 
 /** AI 剪辑 page purpose in framework-remix mode (also shown while capabilities load). */
 export const REMIX_PURPOSE = '框架混剪：选产品和结构，从已确认片段批量组合出片；成片回存素材库并记录来源片段。';
+
+/** AI 剪辑 page purpose in 卖点混剪 mode. */
+export const SELLING_POINT_REMIX_PURPOSE =
+  '卖点混剪：沿用参考原片的框架结构，每个框架段按卖点用其他原片的卖点片段替换；成片回存素材库并记录每段的拼法。';
+
+export function remixPurpose(mode: RemixFormMode): string {
+  return mode === 'sellingPoint' ? SELLING_POINT_REMIX_PURPOSE : REMIX_PURPOSE;
+}
 
 /** AI 剪辑 header over one production Run's detail (成片 → 任务详情). */
 export const RUN_DETAIL_PURPOSE = '查看这条成片的方案、制作进度和失败原因，可重新制作或进入工程精修。';
@@ -69,9 +77,12 @@ export function buildRemixPreviewRequest(
   structure: RemixStructure,
   productName: string | null,
   count: number | null,
+  mode: RemixFormMode = 'framework',
 ): StudioRemixBatchPreviewRequest | string {
   if (!preset) return '没有可用的分类预设。';
-  const base = { presetKey: preset.presetKey, presetVersion: preset.version };
+  // 卖点混剪 takes its slots from a reference original only.
+  if (mode === 'sellingPoint' && structure.mode !== 'reference') return '卖点混剪需要选择参考原片。';
+  const base = { presetKey: preset.presetKey, presetVersion: preset.version, ...(mode === 'sellingPoint' ? { mode } : {}) };
   let shape: Pick<StudioRemixBatchPreviewRequest, 'labels' | 'sourceAssetId'>;
   if (structure.mode === 'reference') {
     if (!structure.sourceAssetId) return '选择参考原片后显示可用组合。';

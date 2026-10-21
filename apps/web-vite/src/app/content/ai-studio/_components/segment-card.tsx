@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import type { AssetCardPill } from '@/app/marketing/content-assets/_components/content-assets-asset-intelligence';
 import { createContentAssetPlaybackUrl } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import type { StudioContentSegment, StudioSegmentPreset } from '../_lib/ai-studio-api';
-import { findPreset, isSegmentReadOnly, labelName } from '../_lib/segment-display';
+import { segmentLabelName, findPreset, isSegmentReadOnly } from '../_lib/segment-display';
 import { hasSegmentProduct, resolveSegmentPills } from '../_lib/segment-pills';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
@@ -33,6 +33,8 @@ interface SegmentCardProps {
   showStatus?: boolean;
   /** Choices for the inline 补填产品 picker. */
   productOptions: readonly { label: string; value: string }[];
+  /** Extra context pills, e.g. the framework segment a selling-point segment sits in. */
+  notes?: readonly string[];
   onSelectedChange: (segmentId: string, selected: boolean) => void;
   onSetProduct: (segment: StudioContentSegment, productName: string) => void;
 }
@@ -52,6 +54,7 @@ export function SegmentCard({
   busy,
   showStatus = true,
   productOptions,
+  notes = [],
   onSelectedChange,
   onSetProduct,
 }: SegmentCardProps) {
@@ -59,9 +62,9 @@ export function SegmentCard({
   const coverUrl = coverFailed || !preferredCover ? fallbackCoverUrl : preferredCover;
   const navigate = useNavigate();
   const [previewing, setPreviewing] = useState(false);
-  const label = labelName(findPreset(presets, segment.presetKey, segment.presetVersion), segment.labelKey);
+  const label = segmentLabelName(findPreset(presets, segment.presetKey, segment.presetVersion), segment);
   const editable = canWrite && !isSegmentReadOnly(segment);
-  const open = () => navigate(buildSegmentAnnotationPath(segment.assetId, segment.segmentId));
+  const open = () => navigate(buildSegmentAnnotationPath(segment.assetId, segment.segmentId, segment.presetKey));
   const checkable = selectable && editable;
   const activate = () => {
     if (!selectable) open();
@@ -114,8 +117,11 @@ export function SegmentCard({
         <p className={styles.segmentSource} title={segment.assetTitle}>
           {segment.assetTitle}
         </p>
-        {pills.length > 0 || missingProduct ? (
+        {pills.length > 0 || missingProduct || notes.length > 0 ? (
           <div className={styles.segmentPills}>
+            {notes.map((note) => (
+              <span className={styles.segmentPill} key={note}>{note}</span>
+            ))}
             {pills.map((pill) => (
               <span className={`${styles.segmentPill} ${pillToneClass(pill)}`} key={pill.label}>{pill.label}</span>
             ))}

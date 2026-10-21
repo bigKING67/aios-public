@@ -63,7 +63,7 @@ class UnavailableWorkerTests(unittest.TestCase):
 
     def test_invalid_prompt_or_shot_settings_are_unavailable_before_claiming(self):
         os.environ.update(ENABLED)
-        for name, value in (('CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION', 'segment-suggest-v9'),
+        for name, value in (('CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION', 'segment-suggest-v99'),
                             ('CONTENT_AI_STUDIO_SEGMENT_SUGGEST_SHOT_THRESHOLD', '2'),
                             ('CONTENT_AI_STUDIO_SEGMENT_SUGGEST_SHOT_WINDOW_SECONDS', 'x')):
             with self.subTest(name=name), patch.dict(os.environ, {name: value}):
@@ -76,6 +76,12 @@ class UnavailableWorkerTests(unittest.TestCase):
         with patch.dict(os.environ, {'CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION': 'segment-suggest-v1'}):
             config = worker.suggest_config()
         self.assertEqual((config['promptVersion'], config['shots']['enabled']), ('segment-suggest-v1', False))
+
+    def test_v15_rejects_other_models_before_database_claim(self):
+        os.environ.update(ENABLED)
+        os.environ['CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION']='segment-suggest-v15'
+        with self.assertRaises(worker.WorkerUnavailable):
+            worker.process_one(Path('/tmp'),provider_factory=MockSegmentProvider,source_factory=lambda:None)
 
     def test_once_exits_nonzero_with_reason(self):
         os.environ.update(ENABLED)

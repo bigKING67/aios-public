@@ -212,7 +212,7 @@ pub(super) async fn overview(
            LEFT JOIN ads.marketing_content_assets a ON a.asset_id = j.asset_id \
            WHERE ($1::TEXT IS NULL OR j.owner_user_id = $1) AND {JOB_IN_SCOPE} \
            UNION ALL \
-           SELECT CASE WHEN b.structure->>'mode' = 'edit' THEN 'edit' ELSE 'remix' END, b.batch_id, COALESCE(NULLIF(b.constraints->>'productName', ''), '框架混剪'), b.status, \
+           SELECT CASE b.structure->>'mode' WHEN 'edit' THEN 'edit' WHEN 'sellingPoint' THEN 'sellingPoint' ELSE 'remix' END, b.batch_id, COALESCE(NULLIF(b.constraints->>'productName', ''), CASE b.structure->>'mode' WHEN 'edit' THEN '单条剪辑' WHEN 'sellingPoint' THEN '卖点混剪' ELSE '框架混剪' END), b.status, \
                   b.planned_count::TEXT || ' 条', b.created_at \
            FROM ads.content_remix_batches b \
            WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1) AND {batch_in_scope} \

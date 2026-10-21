@@ -165,6 +165,27 @@ export function hasCancellableRemixItems(items: readonly Pick<StudioRemixBatchIt
   return items.some((item) => !CANCEL_SETTLED_RUN_STATUSES.has(item.runStatus));
 }
 
+/** Batch `mode`: `framework` (类型 1), `sellingPoint` (类型 2) or `edit` (单条剪辑). */
+export type RemixBatchMode = 'framework' | 'sellingPoint' | 'edit';
+
+/** The two modes the batch remix form runs in. */
+export type RemixFormMode = Exclude<RemixBatchMode, 'edit'>;
+
+export function remixModeLabel(mode: string): string {
+  if (mode === 'edit') return '单条剪辑';
+  if (mode === 'sellingPoint') return '卖点混剪';
+  return '框架混剪';
+}
+
+/** How a 卖点混剪 slot was filled (`RemixBatchSegment.tier`). */
+export function remixTierLabel(tier: string | null | undefined, fallback: boolean | null | undefined): string | null {
+  if (fallback) return '整段替换';
+  if (tier === 'exact') return '卖点一致';
+  if (tier === 'spliced') return '多段拼出';
+  if (tier === 'varied') return '卖点有变化';
+  return null;
+}
+
 /** Who started a batch; the caller's own batches read as 「我」. */
 export function remixBatchOwnerLabel(
   batch: Pick<StudioRemixBatch, 'ownedByCurrentUser' | 'ownerName' | 'ownerUserId'>,

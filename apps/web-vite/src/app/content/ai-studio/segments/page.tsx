@@ -8,11 +8,11 @@ export default function AiStudioSegmentsPage() {
   return (
     <AiStudioShell>
       <AiStudioCapabilityGate
-        title="片段素材"
-        purpose="片段由原片、时间区间、分类标签和确认状态组成，是框架混剪的选材来源。片段只引用原片，不复制媒体。"
+        title="框架片段"
+        purpose="框架片段由原片、时间区间、框架标签和确认状态组成，是框架混剪的选材来源。片段只引用原片，不复制媒体。"
       >
         {(capabilities) => (
-          <SegmentsWorkspace canWrite={capabilities.canWrite} openAccess={capabilities.openAccess} products={capabilities.products} />
+          <SegmentsWorkspace kind="framework" canWrite={capabilities.canWrite} openAccess={capabilities.openAccess} products={capabilities.products} />
         )}
       </AiStudioCapabilityGate>
     </AiStudioShell>

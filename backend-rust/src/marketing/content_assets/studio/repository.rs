@@ -25,7 +25,7 @@ use sqlx::{postgres::PgRow, PgConnection, PgPool, Row};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use uuid::Uuid;
 
-const SEGMENT_SELECT: &str = "SELECT s.segment_id, s.owner_user_id, s.asset_id, a.title AS asset_title, s.source_content_hash, COALESCE(LOWER(TRIM(a.raw_sha256)) = s.source_content_hash, FALSE) AS source_current, s.source_duration_ms, s.start_ms, s.end_ms, s.preset_key, s.preset_version, s.label_key, s.product_name, s.origin, s.status, s.evidence, s.revision, s.confirmed_by, s.confirmed_at::TEXT AS confirmed_at, s.created_at::TEXT AS created_at, s.updated_at::TEXT AS updated_at FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id";
+const SEGMENT_SELECT: &str = "SELECT s.segment_id, s.owner_user_id, s.asset_id, a.title AS asset_title, s.source_content_hash, COALESCE(LOWER(TRIM(a.raw_sha256)) = s.source_content_hash, FALSE) AS source_current, s.source_duration_ms, s.start_ms, s.end_ms, s.preset_key, s.preset_version, s.label_key, s.additional_label_keys, s.product_name, s.continues_previous, s.origin, s.status, s.evidence, s.revision, s.confirmed_by, s.confirmed_at::TEXT AS confirmed_at, s.created_at::TEXT AS created_at, s.updated_at::TEXT AS updated_at FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id";
 
 /// The exclusion-constraint race backstop cannot name the winner, so the
 /// overlap conflict carries no segment ids.
@@ -57,7 +57,12 @@ fn segment_from_row(row: &PgRow) -> ContentSegment {
         preset_key: row.get("preset_key"),
         preset_version: row.get("preset_version"),
         label_key: row.get("label_key"),
+        label_keys: domain::segment_label_keys(
+            &row.get::<String, _>("label_key"),
+            &row.get::<Vec<String>, _>("additional_label_keys"),
+        ),
         product_name: row.get("product_name"),
+        continues_previous: row.get("continues_previous"),
         origin: row.get("origin"),
         status: row.get("status"),
         evidence: row.get("evidence"),
@@ -117,6 +122,26 @@ pub(super) struct AssetFacts {
 
 /// Scoped access requires the caller's edit permission on the asset; open
 /// access only requires the asset to exist. Readiness and hash always apply.
+/// `continuesPrevious` only describes selling-point segments (类型 2 连续块).
+async fn ensure_selling_point_preset(
+    db: &mut PgConnection,
+    preset_key: &str,
+    version: i32,
+) -> StudioResult<()> {
+    let dimension: Option<String> = sqlx::query_scalar(
+        "SELECT dimension FROM ads.content_segment_presets WHERE preset_key = $1 AND version = $2",
+    )
+    .bind(preset_key)
+    .bind(version)
+    .fetch_optional(&mut *db)
+    .await
+    .map_err(db_error)?;
+    if dimension.as_deref() != Some(domain::SELLING_POINT_DIMENSION) {
+        return Err(AppError::bad_request("continuesPrevious 只用于卖点预设的片段").into());
+    }
+    Ok(())
+}
+
 pub(super) async fn writable_asset(
     pool: &PgPool,
     user: &CurrentUser,
@@ -245,7 +270,7 @@ pub(super) async fn list_segments(
         }
     }
     let product = domain::normalize_product_name(query.product_name.as_deref())?;
-    let sql = format!("{SEGMENT_SELECT} WHERE a.is_deleted = FALSE AND ($1::UUID IS NULL OR s.asset_id = $1) AND ($2::TEXT IS NULL OR s.preset_key = $2) AND ($3::TEXT IS NULL OR s.label_key = $3) AND ($4::TEXT IS NULL OR s.product_name = $4) AND ($5::TEXT IS NULL OR s.status = $5) AND ($6::TEXT IS NULL OR s.origin = $6) AND ($7::UUID IS NULL OR (s.asset_id, s.preset_key, s.start_ms, s.segment_id) > (SELECT c.asset_id, c.preset_key, c.start_ms, c.segment_id FROM ads.content_segments c WHERE c.segment_id = $7)) AND ($9::BOOL IS NOT TRUE OR NULLIF(BTRIM(s.product_name), '') IS NULL) AND ($10::TEXT IS NULL OR $10 = ANY(a.tags)) ORDER BY s.asset_id, s.preset_key, s.start_ms, s.segment_id LIMIT $8");
+    let sql = format!("{SEGMENT_SELECT} WHERE a.is_deleted = FALSE AND ($1::UUID IS NULL OR s.asset_id = $1) AND ($2::TEXT IS NULL OR s.preset_key = $2) AND ($3::TEXT IS NULL OR s.label_key = $3 OR $3 = ANY(s.additional_label_keys)) AND ($4::TEXT IS NULL OR s.product_name = $4) AND ($5::TEXT IS NULL OR s.status = $5) AND ($6::TEXT IS NULL OR s.origin = $6) AND ($7::UUID IS NULL OR (s.asset_id, s.preset_key, s.start_ms, s.segment_id) > (SELECT c.asset_id, c.preset_key, c.start_ms, c.segment_id FROM ads.content_segments c WHERE c.segment_id = $7)) AND ($9::BOOL IS NOT TRUE OR NULLIF(BTRIM(s.product_name), '') IS NULL) AND ($10::TEXT IS NULL OR $10 = ANY(a.tags)) ORDER BY s.asset_id, s.preset_key, s.start_ms, s.segment_id LIMIT $8");
     let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
         .bind(query.asset_id)
         .bind(query.preset_key)
@@ -305,7 +330,11 @@ pub(super) async fn create_segment(
     };
     let mut tx = pool.begin().await.map_err(db_error)?;
     let labels = active_preset_labels(&mut tx, &request.preset_key, request.preset_version).await?;
-    domain::ensure_label(&labels, &request.label_key)?;
+    let additional =
+        domain::additional_labels(&labels, &request.label_key, request.label_keys.as_deref())?;
+    if request.continues_previous || !additional.is_empty() {
+        ensure_selling_point_preset(&mut tx, &request.preset_key, request.preset_version).await?;
+    }
     if status == "confirmed" {
         lock_interval_scope(&mut tx, request.asset_id, &request.preset_key).await?;
         ensure_no_confirmed_overlap(
@@ -318,11 +347,11 @@ pub(super) async fn create_segment(
         .await?;
     }
     let segment_id = Uuid::new_v4();
-    sqlx::query("INSERT INTO ads.content_segments (segment_id, owner_user_id, asset_id, source_content_hash, source_duration_ms, start_ms, end_ms, preset_key, preset_version, label_key, product_name, origin, status, confirmed_by, confirmed_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'human', $12, CASE WHEN $12 = 'confirmed' THEN $2 END, CASE WHEN $12 = 'confirmed' THEN NOW() END)")
+    sqlx::query("INSERT INTO ads.content_segments (segment_id, owner_user_id, asset_id, source_content_hash, source_duration_ms, start_ms, end_ms, preset_key, preset_version, label_key, product_name, origin, status, confirmed_by, confirmed_at, continues_previous, additional_label_keys) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'human', $12, CASE WHEN $12 = 'confirmed' THEN $2 END, CASE WHEN $12 = 'confirmed' THEN NOW() END, $13, $14)")
         .bind(segment_id).bind(&user.user_id).bind(request.asset_id).bind(&asset.sha256)
         .bind(asset.duration_ms).bind(request.start_ms).bind(request.end_ms)
         .bind(&request.preset_key).bind(request.preset_version).bind(&request.label_key)
-        .bind(product_name).bind(status)
+        .bind(product_name).bind(status).bind(request.continues_previous).bind(&additional)
         .execute(&mut *tx).await.map_err(db_error)?;
     tx.commit().await.map_err(db_error)?;
     Ok(fetch_segment(pool, segment_id)
@@ -340,8 +369,10 @@ pub(super) async fn update_segment(
     if request.start_ms.is_none()
         && request.end_ms.is_none()
         && request.label_key.is_none()
+        && request.label_keys.is_none()
         && request.product_name.is_none()
         && request.status.is_none()
+        && request.continues_previous.is_none()
     {
         return Err(AppError::bad_request("没有需要修改的字段").into());
     }
@@ -357,7 +388,7 @@ pub(super) async fn update_segment(
     let asset = writable_asset(pool, user, access, existing.asset_id).await?;
     mark_stale(pool, existing.asset_id, &asset.sha256).await?;
     let mut tx = pool.begin().await.map_err(db_error)?;
-    let row = sqlx::query("SELECT revision, status, source_content_hash, start_ms, end_ms, preset_key, preset_version, label_key, product_name FROM ads.content_segments WHERE segment_id = $1 FOR UPDATE")
+    let row = sqlx::query("SELECT revision, status, source_content_hash, start_ms, end_ms, preset_key, preset_version, label_key, additional_label_keys, product_name FROM ads.content_segments WHERE segment_id = $1 FOR UPDATE")
         .bind(segment_id).fetch_optional(&mut *tx).await.map_err(db_error)?.ok_or(AppError::NotFound)?;
     if row.get::<String, _>("status") == "stale"
         || row.get::<String, _>("source_content_hash") != asset.sha256
@@ -380,9 +411,20 @@ pub(super) async fn update_segment(
     let current_label: String = row.get("label_key");
     let label_key = request.label_key.unwrap_or(current_label.clone());
     let status = request.status.unwrap_or_else(|| row.get("status"));
-    if label_key != current_label || status == "confirmed" {
+    let current_additional: Vec<String> = row.get("additional_label_keys");
+    let labels_changed = request.label_keys.is_some() || label_key != current_label;
+    let requested_labels = request.label_keys.or_else(|| {
+        (label_key == current_label)
+            .then(|| domain::segment_label_keys(&label_key, &current_additional))
+    });
+    let additional = if labels_changed || status == "confirmed" {
         let labels = active_preset_labels(&mut tx, &preset_key, row.get("preset_version")).await?;
-        domain::ensure_label(&labels, &label_key)?;
+        domain::additional_labels(&labels, &label_key, requested_labels.as_deref())?
+    } else {
+        current_additional
+    };
+    if !additional.is_empty() {
+        ensure_selling_point_preset(&mut tx, &preset_key, row.get("preset_version")).await?;
     }
     if status == "confirmed" {
         lock_interval_scope(&mut tx, existing.asset_id, &preset_key).await?;
@@ -395,15 +437,18 @@ pub(super) async fn update_segment(
         )
         .await?;
     }
+    if request.continues_previous == Some(true) {
+        ensure_selling_point_preset(&mut tx, &preset_key, row.get("preset_version")).await?;
+    }
     // A confirmed segment keeps its confirmer when only the product changes;
     // new bounds, label or a fresh confirmation record the editing user.
     let product_name = match request.product_name.as_deref() {
         Some(value) => domain::normalize_product_name(Some(value))?,
         None => row.get("product_name"),
     };
-    sqlx::query("UPDATE ads.content_segments SET start_ms = $2, end_ms = $3, label_key = $4, product_name = $5, status = $6, source_duration_ms = $7, confirmed_by = CASE WHEN $6 = 'confirmed' THEN (CASE WHEN status = 'confirmed' AND start_ms = $2 AND end_ms = $3 AND label_key = $4 THEN confirmed_by ELSE $8 END) END, confirmed_at = CASE WHEN $6 = 'confirmed' THEN (CASE WHEN status = 'confirmed' AND start_ms = $2 AND end_ms = $3 AND label_key = $4 THEN confirmed_at ELSE NOW() END) END, revision = revision + 1, updated_at = NOW() WHERE segment_id = $1")
+    sqlx::query("UPDATE ads.content_segments SET start_ms = $2, end_ms = $3, label_key = $4, product_name = $5, status = $6, source_duration_ms = $7, confirmed_by = CASE WHEN $6 = 'confirmed' THEN (CASE WHEN status = 'confirmed' AND start_ms = $2 AND end_ms = $3 AND label_key = $4 AND additional_label_keys = $10 THEN confirmed_by ELSE $8 END) END, confirmed_at = CASE WHEN $6 = 'confirmed' THEN (CASE WHEN status = 'confirmed' AND start_ms = $2 AND end_ms = $3 AND label_key = $4 AND additional_label_keys = $10 THEN confirmed_at ELSE NOW() END) END, continues_previous = COALESCE($9, continues_previous), additional_label_keys = $10, revision = revision + 1, updated_at = NOW() WHERE segment_id = $1")
         .bind(segment_id).bind(start_ms).bind(end_ms).bind(&label_key).bind(product_name)
-        .bind(&status).bind(asset.duration_ms).bind(&user.user_id)
+        .bind(&status).bind(asset.duration_ms).bind(&user.user_id).bind(request.continues_previous).bind(&additional)
         .execute(&mut *tx).await.map_err(db_error)?;
     tx.commit().await.map_err(db_error)?;
     Ok(fetch_segment(pool, segment_id)
@@ -416,6 +461,8 @@ struct ConfirmRow {
     preset_key: String,
     preset_version: i32,
     range: (i32, i32),
+    label_key: String,
+    label_keys: Vec<String>,
 }
 
 pub(super) async fn confirm_segments(
@@ -446,7 +493,7 @@ pub(super) async fn confirm_segments(
         hashes.insert(asset_id, asset.sha256);
     }
     let mut tx = pool.begin().await.map_err(db_error)?;
-    let rows = sqlx::query("SELECT segment_id, asset_id, revision, status, source_content_hash, preset_key, preset_version, start_ms, end_ms FROM ads.content_segments WHERE segment_id = ANY($1) ORDER BY segment_id FOR UPDATE")
+    let rows = sqlx::query("SELECT segment_id, asset_id, revision, status, source_content_hash, preset_key, preset_version, start_ms, end_ms, label_key, additional_label_keys FROM ads.content_segments WHERE segment_id = ANY($1) ORDER BY segment_id FOR UPDATE")
         .bind(&ids).fetch_all(&mut *tx).await.map_err(db_error)?;
     if rows.len() != ids.len() {
         return Err(AppError::NotFound.into());
@@ -477,6 +524,11 @@ pub(super) async fn confirm_segments(
                 preset_key: row.get("preset_key"),
                 preset_version: row.get("preset_version"),
                 range: (row.get("start_ms"), row.get("end_ms")),
+                label_key: row.get("label_key"),
+                label_keys: domain::segment_label_keys(
+                    &row.get::<String, _>("label_key"),
+                    &row.get::<Vec<String>, _>("additional_label_keys"),
+                ),
             },
         );
     }
@@ -485,7 +537,17 @@ pub(super) async fn confirm_segments(
         .map(|row| (row.preset_key.clone(), row.preset_version))
         .collect();
     for (key, version) in &presets {
-        active_preset_labels(&mut tx, key, *version).await?;
+        let labels = active_preset_labels(&mut tx, key, *version).await?;
+        for row in batch
+            .values()
+            .filter(|row| &row.preset_key == key && row.preset_version == *version)
+        {
+            let additional =
+                domain::additional_labels(&labels, &row.label_key, Some(&row.label_keys))?;
+            if !additional.is_empty() {
+                ensure_selling_point_preset(&mut tx, key, *version).await?;
+            }
+        }
     }
     let scopes: BTreeSet<(Uuid, String)> = batch
         .values()

@@ -11,8 +11,8 @@ const PRESET = {
 function segment(startMs: number, endMs: number): StudioContentSegment {
   return {
     segmentId: `s-${startMs}`, ownerUserId: 'u', assetId: 'a', assetTitle: '原片', sourceContentHash: 'h', sourceCurrent: true,
-    sourceDurationMs: 100_000, startMs, endMs, presetKey: 'framework', presetVersion: 1, labelKey: 'voice',
-    productName: null, origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
+    sourceDurationMs: 100_000, startMs, endMs, presetKey: 'framework', presetVersion: 1, labelKey: 'voice', labelKeys: ['voice'],
+    productName: null, continuesPrevious: false, origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
     createdAt: '', updatedAt: '', coverUrl: null,
   };
 }

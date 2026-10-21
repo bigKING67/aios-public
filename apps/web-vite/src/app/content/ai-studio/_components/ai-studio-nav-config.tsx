@@ -5,6 +5,7 @@ import {
   PlaySquareOutlined,
   RobotOutlined,
   ScissorOutlined,
+  TagsOutlined,
 } from '@ant-design/icons';
 import type { ReactNode } from 'react';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
@@ -30,7 +31,8 @@ export const AI_STUDIO_NAV_GROUPS: AiStudioNavGroup[] = [
     items: [
       { path: ROUTE_PATHS.contentAiStudio, label: '首页', icon: <HomeOutlined />, end: true },
       { path: ROUTE_PATHS.contentAiStudioAssets, label: '原片', icon: <FileImageOutlined /> },
-      { path: ROUTE_PATHS.contentAiStudioSegments, label: '片段素材', icon: <AppstoreOutlined /> },
+      { path: ROUTE_PATHS.contentAiStudioSegments, label: '框架片段', icon: <AppstoreOutlined /> },
+      { path: ROUTE_PATHS.contentAiStudioSellingPoints, label: '卖点片段', icon: <TagsOutlined /> },
       { path: ROUTE_PATHS.contentAiStudioOutputs, label: '成片', icon: <PlaySquareOutlined /> },
     ],
   },

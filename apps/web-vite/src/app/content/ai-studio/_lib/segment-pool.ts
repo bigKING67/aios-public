@@ -15,7 +15,8 @@ export interface SegmentPoolRow {
  */
 export function buildSegmentPoolRows(
   cells: readonly StudioSegmentPoolCell[],
-  labels: readonly Pick<StudioSegmentPresetLabel, 'key'>[]
+  labels: readonly Pick<StudioSegmentPresetLabel, 'key'>[],
+  productCounts?: readonly { productName: string | null; confirmedCount: number }[],
 ): SegmentPoolRow[] {
   const byProduct = new Map<string | null, Record<string, number>>();
   for (const cell of cells) {
@@ -24,10 +25,11 @@ export function buildSegmentPoolRows(
     counts[cell.labelKey] = (counts[cell.labelKey] ?? 0) + cell.confirmedCount;
     byProduct.set(key, counts);
   }
+  const physicalCounts = new Map(productCounts?.map((item) => [item.productName, item.confirmedCount]));
   const rows = [...byProduct.entries()].map(([productName, counts]) => ({
     productName,
     counts,
-    total: Object.values(counts).reduce((sum, value) => sum + value, 0),
+    total: physicalCounts.get(productName) ?? Object.values(counts).reduce((sum, value) => sum + value, 0),
     missingLabels: productName === null ? [] : labels.map((label) => label.key).filter((key) => !counts[key]),
   }));
   return rows.sort((a, b) => {
@@ -52,5 +54,5 @@ export function poolScopeCounts(
   for (const row of included) {
     for (const [key, value] of Object.entries(row.counts)) counts[key] = (counts[key] ?? 0) + value;
   }
-  return { total: Object.values(counts).reduce((sum, value) => sum + value, 0), counts };
+  return { total: included.reduce((sum, row) => sum + row.total, 0), counts };
 }

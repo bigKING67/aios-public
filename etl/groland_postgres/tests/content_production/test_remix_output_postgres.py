@@ -20,6 +20,15 @@ def sha(value: str) -> str:
 
 @unittest.skipUnless(DB, "requires disposable database with migrations 021–032")
 class RemixOutputTests(unittest.TestCase):
+    def test_linkage_reads_selling_point_mode_from_the_bound_batch(self):
+        from content_production.run_bridge import linkage
+        self.addCleanup(self.execute, "UPDATE ads.content_production_jobs SET status='cancelled' WHERE job_id=%s", (self.job,))
+        self.addCleanup(self.execute, "UPDATE ads.content_production_runs SET status='cancelled' WHERE run_id=%s", (self.run,))
+        self.execute("UPDATE ads.content_production_runs SET request=%s::jsonb WHERE run_id=%s", (json.dumps({"taskType":"framework_remix"}), self.run))
+        self.assertIsNone(linkage(self.conn, {'job_id':self.job})['remix_mode'])
+        self.execute("UPDATE ads.content_remix_batches SET structure=structure || '{\"mode\":\"sellingPoint\"}'::jsonb WHERE batch_id=%s", (self.batch,))
+        self.assertEqual(linkage(self.conn, {'job_id':self.job})['remix_mode'], 'sellingPoint')
+
     def setUp(self):
         self.env = patch.dict(os.environ, {"CONTENT_PRODUCTION_RUNS_ENABLED": "true"})
         self.env.start()

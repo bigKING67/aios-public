@@ -13,6 +13,8 @@ pub(super) const STATUSES: [&str; 4] = ["suggested", "confirmed", "rejected", "s
 /// Statuses a client may set; `stale` is only assigned by the server.
 pub(super) const CLIENT_STATUSES: [&str; 3] = ["suggested", "confirmed", "rejected"];
 pub(super) const ORIGINS: [&str; 2] = ["ai", "human"];
+/// Preset dimension of 类型 2 selling points (migration 035).
+pub(super) const SELLING_POINT_DIMENSION: &str = "selling_point";
 
 pub(super) fn validate_range(
     start_ms: i32,
@@ -77,6 +79,45 @@ pub(super) fn ensure_label(labels: &[SegmentPresetLabel], label_key: &str) -> Ap
     } else {
         Err(AppError::bad_request("标签不属于该分类预设版本"))
     }
+}
+
+/// Canonical labels for one physical span. Array order does not rank evidence.
+pub(super) fn segment_label_keys(primary: &str, additional: &[String]) -> Vec<String> {
+    let mut keys = additional.to_vec();
+    keys.push(primary.to_owned());
+    keys.sort();
+    keys.dedup();
+    keys
+}
+
+pub(super) fn additional_labels(
+    labels: &[SegmentPresetLabel],
+    primary: &str,
+    requested: Option<&[String]>,
+) -> AppResult<Vec<String>> {
+    ensure_label(labels, primary)?;
+    let Some(keys) = requested else {
+        return Ok(Vec::new());
+    };
+    let unique: std::collections::BTreeSet<_> = keys.iter().collect();
+    if keys.is_empty()
+        || keys.len() > 32
+        || unique.len() != keys.len()
+        || !keys.iter().any(|key| key == primary)
+    {
+        return Err(AppError::bad_request(
+            "labelKeys 必须包含 labelKey，且包含 1–32 个不重复标签",
+        ));
+    }
+    for key in keys {
+        validate_key(key, "labelKeys")?;
+        ensure_label(labels, key)?;
+    }
+    Ok(unique
+        .into_iter()
+        .filter(|key| key.as_str() != primary)
+        .cloned()
+        .collect())
 }
 
 pub(super) fn validate_client_status(status: &str) -> AppResult<()> {

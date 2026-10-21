@@ -1,13 +1,22 @@
 import { ArrowLeftOutlined, ExportOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
 import { Alert, Button, Popconfirm, Select, Skeleton } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { resolveContentAssetDisplayTitle, resolveContentAssetProductText } from '@/app/marketing/content-assets/_lib/content-assets-display';
 import { formatDuration } from '@/app/marketing/content-assets/_lib/content-assets-formatters';
-import { ROUTE_PATHS } from '@/lib/route-policy-registry';
-import type { StudioContentSegment, StudioSegmentPreset } from '../_lib/ai-studio-api';
+import { aiStudioQueryKeys, fetchAllStudioSegments, type StudioContentSegment, type StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { buildContentAssetDetailPath } from '../_lib/remix-routes';
-import { findPreset, isSegmentReadOnly, presetDisplayName, SEGMENT_STATUS_OPTIONS } from '../_lib/segment-display';
+import { segmentListPath } from '../_lib/segment-routes';
+import {
+  DEFAULT_PRESET_KEY,
+  findPreset,
+  isSegmentReadOnly,
+  isSellingPointPreset,
+  presetDisplayName,
+  SEGMENT_STATUS_OPTIONS,
+  SELLING_POINT_FRAMEWORK_LABEL,
+} from '../_lib/segment-display';
 import { SegmentCreateForm } from './segment-create-form';
 import { SegmentEditModal } from './segment-edit-modal';
 import { SegmentSourcePlayer } from './segment-source-player';
@@ -34,6 +43,14 @@ interface SegmentAnnotationViewProps {
 
 export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openAccess, presets, preset, onPresetChange }: SegmentAnnotationViewProps) {
   const annotation = useSegmentAnnotation(assetId, preset, presets);
+  const sellingPoint = isSellingPointPreset(preset);
+  // Selling-point segments live inside confirmed framework segments; show those as a reference lane.
+  const frameQuery = { assetId, presetKey: DEFAULT_PRESET_KEY };
+  const framesQuery = useQuery({
+    queryKey: aiStudioQueryKeys.segmentList(frameQuery),
+    queryFn: ({ signal }) => fetchAllStudioSegments(frameQuery, { signal }),
+    enabled: sellingPoint && assetId.length > 0,
+  });
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playback = useRangePlayback(videoRef);
   const [mediaDurationMs, setMediaDurationMs] = useState<number | null>(null);
@@ -77,6 +94,11 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
   const segmentProduct = assetProduct
     ? null
     : segments.find((segment) => segment.status === 'confirmed' && segment.productName)?.productName ?? null;
+  // Same rule as the selling-point worker: the newest framework version with confirmed segments.
+  const confirmedFrames = (framesQuery.data?.items ?? []).filter((segment) => segment.status === 'confirmed' && segment.sourceCurrent);
+  const frameVersion = Math.max(0, ...confirmedFrames.map((segment) => segment.presetVersion));
+  const frames = confirmedFrames.filter((segment) => segment.presetVersion === frameVersion);
+  const hasVoiceover = frames.some((segment) => segment.labelKey === SELLING_POINT_FRAMEWORK_LABEL);
   const maxEnd = segments.reduce((max, segment) => Math.max(max, segment.endMs), 0);
   const timelineDurationMs = Math.max(assetDurationMs ?? mediaDurationMs ?? 0, maxEnd);
   const canPlay = !asset.externalOnly && Boolean(asset.rawObjectKey || asset.previewObjectKey);
@@ -107,8 +129,8 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
     <section className={pageStyles.panel} aria-labelledby="ai-studio-page-title">
       <header className={pageStyles.pageHeader}>
         <div>
-          <RouterLink className={styles.backLink} to={ROUTE_PATHS.contentAiStudioSegments}>
-            <ArrowLeftOutlined aria-hidden /> 片段素材
+          <RouterLink className={styles.backLink} to={segmentListPath(sellingPoint ? 'sellingPoint' : 'framework')}>
+            <ArrowLeftOutlined aria-hidden /> {sellingPoint ? '卖点片段' : '框架片段'}
           </RouterLink>
           <h1 id="ai-studio-page-title">标注片段 · {resolveContentAssetDisplayTitle(asset)}</h1>
           <p>
@@ -206,7 +228,35 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
             highlightedIds={highlightedIds}
             onSelect={selectSegment}
             onSeek={canPlay ? playback.seekTo : undefined}
+            context={sellingPoint ? { title: '框架段', segments: frames } : undefined}
           />
+        ) : null}
+        {sellingPoint && framesQuery.isError ? (
+          <Alert
+            type="error"
+            showIcon
+            title="框架段读取失败，暂时看不到卖点片段该落在哪些框架段内"
+            action={<Button onClick={() => void framesQuery.refetch()}>重试</Button>}
+          />
+        ) : null}
+        {sellingPoint && framesQuery.isSuccess && frames.length === 0 ? (
+          <Alert
+            type="warning"
+            showIcon
+            title="这条原片还没有已确认的框架段"
+            description="卖点片段要落在框架段内才能用于卖点混剪；先切到框架预设确认框架段，再标卖点或发起卖点分析。"
+          />
+        ) : null}
+        {sellingPoint && frames.length > 0 && !hasVoiceover ? (
+          <Alert
+            type="warning"
+            showIcon
+            title="这条原片没有混剪口播段"
+            description="卖点只在混剪口播段中拆解；实拍、街采、机制等段在卖点混剪里整段替换，段内标的卖点不参与组合。"
+          />
+        ) : null}
+        {sellingPoint && hasVoiceover ? (
+          <p className={styles.fieldHelp}>卖点只在混剪口播段中拆解；实拍、街采、机制等段整段替换，段内标的卖点不参与卖点混剪。</p>
         ) : null}
         {annotation.truncated ? <p className={styles.fieldHelp}>片段较多，只显示前 1000 条。</p> : null}
       </article>

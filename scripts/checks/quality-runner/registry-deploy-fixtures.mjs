@@ -31,10 +31,6 @@ export function assertRegistryDeployInputs({ assertTrue, registry }) {
     ['scripts/lib/deploy/deploy-config-baseline-fixture.mjs', 'deploy baseline configuration specimens'],
     ['scripts/lib/deploy/api-deploy-proof-fixtures.mjs', 'API recovery fixtures'],
     ['scripts/lib/deploy/api-deploy-proof.sh', 'API recovery implementation'],
-    [
-      'scripts/lib/deploy/sample-inventory-public-access-preflight-fixtures.mjs',
-      'sample inventory access fixtures',
-    ],
   ]) {
     assertTrue(
       registry.byName.get('verify:deploy:config-behavior')?.inputs.includes(input),

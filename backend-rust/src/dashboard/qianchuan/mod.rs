@@ -9,7 +9,7 @@ use serde_json::{json, Value};
 use sqlx::{PgPool, Row};
 use tracing::error;
 
-use crate::state::AppState;
+use crate::{auth::CurrentUser, state::AppState};
 
 use super::errors::normalize_qianchuan_error_message;
 use super::params::LiveQueryParams;
@@ -477,6 +477,7 @@ struct QianchuanDataBundle {
 
 pub(crate) async fn get_qianchuan(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<LiveQueryParams>,
 ) -> Response {
     let start_date = get_validated_date_param(query.start_date.as_deref());

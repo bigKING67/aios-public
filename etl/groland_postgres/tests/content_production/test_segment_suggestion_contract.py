@@ -47,7 +47,7 @@ class PromptTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             build_prompt('自定义预设', labels, PROMPT_V1, '镜头切换统计')
         with self.assertRaises(ValueError):
-            build_prompt('自定义预设', labels, 'segment-suggest-v9')
+            build_prompt('自定义预设', labels, 'segment-suggest-v99')
 
     def test_v2_prompt_embeds_statistics_guidance_and_omission(self):
         labels = preset_labels(LABELS)
@@ -221,6 +221,21 @@ class PromptV3Tests(unittest.TestCase):
         for name in ('混剪口播', '实拍内容', '街采', '机制', 'KOC'):
             self.assertNotIn(name, v4)
 
+    def test_v12_is_v4_with_the_ten_second_continuity_rules(self):
+        from content_production.segment_suggestion_contract import PROMPT_V12
+        v4 = build_prompt('自定义预设', self.labels, PROMPT_V4, '切点统计')
+        v12 = build_prompt('自定义预设', self.labels, PROMPT_V12, '切点统计')
+        rule = lambda prompt, n: next(line for line in prompt.splitlines() if line.startswith(f'{n}. '))
+        self.assertIn('10 秒及以上', rule(v12, 6))
+        self.assertIn('不打断连续', rule(v12, 9))
+        self.assertIn('外来素材', rule(v12, 6))
+        self.assertNotIn('十几秒', v12)
+        # Everything except rules 6 and 9 is v4.
+        self.assertEqual(v12.replace(rule(v12, 6), rule(v4, 6)).replace('\n' + rule(v12, 9), ''), v4)
+        for name in ('混剪口播', '实拍内容', '街采', '机制', 'KOC'):
+            self.assertNotIn(name, v12)
+        self.assertIn('same_person_as_previous', response_schema(self.labels, PROMPT_V12)['properties']['segments']['items']['required'])
+
     def test_only_v4_schema_requires_the_person_field(self):
         item = lambda version: response_schema(self.labels, version)['properties']['segments']['items']
         self.assertNotIn('same_person_as_previous', item(PROMPT_V3)['properties'])
@@ -288,10 +303,28 @@ class LabelMinimumTests(unittest.TestCase):
         self.assertEqual(result, [(0, 12, 'mix'), (12, 57, 'live'), (57, 80, 'mix')])
         self.assertEqual(stats['absorbedShort'], 0)
 
-    def test_long_spans_of_different_people_end_as_one_segment(self):
-        segs = [(0, 40, 'live', False), (40, 80, 'live', False), (80, 90, 'mix', False)]
+    def test_long_spans_of_different_people_stay_separate_segments(self):
+        # 竞品-004 (business-confirmed 2026-10-14): a person change inside live footage is a segment boundary.
+        segs = [(0, 21, 'mix', False), (21, 63, 'live', False), (63, 119, 'live', False), (119, 143, 'street', False)]
         result, _, _ = self.run_people(segs, {'live': 30_000})
-        self.assertEqual(result, [(0, 80, 'live'), (80, 90, 'mix')])
+        self.assertEqual(result, [(0, 21, 'mix'), (21, 63, 'live'), (63, 119, 'live'), (119, 143, 'street')])
+
+    def test_person_boundary_survives_absorbing_a_short_person(self):
+        # The short third person folds into the montage; the two long people stay apart.
+        segs = [(0, 20, 'mix', False), (20, 60, 'live', False), (60, 100, 'live', False), (100, 110, 'live', False),
+                (110, 160, 'mix', False)]
+        result, stats, _ = self.run_people(segs, {'live': 30_000})
+        self.assertEqual(result, [(0, 20, 'mix'), (20, 60, 'live'), (60, 100, 'live'), (100, 160, 'mix')])
+        self.assertEqual(stats['absorbedShort'], 1)
+
+    def test_short_span_that_ends_the_film_is_kept(self):
+        # 竞品-015: montage then a real 25s demo that closes the film.
+        result, stats = self.run_pp([(0, 28, 'mix'), (28, 53, 'live')], {'live': 30_000})
+        self.assertEqual(result, [(0, 28, 'mix'), (28, 53, 'live')])
+        self.assertEqual(stats['absorbedShort'], 0)
+        # Only the last span is exempt: the same span earlier in the film still folds.
+        result, _ = self.run_pp([(0, 28, 'mix'), (28, 53, 'live'), (53, 90, 'mix')], {'live': 30_000})
+        self.assertEqual(result, [(0, 90, 'mix')])
 
     def test_person_changes_only_matter_for_labels_with_a_minimum(self):
         segs = [(0, 10, 'mix', False), (10, 20, 'mix', False), (20, 60, 'live', False)]
@@ -318,12 +351,13 @@ class PresetAbsorbRuleTests(unittest.TestCase):
         return [(s['start_ms'] / 1000, s['end_ms'] / 1000, s['label_key']) for s in result], stats
 
     def test_short_span_only_joins_allowed_neighbours(self):
-        # 蜜粉-002: a 19s single-person demo after the street interview ends the film; it is not montage.
-        segs = [(0, 15, 'mix'), (15, 57, 'live'), (57, 68, 'mix'), (68, 74, 'street'), (74, 93, 'live')]
+        # 蜜粉-002 shape, moved off the film end (the last span is always kept): a 19s demo
+        # after the street interview is not montage.
+        segs = [(0, 15, 'mix'), (15, 57, 'live'), (57, 68, 'mix'), (68, 74, 'street'), (74, 93, 'live'), (93, 100, 'street')]
         result, _ = self.run_pp(segs, {'live': 30_000})
-        self.assertEqual(result[-1], (68, 93, 'street'))
+        self.assertEqual(result[-1], (68, 100, 'street'))
         result, stats = self.run_pp(segs, {'live': 30_000}, {'live': frozenset({'mix'})})
-        self.assertEqual(result, [(0, 15, 'mix'), (15, 57, 'live'), (57, 68, 'mix'), (68, 74, 'street'), (74, 93, 'live')])
+        self.assertEqual(result, segs)
         self.assertEqual((stats['absorbedShort'], stats['labelAbsorbInto']), (0, {'live': ['mix']}))
         # Next to an allowed label it is still absorbed.
         result, _ = self.run_pp([(0, 50, 'mix'), (50, 60, 'live'), (60, 70, 'street')], {'live': 30_000}, {'live': frozenset({'mix'})})
@@ -331,13 +365,15 @@ class PresetAbsorbRuleTests(unittest.TestCase):
 
     def test_restricted_absorb_still_picks_the_longer_of_target_and_own_label(self):
         # 蜜粉-024 run 2: the model reported a person change inside one demo; the longer own-label
-        # neighbour wins, so the 21.6s piece stays live.
+        # neighbour wins, so the 21.6s piece stays live. The reported change stays a boundary
+        # (an extra cut between two live spans; per-second labels are unaffected).
         payload = {'segments': [
             {'start_sec': 0, 'end_sec': 14.4, 'label_key': 'mix', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False},
             {'start_sec': 14.4, 'end_sec': 36, 'label_key': 'live', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False},
             {'start_sec': 36, 'end_sec': 117.2, 'label_key': 'live', 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False}]}
         result, _ = postprocess(payload, 200_000, self.keys, 1000, {'live': 30_000}, {'live': frozenset({'mix'})})
-        self.assertEqual([(s['start_ms'], s['end_ms'], s['label_key']) for s in result], [(0, 14400, 'mix'), (14400, 117200, 'live')])
+        self.assertEqual([(s['start_ms'], s['end_ms'], s['label_key']) for s in result],
+                         [(0, 14400, 'mix'), (14400, 36000, 'live'), (36000, 117200, 'live')])
 
     def test_restricted_absorb_folds_short_different_people_next_to_montage(self):
         # 整片-004 pattern: two different people, each under 30s, inside the montage -> both montage.
@@ -360,6 +396,14 @@ class PresetAbsorbRuleTests(unittest.TestCase):
                                     bridge={'promo': 12_000})
         self.assertEqual(result, [(0, 25, 'promo')])
         self.assertEqual((stats['bridged'], stats['merged']), (2, 4))
+
+    def test_bridge_merges_keep_person_boundaries(self):
+        payload = {'segments': [
+            {'start_sec': a, 'end_sec': b, 'label_key': k, 'confidence': 0.9, 'reason': 'r', 'same_person_as_previous': False}
+            for a, b, k in ((0, 40, 'live'), (40, 80, 'live'), (80, 85, 'promo'), (85, 90, 'mix'), (90, 95, 'promo'))]}
+        result, _ = postprocess(payload, 200_000, self.keys, 1000, {'live': 30_000}, None, {'promo': 12_000})
+        self.assertEqual([(s['start_ms'] // 1000, s['end_ms'] // 1000, s['label_key']) for s in result],
+                         [(0, 40, 'live'), (40, 80, 'live'), (80, 95, 'promo')])
 
     def test_bridge_does_not_apply_to_other_labels_or_long_spans(self):
         # A short promo between montage spans is not bridged into montage (montage has no bridge).

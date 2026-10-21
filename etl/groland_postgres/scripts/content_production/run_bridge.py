@@ -28,6 +28,11 @@ def linkage(conn, job: dict) -> dict | None:
           FROM ads.content_production_run_renders l JOIN ads.content_production_runs r ON r.run_id=l.run_id
           WHERE l.job_id=%s""", (job["job_id"],))
         row = cursor.fetchone()
+        if row and row["task_type"] == "framework_remix" and remix_output.installed(cursor):
+            cursor.execute("""SELECT b.structure->>'mode' AS mode FROM ads.content_remix_batches b
+              JOIN ads.content_remix_batch_runs br USING (batch_id) WHERE br.run_id=%s""", (row["run_id"],))
+            batch = cursor.fetchone()
+            row["remix_mode"] = batch["mode"] if batch else None
     conn.commit()
     return dict(row) if row else None
 

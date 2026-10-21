@@ -8,12 +8,7 @@ use sqlx::{postgres::PgPoolOptions, PgPool};
 use tokio::task::JoinHandle;
 use uuid::Uuid;
 
-use crate::{
-    config::{SampleInventoryAccessMode, Settings},
-    cors::build_cors_layer,
-    routes::build_app,
-    state::AppState,
-};
+use crate::{config::Settings, cors::build_cors_layer, routes::build_app, state::AppState};
 
 const MAIN_ASSET_ID: &str = "11111111-1111-1111-1111-111111111111";
 const FIXTURE_USER_ID: i64 = 90_000_001;
@@ -354,7 +349,6 @@ pub(crate) fn fixture_settings(database_url: String) -> Settings {
         refresh_token_expire_days: 30,
         dragonfly_url: "redis://127.0.0.1:6379".to_string(),
         cors_origins: vec!["http://127.0.0.1:5173".to_string()],
-        sample_inventory_access_mode: SampleInventoryAccessMode::Authenticated,
         weekly_report_cache_ttl_seconds: 0,
         weekly_period_cache_ttl_seconds: 0,
         monthly_report_cache_ttl_seconds: 0,

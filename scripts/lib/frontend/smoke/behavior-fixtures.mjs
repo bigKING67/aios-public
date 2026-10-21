@@ -238,17 +238,28 @@ export async function runFrontendSmokeBehaviorFixtures(assertions) {
     'performance smoke should load route budgets from smoke-routes config',
   );
   assertEqual(
-    performanceRouteByPath.get('/dashboard')?.performanceInteractionSelector,
+    defaultRouteByPath.has('/dashboard') || performanceRouteByPath.has('/dashboard'),
+    false,
+    'public smoke should not treat the login-only dashboard as a public route',
+  );
+  assertEqual(
+    routeByPath.get('/dashboard')?.expectedFinalPath,
+    '/login',
+    'anonymous dashboard smoke should resolve to the login route',
+  );
+  const dashboardPerformanceRoute = authenticatedPerformanceRouteByPath.get('/dashboard?tab=douyin&dimension=live');
+  assertEqual(
+    dashboardPerformanceRoute?.performanceInteractionSelector,
     'nav[aria-label="平台切换"] button',
     'dashboard performance smoke should use the safe platform-tab interaction probe',
   );
   assertEqual(
-    performanceRouteByPath.get('/dashboard')?.performanceBudget.maxInpMs,
+    dashboardPerformanceRoute?.performanceBudget.maxInpMs,
     200,
     'dashboard performance smoke should enforce the INP budget',
   );
   assertEqual(
-    performanceRouteByPath.get('/dashboard')?.performanceBudget.maxCls,
+    dashboardPerformanceRoute?.performanceBudget.maxCls,
     0.1,
     'dashboard performance smoke should enforce the CLS budget',
   );

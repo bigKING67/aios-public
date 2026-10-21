@@ -78,7 +78,11 @@ Desktop.ini
 
 # Claude Code / IDE 工作目录
 .ace-tool/
-.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+# Team Workflow Craft is committed so members need no separate install.
+!.claude/skills/team-workflow-craft/
 
 # 本地开发工具
 .env.*.local

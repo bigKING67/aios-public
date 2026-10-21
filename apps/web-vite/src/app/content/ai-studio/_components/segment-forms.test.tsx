@@ -23,6 +23,22 @@ function renderForm(onSubmit = vi.fn().mockResolvedValue(true), readCurrentMs: (
 }
 
 describe('segment create form', () => {
+  it('records two selling points on one complete span', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(true);
+    render(<SegmentCreateForm preset={{ ...preset, presetKey: 'selling_point', dimension: 'selling_point', labels: [
+      { key: 'moisturizing', name: '滋润保湿', definition: '即时保湿' },
+      { key: 'skincare', name: '养肤护肤', definition: '长期养肤' },
+    ] }} assetProductName="小紫瓶" durationMs={60_000} busy={false} readCurrentMs={null} onSubmit={onSubmit} />);
+    fireEvent.change(screen.getByLabelText('入点'), { target: { value: '0:01.0' } });
+    fireEvent.change(screen.getByLabelText('出点'), { target: { value: '0:05.0' } });
+    fireEvent.mouseDown(screen.getByLabelText('标签'));
+    fireEvent.click(await screen.findByText('滋润保湿'));
+    fireEvent.click(await screen.findByText('养肤护肤'));
+    fireEvent.click(screen.getByRole('button', { name: '新建片段' }));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(onSubmit.mock.calls[0][0]).toMatchObject({ startMs: 1000, endMs: 5000,
+      labelKey: 'moisturizing', labelKeys: ['moisturizing', 'skincare'] });
+  });
   it('blocks invalid drafts with inline errors', async () => {
     const onSubmit = renderForm();
     fireEvent.change(screen.getByLabelText('入点'), { target: { value: '0:05.0' } });
@@ -65,5 +81,17 @@ describe('segment edit patch', () => {
     expect(buildSegmentPatch(segment, { startMs: 1_000, endMs: 5_000, labelKey: 'street', productName: '  ' }))
       .toEqual({ expectedRevision: 4, productName: '' });
     expect(buildSegmentPatch(segment, { startMs: 1_000, endMs: 5_000, labelKey: 'street', productName: '小紫瓶' })).toBeNull();
+  });
+
+  it('changes secondary labels without changing or duplicating the physical span', () => {
+    const multi = { ...segment, labelKey: 'moisturizing', labelKeys: ['moisturizing', 'skincare'] };
+    const next = { startMs: 1000, endMs: 5000, labelKey: 'moisturizing', productName: '小紫瓶' };
+    expect(buildSegmentPatch(multi, { ...next, labelKey: 'skincare', labelKeys: ['skincare', 'moisturizing'] })).toBeNull();
+    expect(buildSegmentPatch(multi, { ...next, labelKey: 'skincare', labelKeys: ['skincare'] }))
+      .toEqual({ expectedRevision: 4, labelKey: 'skincare', labelKeys: ['skincare'] });
+    expect(buildSegmentPatch(multi, { ...next, labelKeys: ['moisturizing'] }))
+      .toEqual({ expectedRevision: 4, labelKeys: ['moisturizing'] });
+    expect(buildSegmentPatch(multi, { ...next, endMs: 6000, labelKeys: multi.labelKeys }))
+      .toEqual({ expectedRevision: 4, endMs: 6000 });
   });
 });

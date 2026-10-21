@@ -4,7 +4,7 @@ import sys
 import threading
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 from content_production.segment_suggestion_contract import response_schema
 from content_production.segment_suggestion_provider import (
@@ -20,6 +20,60 @@ def no_network(*_args, **_kwargs):
 
 
 class LiveGuardTests(unittest.TestCase):
+    def test_independent_voice_samples_cannot_include_visual_or_prior_audio_context(self):
+        provider = object.__new__(ArkSegmentProvider)
+        provider.model = 'doubao-seed-2-1-lite-260915'
+        provider._request = Mock()
+        samples = [('A', Path(__file__)), ('B', Path(__file__))]
+        provider.review('compare actual voices', {}, audio_samples=samples)
+        content = provider._request.call_args.args[0]
+        self.assertEqual([c['type'] for c in content],
+                         ['input_text','input_audio','input_text','input_audio','input_text'])
+        self.assertEqual([content[i]['text'] for i in (0,2)], ['A','B'])
+        for inputs in ({'audio':Path(__file__)},{'proxy':Path(__file__)},{'boards':[Path(__file__)]}):
+            with self.assertRaisesRegex(ValueError,'only labelled audio'):
+                provider.review('invalid mixed evidence', {}, audio_samples=samples, **inputs)
+        self.assertEqual(provider._request.call_count, 1)
+
+    def test_audio_review_explicitly_sends_same_lite_audio_without_changing_visual_calls(self):
+        provider = object.__new__(ArkSegmentProvider)
+        provider.model = 'doubao-seed-2-1-lite-260915'
+        provider._request = Mock()
+        provider.review('aligned media', {}, audio=Path(__file__), proxy=Path(__file__))
+        self.assertEqual([c['type'] for c in provider._request.call_args.args[0]],
+                         ['input_video', 'input_audio', 'input_text'])
+        provider.review('visual only', {}, proxy=Path(__file__))
+        self.assertEqual([c['type'] for c in provider._request.call_args.args[0]],
+                         ['input_video', 'input_text'])
+        provider.model = 'another-model'
+        with self.assertRaises(SuggestionError):
+            provider.review('forbidden fallback', {}, audio=Path(__file__))
+
+    def test_bounded_review_reasoning_does_not_change_legacy_requests(self):
+        provider = object.__new__(ArkSegmentProvider)
+        provider.model = 'doubao-seed-2-1-lite-260915'
+        provider.client = Mock()
+        provider.client._post.return_value = {'status': 'completed', 'output': [
+            {'type': 'message', 'content': [{'type': 'output_text', 'text': '{}'}]}]}
+        provider.review('frame facts', {}, thinking='enabled', reasoning_effort='low')
+        self.assertEqual(provider.client._post.call_args.args[0]['reasoning'], {'effort': 'low'})
+        self.assertEqual(provider.client._post.call_args.args[0]['max_output_tokens'], 8192)
+        provider.review('legacy facts', {})
+        self.assertNotIn('reasoning', provider.client._post.call_args.args[0])
+        for effort in ('high', 'invalid'):
+            with self.assertRaises(ValueError):
+                provider.review('invalid', {}, thinking='disabled', reasoning_effort=effort)
+        self.assertEqual(provider.client._post.call_count, 2)
+
+    def test_proposal_reasoning_is_explicit_and_legacy_default_is_unchanged(self):
+        provider = object.__new__(ArkSegmentProvider)
+        provider.thinking, provider.fps = 'enabled', 2
+        provider._request = Mock()
+        provider.suggest(Path(__file__), 'prompt', {}, 1000, reasoning_effort='medium')
+        self.assertEqual(provider._request.call_args.kwargs, {'reasoning_effort':'medium'})
+        provider.suggest(Path(__file__), 'prompt', {}, 1000)
+        self.assertEqual(provider._request.call_args.kwargs, {'reasoning_effort':None})
+
     def test_ark_provider_refuses_without_explicit_live_flag(self):
         env = {key: value for key, value in os.environ.items() if key != LIVE_ENV}
         env.update({'ARK_API_KEY': 'fixture-only', 'CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROVIDER': 'ark'})

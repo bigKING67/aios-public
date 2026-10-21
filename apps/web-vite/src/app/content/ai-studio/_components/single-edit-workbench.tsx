@@ -25,7 +25,7 @@ import {
 } from '../_lib/remix-edit';
 import { buildRemixBatchPath, EDIT_FROM_BATCH_PARAM, EDIT_FROM_ORDINAL_PARAM } from '../_lib/remix-routes';
 import { readStudioConflict } from '../_lib/segment-errors';
-import { pickDefaultPreset, presetDisplayName } from '../_lib/segment-display';
+import { pickDefaultPreset, presetDisplayName, remixablePresets } from '../_lib/segment-display';
 import { EditingModeTabs } from './editing-mode-tabs';
 import { RemixRecentBatches } from './remix-recent-batches';
 import { EditLaunchCard } from './single-edit-launch';
@@ -62,7 +62,7 @@ export function SingleEditPanel({ capabilities }: { capabilities: StudioCapabili
         </div>
         <div className={remixStyles.headerEnd}>
           {enabled ? null : <Badge status="neutral">尚未启用</Badge>}
-          <EditingModeTabs remix={false} />
+          <EditingModeTabs mode="single" />
         </div>
       </header>
       {enabled ? (
@@ -70,10 +70,10 @@ export function SingleEditPanel({ capabilities }: { capabilities: StudioCapabili
       ) : (
         <article className={pageStyles.card}>
           <h2>单条剪辑未启用</h2>
-          <p>当前环境没有开启成片渲染，本页不会创建任何渲染任务。在此之前可以先在片段素材页确认片段。</p>
+          <p>当前环境没有开启成片渲染，本页不会创建任何渲染任务。在此之前可以先在框架片段页确认片段。</p>
           <div className={pageStyles.nextAction}>
             <RouterLink className={pageStyles.actionLink} to={ROUTE_PATHS.contentAiStudioSegments}>
-              去片段素材
+              去框架片段
             </RouterLink>
           </div>
         </article>
@@ -87,19 +87,20 @@ function SingleEditPresets({ capabilities }: { capabilities: StudioCapabilitiesR
   const presetsQuery = useStudioPresets(true);
   const [presetId, setPresetId] = useState<string | null>(null);
   const presets = presetsQuery.data ?? [];
-  const preset = presets.find((item) => `${item.presetKey}:${item.version}` === presetId) ?? pickDefaultPreset(presets);
+  const choices = remixablePresets(presets);
+  const preset = choices.find((item) => `${item.presetKey}:${item.version}` === presetId) ?? pickDefaultPreset(choices);
   if (presetsQuery.isPending) return <Skeleton active paragraph={{ rows: 6 }} />;
   if (presetsQuery.isError || !preset) {
     return <Alert type="error" showIcon title="分类预设读取失败" description="请刷新后重试。" />;
   }
   const id = `${preset.presetKey}:${preset.version}`;
   const presetSelect =
-    presets.length > 1 ? (
+    choices.length > 1 ? (
       <Select
         aria-label="分类预设"
         className={styles.presetSelect}
         value={id}
-        options={presets.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item) }))}
+        options={choices.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item) }))}
         onChange={setPresetId}
       />
     ) : null;
@@ -160,7 +161,8 @@ function SingleEditBoard({ capabilities, preset, presets, presetSelect }: Single
     const batch = fromDetail.data?.batch;
     const otherPreset =
       batch && (batch.presetKey !== preset.presetKey || batch.presetVersion !== preset.version) ? batch : null;
-    const item = otherPreset ? undefined : fromDetail.data?.items.find((entry) => entry.ordinal === fromOrdinal);
+    const sellingPoint = batch?.mode === 'sellingPoint';
+    const item = otherPreset || sellingPoint ? undefined : fromDetail.data?.items.find((entry) => entry.ordinal === fromOrdinal);
     if (item) {
       const next = clipsFromOutput(item.segments);
       setClipsState(next);
@@ -170,7 +172,9 @@ function SingleEditBoard({ capabilities, preset, presets, presetSelect }: Single
       setFromError(
         fromDetail.isError
           ? '没能读取这条成片（可能已删除或无权查看），剪辑台保持原样。'
-          : otherPreset
+          : sellingPoint
+            ? '卖点混剪的成片由卖点片段拼成，不能在单条剪辑里载入，剪辑台保持原样。'
+            : otherPreset
             ? `这条成片用的是分类预设 v${otherPreset.presetVersion}，请在剪辑台切换到同一预设后再从成片开始。`
             : `批次里没有第 ${fromOrdinal} 条成片，剪辑台保持原样。`,
       );

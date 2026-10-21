@@ -7,6 +7,7 @@ const AI_STUDIO_PATHS = [
   ROUTE_PATHS.contentAiStudio,
   ROUTE_PATHS.contentAiStudioAssets,
   ROUTE_PATHS.contentAiStudioSegments,
+  ROUTE_PATHS.contentAiStudioSellingPoints,
   ROUTE_PATHS.contentAiStudioOutputs,
   ROUTE_PATHS.contentAiStudioAnalysis,
   ROUTE_PATHS.contentAiStudioEditing,

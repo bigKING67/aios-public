@@ -23,13 +23,24 @@ LEASE_SQL = "INTERVAL '2 minutes'"
 MAX_PRODUCT_NAME_CHARS = 200
 
 
-def claim(conn):
+def claim(conn, dimensions=None, fallback_after_seconds=None):
+    """Claims the oldest queued job. With `dimensions`, only jobs whose preset dimension is listed;
+    with `fallback_after_seconds` as well, other jobs once they have waited that long (a GPU node takes
+    framework jobs first, the VPS worker still serves them when the node is away)."""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(f"""UPDATE ads.content_segment_suggestion_jobs SET status='failed',stage='执行租约过期',
           error_code='lease_expired',error_message='worker 已中断；模型调用可能已计费，请检查后手动重新发起',
           finished_at=NOW(),updated_at=NOW()
           WHERE status='running' AND heartbeat_at<NOW()-{LEASE_SQL}""")
-        cur.execute("SELECT job_id FROM ads.content_segment_suggestion_jobs WHERE status='queued' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1")
+        if dimensions:
+            cur.execute("""SELECT j.job_id FROM ads.content_segment_suggestion_jobs j
+              JOIN ads.content_segment_presets p ON p.preset_key=j.preset_key AND p.version=j.preset_version
+              WHERE j.status='queued' AND (p.dimension = ANY(%s)
+                OR (%s::INTEGER IS NOT NULL AND j.created_at < NOW() - make_interval(secs => %s::INTEGER)))
+              ORDER BY j.created_at FOR UPDATE OF j SKIP LOCKED LIMIT 1""",
+                        (list(dimensions), fallback_after_seconds, fallback_after_seconds))
+        else:
+            cur.execute("SELECT job_id FROM ads.content_segment_suggestion_jobs WHERE status='queued' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1")
         row = cur.fetchone()
         if not row:
             conn.commit()
@@ -108,7 +119,7 @@ def load_source(conn, job):
         cur.execute("""SELECT raw_object_key,bucket,raw_sha256,duration_seconds,product_name,asset_status,external_only,is_deleted
           FROM ads.marketing_content_assets WHERE asset_id=%s""", (job['asset_id'],))
         asset = cur.fetchone()
-        cur.execute("SELECT name,labels,status FROM ads.content_segment_presets WHERE preset_key=%s AND version=%s",
+        cur.execute("SELECT name,labels,status,dimension FROM ads.content_segment_presets WHERE preset_key=%s AND version=%s",
                     (job['preset_key'], job['preset_version']))
         preset = cur.fetchone()
     conn.commit()
@@ -119,7 +130,27 @@ def load_source(conn, job):
     if not preset or preset['status'] != 'active':
         raise SuggestionError('preset_retired', '分类预设已停用')
     return {'objectKey': asset['raw_object_key'], 'bucket': asset['bucket'], 'durationMs': asset_duration_ms(asset['duration_seconds']),
-            'productName': normalize_product(asset['product_name']), 'presetName': preset['name'], 'labels': preset['labels']}
+            'productName': normalize_product(asset['product_name']), 'presetName': preset['name'], 'labels': preset['labels'],
+            'presetDimension': preset['dimension']}
+
+
+def confirmed_frames(conn, job):
+    """Confirmed framework segments of the job's current source, from the newest framework preset
+    version that has any, in time order (AI 卖点打标 marks selling points inside them)."""
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute("""SELECT s.segment_id::TEXT AS segment_id,s.start_ms,s.end_ms,s.label_key,s.preset_key,s.preset_version,
+            COALESCE((SELECT l->>'name' FROM jsonb_array_elements(p.labels) l WHERE l->>'key'=s.label_key LIMIT 1), s.label_key)
+              AS label_name
+          FROM ads.content_segments s JOIN ads.content_segment_presets p
+            ON p.preset_key=s.preset_key AND p.version=s.preset_version AND p.dimension='framework'
+          WHERE s.asset_id=%s AND s.source_content_hash=%s AND s.status='confirmed'
+          ORDER BY s.preset_version DESC,s.start_ms,s.segment_id""", (job['asset_id'], job['source_content_hash']))
+        rows = cur.fetchall()
+    conn.commit()
+    if not rows:
+        return []
+    newest = (rows[0]['preset_key'], rows[0]['preset_version'])
+    return [dict(row) for row in rows if (row['preset_key'], row['preset_version']) == newest]
 
 
 def publish(conn, job, source, segments, *, model, provider, summary, usage, inserted=None):
@@ -157,7 +188,7 @@ def publish(conn, job, source, segments, *, model, provider, summary, usage, ins
               WHERE asset_id=%s AND preset_key=%s AND origin='ai' AND status='suggested' AND source_content_hash=%s""",
                         (str(job['job_id']), job['asset_id'], job['preset_key'], job['source_content_hash']))
             superseded = cur.rowcount
-            cur.execute("""SELECT start_ms,end_ms,label_key,product_name FROM ads.content_segments
+            cur.execute("""SELECT start_ms,end_ms,label_key,ARRAY[label_key] || additional_label_keys AS label_keys,product_name FROM ads.content_segments
               WHERE asset_id=%s AND preset_key=%s AND status='confirmed' AND source_content_hash=%s""",
                         (job['asset_id'], job['preset_key'], job['source_content_hash']))
             confirmed = cur.fetchall()
@@ -167,14 +198,20 @@ def publish(conn, job, source, segments, *, model, provider, summary, usage, ins
                 evidence = {'jobId': str(job['job_id']), 'provider': provider, 'model': model,
                             'promptVersion': summary['promptVersion'], 'confidence': segment['confidence'],
                             'reason': segment['reason'], 'basis': 'model-observation'}
+                if 'framework_segment_id' in segment:
+                    evidence.update(quote=segment['quote'], frameworkSegmentId=segment['framework_segment_id'])
+                if 'boundary_review' in segment:
+                    evidence['boundaryReview'] = segment['boundary_review']
                 segment_id = str(uuid.uuid4())
                 written.append({'segment_id': segment_id, 'start_ms': segment['start_ms'], 'end_ms': segment['end_ms']})
                 cur.execute("""INSERT INTO ads.content_segments (segment_id,owner_user_id,asset_id,source_content_hash,
-                  source_duration_ms,start_ms,end_ms,preset_key,preset_version,label_key,product_name,origin,status,evidence)
-                  VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'ai','suggested',%s)""",
+                  source_duration_ms,start_ms,end_ms,preset_key,preset_version,label_key,product_name,origin,status,evidence,
+                  continues_previous,additional_label_keys) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'ai','suggested',%s,%s,%s)""",
                             (segment_id, job['owner_user_id'], job['asset_id'], job['source_content_hash'],
                              source['durationMs'], segment['start_ms'], segment['end_ms'], job['preset_key'],
-                             job['preset_version'], segment['label_key'], product_name, Json(evidence)))
+                             job['preset_version'], segment['label_key'], product_name, Json(evidence),
+                             bool(segment.get('continues_previous')),
+                             [key for key in segment.get('label_keys', []) if key != segment['label_key']]))
             result = {**summary, 'segmentsInserted': len(segments), 'supersededSuggestions': superseded,
                       'skippedConfirmedDuplicates': duplicates}
             cur.execute("""UPDATE ads.content_segment_suggestion_jobs SET status='succeeded',stage='切段完成',

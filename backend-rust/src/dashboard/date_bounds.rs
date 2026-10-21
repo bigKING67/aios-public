@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -140,6 +141,7 @@ FROM ads.douyin_qianchuan_live_all_domain_material_daily
 
 pub(crate) async fn get_dashboard_date_bounds(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<DashboardDateBoundsQueryParams>,
 ) -> Response {
     let platform = normalize_platform(query.platform.as_deref());

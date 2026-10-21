@@ -20,6 +20,9 @@ type ProtectedRouteSourceOwner = {
 type ProtectedRoutePath = (typeof PROTECTED_ROUTE_POLICY_ENTRIES)[number]['path'];
 
 const PROTECTED_ROUTE_SOURCE_OWNERS = {
+  [ROUTE_PATHS.dashboard]: {
+    page: 'apps/web-vite/src/app/dashboard/page.tsx',
+  },
   [ROUTE_PATHS.dashboardIndustryMaterialInspiration]: {
     page: 'apps/web-vite/src/app/dashboard/industry-material-inspiration/page.tsx',
   },
@@ -83,6 +86,10 @@ const PROTECTED_ROUTE_SOURCE_OWNERS = {
   },
   [ROUTE_PATHS.contentAiStudioSegments]: {
     page: 'apps/web-vite/src/app/content/ai-studio/segments/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioSellingPoints]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/selling-points/page.tsx',
     importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
   },
   [ROUTE_PATHS.contentAiStudioOutputs]: {

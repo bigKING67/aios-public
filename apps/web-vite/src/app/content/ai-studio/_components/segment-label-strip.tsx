@@ -26,7 +26,7 @@ export function SegmentLabelStrip({ preset, scope, labelKey, onScopeChange, onLa
     queryKey: aiStudioQueryKeys.segmentPool(preset.presetKey, preset.version),
     queryFn: ({ signal }) => fetchStudioSegmentPool(preset.presetKey, preset.version, { signal }),
   });
-  const rows = useMemo(() => buildSegmentPoolRows(poolQuery.data?.items ?? [], preset.labels), [poolQuery.data, preset.labels]);
+  const rows = useMemo(() => buildSegmentPoolRows(poolQuery.data?.items ?? [], preset.labels, poolQuery.data?.productCounts), [poolQuery.data, preset.labels]);
   const { total, counts } = poolScopeCounts(rows, scope);
   const products = rows.filter((row) => row.productName !== null).map((row) => row.productName as string);
   if (scope.kind === 'product' && !products.includes(scope.productName)) products.push(scope.productName);

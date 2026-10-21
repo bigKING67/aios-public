@@ -1,8 +1,10 @@
 import { Input, Modal, Select } from 'antd';
 import { useEffect, useId, useState } from 'react';
 import type { StudioContentSegment, StudioSegmentPreset, StudioUpdateContentSegmentRequest } from '../_lib/ai-studio-api';
+import { isSellingPointPreset } from '../_lib/segment-display';
 import { buildSegmentPatch, type SegmentDraftErrors, validateSegmentDraft } from '../_lib/segment-form';
 import { formatSegmentTime } from '../_lib/segment-time';
+import { ContinuesPreviousField } from './segment-create-form';
 import styles from './segment-annotation.module.css';
 
 interface SegmentEditModalProps {
@@ -18,8 +20,11 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
   const id = useId();
   const [startText, setStartText] = useState('');
   const [endText, setEndText] = useState('');
-  const [labelKey, setLabelKey] = useState('');
+  const [labelKeys, setLabelKeys] = useState<string[]>([]);
+  const labelKey = labelKeys[0] ?? '';
   const [productName, setProductName] = useState('');
+  const [continuesPrevious, setContinuesPrevious] = useState(false);
+  const sellingPoint = isSellingPointPreset(preset);
   const [errors, setErrors] = useState<SegmentDraftErrors>({});
   const [notice, setNotice] = useState('');
 
@@ -27,8 +32,9 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
     if (!segment) return;
     setStartText(formatSegmentTime(segment.startMs));
     setEndText(formatSegmentTime(segment.endMs));
-    setLabelKey(segment.labelKey);
+    setLabelKeys([segment.labelKey, ...(segment.labelKeys ?? []).filter((key) => key !== segment.labelKey)]);
     setProductName(segment.productName ?? '');
+    setContinuesPrevious(segment.continuesPrevious);
     setErrors({});
     setNotice('');
   }, [segment]);
@@ -46,7 +52,14 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
       setErrors(result.errors);
       return;
     }
-    const patch = buildSegmentPatch(segment, { startMs: result.startMs, endMs: result.endMs, labelKey, productName });
+    const patch = buildSegmentPatch(segment, {
+      startMs: result.startMs,
+      endMs: result.endMs,
+      labelKey,
+      labelKeys: sellingPoint ? labelKeys : undefined,
+      productName,
+      continuesPrevious: sellingPoint ? continuesPrevious : undefined,
+    });
     if (!patch) {
       setNotice('没有需要保存的修改。');
       return;
@@ -90,12 +103,13 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
           <label htmlFor={`${id}-label`}>标签</label>
           <Select
             id={`${id}-label`}
-            value={labelKey || undefined}
+            mode={sellingPoint ? 'multiple' : undefined}
+            value={sellingPoint ? labelKeys : labelKey || undefined}
             options={(preset?.labels ?? []).map((label) => ({ value: label.key, label: label.name }))}
-            onChange={(next: string) => setLabelKey(next)}
+            onChange={(next: string | string[]) => setLabelKeys(Array.isArray(next) ? next : [next])}
           />
           <p className={errors.label ? styles.fieldError : styles.fieldHelp}>
-            {errors.label ?? preset?.labels.find((label) => label.key === labelKey)?.definition ?? ''}
+            {errors.label ?? (preset?.labels.filter((label) => labelKeys.includes(label.key)).map((label) => label.definition).join('；') || (sellingPoint ? '选择这段完整内容实际表达的全部卖点。' : ''))}
           </p>
         </div>
         <div className={styles.field}>
@@ -108,6 +122,7 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
             onChange={(event) => setProductName(event.target.value)}
           />
         </div>
+        {sellingPoint ? <ContinuesPreviousField checked={continuesPrevious} onChange={setContinuesPrevious} /> : null}
         {notice ? <p className={styles.fieldHelp} role="status">{notice}</p> : null}
       </div>
     </Modal>

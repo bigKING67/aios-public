@@ -1,21 +1,25 @@
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 
 /**
- * AI 剪辑 opens on framework remix; `?mode=single` selects single-task editing.
- * `?mode=remix` stays valid for saved links.
+ * AI 剪辑 opens on framework remix; `?mode=sellingPoint` selects 卖点混剪 and
+ * `?mode=single` single-task editing. `?mode=remix` stays valid for saved links.
  */
 export const EDITING_MODE_PARAM = 'mode';
 export const EDITING_REMIX_MODE = 'remix';
+export const EDITING_SELLING_POINT_MODE = 'sellingPoint';
 export const EDITING_SINGLE_MODE = 'single';
+
+/** The three AI 剪辑 tabs. */
+export type EditingMode = 'framework' | 'sellingPoint' | 'single';
 /** Single-task deep links (`/editing/:runId`, legacy library links) carry this. */
 export const EDITING_RUN_PARAM = 'editingRun';
 
 export const REMIX_BATCH_PARAM = 'batch';
 
-export function buildEditingModePath(remix: boolean): string {
-  return remix
-    ? ROUTE_PATHS.contentAiStudioEditing
-    : `${ROUTE_PATHS.contentAiStudioEditing}?${EDITING_MODE_PARAM}=${EDITING_SINGLE_MODE}`;
+export function buildEditingModePath(mode: EditingMode): string {
+  if (mode === 'framework') return ROUTE_PATHS.contentAiStudioEditing;
+  const value = mode === 'single' ? EDITING_SINGLE_MODE : EDITING_SELLING_POINT_MODE;
+  return `${ROUTE_PATHS.contentAiStudioEditing}?${EDITING_MODE_PARAM}=${value}`;
 }
 
 /** Outputs route focused on one batch. */

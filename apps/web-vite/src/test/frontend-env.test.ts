@@ -10,7 +10,6 @@ const ENV_KEYS = [
   'VITE_DASHBOARD_MAX_QUERY_DAYS',
   'VITE_FORCE_FRESH_DATA',
   'VITE_REPORT_API',
-  'VITE_SAMPLE_INVENTORY_ACCESS_MODE',
   'VITE_SUPER_ADMIN_ACCOUNTS',
 ] as const;
 
@@ -48,7 +47,6 @@ describe('frontend environment normalization', () => {
     expect(frontendEnv.apiDebugLogs).toBe(false);
     expect(frontendEnv.forceFreshData).toBe(false);
     expect(frontendEnv.isDevelopment).toBe(false);
-    expect(frontendEnv.sampleInventoryAccessMode).toBe('authenticated');
     expect(shouldBypassFrontendCache()).toBe(false);
     expect(shouldBypassQueryCache()).toBe(false);
   });
@@ -61,7 +59,6 @@ describe('frontend environment normalization', () => {
     process.env.NODE_ENV = 'development';
     process.env.VITE_DASHBOARD_MAX_QUERY_DAYS = ' 90 ';
     process.env.VITE_SUPER_ADMIN_ACCOUNTS = 'admin@example.test';
-    process.env.VITE_SAMPLE_INVENTORY_ACCESS_MODE = ' PUBLIC ';
     process.env.VITE_API_GATEWAY_TARGET = 'http://api.example.test/v1';
     const { frontendEnv, shouldBypassFrontendCache, shouldBypassQueryCache } = await loadFrontendEnv();
 
@@ -71,7 +68,6 @@ describe('frontend environment normalization', () => {
       dashboardMaxQueryDays: '90',
       forceFreshData: true,
       isDevelopment: true,
-      sampleInventoryAccessMode: 'public',
       serverApiUrl: 'http://api.example.test/v1',
       superAdminAccounts: 'admin@example.test',
     });
@@ -94,14 +90,5 @@ describe('frontend environment normalization', () => {
     loaded = await loadFrontendEnv();
     expect(loaded.frontendEnv.apiGatewayPrefix).toBe('/legacy');
     expect(loaded.frontendEnv.serverApiUrl).toBe('http://legacy.example.test/v1');
-  });
-
-  it('fails closed when the sample inventory access mode is invalid', async () => {
-    clearFrontendEnv();
-    process.env.VITE_SAMPLE_INVENTORY_ACCESS_MODE = 'anonymous';
-
-    await expect(loadFrontendEnv()).rejects.toThrow(
-      'Invalid VITE_SAMPLE_INVENTORY_ACCESS_MODE',
-    );
   });
 });

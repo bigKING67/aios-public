@@ -60,10 +60,10 @@ pub(super) fn combination_hash(segment_ids: &[Uuid]) -> String {
     hex::encode(hasher.finalize())
 }
 
-struct SplitMix64(u64);
+pub(super) struct SplitMix64(pub(super) u64);
 
 impl SplitMix64 {
-    fn next(&mut self) -> u64 {
+    pub(super) fn next(&mut self) -> u64 {
         self.0 = self.0.wrapping_add(0x9E37_79B9_7F4A_7C15);
         let mut z = self.0;
         z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
@@ -72,7 +72,7 @@ impl SplitMix64 {
     }
 
     /// Unbiased value in `0..bound` (bound > 0) by rejection sampling.
-    fn below(&mut self, bound: u64) -> u64 {
+    pub(super) fn below(&mut self, bound: u64) -> u64 {
         let zone = u64::MAX - (u64::MAX % bound);
         loop {
             let value = self.next();

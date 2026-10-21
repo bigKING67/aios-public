@@ -49,8 +49,8 @@ function item(ordinal: number, extra: Partial<StudioRemixBatchItem> = {}): Studi
     runStage: 'delivery', waitingReason: null, jobStatus: 'completed', jobError: null, outputAssetId: `out-${ordinal}`,
     outputCoverUrl: `https://cdn.invalid/out-${ordinal}.jpg`, durationMs: 9500,
     segments: [
-      { segmentId: `s-${ordinal}-1`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'voice', startMs: 0, endMs: 4500 },
-      { segmentId: `s-${ordinal}-2`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'demo', startMs: 10000, endMs: 15000 },
+      { segmentId: `s-${ordinal}-1`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'voice', startMs: 0, endMs: 4500, slot: null, tier: null, fallback: null, sellingPoints: null, segmentIds: null },
+      { segmentId: `s-${ordinal}-2`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'demo', startMs: 10000, endMs: 15000, slot: null, tier: null, fallback: null, sellingPoints: null, segmentIds: null },
     ],
     ...extra,
   };

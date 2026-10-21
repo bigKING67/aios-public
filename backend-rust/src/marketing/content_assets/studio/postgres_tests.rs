@@ -72,11 +72,13 @@ pub(super) fn create(asset_id: Uuid, start_ms: i32, end_ms: i32) -> CreateConten
         preset_key: "framework".into(),
         preset_version: 1,
         label_key: "mixed_voiceover".into(),
+        label_keys: None,
         start_ms,
         end_ms,
         product_name: None,
         source_content_hash: None,
         draft: false,
+        continues_previous: false,
     }
 }
 
@@ -86,8 +88,10 @@ pub(super) fn patch(expected_revision: i32) -> UpdateContentSegmentRequest {
         start_ms: None,
         end_ms: None,
         label_key: None,
+        label_keys: None,
         product_name: None,
         status: None,
+        continues_previous: None,
     }
 }
 

@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 from content_production import segment_transcript as st
@@ -84,6 +85,20 @@ class ResolveTests(unittest.TestCase):
     def resolve(self, conn, client=None, source=None, duration_ms=3000):
         return st.resolve(conn, 'asset', 'a' * 64, source or self.work / 'missing.mp4', duration_ms, dict(os.environ),
                           lambda: None, self.work, client)
+
+    def test_cached_only_miss_and_lookup_failure_never_submit_asr(self):
+        with patch.object(st, 'transcribe') as asr:
+            data, settings, summary = st.resolve_cached(FakeConn([None, None]), 'asset', 'a' * 64)
+            self.assertIsNone(data)
+            self.assertEqual((settings['mode'], summary['status']), ('cache_only', 'empty'))
+            conn = FakeConn([])
+            with patch.object(st, 'cached_utterances', side_effect=RuntimeError('private diagnostic')):
+                data, settings, summary = st.resolve_cached(conn, 'asset', 'a' * 64)
+            self.assertIsNone(data)
+            self.assertTrue(conn.rolled_back)
+            self.assertEqual(summary, {'status': 'unavailable', 'mode': 'cache_only', 'errorType': 'RuntimeError'})
+            self.assertEqual(settings, summary)
+            asr.assert_not_called()
 
     def test_earlier_job_transcript_is_reused_without_asr(self):
         client = FakeClient()

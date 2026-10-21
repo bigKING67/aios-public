@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -23,6 +24,7 @@ use super::super::{
 
 pub(in crate::dashboard) async fn get_overview_details(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<OverviewDetailsQueryParams>,
 ) -> Response {
     let start_date = get_validated_date_param(query.start_date.as_deref());

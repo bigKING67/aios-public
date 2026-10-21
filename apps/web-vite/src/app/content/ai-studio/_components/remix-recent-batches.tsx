@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
-import { remixBatchOwnerLabel, remixBatchStatusView, type StudioRemixBatch } from '../_lib/remix-api';
+import { type RemixBatchMode, remixBatchOwnerLabel, remixBatchStatusView, type StudioRemixBatch } from '../_lib/remix-api';
 import { remixBatchStructureText } from '../_lib/remix-form';
 import { buildRemixBatchPath } from '../_lib/remix-routes';
 import { formatShortTimestamp } from '../_lib/studio-time';
@@ -25,6 +25,7 @@ function progressText(batch: StudioRemixBatch): string {
 
 const COPY = {
   framework: { title: '最近批次', none: '还没有框架混剪批次，生成后会显示在这里。', empty: '还没有出成片的批次。' },
+  sellingPoint: { title: '最近批次', none: '还没有卖点混剪批次，生成后会显示在这里。', empty: '还没有出成片的批次。' },
   edit: { title: '最近单条成片', none: '还没有单条成片，生成后会显示在这里。', empty: '还没有出片成功的单条成片。' },
 } as const;
 
@@ -40,11 +41,11 @@ export function RemixRecentBatches({
 }: {
   presets: readonly StudioSegmentPreset[];
   openAccess: boolean;
-  mode: 'framework' | 'edit';
+  mode: RemixBatchMode;
 }) {
   const { query, refresh, pollPaused } = useRemixBatches(true);
   const copy = COPY[mode];
-  const all = (query.data ?? []).filter((batch) => (batch.mode === 'edit') === (mode === 'edit'));
+  const all = (query.data ?? []).filter((batch) => batch.mode === mode);
   // Same rule as 成片: batches that ended without any output stay out of the way.
   const batches = all.filter((batch) => batch.succeededCount > 0 || batch.runningCount > 0);
   const hidden = all.length - batches.length;

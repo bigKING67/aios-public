@@ -94,12 +94,13 @@ def parse_scored_cuts(log, offset_ms):
     return cuts
 
 
-def refine_cuts(video, boundary_ms, env, tick, log_path, timeout=SNAP_TIMEOUT_SECONDS):
+def refine_cuts(video, boundary_ms, env, tick, log_path, timeout=SNAP_TIMEOUT_SECONDS, *, after_ms=SNAP_AFTER_MS,
+                threshold=SNAP_THRESHOLD):
     """Scored scene changes within [boundary - SNAP_BEFORE_MS, boundary + SNAP_AFTER_MS] of the original."""
     start = max(boundary_ms - SNAP_BEFORE_MS, 0)
     try:
         with open(log_path, 'wb') as log:
-            code = run_media(refine_command(video, start, boundary_ms + SNAP_AFTER_MS - start), env, tick, timeout,
+            code = run_media(refine_command(video, start, boundary_ms + after_ms - start, threshold), env, tick, timeout,
                              stderr=log, poll_seconds=0.1)
         if code:
             raise ValueError('boundary refine exited with an error')

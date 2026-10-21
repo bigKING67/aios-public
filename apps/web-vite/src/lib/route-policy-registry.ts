@@ -56,6 +56,7 @@ export const ROUTE_PATHS = {
   contentAiStudio: '/content/ai-studio',
   contentAiStudioAssets: '/content/ai-studio/assets',
   contentAiStudioSegments: '/content/ai-studio/segments',
+  contentAiStudioSellingPoints: '/content/ai-studio/selling-points',
   contentAiStudioOutputs: '/content/ai-studio/outputs',
   contentAiStudioAnalysis: '/content/ai-studio/analysis',
   contentAiStudioEditing: '/content/ai-studio/editing',
@@ -80,7 +81,6 @@ export const ROUTE_PATHS = {
 export const PUBLIC_ROUTE_POLICY_ENTRIES = [
   { path: ROUTE_PATHS.home, kind: 'public' },
   { path: ROUTE_PATHS.login, kind: 'public' },
-  { path: ROUTE_PATHS.dashboard, kind: 'public' },
   { path: ROUTE_PATHS.docs, kind: 'public' },
   { path: ROUTE_PATHS.docsGuide, kind: 'public' },
   { path: ROUTE_PATHS.docsAnalysisFrameworks, kind: 'public' },
@@ -90,6 +90,11 @@ export const PUBLIC_ROUTE_POLICY_ENTRIES = [
 ] as const satisfies readonly PublicRoutePolicyEntry[];
 
 export const PROTECTED_ROUTE_POLICY_ENTRIES = [
+  {
+    path: ROUTE_PATHS.dashboard,
+    kind: 'authenticated',
+    layoutMenuPath: ROUTE_PATHS.dashboard,
+  },
   {
     path: ROUTE_PATHS.dashboardIndustryMaterialInspiration,
     kind: 'content_assets_write',
@@ -176,6 +181,11 @@ export const PROTECTED_ROUTE_POLICY_ENTRIES = [
   },
   {
     path: ROUTE_PATHS.contentAiStudioSegments,
+    kind: 'authenticated',
+    layoutMenuPath: ROUTE_PATHS.contentAiStudio,
+  },
+  {
+    path: ROUTE_PATHS.contentAiStudioSellingPoints,
     kind: 'authenticated',
     layoutMenuPath: ROUTE_PATHS.contentAiStudio,
   },

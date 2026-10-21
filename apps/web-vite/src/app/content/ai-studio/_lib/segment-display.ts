@@ -38,6 +38,32 @@ export function isSegmentReadOnly(segment: Pick<StudioContentSegment, 'status' |
 
 export const DEFAULT_PRESET_KEY = 'framework';
 
+/** Selling-point presets (类型 2) mark spans inside framework segments; they never form remix slots themselves. */
+export const SELLING_POINT_DIMENSION = 'selling_point';
+/** Key of the selling-point preset (`POINT_PRESET_KEY` on the server). */
+export const SELLING_POINT_PRESET_KEY = 'selling_point';
+/** Selling points are only split inside this framework label (`POINT_FRAMEWORK_LABEL` on the server). */
+export const SELLING_POINT_FRAMEWORK_LABEL = 'mixed_voiceover';
+
+export function isSellingPointPreset(preset: Pick<StudioSegmentPreset, 'dimension'> | undefined): boolean {
+  return preset?.dimension === SELLING_POINT_DIMENSION;
+}
+
+/** Presets a remix or single edit can be structured by. */
+export function remixablePresets(presets: readonly StudioSegmentPreset[]): StudioSegmentPreset[] {
+  return presets.filter((preset) => !isSellingPointPreset(preset));
+}
+
+/** Names of selling-point keys: active presets first, newest version first. */
+export function sellingPointNames(presets: readonly StudioSegmentPreset[], keys: readonly string[]): string[] {
+  const pool = presets
+    .filter(isSellingPointPreset)
+    .sort((a, b) => Number(b.status === 'active') - Number(a.status === 'active') || b.version - a.version);
+  const names = new Map<string, string>();
+  for (const label of pool.flatMap((preset) => preset.labels)) if (!names.has(label.key)) names.set(label.key, label.name);
+  return keys.map((key) => names.get(key) ?? key);
+}
+
 /** Prefers the default key, then the highest active version. */
 export function pickDefaultPreset(presets: readonly StudioSegmentPreset[]): StudioSegmentPreset | null {
   const active = presets.filter((preset) => preset.status === 'active');
@@ -55,7 +81,13 @@ export function findPreset(
 }
 
 export function labelName(preset: StudioSegmentPreset | undefined, labelKey: string): string {
-  return preset?.labels.find((label) => label.key === labelKey)?.name ?? labelKey;
+  return preset?.labels.find((label) => label.key === labelKey)?.name
+    ?? (labelKey === 'celebrity_endorsement' ? '旧背书（待重分）' : labelKey);
+}
+
+/** A multi-label span is still one physical clip. Old responses remain readable. */
+export function segmentLabelName(preset: StudioSegmentPreset | undefined, segment: Pick<StudioContentSegment, 'labelKey' | 'labelKeys'>): string {
+  return (segment.labelKeys ?? [segment.labelKey]).map((key) => labelName(preset, key)).join('、');
 }
 
 /**

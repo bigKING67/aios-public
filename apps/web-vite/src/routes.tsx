@@ -18,6 +18,7 @@ const LiveCenterAnalysisResultPage = lazy(
 const AiStudioHomePage = lazy(() => import('@/app/content/ai-studio/page'));
 const AiStudioAssetsPage = lazy(() => import('@/app/content/ai-studio/assets/page'));
 const AiStudioSegmentsPage = lazy(() => import('@/app/content/ai-studio/segments/page'));
+const AiStudioSellingPointsPage = lazy(() => import('@/app/content/ai-studio/selling-points/page'));
 const AiStudioOutputsPage = lazy(() => import('@/app/content/ai-studio/outputs/page'));
 const AiStudioAnalysisPage = lazy(() => import('@/app/content/ai-studio/analysis/page'));
 const AiStudioEditingPage = lazy(() => import('@/app/content/ai-studio/editing/page'));
@@ -84,6 +85,7 @@ export function AppRoutes() {
         <Route path={ROUTE_PATHS.contentAiStudio} element={<AiStudioHomePage />} />
         <Route path={ROUTE_PATHS.contentAiStudioAssets} element={<AiStudioAssetsPage />} />
         <Route path={ROUTE_PATHS.contentAiStudioSegments} element={<AiStudioSegmentsPage />} />
+        <Route path={ROUTE_PATHS.contentAiStudioSellingPoints} element={<AiStudioSellingPointsPage />} />
         <Route path={ROUTE_PATHS.contentAiStudioOutputs} element={<AiStudioOutputsPage />} />
         <Route path={ROUTE_PATHS.contentAiStudioAnalysis} element={<AiStudioAnalysisPage />} />
         <Route path={ROUTE_PATHS.contentAiStudioEditing} element={<AiStudioEditingPage />} />

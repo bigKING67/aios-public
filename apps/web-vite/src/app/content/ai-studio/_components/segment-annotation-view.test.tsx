@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchContentAssetDetail, createContentAssetPlaybackUrl } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import { APIError } from '@/lib/request';
@@ -38,9 +38,14 @@ function segment(segmentId: string, status: string, startMs: number, endMs: numb
   return {
     segmentId, status, startMs, endMs, assetId: ASSET, assetTitle: '整片-001', ownerUserId: 'u1',
     sourceContentHash: 'a'.repeat(64), sourceCurrent: true, sourceDurationMs: 60_000, presetKey: 'framework', presetVersion: 1,
-    labelKey: 'street', productName: '小紫瓶', origin: status === 'suggested' ? 'ai' : 'human', evidence: {}, revision: 1,
+    labelKey: 'street', labelKeys: ['street'], productName: '小紫瓶', continuesPrevious: false, origin: status === 'suggested' ? 'ai' : 'human', evidence: {}, revision: 1,
     confirmedBy: null, confirmedAt: null, createdAt: '', updatedAt: '', coverUrl: null, ...extra,
   };
+}
+
+function LocationProbe() {
+  const location = useLocation();
+  return <output aria-label="当前地址">{`${location.pathname}${location.search}`}</output>;
 }
 
 function renderWorkspace(entry: string, canWrite = true, openAccess = false) {
@@ -48,11 +53,20 @@ function renderWorkspace(entry: string, canWrite = true, openAccess = false) {
   render(
     <QueryClientProvider client={client}>
       <MemoryRouter initialEntries={[entry]}>
-        <SegmentsWorkspace canWrite={canWrite} openAccess={openAccess} />
+        <Routes>
+          <Route path="/content/ai-studio/segments" element={<SegmentsWorkspace kind="framework" canWrite={canWrite} openAccess={openAccess} />} />
+          <Route path="/content/ai-studio/selling-points" element={<SegmentsWorkspace kind="sellingPoint" canWrite={canWrite} openAccess={openAccess} />} />
+        </Routes>
+        <LocationProbe />
       </MemoryRouter>
     </QueryClientProvider>,
   );
 }
+
+const SELLING_POINT_PRESET = {
+  presetKey: 'selling_point', version: 1, dimension: 'selling_point', name: '卖点', status: 'active',
+  labels: [{ key: 'long_wear', name: '持妆', definition: '' }],
+};
 
 beforeEach(() => {
   // The annotation view pages through the same list endpoint.
@@ -164,7 +178,7 @@ describe('segment library view', () => {
     vi.mocked(fetchStudioSegments).mockResolvedValue({ items: [segment(SUGGESTED, 'suggested', 5_000, 12_000)], nextCursor: 'next', assets: [] });
     renderWorkspace('/content/ai-studio/segments?status=suggested&labelKey=street&origin=ai');
 
-    expect(await screen.findByRole('heading', { name: '片段素材' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: '框架片段' })).toBeInTheDocument();
     await waitFor(() => expect(fetchStudioSegments).toHaveBeenCalled());
     expect(vi.mocked(fetchStudioSegments).mock.calls[0][0]).toMatchObject({ presetKey: 'framework', status: 'suggested', labelKey: 'street', origin: 'ai', limit: 50 });
     expect(screen.queryByText(/只作用于已加载/)).not.toBeInTheDocument();
@@ -178,6 +192,61 @@ describe('segment library view', () => {
     renderWorkspace('/content/ai-studio/segments?view=table');
 
     const link = await screen.findByRole('link', { name: '去标注' });
-    expect(link).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${ASSET}&segmentId=${SUGGESTED}`);
+    expect(link).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${ASSET}&segmentId=${SUGGESTED}&presetKey=framework`);
+  });
+
+  it('lists 卖点片段 under its own route with the framework segment each sits in', async () => {
+    vi.mocked(fetchStudioPresets).mockResolvedValue([
+      { presetKey: 'framework', version: 1, dimension: 'framework', name: '框架', status: 'active', labels: [{ key: 'street', name: '街采', definition: '' }] },
+      SELLING_POINT_PRESET,
+    ]);
+    vi.mocked(fetchStudioSegments).mockImplementation(async (query) => ({
+      items: query.presetKey === 'selling_point'
+        ? [segment(SUGGESTED, 'confirmed', 5_000, 9_000, { presetKey: 'selling_point', labelKey: 'long_wear', continuesPrevious: true })]
+        : [segment(CONFIRMED, 'confirmed', 0, 20_000)],
+      nextCursor: null,
+      assets: [],
+    }));
+    renderWorkspace('/content/ai-studio/selling-points');
+
+    expect(await screen.findByRole('heading', { name: '卖点片段' })).toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: '分类预设' })).not.toBeInTheDocument();
+    expect(await screen.findByText('街采内')).toBeInTheDocument();
+    expect(screen.getByText('连着上一段')).toBeInTheDocument();
+    expect(vi.mocked(fetchStudioSegments).mock.calls.some(([query]) => query.presetKey === 'selling_point' && query.status === 'confirmed')).toBe(true);
+  });
+
+  it('keeps a selling-point annotation under 卖点片段 with its preset', async () => {
+    vi.mocked(fetchStudioPresets).mockResolvedValue([SELLING_POINT_PRESET]);
+    vi.mocked(fetchStudioSegments).mockResolvedValue({ items: [], nextCursor: null, assets: [] });
+    renderWorkspace(`/content/ai-studio/segments?assetId=${ASSET}&presetKey=selling_point`);
+
+    await waitFor(() =>
+      expect(screen.getByRole('status', { name: '当前地址' }).textContent).toBe(`/content/ai-studio/selling-points?assetId=${ASSET}&presetKey=selling_point`),
+    );
+  });
+
+  it.each([
+    ['street', '这条原片没有混剪口播段'],
+    ['mixed_voiceover', '卖点只在混剪口播段中拆解；实拍、街采、机制等段整段替换，段内标的卖点不参与卖点混剪。'],
+  ])('tells the annotator selling points are only split inside 混剪口播 (%s)', async (labelKey, text) => {
+    vi.mocked(fetchStudioPresets).mockResolvedValue([SELLING_POINT_PRESET]);
+    vi.mocked(fetchStudioSegments).mockImplementation(async (query) => ({
+      items: query.presetKey === 'selling_point' ? [] : [segment(CONFIRMED, 'confirmed', 0, 20_000, { labelKey, labelKeys: [labelKey] })],
+      nextCursor: null,
+      assets: [],
+    }));
+    renderWorkspace(`/content/ai-studio/selling-points?assetId=${ASSET}&presetKey=selling_point`);
+
+    expect(await screen.findByText(text)).toBeInTheDocument();
+  });
+
+  it('moves an old selling-point list link to 卖点片段', async () => {
+    vi.mocked(fetchStudioPresets).mockResolvedValue([SELLING_POINT_PRESET]);
+    vi.mocked(fetchStudioSegments).mockResolvedValue({ items: [], nextCursor: null, assets: [] });
+    renderWorkspace('/content/ai-studio/segments?presetKey=selling_point&status=suggested');
+
+    await waitFor(() => expect(screen.getByRole('status', { name: '当前地址' }).textContent).toBe('/content/ai-studio/selling-points?status=suggested'));
+    expect(await screen.findByRole('link', { name: '选择原片标注' })).toHaveAttribute('href', '/content/ai-studio/assets?presetKey=selling_point');
   });
 });

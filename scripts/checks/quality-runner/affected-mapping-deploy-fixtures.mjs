@@ -195,18 +195,6 @@ export function assertDeployAffectedMapping({
     );
   }
 
-  const sampleInventoryDeployFixture = selectAffectedGates(registry, [
-    'scripts/lib/deploy/sample-inventory-public-access-preflight-fixtures.mjs',
-  ]);
-  assertTrue(
-    sampleInventoryDeployFixture.names.includes('verify:deploy:config-behavior'),
-    'sample inventory access fixture should select deploy behavior coverage',
-  );
-  assertFalse(
-    sampleInventoryDeployFixture.names.includes('verify:backend:check'),
-    'sample inventory access fixture should not use backend safe fallback',
-  );
-
   const vpsGitStateBehaviorFixture = selectAffectedGates(registry, ['scripts/lib/deploy/vps-git-state-behavior-fixtures.mjs']);
   assertTrue(vpsGitStateBehaviorFixture.names.includes('lint:scripts'), 'VPS Git state behavior fixture should keep script lint coverage');
   assertTrue(

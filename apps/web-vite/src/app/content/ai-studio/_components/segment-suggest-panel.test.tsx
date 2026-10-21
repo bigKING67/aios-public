@@ -195,7 +195,7 @@ describe('AI 分析 segment suggestion panel', () => {
     ]);
     renderPanel(capabilities({ canWrite: false }));
     expect(await screen.findByText('新增待确认 4 段，替换旧建议 1 段，丢弃无效输出 2 条')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '审核建议片段' })).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${READY}`);
+    expect(screen.getByRole('link', { name: '审核建议片段' })).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${READY}&presetKey=framework`);
     // The prompt generation is shown per job, separate from the label-set version.
     expect(screen.getByText(/· 提示词 v4$/)).toBeInTheDocument();
     expect(screen.getByText('原片内容已变化，请重新开始分析')).toBeInTheDocument();

@@ -18,6 +18,7 @@ import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { ASSET_ANNOTATION_OPTIONS, readAnnotationFilter, resolveAnnotationPills } from '../_lib/asset-annotation';
 import { buildContentAssetDetailPath } from '../_lib/remix-routes';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
+import { SELLING_POINT_PRESET_KEY } from '../_lib/segment-display';
 import { studioProductOptions } from '../_lib/studio-products';
 import pageStyles from '../ai-studio.module.css';
 import { AnnotationPillText } from './annotation-pill-text';
@@ -58,6 +59,7 @@ export function AiStudioAssetsView({
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const annotationPreset = searchParams.get('presetKey') === SELLING_POINT_PRESET_KEY ? SELLING_POINT_PRESET_KEY : undefined;
   const keyword = searchParams.get('keyword') ?? '';
   const productName = searchParams.get('productName') ?? '';
   const videoType = searchParams.get('videoType') ?? '';
@@ -103,7 +105,8 @@ export function AiStudioAssetsView({
       return next;
     }, { replace: true });
   };
-  const openAnnotation = (asset: ContentAssetItem) => navigate(buildSegmentAnnotationPath(asset.assetId));
+  const annotationPath = (asset: ContentAssetItem) => buildSegmentAnnotationPath(asset.assetId, undefined, annotationPreset);
+  const openAnnotation = (asset: ContentAssetItem) => navigate(annotationPath(asset));
 
   const columns: ColumnsType<ContentAssetItem> = [
     {
@@ -135,7 +138,7 @@ export function AiStudioAssetsView({
       key: 'actions',
       render: (_, asset) => (
         <div className={styles.rowActions}>
-          <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(asset.assetId)}>标注片段</RouterLink>
+          <RouterLink className={styles.tableLink} to={annotationPath(asset)}>标注片段</RouterLink>
           <RouterLink className={styles.tableLink} to={buildContentAssetDetailPath(asset.assetId)}>
             在素材库打开
           </RouterLink>

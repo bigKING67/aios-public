@@ -6,14 +6,21 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 
-from marketing_content_assets.tos_storage import TosStorageClient, TosStorageConfig
+from marketing_content_assets.tos_storage import TosStorageClient, TosStorageConfig, UploadTuning
 from object_fixture import start_store
 
 
 @unittest.skipUnless(shutil.which("openssl"), "requires openssl for loopback TLS fixture")
 class ObjectFixtureTests(unittest.TestCase):
     def test_concurrent_distinct_uploads_are_not_overwritten(self):
+        self.exercise_uploads(multipart=False)
+
+    def test_concurrent_multipart_uploads_round_trip_with_real_signatures(self):
+        self.exercise_uploads(multipart=True)
+
+    def exercise_uploads(self, *, multipart):
         with tempfile.TemporaryDirectory(prefix="aios-object-fixture-") as folder:
             root = Path(folder)
             cert, key = root / "cert.pem", root / "key.pem"
@@ -28,7 +35,8 @@ class ObjectFixtureTests(unittest.TestCase):
             server, counts = start_store(root, source, cert, key, access, secret)
             config = TosStorageConfig(access, secret, f"https://127.0.0.1:{server.server_port}", "fixture", "127")
             def one(index):
-                client = TosStorageClient(config)
+                tuning = UploadTuning(multipart_threshold_bytes=1, part_size_bytes=16384, attempts=1) if multipart else None
+                client = TosStorageClient(config, tuning)
                 client.session.trust_env = False
                 client.session.verify = str(cert)
                 payload = bytes([index]) * 65536
@@ -36,6 +44,21 @@ class ObjectFixtureTests(unittest.TestCase):
                 file.write_bytes(payload)
                 name = f"production/batch/job-{index}/video.mp4"
                 try:
+                    if multipart and index == 0:
+                        # Invalid completion must not publish a partially uploaded object.
+                        url, headers = client._signed_url_and_headers("POST", name, {}, query_params={"uploads": ""})
+                        initiated = client.session.post(url, headers=headers, timeout=10)
+                        initiated.raise_for_status()
+                        upload_id = ET.fromstring(initiated.text).findtext("UploadId")
+                        url, headers = client._signed_url_and_headers("PUT", name, {}, query_params={"uploadId": upload_id, "partNumber": "1"})
+                        part = client.session.put(url, headers=headers, data=b"partial", timeout=10)
+                        part.raise_for_status()
+                        body = '<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>wrong</ETag></Part></CompleteMultipartUpload>'
+                        url, headers = client._signed_url_and_headers("POST", name, {}, query_params={"uploadId": upload_id})
+                        self.assertEqual(client.session.post(url, headers=headers, data=body, timeout=10).status_code, 400)
+                        self.assertEqual(client.session.get(client.presign_get_url(name), timeout=10).status_code, 404)
+                        url, headers = client._signed_url_and_headers("DELETE", name, {}, query_params={"uploadId": upload_id})
+                        self.assertEqual(client.session.delete(url, headers=headers, timeout=10).status_code, 204)
                     client.upload_file(name, file, "video/mp4")
                     response = client.session.get(client.presign_get_url(name), timeout=10)
                     response.raise_for_status()

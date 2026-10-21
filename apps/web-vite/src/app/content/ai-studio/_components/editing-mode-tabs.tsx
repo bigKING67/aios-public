@@ -1,21 +1,23 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { buildEditingModePath } from '../_lib/remix-routes';
+import { buildEditingModePath, type EditingMode } from '../_lib/remix-routes';
 import remixStyles from './remix.module.css';
 
-/** Route-driven switch between framework remix batches (default) and single-task editing. */
-export function EditingModeTabs({ remix }: { remix: boolean }) {
-  const tabs = [
-    { remix: true, label: '框架混剪' },
-    { remix: false, label: '单条剪辑' },
-  ];
+const TABS: ReadonlyArray<{ mode: EditingMode; label: string }> = [
+  { mode: 'framework', label: '框架混剪' },
+  { mode: 'sellingPoint', label: '卖点混剪' },
+  { mode: 'single', label: '单条剪辑' },
+];
+
+/** Route-driven switch between framework remix (default), 卖点混剪 and single-task editing. */
+export function EditingModeTabs({ mode }: { mode: EditingMode }) {
   return (
     <nav className={remixStyles.modeTabs} aria-label="剪辑方式">
-      {tabs.map((tab) => {
-        const active = tab.remix === remix;
+      {TABS.map((tab) => {
+        const active = tab.mode === mode;
         return (
           <RouterLink
-            key={tab.label}
-            to={buildEditingModePath(tab.remix)}
+            key={tab.mode}
+            to={buildEditingModePath(tab.mode)}
             className={active ? `${remixStyles.modeTab} ${remixStyles.modeTabActive}` : remixStyles.modeTab}
             aria-current={active ? 'page' : undefined}
           >

@@ -54,8 +54,8 @@ function capabilities(extra: Partial<StudioCapabilitiesResponse> = {}): StudioCa
 function segment(id: string, extra: Partial<StudioContentSegment> = {}): StudioContentSegment {
   return {
     segmentId: id, ownerUserId: 'u', assetId: 'a-1', assetTitle: '百雀羚整片-001.mp4', sourceContentHash: 'h', sourceCurrent: true,
-    sourceDurationMs: 60_000, startMs: 0, endMs: 8_000, presetKey: 'framework', presetVersion: 1, labelKey: 'voice',
-    productName: '精华', origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
+    sourceDurationMs: 60_000, startMs: 0, endMs: 8_000, presetKey: 'framework', presetVersion: 1, labelKey: 'voice', labelKeys: ['voice'],
+    productName: '精华', continuesPrevious: false, origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
     createdAt: '', updatedAt: '', coverUrl: null, ...extra,
   };
 }

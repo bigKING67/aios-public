@@ -25,6 +25,7 @@ from .derived_assets import validate_derived_assets
 from .treatment_visual_worker import review_job as review_treated_render
 from .remix_normalization import Settings as RemixSettings, finalize as finalize_remix_output, measure_clips, measure_rendered_clips
 from . import remix_mediakit
+from .remix_similarity import review as review_remix_pictures
 from .mediakit_client import MediaKitError
 
 FRAMEWORK_REMIX = "framework_remix"
@@ -141,6 +142,10 @@ def process_one(module: Path, work_root: Path) -> dict:
                 if job["snapshot"].get("editDocument") is None and (link or profile_name(job["snapshot"]) != "legacy_v1"):
                     stage = "检查成片"
                     receipt["host_inspection"] = inspect_output(video, job["snapshot"], job["preview"], receipt, tick, workspace.lock_fd)
+                if remix and link.get("remix_mode") == "sellingPoint":
+                    stage = "复核跨原片相近画面"
+                    receipt["host_remix_picture_review"] = review_remix_pictures(
+                        job["snapshot"], video, receipt, work, tick, workspace.lock_fd)
                 if link and not job["preview"]:
                     stage = "检查最终采用片段"
                     selected_review = review_selected_sources(job["snapshot"], media, video, receipt, work, tick, workspace.lock_fd)

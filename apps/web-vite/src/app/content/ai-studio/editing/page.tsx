@@ -9,8 +9,9 @@ import { AiStudioShell } from '../_components/ai-studio-shell';
 import { FrameworkRemixPanel } from '../_components/framework-remix-panel';
 import { SingleEditPanel } from '../_components/single-edit-workbench';
 import { SINGLE_EDIT_PURPOSE } from '../_lib/remix-edit';
-import { REMIX_PURPOSE, RUN_DETAIL_PURPOSE } from '../_lib/remix-form';
-import { EDITING_MODE_PARAM, EDITING_RUN_PARAM, EDITING_SINGLE_MODE } from '../_lib/remix-routes';
+import type { RemixFormMode } from '../_lib/remix-api';
+import { remixPurpose, RUN_DETAIL_PURPOSE } from '../_lib/remix-form';
+import { EDITING_MODE_PARAM, EDITING_RUN_PARAM, EDITING_SELLING_POINT_MODE, EDITING_SINGLE_MODE } from '../_lib/remix-routes';
 import styles from '../ai-studio.module.css';
 import annotationStyles from '../_components/segment-annotation.module.css';
 
@@ -27,12 +28,13 @@ export default function AiStudioEditingPage() {
   // A task link (`editingRun`) always opens the task detail, whatever mode the URL also carries.
   const legacyRun = params.get(EDITING_RUN_PARAM) !== null;
   const remix = !legacyRun && mode !== EDITING_SINGLE_MODE;
+  const remixMode: RemixFormMode = mode === EDITING_SELLING_POINT_MODE ? 'sellingPoint' : 'framework';
   return (
     <AiStudioShell>
       <div className={styles.panel}>
         {remix ? (
-          <AiStudioCapabilityGate title="AI 剪辑" purpose={REMIX_PURPOSE}>
-            {(capabilities) => <FrameworkRemixPanel capabilities={capabilities} />}
+          <AiStudioCapabilityGate title="AI 剪辑" purpose={remixPurpose(remixMode)}>
+            {(capabilities) => <FrameworkRemixPanel capabilities={capabilities} mode={remixMode} />}
           </AiStudioCapabilityGate>
         ) : !legacyRun ? (
           <AiStudioCapabilityGate title="AI 剪辑" purpose={SINGLE_EDIT_PURPOSE}>

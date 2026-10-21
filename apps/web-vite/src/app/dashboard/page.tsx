@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { pickQueryValue } from '@/app/_shared/route-query';
+import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardPageClient } from './_components/dashboard-page-client';
 
 export default function DashboardPage() {
@@ -23,5 +24,9 @@ export default function DashboardPage() {
     [searchParams],
   );
 
-  return <DashboardPageClient initialFilters={initialFilters} />;
+  return (
+    <ProtectedRoute>
+      <DashboardPageClient initialFilters={initialFilters} />
+    </ProtectedRoute>
+  );
 }

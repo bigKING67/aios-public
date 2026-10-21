@@ -549,7 +549,6 @@ export function inferGateInputPatterns(name, group, command) {
         'scripts/lib/deploy/deploy-config-baseline-fixture.mjs',
         'scripts/lib/deploy/api-deploy-proof-fixtures.mjs',
         'scripts/lib/deploy/api-deploy-proof.sh',
-        'scripts/lib/deploy/sample-inventory-public-access-preflight-fixtures.mjs',
       ] : []),
       ...scriptInputs,
       ...(name.endsWith('-behavior') ? pairedBehaviorTargetFiles(targetFiles) : []),

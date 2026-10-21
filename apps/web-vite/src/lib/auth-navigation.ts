@@ -37,7 +37,6 @@ import {
   normalizeRoutePolicyPath,
   type RoutePolicyEntry,
 } from './route-policy-registry';
-import { frontendEnv } from './frontend-env';
 
 type RouteAccessIdentity = {
   username?: string | null;
@@ -140,7 +139,7 @@ function canAccessPolicyEntry(
         hasAnyPermissionCode(options.permissionContext, REPORT_EXPORT_PERMISSIONS)
       );
     case 'sample_inventory':
-      return frontendEnv.sampleInventoryAccessMode === 'public' || options.isAuthenticated;
+      return options.isAuthenticated;
     case 'marketing_workspace':
       return options.isAuthenticated && (
         canAccessCreatorLibraryByRole(options.roles, options.identity) ||

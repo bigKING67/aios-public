@@ -91,7 +91,12 @@ pub(super) struct ContentSegment {
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
     pub(super) label_key: String,
+    /// All labels carried by this physical span, including the legacy labelKey.
+    pub(super) label_keys: Vec<String>,
     pub(super) product_name: Option<String>,
+    /// Selling-point segments only. True when the segment cannot be cut from
+    /// the immediately preceding selling-point segment of the same asset (类型 2 连续块).
+    pub(super) continues_previous: bool,
     pub(super) origin: String,
     pub(super) status: String,
     pub(super) evidence: Value,
@@ -147,6 +152,8 @@ pub(super) struct CreateContentSegmentRequest {
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
     pub(super) label_key: String,
+    #[serde(default)]
+    pub(super) label_keys: Option<Vec<String>>,
     pub(super) start_ms: i32,
     pub(super) end_ms: i32,
     #[serde(default)]
@@ -155,6 +162,9 @@ pub(super) struct CreateContentSegmentRequest {
     pub(super) source_content_hash: Option<String>,
     #[serde(default)]
     pub(super) draft: bool,
+    /// Selling-point presets only; see `ContentSegment.continuesPrevious`.
+    #[serde(default)]
+    pub(super) continues_previous: bool,
 }
 
 /// Optimistic update: `expectedRevision` must equal the stored revision.
@@ -171,9 +181,14 @@ pub(super) struct UpdateContentSegmentRequest {
     #[serde(default)]
     pub(super) label_key: Option<String>,
     #[serde(default)]
+    pub(super) label_keys: Option<Vec<String>>,
+    #[serde(default)]
     pub(super) product_name: Option<String>,
     #[serde(default)]
     pub(super) status: Option<String>,
+    /// Selling-point presets only; see `ContentSegment.continuesPrevious`.
+    #[serde(default)]
+    pub(super) continues_previous: Option<bool>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -327,10 +342,19 @@ pub(super) struct SegmentPoolCell {
     pub(super) confirmed_count: i64,
 }
 
+/// Distinct physical segments per product, independent of the number of labels.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct SegmentPoolProductCount {
+    pub(super) product_name: Option<String>,
+    pub(super) confirmed_count: i64,
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(super) struct SegmentPoolResponse {
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
     pub(super) items: Vec<SegmentPoolCell>,
+    pub(super) product_counts: Vec<SegmentPoolProductCount>,
 }

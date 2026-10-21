@@ -88,6 +88,7 @@ pub(super) async fn fixture(pool: &PgPool) -> Fixture {
 
 pub(super) fn preview_request(f: &Fixture, count: i32) -> RemixBatchPreviewRequest {
     RemixBatchPreviewRequest {
+        mode: None,
         preset_key: "framework".into(),
         preset_version: 1,
         labels: Some(vec![
@@ -104,6 +105,7 @@ pub(super) fn preview_request(f: &Fixture, count: i32) -> RemixBatchPreviewReque
 pub(super) fn create_request(f: &Fixture, count: i32, key: &str) -> CreateRemixBatchRequest {
     let preview = preview_request(f, count);
     CreateRemixBatchRequest {
+        mode: None,
         idempotency_key: key.into(),
         preset_key: preview.preset_key,
         preset_version: preview.preset_version,
@@ -392,8 +394,7 @@ async fn an_edited_confirmed_segment_is_rejected_before_freezing() {
     )
     .await
     .unwrap();
-    let combo = &plan.selection.combos[0];
-    let chosen = plan.slots[1][combo.picks[1]].segment_id;
+    let chosen = plan.runs[0].clips[1].parts[0].segment_id;
     // Still confirmed with the same hash, but its cut points moved after planning.
     sqlx::query("UPDATE ads.content_segments SET end_ms = end_ms - 500 WHERE segment_id = $1")
         .bind(chosen)
@@ -604,6 +605,7 @@ async fn a_reference_original_is_never_reproduced() {
     segment(&pool, (b, &sha_b), "live_demo", (10_000, 15_000), &product).await;
     let owner = user(&owner_id);
     let request = RemixBatchPreviewRequest {
+        mode: None,
         preset_key: "framework".into(),
         preset_version: 1,
         labels: None,
@@ -625,6 +627,7 @@ async fn a_reference_original_is_never_reproduced() {
         &owner,
         SCOPED,
         &CreateRemixBatchRequest {
+            mode: None,
             idempotency_key: "ref-1".into(),
             preset_key: request.preset_key,
             preset_version: 1,

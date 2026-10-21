@@ -230,6 +230,16 @@ struct StoredSegment {
     start_ms: i32,
     end_ms: i32,
     label_key: String,
+    #[serde(default)]
+    slot: Option<i32>,
+    #[serde(default)]
+    tier: Option<String>,
+    #[serde(default)]
+    fallback: Option<bool>,
+    #[serde(default)]
+    selling_points: Option<Vec<String>>,
+    #[serde(default)]
+    segment_ids: Option<Vec<Uuid>>,
 }
 
 /// 404 unless the batch is in the enterprise (same predicate as `list`); a
@@ -276,7 +286,7 @@ pub(super) async fn detail(
         .ok_or(AppError::NotFound)?;
     let mut batch = batch_from_row(&row, viewer, Some(settings));
     attach_owner_names(pool, std::slice::from_mut(&mut batch)).await;
-    let rows = sqlx::query("SELECT br.ordinal, br.run_id, br.combination_hash, br.segments, br.output_asset_id, oa.cover_object_key AS output_cover_key, r.status, r.stage, r.waiting_reason, j.status AS job_status, j.error_message AS job_error FROM ads.content_remix_batch_runs br JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.content_production_jobs j ON j.job_id = r.render_job_id LEFT JOIN ads.marketing_content_assets oa ON oa.asset_id = br.output_asset_id AND oa.is_deleted = FALSE WHERE br.batch_id = $1 ORDER BY br.ordinal")
+    let rows = sqlx::query("SELECT br.ordinal, br.run_id, br.combination_hash, br.segments, br.output_asset_id, oa.cover_object_key AS output_cover_key, r.status, r.stage, r.waiting_reason, j.status AS job_status, j.error_message AS job_error, j.receipt->'host_remix_picture_review' AS picture_review, j.receipt->'host_inspection'->>'sha256' AS inspected_sha FROM ads.content_remix_batch_runs br JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.content_production_jobs j ON j.job_id = r.render_job_id LEFT JOIN ads.marketing_content_assets oa ON oa.asset_id = br.output_asset_id AND oa.is_deleted = FALSE WHERE br.batch_id = $1 ORDER BY br.ordinal")
         .bind(batch_id).fetch_all(pool).await.map_err(db_error)?;
     let mut stored = Vec::with_capacity(rows.len());
     for row in &rows {
@@ -313,6 +323,10 @@ pub(super) async fn detail(
                 waiting_reason: row.get("waiting_reason"),
                 job_status: row.get("job_status"),
                 job_error: row.get("job_error"),
+                picture_review: super::remix_picture_review::project(
+                    row.get("picture_review"),
+                    row.get("inspected_sha"),
+                ),
                 output_asset_id: row.get("output_asset_id"),
                 output_cover_url: row
                     .get::<Option<String>, _>("output_cover_key")
@@ -330,6 +344,11 @@ pub(super) async fn detail(
                         label_key: s.label_key,
                         start_ms: s.start_ms,
                         end_ms: s.end_ms,
+                        slot: s.slot,
+                        tier: s.tier,
+                        fallback: s.fallback,
+                        selling_points: s.selling_points,
+                        segment_ids: s.segment_ids,
                     })
                     .collect(),
             }

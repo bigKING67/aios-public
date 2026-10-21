@@ -312,6 +312,7 @@ Value semantics for static-report charts:
 ### Content Hub / Live Center Pages
 
 - Primary job: organize content operations under the top-level 内容中台 navigation while keeping 素材库, AI 创作中心, and 直播中台 as focused secondary workbench entries. 素材库 owns asset management; AI 创作中心 (`/content/ai-studio/*`) owns production (analysis, segments, editing, outputs) on the same asset truth and uses route-driven sidebar navigation, reusing the 素材库 console sidebar grammar rather than inventing a second one.
+- AI 创作中心 segment lists are one grammar in two routes: 框架片段 (`/content/ai-studio/segments`) and 卖点片段 (`/content/ai-studio/selling-points`) each fix the list to one preset kind and share the same segment library table, filters, bulk bar, and annotation entry. A selling-point row may add its framework-segment reference and the 连着 marker inside the existing row layout; neither route introduces its own visual pattern.
 - The content hub navigation grammar should stay one-language: the active top-level item may use the global blue pill treatment, while nested entry icons remain unframed unless the control itself is an explicit button. Do not stack an icon box inside an active navigation pill.
 - Live center pages are operational review workbenches: lead with the session queue, review status, source metadata, and next action rather than a marketing-style hero or decorative media wall.
 - Live center session queues default to Groland self-broadcast scope; do not mix other anchors or 达播 sessions into the primary review queue.

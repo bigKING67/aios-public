@@ -4,6 +4,8 @@
 //! → render job, the same order and services as `create` + `revise` +
 //! `produce`. No model planning, captions or plan confirmation are involved;
 //! each clip keeps its own source audio (legacy clip snapshot, volume 1.0).
+/// Source ceiling of one framework_remix Run, also enforced by 类型 2 planning.
+pub(in crate::marketing::content_assets) use super::domain::FRAMEWORK_REMIX_MAX_SOURCES;
 use super::{
     domain::{self, FRAMEWORK_REMIX},
     execution, repository as repo,

@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Checkbox, Popconfirm, Tooltip } from 'antd';
 import { Link as RouterLink } from 'react-router-dom';
-import type { StudioRemixEditCheckResponse, StudioRemixEditMatch } from '../_lib/remix-api';
+import { remixModeLabel, type StudioRemixEditCheckResponse, type StudioRemixEditMatch } from '../_lib/remix-api';
 import { REMIX_EDIT_DUPLICATE_CODE } from '../_lib/remix-edit';
 import { buildRemixBatchPath } from '../_lib/remix-routes';
 import { readStudioConflict } from '../_lib/segment-errors';
@@ -25,7 +25,7 @@ function MatchList({ matches, showOverlap }: { matches: readonly StudioRemixEdit
       {matches.map((match) => (
         <li key={`${match.batchId}-${match.ordinal}`}>
           <RouterLink className={styles.tableLink} to={buildRemixBatchPath(match.batchId)}>
-            {match.mode === 'edit' ? '单条剪辑' : `框架混剪 · 第 ${match.ordinal} 条`} · {match.batchId.slice(0, 8)}
+            {match.mode === 'edit' ? '单条剪辑' : `${remixModeLabel(match.mode)} · 第 ${match.ordinal} 条`} · {match.batchId.slice(0, 8)}
           </RouterLink>
           <span>
             {showOverlap ? `重叠 ${Math.round(match.overlap * 100)}% · ` : ''}

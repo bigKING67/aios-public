@@ -58,6 +58,7 @@ const OVERVIEW: StudioOverviewResponse = {
   recent: [
     { kind: 'remix', id: '5bc38409-0000-4000-8000-000000000000', title: '百雀羚', status: 'succeeded', detail: '4 条', createdAt: '2026-09-30T08:00:00Z' },
     { kind: 'edit', id: '2af6a99c-0000-4000-8000-000000000000', title: '面霜', status: 'running', detail: '1 条', createdAt: '2026-09-30T07:00:00Z' },
+    { kind: 'sellingPoint', id: '7bc38409-0000-4000-8000-000000000000', title: '蜜粉', status: 'running', detail: '3 条', createdAt: '2026-09-30T06:00:00Z' },
     { kind: 'analysis', id: '6bc38409-0000-4000-8000-000000000000', title: '整片 A', status: 'failed', detail: 'provider_error', createdAt: '2026-09-30T07:00:00Z' },
   ],
 };
@@ -95,6 +96,7 @@ describe('AI studio home overview', () => {
     const recent = screen.getByRole('article', { name: '最近任务' });
     expect(within(recent).getByText(/AI 分析 · .* · 模型调用失败/)).toBeInTheDocument();
     expect(within(recent).getByText(/单条剪辑 · /)).toBeInTheDocument();
+    expect(within(recent).getByText(/卖点混剪 · /)).toBeInTheDocument();
     expect(within(recent).getByRole('link', { name: /百雀羚/ })).toHaveAttribute(
       'href',
       '/content/ai-studio/outputs?batch=5bc38409-0000-4000-8000-000000000000',

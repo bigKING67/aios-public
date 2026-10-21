@@ -1,7 +1,5 @@
 const DEFAULT_API_GATEWAY_PREFIX = '/v1';
 
-export type SampleInventoryAccessMode = 'public' | 'authenticated';
-
 function normalizePrefix(rawPrefix: string): string {
   const trimmed = rawPrefix.trim();
   if (!trimmed) {
@@ -21,17 +19,6 @@ function isEnabled(rawValue: string): boolean {
   return rawValue.trim() === '1';
 }
 
-function resolveSampleInventoryAccessMode(rawValue: string): SampleInventoryAccessMode {
-  const normalized = rawValue.trim().toLowerCase() || 'authenticated';
-  if (normalized === 'public' || normalized === 'authenticated') {
-    return normalized;
-  }
-
-  throw new Error(
-    `Invalid VITE_SAMPLE_INVENTORY_ACCESS_MODE: ${normalized}; expected public or authenticated`,
-  );
-}
-
 export const frontendEnv = Object.freeze({
   apiDebugLogs: isEnabled(readEnv('VITE_API_DEBUG_LOGS')),
   apiGatewayPrefix: normalizePrefix(
@@ -42,9 +29,6 @@ export const frontendEnv = Object.freeze({
   dashboardMaxQueryDays: readEnv('VITE_DASHBOARD_MAX_QUERY_DAYS').trim(),
   forceFreshData: isEnabled(readEnv('VITE_FORCE_FRESH_DATA')),
   isDevelopment: readEnv('NODE_ENV') === 'development',
-  sampleInventoryAccessMode: resolveSampleInventoryAccessMode(
-    readEnv('VITE_SAMPLE_INVENTORY_ACCESS_MODE'),
-  ),
   serverApiUrl:
     readEnv('VITE_API_GATEWAY_TARGET') ||
     readEnv('VITE_REPORT_API') ||

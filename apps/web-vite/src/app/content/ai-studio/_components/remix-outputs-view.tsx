@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
 import type { StudioCapabilitiesResponse, StudioSegmentPreset } from '../_lib/ai-studio-api';
-import { remixBatchOwnerLabel, remixBatchStatusView, remixWaitingReasonLabel, type StudioRemixBatch } from '../_lib/remix-api';
+import { remixBatchOwnerLabel, remixBatchStatusView, remixModeLabel, remixWaitingReasonLabel, type StudioRemixBatch } from '../_lib/remix-api';
 import { remixBatchStructureText } from '../_lib/remix-form';
 import { buildEditingModePath, buildRemixBatchPath, REMIX_BATCH_PARAM } from '../_lib/remix-routes';
 import { formatShortTimestamp } from '../_lib/studio-time';
@@ -37,7 +37,7 @@ function BatchCard({ batch, presets, openAccess }: { batch: StudioRemixBatch; pr
       </span>
       <span className={outputStyles.head}>
         <span className={outputStyles.title} title={batch.productName}>{batch.productName}</span>
-        {batch.mode === 'edit' ? <Badge status="neutral">单条</Badge> : null}
+        {batch.mode !== 'framework' ? <Badge status="neutral">{remixModeLabel(batch.mode)}</Badge> : null}
         <Badge status={view.tone}>{view.label}</Badge>
       </span>
       <span className={outputStyles.structure} title={structure}>{structure}</span>
@@ -68,7 +68,7 @@ function BatchList({ presets, openAccess }: { presets: readonly StudioSegmentPre
       <div className={styles.cardHeading}>
         <h2 id="remix-batches-title">{openAccess ? '全部成片批次' : '我的成片批次'}</h2>
         <span className={styles.rowActions}>
-          <RouterLink className={styles.secondaryLink} to={buildEditingModePath(true)}>
+          <RouterLink className={styles.secondaryLink} to={buildEditingModePath('framework')}>
             新建批次
           </RouterLink>
           <Button onClick={() => void refresh()} loading={query.isFetching}>
@@ -99,7 +99,7 @@ function BatchList({ presets, openAccess }: { presets: readonly StudioSegmentPre
         </Button>
       ) : null}
       <p className={styles.fieldHelp}>
-        {openAccess ? '显示所有人最近 50 个批次（框架混剪与单条剪辑），任何已登录账号都可查看和取消。' : '显示最近 50 个批次（框架混剪与单条剪辑）。'}
+        {openAccess ? '显示所有人最近 50 个批次（框架混剪、卖点混剪与单条剪辑），任何已登录账号都可查看和取消。' : '显示最近 50 个批次（框架混剪、卖点混剪与单条剪辑）。'}
       </p>
       <p className={styles.fieldHelp} role="status" aria-live="polite">
         {pollPaused ? '自动刷新已暂停（超过 30 分钟），点「刷新」查看最新进度。' : ''}
@@ -141,7 +141,7 @@ export function RemixOutputsView({ capabilities }: { capabilities: StudioCapabil
       <header className={pageStyles.pageHeader}>
         <div>
           <h1 id="ai-studio-page-title">成片</h1>
-          <p>框架混剪与单条剪辑的成片：在这里预览、下载，成片同时回存素材库并记录来源片段。</p>
+          <p>框架混剪、卖点混剪与单条剪辑的成片：在这里预览、下载，成片同时回存素材库并记录来源片段。</p>
         </div>
         {capabilities.remixEnabled ? null : <Badge status="neutral">尚未启用</Badge>}
       </header>
@@ -150,7 +150,7 @@ export function RemixOutputsView({ capabilities }: { capabilities: StudioCapabil
           <h2>框架混剪未启用</h2>
           <p>当前环境没有开启框架混剪批量出片，这里没有批次可显示。单条 AI 剪辑任务的成片仍在 AI 剪辑的任务详情里播放和下载。</p>
           <div className={pageStyles.nextAction}>
-            <RouterLink className={pageStyles.actionLink} to={buildEditingModePath(false)}>
+            <RouterLink className={pageStyles.actionLink} to={buildEditingModePath('single')}>
               打开 AI 剪辑
             </RouterLink>
           </div>

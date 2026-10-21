@@ -18,7 +18,6 @@ import {
   type ParseSampleInventoryBackupRequest,
   type RestoreSampleInventoryBackupRequest,
   type SampleInventoryAdjustmentRequest,
-  type SampleInventoryAccessPolicy,
   type SampleInventoryBackupFile,
   type SampleInventoryBackupPlanResponse,
   type SampleInventoryBackupRestoreResponse,
@@ -61,11 +60,6 @@ function compactParams(
       (entry): entry is [string, string | number | boolean] => entry[1] !== undefined && entry[1] !== "",
     ),
   );
-}
-
-export async function fetchSampleInventoryAccessPolicy(): Promise<SampleInventoryAccessPolicy> {
-  const response = await apiClient.get<SampleInventoryAccessPolicy>(AIOS_API_PATHS.sampleInventoryAccessPolicy);
-  return response.data;
 }
 
 export async function fetchSampleInventoryBackup(): Promise<SampleInventoryBackupFile> {

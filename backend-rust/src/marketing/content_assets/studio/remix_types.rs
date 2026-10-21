@@ -10,6 +10,10 @@ use uuid::Uuid;
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct RemixBatchPreviewRequest {
+    /// `framework` (default, 类型 1 框架混剪) or `sellingPoint` (类型 2 卖点混剪,
+    /// requires `sourceAssetId`).
+    #[serde(default)]
+    pub(super) mode: Option<String>,
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
     #[serde(default)]
@@ -26,6 +30,9 @@ pub(super) struct RemixBatchPreviewRequest {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct CreateRemixBatchRequest {
     pub(super) idempotency_key: String,
+    /// See `RemixBatchPreviewRequest.mode`.
+    #[serde(default)]
+    pub(super) mode: Option<String>,
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
     #[serde(default)]
@@ -43,7 +50,13 @@ pub(super) struct CreateRemixBatchRequest {
 pub(super) struct RemixSlotAvailability {
     pub(super) ordinal: i32,
     pub(super) label_key: String,
+    /// Usable segments (类型 1) or fill options of the slot (类型 2).
     pub(super) candidate_count: i32,
+    /// 类型 2 only. The reference's selling points in this slot (empty when the
+    /// slot has no known selling points); null for 类型 1. Includes fallback slots.
+    pub(super) selling_points: Option<Vec<String>>,
+    /// 类型 2 only. True when the slot is filled by whole framework segments (类型 1).
+    pub(super) fallback: Option<bool>,
 }
 
 /// Read-only availability. `availableCombinations` counts valid combinations
@@ -53,6 +66,8 @@ pub(super) struct RemixSlotAvailability {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(super) struct RemixBatchPreviewResponse {
+    /// `framework` or `sellingPoint`.
+    pub(super) mode: String,
     pub(super) labels: Vec<String>,
     pub(super) source_asset_id: Option<Uuid>,
     pub(super) product_name: String,
@@ -85,6 +100,15 @@ pub(super) struct RemixBatchSegment {
     pub(super) label_key: String,
     pub(super) start_ms: i32,
     pub(super) end_ms: i32,
+    /// 类型 2 only (null otherwise). 1-based slot, fill tier (exact, spliced,
+    /// varied), whole-framework fallback and the clip's selling points.
+    pub(super) slot: Option<i32>,
+    pub(super) tier: Option<String>,
+    pub(super) fallback: Option<bool>,
+    pub(super) selling_points: Option<Vec<String>>,
+    /// 类型 2 only. Every selling-point segment of the clip's block, in order
+    /// (`segmentId` is the first one); null for 类型 1.
+    pub(super) segment_ids: Option<Vec<Uuid>>,
 }
 
 /// One output. `outcome` is running, succeeded, failed or cancelled (derived from the
@@ -107,6 +131,25 @@ pub(super) struct RemixBatchItem {
     pub(super) output_cover_url: Option<String>,
     pub(super) duration_ms: i64,
     pub(super) segments: Vec<RemixBatchSegment>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) picture_review: Option<RemixPictureReview>,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct RemixPictureReview {
+    pub(super) status: String,
+    pub(super) pair_count: u64,
+    pub(super) pairs: Vec<RemixPicturePair>,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct RemixPicturePair {
+    pub(super) left_clip: u64,
+    pub(super) right_clip: u64,
+    pub(super) left_ms: u64,
+    pub(super) right_ms: u64,
 }
 
 /// Batch summary. `status` is derived from the current Runs (running,
@@ -116,7 +159,7 @@ pub(super) struct RemixBatchItem {
 #[serde(rename_all = "camelCase")]
 pub(super) struct RemixBatch {
     pub(super) batch_id: Uuid,
-    /// `framework` (框架混剪) or `edit` (单条剪辑, one output).
+    /// `framework` (框架混剪), `sellingPoint` (卖点混剪) or `edit` (单条剪辑, one output).
     pub(super) mode: String,
     /// The user who created the batch (its Runs and output assets belong to them).
     pub(super) owner_user_id: String,

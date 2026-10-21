@@ -5,7 +5,7 @@ import { Badge } from '@/components/atoms/badge';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import type { EditSegment } from '../_lib/remix-edit';
-import { remixItemStatusView, type StudioRemixBatchItem } from '../_lib/remix-api';
+import { remixItemStatusView, remixModeLabel, type StudioRemixBatchItem } from '../_lib/remix-api';
 import { referenceAssetOptions, remixBatchStructureText, shortAssetTitle, type ReferenceAssetOption } from '../_lib/remix-form';
 import { labelName, presetDisplayName } from '../_lib/segment-display';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
@@ -39,7 +39,11 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
   const { query: detail } = useRemixBatch(open ? batchId : null);
   const withOutputs = (batches.data ?? []).filter(
     (batch) =>
-      batch.succeededCount > 0 && batch.presetKey === preset.presetKey && batch.presetVersion === preset.version,
+      // 卖点混剪 outputs are made of selling-point segments the 剪辑台 cannot load.
+      batch.succeededCount > 0 &&
+      batch.mode !== 'sellingPoint' &&
+      batch.presetKey === preset.presetKey &&
+      batch.presetVersion === preset.version,
   );
   const close = () => {
     setBatchId(null);
@@ -96,7 +100,7 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
               <span className={editStyles.pickBody}>
                 <span className={editStyles.pickTitle}>
                   {batch.productName}
-                  <Badge status="neutral">{batch.mode === 'edit' ? '单条' : '框架混剪'}</Badge>
+                  <Badge status="neutral">{batch.mode === 'edit' ? '单条' : remixModeLabel(batch.mode)}</Badge>
                 </span>
                 <span className={editStyles.pickChain}>{remixBatchStructureText(batch, presets)}</span>
                 <span className={editStyles.pickMeta}>

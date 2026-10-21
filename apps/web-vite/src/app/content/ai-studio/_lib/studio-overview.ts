@@ -2,7 +2,7 @@ import type { BadgeStatus } from '@/components/atoms/badge';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import type { StudioOverviewActivity, StudioOverviewPeriodKey, StudioOverviewResponse } from './ai-studio-api';
 import { buildRemixBatchPath } from './remix-routes';
-import { remixBatchStatusView } from './remix-api';
+import { remixBatchStatusView, remixModeLabel } from './remix-api';
 import { suggestionJobStatusView } from './segment-suggestion-api';
 
 export const OVERVIEW_PERIODS: readonly { value: StudioOverviewPeriodKey; label: string }[] = [
@@ -69,10 +69,11 @@ export function buildOverviewFlow(overview: StudioOverviewResponse | undefined, 
             : { label: `${periodLabel}完成 ${p.analysisSucceeded} 个`, tone: 'success' },
     },
     {
-      label: '人工确认与片段素材',
+      label: '人工确认与片段',
       helper: `确认后的片段才进入可混剪的片段池${p ? `，当前已确认 ${p.segmentsConfirmed} 段` : ''}。`,
-      // Pending work opens the library filtered to it; otherwise the confirmed library.
-      to: p && p.segmentsSuggested > 0 ? `${ROUTE_PATHS.contentAiStudioSegments}?status=suggested` : ROUTE_PATHS.contentAiStudioSegments,
+      // Pending work spans framework and selling-point presets, so it opens AI 分析,
+      // whose jobs link to their own preset's review; otherwise the confirmed library.
+      to: p && p.segmentsSuggested > 0 ? ROUTE_PATHS.contentAiStudioAnalysis : ROUTE_PATHS.contentAiStudioSegments,
       status: !p
         ? null
         : p.segmentsSuggested > 0
@@ -108,6 +109,8 @@ const ANALYSIS_ERROR_LABELS: Record<string, string> = {
   invalid_request: '请求无效',
   unavailable: '服务不可用',
   internal_error: '内部错误',
+  framework_required: '缺少已确认框架段',
+  voiceover_required: '缺少混剪口播段',
 };
 
 export interface OverviewActivityView {
@@ -119,9 +122,9 @@ export interface OverviewActivityView {
 }
 
 export function overviewActivityView(activity: StudioOverviewActivity): OverviewActivityView {
-  if (activity.kind === 'remix' || activity.kind === 'edit') {
+  if (activity.kind === 'remix' || activity.kind === 'edit' || activity.kind === 'sellingPoint') {
     return {
-      kindLabel: activity.kind === 'edit' ? '单条剪辑' : '框架混剪',
+      kindLabel: remixModeLabel(activity.kind),
       title: activity.title,
       detail: activity.detail ?? null,
       status: remixBatchStatusView(activity.status),

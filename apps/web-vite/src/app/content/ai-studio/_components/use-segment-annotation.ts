@@ -85,6 +85,7 @@ export function useSegmentAnnotation(assetId: string, preset: StudioSegmentPrese
         endMs: values.endMs,
         productName: values.productName,
         draft: values.draft,
+        continuesPrevious: values.continuesPrevious,
         sourceContentHash: SHA256_PATTERN.test(rawSha256) ? rawSha256.toLowerCase() : undefined,
       });
     },

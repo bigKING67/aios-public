@@ -6,7 +6,7 @@ import { SegmentTable } from './segment-table';
 function segment(segmentId: string, origin: string, evidence: unknown): StudioContentSegment {
   return {
     segmentId, status: 'suggested', startMs: 0, endMs: 5000, assetId: 'a', assetTitle: '整片', ownerUserId: 'u', sourceContentHash: 'a'.repeat(64),
-    sourceCurrent: true, sourceDurationMs: 60_000, presetKey: 'framework', presetVersion: 1, labelKey: 'koc', productName: null, origin,
+    sourceCurrent: true, sourceDurationMs: 60_000, presetKey: 'framework', presetVersion: 1, labelKey: 'koc', labelKeys: ['koc'], productName: null, continuesPrevious: false, origin,
     evidence, revision: 1, confirmedBy: null, confirmedAt: null, createdAt: '', updatedAt: '', coverUrl: null,
   };
 }

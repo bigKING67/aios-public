@@ -11,9 +11,13 @@ mod remix;
 mod remix_cancel;
 mod remix_combos;
 mod remix_edit;
+mod remix_picture_review;
+mod remix_points_plan;
 mod remix_read;
+mod remix_selling_points;
 mod remix_types;
 mod repository;
+mod selling_point_labels;
 mod suggestions;
 mod types;
 
@@ -420,7 +424,21 @@ mod remix_postgres_tests;
 mod remix_edit_postgres_tests;
 
 #[cfg(test)]
+mod remix_points_postgres_tests;
+#[cfg(test)]
+mod remix_points_voiceover_postgres_tests;
+
+#[cfg(test)]
+mod remix_points_media_tests;
+
+#[cfg(test)]
+mod browser_acceptance_tests;
+
+#[cfg(test)]
 mod postgres_tests;
+
+#[cfg(test)]
+mod segment_multilabel_postgres_tests;
 
 #[cfg(test)]
 mod suggestion_postgres_tests;

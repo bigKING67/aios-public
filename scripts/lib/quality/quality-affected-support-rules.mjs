@@ -21,7 +21,6 @@ const DEPLOY_CONFIG_BEHAVIOR_FIXTURE_FILES = new Set([
   'scripts/lib/deploy/deploy-config-behavior-fixtures.mjs',
   'scripts/lib/deploy/api-deploy-proof-fixtures.mjs',
   'scripts/lib/deploy/api-deploy-proof.sh',
-  'scripts/lib/deploy/sample-inventory-public-access-preflight-fixtures.mjs',
 ]);
 
 const VPS_GIT_STATE_BEHAVIOR_FIXTURE_FILES = new Set([

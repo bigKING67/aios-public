@@ -25,7 +25,8 @@ FAILED = "remix_output_failed"
 # publication instead of discarding a billed render.
 RETRY = "remix_output_retry"
 ENTERPRISE_TAG_PREFIX = "企业:"
-OUTPUT_EVENT_MESSAGES = {"framework": "框架混剪成片已回存素材库", "edit": "单条剪辑成片已回存素材库"}
+OUTPUT_EVENT_MESSAGES = {"framework": "框架混剪成片已回存素材库", "sellingPoint": "卖点混剪成片已回存素材库",
+                         "edit": "单条剪辑成片已回存素材库"}
 
 
 def installed(cursor) -> bool:
@@ -43,10 +44,12 @@ def _clips_match(segments: list, clips: list) -> bool:
 
 
 def output_title(mode, product: str, batch: uuid.UUID, ordinal: int) -> str:
-    """单条剪辑 batches (structure.mode = 'edit') hold one output; 框架混剪 numbers each output."""
+    """单条剪辑 batches (structure.mode = 'edit') hold one output; 框架混剪 and 卖点混剪
+    (structure.mode = 'sellingPoint') number each output."""
     if mode == "edit":
         return f"单条剪辑 · {product[:TITLE_PRODUCT_CHARS]} · {batch.hex[:8]}"
-    return f"框架混剪 · {product[:TITLE_PRODUCT_CHARS]} · {batch.hex[:8]}-{ordinal:02d}"
+    kind = "卖点混剪" if mode == "sellingPoint" else "框架混剪"
+    return f"{kind} · {product[:TITLE_PRODUCT_CHARS]} · {batch.hex[:8]}-{ordinal:02d}"
 
 
 def publish(cursor, run_id, snapshot: dict, receipt: dict, output_key: str) -> str | None:
@@ -75,7 +78,7 @@ def publish(cursor, run_id, snapshot: dict, receipt: dict, output_key: str) -> s
     batch = uuid.UUID(str(link["batch_id"]))
     title = output_title(link.get("mode"), product, batch, link["ordinal"])
     provenance = {"source": "ai_studio_output", "runId": str(run_id), "batchId": str(batch),
-                  "ordinal": link["ordinal"], "mode": "edit" if link.get("mode") == "edit" else "framework"}
+                  "ordinal": link["ordinal"], "mode": link.get("mode") if link.get("mode") in ("edit", "sellingPoint") else "framework"}
     cursor.execute("SAVEPOINT remix_output")
     try:
         _register(cursor, run_id, link, segments, source["bucket"], output_key, sha, inspection, provenance, title)
@@ -114,12 +117,21 @@ def _link_existing(cursor, run_id, segments, sha) -> str | None:
     return None
 
 
+def _lineage_rows(segments):
+    """One row per source segment: 卖点混剪 clips list each selling-point segment of their
+    block in `parts` with its own range; other clips are one segment each."""
+    for segment in segments:
+        parts = segment.get("parts")
+        for part in parts if isinstance(parts, list) and parts else [segment]:
+            yield (part["segmentId"], segment["assetId"], segment["sourceContentHash"],
+                   part["startMs"], part["endMs"])
+
+
 def _write_lineage(cursor, run_id, asset_id, segments) -> None:
-    for ordinal, segment in enumerate(segments, start=1):
+    for ordinal, (segment_id, source_id, source_hash, start_ms, end_ms) in enumerate(_lineage_rows(segments), start=1):
         cursor.execute("""INSERT INTO ads.content_asset_lineage (output_asset_id,run_id,ordinal,segment_id,
             source_asset_id,source_content_hash,source_start_ms,source_end_ms) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
-                       (asset_id, run_id, ordinal, segment["segmentId"], segment["assetId"],
-                        segment["sourceContentHash"], segment["startMs"], segment["endMs"]))
+                       (asset_id, run_id, ordinal, segment_id, source_id, source_hash, start_ms, end_ms))
     cursor.execute("UPDATE ads.content_remix_batch_runs SET output_asset_id=%s WHERE run_id=%s", (asset_id, run_id))
 
 

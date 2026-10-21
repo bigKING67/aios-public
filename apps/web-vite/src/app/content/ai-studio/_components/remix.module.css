@@ -110,6 +110,32 @@
   font-variant-numeric: tabular-nums;
 }
 
+.timeline li:has(.slotTarget) {
+  max-width: 100%;
+}
+
+.timeline li:has(.slotTarget) .slot {
+  min-width: 0;
+}
+
+.timeline li:has(.slotTarget) .slotName,
+.timeline li:has(.slotTarget) .slotCount {
+  flex: none;
+  white-space: nowrap;
+}
+
+.slotTarget {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 240px;
+  padding-left: var(--spacing-2);
+  overflow: hidden;
+  border-left: 1px solid var(--divider-color);
+  color: var(--text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .slotGap {
   border-color: var(--status-warning-border);
   background: var(--status-warning-bg);

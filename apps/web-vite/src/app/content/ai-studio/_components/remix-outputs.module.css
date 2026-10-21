@@ -220,6 +220,11 @@
   font-weight: var(--font-weight-medium);
 }
 
+.lineagePlan {
+  flex-basis: 100%;
+  color: var(--text-tertiary);
+}
+
 .lineageTime {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

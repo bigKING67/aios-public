@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use crate::auth::CurrentUser;
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -22,6 +23,7 @@ use super::validation::{goods_card_date_range_error_response, parse_goods_card_d
 
 pub(in crate::dashboard) async fn get_goods_card(
     State(state): State<Arc<AppState>>,
+    _current_user: CurrentUser,
     Query(query): Query<TrafficQueryParams>,
 ) -> Response {
     let platform = normalize_text_input(query.platform.as_deref());

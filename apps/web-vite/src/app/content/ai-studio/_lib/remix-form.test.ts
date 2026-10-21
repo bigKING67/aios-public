@@ -1,5 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { groupRemixCandidates, referenceAssetOptions } from './remix-form';
+import type { StudioSegmentPreset } from './ai-studio-api';
+import { buildRemixPreviewRequest, groupRemixCandidates, referenceAssetOptions } from './remix-form';
+
+describe('buildRemixPreviewRequest', () => {
+  const preset = { presetKey: 'framework', version: 2 } as StudioSegmentPreset;
+
+  it('sends mode only for 卖点混剪 and requires a reference original there', () => {
+    const reference = { mode: 'reference' as const, sourceAssetId: 'a1' };
+    expect(buildRemixPreviewRequest(preset, reference, '精华', 3)).toEqual({
+      presetKey: 'framework', presetVersion: 2, sourceAssetId: 'a1', productName: '精华', count: 3,
+    });
+    expect(buildRemixPreviewRequest(preset, reference, '精华', 3, 'sellingPoint')).toEqual({
+      presetKey: 'framework', presetVersion: 2, mode: 'sellingPoint', sourceAssetId: 'a1', productName: '精华', count: 3,
+    });
+    expect(buildRemixPreviewRequest(preset, { mode: 'manual', labels: ['voice'] }, '精华', 3, 'sellingPoint')).toBe(
+      '卖点混剪需要选择参考原片。',
+    );
+  });
+});
 
 describe('referenceAssetOptions', () => {
   it('orders each asset structure by time, skips stale segments and picks the common product', () => {

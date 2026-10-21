@@ -7,7 +7,8 @@ use super::error::StudioResult;
 use super::repository::db_error;
 use super::types::{
     AssetSegmentSummary, AssetSegmentSummaryListResponse, AssetSegmentSummaryQuery,
-    SegmentAssetCover, SegmentPoolCell, SegmentPoolQuery, SegmentPoolResponse,
+    SegmentAssetCover, SegmentPoolCell, SegmentPoolProductCount, SegmentPoolQuery,
+    SegmentPoolResponse,
 };
 use crate::config::Settings;
 use crate::error::AppError;
@@ -143,15 +144,16 @@ pub(super) async fn segment_pool(
         return Err(AppError::bad_request("presetVersion 必须大于 0").into());
     }
     let rows = sqlx::query(
-        "SELECT NULLIF(BTRIM(s.product_name), '') AS product_name, s.label_key, \
-                COUNT(*) AS confirmed_count \
+        "SELECT NULLIF(BTRIM(s.product_name), '') AS product_name, label.label_key, \
+                COUNT(DISTINCT s.segment_id) AS confirmed_count \
          FROM ads.content_segments s \
+         CROSS JOIN LATERAL UNNEST(ARRAY[s.label_key] || s.additional_label_keys) AS label(label_key) \
          JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id \
          WHERE s.status = 'confirmed' AND s.preset_key = $1 AND s.preset_version = $2 \
            AND a.is_deleted = FALSE \
            AND LOWER(TRIM(a.raw_sha256)) = s.source_content_hash \
            AND ($3::TEXT IS NULL OR $3 = ANY(a.tags)) \
-         GROUP BY 1, 2 \
+         GROUP BY GROUPING SETS ((NULLIF(BTRIM(s.product_name), ''), label.label_key), (NULLIF(BTRIM(s.product_name), ''))) \
          ORDER BY 1 NULLS LAST, 2",
     )
     .bind(&preset_key)
@@ -162,9 +164,18 @@ pub(super) async fn segment_pool(
     .map_err(db_error)?;
     let items = rows
         .iter()
+        .filter(|row| row.get::<Option<String>, _>("label_key").is_some())
         .map(|row| SegmentPoolCell {
             product_name: row.get("product_name"),
             label_key: row.get("label_key"),
+            confirmed_count: row.get("confirmed_count"),
+        })
+        .collect();
+    let product_counts = rows
+        .iter()
+        .filter(|row| row.get::<Option<String>, _>("label_key").is_none())
+        .map(|row| SegmentPoolProductCount {
+            product_name: row.get("product_name"),
             confirmed_count: row.get("confirmed_count"),
         })
         .collect();
@@ -172,6 +183,7 @@ pub(super) async fn segment_pool(
         preset_key,
         preset_version,
         items,
+        product_counts,
     })
 }
 

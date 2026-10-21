@@ -83,11 +83,11 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
                      (segment_id, self.asset, sha or self.sha, start, end, label, origin, status, status, status))
         return segment_id
 
-    def job(self, sha=None, settings=None):
+    def job(self, sha=None, settings=None, preset='framework'):
         job_id = str(uuid.uuid4())
         self.execute("""INSERT INTO ads.content_segment_suggestion_jobs (job_id,owner_user_id,asset_id,source_content_hash,
-            preset_key,preset_version,request_settings) VALUES (%s,'requester',%s,%s,'framework',1,%s)""",
-                     (job_id, self.asset, sha or self.sha, json.dumps(settings or {})))
+            preset_key,preset_version,request_settings) VALUES (%s,'requester',%s,%s,%s,1,%s)""",
+                     (job_id, self.asset, sha or self.sha, preset, json.dumps(settings or {})))
         return job_id
 
     def run_worker(self, provider, env=None):
@@ -112,7 +112,8 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
         self.assertEqual([tuple(row) for row in rows], [(0, 3000), (3000, 6000)])
         summary = self.execute('SELECT result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0][0]
         self.assertEqual(summary['boundarySnap'],
-                         {'enabled': True, 'boundaries': 1, 'snapped': 1, 'failed': 0, 'shiftsMs': [-295]})
+                         {'enabled': True, 'boundaries': 1, 'snapped': 1, 'failed': 0, 'shiftsMs': [-295],
+                          'gapRepairs': []})
         with patch.dict(os.environ, {'CONTENT_AI_STUDIO_SEGMENT_SUGGEST_SNAP': '0'}):
             job_id = self.job(sha=self.cut_sha)
             self.run_worker(MockSegmentProvider(late))
@@ -211,6 +212,185 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
         self.assertEqual(superseded['supersededByJobId'], job_id)
         self.assertEqual(self.run_worker(MockSegmentProvider(PAYLOAD)), {'status': 'idle'})
 
+    def test_makeup_effect_business_definition_reaches_worker_and_retains_source_quote(self):
+        self.segment(0, 6000, 'human', 'confirmed')
+        job_id = self.job(preset='selling_point')
+        provider = MockSegmentProvider({'segments': [{
+            'framework_index': 0, 'start_sec': 0.5, 'end_sec': 5.0, 'label_key': 'no_caking',
+            'continues_previous': False, 'quote': '上脸自然清透，没有粉感', 'reason': '本产品妆面表现'}]})
+        self.assertEqual(self.run_worker(provider), {'jobId': job_id, 'status': 'succeeded'})
+        self.assertIn('no_caking（妆效）', provider.calls[0]['prompt'])
+        self.assertIn('不要求同时出现“不卡粉”', provider.calls[0]['prompt'])
+        rows = self.execute("""SELECT label_key,status,evidence FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point'""", (self.asset,))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual((rows[0][0], rows[0][1], rows[0][2]['quote'], rows[0][2]['promptVersion']),
+                         ('no_caking', 'suggested', '上脸自然清透，没有粉感', 'selling-point-v7'))
+
+    def test_selling_point_multilabel_worker_publishes_one_physical_span(self):
+        self.segment(0, 6000, 'human', 'confirmed')
+        job_id = self.job(preset='selling_point')
+        provider = MockSegmentProvider({'segments': [{
+            'framework_index': 0, 'start_sec': 0.5, 'end_sec': 5,
+            'label_keys': ['skincare', 'moisturizing'], 'continues_previous': False,
+            'quote': '精华养肤，上脸不拔干', 'reason': '长期养护及即时保湿各有明确依据'}]})
+        self.assertEqual(self.run_worker(provider), {'jobId': job_id, 'status': 'succeeded'})
+        rows = self.execute("""SELECT start_ms,end_ms,label_key,additional_label_keys,evidence FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point'""", (self.asset,))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][:4], (500, 5000, 'moisturizing', ['skincare']))
+        self.assertEqual(rows[0][4]['quote'], '精华养肤，上脸不拔干')
+        self.assertIn('label_keys', provider.calls[0]['schema']['properties']['segments']['items']['required'])
+
+    def test_selling_point_job_marks_spans_inside_confirmed_framework_segments(self):
+        frame = self.segment(0, 6000, 'human', 'confirmed')
+        job_id = self.job(preset='selling_point')
+        payload = {'segments': [
+            {'framework_index': 0, 'start_sec': 0.5, 'end_sec': 2.5, 'label_key': 'moisturizing',
+             'continues_previous': True, 'quote': '上脸不干', 'reason': '口播讲滋润'},
+            {'framework_index': 0, 'start_sec': 2.5, 'end_sec': 5.0, 'label_key': 'long_wear',
+             'continues_previous': True, 'quote': '一整天不脱妆', 'reason': '同一句口播接着讲持妆'},
+            {'framework_index': 0, 'start_sec': 5.0, 'end_sec': 5.5, 'label_key': 'long_wear',
+             'continues_previous': False, 'quote': '', 'reason': '过短'}]}
+        provider = MockSegmentProvider(payload)
+        with patch.object(segment_transcript, 'transcribe') as asr:
+            self.assertEqual(self.run_worker(provider), {'jobId': job_id, 'status': 'succeeded'})
+        asr.assert_not_called()
+        call = provider.calls[0]
+        self.assertIn('第 0 段 0.000–6.000 秒（0:00–0:06）：混剪口播', call['prompt'])
+        self.assertIn('moisturizing（滋润保湿）', call['prompt'])
+        self.assertIn('continues_previous', call['schema']['properties']['segments']['items']['required'])
+        prompt, summary = self.execute("""SELECT prompt_version,result_summary FROM ads.content_segment_suggestion_jobs
+            WHERE job_id=%s""", (job_id,))[0]
+        self.assertEqual(prompt, 'selling-point-v7')
+        self.assertEqual((summary['segmentsInserted'], summary['frameworkSegments'], summary['continuousCount']), (2, 1, 1))
+        self.assertEqual(summary['shotDetection'], {'status': 'skipped'})
+        rows = self.execute("""SELECT start_ms,end_ms,label_key,continues_previous,evidence FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point' AND status='suggested' ORDER BY start_ms""", (self.asset,))
+        self.assertEqual([(r[0], r[1], r[2], r[3]) for r in rows],
+                         [(500, 2500, 'moisturizing', False), (2500, 5000, 'long_wear', True)])
+        self.assertEqual((rows[1][4]['quote'], rows[1][4]['frameworkSegmentId']), ('一整天不脱妆', frame))
+        self.assertEqual(rows[0][4]['boundaryReview']['status'], 'needs_review')
+        self.assertIn('缺少同源口播', rows[0][4]['reason'])
+
+    def test_selling_point_boundaries_use_real_frames_and_persist_review_evidence(self):
+        self.execute('UPDATE ads.marketing_content_assets SET raw_sha256=%s,raw_object_key=%s WHERE asset_id=%s',
+                     (self.cut_sha, 'fixtures/cut.mp4', self.asset))
+        frame = self.segment(0, 6000, 'human', 'confirmed', sha=self.cut_sha)
+        self.execute("""INSERT INTO ads.marketing_content_asset_transcripts
+            (transcript_id,asset_id,source_object_key,transcript_object_key,provider,model,
+             transcript_text,script_text,srt_text,segments,metadata)
+            VALUES (%s,%s,'fixtures/cut.mp4','fixture.json','seed_asr','fixture','','','',%s,%s)""",
+            (str(uuid.uuid4()), self.asset, json.dumps([
+                {'start_ms': 100, 'end_ms': 2850, 'text': '上脸不干'},
+                {'start_ms': 3150, 'end_ms': 5900, 'text': '养肤'}]), json.dumps({'source_sha256': self.cut_sha})))
+        job_id = self.job(sha=self.cut_sha, preset='selling_point')
+        payload = {'segments': [
+            {'framework_index': 0, 'start_sec': 0, 'end_sec': 2.9, 'label_key': 'moisturizing',
+             'continues_previous': False, 'quote': '上脸不干', 'reason': '保湿'},
+            {'framework_index': 0, 'start_sec': 3.1, 'end_sec': 6, 'label_key': 'skincare',
+             'continues_previous': False, 'quote': '养肤', 'reason': '养肤'}]}
+        with patch.object(segment_transcript, 'transcribe') as asr:
+            self.assertEqual(self.run_worker(MockSegmentProvider(payload)), {'jobId': job_id, 'status': 'succeeded'})
+        asr.assert_not_called()
+        rows = self.execute("""SELECT start_ms,end_ms,evidence,status FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point' ORDER BY start_ms""", (self.asset,))
+        self.assertEqual([(r[0], r[1], r[3]) for r in rows], [(0, 3000, 'suggested'), (3000, 6000, 'suggested')])
+        self.assertEqual(rows[0][2]['boundaryReview']['originalSpanMs'], [0, 2900])
+        self.assertEqual(rows[0][2]['boundaryReview']['status'], 'checked')
+        self.assertEqual(self.execute('SELECT start_ms,end_ms FROM ads.content_segments WHERE segment_id=%s', (frame,)), [(0, 6000)])
+        settings, summary = self.execute('SELECT request_settings,result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0]
+        self.assertEqual(settings['sellingPointBoundaries']['policy'], 'selling-point-boundary-v1')
+        self.assertEqual(summary['sellingPointBoundaries']['adjustedEdges'], 2)
+
+    def test_selling_point_uses_only_source_matched_cached_transcript_without_asr(self):
+        self.segment(0, 6000, 'human', 'confirmed')
+        transcript_id = str(uuid.uuid4())
+        self.execute("""INSERT INTO ads.marketing_content_asset_transcripts
+            (transcript_id,asset_id,source_object_key,transcript_object_key,provider,model,
+             transcript_text,script_text,srt_text,segments,metadata)
+            VALUES (%s,%s,'fixtures/whole.mp4','fixture.json','seed_asr','fixture','','','',%s,%s)""",
+            (transcript_id, self.asset, json.dumps([{'start_ms': 123, 'end_ms': 2456, 'text': '原片口播不干'}]),
+             json.dumps({'source_sha256': 'b' * 64})))
+        payload = {'segments': [{'framework_index': 0, 'start_sec': .123, 'end_sec': 2.456,
+            'label_key': 'moisturizing', 'continues_previous': False, 'quote': '原片口播不干', 'reason': '保湿'}]}
+        for expected in (False, True):
+            with self.subTest(source_match=expected):
+                if expected:
+                    self.execute('UPDATE ads.marketing_content_asset_transcripts SET metadata=%s WHERE transcript_id=%s',
+                                 (json.dumps({'source_sha256': self.sha}), transcript_id))
+                job_id, provider = self.job(preset='selling_point'), MockSegmentProvider(payload)
+                with patch.object(segment_transcript, 'transcribe') as asr:
+                    self.assertEqual(self.run_worker(provider), {'jobId': job_id, 'status': 'succeeded'})
+                asr.assert_not_called()
+                self.assertEqual('[0.123–2.456 秒] 原片口播不干' in provider.calls[0]['prompt'], expected)
+                settings, summary = self.execute('SELECT request_settings,result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0]
+                self.assertEqual(summary['transcript']['status'], 'ok' if expected else 'empty')
+                self.assertEqual(settings['transcript']['mode'], 'cache_only')
+                if expected:
+                    self.assertEqual(settings['transcript']['utterances'], [[123, 2456, '原片口播不干']])
+                    self.assertEqual(summary['transcript']['origin'], 'library')
+
+    def test_selling_point_job_without_confirmed_framework_fails_before_any_model_call(self):
+        self.segment(0, 6000, 'ai', 'suggested')
+        job_id = self.job(preset='selling_point')
+        provider = MockSegmentProvider({'segments': []})
+        self.assertEqual(self.run_worker(provider)['status'], 'failed')
+        self.assertEqual(provider.calls, [])
+        status, code = self.execute("SELECT status,error_code FROM ads.content_segment_suggestion_jobs WHERE job_id=%s",
+                                    (job_id,))[0]
+        self.assertEqual((status, code), ('failed', 'framework_required'))
+
+    def test_selling_point_job_splits_only_mixed_voiceover_frames(self):
+        live = self.segment(0, 3000, 'human', 'confirmed', label='live_demo')
+        voice = self.segment(3000, 6000, 'human', 'confirmed')
+        job_id = self.job(preset='selling_point')
+        provider = MockSegmentProvider({'segments': [{
+            'framework_index': 0, 'start_sec': 3.2, 'end_sec': 5.5, 'label_key': 'moisturizing',
+            'continues_previous': False, 'quote': '上脸不干', 'reason': '口播讲滋润'}]})
+        self.assertEqual(self.run_worker(provider), {'jobId': job_id, 'status': 'succeeded'})
+        prompt = provider.calls[0]['prompt']
+        self.assertIn('第 0 段 3.000–6.000 秒（0:03–0:06）：混剪口播', prompt)
+        self.assertNotIn('实拍内容', prompt)
+        rows = self.execute("""SELECT start_ms,end_ms,evidence FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point'""", (self.asset,))
+        self.assertEqual([(r[0], r[1], r[2]['frameworkSegmentId']) for r in rows], [(3200, 5500, voice)])
+        summary = self.execute('SELECT result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0][0]
+        self.assertEqual((summary['frameworkSegments'], summary['voiceoverSegments']), (2, 1))
+        # The boundary review still covers every framework edge.
+        reviewed = {f['frameworkSegmentId'] for f in summary['sellingPointBoundaries']['frameworks']}
+        self.assertEqual(reviewed, {live, voice})
+
+    def test_selling_point_job_without_mixed_voiceover_fails_before_any_model_call(self):
+        self.segment(0, 6000, 'human', 'confirmed', label='street_interview')
+        job_id = self.job(preset='selling_point')
+        provider = MockSegmentProvider({'segments': []})
+        self.assertEqual(self.run_worker(provider)['status'], 'failed')
+        self.assertEqual(provider.calls, [])
+        status, code = self.execute("SELECT status,error_code FROM ads.content_segment_suggestion_jobs WHERE job_id=%s",
+                                    (job_id,))[0]
+        self.assertEqual((status, code), ('failed', 'voiceover_required'))
+
+    def test_selling_point_job_does_not_publish_a_partially_filtered_continuous_chain(self):
+        frame = self.segment(0, 6000, 'human', 'confirmed')
+        job_id = self.job(preset='selling_point')
+        payload = {'segments': [
+            {'framework_index': 0, 'start_sec': 0, 'end_sec': 1.5, 'label_key': 'moisturizing',
+             'continues_previous': False, 'quote': '上脸不干', 'reason': '独立镜头'},
+            {'framework_index': 0, 'start_sec': 2, 'end_sec': 3.5, 'label_key': 'not_in_preset',
+             'continues_previous': False, 'quote': '自然妆效', 'reason': '另一连续镜头的开头'},
+            {'framework_index': 0, 'start_sec': 3.5, 'end_sec': 5.5, 'label_key': 'skincare',
+             'continues_previous': True, 'quote': '同时养肤', 'reason': '不能从上一段切开'}]}
+        provider = MockSegmentProvider(payload)
+        self.assertEqual(self.run_worker(provider)['status'], 'failed')
+        self.assertEqual(len(provider.calls), 1)
+        status, code = self.execute('SELECT status,error_code FROM ads.content_segment_suggestion_jobs WHERE job_id=%s',
+                                    (job_id,))[0]
+        self.assertEqual((status, code), ('failed', 'invalid_response'))
+        self.assertEqual(self.execute("SELECT COUNT(*) FROM ads.content_segments WHERE asset_id=%s AND preset_key='selling_point'",
+                                      (self.asset,))[0][0], 0)
+        self.assertEqual(self.execute('SELECT status FROM ads.content_segments WHERE segment_id=%s', (frame,))[0][0], 'confirmed')
+
     def test_label_subset_limits_the_call_and_drops_other_labels(self):
         subset = ['mixed_voiceover', 'live_demo', 'street_interview', 'promotion']
         # The API stores the subset; the worker must merge its call settings instead of replacing it.
@@ -288,7 +468,7 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
         job_id = self.job()
         provider = MockSegmentProvider(PAYLOAD)
         with self.assertRaises(WorkerUnavailable):
-            self.run_worker(provider, {'CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION': 'segment-suggest-v9'})
+            self.run_worker(provider, {'CONTENT_AI_STUDIO_SEGMENT_SUGGEST_PROMPT_VERSION': 'segment-suggest-v99'})
         self.assertEqual(provider.calls, [])
         self.assertEqual(self.execute("SELECT status FROM ads.content_segment_suggestion_jobs WHERE job_id=%s",
                                       (job_id,))[0][0], 'queued')

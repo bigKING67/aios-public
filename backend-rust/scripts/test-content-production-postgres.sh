@@ -15,7 +15,7 @@ docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v O
 docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 < etl/groland_postgres/sql/migrations/20260522_1600__create_ads_marketing_content_assets.sql
 # AI 切段 v5 reads the library's Seed ASR transcripts.
 docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 < etl/groland_postgres/sql/migrations/20260525_1810__add_marketing_content_asset_transcripts.sql
-for migration in sql/migrations/021_content_production.sql sql/migrations/022_content_production_shot_catalogs.sql sql/migrations/023_content_production_shot_jobs.sql sql/migrations/024_content_production_semantic_jobs.sql sql/migrations/026_content_production_runs.sql sql/migrations/027_content_production_run_renders.sql sql/migrations/028_content_production_planning_queue.sql sql/migrations/029_content_ai_studio_segments.sql sql/migrations/030_content_ai_studio_segment_suggestions.sql sql/migrations/031_content_ai_studio_remix_batches.sql sql/migrations/032_content_ai_studio_remix_batch_cancel.sql; do
+for migration in sql/migrations/021_content_production.sql sql/migrations/022_content_production_shot_catalogs.sql sql/migrations/023_content_production_shot_jobs.sql sql/migrations/024_content_production_semantic_jobs.sql sql/migrations/026_content_production_runs.sql sql/migrations/027_content_production_run_renders.sql sql/migrations/028_content_production_planning_queue.sql sql/migrations/029_content_ai_studio_segments.sql sql/migrations/030_content_ai_studio_segment_suggestions.sql sql/migrations/031_content_ai_studio_remix_batches.sql sql/migrations/032_content_ai_studio_remix_batch_cancel.sql sql/migrations/035_content_ai_studio_selling_points.sql sql/migrations/042_content_ai_studio_selling_point_business_labels.sql sql/migrations/043_content_ai_studio_makeup_effect_label.sql sql/migrations/044_content_ai_studio_segment_multilabel.sql sql/migrations/045_content_ai_studio_endorsement_categories.sql; do
   docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 < "$migration"
 done
 docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 <<'SQL'
@@ -30,10 +30,14 @@ bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::pr
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::production::runs::execution_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::production::runs::planning_queue_tests -- --ignored --test-threads=1
 docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 < etl/groland_postgres/tests/sql/content_production_runs_contract.sql
+docker exec -i "$fixture_id" psql -U postgres -d content_production_fixture -v ON_ERROR_STOP=1 < etl/groland_postgres/tests/sql/content_ai_studio_selling_points_contract.sql
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::postgres_tests -- --ignored
+bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::segment_multilabel_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::suggestion_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::remix_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::remix_edit_postgres_tests -- --ignored
+bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::remix_points_postgres_tests -- --ignored
+bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::remix_points_voiceover_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::access_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::asset_summary_postgres_tests -- --ignored
 bash scripts/backend-rust/cargo-with-cache.sh test marketing::content_assets::studio::overview_postgres_tests -- --ignored
