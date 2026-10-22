@@ -83,14 +83,8 @@ function DefaultLayoutChrome({
         <div className="mx-auto w-full max-w-[1600px] px-3 sm:px-4">
           <div className="relative flex min-h-[72px] items-center gap-2 sm:gap-4">
             <div className="flex min-w-0 flex-1 items-center md:min-w-[196px] md:flex-none md:shrink-0">
-              <Link to={ROUTE_PATHS.home} aria-label="返回首页" className="inline-flex items-center">
-                <img
-                  src="/home-brand-crop.png"
-                  alt="AGI AIOS"
-                  width={180}
-                  height={48}
-                  className="h-8 sm:h-10 w-auto object-contain"
-                />
+              <Link to={ROUTE_PATHS.home} aria-label="返回首页" className={styles.brand}>
+                AGI AIOS
               </Link>
             </div>
 

@@ -5,13 +5,15 @@ gray-pair checks -> local VLM shot facts -> OCR -> rule engine -> bounded Lite r
 finalize. Every stage is deterministic given its model outputs, and the job always publishes a
 full-coverage timeline: a failed Lite review keeps the rule output.
 """
+import copy
+
 import numpy as np
 
 from ..segment_suggestion_contract import merge_usage
 from . import local_vlm, mouth, ocr, persons, review, rules, shots
 from .frames import Frames
 
-PIPELINE_VERSION = 'framework-v2-rules-v8'
+PIPELINE_VERSION = 'framework-v2-rules-v9'
 RULE_CONFIDENCE = 0.7
 REVIEW_CONFIDENCE = 0.85
 
@@ -27,17 +29,28 @@ def _bg_near(feats, k):
     return max(near) if near else None
 
 
-def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage):
+def frame_requests(spans):
+    """Shared by the actual decoder and isolated, zero-inference input audits."""
+    starts = np.array([a for a, _ in spans], np.float32)
+    ends = np.array([b for _, b in spans], np.float32)
+    return (persons.frame_requests(spans) + local_vlm.fact_requests(spans)
+            + local_vlm.pair_requests(starts, ends) + ocr.frame_requests(spans))
+
+
+def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage, *,
+        evidence_sink=None, sampling=None):
     """Returns (segments, summary, usage). `stage` is a one-item list the worker shows in the UI."""
     duration = duration_ms / 1000
     stage[0] = '镜头切点'
     cuts = shots.cut_times(proxy)
     spans = shots.spans(cuts, duration)
+    if sampling is not None:
+        if evidence_sink is None:
+            raise ValueError('Experimental sampling requires an evidence sink')
+        cuts, spans = sampling.layout(source, cuts, duration_ms)
     stage[0] = '解码画面'
-    starts = np.array([a for a, _ in spans], np.float32)
-    ends = np.array([b for _, b in spans], np.float32)
-    frames = Frames(source, persons.frame_requests(spans) + local_vlm.fact_requests(spans)
-                    + local_vlm.pair_requests(starts, ends) + ocr.frame_requests(spans), tick)
+    requests = frame_requests(spans)
+    frames = (Frames(source, requests, tick) if sampling is None else sampling.decode(source, requests, tick))
     stage[0] = '人物特征'
     feats = persons.extract(frames, spans, tick)
     chain = persons.chains(feats)
@@ -57,6 +70,9 @@ def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage
     shot_rows = [{'start': a, 'end': b, 'facts': f, 'chain': chain.get(k), 'ocr': t, 'bg_near': _bg_near(feats, k)}
                  for k, ((a, b), f, t) in enumerate(zip(spans, facts, texts))]
     rule_segments, runs = rules.segment(shot_rows, duration)
+    # Explicit evaluation hook only; the worker does not retain frame observations.
+    evidence = None if evidence_sink is None else copy.deepcopy(dict(
+        shots=shot_rows, cuts=cuts, runs=runs, ruleSegments=rule_segments, durationMs=duration_ms))
     stage[0] = '复核'
     final, receipts = review.review(provider, source, rule_segments, runs, cuts, duration, work, env, tick)
     stage[0] = '口型'
@@ -94,4 +110,10 @@ def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage
         'mouthShots': len(probed), 'localVlm': {'model': vlm.model, **vlm.usage},
         'ruleSegments': rule_segments, 'review': receipts,
     }
+    if evidence is not None:
+        evidence['mouth'] = [[s['start'], s['end'], s['mouth']] for s in shot_rows if 'mouth' in s]
+        if sampling is not None:
+            evidence['sampling'] = copy.deepcopy(sampling.receipt)
+            summary['sampling'] = {k: v for k, v in sampling.receipt.items() if k != 'samples'}
+        evidence_sink(evidence)
     return segments, summary, usage

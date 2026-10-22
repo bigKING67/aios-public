@@ -10,10 +10,14 @@ Requests bypass HTTP proxy environment variables: the endpoint is a private Tail
 import base64
 import json
 import os
-from concurrent.futures import ThreadPoolExecutor
+import threading
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 
 import cv2
 import requests
+
+from ..execution import Cancelled
+from . import inference_slots
 
 FACTS_PROMPT_VERSION = 'shot-facts-v1'
 PAIR_PROMPT_VERSION = 'pair-verify-v1'
@@ -142,6 +146,10 @@ class LocalVlm:
         if not self.base_url or not key:
             raise RuntimeError('FRAMEWORK_V2_VLM_BASE_URL and FRAMEWORK_V2_VLM_API_KEY are required')
         self.concurrency = int(os.environ.get(CONCURRENCY_ENV, '8'))
+        if not 1 <= self.concurrency <= 64:
+            raise ValueError(f'{CONCURRENCY_ENV} must be within 1..64')
+        inference_slots.limit()
+        self.cancelled = threading.Event()
         self.session = requests.Session()
         self.session.trust_env = False
         self.session.headers['Authorization'] = f'Bearer {key}'
@@ -153,7 +161,8 @@ class LocalVlm:
         body = {'model': self.model, 'messages': [{'role': 'user', 'content': content}], 'max_tokens': max_tokens,
                 'temperature': 0, 'seed': 0, 'chat_template_kwargs': {'enable_thinking': False},
                 'response_format': {'type': 'json_schema', 'json_schema': {'name': name, 'schema': schema}}}
-        response = self.session.post(f'{self.base_url}/chat/completions', json=body, timeout=180)
+        with inference_slots.acquire(self.base_url, self._check_cancelled):
+            response = self.session.post(f'{self.base_url}/chat/completions', json=body, timeout=180)
         response.raise_for_status()
         data = response.json()
         usage = data.get('usage') or {}
@@ -164,6 +173,23 @@ class LocalVlm:
             return json.loads(data['choices'][0]['message']['content'])
         except (KeyError, json.JSONDecodeError):
             return None
+
+    def _check_cancelled(self):
+        if self.cancelled.is_set():
+            raise Cancelled('local VLM request cancelled')
+
+    def _result(self, future, tick):
+        try:
+            while True:
+                tick()  # Queued/admitted requests must not starve the job's lease heartbeat.
+                try:
+                    return future.result(timeout=.5)
+                except FutureTimeout:
+                    if future.done():
+                        return future.result()
+        except BaseException:
+            self.cancelled.set()
+            raise
 
     def shot_facts(self, frames, spans, tick=lambda: None):
         """One structured fact record (or None) per shot; frames holds fact_requests(spans)."""
@@ -176,8 +202,7 @@ class LocalVlm:
                        for imgs in images]
             out = []
             for future in futures:
-                tick()
-                out.append(future.result())
+                out.append(self._result(future, tick))
         return out
 
     def same_person(self, frames, pairs, starts, ends, tick=lambda: None):
@@ -189,8 +214,7 @@ class LocalVlm:
             futures = [(i, j, pool.submit(self._call, imgs, PAIR_PROMPT, PAIR_SCHEMA, 'pair', 120)) for i, j, imgs in jobs]
             out = []
             for i, j, future in futures:
-                tick()
-                out.append((i, j, future.result()))
+                out.append((i, j, self._result(future, tick)))
         return out
 
 

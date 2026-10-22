@@ -148,6 +148,33 @@ class FinalizeTests(unittest.TestCase):
         out = rules.finalize([[0, 60, LIVE], [60, 85, MIXED], [85, 90, PROMO]], shots)
         self.assertEqual(out, [[0, 60, LIVE], [60, 90, PROMO]])
 
+    def test_a_passing_offer_line_in_the_review_does_not_start_the_promotion(self):
+        # 蜜粉-011: the review closes with "现在下单立减70", then 15s of selling-point montage, then the offer.
+        shots = [shot(0, 17.7), shot(17.7, 72.6, chain=1), shot(72.6, 80.5, chain=1, ocr=['现在下单呢立减70']),
+                 shot(80.5, 88, subject='closeup', style='studio_ad'), shot(88, 96, subject='product', style='studio_ad'),
+                 shot(96, 98.7, subject='product', style='studio_ad', ocr=['现在赶上直播间限时宠粉福利']),
+                 shot(98.7, 100.4, subject='product', style='studio_ad', ocr=['直播间三折就能到手']),
+                 shot(100.4, 112.3, subject='product', style='studio_ad'),
+                 shot(112.3, 115.5, subject='product', style='studio_ad', ocr=['能抢到的抓紧冲'])]
+        out = rules.finalize([[0, 17.7, MIXED], [17.7, 80.5, LIVE], [80.5, 112.3, MIXED], [112.3, 115.5, PROMO]], shots)
+        self.assertEqual(out, [[0, 17.7, MIXED], [17.7, 80.5, LIVE], [80.5, 96, MIXED], [96, 115.5, PROMO]])
+        # 蜜粉-016: the review already handed the whole tail to the promotion; it shrinks back to the real offer.
+        out = rules.finalize([[0, 17.7, MIXED], [17.7, 80.5, LIVE], [80.5, 115.5, PROMO]], shots)
+        self.assertEqual(out, [[0, 17.7, MIXED], [17.7, 80.5, LIVE], [80.5, 96, MIXED], [96, 115.5, PROMO]])
+
+    def test_a_single_closing_offer_line_still_starts_the_promotion(self):
+        shots = [shot(0, 60, chain=1), shot(60, 70, subject='product', style='studio_ad'),
+                 shot(70, 75, subject='product', style='studio_ad', ocr=['现在下单立减60'])]
+        out = rules.finalize([[0, 60, LIVE], [60, 75, MIXED]], shots)
+        self.assertEqual(out, [[0, 60, LIVE], [60, 70, MIXED], [70, 75, PROMO]])
+
+    def test_own_polished_closeup_and_price_ending_do_not_become_standalone_promotion(self):
+        shots = [shot(0, 50, chain=1),
+                 shot(50, 60, subject='closeup', style='studio_ad', ocr=['现在下单99元']),
+                 shot(60, 72, chain=1, style='studio_ad', ocr=['快来直播间'])]
+        shots[1].update(kind='ad', bg_near=.7)
+        self.assertEqual(rules.finalize([[0, 72, LIVE]], shots), [[0, 72, LIVE]])
+
     def test_disclaimers_and_other_word_senses_are_not_offers(self):
         shots = [shot(0, 50, chain=1), shot(50, 60, ocr=['具体活动以直播间活动为准']), shot(60, 70, ocr=['对冲脸上黄气']),
                  shot(70, 80, ocr=['199元到手'])]

@@ -1,4 +1,5 @@
 import json
+import contextlib
 import os
 import shutil
 import subprocess
@@ -142,15 +143,25 @@ class WorkerHookTests(unittest.TestCase):
         provider = SimpleNamespace(name='local-v2', vlm_model='qwen3.5-4b', model='lite',
                                    request_settings=lambda: {'provider': 'local-v2'})
         job = {'asset_id': 'asset', 'source_content_hash': 'a' * 64}
+        events = []
+        def visual(*args):
+            events.append('visual')
+            return [], {'pipeline': 'v2'}, {}
+        def resolved():
+            events.append('transcript')
+            return transcript
         with tempfile.TemporaryDirectory() as folder, \
-                patch.object(st, 'resolve_local', return_value=transcript) as resolve, \
-                patch.object(pipeline, 'run', return_value=([], {'pipeline': 'v2'}, {})), \
-                patch.object(worker, 'record_request') as record, patch.object(worker, 'load_source'), \
-                patch.object(worker, '_publish', return_value=True) as publish:
+                patch.object(st, 'local_in_background', return_value=contextlib.nullcontext(resolved)) as resolve, \
+                patch.object(pipeline, 'run', side_effect=visual), \
+                patch.object(worker, 'record_request', side_effect=lambda *args: events.append('record')) as record, \
+                patch.object(worker, 'load_source'), \
+                patch.object(worker, '_publish', side_effect=lambda *args: events.append('publish') or True) as publish:
             proxy = Path(folder) / 'proxy.mp4'
             proxy.write_bytes(b'x')
             worker._suggest_v2(Mock(), job, provider, None, {}, Path(folder) / 'source.mp4', proxy, 3000, ['a'],
                                {}, Path(folder), lambda: None, [''], {})
+        self.assertEqual(events, ['record', 'visual', 'transcript'] +
+                         (['record'] if transcript[0] else []) + ['publish'])
         return resolve, record.call_args.args[4], publish.call_args.args[6]
 
     def test_framework_job_stores_the_transcript_for_later_selling_point_jobs(self):

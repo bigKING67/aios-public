@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -95,11 +96,13 @@ def validate_cleanup(root, relative):
 def cleanup(root, full=False):
     relative = TARGET if full else TARGET / 'debug/incremental'
     target = validate_cleanup(root, relative)
-    before = disk_bytes(target)
+    selected = disk_bytes(target)
+    before = disk_bytes(root / TARGET)
     if target.exists():
         shutil.rmtree(target)
-    log(f'removed={relative} releasedBytes={before}')
-    return before
+    released = max(0, before - disk_bytes(root / TARGET))
+    log(f'removed={relative} selectedBytes={selected} releasedBytes={released}')
+    return released
 
 
 def lock_file(root):
@@ -134,10 +137,17 @@ def mark(root, name):
 
 def auto_maintain(root):
     now = time.time()
-    if now - timestamp(root, 'last-check') < POLICY['checkIntervalHours'] * 3600:
+    checked = timestamp(root, 'last-check')
+    attempted = timestamp(root, 'last-attempt')
+    failed = attempted > checked
+    if failed and now - attempted < POLICY['retryIntervalMinutes'] * 60:
         return
-    # Throttle failed attempts too; explicit maintenance remains available.
-    mark(root, 'last-check')
+    pending = timestamp(root, 'incremental-over-budget') > checked
+    if not failed and not pending and now - checked < POLICY['checkIntervalHours'] * 3600:
+        return
+    # Only completed maintenance advances the daily check. Failures back off
+    # independently, including a retry of a post-build over-budget observation.
+    mark(root, 'last-attempt')
     report = audit(root)
     triggers = reasons(report, timestamp(root, 'last-use'), now)
     if triggers:
@@ -149,6 +159,54 @@ def auto_maintain(root):
         if remaining > POLICY['totalBudgetBytes']:
             log(f'remainingBytes={remaining}; inspect with npm run maintenance:cargo; '
                 'full cleanup requires --all --apply')
+    mark(root, 'last-check')
+
+
+def post_build_check(root, fd):
+    # The last concurrent builder can inspect; never wait for or clean another
+    # builder's outputs. Detection does not discard this build's fresh cache.
+    if not try_exclusive(fd):
+        return
+    report = audit(root)
+    triggers = reasons(report, 0, time.time())
+    if 'incremental-budget' in triggers:
+        mark(root, 'incremental-over-budget')
+    if triggers:
+        log(f'post-build triggers={",".join(triggers)} '
+            f'totalBytes={report["totalBytes"]} incrementalBytes={report["incrementalBytes"]}; '
+            'incremental overage is checked at next safe build; '
+            'full cleanup requires --all --apply')
+
+
+def wait_for_cargo(args, fd):
+    # Cargo inherits the shared lock even if this supervisor is killed. Use a
+    # separate process group so a signal to the wrapper also reaches test tools.
+    child = subprocess.Popen(['cargo', *args], pass_fds=(fd,), start_new_session=True)
+
+    def forward(signum, _frame):
+        try:
+            os.killpg(child.pid, signum)
+        except ProcessLookupError:
+            pass
+
+    handlers = {sig: signal.signal(sig, forward)
+                for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)}
+    try:
+        returncode = child.wait()
+    finally:
+        for sig, handler in handlers.items():
+            signal.signal(sig, handler)
+    if returncode >= 0:
+        try:
+            post_build_check(ROOT, fd)
+        except (OSError, RuntimeError, subprocess.SubprocessError, ValueError) as error:
+            log(f'post-build check skipped: {error}')
+    os.close(fd)
+    if returncode < 0:
+        signum = -returncode
+        signal.signal(signum, signal.SIG_DFL)
+        os.kill(os.getpid(), signum)
+    raise SystemExit(returncode)
 
 
 def canonical_invocation(args):
@@ -174,6 +232,9 @@ def run_cargo(args):
     safe_path(ROOT, TARGET)
     fd = lock_file(ROOT)
     command_args = args[:args.index('--')] if '--' in args else args
+    overridden = any(arg == '--config' or arg.startswith('--config=')
+                     or arg == '--target-dir' or arg.startswith('--target-dir=')
+                     for arg in command_args)
     if 'clean' in command_args:
         if not try_exclusive(fd):
             raise RuntimeError('active build holds cache lock; clean refused')
@@ -182,16 +243,15 @@ def run_cargo(args):
         # Exclusive check is opportunistic; ordinary builds share the lock.
         if try_exclusive(fd):
             try:
-                overridden = any(arg == '--config' or arg.startswith('--config=')
-                                 or arg == '--target-dir' or arg.startswith('--target-dir=')
-                                 for arg in command_args)
                 if not overridden:
                     auto_maintain(ROOT)
             except (OSError, RuntimeError, subprocess.SubprocessError, ValueError) as error:
                 log(f'maintenance skipped: {error}')
         fcntl.flock(fd, fcntl.LOCK_SH)
     mark(ROOT, 'last-use')
-    # Exec preserves Cargo exit codes/signals and keeps the lock for cargo run.
+    if not overridden and args and args[0] in ('build', 'b', 'check', 'c', 'test', 't', 'clippy'):
+        wait_for_cargo(args, fd)
+    # Other commands (including long-lived cargo run) retain exec semantics.
     # The lock file is never unlinked, avoiding inode replacement races.
     os.set_inheritable(fd, True)
     os.execvp('cargo', ['cargo', *args])

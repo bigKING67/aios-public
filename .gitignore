@@ -26,6 +26,7 @@
 .env.vps
 .env.feishu-sync.vps
 .env.vps.bak.*
+.env*.bak*
 
 # ============ 日志文件 ============
 npm-debug.log*

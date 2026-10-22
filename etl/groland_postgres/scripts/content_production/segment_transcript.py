@@ -8,8 +8,11 @@ transcript is available and never fails the job. Cancellation or a lost lease
 (`Cancelled`, raised by `tick`) still propagates.
 """
 import os
+import threading
 import uuid
 import wave
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
+from contextlib import contextmanager
 
 from .execution import Cancelled
 from .segment_suggestion_provider import call_with_ticks, run_media
@@ -171,6 +174,67 @@ def resolve_local(conn, asset_id, source_hash, source, duration_ms, env, tick, w
         return summary, summary
     summary = {'status': 'ok', 'origin': origin, 'utterances': len(utterances), **({'models': models} if models else {})}
     return {**summary, 'utterances': utterances}, summary
+
+
+@contextmanager
+def local_in_background(conn, asset_id, source_hash, source, duration_ms, env, tick, work):
+    """Overlap local ASR with vision; database access and lease ticks stay on the caller.
+
+    The yielded resolver must finish before publishing. On cancellation/failure,
+    stop the owned media task before its temporary directory can be reclaimed.
+    Cached/disabled ASR creates no thread and makes no service request.
+    """
+    if not local_configured():
+        yield lambda: (None, None)
+        return
+    try:
+        cached, origin = cached_utterances(conn, asset_id, source_hash)
+    except Cancelled:
+        raise
+    except Exception as error:
+        conn.rollback()
+        summary = {'status': 'unavailable', 'origin': LOCAL_ORIGIN, 'errorType': type(error).__name__}
+        yield lambda: (summary, summary)
+        return
+    if cached is not None:
+        summary = {'status': 'ok', 'origin': origin, 'utterances': len(cached)}
+        yield lambda: ({**summary, 'utterances': cached}, summary)
+        return
+
+    stopped = threading.Event()
+    def background_tick():
+        if stopped.is_set():
+            raise Cancelled('local transcription cancelled')
+
+    pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix='local-asr')
+    future = pool.submit(transcribe_local, source, duration_ms, env, background_tick, work)
+    def resolve():
+        try:
+            while True:
+                tick()
+                try:
+                    utterances, models = future.result(timeout=.5)
+                    break
+                except FutureTimeout:
+                    if future.done():  # the ASR operation itself raised TimeoutError
+                        utterances, models = future.result()
+                        break
+        except Cancelled:
+            raise
+        except Exception as error:
+            summary = {'status': 'unavailable', 'origin': LOCAL_ORIGIN, 'errorType': type(error).__name__}
+            return summary, summary
+        summary = {'status': 'ok' if utterances else 'empty', 'origin': LOCAL_ORIGIN}
+        if utterances:
+            summary.update(utterances=len(utterances), **({'models': models} if models else {}))
+            return {**summary, 'utterances': utterances}, summary
+        return summary, summary
+    try:
+        yield resolve
+    finally:
+        stopped.set()
+        future.cancel()
+        pool.shutdown(wait=True, cancel_futures=True)
 
 
 def _clock(ms):

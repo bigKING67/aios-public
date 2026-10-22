@@ -86,15 +86,6 @@ export function LoginPageClient() {
         <Space orientation="vertical" size="large" className="w-full">
           {/* 页面标题 */}
           <div className={styles.loginHeader}>
-            <div className={styles.brandMark} aria-hidden="true">
-              <img
-                src="/favicon.png"
-                alt=""
-                width={56}
-                height={56}
-                className={styles.brandMarkImage}
-              />
-            </div>
             <h1 className={styles.loginTitle}>
               AGI AIOS
             </h1>

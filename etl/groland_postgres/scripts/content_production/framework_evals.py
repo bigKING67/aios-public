@@ -93,8 +93,8 @@ def run(args):
     package = Path(__file__).parent
     # Snapshot every runtime Python dependency in these two local packages.
     for folder in (package, package.parent/'marketing_content_assets'):
-        for path in folder.glob('*.py'):
-            target = args.output/'code'/folder.name/path.name
+        for path in folder.rglob('*.py'):
+            target = args.output/'code'/folder.name/path.relative_to(folder)
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(path, target)
             code[str(path.relative_to(package.parent))] = file_hash(path)

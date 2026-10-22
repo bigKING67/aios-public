@@ -12,12 +12,16 @@ class SnapshotTests(unittest.TestCase):
             root=Path(tmp)
             for name in ('content_production','marketing_content_assets'):
                 (root/name).mkdir();(root/name/'__init__.py').write_text('original')
+            nested = root/'content_production/framework_v2'
+            nested.mkdir()
+            (nested/'pipeline.py').write_text('nested original')
             observed=[]
             def launch(command,env,check):
                 frozen=Path(env['PYTHONPATH']);observed.append(frozen)
                 self.assertNotEqual(frozen,root)
                 (root/'content_production/__init__.py').write_text('concurrent user change')
                 self.assertEqual((frozen/'content_production/__init__.py').read_text(),'original')
+                self.assertEqual((frozen/'content_production/framework_v2/pipeline.py').read_text(),'nested original')
                 self.assertEqual(command[-2:],['run','--help'])
                 with patch.dict(os.environ,{snapshot.ENV:str(frozen)}):
                     self.assertTrue(snapshot.is_snapshot(frozen/'content_production'))

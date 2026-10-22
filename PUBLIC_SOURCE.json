@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "bigKING67/aios",
-  "sourceCommit": "7ea44f24fbe3782af43ea79b107e03cdf52de6da",
+  "sourceCommit": "d6712508ec028b685101ad1855372c149cbb8d7b",
   "policySha256": "02368763579b240c67083716dbdfd347142b74cf92b84c202f9207b0d2128905",
-  "fileCount": 4574,
-  "contentSha256": "d034baee796efd81b27a3fa8b7900d385553e8454a98e324c7089cb3763e56fc",
+  "fileCount": 4611,
+  "contentSha256": "510f552d42213a829057e1a3885400df7d3adcac21de05f5dc41869e3c2ce561",
   "files": [
     {
       "path": ".dockerignore",
@@ -27,14 +27,14 @@
     {
       "path": ".github/workflows/quality-gate.yml",
       "mode": "100644",
-      "size": 886,
-      "sha256": "d99aa7aec807fb17b21b2262a9a74e2b0a4b1c9af3914a6c0a15ffda269c12ef"
+      "size": 891,
+      "sha256": "d20ed8481869e642427ba61cad6b6485812fb4b8a2c0cf63b1ca76797982dce2"
     },
     {
       "path": ".gitignore",
       "mode": "100644",
-      "size": 2492,
-      "sha256": "2c0c8cb663a75bfc5eba7bd788c3d11355279de8090c9d7fc52a8ef71aca56a1"
+      "size": 2503,
+      "sha256": "b0b0c7816a97fcbd90d0f6bf441e1422af73692d1b109dbc982c145c20f00aeb"
     },
     {
       "path": ".gitleaks.toml",
@@ -45,8 +45,8 @@
     {
       "path": ".nvmrc",
       "mode": "100644",
-      "size": 3,
-      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+      "size": 8,
+      "sha256": "d9f318747a126ce2247661af67852b185def7789492eabfad7bba322be087c33"
     },
     {
       "path": "apps/web-vite/AGENTS.md",
@@ -63,8 +63,8 @@
     {
       "path": "apps/web-vite/index.html",
       "mode": "100644",
-      "size": 509,
-      "sha256": "c49b1b46f76cb9f2ea254ec22d2c4acb571c6bf2a6e05d6b3dde88a65f24548d"
+      "size": 557,
+      "sha256": "57fb484b58047a336a98c9bbffd406de5513cadf1183f6443ae03d69fbbafab8"
     },
     {
       "path": "apps/web-vite/src/App.tsx",
@@ -4191,14 +4191,14 @@
     {
       "path": "apps/web-vite/src/app/login/_components/login-page-client.tsx",
       "mode": "100644",
-      "size": 5162,
-      "sha256": "3017cefaf5520972a92f00a8734e1a16e58689b21e0a80510c3d62254c27a380"
+      "size": 4878,
+      "sha256": "d40290f9f3b6a50d284fc6cb76a8aa54c115f35705febfe61ed14facdfc53c47"
     },
     {
       "path": "apps/web-vite/src/app/login/login.module.css",
       "mode": "100644",
-      "size": 2014,
-      "sha256": "b1b17200dcb46ea94c6ee05eb719929920d255036baf68241638ae23febff491"
+      "size": 1523,
+      "sha256": "52c5980058d4b556c5e916895f1002cabcbc177328942b0b8e0b2da62007259c"
     },
     {
       "path": "apps/web-vite/src/app/login/page.tsx",
@@ -8883,14 +8883,14 @@
     {
       "path": "apps/web-vite/src/components/organisms/layout.module.css",
       "mode": "100644",
-      "size": 542,
-      "sha256": "f06d52e9b939d54df19802a5b3c0fec606db034803e18b6110108f17a7e5739b"
+      "size": 935,
+      "sha256": "c305652b493dbe8c2c728a889d3f83cd14989e557ec50a9e5153f1b7a123e69b"
     },
     {
       "path": "apps/web-vite/src/components/organisms/layout.tsx",
       "mode": "100644",
-      "size": 4455,
-      "sha256": "d2c965711ac446e97c332efb9f504c724c0d3a2a0c71a952fdbcd4d086afa837"
+      "size": 4226,
+      "sha256": "b50a54c195d848e6de49517d2940dafc2622a06c86410542a9094ff804ae54e4"
     },
     {
       "path": "apps/web-vite/src/components/organisms/line-chart-model.ts",
@@ -12922,7 +12922,7 @@
       "path": "backend-rust/src/marketing/content_assets/production/render-binding.json",
       "mode": "100644",
       "size": 324,
-      "sha256": "edc0195ae2bbe784c43497ce50bc7d90a5744926dd357e6c92d67f9f73e6fab5"
+      "sha256": "c7aa9e0f7eacf5b2fc05ba13da9b8b04d5eeb5f209d20b6f949cccec5baa801d"
     },
     {
       "path": "backend-rust/src/marketing/content_assets/production/repository.rs",
@@ -16929,8 +16929,8 @@
     {
       "path": "DESIGN.md",
       "mode": "100644",
-      "size": 111929,
-      "sha256": "c9c037e249b4316351acc0e8d9b2c3213d3c4f0d8a6eeb6e57cf525f9d14e6a2"
+      "size": 112225,
+      "sha256": "0b9e19b110627992304d6402577560b61aaa32f923fd8d325f210b1f05945d5d"
     },
     {
       "path": "docker-compose.content-production.yml",
@@ -16953,8 +16953,8 @@
     {
       "path": "docker/content-production/Dockerfile",
       "mode": "100644",
-      "size": 1031,
-      "sha256": "c3ff2f98236c1e525d2e16711e1b6c9772edbb02e930409d979d70faa11a1c2c"
+      "size": 1036,
+      "sha256": "64a1cc95a198f9cc8e07dfa126ec48d9adc23a522230986cd2f677281a9a1a76"
     },
     {
       "path": "docker/content-production/README.md",
@@ -17013,14 +17013,14 @@
     {
       "path": "docker/content-production/renderer/package-lock.json",
       "mode": "100644",
-      "size": 56209,
-      "sha256": "245e3c6a8c56386c8b06027faca28f7af67cd880b7d6a172170a50e02ce85f04"
+      "size": 56238,
+      "sha256": "f93d362f11be6a47fb6c60d0d5ffbec31f9e57f1ccf1530ef3448cd07911360e"
     },
     {
       "path": "docker/content-production/renderer/package.json",
       "mode": "100644",
-      "size": 302,
-      "sha256": "a67bbe6c774d4bf4fb020df093e8b9841bc98d5e9e78e3f439986ad8022957dd"
+      "size": 331,
+      "sha256": "9bd1ef860b3bd158a578cf91b01ccc1ffdb7a5ad37a0392f6c604fb2071f70f0"
     },
     {
       "path": "docker/content-production/renderer/project.mjs",
@@ -17163,14 +17163,14 @@
     {
       "path": "Dockerfile",
       "mode": "100644",
-      "size": 670,
-      "sha256": "61d994b1b4b9a5b0b2375fe2216b3f9151290cde5e0281829e8dafe01f891d9f"
+      "size": 680,
+      "sha256": "52ccdd94f51f8f4a0f6e376b0bd7b3f3059543706cbcf4ef7a47cb105d4c5495"
     },
     {
       "path": "Dockerfile.vite",
       "mode": "100644",
-      "size": 670,
-      "sha256": "61d994b1b4b9a5b0b2375fe2216b3f9151290cde5e0281829e8dafe01f891d9f"
+      "size": 680,
+      "sha256": "52ccdd94f51f8f4a0f6e376b0bd7b3f3059543706cbcf4ef7a47cb105d4c5495"
     },
     {
       "path": "eslint.config.mjs",
@@ -17373,8 +17373,8 @@
     {
       "path": "etl/groland_postgres/pyproject.toml",
       "mode": "100644",
-      "size": 947,
-      "sha256": "c84b49502a8047b6e7918286854793113b605ca92030d698d6aa4060867258f2"
+      "size": 990,
+      "sha256": "54bc55e1b0627d9d980d2fb51b953f7d17938b374a34f2381af697d93a6944a5"
     },
     {
       "path": "etl/groland_postgres/README.md",
@@ -17620,7 +17620,7 @@
       "path": "etl/groland_postgres/scripts/content_production/creative-craft.lock.json",
       "mode": "100644",
       "size": 1239,
-      "sha256": "e0409723fc07839312301074c7437466bd4a5647e4210e8d6ab22c7305202068"
+      "sha256": "5567ccccbbdd25b302183408d99bef6024eef4058cf74fcd5c573f877a46ca4c"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/derived_assets.py",
@@ -17739,14 +17739,14 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_eval_snapshot.py",
       "mode": "100644",
-      "size": 1167,
-      "sha256": "00a2ed7b61231e118a046c069c7db0f42718545e64c5ef6d7969ec325202e6f9"
+      "size": 1326,
+      "sha256": "d50e10ea60c2cf75edc0a81facb6b1cb34cd45c18ead49a6fd1d432928e55193"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_evals.py",
       "mode": "100644",
-      "size": 13384,
-      "sha256": "68d657f9b4f58deb701ac22f3c7111899919d8efd2c4e733674690a2ea685dbd"
+      "size": 13400,
+      "sha256": "53ccaaedc289fa3fd6088d60d686f1fa7b4f8a34a6f4a227c1e8f16d628d1e82"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_evaluation.py",
@@ -17773,6 +17773,90 @@
       "sha256": "2a19ce902ffdbed5813a479d468e22bc8be83dd07b76ad310c402687ffa574e2"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/__init__.py",
+      "mode": "100644",
+      "size": 90,
+      "sha256": "1626b25f051f16b267d4c7a9b18f38a169353009dee6c2bbbc527624afae26c6"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/__main__.py",
+      "mode": "100644",
+      "size": 5774,
+      "sha256": "9b8157c3da340fad902d0417e3403f6fa2e4d9bc85d5b3d219a01a7f2373560c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/artifacts.py",
+      "mode": "100644",
+      "size": 5213,
+      "sha256": "6fed01c69e0a5350ea860f67cb9ec431f59be1bf5d3e2fb5c9febc6068178f3c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/evaluate.py",
+      "mode": "100644",
+      "size": 10220,
+      "sha256": "4cd6f311188a06b14d8eab3904149beec3bb72e553b196880df082efa953da4c"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/feedback.py",
+      "mode": "100644",
+      "size": 2157,
+      "sha256": "b4deaad12519462c2a6eb7ca468949ec200126aa1c34015f4373914d5e715570"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/optimize.py",
+      "mode": "100644",
+      "size": 8178,
+      "sha256": "784af71a9b79c54dcb405012ee1a13beec4f3bf11e1320f1a84fdca8472607f0"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/replay.py",
+      "mode": "100644",
+      "size": 5137,
+      "sha256": "02f03b0f1fa3b14516728fcefd5117edeb331a299b086d25ef285a9a27e248ea"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/runtime.py",
+      "mode": "100644",
+      "size": 3831,
+      "sha256": "0df3ee1c28c384ead97e7e824989f72e769d07548c12634466f4ccf9e3112de8"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/source_pipeline.py",
+      "mode": "100644",
+      "size": 9835,
+      "sha256": "fd5ce62f3c42560af4c27a990d601d17fbdc1518e42b8142426264fa7bf30914"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/source_review.py",
+      "mode": "100644",
+      "size": 6050,
+      "sha256": "95af5cd63f5c73397301ef6483f03cc225d6f1ad132c5f6e4db916f99d4e89d7"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/source_routes.py",
+      "mode": "100644",
+      "size": 3106,
+      "sha256": "83913ff07e31b11c659ff2010de7f466513cf2b3bf6efbdbf909695218f04fee"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/source_sampling.py",
+      "mode": "100644",
+      "size": 7719,
+      "sha256": "b0adc3746e1faddb59f2ddcae84898a74f2c1e0dc0727f0b3f715eef79812fb2"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/transition_sampling.py",
+      "mode": "100644",
+      "size": 4974,
+      "sha256": "72296aa92d0e540fc7594464315a6de7aaf9f6a82bfb06dd942163970f1546f7"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_harness/triage.py",
+      "mode": "100644",
+      "size": 6413,
+      "sha256": "ba6ee56a32e85f472418c283f82c9d0675d478f97e2dd03f70dfc64e49cfb2f3"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/framework_identity_evidence.py",
       "mode": "100644",
       "size": 2401,
@@ -17783,6 +17867,12 @@
       "mode": "100644",
       "size": 6811,
       "sha256": "27eb23103455d1b095af776525e7cf8fa77285612a5a8c403769513541f0db58"
+    },
+    {
+      "path": "etl/groland_postgres/scripts/content_production/framework_local_evidence.py",
+      "mode": "100644",
+      "size": 11332,
+      "sha256": "b08b1b5f0ce14a72342abfca692a927016ab4f22d5fed59acde8b3c5ff9b50ff"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_narrator_return.py",
@@ -17923,10 +18013,16 @@
       "sha256": "c4e461952c45b6dfb2d7b2c19c9ecafce975f83a79145c77114107fadbd98d94"
     },
     {
+      "path": "etl/groland_postgres/scripts/content_production/framework_v2/inference_slots.py",
+      "mode": "100644",
+      "size": 1892,
+      "sha256": "425410ec531bc9d5fa5402572aff6df890eb30cae021bc6eca6d25106887c694"
+    },
+    {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/local_vlm.py",
       "mode": "100644",
-      "size": 8466,
-      "sha256": "0e3c8fd0cf473b2e1721aba08fb75875634f62f48997370f3059ccca745550fe"
+      "size": 9401,
+      "sha256": "6f3b552121459690c2f7be61fa002b817fb9af4ca82778ee24725ced70a0ff49"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/mouth_probe.py",
@@ -17955,8 +18051,8 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/pipeline.py",
       "mode": "100644",
-      "size": 4542,
-      "sha256": "9a1da5f39cf75794f3412611736d57ff05754044d10fcec70f2f43d256295fe3"
+      "size": 5649,
+      "sha256": "42f37d1150e08284e3c0e9af2286ef067675e957325e0fbcfb236ab92f894c07"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/review.py",
@@ -17967,14 +18063,14 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/rules.py",
       "mode": "100644",
-      "size": 19432,
-      "sha256": "8e38c1539a6fbda7600fbc9500edb401e4fb65ce364ab441f7572a2631760c19"
+      "size": 20701,
+      "sha256": "9df8e42649d2e6f73fa47cc24959fb40329720a3fc870445e60c9826bb033681"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_v2/shots.py",
       "mode": "100644",
-      "size": 806,
-      "sha256": "d05b3df1ed1e6fd1250140d8b9faa2688c10b46e982cbeb006b87b388e0276d8"
+      "size": 1058,
+      "sha256": "0876ab38025ec749d8fe0e613951f5da604e034a1606f772a40e787f88e65c9f"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/framework_window_audit.py",
@@ -18129,14 +18225,14 @@
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_suggestion_worker.py",
       "mode": "100644",
-      "size": 32729,
-      "sha256": "f359f7c879cb11a3bb9e6a3d26989f98664cbe39a63cd33016356fdf7f27b02d"
+      "size": 32997,
+      "sha256": "3d210719c945efac243623d8999f426a3d49e72627e57d4963815cc8c311261e"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/segment_transcript.py",
       "mode": "100644",
-      "size": 10170,
-      "sha256": "9bdc5252da08f1754be6eb5d8865e85f72aad7f360f2640c7cfb43a9d3aefd22"
+      "size": 12746,
+      "sha256": "bfa5665abbc5848dee684ed2e1dba6a82c3cbf9fb2cdf553bab959de901fa689"
     },
     {
       "path": "etl/groland_postgres/scripts/content_production/selected_review_actions.py",
@@ -20563,6 +20659,18 @@
       "sha256": "c3556e6613c70319f4a1a5e6ddd219c64d3368d03f91812a98cc39b4060d734a"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_continuity_eval.py",
+      "mode": "100644",
+      "size": 11345,
+      "sha256": "181b7992e4fc2976672dbb8d4983d69a9e3508e4711473f28a4123fbf01795a3"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_continuity_evidence.py",
+      "mode": "100644",
+      "size": 10351,
+      "sha256": "240f3f2c6318ea897df7ad9a18513b31fa44ada2a40c331e7020421c8acaa7b0"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_continuity.py",
       "mode": "100644",
       "size": 7015,
@@ -20601,8 +20709,8 @@
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_eval_snapshot.py",
       "mode": "100644",
-      "size": 1632,
-      "sha256": "3047144fa6678209a2a58d52993cbccf74da066b0ea5067415be346a0adc392f"
+      "size": 1903,
+      "sha256": "31a7f297fb2730887ca0e686a333887509ffccde022796d902e5f9e5de62b11c"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_evals.py",
@@ -20641,16 +20749,40 @@
       "sha256": "21abd59139318d5bb07cbfe46d713e3fc2787fee1f93b87915152d1fc5737d16"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_harness_source_review.py",
+      "mode": "100644",
+      "size": 16076,
+      "sha256": "797a525a5c7f40e368d315b7569f7641b6fc450b243a36639add34afe904bdb2"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_harness.py",
+      "mode": "100644",
+      "size": 14806,
+      "sha256": "c0f24ab493455aee26841d4ec625b07adb49684eeecd61977ca4a2fd7838bae5"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_identity_evidence.py",
       "mode": "100644",
       "size": 3100,
       "sha256": "de25230be9cf098b8d61854e5d9e30eb153b4d4377493c37aa213f505c65f8f2"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_interval_evidence.py",
+      "mode": "100644",
+      "size": 9322,
+      "sha256": "6379c524aff2cc757e8cf674814a74dd6a4ab10301550a8b1635d2933b4ca9b9"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_isolated_attachment.py",
       "mode": "100644",
       "size": 5452,
       "sha256": "00e357357978af287949767c54f2e4babe480cec0e65fe9b9752af3365e10510"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_local_evidence.py",
+      "mode": "100644",
+      "size": 4724,
+      "sha256": "c7a46a7e72eac3ec365fe71f6950b672fdb478a6b5c714183ddde03b681967cb"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_narrator_return.py",
@@ -20689,6 +20821,24 @@
       "sha256": "40ee26e9f57026f8962949eab43fdaf0c533ee3bcebeed5dcce2ebb4adde6c79"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_pair_9b.py",
+      "mode": "100644",
+      "size": 6701,
+      "sha256": "e537ed3857106dd04373557f230be833b1298432e1405bd045b4bc7454a82b01"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_pair_thinking.py",
+      "mode": "100644",
+      "size": 5346,
+      "sha256": "97446f54b4f6100d498afdf404687ddba23936113ce314d5bc51662ae7db38ae"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_pair_video_probe.py",
+      "mode": "100644",
+      "size": 9212,
+      "sha256": "ffc2360b899ea6cea8da8bb0bc8fd527d6c77ff701e2d79bb10aec96883a36b5"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_provenance_repair.py",
       "mode": "100644",
       "size": 6433,
@@ -20705,6 +20855,12 @@
       "mode": "100644",
       "size": 8081,
       "sha256": "c60740f848a81223189cb6686a1db9309ff3af0a9c7ae172e9720b5f763a9461"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_replay.py",
+      "mode": "100644",
+      "size": 4090,
+      "sha256": "32ffb3014037736de38ce6d8636baf1b1bb90d3928e44aee14fd6e07a858d570"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_review_membership.py",
@@ -20761,10 +20917,28 @@
       "sha256": "a78bc2dfe2911a345436e2df7d7cf68be65c3bc7cb94895a030bf054d31b833f"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_source_pipeline.py",
+      "mode": "100644",
+      "size": 6859,
+      "sha256": "9a191a072b5ac2685dbd6ee8c884781bff56beea94d4c6ebdd41ada9b04b429b"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_source_roles.py",
       "mode": "100644",
       "size": 1609,
       "sha256": "8c2ad7d6a2b627b23376da4ebe0783a0d294be553de95df56962201ce0866e3b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_source_routes.py",
+      "mode": "100644",
+      "size": 5965,
+      "sha256": "ce78b3ebb27b7431c9c8e807d45768e40673d5c6cef81cb52619e2add2d05457"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_source_sampling.py",
+      "mode": "100644",
+      "size": 5056,
+      "sha256": "e912d2d5165cedcde5e594820bb97f888575c81aba4b11447a27096d9e01b55c"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_speaker_evidence.py",
@@ -20773,16 +20947,52 @@
       "sha256": "c29c19e1b11a5b1844e094a43b587c064c7463cbafb29c8043fc5981d821a786"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_split_facts.py",
+      "mode": "100644",
+      "size": 4662,
+      "sha256": "f1933b9a4bb808afcbc200ba90d814f09f58865f998d78bc2b40df2ea4450bb1"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_state_repair.py",
       "mode": "100644",
       "size": 7361,
       "sha256": "ad384fdb5c06be88c7fabcc1b920d6a9f9219299b8fb375848bfc6c83fe81282"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_transition_sampling.py",
+      "mode": "100644",
+      "size": 11717,
+      "sha256": "fc03aecc0b5ebdfee82140be1841f32f7eae84f270b7c4f66d8ab9e3e9e8456a"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_triage.py",
+      "mode": "100644",
+      "size": 4315,
+      "sha256": "1d2e1eb67f1e9377597d80b52abd14608b53ea666bd3049205817101dfe14980"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_v2_inference_slots.py",
+      "mode": "100644",
+      "size": 3798,
+      "sha256": "2b3bf35d7d9b80be9cefa1fce0410551ad927a9a4fbc5c00d7ccaef03f20e28b"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_v2_shots.py",
+      "mode": "100644",
+      "size": 1768,
+      "sha256": "800dd2793764d8b5a7e8bafecd67c19e762ebd99a62288b11ffc59f38dc5923b"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_framework_v2.py",
       "mode": "100644",
-      "size": 18050,
-      "sha256": "2fd846a3b4841c18b6aa20adf9ab3fb835216bcfc810caf1f5291e7c476ece54"
+      "size": 20321,
+      "sha256": "c21178e62ae5d2f0ae4c741f5d4d0bebc8d03166f6326dcfa72e10da55953206"
+    },
+    {
+      "path": "etl/groland_postgres/tests/content_production/test_framework_video_sampling_plan.py",
+      "mode": "100644",
+      "size": 2579,
+      "sha256": "55462a336b913238eddf6ac21250ef541c749349a5e38c5a828923d756f081ec"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_framework_voice_resolution.py",
@@ -20821,10 +21031,16 @@
       "sha256": "b4aaa4e7016009224aa1eb6a5b2f69a3372ef4387c282c794a88c538558e3ec5"
     },
     {
+      "path": "etl/groland_postgres/tests/content_production/test_local_asr_background.py",
+      "mode": "100644",
+      "size": 4603,
+      "sha256": "83c66c3f57fdf36f6258fa2d8876173ec9deaf45812936b11b7a1ee8a77f4ed2"
+    },
+    {
       "path": "etl/groland_postgres/tests/content_production/test_local_asr.py",
       "mode": "100644",
-      "size": 10883,
-      "sha256": "e6c02d7db2eee64f9162945948710a220d41679a56d9ed66285b6bfcc5bfa7d4"
+      "size": 11387,
+      "sha256": "c2d45de9207efd1d099df5a98a0f58feb6a3831d73fe4bcbe95d78aa9961c68b"
     },
     {
       "path": "etl/groland_postgres/tests/content_production/test_local_media_budget.py",
@@ -21179,6 +21395,12 @@
       "mode": "100644",
       "size": 82805,
       "sha256": "c21b91d06740c40c1c652ac1834c07d4a4b7e8ce2a4d2d1914593b994c908d5c"
+    },
+    {
+      "path": "etl/groland_postgres/tests/fixtures/framework-evals/frozen-replay-v1.json",
+      "mode": "100644",
+      "size": 10112,
+      "sha256": "a4bf0cc84e7b9d26c9c458978873dae3973a3428e898c1717ed299dee06ab5bf"
     },
     {
       "path": "etl/groland_postgres/tests/sql/all_trade_overview_check.sql",
@@ -21765,8 +21987,8 @@
     {
       "path": "etl/groland_postgres/uv.lock",
       "mode": "100644",
-      "size": 247808,
-      "sha256": "2fd6e6b6b04d05291d356abe2dd9025410d31097c32d95af73b840a5f8efd3dc"
+      "size": 248646,
+      "sha256": "767bb879b14be1828fc17a314379c041d069d8cdb8057dca8e0c0142ed9b5434"
     },
     {
       "path": "LICENSE",
@@ -21777,14 +21999,14 @@
     {
       "path": "package-lock.json",
       "mode": "100644",
-      "size": 332006,
-      "sha256": "d936d59ec5f59f9b5f5ea1427406b7edf39a7485e53d6569f3e364507ecda1d8"
+      "size": 332019,
+      "sha256": "ca52edc0d60d832b95a1f55e1eb6796593be6442f5f8f09ea26a7a2375cb7ae7"
     },
     {
       "path": "package.json",
       "mode": "100644",
-      "size": 54828,
-      "sha256": "ebe5d55c84222dfef295bab164e54e6fafcd1461452b1edf39031e1fd46bab48"
+      "size": 54841,
+      "sha256": "a9f35feebc403ac2eada09f6d35a3354b3b122eb9b94e349d9a4c7adf7ad5060"
     },
     {
       "path": "postcss.config.js",
@@ -21795,8 +22017,8 @@
     {
       "path": "public/apple-touch-icon.png",
       "mode": "100644",
-      "size": 17707,
-      "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
+      "size": 9963,
+      "sha256": "888a49c95ee39b0a1ff65262d82bd0ec926b35d3685742a8bd0503c221c7df9e"
     },
     {
       "path": "public/assets/recruiting/shot-v1/aios-shot-materials.zip",
@@ -21879,14 +22101,14 @@
     {
       "path": "public/favicon.ico",
       "mode": "100644",
-      "size": 3530,
-      "sha256": "fefe771ae8b8743e43135e944558e8f3515200b26d0e1300f0b9a728b79a2a62"
+      "size": 30251,
+      "sha256": "79d80373b022d6ea2c65f6b0c23d71a525f1c63b4b28f9f268fae0eb22c212ec"
     },
     {
       "path": "public/favicon.png",
       "mode": "100644",
-      "size": 17707,
-      "sha256": "848710eaa6467de481beb2f0e270edf15dc4feb2586e0bff036e2a406e535ac0"
+      "size": 9963,
+      "sha256": "888a49c95ee39b0a1ff65262d82bd0ec926b35d3685742a8bd0503c221c7df9e"
     },
     {
       "path": "public/home-brand-crop.png",
@@ -21897,8 +22119,8 @@
     {
       "path": "README.md",
       "mode": "100644",
-      "size": 5195,
-      "sha256": "4bcf4402e18b4ae9369be5a5717f45a097a493bb03cb154e54f787e79157d679"
+      "size": 5221,
+      "sha256": "b10c43d2519ea188a6727e13bd90749cf09d7a4d6de5c7765a5af9b5f1174a07"
     },
     {
       "path": "rust-toolchain.toml",
@@ -21909,8 +22131,8 @@
     {
       "path": "scripts/backend-rust/cache-maintenance.py",
       "mode": "100644",
-      "size": 8327,
-      "sha256": "68deb02a9d57301af67164bc2ab9562d4d3bf8ae10ef955c9c515a2c035635b1"
+      "size": 10735,
+      "sha256": "4d212a4e6e23b8ed9db81aeca08fa20c4eebd4f9cd065d2fc4c9456c51816ef9"
     },
     {
       "path": "scripts/backend-rust/cargo-with-cache.sh",
@@ -24459,8 +24681,8 @@
     {
       "path": "scripts/config/backend-cargo-cache.json",
       "mode": "100644",
-      "size": 123,
-      "sha256": "434f30844067dd8c75848d4877650ad3e4299c7700531ffe5cde86fdc2bcbc9e"
+      "size": 153,
+      "sha256": "a79a676b8625857bd624482e050432aaa33790c177ec14776b10b6df061c6740"
     },
     {
       "path": "scripts/config/contracts/aios-api-contract.mjs",

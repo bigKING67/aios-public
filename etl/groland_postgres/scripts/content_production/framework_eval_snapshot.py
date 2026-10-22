@@ -15,17 +15,19 @@ def is_snapshot(package=None):
     return bool(marker and Path(marker).resolve() == root)
 
 
-def run(argv, package=None):
+def run(argv, package=None, *, module='content_production.framework_evals'):
     package = package or Path(__file__).parent
     with tempfile.TemporaryDirectory(prefix='framework-eval-runtime-') as folder:
         root = Path(folder)
         for name in ('content_production', 'marketing_content_assets'):
             target = root/name
             target.mkdir()
-            for source in (package.parent/name).glob('*.py'):
-                shutil.copy2(source, target/source.name)
+            for source in (package.parent/name).rglob('*.py'):
+                destination = target/source.relative_to(package.parent/name)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, destination)
         # Never import the mutable checkout ahead of the private packages.
         env = dict(os.environ, PYTHONPATH=str(root))
         env[ENV] = str(root)
-        return subprocess.run([sys.executable, '-m', 'content_production.framework_evals', *argv],
+        return subprocess.run([sys.executable, '-m', module, *argv],
                               env=env, check=False).returncode

@@ -31,7 +31,9 @@ research/p1-p2-results.md); change them only with a full 55-film rerun.
   without a cue in between), lasting MID_PROMO_MIN_SEC with at least MID_PROMO_MIN_CUES offer lines, are a
   promotion block wherever they sit; only mixed footage is relabelled.
 - The closing promotion block starts at the first explicit offer or call to action near the end (the
-  pitch that follows belongs to it) and never at a standing "activity terms" disclaimer.
+  pitch that follows belongs to it) and never at a standing "activity terms" disclaimer. A single offer line
+  with no further cue within LONE_CUE_GAP_SEC is a passing mention (business 2026-10-22: the stretch is not
+  about the offer), so a review's closing "现在下单立减70" does not turn the montage after it into promotion.
 """
 import re
 from collections import Counter
@@ -48,6 +50,9 @@ TAIL_WINDOW_SEC = 40.0
 TAIL_OFFER_SHARE = 0.5
 # The closing call to action may sit up to three shots before the end (product shots can follow it).
 TAIL_CUE_SHOTS = 3
+# A lone offer line ("现在下单立减70" closing a review) is a passing mention. Replayed on 55 films, 6-15s give the same
+# result; 蜜粉-011/016 have 15.6s/21.3s of selling-point montage between the mention and the real offer.
+LONE_CUE_GAP_SEC = 10.0
 # Text or a name tag on more than this share of shots is a watermark, filing number or disclaimer.
 STATIC_SHARE = 0.4
 SHORT_SEGMENT_SEC = 1.5
@@ -374,6 +379,15 @@ def _studio_live(segments, shots):
     return _merge(out)
 
 
+def _block_start(tail, standing):
+    """Start of the closing offer block: the first cue that is followed by another cue within LONE_CUE_GAP_SEC,
+    or the last cue. An earlier cue left alone is a passing mention, not a promotion."""
+    cues = [s for s in tail if _promo_cue(s, standing)]
+    for cue, following in zip(cues, cues[1:] + [None]):
+        if following is None or following['start'] - cue['end'] <= LONE_CUE_GAP_SEC:
+            return cue['start']
+
+
 def _tail_promotion(segments, shots):
     duration = segments[-1][1]
     lo = max(duration - TAIL_WINDOW_SEC, duration / 2)
@@ -381,10 +395,14 @@ def _tail_promotion(segments, shots):
     standing = _standing_text(shots)
     if not tail or not any(_promo_cue(s, standing) for s in tail[-TAIL_CUE_SHOTS:]):
         return segments
-    start = next(s for s in tail if _promo_cue(s, standing))['start']
+    start = _block_start(tail, standing)
+    # After skipped mentions the evidence search starts at the block, or the mention would still keep the
+    # montage before it from shrinking out of an existing promotion block.
+    skipped = start != next(s for s in tail if _promo_cue(s, standing))['start']
     # An existing promotion block only shrinks where nothing before `evidence` looks like an offer.
-    evidence = next((s['start'] for s in tail if _promo_cue(s, standing) or (s['facts'] or {}).get('offer_text')
-                     or (s['facts'] or {}).get('style') == 'promo_graphic'), start)
+    evidence = next((s['start'] for s in tail if (not skipped or s['start'] >= start)
+                     and (_promo_cue(s, standing) or (s['facts'] or {}).get('offer_text')
+                          or (s['facts'] or {}).get('style') == 'promo_graphic')), start)
     marks = sorted({start, evidence})
     out = []
     for a, b, lab in segments:

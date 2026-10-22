@@ -3,8 +3,8 @@
   "engine": "@hyperframes/producer",
   "engine_version": "0.8.53",
   "files": {
-    "package.json": "a67bbe6c774d4bf4fb020df093e8b9841bc98d5e9e78e3f439986ad8022957dd",
-    "package-lock.json": "245e3c6a8c56386c8b06027faca28f7af67cd880b7d6a172170a50e02ce85f04",
+    "package.json": "9bd1ef860b3bd158a578cf91b01ccc1ffdb7a5ad37a0392f6c604fb2071f70f0",
+    "package-lock.json": "f93d362f11be6a47fb6c60d0d5ffbec31f9e57f1ccf1530ef3448cd07911360e",
     "cli.mjs": "5da8937973bf6f2af3953fffd5c32aa12c595c802857802079021e49f4608ec0",
     "project.mjs": "a66278144f55d2792235a3ff6bc9605a890bd168947717d060fbdf8786d69372",
     "composition.mjs": "4743859e6ea6d58123c98143c66d1b908aaf56e16f88c08aaf815f0cf7b868d3",

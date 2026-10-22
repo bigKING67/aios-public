@@ -12,7 +12,8 @@
 - Domain: enterprise data operations, commerce analytics, reporting, and internal data-product workflows.
 - Core users: operators, analysts, founders, and internal data/BI maintainers who read dense metrics daily.
 - Primary scenarios: dashboard monitoring, weekly/monthly reports, DataOps runtime diagnosis, creator/live/traffic analysis, and operational admin.
-- Design direction: company-branded light enterprise console with DeepSeek-like typographic discipline: restrained, neutral, spacious, data-first, and low-noise.
+- Design direction: product-branded light enterprise console with DeepSeek-like typographic discipline: restrained, neutral, spacious, data-first, and low-noise.
+- Product identity: public navigation, login and recruiting surfaces use the AGI AIOS name without the former Groland logo. Browser and home-screen icons use a compact AIOS lettermark in the existing blue/white palette; historical business reports retain their factual company and product names.
 - Brand source: pure white `#FFFFFF` plus light gray `#F5F5F5` for space, modern SaaS blue `#2F6EEA` for primary fills, accessible blue text `#2457C5` for links/small text/icons, and matte black `#1A1A1A` for text/logo/title.
 - Existing constraints: Vite + React + React Router, Ant Design v6, Tailwind CSS v4, CSS Modules, ECharts, CSS variables.
 - Tailwind v4 uses `@tailwindcss/vite` and explicit `@config` loading of `tailwind.config.ts`; its content paths remain the source scan boundary. Preserve the existing unlayered Preflight/utility cascade with AntD and CSS Modules. Theme variables use the `theme` layer; the v3 default border color is retained through the framework gray-200 variable. Do not replace the split imports with the default layered import without browser regression evidence.

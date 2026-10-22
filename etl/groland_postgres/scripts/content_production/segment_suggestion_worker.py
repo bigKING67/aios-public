@@ -449,16 +449,19 @@ def _suggest_v2(conn, job, provider, fetcher, source, local, proxy, duration_ms,
     model = f'{provider.vlm_model}+{provider.model}'
     settings = {**provider.request_settings(), 'labelKeys': label_keys, 'durationMs': duration_ms,
                 'proxySha256': file_hash(proxy), 'promptVersion': pipeline.PIPELINE_VERSION}
-    # The original is already local: transcribe it once so later selling-point jobs reuse it (no-op when unset).
-    if segment_transcript.local_configured():
-        stage[0] = '口播转写'
-    transcript_settings, transcript_summary = segment_transcript.resolve_local(
-        conn, job['asset_id'], job['source_content_hash'], local, duration_ms, env, tick, work)
-    if transcript_settings:
-        settings['transcript'] = transcript_settings
-    record_request(conn, job, model, pipeline.PIPELINE_VERSION, settings)
-    segments, summary, usage = pipeline.run(local, proxy, duration_ms, label_keys, provider, work, env, tick, stage)
-    billed['usage'] = usage
+    # ASR supplies later selling-point jobs, not this visual pipeline's inputs.
+    # Record the visual request before any billable call; attach ASR before publish.
+    with segment_transcript.local_in_background(conn, job['asset_id'], job['source_content_hash'], local,
+                                                duration_ms, env, tick, work) as transcript:
+        record_request(conn, job, model, pipeline.PIPELINE_VERSION, settings)
+        segments, summary, usage = pipeline.run(local, proxy, duration_ms, label_keys, provider, work, env, tick, stage)
+        billed['usage'] = usage
+        if segment_transcript.local_configured():
+            stage[0] = '等待口播转写'
+        transcript_settings, transcript_summary = transcript()
+        if transcript_settings:
+            settings = {**settings, 'transcript': transcript_settings}
+            record_request(conn, job, model, pipeline.PIPELINE_VERSION, settings)
     summary = {**summary, 'provider': provider.name, 'labelKeys': label_keys,
                **({'transcript': transcript_summary} if transcript_summary else {})}
     load_source(conn, job)

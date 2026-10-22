@@ -1,6 +1,6 @@
 {
   "name": "aios",
-  "version": "4.1.107",
+  "version": "4.1.108",
   "description": "AGI AIOS - AI 驱动的企业业务生产力系统（经营分析、内容中台与 AI 创作、报告、数据运维）",
   "private": true,
   "scripts": {
@@ -491,7 +491,7 @@
     "vitest": "^5.0.3"
   },
   "engines": {
-    "node": ">=24.0.0",
+    "node": "^24.22.1 || >=26.12.1",
     "npm": ">=9.0.0"
   },
   "overrides": {

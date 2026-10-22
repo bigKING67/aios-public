@@ -1,6 +1,6 @@
 {
   "contractVersion": 1,
-  "rendererLockSha256": "e0409723fc07839312301074c7437466bd4a5647e4210e8d6ab22c7305202068",
+  "rendererLockSha256": "5567ccccbbdd25b302183408d99bef6024eef4058cf74fcd5c573f877a46ca4c",
   "engine": "@hyperframes/producer",
   "engineVersion": "0.8.53",
   "captionFont": {

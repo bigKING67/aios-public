@@ -6,13 +6,16 @@ MIN_SHOT_SEC = 0.15
 
 
 def cut_times(proxy):
-    from scenedetect import AdaptiveDetector, ContentDetector, detect
+    from scenedetect import AdaptiveDetector, ContentDetector, SceneManager, open_video
 
-    cuts = set()
-    for detector in (AdaptiveDetector, ContentDetector):
-        for start, _ in detect(str(proxy), detector(), show_progress=False)[1:]:
-            cuts.add(round(start.get_seconds(), 3))
-    return sorted(cuts)
+    # Keep both detectors and their independent state, sharing only video decoding.
+    # A single detector changes the union and can remove business boundaries.
+    manager = SceneManager()
+    manager.add_detector(AdaptiveDetector())
+    manager.add_detector(ContentDetector())
+    video = open_video(str(proxy))
+    manager.detect_scenes(video, show_progress=False)
+    return sorted({round(start.get_seconds(), 3) for start, _ in manager.get_scene_list()[1:]})
 
 
 def spans(cuts, duration):
