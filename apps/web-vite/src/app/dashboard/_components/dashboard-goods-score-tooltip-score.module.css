@@ -13,12 +13,12 @@
 }
 
 .scoreLabel {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
 }
 
 .scoreValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-data-md);
   font-weight: 630;
   line-height: var(--line-height-none);
@@ -26,7 +26,7 @@
 }
 
 .scoreMax {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 560;
 }

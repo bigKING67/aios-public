@@ -1,4 +1,4 @@
-import { Button, Input, Popconfirm, Select } from "antd";
+import { Button, confirmModal, Input, SearchBar } from '@lobehub/ui';
 
 import type { SampleInventoryDownloadKind } from "../_lib/sample-inventory-downloads";
 import type {
@@ -10,6 +10,7 @@ import type {
   SampleInventoryUrlState,
 } from "../_lib/sample-inventory-types";
 import styles from "../sample-inventory-workspace.module.css";
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 
 type SampleInventoryWorkspaceToolbarProps = {
   state: SampleInventoryUrlState;
@@ -45,30 +46,31 @@ export function SampleInventoryWorkspaceToolbar(props: SampleInventoryWorkspaceT
   if (state.tab === "inventory") {
     return (
       <div className={styles.toolbar}>
-        <Input.Search
+        <SearchBar
           className={styles.searchInput}
           allowClear
+          aria-label="搜索样品"
           value={props.searchDraft}
-          placeholder="🔍 搜索编号/名称/规格..."
-          onChange={(event) => props.onSearchDraftChange(event.target.value)}
+          placeholder="搜索编号/名称/规格..."
+          onInputChange={props.onSearchDraftChange}
           onSearch={props.onSearch}
         />
-        <Select
-          className={styles.stockFilter}
+        <LabeledSelect
+          wrapperClassName={styles.stockFilter}
           value={state.productKind}
-          aria-label="类别"
-          onChange={props.onProductKindChange}
+          label="类别"
+          onChange={(kind) => kind && props.onProductKindChange(kind)}
           options={[
             { value: "all", label: "全部类别" },
             { value: "primary", label: "主品" },
             { value: "gift", label: "赠品" },
           ]}
         />
-        <Select
-          className={styles.stockFilter}
+        <LabeledSelect
+          wrapperClassName={styles.stockFilter}
           value={state.stockStatus}
-          aria-label="库存状态"
-          onChange={props.onStockStatusChange}
+          label="库存状态"
+          onChange={(status) => status && props.onStockStatusChange(status)}
           options={[
             { value: "all", label: "全部库存" },
             { value: "in_stock", label: "有库存" },
@@ -102,18 +104,19 @@ export function SampleInventoryWorkspaceToolbar(props: SampleInventoryWorkspaceT
         </Button>
         <Button onClick={props.onRestore}>📥 恢复</Button>
         <Button onClick={props.onOpenSettings}>⚙ 主品预警阈值</Button>
-        <Popconfirm
-          title={`归档已选择的 ${props.selectedSampleCount} 个样品？`}
-          description="仅零库存且无预留的样品可归档。"
-          okText="归档"
-          cancelText="取消"
-          onConfirm={props.onBatchArchiveSamples}
-          disabled={props.selectedSampleCount === 0}
+        <Button danger disabled={props.selectedSampleCount === 0}
+          onClick={() =>
+            confirmModal({
+              title: `归档已选择的 ${props.selectedSampleCount} 个样品？`,
+              content: '仅零库存且无预留的样品可归档。',
+              okText: '归档',
+              cancelText: '取消',
+              onOk: props.onBatchArchiveSamples,
+            })
+          }
         >
-          <Button danger disabled={props.selectedSampleCount === 0}>
             🗑 批量删除
           </Button>
-        </Popconfirm>
         <span className={styles.toolbarHint}>勾选左侧复选框后删除</span>
       </div>
     );
@@ -124,17 +127,19 @@ export function SampleInventoryWorkspaceToolbar(props: SampleInventoryWorkspaceT
     const showBatchDelete = state.tab === "outbound";
     return (
       <div className={styles.toolbar}>
-        <Input.Search
+        <SearchBar
           className={styles.searchInput}
           allowClear
+          aria-label="搜索出库记录"
           value={props.searchDraft}
-          placeholder="🔍 搜索样品/申领人/部门..."
-          onChange={(event) => props.onSearchDraftChange(event.target.value)}
+          placeholder="搜索样品/申领人/部门..."
+          onInputChange={props.onSearchDraftChange}
           onSearch={props.onSearch}
         />
         {showStatusFilter && (
-          <Select
-            className={styles.statusSelect}
+          <LabeledSelect
+            wrapperClassName={styles.statusSelect}
+            label="出库状态"
             allowClear
             value={state.status === "all" ? undefined : state.status}
             placeholder="全部状态"
@@ -163,18 +168,19 @@ export function SampleInventoryWorkspaceToolbar(props: SampleInventoryWorkspaceT
         <Button onClick={() => props.onDownload("outbound-export")}>📊 导出Excel</Button>
         {showBatchDelete && (
           <>
-            <Popconfirm
-              title={`删除已选择的 ${props.selectedOutboundCount} 条出库记录？`}
-              description="已审批或已取样记录会通过补偿流水恢复对应库存。"
-              okText="确认删除"
-              cancelText="取消"
-              disabled={props.selectedOutboundCount === 0}
-              onConfirm={props.onBatchArchiveOutbounds}
+            <Button danger disabled={props.selectedOutboundCount === 0}
+              onClick={() =>
+                confirmModal({
+                  title: `删除已选择的 ${props.selectedOutboundCount} 条出库记录？`,
+                  content: '已审批或已取样记录会通过补偿流水恢复对应库存。',
+                  okText: '确认删除',
+                  cancelText: '取消',
+                  onOk: props.onBatchArchiveOutbounds,
+                })
+              }
             >
-              <Button danger disabled={props.selectedOutboundCount === 0}>
                 🗑 批量删除
               </Button>
-            </Popconfirm>
             <span className={styles.toolbarHint}>勾选左侧复选框后删除</span>
           </>
         )}
@@ -186,12 +192,13 @@ export function SampleInventoryWorkspaceToolbar(props: SampleInventoryWorkspaceT
 
   return (
     <div className={styles.toolbar}>
-      <Input.Search
+      <SearchBar
         className={styles.searchInput}
         allowClear
+        aria-label="搜索入库记录"
         value={props.searchDraft}
-        placeholder="🔍 搜索样品/操作人..."
-        onChange={(event) => props.onSearchDraftChange(event.target.value)}
+        placeholder="搜索样品/操作人..."
+        onInputChange={props.onSearchDraftChange}
         onSearch={props.onSearch}
       />
       <div className={styles.dateGroup}>

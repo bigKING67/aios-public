@@ -133,9 +133,9 @@ assertFailsWith(
   runWithNames(gateNames(moveGateAfter(
     RUN_GATES,
     'verify:design:token-values-sync-behavior',
-    'verify:design:antd-theme-token-sync',
+    'verify:design:echarts-theme-token-sync',
   ))),
-  'verify:design:token-values-sync-behavior must run before verify:design:antd-theme-token-sync',
+  'verify:design:token-values-sync-behavior must run before verify:design:echarts-theme-token-sync',
   'moving token helper behavior after adapter sync should fail dependency ordering',
 );
 
@@ -187,26 +187,6 @@ assertFailsWith(
   ))),
   'verify:design:docs-behavior must be immediately followed by verify:design:docs',
   'swapping design docs behavior/main gates should fail adjacency',
-);
-
-assertFailsWith(
-  runWithNames(gateNames(swapGatesByName(
-    RUN_GATES,
-    'verify:design:antd-table-selectors',
-    'verify:design:antd-table-selectors-behavior',
-  ))),
-  'verify:design:antd-table-selectors must be immediately followed by verify:design:antd-table-selectors-behavior',
-  'swapping AntD table selector main/behavior gates should fail adjacency',
-);
-
-assertFailsWith(
-  runWithNames(gateNames(swapGatesByName(
-    RUN_GATES,
-    'verify:design:antd-theme-token-sync',
-    'verify:design:antd-theme-token-sync-behavior',
-  ))),
-  'verify:design:antd-theme-token-sync must be immediately followed by verify:design:antd-theme-token-sync-behavior',
-  'swapping AntD theme sync main/behavior gates should fail adjacency',
 );
 
 assertFailsWith(

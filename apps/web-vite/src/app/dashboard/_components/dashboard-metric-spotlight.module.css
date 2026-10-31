@@ -18,7 +18,7 @@
 
 .spotlightCard {
   border-radius: 22px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg);
   padding: 14px 16px 12px;
   box-shadow: var(--dashboard-card-shadow);
@@ -55,7 +55,7 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-lg);
   font-weight: 640;
 }
@@ -63,7 +63,7 @@
 .spotlightTooltipIcon {
   display: inline-flex;
   align-items: center;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   cursor: help;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-none);
@@ -71,18 +71,18 @@
 }
 
 .spotlightTooltipIcon:hover {
-  color: var(--brand-primary);
+  color: var(--lobe-color-primary);
 }
 
 .spotlightSubtitle {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 560;
 }
 
 .spotlightValue {
   margin-top: 8px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-data-lg);
   line-height: var(--line-height-none);
   font-weight: 700;
@@ -94,13 +94,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
 .spotlightTrendUnavailable {
   margin-top: 12px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }

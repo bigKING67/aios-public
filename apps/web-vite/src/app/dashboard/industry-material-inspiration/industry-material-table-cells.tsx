@@ -1,5 +1,5 @@
-import { LinkOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Tooltip } from '@lobehub/ui';
+import { Link as LinkIcon } from 'lucide-react';
 import {
   EMPTY_TEXT,
   formatExposureRange,
@@ -109,7 +109,7 @@ export function VideoCell({ row }: { row: IndustryMaterialRow }) {
         title={title}
       >
         <span className={tableCellStyles.videoTitle}>{title}</span>
-        <LinkOutlined aria-hidden />
+        <LinkIcon size="1em" strokeWidth={1.8} aria-hidden="true" />
       </a>
     </div>
   );

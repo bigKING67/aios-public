@@ -1,4 +1,4 @@
-import { Alert } from 'antd';
+import { Alert } from '@lobehub/ui';
 import type { EditingRun } from '../_lib/content-editing-api';
 
 const labels: Record<string, string> = {

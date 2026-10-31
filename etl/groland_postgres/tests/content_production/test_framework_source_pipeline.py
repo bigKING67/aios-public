@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'scripts'))
 from content_production.framework_harness import source_sampling as s
 from content_production.framework_harness.source_pipeline import NativeFrames, NativeSampling, UnresolvedSampling
 from content_production.framework_v2 import pipeline, rules
+from content_production.segment_suggestion_provider import SuggestionError
 
 
 @pytest.fixture
@@ -96,10 +97,15 @@ def test_pipeline_recomputes_all_observers_on_native_inputs_and_preserves_defaul
             return [dict(subject='product', style='studio_ad', people_count=0,
                 talking_to_camera=False, using_product=False, celebrity_tag=False, offer_text=False, note='')
                 for _ in spans]
-    def text(frames, spans, tick):
+    def text(frames, spans, tick, *, timings=None):
         calls.append(('ocr', spans))
         return [[] for _ in spans], 'fixture-only'
-    def no_external_call(*args, **kwargs): raise AssertionError('Network call is forbidden')
+    reviews = []
+    def no_external_call(*args, **kwargs):
+        # The closing review always runs; offline it fails like a provider error and keeps the rule output.
+        reviews.append(kwargs['proxy'])
+        raise SuggestionError('offline', 'Network call is forbidden')
+    monkeypatch.setattr(pipeline.review, 'clip', lambda source, a, b, path, env: path)
     monkeypatch.setattr(pipeline.persons, 'extract', features)
     monkeypatch.setattr(pipeline.local_vlm, 'LocalVlm', Observers)
     monkeypatch.setattr(pipeline.ocr, 'shot_text', text)
@@ -114,11 +120,19 @@ def test_pipeline_recomputes_all_observers_on_native_inputs_and_preserves_defaul
     assert native['sampling'] == sample.receipt
     assert summary['sampling']['inputSha256'] == sample.receipt['inputSha256']
     calls.clear()
-    old, summary, _ = pipeline.run(*args, evidence_sink=legacy.update)
+    from content_production.stage_timings import StageTimings
+    timings = StageTimings()
+    old, summary, _ = pipeline.run(*args, evidence_sink=legacy.update, timings=timings)
     assert [r['start'] for r in legacy['shots']] == [0.0, 1.1]
     assert all(spans == [(0.0, 1.1), (1.1, 2.0)] for _, spans in calls)
     assert 'sampling' not in summary and 'sampling' not in legacy
     assert new == old  # Fixture label outcome is unchanged; this is not a real-model quality claim.
+    assert len(reviews) == 2 and all(summary['review'][-1]['error'] == 'offline' for _ in reviews)
+    measured = timings.snapshot('before_result_write')['stages']
+    assert measured['framework_review_cloud']['failures'] == 1
+    assert measured['framework_review_clips']['calls'] == 1
+    assert measured['framework_ocr']['calls'] == 1
+    assert measured['framework_facts_vlm']['calls'] == 1
 
 
 def test_pipeline_fails_before_models_when_plan_unresolved_or_evidence_missing(source, tmp_path, monkeypatch):

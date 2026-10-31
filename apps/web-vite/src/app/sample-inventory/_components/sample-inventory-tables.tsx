@@ -1,6 +1,6 @@
-import { CopyOutlined, EditOutlined, FormOutlined } from "@ant-design/icons";
-import { App, Button, Space, Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { Copy, Pencil, SquarePen } from 'lucide-react';
+import { Button, Flexbox, Table, toast } from '@lobehub/ui';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 
 import { Badge, type BadgeStatus } from "@/components/atoms/badge";
 import {
@@ -111,7 +111,6 @@ export function OutboundTable({
   onTransition,
   onArchive,
 }: OutboundTableProps) {
-  const { message } = App.useApp();
   const columnWidths = useSampleInventoryColumnWidths("outbound-records", OUTBOUND_COLUMN_WIDTHS);
   const columnTitle = (key: OutboundColumnKey, title: string) =>
     resizableColumns ? (
@@ -202,13 +201,13 @@ export function OutboundTable({
             <Button
               type="link"
               size="small"
-              icon={<CopyOutlined aria-hidden="true" />}
+              icon={<Copy size={14} strokeWidth={1.8} aria-hidden="true" />}
               aria-label="复制地址"
               title="复制地址"
               onClick={() => {
                 void copyText(value).then((copied) => {
-                  if (copied) message.success("地址已复制");
-                  else message.error("复制失败，请手动复制");
+                  if (copied) toast.success("地址已复制");
+                  else toast.error("复制失败，请手动复制");
                 });
               }}
             >
@@ -228,22 +227,22 @@ export function OutboundTable({
           return value || "--";
         }
         return value ? (
-          <Space size={4}>
+          <Flexbox horizontal gap={4}>
             <span>{value}</span>
             <Button
               type="link"
               size="small"
-              icon={<EditOutlined aria-hidden="true" />}
+              icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
               aria-label={`修改 ${item.sampleName} 快递单号`}
               title="修改快递单号"
               onClick={() => onEditTracking(item)}
             />
-          </Space>
+          </Flexbox>
         ) : (
           <Button
             type="link"
             size="small"
-            icon={<FormOutlined aria-hidden="true" />}
+            icon={<SquarePen size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onEditTracking(item)}
           >
             填单号

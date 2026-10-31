@@ -17,9 +17,9 @@ export function formatSegmentTime(ms: number | null | undefined): string {
     : `${minutes}:${secondsText}`;
 }
 
+/** A span's length in the same `m:ss.s` clock as its in and out points (0:48.9, 3:46.8). */
 export function formatSegmentDuration(startMs: number, endMs: number): string {
-  const seconds = Math.max(0, endMs - startMs) / 1000;
-  return `${seconds.toFixed(1)} 秒`;
+  return formatSegmentTime(Math.max(0, endMs - startMs));
 }
 
 const TIME_PATTERN = /^(?:(\d+):)?(?:(\d+):)?(\d+(?:\.\d{1,3})?)$/;
@@ -97,4 +97,17 @@ export function cutPoints(
     const align = ms < minGap / 2 ? 'start' : durationMs - ms < minGap / 2 ? 'end' : 'center';
     return { ms, labelled, align };
   });
+}
+
+/** Position of `value` on a timeline of `total` ms, as a clamped CSS percentage. */
+export function timelinePercent(value: number, total: number): string {
+  if (total <= 0) return '0%';
+  return `${Math.min(100, Math.max(0, (value / total) * 100)).toFixed(3)}%`;
+}
+
+/** Whole-second ruler marks; the end label sits at the right edge, so a mark that would collide with it is dropped. */
+export function timelineTicks(durationMs: number): number[] {
+  const ticks = rulerTicks(durationMs);
+  if (ticks.length > 1 && durationMs - ticks[ticks.length - 1] < durationMs * 0.08) ticks.pop();
+  return ticks;
 }

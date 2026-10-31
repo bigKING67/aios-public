@@ -80,14 +80,6 @@ export function assertRegistryDesignInputs({
     'Tailwind token alias behavior fixture should hash its split core helper instead of every script helper',
   );
   assertFalse(
-    registry.byName.get('verify:design:antd-theme-token-sync')?.inputs.includes('apps/web-vite/src/**'),
-    'AntD theme token sync gate should hash exact source files instead of broad source inputs',
-  );
-  assertFalse(
-    registry.byName.get('verify:design:antd-theme-token-sync')?.inputs.includes('apps/**'),
-    'AntD theme token sync gate should hash exact app files instead of broad app inputs',
-  );
-  assertFalse(
     registry.byName.get('verify:design:echarts-css-token-sync')?.inputs.includes('apps/web-vite/src/**'),
     'ECharts CSS token sync gate should hash exact source files instead of broad source inputs',
   );
@@ -102,10 +94,6 @@ export function assertRegistryDesignInputs({
   assertFalse(
     registry.byName.get('verify:design:echarts-theme-token-sync-behavior')?.inputs.includes('scripts/lib/**'),
     'ECharts theme token sync behavior fixture should hash exact split helpers instead of every script helper',
-  );
-  assertFalse(
-    registry.byName.get('verify:design:antd-table-selectors-behavior')?.inputs.includes('scripts/lib/**'),
-    'AntD table selector behavior fixture should hash its split core helper instead of every script helper',
   );
   assertFalse(
     registry.byName.get('verify:design:tokens')?.inputs.includes('apps/web-vite/src/**'),
@@ -242,10 +230,6 @@ export function assertRegistryDesignInputs({
     registry.byName.get('verify:design:runtime-tokens-behavior')?.inputs.includes('scripts/lib/design/design-runtime-token-sync-behavior-fixtures.mjs'),
     'design runtime token behavior fixture should include split behavior fixtures',
   );
-  assertFalse(
-    registry.byName.get('verify:design:antd-theme-token-sync-behavior')?.inputs.includes('scripts/lib/**'),
-    'AntD theme behavior fixture should hash its split core helper instead of every script helper',
-  );
   assertTrue(
     registry.byName.get('verify:design:tailwind-utilities-behavior')?.inputs.includes('scripts/checks/design/tailwind-utility-colors.behavior.mjs'),
     'behavior fixture cache key should include the fixture script itself',
@@ -321,22 +305,6 @@ export function assertRegistryDesignInputs({
       `${gateName} cache key should include split Tailwind non-color alias helper`,
     );
   }
-  assertTrue(
-    registry.byName.get('verify:design:antd-theme-token-sync')?.inputs.includes('apps/web-vite/src/theme/ant-theme.ts'),
-    'AntD theme token sync cache key should include its theme adapter source',
-  );
-  assertTrue(
-    registry.byName.get('verify:design:antd-theme-token-sync')?.inputs.includes('apps/web-vite/src/ViteProviders.tsx'),
-    'AntD theme token sync cache key should include its provider entrypoint',
-  );
-  assertTrue(
-    registry.byName.get('verify:design:antd-theme-token-sync-behavior')?.inputs.includes('scripts/checks/design/antd-theme-token-sync.mjs'),
-    'AntD theme behavior fixture cache key should include its paired production checker',
-  );
-  assertTrue(
-    registry.byName.get('verify:design:antd-theme-token-sync-behavior')?.inputs.includes('scripts/fixtures/design/antd-theme-token-sync.behavior-fixtures.mjs'),
-    'AntD theme behavior fixture cache key should include its split behavior helper',
-  );
   for (const input of [
     'DESIGN_TOKENS.json',
     'scripts/config/design/token-color-sync.config.json',
@@ -374,27 +342,6 @@ export function assertRegistryDesignInputs({
     registry.byName.get('verify:design:echarts-theme-token-sync-behavior')?.inputs.includes('scripts/lib/design/echarts-theme-token-sync-behavior-fixtures.mjs'),
     'ECharts theme token sync behavior fixture cache key should include split behavior fixtures',
   );
-  assertTrue(
-    registry.byName.get('verify:design:antd-table-selectors')?.inputs.includes('scripts/config/allowlists/antd-table-selector-allowlist.json'),
-    'AntD table selector cache key should include selector allowlist config',
-  );
-  assertTrue(
-    registry.byName.get('verify:design:antd-table-selectors-behavior')?.inputs.includes('scripts/checks/design/antd-table-selectors.mjs'),
-    'AntD table selector behavior fixture cache key should include paired production checker',
-  );
-  assertTrue(
-    registry.byName.get('verify:design:antd-table-selectors-behavior')?.inputs.includes('scripts/fixtures/design/antd-table-selectors.behavior-fixtures.mjs'),
-    'AntD table selector behavior fixture cache key should include split behavior fixtures',
-  );
-  for (const gateName of [
-    'verify:design:antd-theme-token-sync',
-    'verify:design:antd-theme-token-sync-behavior',
-  ]) {
-    assertTrue(
-      registry.byName.get(gateName)?.inputs.includes('scripts/lib/design/antd-theme-token-sync-core.mjs'),
-      `${gateName} cache key should include split AntD theme token sync helper`,
-    );
-  }
   for (const gateName of [
     'verify:design:echarts-css-token-sync',
     'verify:design:echarts-css-token-sync-behavior',
@@ -411,15 +358,6 @@ export function assertRegistryDesignInputs({
     assertTrue(
       registry.byName.get(gateName)?.inputs.includes('scripts/lib/design/echarts-theme-token-sync-core.mjs'),
       `${gateName} cache key should include split ECharts theme token sync helper`,
-    );
-  }
-  for (const gateName of [
-    'verify:design:antd-table-selectors',
-    'verify:design:antd-table-selectors-behavior',
-  ]) {
-    assertTrue(
-      registry.byName.get(gateName)?.inputs.includes('scripts/lib/design/antd-table-selectors-core.mjs'),
-      `${gateName} cache key should include split AntD table selector helper`,
     );
   }
 }

@@ -1,10 +1,8 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Alert, Button, Empty } from 'antd';
-import {
-  ArrowLeftOutlined,
-} from '@ant-design/icons';
+import { Alert, Button, Empty } from '@lobehub/ui';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/organisms/layout';
@@ -176,7 +174,7 @@ export function ContentAssetDetailClient({ assetId }: { assetId: string }) {
           <section className={consoleStyles.detailConsole}>
             <header className={consoleStyles.detailTopbar}>
               <Link className={consoleStyles.detailBackLink} to={ROUTE_PATHS.marketingContentAssets}>
-                <ArrowLeftOutlined />
+                <ArrowLeft size={14} strokeWidth={1.8} aria-hidden="true" />
                 返回素材库
               </Link>
               <div className={consoleStyles.detailTopbarMeta}>
@@ -210,7 +208,7 @@ export function ContentAssetDetailClient({ assetId }: { assetId: string }) {
                   className={consoleStyles.detailAlert}
                   type="error"
                   showIcon
-                  message="素材详情加载失败"
+                  title="素材详情加载失败"
                   description={resolveContentAssetRequestError(error)}
                 />
               ) : null}

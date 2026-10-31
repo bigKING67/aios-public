@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Select, Skeleton } from 'antd';
+import { Alert, Button, Skeleton } from '@lobehub/ui';
 import { useMemo } from 'react';
 import { aiStudioQueryKeys, fetchStudioSegmentPool, type StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { buildSegmentPoolRows, poolScopeCounts, type PoolScope } from '../_lib/segment-pool';
+import { isLongOptionList } from '../_lib/studio-products';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './segment-library.module.css';
 
 /** Product select value for segments without a product. */
@@ -17,9 +19,9 @@ interface SegmentLabelStripProps {
 }
 
 /**
- * Product picker plus one chip per framework label. Each chip is both the label
- * filter and the usable (confirmed) count for the chosen product, so a gap for
- * 框架混剪 shows as a 待补 chip instead of a separate overview table.
+ * One chip per framework label plus the product picker, on a single row. Each chip
+ * is both the label filter and the usable (confirmed) count for the chosen product,
+ * so a gap for 框架混剪 shows as a 待补 chip instead of a separate overview table.
  */
 export function SegmentLabelStrip({ preset, scope, labelKey, onScopeChange, onLabelChange }: SegmentLabelStripProps) {
   const poolQuery = useQuery({
@@ -35,48 +37,49 @@ export function SegmentLabelStrip({ preset, scope, labelKey, onScopeChange, onLa
 
   return (
     <div className={styles.labelStrip}>
-      <div className={styles.stripHead}>
-        <Select
-          aria-label="产品"
-          className={styles.stripProduct}
-          showSearch
-          value={productValue}
-          options={[
-            { value: '', label: '全部产品' },
-            ...products.map((name) => ({ value: name, label: name })),
-            { value: WITHOUT_PRODUCT, label: '缺产品的片段' },
-          ]}
-          onChange={(value: string) =>
-            onScopeChange(value === '' ? { kind: 'all' } : value === WITHOUT_PRODUCT ? { kind: 'withoutProduct' } : { kind: 'product', productName: value })
-          }
-        />
+      <div className={styles.chipsGroup}>
+        {poolQuery.isPending ? <Skeleton className={styles.stripSkeleton} /> : null}
+        {poolQuery.isError ? (
+          <Alert type="error" showIcon title="片段数量读取失败" action={<Button size="small" onClick={() => void poolQuery.refetch()}>重试</Button>} />
+        ) : null}
+        {poolQuery.isSuccess ? (
+          <div className={styles.chips} role="group" aria-label="框架标签">
+            {chips.map((chip) => {
+              const active = chip.key === labelKey;
+              const gap = chip.key !== '' && chip.count === 0 && scope.kind !== 'withoutProduct';
+              return (
+                <button
+                  key={chip.key || 'all'}
+                  type="button"
+                  className={`${styles.chip} ${active ? styles.chipActive : ''} ${gap && !active ? styles.chipGap : ''}`}
+                  aria-pressed={active}
+                  aria-label={`${chip.name}：${chip.count} 条${gap ? '，待补片段' : ''}`}
+                  onClick={() => onLabelChange(chip.key)}
+                >
+                  <span className={styles.chipName}>{chip.name}</span>
+                  <span className={styles.chipCount}>{gap ? '待补' : chip.count}</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
         <span className={styles.stripNote}>数字为可用于混剪的已确认片段</span>
       </div>
-      {poolQuery.isPending ? <Skeleton.Button active block className={styles.stripSkeleton} /> : null}
-      {poolQuery.isError ? (
-        <Alert type="error" showIcon title="片段数量读取失败" action={<Button size="small" onClick={() => void poolQuery.refetch()}>重试</Button>} />
-      ) : null}
-      {poolQuery.isSuccess ? (
-        <div className={styles.chips} role="group" aria-label="框架标签">
-          {chips.map((chip) => {
-            const active = chip.key === labelKey;
-            const gap = chip.key !== '' && chip.count === 0 && scope.kind !== 'withoutProduct';
-            return (
-              <button
-                key={chip.key || 'all'}
-                type="button"
-                className={`${styles.chip} ${active ? styles.chipActive : ''} ${gap && !active ? styles.chipGap : ''}`}
-                aria-pressed={active}
-                aria-label={`${chip.name}：${chip.count} 条${gap ? '，待补片段' : ''}`}
-                onClick={() => onLabelChange(chip.key)}
-              >
-                <span className={styles.chipName}>{chip.name}</span>
-                <span className={styles.chipCount}>{gap ? '待补' : chip.count}</span>
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
+      <LabeledSelect
+        label="产品"
+        wrapperClassName={styles.stripProduct}
+        showSearch={isLongOptionList(products)}
+        value={productValue}
+        options={[
+          { value: '', label: '全部产品' },
+          ...products.map((name) => ({ value: name, label: name })),
+          { value: WITHOUT_PRODUCT, label: '缺产品的片段' },
+        ]}
+        onChange={(value) =>
+          value !== undefined &&
+          onScopeChange(value === '' ? { kind: 'all' } : value === WITHOUT_PRODUCT ? { kind: 'withoutProduct' } : { kind: 'product', productName: value })
+        }
+      />
     </div>
   );
 }

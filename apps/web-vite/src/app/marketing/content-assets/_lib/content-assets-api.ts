@@ -77,6 +77,7 @@ export function buildContentAssetParams(
   if (query.segmentStatus) params.segment_status = query.segmentStatus;
   if (query.segmentStatus && query.segmentPreset) params.segment_preset = query.segmentPreset;
   if (query.studioOutputs) params.studio_outputs = query.studioOutputs;
+  if (query.testSamples) params.test_samples = query.testSamples;
   return params;
 }
 

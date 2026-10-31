@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   buildDouyinCardProductColumns,
   buildDouyinCardSourceColumns,
@@ -27,19 +27,19 @@ import type {
 type TrendClassNameResolver = (value: number | undefined) => string;
 
 interface TmallPlatformColumns {
-  goodsColumns: ColumnsType<GoodsTableRow>;
-  channelColumns: ColumnsType<ChannelAttributionRow>;
-  funnelDetailColumnsWithClickStage: ColumnsType<FunnelChannelRow>;
-  funnelDetailColumnsWithoutClickStage: ColumnsType<FunnelChannelRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  goodsColumns: TableColumnsType<GoodsTableRow>;
+  channelColumns: TableColumnsType<ChannelAttributionRow>;
+  funnelDetailColumnsWithClickStage: TableColumnsType<FunnelChannelRow>;
+  funnelDetailColumnsWithoutClickStage: TableColumnsType<FunnelChannelRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
 }
 
 interface DouyinPlatformColumns {
-  douyinLiveColumns: ColumnsType<DouyinLiveSessionRow>;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  douyinShortvideoColumns: ColumnsType<DouyinShortvideoRow>;
-  douyinCardProductColumns: ColumnsType<DouyinCardProductRow>;
-  douyinCardSourceColumns: ColumnsType<DouyinCardSourceRow>;
+  douyinLiveColumns: TableColumnsType<DouyinLiveSessionRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  douyinShortvideoColumns: TableColumnsType<DouyinShortvideoRow>;
+  douyinCardProductColumns: TableColumnsType<DouyinCardProductRow>;
+  douyinCardSourceColumns: TableColumnsType<DouyinCardSourceRow>;
 }
 
 export interface PlatformTabColumns extends TmallPlatformColumns, DouyinPlatformColumns {}

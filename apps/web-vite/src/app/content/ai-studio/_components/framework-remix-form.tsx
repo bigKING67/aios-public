@@ -1,5 +1,6 @@
-import { CheckCircleFilled, InfoCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, InputNumber, Popconfirm, Radio, Select, Skeleton, Tooltip } from 'antd';
+import { CircleCheck, Info } from 'lucide-react';
+import { Alert, confirmModal, InputNumber, Segmented, Select, SkeletonText, Tooltip } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { StudioCapabilitiesResponse } from '../_lib/ai-studio-api';
@@ -7,10 +8,13 @@ import { newRemixIdempotencyKey, type RemixFormMode, remixModeLabel } from '../_
 import { buildRemixPreviewRequest, type ReferenceAssetOption, type RemixStructure } from '../_lib/remix-form';
 import { buildRemixBatchPath } from '../_lib/remix-routes';
 import { labelName, pickDefaultPreset, presetDisplayName, remixablePresets, sellingPointNames } from '../_lib/segment-display';
+import { isLongOptionList } from '../_lib/studio-products';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { FrameworkRemixPreview, FrameworkRemixSummary } from './framework-remix-preview';
 import { FrameworkRemixStructure } from './framework-remix-structure';
 import { RemixCandidates } from './remix-candidates';
 import { RemixRecentBatches } from './remix-recent-batches';
+import { StructurePoolPreview } from './structure-pool-preview';
 import { useStudioPresets } from './use-ai-studio-queries';
 import { useCreateRemixBatch, useRemixPreview, useRemixProducts } from './use-remix-batches';
 import pageStyles from '../ai-studio.module.css';
@@ -20,7 +24,7 @@ import workbenchStyles from './studio-workbench.module.css';
 
 const REMIX_RULES = {
   framework:
-    '按框架顺序从已确认片段中确定性组合，不调用模型选片；每条成片只用同一产品的片段，同一片段不会在一条成片里重复出现，各片段保留原声。',
+    '按框架顺序从已确认片段中确定性组合，不调用模型选片；沿用参考原片时，每段只用时长在参考段 ±20% 内的同类片段。每条成片只用同一产品的片段，同一片段不会在一条成片里重复出现，各片段保留原声。',
   sellingPoint:
     '以参考原片的框架段为槽位，每段用其他原片已确认的卖点片段拼满（最多 3 块、时长在参考段的 ±20% 内）；优先卖点完全一致，其次多段拼出相同卖点，最后允许卖点有变化。连着的卖点片段整块使用；参考段没有卖点或被一块占满时整段替换。不调用模型选片，各片段保留原声。',
 } as const;
@@ -88,7 +92,7 @@ export function FrameworkRemixForm({
     );
   };
 
-  if (presetsQuery.isPending) return <Skeleton active paragraph={{ rows: 6 }} />;
+  if (presetsQuery.isPending) return <SkeletonText rows={6} />;
   if (presetsQuery.isError || !preset) {
     return <Alert type="error" showIcon title="分类预设读取失败" description={errorText(presetsQuery.error)} />;
   }
@@ -115,159 +119,175 @@ export function FrameworkRemixForm({
                   : null;
 
   return (
-    <div className={workbenchStyles.layout}>
-      <article className={pageStyles.card} aria-labelledby="remix-form-title">
-        <div className={styles.cardHeading}>
-          <h2 id="remix-form-title">产品与结构</h2>
-          {presets.length > 1 ? (
-            <Select
-              aria-label="分类预设"
-              className={styles.presetSelect}
-              value={`${preset.presetKey}:${preset.version}`}
-              options={presets.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item) }))}
-              onChange={edit((value: string) => {
-                setPresetId(value);
-                setStructure({ mode: 'reference', sourceAssetId: null });
-                setProductName(null);
-              })}
-            />
-          ) : null}
-        </div>
-        {!capabilities.canWrite ? <Alert type="info" showIcon title="当前账号没有素材编辑权限，只能查看。" /> : null}
-        <div className={remixStyles.setupRow}>
-          <div className={styles.field}>
-            <label htmlFor="remix-product" className={remixStyles.fieldLabel}>产品</label>
-            <Select
-              id="remix-product"
-              showSearch
-              placeholder="选择片段的产品"
-              loading={products.isPending}
-              disabled={!capabilities.canWrite}
-              value={productName ?? undefined}
-              options={(products.data ?? []).map((item) => ({
-                value: item.productName,
-                label: `${item.productName}（${item.confirmedSegmentCount} 段）`,
-              }))}
-              onChange={edit((value: string) => setProductName(value))}
-              notFoundContent={products.isError ? '产品读取失败' : '还没有带产品的已确认片段'}
-            />
-          </div>
-          <div className={styles.field}>
-            <span className={remixStyles.fieldLabel}>框架结构</span>
-            {sellingPoint ? (
-              <p className={styles.fieldHelp}>沿用参考原片的框架段，每段按卖点替换。每条成片必须同时包含滋润保湿和养肤护肤，顺序不限。</p>
-            ) : (
-              <Radio.Group
-                aria-label="结构来源"
-                optionType="button"
-                value={structure.mode}
-                disabled={!capabilities.canWrite}
-                onChange={(event) =>
-                  edit(setStructure)(
-                    event.target.value === 'reference'
-                      ? { mode: 'reference', sourceAssetId: null }
-                      : { mode: 'manual', labels: preview.data?.labels ?? [] },
-                  )
-                }
-                options={[
-                  { value: 'reference', label: '沿用参考原片' },
-                  { value: 'manual', label: '手动排列框架顺序' },
-                ]}
+    <div className={workbenchStyles.page}>
+      <div className={`${workbenchStyles.layout} ${workbenchStyles.layoutFit}`}>
+        <article className={pageStyles.card} aria-labelledby="remix-form-title">
+          <div className={styles.cardHeading}>
+            <h2 id="remix-form-title">产品与结构</h2>
+            {presets.length > 1 ? (
+              <LabeledSelect
+                label="分类预设"
+                wrapperClassName={styles.presetSelect}
+                value={`${preset.presetKey}:${preset.version}`}
+                options={presets.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item, presets) }))}
+                onChange={edit((value?: string) => {
+                  if (value === undefined) return;
+                  setPresetId(value);
+                  setStructure({ mode: 'reference', sourceAssetId: null });
+                  setProductName(null);
+                })}
               />
-            )}
+            ) : null}
           </div>
-        </div>
-        <FrameworkRemixStructure
-          preset={preset}
-          value={structure}
-          onChange={edit(setStructure)}
-          onReferencePicked={pickReference}
-          disabled={!capabilities.canWrite}
-        />
-        {structureChosen ? (
-        <section className={remixStyles.stack} aria-labelledby="remix-preview-title">
-          <h3 id="remix-preview-title" className={remixStyles.sectionTitle}>结构预览</h3>
-          <FrameworkRemixPreview
+          {!capabilities.canWrite ? <Alert type="info" showIcon title="当前账号没有素材编辑权限，只能查看。" /> : null}
+          <div className={remixStyles.setupRow}>
+            <div className={styles.field}>
+              <label htmlFor="remix-product" className={remixStyles.fieldLabel}>产品</label>
+              <Select
+                id="remix-product"
+                showSearch={isLongOptionList(products.data ?? [])}
+                placeholder="选择片段的产品"
+                loading={products.isPending}
+                disabled={!capabilities.canWrite}
+                value={productName ?? undefined}
+                options={(products.data ?? []).map((item) => ({
+                  value: item.productName,
+                  label: `${item.productName}（${item.confirmedSegmentCount} 段）`,
+                }))}
+                onChange={(value) => typeof value === 'string' && edit(setProductName)(value)}
+              />
+              {products.isError ? (
+                <p className={styles.fieldError} role="alert">产品读取失败</p>
+              ) : products.data && products.data.length === 0 ? (
+                <p className={styles.fieldHelp}>还没有带产品的已确认片段</p>
+              ) : null}
+            </div>
+            <div className={styles.field}>
+              <span className={remixStyles.fieldLabel}>框架结构</span>
+              {sellingPoint ? (
+                <p className={styles.fieldHelp}>沿用参考原片的框架段，每段按卖点替换。每条成片必须同时包含滋润保湿和养肤护肤，顺序不限。</p>
+              ) : (
+                <div role="group" aria-label="结构来源">
+                  <Segmented
+                    value={structure.mode}
+                    disabled={!capabilities.canWrite}
+                    onChange={(value) =>
+                      edit(setStructure)(
+                        value === 'reference'
+                          ? { mode: 'reference', sourceAssetId: null }
+                          : { mode: 'manual', labels: preview.data?.labels ?? [] },
+                      )
+                    }
+                    options={[
+                      { value: 'reference', label: '沿用参考原片' },
+                      { value: 'manual', label: '手动排列框架顺序' },
+                    ]}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <FrameworkRemixStructure
             preset={preset}
-            preview={request ? preview.data : undefined}
-            pointNames={(keys) => sellingPointNames(allPresets, keys)}
-            loading={preview.isFetching || !previewSettled}
-            error={preview.isError ? errorText(preview.error) : null}
-            incompleteHint={typeof built === 'string' ? built.replace('后显示可用组合', '后显示每一位的可用片段') : null}
+            value={structure}
+            onChange={edit(setStructure)}
+            onReferencePicked={pickReference}
+            disabled={!capabilities.canWrite}
           />
-        </section>
-        ) : null}
-        {!sellingPoint && request && preview.data && !preview.isError ? (
-          <section className={remixStyles.stack} aria-labelledby="remix-candidates-title">
-            <h3 id="remix-candidates-title" className={remixStyles.sectionTitle}>候选片段</h3>
-            <RemixCandidates preset={preset} preview={preview.data} />
-          </section>
-        ) : null}
-      </article>
-
-      <aside className={workbenchStyles.side}>
-        <article className={`${pageStyles.card} ${workbenchStyles.launch}`} aria-labelledby="remix-launch-title">
-          <div className={workbenchStyles.launchHead}>
-            <h2 id="remix-launch-title">生成成片</h2>
-            <span className={workbenchStyles.launchMeta}>
-              框架标签 v{preset.version}
-              <Tooltip title={REMIX_RULES[mode]} trigger={['hover', 'focus']}>
-                <InfoCircleOutlined className={workbenchStyles.infoIcon} tabIndex={0} aria-label="混剪规则" />
-              </Tooltip>
-            </span>
-          </div>
-          {current ? (
-            <FrameworkRemixSummary preview={current} />
-          ) : (
-            <ol className={remixStyles.steps} aria-label="生成步骤">
-              {[
-                { done: Boolean(productName), label: productName ? `产品：${productName}` : '选择产品' },
-                {
-                  done: structure.mode === 'reference' ? Boolean(structure.sourceAssetId) : structure.labels.length > 0,
-                  label: structure.mode === 'reference' ? '选一条参考原片定结构' : '排好框架顺序',
-                },
-                { done: false, label: '确认数量后生成' },
-              ].map((step) => (
-                <li key={step.label} className={step.done ? remixStyles.stepDone : undefined}>
-                  {step.done ? <CheckCircleFilled aria-hidden /> : <span className={remixStyles.stepDot} aria-hidden />}
-                  <span>{step.label}</span>
-                </li>
-              ))}
-            </ol>
-          )}
-          <div className={styles.field}>
-            <label htmlFor="remix-count" className={remixStyles.fieldLabel}>生成数量（每批最多 {maxPerBatch} 条）</label>
-            <InputNumber
-              id="remix-count"
-              min={1}
-              max={maxPerBatch}
-              precision={0}
-              disabled={!capabilities.canWrite}
-              value={count}
-              onChange={edit((value: number | null) => setCount(value))}
+          {structureChosen ? (
+          <section className={remixStyles.stack} aria-labelledby="remix-preview-title">
+            <h3 id="remix-preview-title" className={remixStyles.sectionTitle}>结构预览</h3>
+            <FrameworkRemixPreview
+              preset={preset}
+              preview={request ? preview.data : undefined}
+              pointNames={(keys) => sellingPointNames(allPresets, keys)}
+              loading={preview.isFetching || !previewSettled}
+              error={preview.isError ? errorText(preview.error) : null}
+              incompleteHint={typeof built === 'string' ? built.replace('后显示可用组合', '后显示每一位的可用片段') : null}
             />
-          </div>
-          <div className={workbenchStyles.launchFoot}>
-            <Popconfirm
-              title={`确认生成 ${plannable} 条${remixModeLabel(mode)}？`}
-              description="成片按顺序进入渲染队列（单通道依次处理，可能需要较长时间）。提交后不会自动重试，可在「成片」查看进度。"
-              okText="开始生成"
-              cancelText="取消"
-              onConfirm={submit}
-              disabled={!canSubmit}
-            >
-              <Button type={canSubmit ? 'primary' : 'default'} block disabled={!canSubmit} loading={create.isPending}>
-                {plannable > 0 ? `生成 ${plannable} 条成片` : '生成成片'}
-              </Button>
-            </Popconfirm>
-            <p className={workbenchStyles.estimate}>
-              {blocker ?? `1080×1920 · 30fps · 最长 ${capabilities.remixMaxSeconds} 秒，统一响度 -14 LUFS；非 9:16 原片会有黑边。`}
-            </p>
-          </div>
-          {create.isError ? <Alert type="error" showIcon title="批次提交失败" description={errorText(create.error)} /> : null}
+          </section>
+          ) : null}
+          {!sellingPoint && request && preview.data && !preview.isError ? (
+            <section className={remixStyles.stack} aria-labelledby="remix-candidates-title">
+              <h3 id="remix-candidates-title" className={remixStyles.sectionTitle}>候选片段</h3>
+              <RemixCandidates preset={preset} preview={preview.data} />
+            </section>
+          ) : null}
         </article>
-        <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode={mode} />
-      </aside>
+
+        <aside className={workbenchStyles.side}>
+          <article className={`${pageStyles.card} ${workbenchStyles.launch}`} aria-labelledby="remix-launch-title">
+            <div className={workbenchStyles.launchHead}>
+              <h2 id="remix-launch-title">生成成片</h2>
+              <span className={workbenchStyles.launchMeta}>
+                <Tooltip title={`${REMIX_RULES[mode]} 当前框架标签为 v${preset.version}。`}>
+                  <Info size={14} strokeWidth={1.8} className={workbenchStyles.infoIcon} tabIndex={0} aria-label="混剪规则" />
+                </Tooltip>
+              </span>
+            </div>
+            {current ? (
+              <FrameworkRemixSummary preview={current} />
+            ) : (
+              <ol className={remixStyles.steps} aria-label="生成步骤">
+                {[
+                  { done: Boolean(productName), label: productName ? `产品：${productName}` : '选择产品' },
+                  {
+                    done: structure.mode === 'reference' ? Boolean(structure.sourceAssetId) : structure.labels.length > 0,
+                    label: structure.mode === 'reference' ? '选一条参考原片定结构' : '排好框架顺序',
+                  },
+                  { done: false, label: '确认数量后生成' },
+                ].map((step, index) => (
+                  <li key={step.label} className={step.done ? remixStyles.stepDone : undefined}>
+                    {step.done ? (
+                      <CircleCheck size={18} strokeWidth={1.8} aria-label="已完成" />
+                    ) : (
+                      <span className={remixStyles.stepNumber} aria-hidden>{index + 1}</span>
+                    )}
+                    <span>{step.label}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+            <div className={styles.field}>
+              <label htmlFor="remix-count" className={remixStyles.fieldLabel}>生成数量（每批最多 {maxPerBatch} 条）</label>
+              <InputNumber
+                id="remix-count"
+                className={remixStyles.countInput}
+                min={1}
+                max={maxPerBatch}
+                precision={0}
+                disabled={!capabilities.canWrite}
+                value={count}
+                onChange={edit((value: number | null) => setCount(value))}
+              />
+            </div>
+            <div className={workbenchStyles.launchFoot}>
+              <AiActionButton
+                block
+                disabled={!canSubmit}
+                loading={create.isPending}
+                onClick={() =>
+                  confirmModal({
+                    title: `确认生成 ${plannable} 条${remixModeLabel(mode)}？`,
+                    content: '成片按顺序进入渲染队列（单通道依次处理，可能需要较长时间）。提交后不会自动重试，可在「成片」查看进度。',
+                    okText: '开始生成',
+                    cancelText: '取消',
+                    onOk: submit,
+                  })
+                }
+              >
+                {plannable > 0 ? `生成 ${plannable} 条成片` : '生成成片'}
+              </AiActionButton>
+              <p className={workbenchStyles.estimate}>
+                {blocker ?? `1080×1920 · 30fps · 最长 ${capabilities.remixMaxSeconds} 秒，统一响度 -14 LUFS；非 9:16 原片会有黑边。`}
+              </p>
+            </div>
+            {create.isError ? <Alert type="error" showIcon title="批次提交失败" description={errorText(create.error)} /> : null}
+          </article>
+        </aside>
+      </div>
+      {!sellingPoint ? <StructurePoolPreview productName={productName} /> : null}
+      <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode={mode} />
     </div>
   );
 }

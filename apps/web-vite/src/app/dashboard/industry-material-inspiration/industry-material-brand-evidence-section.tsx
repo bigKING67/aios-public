@@ -1,4 +1,4 @@
-import { LinkOutlined } from '@ant-design/icons';
+import { Link as LinkIcon } from 'lucide-react';
 import type {
   IndustryMaterialBrandInsightEvidenceMaterial,
   IndustryMaterialBrandInsightNextAction,
@@ -118,7 +118,7 @@ function EvidenceMaterialRow({
             {href ? (
               <a href={href} target="_blank" rel="noreferrer" title={title}>
                 <span className={styles.evidenceTitle}>{title}</span>
-                <LinkOutlined className={styles.evidenceTitleIcon} aria-hidden />
+                <LinkIcon className={styles.evidenceTitleIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
               </a>
             ) : (
               <strong title={title}>{title}</strong>

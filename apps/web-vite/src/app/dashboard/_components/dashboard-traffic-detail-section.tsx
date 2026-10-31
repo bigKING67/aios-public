@@ -1,6 +1,5 @@
 import type { Key, ReactNode } from 'react';
-import { Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, type TableColumnsType } from '@lobehub/ui';
 
 import noticeStyles from './dashboard-notice.module.css';
 import { renderDashboardTrafficExpandIcon } from './dashboard-traffic-expand-icon';
@@ -18,8 +17,8 @@ export type DashboardTrafficDetailSectionProps = {
   trafficGoodsLoadError: string | null;
   trafficRows: DashboardTrafficTreeNode[];
   trafficGoodsRows: DashboardTrafficGoodsTreeNode[];
-  trafficColumns: ColumnsType<DashboardTrafficTreeNode>;
-  trafficGoodsColumns: ColumnsType<DashboardTrafficGoodsTreeNode>;
+  trafficColumns: TableColumnsType<DashboardTrafficTreeNode>;
+  trafficGoodsColumns: TableColumnsType<DashboardTrafficGoodsTreeNode>;
   trafficLoading: boolean;
   trafficGoodsLoading: boolean;
   expandedTrafficRowKeys: Key[];

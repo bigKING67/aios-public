@@ -1,6 +1,5 @@
 import type { Key, ReactNode } from 'react';
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table, type TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { DashboardChart } from './dashboard-chart';
@@ -29,7 +28,7 @@ export type DashboardGoodsCardDetailSectionProps = {
   bottomMetricCards: LiveMetricCard[];
   trendOption: EChartsCoreOption;
   rows: DashboardGoodsCardRow[];
-  columns: ColumnsType<DashboardGoodsCardRow>;
+  columns: TableColumnsType<DashboardGoodsCardRow>;
   loading: boolean;
   emptyText: ReactNode;
   trafficDrawerOpen: boolean;
@@ -38,7 +37,7 @@ export type DashboardGoodsCardDetailSectionProps = {
   trafficAsOfDate: string;
   trafficLoadError: string | null;
   trafficRows: DashboardGoodsCardTrafficTreeNode[];
-  trafficColumns: ColumnsType<DashboardGoodsCardTrafficTreeNode>;
+  trafficColumns: TableColumnsType<DashboardGoodsCardTrafficTreeNode>;
   trafficLoading: boolean;
   expandedTrafficRowKeys: Key[];
   onExpandedTrafficRowKeysChange: (keys: Key[]) => void;

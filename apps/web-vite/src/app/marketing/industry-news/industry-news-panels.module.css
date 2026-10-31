@@ -9,16 +9,16 @@
   gap: 8px;
   min-width: 0;
   padding: 16px 18px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .metricLabel,
 .metricNote {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -28,7 +28,7 @@
 }
 
 .metricValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-data-md);
   font-weight: var(--font-weight-data);
@@ -43,14 +43,14 @@
   gap: 14px;
   min-width: 0;
   padding: 12px 14px;
-  border: 1px solid var(--status-info-border);
+  border: 1px solid var(--lobe-color-info-border);
   border-radius: var(--border-radius-lg);
-  background: var(--status-info-bg);
+  background: var(--lobe-color-info-bg);
 }
 
 .statusPanelDanger {
-  border-color: var(--status-danger-border);
-  background: var(--status-danger-bg);
+  border-color: var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
 }
 
 .statusMain {
@@ -61,17 +61,17 @@
 }
 
 .statusIcon {
-  color: var(--status-info-strong);
+  color: var(--aios-status-info);
   font-size: var(--font-size-lg);
 }
 
 .statusPanelDanger .statusIcon {
-  color: var(--status-danger-strong);
+  color: var(--aios-status-danger-strong);
 }
 
 .statusTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -79,7 +79,7 @@
 
 .statusMeta {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -89,8 +89,8 @@
   grid-template-columns: minmax(0, 1fr) 118px;
   gap: 18px;
   padding: 22px 20px;
-  border-bottom: 1px solid var(--divider-color);
-  background: var(--bg-card);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  background: var(--lobe-color-bg-container);
   cursor: pointer;
   transition:
     background-color var(--transition-base),
@@ -99,11 +99,11 @@
 
 .articleItem:hover,
 .articleItem:focus-visible {
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .articleItem:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: -2px;
 }
 
@@ -126,19 +126,19 @@
   gap: 8px;
   min-width: 0;
   flex-wrap: wrap;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .sourceName {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-weight: var(--font-weight-semibold);
 }
 
 .articleTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: var(--font-weight-section-title);
   line-height: var(--line-height-tight);
@@ -153,14 +153,14 @@
 .articleDigest,
 .articleExcerpt {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
 }
 
 .articleExcerpt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .articleFooter {
@@ -174,9 +174,9 @@
   overflow: hidden;
   width: 118px;
   aspect-ratio: 1 / 1;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .articleItemCompact .coverWrap {
@@ -195,8 +195,8 @@
   place-items: center;
   width: 100%;
   height: 100%;
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   font-size: var(--font-size-2xl);
 }
 
@@ -204,7 +204,7 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sourceHeader {
@@ -217,7 +217,7 @@
 
 .sourceTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -225,7 +225,7 @@
 
 .sourceHint {
   margin: 2px 0 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -244,9 +244,9 @@
   gap: 8px;
   width: 100%;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   color: inherit;
   font: inherit;
   text-align: left;
@@ -259,19 +259,19 @@
 
 .sourceItem:hover,
 .sourceItem:focus-visible {
-  border-color: var(--brand-border);
-  background: var(--bg-hover);
+  border-color: var(--aios-ai-border);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sourceItem:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
 .sourceItemActive {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
-  box-shadow: inset 3px 0 0 var(--brand-primary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
+  box-shadow: inset 3px 0 0 var(--lobe-color-primary);
 }
 
 .sourceTop {
@@ -286,8 +286,8 @@
   width: 32px;
   height: 32px;
   border-radius: var(--border-radius-full);
-  border: 1px solid var(--border-color);
-  background: var(--bg-subtle);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sourceInfo {
@@ -298,7 +298,7 @@
 
 .sourceNickname {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -307,7 +307,7 @@
 }
 
 .sourceSub {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -323,18 +323,18 @@
   place-items: center;
   min-height: 160px;
   padding: 20px;
-  border: 1px dashed var(--border-color);
+  border: 1px dashed var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-card);
-  color: var(--text-tertiary);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .sourceEmptyError {
-  border-color: var(--status-danger-border);
-  background: var(--status-danger-bg);
-  color: var(--status-danger-strong);
+  border-color: var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
+  color: var(--aios-status-danger-strong);
 }
 
 .sourceStat {
@@ -347,14 +347,14 @@
 }
 
 .sourceStatLabel {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .sourceStatValue {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-data);
@@ -371,7 +371,7 @@
 
 .drawerTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: var(--font-weight-section-title);
   line-height: var(--line-height-tight);
@@ -380,7 +380,7 @@
 
 .drawerParagraph {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-prose);
   overflow-wrap: anywhere;
@@ -391,9 +391,9 @@
   overflow: hidden;
   width: 100%;
   margin-bottom: 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .drawerCover img {
@@ -409,7 +409,7 @@
   }
 
   .sourcePanel {
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--lobe-color-border);
   }
 
   .sourceList {

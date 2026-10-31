@@ -4,8 +4,8 @@
 }
 
 .sidebarPanel {
-  border-right: 1px solid var(--border-color);
-  background: var(--bg-global);
+  border-right: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-layout);
   padding: 12px 10px 14px 16px;
 }
 
@@ -21,11 +21,11 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--status-success);
+  background: var(--aios-status-success);
 }
 
 .brandText {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 620;
   letter-spacing: var(--letter-spacing-normal);
@@ -77,7 +77,7 @@
 
 .navGroupTitle {
   margin: 0 8px 10px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xl);
   line-height: var(--line-height-normal);
   font-weight: 700;
@@ -94,7 +94,7 @@
   padding: 8px 10px;
   margin: 0 4px;
   border-radius: 999px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   text-decoration: none;
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
@@ -108,31 +108,31 @@
 }
 
 .routeNavLink small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   font-weight: 500;
 }
 
 .navLink:hover {
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  background: var(--aios-ai-soft);
+  color: var(--aios-ai-text);
 }
 
 .navLinkActive {
-  background: var(--brand-secondary);
-  color: var(--brand-dark);
+  background: var(--aios-ai-soft);
+  color: var(--lobe-color-primary-hover);
   font-weight: 620;
   box-shadow: inset 0 0 0 1px var(--docs-docs-material-blue-ring-a240);
 }
 
 .navLinkActive:hover {
-  background: var(--brand-secondary);
-  color: var(--brand-dark);
+  background: var(--aios-ai-soft);
+  color: var(--lobe-color-primary-hover);
 }
 
 .navLinkActive small {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
 }
 
 /* Sub-pages of the active section (e.g. 使用指南 modules). */
@@ -141,34 +141,34 @@
   gap: 2px;
   margin: 2px 4px 6px 14px;
   padding-left: 8px;
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid var(--lobe-color-border);
 }
 
 .subNavLink {
   display: block;
   padding: 6px 10px;
   border-radius: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   text-decoration: none;
 }
 
 .subNavLink:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
 }
 
 .subNavLinkActive,
 .subNavLinkActive:hover {
-  background: var(--brand-secondary);
-  color: var(--brand-dark);
+  background: var(--aios-ai-soft);
+  color: var(--lobe-color-primary-hover);
   font-weight: 620;
 }
 
 .navLink:focus-visible,
 .subNavLink:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 1px;
 }
 
@@ -180,7 +180,7 @@
 
 .tocPanel {
   padding: 14px 16px 12px 18px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .tocSticky {
@@ -191,7 +191,7 @@
 
 .tocTitle {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 620;
   letter-spacing: var(--letter-spacing-label);
@@ -208,29 +208,29 @@
 
 .tocLink {
   display: block;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   text-decoration: none;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid var(--lobe-color-border);
   padding: 4px 0 4px 10px;
 }
 
 .tocLink:hover {
-  color: var(--text-primary);
-  border-left-color: var(--text-tertiary);
+  color: var(--lobe-color-text);
+  border-left-color: var(--lobe-color-text-tertiary);
 }
 
 .tocLinkActive {
-  color: var(--text-primary);
-  border-left-color: var(--brand-primary);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  border-left-color: var(--lobe-color-primary);
+  background: var(--aios-ai-soft);
   font-weight: 620;
 }
 
 .tocLinkActive:hover {
-  color: var(--text-primary);
-  border-left-color: var(--brand-primary);
+  color: var(--lobe-color-text);
+  border-left-color: var(--lobe-color-primary);
 }
 
 @media (max-width: 1180px) {
@@ -242,8 +242,8 @@
 @media (max-width: 920px) {
   .sidebarPanel {
     border-right: 0;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-card);
+    border-bottom: 1px solid var(--lobe-color-border);
+    background: var(--lobe-color-bg-container);
     padding: 10px 10px 10px 12px;
   }
 

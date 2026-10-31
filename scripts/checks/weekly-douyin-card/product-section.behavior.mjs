@@ -41,6 +41,7 @@ function main() {
   const bannedIdentifiers = [
     'buildDouyinCardProductAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinCardProductRow',
     'buildAttributionTableProps',

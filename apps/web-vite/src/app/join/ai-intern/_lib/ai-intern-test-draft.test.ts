@@ -48,5 +48,20 @@ describe("versioned candidate drafts", () => {
     expect(loadDraft().values.workflow).toBe("flow");
     expect(loadDraft().values.major).toBe("计算机科学");
     expect(loadDraft().values.contact).toBe("wechat_candidate");
+    expect(loadDraft().values.aiUsage).toBe("AI");
+  });
+
+  it("merges the old rules box once without truncating existing answers", () => {
+    const draft = loadDraft();
+    const workflow = "说".repeat(6000);
+    const rules = "规".repeat(10000);
+    saveDraft({ ...draft, values: { workflow, workflowRules: rules } });
+    const merged = loadDraft();
+    expect(merged.submissionId).toBe(draft.submissionId);
+    expect(merged.startedAt).toBe(draft.startedAt);
+    expect(merged.values.workflow).toBe(`${workflow}\n\n${rules}`);
+    expect(merged.values.workflowRules).toBe("");
+    saveDraft(merged);
+    expect(loadDraft().values.workflow).toBe(merged.values.workflow);
   });
 });

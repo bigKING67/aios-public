@@ -66,6 +66,8 @@ export const BACKEND_GATE_NAMES = Object.freeze([
 export const FRONTEND_DASHBOARD_GATE_NAMES = Object.freeze([
   'verify:dashboard:date-range-bounds-behavior',
   'verify:dashboard:creator-short-video-behavior',
+  'verify:dashboard:qianchuan-scoped-layout',
+  'verify:dashboard:industry-material-inspiration-contract',
 ]);
 
 export const DEFAULT_CI_GATE_NAMES = Object.freeze([

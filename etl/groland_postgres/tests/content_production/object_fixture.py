@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import hmac
+import re
 from pathlib import Path
 import ssl
 import threading
@@ -37,7 +38,7 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
         def authorized(self):
             url = urlsplit(self.path)
             query = dict(parse_qsl(url.query, keep_blank_values=True))
-            if self.command == "GET":
+            if self.command == "GET" and "X-Amz-Signature" in query:
                 supplied = query.pop("X-Amz-Signature")
                 credential = query["X-Amz-Credential"]
                 stamp = query["X-Amz-Date"]
@@ -71,6 +72,12 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
             return valid
 
         def do_GET(self):
+            self.serve_object(head=False)
+
+        def do_HEAD(self):
+            self.serve_object(head=True)
+
+        def serve_object(self, *, head):
             if not self.allowed():
                 return
             name = unquote(urlsplit(self.path).path).lstrip("/")
@@ -79,19 +86,33 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
                 self.send_error(404)
                 return
             data = file.read_bytes()
-            record("get")
-            self.send_response(200)
+            status = 200
+            content_range = None
+            if self.headers.get("Range"):
+                match = re.fullmatch(r"bytes=(\d+)-(\d+)", self.headers["Range"])
+                if not match or not 0 <= int(match[1]) <= int(match[2]) or int(match[1]) >= len(data):
+                    self.send_error(416)
+                    return
+                start, end = int(match[1]), min(int(match[2]), len(data) - 1)
+                content_range = f"bytes {start}-{end}/{len(data)}"
+                data, status = data[start:end + 1], 206
+            if not head:
+                record("get")
+            self.send_response(status)
             self.send_header("Content-Type", "video/mp4")
             self.send_header("Content-Length", str(len(data)))
+            if content_range:
+                self.send_header("Content-Range", content_range)
             self.end_headers()
-            self.wfile.write(data)
+            if not head:
+                self.wfile.write(data)
 
         def do_PUT(self):
             if not self.allowed():
                 return
             name = unquote(urlsplit(self.path).path).lstrip("/")
             length = int(self.headers.get("Content-Length", "0"))
-            if not name.startswith("production/") or ".." in name.split("/") or not 0 < length < 100 * 1024 * 1024:
+            if not name.startswith(("production/", "competitor/evidence/")) or ".." in name.split("/") or not 0 < length < 100 * 1024 * 1024:
                 self.send_error(400)
                 return
             data = self.rfile.read(length)
@@ -133,7 +154,7 @@ def start_store(root: Path, source: Path, cert: Path, key: Path, access: str, se
             url = urlsplit(self.path)
             name = unquote(url.path).lstrip("/")
             query = dict(parse_qsl(url.query, keep_blank_values=True))
-            if not name.startswith("production/") or ".." in name.split("/"):
+            if not name.startswith(("production/", "competitor/evidence/")) or ".." in name.split("/"):
                 self.send_error(400)
                 return
             if query == {"uploads": ""}:

@@ -23,6 +23,22 @@ def load_env_file(path: Path) -> None:
       os.environ[key] = value
 
 
+CLAIM_AFTER_ENV = "CONTENT_WORKER_CLAIM_AFTER_SECONDS"
+
+
+def claim_after_seconds() -> int | None:
+  """Minimum queue age before this process claims a job; None claims at once.
+
+  The fallback instance of a worker (the VPS) sets it so the compute node claims first and the
+  fallback serves only jobs the node has left waiting (offline or busy)."""
+  raw = (os.getenv(CLAIM_AFTER_ENV) or "").strip()
+  if not raw:
+    return None
+  if not raw.isdigit():
+    raise ValueError(f"{CLAIM_AFTER_ENV} must be a non-negative integer")
+  return int(raw)
+
+
 def env_int(name: str, default: int) -> int:
   raw = (os.getenv(name) or "").strip()
   if not raw:

@@ -36,6 +36,7 @@ function main() {
   for (const identifierName of [
     'buildDouyinCardSourceAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinCardSourceRow',
     'diagnosisCardProductId',

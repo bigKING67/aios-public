@@ -1,12 +1,14 @@
 'use client';
 
-import { BellOutlined, CopyOutlined } from '@ant-design/icons';
-import { Button, Select, Tooltip } from 'antd';
+import { Button, Tooltip } from '@lobehub/ui';
+import { Bell, Copy } from 'lucide-react';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import {
   getNotificationTraceSloScanQuickFilterLabel,
   type NotificationTraceSloScanQuickFilter,
 } from './dataops-hub-formatters';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import batchResultStyles from './dataops-batch-result.module.css';
 
 const NOTIFICATION_TRACE_SLO_SCAN_QUICK_FILTER_OPTIONS: Array<{
@@ -48,16 +50,17 @@ export function DataOpsNotificationTraceSloScanActions({
 
   return (
     <div className={batchResultStyles.batchResultControls}>
-      <Select<NotificationTraceSloScanQuickFilter>
+      <LabeledSelect<NotificationTraceSloScanQuickFilter>
+        label="巡检分组筛选"
         size="small"
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
         value={quickFilter}
-        onChange={onQuickFilterChange}
+        onChange={(value) => value && onQuickFilterChange(value)}
         options={NOTIFICATION_TRACE_SLO_SCAN_QUICK_FILTER_OPTIONS}
       />
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={!hasMarkdownText}
         onClick={() => {
           void onCopyMarkdown();
@@ -72,16 +75,18 @@ export function DataOpsNotificationTraceSloScanActions({
             : '当前没有可用通道'
         }
       >
-        <Button
-          size="small"
-          icon={<BellOutlined />}
-          disabled={
-            !hasOperatePermission || globalActionBusy || !defaultAlertChannel || !hasMarkdownText
-          }
-          onClick={onSendAlert}
-        >
-          发送值班摘要
-        </Button>
+        <span className="inline-flex">
+          <Button
+            size="small"
+            icon={<Bell {...DATAOPS_ICON_PROPS} />}
+            disabled={
+              !hasOperatePermission || globalActionBusy || !defaultAlertChannel || !hasMarkdownText
+            }
+            onClick={onSendAlert}
+          >
+            发送值班摘要
+          </Button>
+        </span>
       </Tooltip>
       <span className={batchResultStyles.batchHistoryStatsText}>
         已按风险优先级排序，共 {totalCount} 组，当前

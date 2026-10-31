@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import {
   normalizeText,
@@ -7,11 +6,12 @@ import {
   type NotificationStatusFilter,
 } from './dataops-hub-formatters';
 import { createDataOpsFeedbackActions } from './dataops-feedback-actions';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsClientUtilityState(options: {
   channelFilter: string;
   keywordInput: string;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   notificationEventTypeFilter: string;
   notificationStatusFilter: NotificationStatusFilter;
   notifyFailureChannelFocus: string;

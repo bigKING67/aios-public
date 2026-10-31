@@ -16,7 +16,7 @@ import {
 function segment(id: string, extra: Partial<EditSegment> = {}): EditSegment {
   return {
     segmentId: id, assetId: 'a-1', assetTitle: '原片', labelKey: 'voice', startMs: 0, endMs: 10_000,
-    coverUrl: null, productName: '精华', presetVersion: 1, sourceCurrent: true, ...extra,
+    coverUrl: null, productName: '粉底液', presetVersion: 1, sourceCurrent: true, ...extra,
   };
 }
 
@@ -55,7 +55,7 @@ describe('单条剪辑 editing rules', () => {
   it('blocks unknown segments, mixed products and out-of-range totals', () => {
     const segments = new Map([
       ['s-1', segment('s-1')],
-      ['s-2', segment('s-2', { productName: '面霜' })],
+      ['s-2', segment('s-2', { productName: '口红' })],
       ['s-3', segment('s-3', { endMs: 2_000 })],
     ]);
     const clip = (id: string) => clipFromSegment(segments.get(id) ?? segment(id));
@@ -65,14 +65,14 @@ describe('单条剪辑 editing rules', () => {
     expect(editBlocker([clip('s-3')], segments, 600)).toMatch('至少 3 秒');
     expect(editBlocker([clip('s-1')], segments, 5)).toMatch('最长 5 秒');
     expect(editBlocker([clip('s-1')], segments, 600)).toBeNull();
-    expect(editProduct([clip('gone'), clip('s-2')], segments)).toBe('面霜');
+    expect(editProduct([clip('gone'), clip('s-2')], segments)).toBe('口红');
   });
 
   it('starts from an original in time order with its main product only', () => {
     const segments = [
       segment('late', { startMs: 20_000, endMs: 25_000 }),
       segment('early', { startMs: 0, endMs: 5_000 }),
-      segment('other', { startMs: 30_000, endMs: 35_000, productName: '面霜' }),
+      segment('other', { startMs: 30_000, endMs: 35_000, productName: '口红' }),
       segment('elsewhere', { assetId: 'a-2' }),
     ];
     expect(clipsFromOriginal(segments, 'a-1').map((clip) => clip.segmentId)).toEqual(['early', 'late']);

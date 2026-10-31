@@ -61,9 +61,14 @@ assertDeepEqual(
   'all critical production tokens present should pass',
 );
 assertDeepEqual(
-  findMissingProductionCssTokens([{ path: 'assets/index.css', content: completeCss.replace('--dashboard-inverse-text:', '--dashboard-inverse-text-missing:') }]),
+  findMissingProductionCssTokens([{ path: 'assets/index.css', content: `${completeCss.replace('--dashboard-inverse-text:', '--dashboard-inverse-text-missing:')}\n.dashboard { color: var(--dashboard-inverse-text); }` }]),
   ['--dashboard-inverse-text'],
-  'missing critical production token should be reported',
+  'a used but undefined critical production token should be reported',
+);
+assertDeepEqual(
+  findMissingProductionCssTokens([{ path: 'assets/index.css', content: '.studio { color: var(--text-primary); }' }]),
+  [],
+  'a build that never uses the dashboard tokens (ai_studio profile) should not require them',
 );
 
 withFixtureWorkspace({

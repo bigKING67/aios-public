@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
 import { buildDashboardShortVideoTrendOption } from './dashboard-short-video-trend-option';
@@ -41,7 +41,7 @@ export function useDashboardShortVideoViewState({
     [isMobile]
   );
 
-  const shortVideoDetailColumns = useMemo<ColumnsType<DashboardShortVideoDetailRow>>(
+  const shortVideoDetailColumns = useMemo<TableColumnsType<DashboardShortVideoDetailRow>>(
     () =>
       buildDashboardShortVideoDetailColumns({
         isMobile,

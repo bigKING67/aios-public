@@ -4,7 +4,7 @@ from psycopg2.extras import RealDictCursor
 from .output_profile import canvas, profile_name
 from .caption_quality import caption_delivery_reason
 from .render_binding import receipt_matches
-from . import remix_output
+from . import remix_output, remix_qc
 
 
 def matches_output_profile(snapshot: dict, inspection: dict) -> bool:
@@ -96,10 +96,15 @@ def reconcile(conn) -> int:
                         status, stage = "succeeded", "delivery"
                     else:
                         stage = "inspection"
+                        if reason in (remix_qc.FAILED, remix_qc.INCOMPLETE, "remix_qc_sources_changed"):
+                            status = "failed"
                 else:
                     reason = "invalid_render_receipt"
             elif row["job_status"] == "cancelled":
                 reason = "render_cancelled"
+            elif row["job_status"] == "failed" and isinstance(row["receipt"], dict) and "host_remix_qc" in row["receipt"]:
+                reason = remix_qc.delivery_reason(row["snapshot"], row["receipt"]) or remix_qc.INCOMPLETE
+                status, stage = "failed", "inspection"
             cursor.execute("""UPDATE ads.content_production_runs SET status=%s,stage=%s,
               waiting_reason=%s,pause_requested=FALSE,version=version+1,updated_at=NOW()
               WHERE run_id=%s""", (status, stage, reason, row["run_id"]))

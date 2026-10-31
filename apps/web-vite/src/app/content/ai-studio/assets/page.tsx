@@ -9,7 +9,7 @@ export default function AiStudioAssetsPage() {
     <AiStudioShell>
       <AiStudioCapabilityGate
         title="原片"
-        purpose="这里的原片就是素材库里的原片，与素材库共用素材身份、授权状态和元数据，这里不会产生复制记录。"
+        purpose="点击原片人工标注，或用 AI 切段自动切分。"
       >
         {(capabilities) => (
           <AiStudioAssetsView

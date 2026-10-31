@@ -120,14 +120,16 @@ class PictureReviewTests(unittest.TestCase):
 
 
 class PictureReviewWorkerTests(unittest.TestCase):
-    def test_only_final_selling_point_renders_get_advisory_receipt(self):
-        for mode, preview in [('sellingPoint',False),('framework',False),('sellingPoint',True)]:
+    def test_all_final_remix_modes_gate_upload_and_preserve_failed_qc_receipt(self):
+        for mode, preview, qc_status in [(mode, preview, status) for mode in ('sellingPoint', 'framework', 'edit')
+                                        for preview, status in ((False, 'passed'), (False, 'incomplete'), (False, 'technical'), (True, 'passed'))]:
             with tempfile.TemporaryDirectory() as folder, ExitStack() as stack:
                 stack.enter_context(patch.dict(os.environ, {'CONTENT_PRODUCTION_ENABLED':'true', 'CONTENT_PRODUCTION_WORK_MIN_FREE_BYTES':'1'}))
                 mocked={name:stack.enter_context(patch('content_production.worker.'+name)) for name in (
                     'connect_pg','TosStorageClient','TosStorageConfig.from_env','verify_module','verify_sources','claim','heartbeat','finish',
                     'run_bridge.reconcile','run_bridge.linkage','render_local','measure_clips','finalize_remix_output',
-                    'inspect_output','review_remix_pictures','review_selected_sources','review_selected_semantics','review_treated_render','review_job')}
+                    'inspect_output','remix_qc.review','remix_qc.delivery_reason','upload_with_heartbeat',
+                    'review_selected_sources','review_selected_semantics','review_treated_render','review_job')}
                 snapshot={'aspect':'portrait','assets':[], 'clips':[], 'renderBinding':current_binding()}
                 job={'job_id':'job','project_id':'project','revision':1,'preview':preview,'snapshot':snapshot}
                 mocked['claim'].return_value=job
@@ -136,10 +138,21 @@ class PictureReviewWorkerTests(unittest.TestCase):
                 mocked['finish'].return_value=True
                 mocked['render_local'].return_value=(Path(folder)/'video',{})
                 mocked['finalize_remix_output'].return_value=(Path(folder)/'video',{})
-                mocked['review_remix_pictures'].return_value={'status':'incomplete','deliveryApproved':False}
-                self.assertEqual(process_one(Path(folder),Path(folder))['status'],'completed')
+                mocked['remix_qc.review'].return_value={'status': qc_status}
+                mocked['remix_qc.delivery_reason'].return_value=None if qc_status == 'passed' else 'remix_qc_incomplete'
+                if qc_status == 'technical':
+                    mocked['inspect_output'].side_effect=ValueError('private-url-secret')
+                self.assertEqual(process_one(Path(folder),Path(folder))['status'],
+                                 'completed' if preview or qc_status == 'passed' else 'failed')
                 receipt=mocked['finish'].call_args.kwargs['receipt']
-                self.assertEqual('host_remix_picture_review' in receipt, mode=='sellingPoint' and not preview)
-                if mode=='sellingPoint' and not preview:
-                    self.assertEqual(receipt['host_remix_picture_review']['status'],'incomplete')
-                    self.assertIs(mocked['review_remix_pictures'].call_args.args[0],snapshot)
+                self.assertEqual('host_remix_qc' in receipt, not preview)
+                if not preview:
+                    self.assertEqual(receipt['host_remix_qc']['status'], 'incomplete' if qc_status == 'technical' else qc_status)
+                    if qc_status == 'technical':
+                        mocked['remix_qc.review'].assert_not_called()
+                        self.assertNotIn('private-url-secret', str(receipt))
+                    else:
+                        self.assertIs(mocked['remix_qc.review'].call_args.args[0],snapshot)
+                if qc_status != 'passed':
+                    mocked['upload_with_heartbeat'].assert_not_called()
+                    self.assertNotIn('key', mocked['finish'].call_args.kwargs)

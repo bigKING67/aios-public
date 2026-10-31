@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import type { RefObject, SyntheticEvent } from 'react';
 import {
   formatDurationSeconds,

@@ -9,8 +9,8 @@
 
 .item {
   border-radius: 12px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
@@ -22,19 +22,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
 .itemText {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
 }
 
 .itemMeta {
-  color: var(--text-secondary) !important;
+  color: var(--lobe-color-text-secondary) !important;
   font-size: var(--font-size-sm) !important;
 }
 

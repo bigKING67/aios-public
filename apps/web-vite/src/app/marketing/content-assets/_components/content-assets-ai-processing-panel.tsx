@@ -1,5 +1,7 @@
-import { Button, Popconfirm, Segmented, Select } from 'antd';
-import { FileTextOutlined, RobotOutlined } from '@ant-design/icons';
+import { Bot, FileText } from 'lucide-react';
+import { Button, confirmModal, Segmented } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { CONTENT_ASSET_TODO_OPTIONS } from '../_lib/content-assets-filter-constants';
 import { formatCompactNumber, formatDateTime } from '../_lib/content-assets-formatters';
 import type {
@@ -73,7 +75,7 @@ export function AiProcessingPanel({
   return (
     <section className={styles.workspacePanel}>
       <div className={styles.moduleHero}>
-        <div className={styles.moduleIcon}><RobotOutlined /></div>
+        <div className={styles.moduleIcon}><Bot size={14} strokeWidth={1.8} aria-hidden="true" /></div>
         <div>
           <span>智能分析</span>
           <h1>AI分析中心</h1>
@@ -94,7 +96,7 @@ export function AiProcessingPanel({
       <section className={styles.videoProcessingGrid}>
         <article className={styles.flowCard}>
           <div className={styles.sectionTitle}>
-            <RobotOutlined />
+            <Bot size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>AI / 脚本任务队列</strong>
               <p>
@@ -107,17 +109,20 @@ export function AiProcessingPanel({
             </Button>
           </div>
           <div className={styles.queueToolbar}>
-            <Segmented<ProcessingJobStatusFilter>
-              value={jobStatus}
-              options={PROCESSING_JOB_STATUS_FILTER_OPTIONS}
-              onChange={onJobStatusChange}
-            />
-            <Select<AiProcessingJobTypeFilter>
-              className={styles.queueTypeSelect}
+            <div role="group" aria-label="任务状态">
+              <Segmented<ProcessingJobStatusFilter>
+                value={jobStatus}
+                options={PROCESSING_JOB_STATUS_FILTER_OPTIONS}
+                onChange={onJobStatusChange}
+              />
+            </div>
+            <LabeledSelect<AiProcessingJobTypeFilter>
+              label="任务类型"
+              wrapperClassName={styles.queueTypeSelect}
               size="small"
               value={jobType}
               options={AI_PROCESSING_JOB_TYPE_OPTIONS}
-              onChange={onJobTypeChange}
+              onChange={(type) => type && onJobTypeChange(type)}
             />
           </div>
           <ProcessingJobList
@@ -136,7 +141,7 @@ export function AiProcessingPanel({
 
         <article className={styles.actionCard}>
           <div className={styles.sectionTitle}>
-            <FileTextOutlined />
+            <FileText size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>分析动作入口</strong>
               <p>批量排队只创建任务，实际分析由后台处理器异步执行。</p>
@@ -148,41 +153,47 @@ export function AiProcessingPanel({
               <p>默认自动选择预览版/原片作为输入，每次最多排队 100 条，避免一次性挤爆后台处理器。</p>
             </div>
             <div className={aiStyles.backfillActions}>
-              <Popconfirm
-                title="批量创建 AI 分析任务？"
-                description="系统会为待 AI 的视频排队，已有结果或运行中任务会跳过。"
-                okText="确认排队"
-                cancelText="取消"
-                onConfirm={() =>
-                  onBackfillAiJobs({
-                    jobType: 'analysis',
-                    source: 'auto',
-                    profile: 'preview_fast',
-                    limit: 100,
+              <AiActionButton
+                size="small"
+                disabled={backfillDisabled}
+                onClick={() =>
+                  confirmModal({
+                    title: '批量创建 AI 分析任务？',
+                    content: '系统会为待 AI 的视频排队，已有结果或运行中任务会跳过。',
+                    okText: '确认排队',
+                    cancelText: '取消',
+                    onOk: () =>
+                      onBackfillAiJobs({
+                        jobType: 'analysis',
+                        source: 'auto',
+                        profile: 'preview_fast',
+                        limit: 100,
+                      }),
                   })
                 }
               >
-                <Button size="small" type="primary" disabled={backfillDisabled}>
-                  排队 AI 分析
-                </Button>
-              </Popconfirm>
-              <Popconfirm
-                title="批量创建脚本/SRT 任务？"
-                description="脚本/SRT 与 AI 分析独立，会为缺脚本的视频排队。"
-                okText="确认排队"
-                cancelText="取消"
-                onConfirm={() =>
-                  onBackfillAiJobs({
-                    jobType: 'transcript',
-                    source: 'auto',
-                    limit: 100,
+                排队 AI 分析
+              </AiActionButton>
+              <Button
+                size="small"
+                disabled={backfillDisabled}
+                onClick={() =>
+                  confirmModal({
+                    title: '批量创建脚本/SRT 任务？',
+                    content: '脚本/SRT 与 AI 分析独立，会为缺脚本的视频排队。',
+                    okText: '确认排队',
+                    cancelText: '取消',
+                    onOk: () =>
+                      onBackfillAiJobs({
+                        jobType: 'transcript',
+                        source: 'auto',
+                        limit: 100,
+                      }),
                   })
                 }
               >
-                <Button size="small" disabled={backfillDisabled}>
-                  排队脚本/SRT
-                </Button>
-              </Popconfirm>
+                排队脚本/SRT
+              </Button>
             </div>
           </div>
           <div className={styles.actionList}>

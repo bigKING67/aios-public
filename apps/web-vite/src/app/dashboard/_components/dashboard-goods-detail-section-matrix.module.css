@@ -14,10 +14,10 @@
   align-items: center;
   gap: var(--spacing-1);
   padding: var(--spacing-1) var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   cursor: pointer;
@@ -30,11 +30,11 @@
 
 .matrixSummaryItemInactive {
   opacity: 0.54;
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .matrixSummaryItem:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 1px;
 }
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import notifyStyles from './dataops-notify-panel.module.css';
 import styles from './dataops-hub.module.css';
@@ -18,7 +17,7 @@ interface DataOpsNotificationChannelDetailProps {
   channels: DataOpsNotificationChannel[];
   summary: DataOpsNotificationChannelSummary;
   defaultAlertChannelName: string | null;
-  columns: ColumnsType<DataOpsNotificationChannel>;
+  columns: TableColumnsType<DataOpsNotificationChannel>;
   isCompactViewport: boolean;
   renderPaginationTotal: (total: number, range: [number, number]) => string;
 }

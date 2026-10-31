@@ -45,7 +45,6 @@ export function CreatorLiveDashboardClient() {
   const {
     isMobile,
     messageApi,
-    messageContextHolder,
     isAuthenticated,
     dateControls,
     detailFilters,
@@ -163,7 +162,6 @@ export function CreatorLiveDashboardClient() {
       segmentedName="creator-live-date-mode"
       onDateModeChange={setDateMode}
       datePickerProps={datePickerProps}
-      messageContextHolder={messageContextHolder}
       loadError={loadError}
       mainClassName={styles.dashboardFill}
       errorClassName={styles.errorBanner}

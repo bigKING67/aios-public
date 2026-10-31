@@ -10,8 +10,8 @@ import pageStyles from '../ai-studio.module.css';
 import remixStyles from './remix.module.css';
 
 /**
- * AI 剪辑 page in a remix mode (框架混剪 or 卖点混剪; the mode switch sits in
- * its header). When the remix capability is off it renders an honest notice
+ * AI 合成 page in a remix mode (框架混剪 or 卖点混剪; the mode tabs sit under
+ * the page title). When the remix capability is off it renders an honest notice
  * and mounts no submit control, so no render can be queued.
  */
 export function FrameworkRemixPanel({
@@ -25,16 +25,16 @@ export function FrameworkRemixPanel({
   const name = remixModeLabel(mode);
   return (
     <section className={pageStyles.panel} aria-labelledby="ai-studio-page-title">
-      <header className={pageStyles.pageHeader}>
-        <div>
-          <h1 id="ai-studio-page-title">AI 剪辑</h1>
-          <p>{remixPurpose(mode)}</p>
-        </div>
-        <div className={remixStyles.headerEnd}>
+      <div className={remixStyles.pageTop}>
+        <header className={pageStyles.pageHeader}>
+          <div>
+            <h1 id="ai-studio-page-title">AI 合成</h1>
+            <p>{remixPurpose(mode)}</p>
+          </div>
           {enabled ? null : <Badge status="neutral">尚未启用</Badge>}
-          <EditingModeTabs mode={mode} />
-        </div>
-      </header>
+        </header>
+        <EditingModeTabs mode={mode} />
+      </div>
       {enabled ? (
         // Remount per mode so a structure picked for one mode never leaks into the other.
         <FrameworkRemixForm key={mode} capabilities={capabilities} mode={mode} />

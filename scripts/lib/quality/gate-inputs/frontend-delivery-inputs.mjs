@@ -12,6 +12,15 @@ function buildFingerprintBehaviorInputs({ checkGuardHelperInputs, shared }) {
   ];
 }
 
+function dockerDependencyCacheBehaviorInputs({ shared }) {
+  return [
+    'Dockerfile.vite',
+    'scripts/build/prepare-docker-dependencies.mjs',
+    'scripts/checks/frontend/docker-dependency-cache.behavior.mjs',
+    ...shared,
+  ];
+}
+
 function bundleBudgetInputs({ scriptInputs, shared }) {
   return [
     '@frontendBuildSource',
@@ -171,6 +180,7 @@ function designEvolutionBehaviorInputs({ checkGuardHelperInputs, shared }) {
 
 const FRONTEND_DELIVERY_INPUT_BUILDERS = Object.freeze({
   'verify:frontend:build-fingerprint-behavior': buildFingerprintBehaviorInputs,
+  'verify:frontend:docker-dependency-cache-behavior': dockerDependencyCacheBehaviorInputs,
   'verify:frontend:bundle-budget': bundleBudgetInputs,
   'verify:frontend:bundle-budget-behavior': bundleBudgetBehaviorInputs,
   'verify:frontend:prod-css-integrity': prodCssIntegrityInputs,

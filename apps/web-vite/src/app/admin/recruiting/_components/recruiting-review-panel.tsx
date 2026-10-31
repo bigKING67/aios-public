@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Alert, App, Button, Input, InputNumber, Slider, Space } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import { Alert, Button, InputNumber, Slider, TextArea, toast } from "@lobehub/ui";
+import { Copy } from "lucide-react";
 import { Badge } from "@/components/atoms/badge";
 import { copyText } from "@/lib/copy-text";
 import { resolveClientErrorMessage } from "@/lib/client-error";
@@ -35,7 +35,6 @@ export function RecruitingReviewPanel({
   submission,
   rubric,
 }: RecruitingReviewPanelProps) {
-  const { message } = App.useApp();
   const [scores, setScores] = useState<RecruitingReviewScores>(
     submission.review?.scores ?? EMPTY_SCORES,
   );
@@ -65,7 +64,7 @@ export function RecruitingReviewPanel({
   const handleSave = () => {
     saveReview.mutate(
       { scores, note: note.trim() || null },
-      { onSuccess: () => message.success("评分已保存") },
+      { onSuccess: () => toast.success("评分已保存") },
     );
   };
 
@@ -78,8 +77,8 @@ export function RecruitingReviewPanel({
       note,
     });
     void copyText(summary).then((copied) => {
-      if (copied) message.success("评分结果已复制");
-      else message.error("复制失败，请手动复制");
+      if (copied) toast.success("评分结果已复制");
+      else toast.error("复制失败，请手动复制");
     });
   };
 
@@ -112,6 +111,7 @@ export function RecruitingReviewPanel({
           <div key={dimension.key} className={styles.dimension}>
             <div className={styles.dimensionHeader}>
               <label
+                id={`recruiting-score-${dimension.key}-label`}
                 htmlFor={`recruiting-score-${dimension.key}`}
                 className={styles.dimensionLabel}
               >
@@ -135,7 +135,8 @@ export function RecruitingReviewPanel({
               max={dimension.max}
               value={scores[key]}
               onChange={(value) => updateScore(key, dimension.max, value)}
-              aria-label={dimension.label}
+              // lobe Slider puts aria-label on its group; aria-labelledby reaches the thumb input.
+              aria-labelledby={`recruiting-score-${dimension.key}-label`}
             />
             <p className={styles.dimensionGuidance}>{dimension.guidance}</p>
           </div>
@@ -145,7 +146,7 @@ export function RecruitingReviewPanel({
       <label htmlFor="recruiting-review-note" className={styles.dimensionLabel}>
         备注
       </label>
-      <Input.TextArea
+      <TextArea
         id="recruiting-review-note"
         value={note}
         onChange={(event) => setNote(event.target.value)}
@@ -163,7 +164,7 @@ export function RecruitingReviewPanel({
           )}
         />
       ) : null}
-      <Space wrap>
+      <div className={styles.reviewActions}>
         <Button
           type="primary"
           loading={saveReview.isPending}
@@ -171,10 +172,10 @@ export function RecruitingReviewPanel({
         >
           保存评分
         </Button>
-        <Button icon={<CopyOutlined />} onClick={handleCopy}>
+        <Button icon={<Copy size={16} strokeWidth={1.8} aria-hidden="true" />} onClick={handleCopy}>
           复制评分结果
         </Button>
-      </Space>
+      </div>
       {submission.review ? (
         <p className={styles.reviewMeta}>
           上次保存：{submission.review.reviewedBy ?? "—"} ·{" "}

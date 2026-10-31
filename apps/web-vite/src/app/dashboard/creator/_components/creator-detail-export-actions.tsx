@@ -1,7 +1,7 @@
 'use client';
 
-import { DownOutlined, DownloadOutlined, LoginOutlined } from '@ant-design/icons';
-import { Button, Dropdown, type MenuProps } from 'antd';
+import { Button, DropdownMenu, type DropdownItem } from '@lobehub/ui';
+import { ChevronDown, Download, LogIn } from 'lucide-react';
 import styles from './creator-live-dashboard.module.css';
 
 export interface CreatorDetailExportMenuItem {
@@ -37,45 +37,42 @@ export function CreatorDetailExportActions({
   const exportButton = (
     <Button
       type="primary"
-      icon={<DownloadOutlined />}
+      icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
       loading={exportLoading}
       onClick={hasExportMenu ? undefined : () => void onExport()}
       disabled={exportDisabled}
       title={exportButtonTitle}
     >
       {exportButtonLabel}
-      {hasExportMenu ? <DownOutlined /> : null}
+      {hasExportMenu ? <ChevronDown size={14} strokeWidth={1.8} aria-hidden="true" /> : null}
     </Button>
   );
-  const exportMenu: MenuProps | undefined = hasExportMenu
-    ? {
-        items: exportMenuItems?.map((item) => ({
-          key: item.key,
-          label: item.label,
-          title: item.title,
-          disabled: exportLoading || item.disabled,
-        })),
-        onClick: ({ key }) => {
-          const item = exportMenuItems?.find((candidate) => candidate.key === key);
-          if (!item || exportLoading || item.disabled) {
+  const exportMenuItemsForMenu: DropdownItem[] | undefined = hasExportMenu
+    ? exportMenuItems?.map((item) => ({
+        key: item.key,
+        label: item.label,
+        title: item.title,
+        disabled: exportLoading || item.disabled,
+        onClick: () => {
+          if (exportLoading || item.disabled) {
             return;
           }
           void item.onClick();
         },
-      }
+      }))
     : undefined;
 
   return (
     <div className={styles.detailActions}>
-      {hasExportMenu && exportMenu ? (
-        <Dropdown
-          menu={exportMenu}
-          trigger={['hover', 'click']}
+      {hasExportMenu && exportMenuItemsForMenu ? (
+        <DropdownMenu
+          items={exportMenuItemsForMenu}
+          trigger="both"
           placement="bottomRight"
           disabled={exportDisabled || exportLoading}
         >
           {exportButton}
-        </Dropdown>
+        </DropdownMenu>
       ) : (
         exportButton
       )}
@@ -85,7 +82,7 @@ export function CreatorDetailExportActions({
           <Button
             type="link"
             size="small"
-            icon={<LoginOutlined />}
+            icon={<LogIn size={14} strokeWidth={1.8} aria-hidden="true" />}
             className={styles.loginEntryButton}
             onClick={onNavigateToLogin}
           >

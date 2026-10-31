@@ -1,14 +1,10 @@
 'use client';
 
-import { Alert, Button, Input, Select } from 'antd';
-import {
-  BellOutlined,
-  ClockCircleOutlined,
-  DatabaseOutlined,
-  ReloadOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
+import { Alert, Button, Input } from '@lobehub/ui';
+import { Bell, Clock, Database, RefreshCw, RotateCw } from 'lucide-react';
 import type { DataOpsStatus } from '@/config/dataops-hub';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import hubStyles from './dataops-hub.module.css';
 import overviewStyles from './dataops-overview.module.css';
 import shellStyles from './dataops-shell.module.css';
@@ -135,11 +131,11 @@ export function DataOpsHubOverview({
             value={keywordInput}
             onChange={(event) => onKeywordInputChange(event.target.value)}
             placeholder="搜索任务名、Flow、表名"
-            className={overviewStyles.keywordInput}
           />
-          <Select<DataOpsStatus | 'all'>
+          <LabeledSelect<DataOpsStatus | 'all'>
+            label="任务状态"
             value={statusFilter}
-            onChange={onStatusFilterChange}
+            onChange={(value) => value && onStatusFilterChange(value)}
             options={[
               { label: '全部状态', value: 'all' },
               { label: '健康', value: 'healthy' },
@@ -147,12 +143,12 @@ export function DataOpsHubOverview({
               { label: '异常', value: 'error' },
               { label: '停用', value: 'paused' },
             ]}
-            className={overviewStyles.statusSelect}
+            wrapperClassName={overviewStyles.statusSelect}
           />
-          <Button icon={<ReloadOutlined />} onClick={onRefreshRuntime} loading={runtimeFetching}>
+          <Button icon={<RotateCw {...DATAOPS_ICON_PROPS} />} onClick={onRefreshRuntime} loading={runtimeFetching}>
             刷新
           </Button>
-          <Button icon={<DatabaseOutlined />} onClick={onOpenRuntimeDetails}>
+          <Button icon={<Database {...DATAOPS_ICON_PROPS} />} onClick={onOpenRuntimeDetails}>
             运行态
           </Button>
         </div>
@@ -166,7 +162,7 @@ export function DataOpsHubOverview({
         >
           <div className={overviewStyles.opsSignalHead}>
             <span>编排覆盖</span>
-            <SyncOutlined />
+            <RefreshCw {...DATAOPS_ICON_PROPS} />
           </div>
           <strong>{metrics.healthyRate}%</strong>
           <div className={overviewStyles.metricMainStackBar} aria-hidden>
@@ -187,7 +183,7 @@ export function DataOpsHubOverview({
         <article className={overviewStyles.opsSignalCard}>
           <div className={overviewStyles.opsSignalHead}>
             <span>平均延迟</span>
-            <ClockCircleOutlined />
+            <Clock {...DATAOPS_ICON_PROPS} />
           </div>
           <strong>{metrics.avgLagMinutes}m</strong>
           <p>同步链路最近延迟均值</p>
@@ -200,7 +196,7 @@ export function DataOpsHubOverview({
         >
           <div className={overviewStyles.opsSignalHead}>
             <span>通知失败 24h</span>
-            <BellOutlined />
+            <Bell {...DATAOPS_ICON_PROPS} />
           </div>
           <strong>{metrics.notificationFailureCount24h}</strong>
           <p>默认通道：{defaultAlertChannelName}</p>
@@ -209,7 +205,7 @@ export function DataOpsHubOverview({
         <article className={overviewStyles.opsSignalCard}>
           <div className={overviewStyles.opsSignalHead}>
             <span>运行态存储</span>
-            <DatabaseOutlined />
+            <Database {...DATAOPS_ICON_PROPS} />
           </div>
           <strong className={overviewStyles.opsSignalTextValue}>{runtimeStorageModeLabel}</strong>
           <p>锁模式：{runtimeLockModeLabel}</p>

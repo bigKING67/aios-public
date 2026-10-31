@@ -124,8 +124,8 @@ export function collectProtectedRoutePolicyPropFindings(expectation, protectedSo
     case 'authenticated':
     case 'sample_inventory':
     case 'creator_dashboard':
-    case 'content_assets':
-    case 'content_assets_write':
+    case 'super_admin':
+    case 'team_output':
       return protectedRouteOpenings.some((opening) => opening.includes('requiredPermission='))
         ? [`${expectation.route} ${expectation.kind} ProtectedRoute must rely on route policy access without extra requiredPermission`]
         : [];
@@ -329,10 +329,10 @@ export function allowedContextForKind(kind) {
       return { roles: ['bd'] };
     case 'creator_library':
       return { permissions: ['marketing:creator_library:read'] };
-    case 'content_assets':
-      return { isAuthenticated: true };
-    case 'content_assets_write':
-      return { roles: ['content_ops'] };
+    case 'super_admin':
+      return { roles: ['super_admin'] };
+    case 'team_output':
+      return { permissions: ['marketing:team_output:read'] };
     default:
       throw new Error(`Unhandled protected route policy kind: ${kind}`);
   }

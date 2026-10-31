@@ -1,6 +1,4 @@
 import { useCallback, useState } from 'react';
-import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsNotificationEvent } from '@/config/dataops-hub';
 import { request } from '@/lib/request';
@@ -27,6 +25,7 @@ import {
   orderNotificationRetryReportItems,
   type OrderedNotificationRetryReportItem,
 } from './dataops-notification-retry-report-helpers';
+import type { DataOpsMessageApi, DataOpsModalApi } from './dataops-feedback-types';
 
 type NotificationChannelMap = ReadonlyMap<string, { channelName: string }>;
 
@@ -35,8 +34,8 @@ export function useDataOpsNotificationRetryState(options: {
   availableAlertChannelIds: ReadonlySet<string>;
   filteredFailedNotificationEvents: DataOpsNotificationEvent[];
   hasOperatePermission: boolean;
-  message: MessageInstance;
-  modal: Pick<ModalStaticFunctions, 'confirm'>;
+  message: DataOpsMessageApi;
+  modal: DataOpsModalApi;
   notificationChannelMap: NotificationChannelMap;
   refetchRuntime: () => Promise<unknown>;
   retryGroupTraceFailedEvents: DataOpsNotificationEvent[];

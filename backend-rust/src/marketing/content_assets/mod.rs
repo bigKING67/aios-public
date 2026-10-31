@@ -1,6 +1,7 @@
 mod asset_lookup;
 mod asset_mutations;
 mod cleanup;
+mod cloud_video;
 mod coverage;
 mod delivery;
 mod detail_types;
@@ -10,6 +11,8 @@ mod events;
 mod guards;
 mod handler_support;
 mod handlers;
+#[cfg(test)]
+pub(crate) use handlers::qianchuan_http_route_tests::fixture_settings as http_fixture_settings;
 mod identity_lookup;
 mod identity_metadata;
 mod identity_mutations;
@@ -22,6 +25,7 @@ mod permissions;
 mod prefect_trigger;
 mod processing_mutations;
 mod production;
+mod relation_guard;
 mod repository;
 mod repository_detail;
 mod repository_filters;
@@ -112,6 +116,10 @@ pub(super) fn router() -> axum::Router<std::sync::Arc<crate::state::AppState>> {
 
 pub(super) fn spawn_stale_upload_cleanup(state: std::sync::Arc<crate::state::AppState>) {
     cleanup::spawn_stale_upload_cleanup(state);
+}
+
+pub(super) fn spawn_competitor_auto_analysis(state: std::sync::Arc<crate::state::AppState>) {
+    studio::spawn_competitor_auto_analysis(state);
 }
 
 pub(crate) use production::spawn_planner as spawn_content_planner;

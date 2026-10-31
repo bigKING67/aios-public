@@ -13,9 +13,10 @@ use super::domain;
 use super::error::{ConflictCode, StudioError, StudioResult};
 use super::remix_combos::{self, Candidate};
 use super::remix_points_plan::{self as point_plan, PlannedPart, PlannedRun};
+use super::remix_preview::label_name;
+use super::remix_selling_points::{span, within_duration_tolerance};
 use super::remix_types::{
     CreateRemixBatchRequest, RemixBatchDetail, RemixBatchPreviewRequest, RemixBatchPreviewResponse,
-    RemixSlotAvailability,
 };
 use super::repository::{active_preset_labels, db_error};
 use super::types::SegmentPresetLabel;
@@ -32,6 +33,8 @@ use sha2::{Digest, Sha256};
 use sqlx::{PgConnection, PgPool, Row};
 use std::collections::{BTreeSet, HashMap, HashSet};
 use uuid::Uuid;
+
+pub(super) use super::remix_preview::{preview_response, shortfall_reason};
 
 pub(super) const MAX_SLOTS: usize = 30;
 const MAX_CANDIDATES_PER_LABEL: i64 = 200;
@@ -79,6 +82,7 @@ impl RemixMode {
 
 #[derive(Debug, Clone, PartialEq)]
 pub(super) struct Normalized {
+    pub(super) admission_as_of: Option<chrono::NaiveDate>,
     pub(super) mode: RemixMode,
     pub(super) preset_key: String,
     pub(super) preset_version: i32,
@@ -155,6 +159,7 @@ pub(super) fn normalize(
         )));
     }
     Ok(Normalized {
+        admission_as_of: None,
         mode,
         preset_key: request.preset_key.clone(),
         preset_version: request.preset_version,
@@ -179,6 +184,7 @@ pub(super) fn preview_request(request: &CreateRemixBatchRequest) -> RemixBatchPr
 
 /// Availability of one slot: usable candidates (类型 1) or fill options (类型 2).
 pub(super) struct SlotPlan {
+    pub(super) spend_counts: Option<super::remix_types::SpendCounts>,
     pub(super) candidates: usize,
     /// 类型 2: known reference selling points, including whole-frame fallback.
     pub(super) selling_points: Option<Vec<String>>,
@@ -186,6 +192,8 @@ pub(super) struct SlotPlan {
 }
 
 pub(super) struct Plan {
+    pub(super) admission: HashMap<Uuid, super::types::SourceSpend>,
+    pub(super) admission_excluded: u64,
     pub(super) mode: RemixMode,
     pub(super) labels: Vec<String>,
     pub(super) preset_labels: Vec<SegmentPresetLabel>,
@@ -198,22 +206,40 @@ pub(super) struct Plan {
     pub(super) exact: bool,
     pub(super) previously_used: u64,
     pub(super) reference_excluded: bool,
+    /// Slots only take fills within ±20 % of the reference span.
+    pub(super) slot_tolerance: bool,
+    /// Labels the preview reports as lacking material, in label order.
+    pub(super) missing_labels: Vec<String>,
     pub(super) seed: u64,
 }
 
 /// The reference original's current confirmed segments in time order: their
-/// labels are the slot structure, their ids the combination a batch must not
-/// reproduce (an output identical to the original is not a remix).
+/// labels are the slot structure, their spans the slot durations, their ids
+/// the combination a batch must not reproduce (an output identical to the
+/// original is not a remix).
+struct ReferenceStructure {
+    labels: Vec<String>,
+    ids: Vec<Uuid>,
+    spans_ms: Vec<u64>,
+}
+
 async fn structure_from_asset(
     db: &mut PgConnection,
     n: &Normalized,
     asset_id: Uuid,
     enterprise_tag: Option<&str>,
-) -> StudioResult<(Vec<String>, Vec<Uuid>)> {
-    let rows: Vec<(String, Uuid)> = sqlx::query_as("SELECT s.label_key, s.segment_id FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.asset_id = $1 AND a.is_deleted = FALSE AND s.preset_key = $2 AND s.preset_version = $3 AND s.status = 'confirmed' AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.start_ms, s.segment_id")
+) -> StudioResult<ReferenceStructure> {
+    let rows: Vec<(String, Uuid, i32, i32)> = sqlx::query_as("SELECT s.label_key, s.segment_id, s.start_ms, s.end_ms FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.asset_id = $1 AND a.is_deleted = FALSE AND s.preset_key = $2 AND s.preset_version = $3 AND s.status = 'confirmed' AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.start_ms, s.segment_id")
         .bind(asset_id).bind(&n.preset_key).bind(n.preset_version).bind(enterprise_tag)
         .fetch_all(&mut *db).await.map_err(db_error)?;
-    let (labels, ids): (Vec<String>, Vec<Uuid>) = rows.into_iter().unzip();
+    let spans_ms = rows
+        .iter()
+        .map(|(_, _, start, end)| span(*start, *end))
+        .collect();
+    let (labels, ids): (Vec<String>, Vec<Uuid>) = rows
+        .into_iter()
+        .map(|(label, id, _, _)| (label, id))
+        .unzip();
     if labels.is_empty() {
         return Err(AppError::bad_request("参考原片在该预设版本下没有当前有效的已确认片段").into());
     }
@@ -224,7 +250,11 @@ async fn structure_from_asset(
         ))
         .into());
     }
-    Ok((labels, ids))
+    Ok(ReferenceStructure {
+        labels,
+        ids,
+        spans_ms,
+    })
 }
 
 async fn load_candidates(
@@ -232,14 +262,16 @@ async fn load_candidates(
     n: &Normalized,
     labels: &BTreeSet<String>,
     enterprise_tag: Option<&str>,
+    cloud_enabled: bool,
 ) -> StudioResult<Vec<Candidate>> {
     let labels: Vec<String> = labels.iter().cloned().collect();
-    let rows = sqlx::query("SELECT segment_id, asset_id, start_ms, end_ms, label_key, source_content_hash FROM (SELECT s.*, ROW_NUMBER() OVER (PARTITION BY s.label_key ORDER BY s.asset_id, s.start_ms, s.segment_id) AS rank FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.preset_key = $1 AND s.preset_version = $2 AND s.status = 'confirmed' AND s.label_key = ANY($3) AND s.product_name = $4 AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($6::TEXT IS NULL OR $6 = ANY(a.tags))) ranked WHERE rank <= $5 ORDER BY label_key, asset_id, start_ms, segment_id")
-        .bind(&n.preset_key).bind(n.preset_version).bind(&labels).bind(&n.product_name).bind(MAX_CANDIDATES_PER_LABEL).bind(enterprise_tag)
+    let rows = sqlx::query("SELECT segment_id, asset_id, start_ms, end_ms, label_key, source_content_hash FROM (SELECT s.*, ROW_NUMBER() OVER (PARTITION BY s.label_key ORDER BY s.asset_id, s.start_ms, s.segment_id) AS rank FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.preset_key = $1 AND s.preset_version = $2 AND s.status = 'confirmed' AND s.label_key = ANY($3) AND s.product_name = $4 AND a.is_deleted = FALSE AND ($7::BOOLEAN OR a.bucket <> 'cloud_video') AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($6::TEXT IS NULL OR $6 = ANY(a.tags))) ranked WHERE rank <= $5 ORDER BY label_key, asset_id, start_ms, segment_id")
+        .bind(&n.preset_key).bind(n.preset_version).bind(&labels).bind(&n.product_name).bind(MAX_CANDIDATES_PER_LABEL).bind(enterprise_tag).bind(cloud_enabled)
         .fetch_all(&mut *db).await.map_err(db_error)?;
     Ok(rows
         .into_iter()
         .map(|row| Candidate {
+            low: true,
             segment_id: row.get("segment_id"),
             asset_id: row.get("asset_id"),
             start_ms: row.get("start_ms"),
@@ -255,8 +287,17 @@ pub(super) async fn used_hashes(
     db: &mut PgConnection,
     owner: &str,
 ) -> StudioResult<HashSet<String>> {
-    let hashes: Vec<String> = sqlx::query_scalar("SELECT r.combination_hash FROM ads.content_remix_batch_runs r JOIN ads.content_remix_batches b USING (batch_id) WHERE b.owner_user_id = $1")
-        .bind(owner).fetch_all(&mut *db).await.map_err(db_error)?;
+    used_hashes_since(db, Some(owner), None).await
+}
+
+/// Daily automation has a bounded history; manual requests retain all history.
+pub(super) async fn used_hashes_since(
+    db: &mut PgConnection,
+    owner: Option<&str>,
+    since: Option<chrono::NaiveDate>,
+) -> StudioResult<HashSet<String>> {
+    let hashes: Vec<String> = sqlx::query_scalar("SELECT r.combination_hash FROM ads.content_remix_batch_runs r JOIN ads.content_remix_batches b USING (batch_id) WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1) AND ($2::DATE IS NULL OR b.created_at >= ($2::DATE::TIMESTAMP AT TIME ZONE 'Asia/Shanghai'))")
+        .bind(owner).bind(since).fetch_all(&mut *db).await.map_err(db_error)?;
     Ok(hashes.into_iter().collect())
 }
 
@@ -285,12 +326,14 @@ pub(super) async fn build_plan(
         };
         return point_plan::build(db, context, n, preset_labels).await;
     }
-    let (labels, reference) = match (&n.labels, n.source_asset_id) {
-        (Some(labels), _) => (labels.clone(), None),
+    // A reference original also bounds each slot to ±20 % of its own span; a
+    // hand-written label sequence has no spans.
+    let (labels, reference, spans_ms) = match (&n.labels, n.source_asset_id) {
+        (Some(labels), _) => (labels.clone(), None, None),
         (None, Some(asset_id)) => {
-            let (labels, ids) =
-                structure_from_asset(db, n, asset_id, access.enterprise_tag()).await?;
-            (labels, Some(remix_combos::combination_hash(&ids)))
+            let structure = structure_from_asset(db, n, asset_id, access.enterprise_tag()).await?;
+            let hash = remix_combos::combination_hash(&structure.ids);
+            (structure.labels, Some(hash), Some(structure.spans_ms))
         }
         (None, None) => return Err(AppError::Internal.into()),
     };
@@ -298,29 +341,70 @@ pub(super) async fn build_plan(
         domain::ensure_label(&preset_labels, label)?;
     }
     let distinct: BTreeSet<String> = labels.iter().cloned().collect();
-    let candidates = load_candidates(db, n, &distinct, access.enterprise_tag()).await?;
+    let mut candidates = load_candidates(
+        db,
+        n,
+        &distinct,
+        access.enterprise_tag(),
+        settings.content_ai_studio_cloud_remix_enabled,
+    )
+    .await?;
+    let ids: Vec<Uuid> = candidates
+        .iter()
+        .map(|c| c.asset_id)
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .collect();
+    let admission = super::admission::load(
+        db,
+        &ids,
+        settings.content_ai_studio_admission_min_spend,
+        n.admission_as_of,
+    )
+    .await?;
+    for candidate in &mut candidates {
+        candidate.low = admission
+            .get(&candidate.asset_id)
+            .is_none_or(|s| s.class != "qualified");
+    }
     let asset_ids = candidates.iter().map(|c| c.asset_id).collect();
     let (sources, excluded_assets) =
         point_plan::bind_sources(pool, settings, user, access, asset_ids).await?;
+    let usable: Vec<&Candidate> = candidates
+        .iter()
+        .filter(|c| {
+            point_plan::usable(
+                &sources,
+                max_ms,
+                c.asset_id,
+                Some(&c.source_content_hash),
+                c.start_ms,
+                c.end_ms,
+            )
+        })
+        .collect();
     let slots: Vec<Vec<Candidate>> = labels
         .iter()
-        .map(|label| {
-            candidates
+        .enumerate()
+        .map(|(index, label)| {
+            usable
                 .iter()
                 .filter(|c| {
                     &c.label_key == label
-                        && point_plan::usable(
-                            &sources,
-                            max_ms,
-                            c.asset_id,
-                            Some(&c.source_content_hash),
-                            c.start_ms,
-                            c.end_ms,
-                        )
+                        && spans_ms.as_ref().is_none_or(|spans| {
+                            within_duration_tolerance(spans[index], c.duration_ms())
+                        })
                 })
-                .cloned()
+                .map(|c| (*c).clone())
                 .collect()
         })
+        .collect();
+    // Only labels without any usable segment are missing; a slot emptied by
+    // the ±20 % bound is explained by the shortfall reason instead.
+    let missing_labels = distinct
+        .iter()
+        .filter(|label| !usable.iter().any(|c| &c.label_key == *label))
+        .cloned()
         .collect();
     let selection = remix_combos::select(&slots, n.count, seed, max_ms, used, reference.as_deref());
     Ok(Plan {
@@ -330,6 +414,9 @@ pub(super) async fn build_plan(
         slots: slots
             .iter()
             .map(|slot| SlotPlan {
+                spend_counts: Some(super::admission::counts(
+                    slot.iter().filter_map(|c| admission.get(&c.asset_id)),
+                )),
                 candidates: slot.len(),
                 selling_points: None,
                 fallback: None,
@@ -342,103 +429,13 @@ pub(super) async fn build_plan(
         available: selection.available,
         exact: selection.exact,
         previously_used: selection.previously_used,
+        admission_excluded: selection.admission_excluded,
+        admission,
         reference_excluded: selection.reference_excluded,
+        slot_tolerance: spans_ms.is_some(),
+        missing_labels,
         seed,
     })
-}
-
-fn label_name<'a>(plan: &'a Plan, key: &'a str) -> &'a str {
-    plan.preset_labels
-        .iter()
-        .find(|label| label.key == key)
-        .map_or(key, |label| label.name.as_str())
-}
-
-pub(super) fn shortfall_reason(plan: &Plan, requested: usize) -> Option<String> {
-    let missing: Vec<String> = plan
-        .labels
-        .iter()
-        .enumerate()
-        .filter(|(index, _)| plan.slots[*index].candidates == 0)
-        .map(|(index, key)| format!("第{}位·{}", index + 1, label_name(plan, key)))
-        .collect();
-    if !missing.is_empty() {
-        return Some(format!(
-            "以下框架槽位没有同产品的可用已确认片段：{}",
-            missing.join("、")
-        ));
-    }
-    if plan.runs.len() >= requested {
-        return None;
-    }
-    let counts: Vec<String> = plan
-        .slots
-        .iter()
-        .map(|s| s.candidates.to_string())
-        .collect();
-    let rules = match plan.mode {
-        RemixMode::Framework => "同一片段重复、总时长越界",
-        RemixMode::SellingPoint => {
-            "缺少必保卖点（滋润保湿、养肤护肤）、同一片段或卖点重复、槽位时长超出 ±20%、总时长越界"
-        }
-    };
-    Some(format!(
-        "可用组合{}{} 种，少于请求的 {requested} 条（各槽位候选 {}；已排除{rules}{}）",
-        if plan.exact {
-            "只有 "
-        } else {
-            "抽样只找到 "
-        },
-        plan.runs.len(),
-        counts.join(" × "),
-        if plan.previously_used > 0 {
-            format!("及此前批次已用的 {} 种", plan.previously_used)
-        } else {
-            String::new()
-        }
-    ))
-}
-
-pub(super) fn preview_response(n: &Normalized, plan: &Plan) -> RemixBatchPreviewResponse {
-    let to_i64 = |value: u64| i64::try_from(value).unwrap_or(i64::MAX);
-    RemixBatchPreviewResponse {
-        mode: plan.mode.as_str().to_owned(),
-        labels: plan.labels.clone(),
-        source_asset_id: n.source_asset_id,
-        product_name: n.product_name.clone(),
-        slots: plan
-            .labels
-            .iter()
-            .zip(&plan.slots)
-            .enumerate()
-            .map(|(index, (label, slot))| RemixSlotAvailability {
-                ordinal: index as i32 + 1,
-                label_key: label.clone(),
-                candidate_count: slot.candidates as i32,
-                selling_points: slot.selling_points.clone(),
-                fallback: slot.fallback,
-            })
-            .collect(),
-        missing_labels: plan
-            .labels
-            .iter()
-            .zip(&plan.slots)
-            .filter(|(_, slot)| slot.candidates == 0)
-            .map(|(label, _)| label.clone())
-            .collect::<BTreeSet<_>>()
-            .into_iter()
-            .collect(),
-        excluded_asset_count: plan.excluded_assets as i32,
-        theoretical_combinations: to_i64(plan.theoretical),
-        available_combinations: to_i64(plan.available),
-        available_is_lower_bound: !plan.exact,
-        previously_used_combinations: to_i64(plan.previously_used),
-        reference_combination_excluded: plan.reference_excluded,
-        requested_count: n.count as i32,
-        plannable_count: plan.runs.len() as i32,
-        shortfall_reason: shortfall_reason(plan, n.count),
-        seed: plan.seed as i64,
-    }
 }
 
 pub(super) async fn preview(
@@ -632,18 +629,52 @@ pub(super) async fn create(
             Vec::new(),
         ));
     }
-    lock_segments(&mut tx, &plan, &n).await?;
+    let batch_id = persist_plan(
+        &mut tx,
+        settings,
+        owner,
+        &request.idempotency_key,
+        &n,
+        &plan,
+        shortfall_reason(&plan, n.count),
+    )
+    .await?;
+    tx.commit().await.map_err(db_error)?;
+    super::remix_read::detail(pool, settings, owner, Some(owner), batch_id).await
+}
+
+/// Persist an already-admitted plan in the caller's transaction. Daily planning
+/// shares the same source locks, frozen snapshot, Run and render-job path.
+pub(super) async fn persist_plan(
+    db: &mut PgConnection,
+    settings: &Settings,
+    owner: &str,
+    idempotency_key: &str,
+    n: &Normalized,
+    plan: &Plan,
+    shortfall: Option<String>,
+) -> StudioResult<Uuid> {
+    let planned = plan.runs.len();
+    let digest = n.digest();
+    lock_segments(db, plan, n).await?;
     let batch_id = Uuid::new_v4();
     let mut structure = json!({"labels": plan.labels, "sourceAssetId": n.source_asset_id});
     if n.mode == RemixMode::SellingPoint {
         structure["mode"] = json!(n.mode.as_str());
     }
+    let mut constraints = json!({"productName": n.product_name});
+    if n.mode == RemixMode::Framework {
+        let snapshot = plan.admission.values().next();
+        constraints["admission"] = json!({"asOf": snapshot.and_then(|s| s.as_of.as_deref()),
+            "windowDays": 30, "minSpend": settings.content_ai_studio_admission_min_spend,
+            "complete": snapshot.is_some_and(|s| s.complete), "version": "admission-v1"});
+    }
     sqlx::query("INSERT INTO ads.content_remix_batches (batch_id, owner_user_id, idempotency_key, request_digest, preset_key, preset_version, structure, constraints, requested_count, planned_count, seed, shortfall_reason) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)")
-        .bind(batch_id).bind(owner).bind(&request.idempotency_key).bind(&digest)
+        .bind(batch_id).bind(owner).bind(idempotency_key).bind(&digest)
         .bind(&n.preset_key).bind(n.preset_version).bind(&structure)
-        .bind(json!({"productName": n.product_name})).bind(n.count as i32).bind(planned as i32)
-        .bind(plan.seed as i64).bind(shortfall_reason(&plan, n.count))
-        .execute(&mut *tx).await.map_err(db_error)?;
+        .bind(constraints).bind(n.count as i32).bind(planned as i32)
+        .bind(plan.seed as i64).bind(shortfall)
+        .execute(&mut *db).await.map_err(db_error)?;
     for (index, run) in plan.runs.iter().enumerate() {
         let ordinal = index + 1;
         let sources: Vec<&RemixSource> = run
@@ -652,23 +683,29 @@ pub(super) async fn create(
             .filter_map(|c| plan.sources.get(&c.asset_id))
             .collect();
         let run_id = runs::create_and_produce(
-            &mut tx,
+            db,
             owner,
-            remix_run(&plan, batch_id, ordinal, run, &n.product_name),
+            remix_run(plan, batch_id, ordinal, run, &n.product_name),
             &sources,
         )
         .await?;
         let segments: Vec<_> = run
             .clips
             .iter()
-            .map(|c| point_plan::stored_segment(c, n.mode))
+            .map(|c| {
+                let mut stored = point_plan::stored_segment(c, n.mode);
+                if let Some(spend) = plan.admission.get(&c.asset_id) {
+                    stored["spendClass"] = json!(spend.class);
+                    stored["spend30d"] = json!(spend.spend30d);
+                }
+                stored
+            })
             .collect();
         sqlx::query("INSERT INTO ads.content_remix_batch_runs (batch_id, ordinal, run_id, combination_hash, segments) VALUES ($1, $2, $3, $4, $5)")
             .bind(batch_id).bind(ordinal as i32).bind(run_id).bind(&run.hash).bind(json!(segments))
-            .execute(&mut *tx).await.map_err(db_error)?;
+            .execute(&mut *db).await.map_err(db_error)?;
     }
-    tx.commit().await.map_err(db_error)?;
-    super::remix_read::detail(pool, settings, owner, Some(owner), batch_id).await
+    Ok(batch_id)
 }
 
 #[cfg(test)]
@@ -682,7 +719,7 @@ mod tests {
             preset_version: 1,
             labels: Some(vec!["mixed_voiceover".into(), "street_interview".into()]),
             source_asset_id: None,
-            product_name: " 精华 ".into(),
+            product_name: " 粉底液 ".into(),
             count: 3,
         }
     }
@@ -690,7 +727,7 @@ mod tests {
     #[test]
     fn normalization_requires_one_structure_product_and_bounded_count() {
         let n = normalize(&request(), 10).unwrap();
-        assert_eq!(n.product_name, "精华");
+        assert_eq!(n.product_name, "粉底液");
         assert_eq!(n.count, 3);
         let mut both = request();
         both.source_asset_id = Some(Uuid::nil());

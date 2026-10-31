@@ -1,7 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { FormInstance } from 'antd/es/form';
-import type { MessageInstance } from 'antd/es/message/interface';
+import { toast } from '@lobehub/ui';
 import {
   createUser,
   deleteUser,
@@ -13,8 +12,6 @@ import type { User, UserFormValues } from '../_lib/users-types';
 import { getUserErrorMessage } from './users-error-message';
 
 interface UseUsersPageActionsParams {
-  messageApi: MessageInstance;
-  form: FormInstance<UserFormValues>;
   editingUser: User | null;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   setEditingUser: Dispatch<SetStateAction<User | null>>;
@@ -23,8 +20,6 @@ interface UseUsersPageActionsParams {
 }
 
 export function useUsersPageActions({
-  messageApi,
-  form,
   editingUser,
   setIsModalVisible,
   setEditingUser,
@@ -36,13 +31,12 @@ export function useUsersPageActions({
   const createUserMutation = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
-      messageApi.success('用户创建成功');
+      toast.success('用户创建成功');
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.list() });
       setIsModalVisible(false);
-      form.resetFields();
     },
     onError: (err: unknown) => {
-      messageApi.error(getUserErrorMessage(err, '创建失败'));
+      toast.error(getUserErrorMessage(err, '创建失败'));
     },
   });
 
@@ -54,39 +48,38 @@ export function useUsersPageActions({
       return updateUser(editingUser.id, values);
     },
     onSuccess: () => {
-      messageApi.success('用户更新成功');
+      toast.success('用户更新成功');
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.list() });
       setIsModalVisible(false);
       setEditingUser(null);
-      form.resetFields();
     },
     onError: (err: unknown) => {
-      messageApi.error(getUserErrorMessage(err, '更新失败'));
+      toast.error(getUserErrorMessage(err, '更新失败'));
     },
   });
 
   const deleteUserMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {
-      messageApi.success('用户删除成功');
+      toast.success('用户删除成功');
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.list() });
     },
     onError: (err: unknown) => {
-      messageApi.error(getUserErrorMessage(err, '删除失败'));
+      toast.error(getUserErrorMessage(err, '删除失败'));
     },
   });
 
   const updateUserRolesMutation = useMutation({
     mutationFn: updateUserRoles,
     onSuccess: (_, variables) => {
-      messageApi.success('角色分配已更新');
+      toast.success('角色分配已更新');
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.list() });
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.userRoles(variables.userId) });
       setRoleModalUser(null);
       setSelectedRoleIds(null);
     },
     onError: (err: unknown) => {
-      messageApi.error(getUserErrorMessage(err, '角色分配失败'));
+      toast.error(getUserErrorMessage(err, '角色分配失败'));
     },
   });
 

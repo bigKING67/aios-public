@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import type { BatchOperationAction } from './dataops-hub-formatters';
 import { formatDateTime } from './dataops-hub-formatters';
 import type {

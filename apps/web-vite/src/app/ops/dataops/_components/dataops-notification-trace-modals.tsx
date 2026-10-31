@@ -1,7 +1,6 @@
 'use client';
 
-import { Button, Modal } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Modal, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel, DataOpsNotificationEvent } from '@/config/dataops-hub';
 import type {
   DataOpsNotificationTraceReasonHashRecoveryItem,
@@ -35,7 +34,7 @@ interface DataOpsNotificationTraceModalsProps {
   notificationTraceSloScanRankedItems: NotificationTraceSloScanRankedItem[];
   notificationTraceSloScanDisplayedItems: NotificationTraceSloScanRankedItem[];
   notificationTraceSloScanMarkdownText: string;
-  notificationTraceSloScanColumns: ColumnsType<NotificationTraceSloScanRankedItem>;
+  notificationTraceSloScanColumns: TableColumnsType<NotificationTraceSloScanRankedItem>;
   defaultAlertChannel: DataOpsNotificationChannel | null | undefined;
   retryGroupTraceOpen: boolean;
   activeRetryGroupTraceId: string;
@@ -55,7 +54,7 @@ interface DataOpsNotificationTraceModalsProps {
   retryGroupTraceReasonHashFocusLabel: string;
   retryGroupTraceFilter: NotificationTraceFilter;
   retryGroupTraceMarkdownText: string;
-  retryGroupTraceColumns: ColumnsType<DataOpsNotificationEvent>;
+  retryGroupTraceColumns: TableColumnsType<DataOpsNotificationEvent>;
   hasOperatePermission: boolean;
   globalActionBusy: boolean;
   notificationBatchRetrySubmitting: boolean;
@@ -151,6 +150,7 @@ export function DataOpsNotificationTraceModals({
           void onRunNotificationTraceSloScan();
         }}
         okText={notificationTraceSloScanDryRun ? '执行模拟巡检' : '执行巡检'}
+        cancelText="取消"
         confirmLoading={notificationTraceSloScanRunning}
         cancelButtonProps={{ disabled: notificationTraceSloScanRunning }}
         width={isCompactViewport ? 'calc(100vw - 24px)' : 1100}

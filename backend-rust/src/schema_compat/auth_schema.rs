@@ -28,7 +28,7 @@ pub(super) async fn ensure_auth_timestamp_schema(pool: &PgPool) -> anyhow::Resul
           IF to_regclass('public.auth_roles') IS NOT NULL THEN
             INSERT INTO public.auth_roles (name)
             SELECT role_name
-            FROM (VALUES ('bd'), ('bd_manager'), ('content_ops'), ('content_ops_manager')) AS roles(role_name)
+            FROM (VALUES ('bd'), ('bd_manager'), ('content_ops'), ('content_ops_manager'), ('team_output_viewer'), ('team_output_only')) AS roles(role_name)
             WHERE NOT EXISTS (
               SELECT 1
               FROM public.auth_roles existing_role
@@ -56,7 +56,8 @@ pub(super) async fn ensure_auth_timestamp_schema(pool: &PgPool) -> anyhow::Resul
                 ('marketing:creator_library:manage'),
                 ('marketing:content_assets:read'),
                 ('marketing:content_assets:write'),
-                ('marketing:content_assets:manage')
+                ('marketing:content_assets:manage'),
+                ('marketing:team_output:read')
             ) AS permissions(permission_key)
             WHERE NOT EXISTS (
               SELECT 1
@@ -141,6 +142,20 @@ pub(super) async fn ensure_auth_timestamp_schema(pool: &PgPool) -> anyhow::Resul
                 'marketing:content_assets:manage'
               )
             WHERE role.name = 'content_ops_manager'
+              AND NOT EXISTS (
+                SELECT 1
+                FROM public.auth_role_permissions existing_mapping
+                WHERE existing_mapping.role_id = role.id
+                  AND existing_mapping.permission_id = permission.id
+              );
+
+            -- 团队产出 (AI 创作中心): granted only through this role; users are assigned in /admin/roles.
+            INSERT INTO public.auth_role_permissions (role_id, permission_id)
+            SELECT role.id, permission.id
+            FROM public.auth_roles AS role
+            JOIN public.auth_permissions AS permission
+              ON permission.key = 'marketing:team_output:read'
+            WHERE role.name = 'team_output_viewer'
               AND NOT EXISTS (
                 SELECT 1
                 FROM public.auth_role_permissions existing_mapping

@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { ECharts, EChartsCoreOption } from 'echarts/core';
 
+import { ECHARTS_DARK_COLOR_PAIRS } from '@/lib/echarts-appearance';
+import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
+
 import {
   disposeLeanEcharts,
   setLeanEchartsOption,
@@ -23,6 +26,7 @@ function createChartMock() {
       handlers.set(eventName, handler);
     }),
     setOption: vi.fn(),
+    isDisposed: vi.fn(() => false),
   } as unknown as ECharts;
 
   return {
@@ -55,13 +59,13 @@ describe('lean ECharts tooltip', () => {
         {
           name: 'GMV',
           type: 'bar',
-          itemStyle: { color: 'var(--chart-series-1)' },
+          itemStyle: { color: 'var(--aios-chart-1)' },
           data: [10, 20],
         },
         {
           name: 'GSV',
           type: 'line',
-          lineStyle: { color: 'var(--chart-series-2)' },
+          lineStyle: { color: 'var(--aios-chart-2)' },
           data: [30, { name: 'custom label', value: 40 }],
         },
         {
@@ -75,7 +79,7 @@ describe('lean ECharts tooltip', () => {
 
     setLeanEchartsOption(mock.chart, option);
     mock.emit('mouseover', {
-      color: 'var(--chart-series-1)',
+      color: 'var(--aios-chart-1)',
       dataIndex: 1,
       event: { offsetX: 16, offsetY: 18 },
       name: '07/22',
@@ -178,5 +182,38 @@ describe('lean ECharts tooltip', () => {
     expect(mock.handlers.size).toBe(0);
     expect(mock.chart.off).toHaveBeenCalledTimes(6);
     expect(mock.chart.dispose).toHaveBeenCalledTimes(1);
+  });
+
+  it('draws in the current appearance and redraws live charts when the theme changes', async () => {
+    const darkPrimary = ECHARTS_DARK_COLOR_PAIRS.find(([light]) => light === ECHARTS_CHART_TOKENS.primarySeries)?.[1];
+    const lastColor = (chart: ECharts) => {
+      const calls = vi.mocked(chart.setOption).mock.calls;
+      return (calls[calls.length - 1][0] as { color: string[] }).color[0];
+    };
+    const settle = () => new Promise((resolve) => { setTimeout(resolve, 0); });
+    const root = document.documentElement;
+    root.setAttribute('data-theme', 'dark');
+    const live = createChartMock();
+    const disposed = createChartMock();
+    const option = { color: [ECHARTS_CHART_TOKENS.primarySeries] } as EChartsCoreOption;
+
+    try {
+      setLeanEchartsOption(live.chart, option);
+      setLeanEchartsOption(disposed.chart, option);
+      expect(lastColor(live.chart)).toBe(darkPrimary);
+
+      vi.mocked(disposed.chart.isDisposed).mockReturnValue(true);
+      root.setAttribute('data-theme', 'light');
+      await settle();
+      expect(lastColor(live.chart)).toBe(ECHARTS_CHART_TOKENS.primarySeries);
+      expect(disposed.chart.setOption).toHaveBeenCalledTimes(1);
+
+      disposeLeanEcharts(live.chart);
+      root.setAttribute('data-theme', 'dark');
+      await settle();
+      expect(live.chart.setOption).toHaveBeenCalledTimes(2);
+    } finally {
+      root.removeAttribute('data-theme');
+    }
   });
 });

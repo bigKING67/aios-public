@@ -1,10 +1,11 @@
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Alert, Skeleton } from 'antd';
+import { ArrowRight } from 'lucide-react';
+import { Alert, SkeletonText } from '@lobehub/ui';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import type { StudioRemixBatchPreviewResponse } from '../_lib/remix-api';
 import { labelName } from '../_lib/segment-display';
+import { sourceSpendCountsLabel } from '../_lib/source-spend';
 import styles from './segment-annotation.module.css';
 import remixStyles from './remix.module.css';
 
@@ -26,7 +27,7 @@ function formatRemixCount(value: number): string {
 export function FrameworkRemixPreview({ preset, preview, loading, error, incompleteHint, pointNames }: FrameworkRemixPreviewProps) {
   if (incompleteHint) return <p className={styles.fieldHelp}>{incompleteHint}</p>;
   if (error) return <Alert type="error" showIcon title="可用组合读取失败" description={error} />;
-  if (!preview) return loading ? <Skeleton active paragraph={{ rows: 2 }} title={false} /> : null;
+  if (!preview) return loading ? <SkeletonText rows={2} /> : null;
   const missing = preview.missingLabels.map((key) => labelName(preset, key));
   const sellingPoint = preview.mode === 'sellingPoint';
   return (
@@ -42,9 +43,12 @@ export function FrameworkRemixPreview({ preset, preview, loading, error, incompl
                 <span className={remixStyles.slotCount}>
                   {gap ? '待补' : sellingPoint ? `${slot.candidateCount} 种填法` : `${slot.candidateCount} 段`}
                 </span>
+                {slot.spendCounts ? (
+                  <span className={remixStyles.slotSpendCounts}>{sourceSpendCountsLabel(slot.spendCounts)}</span>
+                ) : null}
                 {sellingPoint ? <SlotTarget slot={slot} pointNames={pointNames} /> : null}
               </span>
-              {index < preview.slots.length - 1 ? <ArrowRightOutlined className={remixStyles.slotArrow} aria-hidden /> : null}
+              {index < preview.slots.length - 1 ? <ArrowRight size={14} strokeWidth={1.8} className={remixStyles.slotArrow} aria-hidden /> : null}
             </li>
           );
         })}
@@ -72,10 +76,25 @@ export function FrameworkRemixPreview({ preset, preview, loading, error, incompl
           title={`${preview.excludedAssetCount} 条原片因授权受限、无编辑权限或未就绪，其片段不参与组合。`}
         />
       ) : null}
+      {typeof preview.admissionExcluded === 'number' && preview.admissionExcluded > 0 ? (
+        <Alert
+          type="warning"
+          showIcon
+          title={preview.admissionExcludedIsLowerBound
+            ? `素材准入至少排除了 ${formatRemixCount(preview.admissionExcluded)} 种抽样组合。`
+            : `素材准入排除了 ${formatRemixCount(preview.admissionExcluded)} 种组合。`}
+          description={preview.admissionExcludedIsLowerBound
+            ? '组合量较大，这个数是已抽样组合的下限，不代表全部排除数。'
+            : undefined}
+        />
+      ) : null}
       <p className={styles.fieldHelp}>
         {sellingPoint
           ? '每段的填法数为该产品已确认卖点片段能拼出的方案（含整段替换）；「整段替换」的框架段按框架混剪规则用其他原片的同类框架段整段替换。'
-          : '每位的片段数为该产品已确认、可用的片段。'}可用组合已排除同一片段重复出现、总时长超限
+          : preview.sourceAssetId
+            ? '每位的片段数为该产品已确认、可用、且时长在参考段 ±20% 内的片段。'
+            : '每位的片段数为该产品已确认、可用的片段。'}可用组合已排除同一片段重复出现、
+        {sellingPoint ? '' : '同一原片内时间重叠、素材准入、'}总时长超限
         {preview.previouslyUsedCombinations > 0 ? `、你此前批次用过的 ${formatRemixCount(preview.previouslyUsedCombinations)} 种` : '、你此前批次用过的'}
         组合{preview.referenceCombinationExcluded ? '，以及和参考原片完全相同的那一种' : ''}；同样的输入得到同样的结果。
       </p>

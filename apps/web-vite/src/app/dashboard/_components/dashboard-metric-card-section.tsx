@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Tooltip } from '@lobehub/ui';
+import { Info } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { SPOTLIGHT_TREND_COLOR } from './dashboard-config';
@@ -115,7 +115,7 @@ export function DashboardMetricCardSection({
                           aria-label={`${heading.title}口径说明`}
                           role="img"
                         >
-                          <InfoCircleOutlined />
+                          <Info size={14} strokeWidth={1.8} aria-hidden="true" />
                         </span>
                       </Tooltip>
                     ) : null}

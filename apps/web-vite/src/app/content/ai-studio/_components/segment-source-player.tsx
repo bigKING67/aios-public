@@ -1,11 +1,12 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { CirclePlay } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Skeleton } from 'antd';
+import { Alert, Button, Skeleton } from '@lobehub/ui';
 import { type RefObject, useEffect, useState } from 'react';
 import { createContentAssetPlaybackUrl } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import type { ContentAssetItem, PlaybackVariant } from '@/app/marketing/content-assets/_lib/content-assets-types';
 import { resolveContentAssetRequestError } from '@/app/marketing/content-assets/_lib/content-assets-ui-helpers';
 import styles from './segment-annotation.module.css';
+import { usePlayableUrl } from '../_lib/reachable-url';
 
 interface SegmentSourcePlayerProps {
   asset: ContentAssetItem;
@@ -39,6 +40,8 @@ export function SegmentSourcePlayer({ asset, videoRef, onTimeUpdate, onSeeking, 
     retry: false,
   });
 
+  const src = usePlayableUrl(playback.data);
+
   const alternative: PlaybackVariant | null = variant === 'raw'
     ? (asset.previewObjectKey ? 'preview' : null)
     : (asset.rawObjectKey ? 'raw' : null);
@@ -46,7 +49,7 @@ export function SegmentSourcePlayer({ asset, videoRef, onTimeUpdate, onSeeking, 
   if (!canPlay) {
     return (
       <div className={styles.playerEmpty}>
-        <PlayCircleOutlined aria-hidden />
+        <CirclePlay size={14} strokeWidth={1.8} aria-hidden />
         <p>
           {asset.externalOnly
             ? '该原片来自外部链接，尚未补传原片，暂不能在线播放。仍可手动输入入点和出点。'
@@ -58,15 +61,15 @@ export function SegmentSourcePlayer({ asset, videoRef, onTimeUpdate, onSeeking, 
 
   return (
     <div className={styles.player}>
-      {playback.isPending ? <Skeleton.Node active className={styles.playerSkeleton} /> : null}
+      {playback.isPending || (playback.data && !src) ? <Skeleton className={styles.playerSkeleton} /> : null}
       {playback.isError ? (
         <Alert type="error" showIcon title="播放地址生成失败" description={resolveContentAssetRequestError(playback.error)} />
       ) : null}
-      {playback.data ? (
+      {playback.data && src ? (
         <video
           ref={videoRef}
           className={styles.video}
-          src={playback.data.url}
+          src={src}
           poster={asset.coverUrl || undefined}
           controls
           playsInline
@@ -86,7 +89,7 @@ export function SegmentSourcePlayer({ asset, videoRef, onTimeUpdate, onSeeking, 
           type="warning"
           showIcon
           title="浏览器无法播放该文件"
-          description={alternative === 'preview' ? '原片编码可能不受浏览器支持，可改用预览版定位时间；播放地址过期时可重新获取。' : '播放地址可能已过期，可重新获取；仍失败请在素材库中检查文件。'}
+          description={alternative === 'preview' ? '原片编码可能不受浏览器支持，可改用预览版定位时间；播放地址过期时可重新获取。' : '播放地址可能已过期，可重新获取；仍失败请检查原片文件。'}
           action={<Button onClick={() => { setMediaError(false); void playback.refetch(); }}>重新获取</Button>}
         />
       ) : null}

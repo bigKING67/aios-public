@@ -239,6 +239,15 @@ async fn selling_point_batches_freeze_blocks_with_fill_details_and_prefer_exact_
     assert!(stored
         .iter()
         .all(|run| run[0]["parts"].as_array().map(Vec::len) == Some(2)));
+    for run in &stored {
+        let checks = run[0]["sourceChecks"].as_array().unwrap();
+        assert!(checks.iter().any(|s| s["presetKey"] == "framework"));
+        for part in run[0]["parts"].as_array().unwrap() {
+            assert!(checks
+                .iter()
+                .any(|s| s["segmentId"] == part["segmentId"] && s["presetKey"] == "selling_point"));
+        }
+    }
     assert!(stored
         .iter()
         .all(|run| run[0]["sellingPoints"] == serde_json::json!(["moisturizing", "skincare"])));

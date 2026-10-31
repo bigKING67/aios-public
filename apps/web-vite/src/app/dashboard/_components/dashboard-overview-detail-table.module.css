@@ -1,7 +1,7 @@
 .pendingMetricHeader {
-  color: var(--text-tertiary) !important;
+  color: var(--lobe-color-text-tertiary) !important;
 }
 
 .pendingMetricCell {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }

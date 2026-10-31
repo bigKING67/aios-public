@@ -1,7 +1,6 @@
 'use client';
 
-import { Table } from 'antd';
-import type { ColumnsType, TableProps } from 'antd/es/table';
+import { Table, type TableColumnsType, type TableProps } from '@lobehub/ui';
 import styles from './creator-live-dashboard.module.css';
 import { creatorDetailTableComponents } from './creator-detail-table-components';
 
@@ -10,7 +9,7 @@ export interface CreatorDetailTableRecord {
 }
 
 export interface CreatorDetailTableProps<TRecord extends CreatorDetailTableRecord> {
-  columns: ColumnsType<TRecord>;
+  columns: TableColumnsType<TRecord>;
   dataSource: TRecord[];
   loading: boolean;
   scrollX: number;

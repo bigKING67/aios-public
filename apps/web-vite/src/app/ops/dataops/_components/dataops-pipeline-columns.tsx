@@ -1,12 +1,8 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { Button, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import {
-  PauseCircleOutlined,
-  PlayCircleOutlined,
-} from '@ant-design/icons';
+import { Button, Table, Tag, Tooltip, type TableColumnsType } from '@lobehub/ui';
+import { CirclePause, CirclePlay } from 'lucide-react';
 import type { DataOpsActionRequest, DataOpsRuntimePipeline } from '@/types/dataops';
 import { DataOpsStatusTag } from './dataops-status-tag';
 import {
@@ -18,6 +14,7 @@ import {
   getActionKey,
   getPipelineActionDisabledReason,
 } from './dataops-action-helpers';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
 interface DataOpsPipelineColumnsOptions {
@@ -61,8 +58,8 @@ export function buildDataOpsPipelineColumns({
   onPipelineAction,
   onOpenCommandModal,
   onOpenTriggerModal,
-}: DataOpsPipelineColumnsOptions): ColumnsType<DataOpsRuntimePipeline> {
-  const expandColumn: ColumnsType<DataOpsRuntimePipeline>[number] = Table.EXPAND_COLUMN;
+}: DataOpsPipelineColumnsOptions): TableColumnsType<DataOpsRuntimePipeline> {
+  const expandColumn: TableColumnsType<DataOpsRuntimePipeline>[number] = Table.EXPAND_COLUMN;
   const headerCellProps = buildPipelineHeaderCellProps;
   const bodyCellProps = buildPipelineBodyCellProps;
 
@@ -80,7 +77,7 @@ export function buildDataOpsPipelineColumns({
       render: (_value, record) => (
         <div className={pipelineStyles.pipelineTaskCell}>
           <div className={pipelineStyles.pipelineHead}>
-            <Tooltip title={record.name}>
+            <Tooltip title={record.name || undefined}>
               <strong>{record.name}</strong>
             </Tooltip>
             <Tag color={DOMAIN_TAG_COLOR[record.domain]}>
@@ -179,8 +176,8 @@ export function buildDataOpsPipelineColumns({
               <Button
                 size="small"
                 type="primary"
-                className={pipelineStyles.pipelinePrimaryAction}
-                icon={<PlayCircleOutlined />}
+                block
+                icon={<CirclePlay {...DATAOPS_ICON_PROPS} />}
                 loading={isTriggerLoading}
                 disabled={shouldDisableAction}
                 onClick={() => onPipelineAction(record, 'trigger_pipeline')}
@@ -192,7 +189,8 @@ export function buildDataOpsPipelineColumns({
             {wrapActionButton(
               <Button
                 size="small"
-                icon={<PauseCircleOutlined />}
+                block
+                icon={<CirclePause {...DATAOPS_ICON_PROPS} />}
                 loading={isToggleLoading}
                 disabled={shouldDisableAction}
                 onClick={() => onPipelineAction(record, toggleAction)}
@@ -204,6 +202,7 @@ export function buildDataOpsPipelineColumns({
             {wrapActionButton(
               <Button
                 size="small"
+                block
                 disabled={shouldDisableAction}
                 onClick={() => onOpenTriggerModal(record)}
               >
@@ -213,6 +212,7 @@ export function buildDataOpsPipelineColumns({
             )}
             <Button
               size="small"
+              block
               onClick={() => onOpenCommandModal(record)}
             >
               Linux命令

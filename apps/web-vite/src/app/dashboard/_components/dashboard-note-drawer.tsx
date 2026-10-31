@@ -1,4 +1,4 @@
-import { Button, DatePicker, Drawer, Segmented, Tag } from 'antd';
+import { Button, DayjsDatePicker, Drawer, Segmented, Tag, datePickerLocaleZhCN } from '@lobehub/ui';
 import dayjs from 'dayjs';
 import type { CSSProperties } from 'react';
 
@@ -113,7 +113,7 @@ export function DashboardNoteDrawer({
     <Drawer
       title={getDashboardNoteDrawerTitle(selectedNoteDate)}
       placement="right"
-      size={isMobile ? 'large' : 'default'}
+      width={isMobile ? '100%' : 378}
       open={open}
       onClose={onClose}
     >
@@ -123,9 +123,10 @@ export function DashboardNoteDrawer({
         ) : null}
 
         <div className={noteStyles.datePickerWrap}>
-          <DatePicker
+          <DayjsDatePicker
             value={noteDraftDate ? dayjs(noteDraftDate) : null}
             allowClear={false}
+            locale={datePickerLocaleZhCN}
             format="YYYY-MM-DD"
             onChange={(value) => {
               if (!value) {
@@ -159,19 +160,21 @@ export function DashboardNoteDrawer({
         ) : null}
 
         {activeQueryPlatform === 'overview' && overviewNotesByPlatform.length > 1 ? (
-          <Segmented
-            name="dashboard-note-platform-filter"
-            size="small"
-            value={overviewNotePlatformFilter}
-            onChange={(value) => onOverviewNotePlatformFilterChange(value as OverviewNotePlatformFilter)}
-            options={[
-              { label: '全部平台', value: 'all' },
-              ...overviewNotesByPlatform.map(([platform]) => ({
-                label: getQueryPlatformLabel(platform),
-                value: platform,
-              })),
-            ]}
-          />
+          <div role="group" aria-label="日报平台筛选">
+            <Segmented
+              name="dashboard-note-platform-filter"
+              size="small"
+              value={overviewNotePlatformFilter}
+              onChange={(value) => onOverviewNotePlatformFilterChange(value as OverviewNotePlatformFilter)}
+              options={[
+                { label: '全部平台', value: 'all' },
+                ...overviewNotesByPlatform.map(([platform]) => ({
+                  label: getQueryPlatformLabel(platform),
+                  value: platform,
+                })),
+              ]}
+            />
+          </div>
         ) : null}
 
         <div className={noteListStyles.list}>

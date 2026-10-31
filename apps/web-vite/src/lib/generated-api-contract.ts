@@ -38,6 +38,14 @@ const CONTENT_STUDIO_REMIX_BATCH_PATH =
   '/marketing/content-assets/studio/remix-batches/{batch_id}' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}'>;
 const CONTENT_STUDIO_REMIX_BATCH_CANCEL_PATH =
   '/marketing/content-assets/studio/remix-batches/{batch_id}/cancel' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel'>;
+const CONTENT_STUDIO_REMIX_OUTPUT_REVIEW_PATH =
+  '/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review'>;
+const CONTENT_STUDIO_REMIX_DELIVERY_RETRY_PATH =
+  '/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry'>;
+const CONTENT_STUDIO_COMPETITOR_VIDEO_ANALYSES_PATH =
+  '/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses'>;
+const CONTENT_STUDIO_COMPETITOR_ANALYSIS_PATH =
+  '/marketing/content-assets/studio/competitor/analyses/{analysis_id}' satisfies GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/analyses/{analysis_id}'>;
 const SAMPLE_INVENTORY_SAMPLE_PATH =
   '/sample-inventory/samples/{sample_id}' satisfies GatewayPathFor<'/v2/sample-inventory/samples/{sample_id}'>;
 const SAMPLE_INVENTORY_SAMPLE_ADJUSTMENT_PATH =
@@ -84,6 +92,7 @@ export const AIOS_API_PATHS = {
   contentStudioOverview: '/marketing/content-assets/studio/overview',
   contentStudioAssetSegmentSummaries: '/marketing/content-assets/studio/asset-segment-summaries',
   contentStudioSegmentPool: '/marketing/content-assets/studio/segment-pool',
+  contentStudioStructurePool: '/marketing/content-assets/studio/structure-pool',
   contentStudioSegments: '/marketing/content-assets/studio/segments',
   contentStudioSegmentsConfirm: '/marketing/content-assets/studio/segments:confirm',
   contentStudioSegment: (segmentId: ApiPathIdentifier) =>
@@ -98,8 +107,30 @@ export const AIOS_API_PATHS = {
     interpolateEncodedPath(CONTENT_STUDIO_REMIX_BATCH_PATH, 'batch_id', batchId),
   contentStudioRemixBatchCancel: (batchId: ApiPathIdentifier) =>
     interpolateEncodedPath(CONTENT_STUDIO_REMIX_BATCH_CANCEL_PATH, 'batch_id', batchId),
+  contentStudioRemixDeliveryRetry: (batchId: ApiPathIdentifier, ordinal: ApiPathIdentifier) =>
+    interpolateEncodedPath(interpolateEncodedPath(CONTENT_STUDIO_REMIX_DELIVERY_RETRY_PATH, 'batch_id', batchId), 'ordinal', ordinal),
+  contentStudioRemixOutputReview: (batchId: ApiPathIdentifier, ordinal: ApiPathIdentifier) =>
+    interpolateEncodedPath(
+      interpolateEncodedPath(CONTENT_STUDIO_REMIX_OUTPUT_REVIEW_PATH, 'batch_id', batchId),
+      'ordinal',
+      ordinal,
+    ),
   contentStudioRemixEdits: '/marketing/content-assets/studio/remix-edits',
   contentStudioRemixEditsCheck: '/marketing/content-assets/studio/remix-edits:check',
+  contentStudioCompetitorVideos: '/marketing/content-assets/studio/competitor/videos',
+  contentStudioCompetitorVideo: (awemeId: ApiPathIdentifier) =>
+    `/marketing/content-assets/studio/competitor/videos/${encodeURIComponent(String(awemeId))}`,
+  contentStudioCompetitorVideoAnalyses: (awemeId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_COMPETITOR_VIDEO_ANALYSES_PATH, 'aweme_id', awemeId),
+  contentStudioCompetitorAnalysis: (analysisId: ApiPathIdentifier) =>
+    interpolateEncodedPath(CONTENT_STUDIO_COMPETITOR_ANALYSIS_PATH, 'analysis_id', analysisId),
+  contentStudioCompetitorOverview: '/marketing/content-assets/studio/competitor/overview',
+  contentStudioCompetitorPatterns: '/marketing/content-assets/studio/competitor/patterns',
+  contentStudioCompetitorReports: '/marketing/content-assets/studio/competitor/reports',
+  contentStudioCompetitorReportLatest: '/marketing/content-assets/studio/competitor/reports/latest',
+  contentStudioTeamOutput: '/marketing/content-assets/studio/team-output',
+  contentStudioTeamOutputVideos: '/marketing/content-assets/studio/team-output/videos',
+  contentStudioTeamOutputExport: '/marketing/content-assets/studio/team-output/export',
   industryMaterialInspiration: '/dashboard/industry-material-inspiration',
   industryNewsArticles: '/marketing/industry-news/articles',
   industryNewsSources: '/marketing/industry-news/sources',
@@ -198,6 +229,7 @@ export const AIOS_API_PATHS = {
   contentStudioOverview: GatewayPathFor<'/v2/marketing/content-assets/studio/overview'>;
   contentStudioAssetSegmentSummaries: GatewayPathFor<'/v2/marketing/content-assets/studio/asset-segment-summaries'>;
   contentStudioSegmentPool: GatewayPathFor<'/v2/marketing/content-assets/studio/segment-pool'>;
+  contentStudioStructurePool: GatewayPathFor<'/v2/marketing/content-assets/studio/structure-pool'>;
   contentStudioSegments: GatewayPathFor<'/v2/marketing/content-assets/studio/segments'>;
   contentStudioSegmentsConfirm: GatewayPathFor<'/v2/marketing/content-assets/studio/segments:confirm'>;
   contentStudioSegment: (segmentId: ApiPathIdentifier) => string;
@@ -208,8 +240,21 @@ export const AIOS_API_PATHS = {
   contentStudioRemixBatchesPreview: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-batches:preview'>;
   contentStudioRemixBatch: (batchId: ApiPathIdentifier) => string;
   contentStudioRemixBatchCancel: (batchId: ApiPathIdentifier) => string;
+  contentStudioRemixDeliveryRetry: (batchId: ApiPathIdentifier, ordinal: ApiPathIdentifier) => string;
+  contentStudioRemixOutputReview: (batchId: ApiPathIdentifier, ordinal: ApiPathIdentifier) => string;
   contentStudioRemixEdits: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-edits'>;
   contentStudioRemixEditsCheck: GatewayPathFor<'/v2/marketing/content-assets/studio/remix-edits:check'>;
+  contentStudioCompetitorVideos: GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/videos'>;
+  contentStudioCompetitorVideo: (awemeId: ApiPathIdentifier) => string;
+  contentStudioCompetitorVideoAnalyses: (awemeId: ApiPathIdentifier) => string;
+  contentStudioCompetitorAnalysis: (analysisId: ApiPathIdentifier) => string;
+  contentStudioCompetitorOverview: GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/overview'>;
+  contentStudioCompetitorPatterns: GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/patterns'>;
+  contentStudioCompetitorReports: GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/reports'>;
+  contentStudioCompetitorReportLatest: GatewayPathFor<'/v2/marketing/content-assets/studio/competitor/reports/latest'>;
+  contentStudioTeamOutput: GatewayPathFor<'/v2/marketing/content-assets/studio/team-output'>;
+  contentStudioTeamOutputVideos: GatewayPathFor<'/v2/marketing/content-assets/studio/team-output/videos'>;
+  contentStudioTeamOutputExport: GatewayPathFor<'/v2/marketing/content-assets/studio/team-output/export'>;
   industryMaterialInspiration: GatewayPathFor<'/v2/dashboard/industry-material-inspiration'>;
   industryNewsArticles: GatewayPathFor<'/v2/marketing/industry-news/articles'>;
   industryNewsSources: GatewayPathFor<'/v2/marketing/industry-news/sources'>;
@@ -312,9 +357,10 @@ export type DashboardUpdateNoteRequest =
 export type StudioCapabilitiesResponse = components['schemas']['StudioCapabilitiesResponse'];
 export type StudioOverviewResponse = components['schemas']['StudioOverviewResponse'];
 export type StudioOverviewActivity = components['schemas']['StudioOverviewActivity'];
-export type StudioOverviewPeriodKey = NonNullable<
-  NonNullable<paths['/v2/marketing/content-assets/studio/overview']['get']['parameters']['query']>['period']
+export type StudioOverviewQuery = NonNullable<
+  paths['/v2/marketing/content-assets/studio/overview']['get']['parameters']['query']
 >;
+export type StudioOverviewPeriod = components['schemas']['StudioOverviewPeriod'];
 export type StudioSegmentPreset = components['schemas']['SegmentPreset'];
 export type StudioSegmentPresetLabel = components['schemas']['SegmentPresetLabel'];
 export type StudioSegmentPresetListResponse = components['schemas']['SegmentPresetListResponse'];
@@ -325,6 +371,8 @@ export type StudioSegmentPoolResponse = components['schemas']['SegmentPoolRespon
 export type StudioSegmentAssetCover = components['schemas']['SegmentAssetCover'];
 export type StudioContentSegment = components['schemas']['ContentSegment'];
 export type StudioContentSegmentListResponse = components['schemas']['ContentSegmentListResponse'];
+export type StudioStructurePoolResponse = components['schemas']['StructurePoolResponse'];
+export type StudioStructurePoolRow = components['schemas']['StructurePoolRow'];
 export type StudioContentSegmentListQuery = NonNullable<
   paths['/v2/marketing/content-assets/studio/segments']['get']['parameters']['query']
 >;
@@ -342,6 +390,8 @@ export type StudioRemixBatchPreviewResponse = components['schemas']['RemixBatchP
 export type StudioCreateRemixBatchRequest = components['schemas']['CreateRemixBatchRequest'];
 export type StudioRemixBatch = components['schemas']['RemixBatch'];
 export type StudioRemixBatchItem = components['schemas']['RemixBatchItem'];
+export type StudioRemixOutputReview = components['schemas']['RemixOutputReview'];
+export type StudioRemixOutputReviewRequest = components['schemas']['RemixOutputReviewRequest'];
 export type StudioRemixBatchSegment = components['schemas']['RemixBatchSegment'];
 export type StudioRemixBatchDetail = components['schemas']['RemixBatchDetail'];
 export type StudioRemixBatchListResponse = components['schemas']['RemixBatchListResponse'];
@@ -351,6 +401,32 @@ export type StudioRemixEditCheckRequest = components['schemas']['RemixEditCheckR
 export type StudioCreateRemixEditRequest = components['schemas']['CreateRemixEditRequest'];
 export type StudioRemixEditMatch = components['schemas']['RemixEditMatch'];
 export type StudioRemixEditCheckResponse = components['schemas']['RemixEditCheckResponse'];
+export type StudioUpdateCompetitorVideoRequest = components['schemas']['UpdateCompetitorVideoRequest'];
+export type StudioCreateCompetitorVideoRequest = components['schemas']['CreateCompetitorVideoRequest'];
+export type StudioCompetitorVideo = components['schemas']['CompetitorVideo'];
+export type StudioCompetitorVideoListResponse = components['schemas']['CompetitorVideoListResponse'];
+export type StudioCompetitorAnalysis = components['schemas']['CompetitorAnalysis'];
+export type StudioCompetitorAnalysisSummary = components['schemas']['CompetitorAnalysisSummary'];
+export type StudioCompetitorPatternsResponse = components['schemas']['CompetitorPatternsResponse'];
+export type StudioCompetitorOverviewResponse = components['schemas']['CompetitorOverviewResponse'];
+export type StudioCompetitorReport = components['schemas']['CompetitorReport'];
+export type StudioCompetitorReportLatestResponse = components['schemas']['CompetitorReportLatestResponse'];
+export type StudioCreateCompetitorReportRequest = components['schemas']['CreateCompetitorReportRequest'];
+export type StudioCompetitorPatternSnapshot = components['schemas']['CompetitorPatternSnapshot'];
+export type StudioOwnSellingPointCoverage = components['schemas']['OwnSellingPointCoverage'];
+export type StudioTeamOutputQuery = NonNullable<
+  paths['/v2/marketing/content-assets/studio/team-output']['get']['parameters']['query']
+>;
+export type StudioTeamOutputVideosQuery = NonNullable<
+  paths['/v2/marketing/content-assets/studio/team-output/videos']['get']['parameters']['query']
+>;
+export type StudioTeamOutputResponse = components['schemas']['TeamOutputResponse'];
+export type StudioTeamOutputMetrics = components['schemas']['TeamOutputMetrics'];
+export type StudioTeamOutputTeam = components['schemas']['TeamOutputTeam'];
+export type StudioTeamOutputGroup = components['schemas']['TeamOutputGroup'];
+export type StudioTeamOutputPerson = components['schemas']['TeamOutputPerson'];
+export type StudioTeamOutputVideo = components['schemas']['TeamOutputVideo'];
+export type StudioTeamOutputVideosResponse = components['schemas']['TeamOutputVideosResponse'];
 export type IndustryMaterialInspirationResponse = components['schemas']['IndustryMaterialInspirationResponse'];
 export type IndustryMaterialBrandAiBackfillRequest =
   IndustryMaterialBrandAiBackfillOperation['requestBody']['content']['application/json'];

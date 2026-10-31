@@ -1,6 +1,6 @@
 //! Guard and route-grammar tests. Kept outside `mod.rs` so the OpenAPI route
 //! extractor only sees production `.route(...)` calls.
-use super::{access::StudioAccess, guard};
+use super::{access::StudioAccess, guard, team_output_guard};
 use crate::{auth::CurrentUser, error::AppError};
 
 fn user(roles: &[&str]) -> CurrentUser {
@@ -140,4 +140,28 @@ async fn colon_action_route_does_not_shadow_segment_ids() {
         }
     }
     server.abort();
+}
+
+#[test]
+fn team_output_needs_its_permission_even_in_open_access() {
+    let mut settings = super::super::handlers::qianchuan_http_route_tests::fixture_settings(
+        "postgres://fixture".into(),
+    );
+    settings.content_ai_studio_enabled = true;
+    settings.content_ai_studio_open_access = true;
+    assert!(matches!(
+        team_output_guard(&settings, &user(&["content_ops_manager"])),
+        Err(AppError::Forbidden)
+    ));
+    let viewer = CurrentUser {
+        permissions: vec!["marketing:team_output:read".into()],
+        ..user(&[])
+    };
+    assert!(team_output_guard(&settings, &viewer).is_ok());
+    assert!(team_output_guard(&settings, &user(&["super_admin"])).is_ok());
+    settings.content_ai_studio_enabled = false;
+    assert!(matches!(
+        team_output_guard(&settings, &viewer),
+        Err(AppError::ServiceUnavailable(_))
+    ));
 }

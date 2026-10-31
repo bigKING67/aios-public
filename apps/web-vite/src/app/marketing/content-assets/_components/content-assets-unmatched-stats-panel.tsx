@@ -1,7 +1,7 @@
+import { FileSearch, Link } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Button, Empty, Popconfirm, Segmented, Select, Tag } from 'antd';
+import { Button, confirmModal, Empty, Segmented, Tag } from '@lobehub/ui';
 import { useQuery } from '@tanstack/react-query';
-import { FileSearchOutlined, LinkOutlined } from '@ant-design/icons';
 import { fetchContentAssetLookup } from '../_lib/content-assets-api';
 import { formatCompactNumber, formatRatio } from '../_lib/content-assets-formatters';
 import { contentAssetsQueryKeys } from '../_lib/content-assets-query-keys';
@@ -14,6 +14,7 @@ import type {
 import { UNMATCHED_STATS_TYPE_OPTIONS } from './content-assets-workspace-options';
 import type { ModuleMetric } from './content-assets-workspace-types';
 import matchingStyles from './content-assets-matching-panel.module.css';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './content-assets-workspace-panels.module.css';
 
 export function UnmatchedStatsPanel({
@@ -82,7 +83,7 @@ export function UnmatchedStatsPanel({
   return (
     <section className={styles.workspacePanel}>
       <div className={styles.moduleHero}>
-        <div className={styles.moduleIcon}><LinkOutlined /></div>
+        <div className={styles.moduleIcon}><Link size={14} strokeWidth={1.8} aria-hidden="true" /></div>
         <div>
           <span>表现数据回流</span>
           <h1>回流匹配</h1>
@@ -103,7 +104,7 @@ export function UnmatchedStatsPanel({
       <section className={styles.matchingWorkbench}>
         <article className={styles.flowCard}>
           <div className={styles.sectionTitle}>
-            <LinkOutlined />
+            <Link size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>未匹配日报队列</strong>
               <p>{loading ? '正在刷新未匹配队列' : '按外部 ID 聚合展示，避免一条素材多天日报重复处理。'}</p>
@@ -113,20 +114,22 @@ export function UnmatchedStatsPanel({
             </Button>
           </div>
           <div className={styles.queueToolbar}>
-            <Segmented<ContentAssetUnmatchedStatsMatchTypeFilter>
-              value={matchType}
-              options={UNMATCHED_STATS_TYPE_OPTIONS}
-              onChange={onMatchTypeChange}
-            />
-            <Select
-              className={styles.matchingTargetSelect}
+            <div role="group" aria-label="匹配类型">
+              <Segmented<ContentAssetUnmatchedStatsMatchTypeFilter>
+                value={matchType}
+                options={UNMATCHED_STATS_TYPE_OPTIONS}
+                onChange={onMatchTypeChange}
+              />
+            </div>
+            <LabeledSelect
+              label="选择要绑定的素材"
+              wrapperClassName={styles.matchingTargetSelect}
               allowClear
               showSearch
               filterOption={false}
               loading={lookupFetching}
               value={bindTargetAssetId || undefined}
               placeholder="选择要绑定的素材"
-              optionFilterProp="label"
               options={mergedAssetOptions.map((item) => ({
                 value: item.value,
                 label: item.helper ? `${item.label} · ${item.helper}` : item.label,
@@ -137,7 +140,7 @@ export function UnmatchedStatsPanel({
           </div>
           {items.length === 0 ? (
             <div className={styles.jobEmpty}>
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={loading ? '正在加载未匹配日报' : '当前没有未匹配日报'} />
+              <Empty description={loading ? '正在加载未匹配日报' : '当前没有未匹配日报'} />
             </div>
           ) : (
             <div className={matchingStyles.matchingList}>
@@ -157,7 +160,7 @@ export function UnmatchedStatsPanel({
 
         <article className={styles.actionCard}>
           <div className={styles.sectionTitle}>
-            <FileSearchOutlined />
+            <FileSearch size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>绑定目标素材</strong>
               <p>右侧选择的是当前要承接回流数据的内部 asset_id。</p>
@@ -235,17 +238,23 @@ function UnmatchedStatsRow({
         {isAdMaterial ? <span>ROI {formatRatio(item.roi)}</span> : null}
       </div>
       <div className={matchingStyles.matchingActions}>
-        <Popconfirm
-          title="确认绑定到选中素材？"
-          description="会写入 ads 身份映射，并把匹配到的 dwd 日报行标记为 matched。"
-          okText="确认绑定"
-          cancelText="取消"
-          onConfirm={() => onBind(item)}
+        <Button
+          size="small"
+          type="primary"
+          loading={actionLoading}
+          disabled={!canWrite || !bindTargetAssetId}
+          onClick={() =>
+            confirmModal({
+              title: '确认绑定到选中素材？',
+              content: '会写入 ads 身份映射，并把匹配到的 dwd 日报行标记为 matched。',
+              okText: '确认绑定',
+              cancelText: '取消',
+              onOk: () => onBind(item),
+            })
+          }
         >
-          <Button size="small" type="primary" loading={actionLoading} disabled={!canWrite || !bindTargetAssetId}>
-            绑定到目标素材
-          </Button>
-        </Popconfirm>
+          绑定到目标素材
+        </Button>
       </div>
     </article>
   );

@@ -251,7 +251,6 @@ export function useDashboardPageShellProps(controller: DashboardPageStateControl
   })();
 
   return {
-    messageContextHolder: messageState.messageContextHolder,
     activeTab: filter.activeTab,
     allowedTabs: access.allowedTabs,
     visibleTabs: renderContext.visibleTabs,

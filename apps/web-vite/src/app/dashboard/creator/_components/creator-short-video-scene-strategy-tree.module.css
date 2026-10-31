@@ -1,8 +1,8 @@
 .sceneStrategyPanel {
   min-width: 0;
   border-radius: var(--border-radius-2xl);
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   box-shadow: var(--creator-shadow-surface);
   padding: var(--spacing-4);
   display: grid;
@@ -19,7 +19,7 @@
 
 .sceneStrategyMeta h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 680;
   line-height: var(--line-height-normal);
@@ -28,7 +28,7 @@
 
 .sceneStrategyMeta p {
   margin: var(--spacing-1) 0 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -38,45 +38,45 @@
   width: 100%;
 }
 
-.sceneStrategyTable :global(.ant-table-container) {
+.sceneStrategyTable :global(.lobe-table-container) {
   border-radius: var(--border-radius-lg);
 }
 
-.sceneStrategyTable :global(.ant-table-cell) {
+.sceneStrategyTable :global(.lobe-table-cell) {
   font-variant-numeric: tabular-nums;
 }
 
-.sceneStrategyTable :global(thead .ant-table-cell:first-child) {
+.sceneStrategyTable :global(thead .lobe-table-cell:first-child) {
   text-align: center !important;
 }
 
-.sceneStrategyTable :global(tbody .ant-table-cell:first-child) {
+.sceneStrategyTable :global(tbody .lobe-table-cell:first-child) {
   text-align: left !important;
 }
 
-.sceneStrategyTable :global(tbody .ant-table-cell:first-child.ant-table-cell-with-append) {
+.sceneStrategyTable :global(tbody .lobe-table-cell:first-child.lobe-table-cell-with-append) {
   white-space: nowrap;
 }
 
-.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-indent),
-.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-expand-icon) {
+.sceneStrategyTable :global(tbody .lobe-table-cell:first-child .lobe-table-row-indent),
+.sceneStrategyTable :global(tbody .lobe-table-cell:first-child .lobe-table-row-expand-icon) {
   vertical-align: middle;
 }
 
-.sceneStrategyTable :global(tbody .ant-table-cell:first-child .ant-table-row-expand-icon) {
+.sceneStrategyTable :global(tbody .lobe-table-cell:first-child .lobe-table-row-expand-icon) {
   margin-inline-end: var(--spacing-2);
 }
 
-.sceneStrategyRowScene :global(.ant-table-cell) {
-  background: color-mix(in srgb, var(--brand-secondary) 18%, var(--bg-card));
+.sceneStrategyRowScene :global(.lobe-table-cell) {
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 18%, var(--lobe-color-bg-container));
 }
 
-.sceneStrategyRowGroup :global(.ant-table-cell) {
-  background: color-mix(in srgb, var(--bg-subtle) 78%, var(--bg-card));
+.sceneStrategyRowGroup :global(.lobe-table-cell) {
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 78%, var(--lobe-color-bg-container));
 }
 
-.sceneStrategyRowSubtype :global(.ant-table-cell) {
-  background: var(--bg-card);
+.sceneStrategyRowSubtype :global(.lobe-table-cell) {
+  background: var(--lobe-color-bg-container);
 }
 
 .sceneStrategyName {
@@ -88,16 +88,16 @@
 }
 
 .sceneStrategyNameMuted .sceneStrategyLabelText {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .sceneStrategyLevelBadge {
   flex: 0 0 auto;
   min-width: 56px;
   border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
-  color: var(--text-tertiary);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-tertiary);
   padding: 2px 6px;
   font-size: var(--font-size-xs);
   font-weight: 620;
@@ -106,20 +106,20 @@
 }
 
 .sceneStrategyLevelBadgeScene {
-  border-color: color-mix(in srgb, var(--brand-primary) 22%, var(--border-color));
-  background: color-mix(in srgb, var(--brand-secondary) 26%, var(--bg-card));
-  color: var(--brand-primary);
+  border-color: color-mix(in srgb, var(--lobe-color-primary) 22%, var(--lobe-color-border));
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 26%, var(--lobe-color-bg-container));
+  color: var(--lobe-color-primary);
 }
 
 .sceneStrategyLevelBadgeGroup {
-  border-color: color-mix(in srgb, var(--brand-primary) 14%, var(--border-color));
-  background: color-mix(in srgb, var(--brand-secondary) 14%, var(--bg-card));
-  color: var(--text-secondary);
+  border-color: color-mix(in srgb, var(--lobe-color-primary) 14%, var(--lobe-color-border));
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 14%, var(--lobe-color-bg-container));
+  color: var(--lobe-color-text-secondary);
 }
 
 .sceneStrategyLevelBadgeSubtype {
-  background: var(--bg-card);
-  color: var(--text-tertiary);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .sceneStrategyLabelStack {
@@ -131,7 +131,7 @@
 .sceneStrategyLabelText {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: 620;
   line-height: var(--line-height-normal);
@@ -146,7 +146,7 @@
   align-items: center;
   justify-content: end;
   width: 100%;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--letter-spacing-data);
 }
@@ -157,19 +157,19 @@
   appearance: none;
   border: 0;
   border-radius: var(--border-radius-full);
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sceneStrategyProgress::-webkit-progress-bar {
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sceneStrategyProgress::-webkit-progress-value {
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
 }
 
 .sceneStrategyProgress::-moz-progress-bar {
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
 }
 
 @media (max-width: 768px) {

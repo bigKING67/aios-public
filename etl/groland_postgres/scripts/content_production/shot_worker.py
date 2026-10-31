@@ -11,6 +11,7 @@ import time
 
 from marketing_content_assets.repository import connect_pg
 from marketing_content_assets.tos_storage import TosStorageClient, TosStorageConfig
+from marketing_content_assets.worker_runtime import claim_after_seconds
 from .execution import Cancelled, renderer_env
 from .queue import verify_sources
 from .worker import download
@@ -55,7 +56,7 @@ def process_one(work_root):
         raise RuntimeError('shot extraction is disabled')
     storage = TosStorageClient(TosStorageConfig.from_env())
     with connect_pg() as conn:
-        job = claim(conn)
+        job = claim(conn, claim_after_seconds())
         if not job:
             return {'status': 'idle'}
         stage, last_beat = '下载原片', 0.0

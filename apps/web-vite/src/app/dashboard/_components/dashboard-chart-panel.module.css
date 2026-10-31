@@ -3,7 +3,7 @@
   min-width: 0;
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg-strong);
   padding: 16px;
   min-height: 348px;
@@ -18,7 +18,7 @@
 
 .footerNote {
   margin-top: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }

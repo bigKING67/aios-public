@@ -17,7 +17,10 @@ use crate::{
     state::AppState,
 };
 
-use super::permissions::ensure_content_asset_read_permission;
+use super::{
+    permissions::ensure_content_asset_read_permission,
+    relation_guard::{relation_exists, QIANCHUAN_MATERIAL_PERFORMANCE_DAILY},
+};
 
 const DEFAULT_DAILY_WINDOW_DAYS: i64 = 90;
 const MAX_DAILY_WINDOW_DAYS: i64 = 366;
@@ -318,16 +321,7 @@ pub(super) async fn query_performance_daily(
 }
 
 async fn qianchuan_daily_table_exists(pool: &PgPool) -> AppResult<bool> {
-    let row = sqlx::query(
-        "SELECT to_regclass('dwd.marketing_content_qianchuan_material_performance_di') IS NOT NULL AS exists",
-    )
-    .fetch_one(pool)
-    .await
-    .map_err(|err| {
-        error!(?err, "check qianchuan material daily performance table failed");
-        AppError::Internal
-    })?;
-    Ok(row.try_get::<bool, _>("exists").unwrap_or(false))
+    relation_exists(pool, QIANCHUAN_MATERIAL_PERFORMANCE_DAILY).await
 }
 
 async fn content_asset_exists(pool: &PgPool, asset_id: Uuid) -> AppResult<bool> {

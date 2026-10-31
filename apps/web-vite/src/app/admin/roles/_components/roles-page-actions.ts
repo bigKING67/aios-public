@@ -1,7 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { message } from 'antd';
-import type { FormInstance } from 'antd';
+import { toast } from '@lobehub/ui';
 import { apiClient } from '@/lib/api-client';
 import {
   AIOS_API_PATHS,
@@ -15,14 +14,12 @@ import { getRoleErrorMessage } from './roles-error-message';
 import type { Role, RoleFormValues } from './roles-types';
 
 export interface UseRolesPageActionsParams {
-  form: FormInstance<RoleFormValues>;
   editingRole: Role | null;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   setEditingRole: Dispatch<SetStateAction<Role | null>>;
 }
 
 export function useRolesPageActions({
-  form,
   editingRole,
   setIsModalOpen,
   setEditingRole,
@@ -41,13 +38,12 @@ export function useRolesPageActions({
       return response.data;
     },
     onSuccess: () => {
-      message.success('角色创建成功');
+      toast.success('角色创建成功');
       queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
       setIsModalOpen(false);
-      form.resetFields();
     },
     onError: (error: unknown) => {
-      message.error(getRoleErrorMessage(error, '角色创建失败'));
+      toast.error(getRoleErrorMessage(error, '角色创建失败'));
     },
   });
 
@@ -69,14 +65,13 @@ export function useRolesPageActions({
       return response.data;
     },
     onSuccess: () => {
-      message.success('角色更新成功');
+      toast.success('角色更新成功');
       queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
       setIsModalOpen(false);
       setEditingRole(null);
-      form.resetFields();
     },
     onError: (error: unknown) => {
-      message.error(getRoleErrorMessage(error, '角色更新失败'));
+      toast.error(getRoleErrorMessage(error, '角色更新失败'));
     },
   });
 
@@ -85,11 +80,11 @@ export function useRolesPageActions({
       await apiClient.delete<RoleMessageResponse>(AIOS_API_PATHS.role(roleId));
     },
     onSuccess: () => {
-      message.success('角色删除成功');
+      toast.success('角色删除成功');
       queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
     },
     onError: (error: unknown) => {
-      message.error(getRoleErrorMessage(error, '角色删除失败'));
+      toast.error(getRoleErrorMessage(error, '角色删除失败'));
     },
   });
 

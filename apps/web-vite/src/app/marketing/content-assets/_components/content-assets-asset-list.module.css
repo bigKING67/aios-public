@@ -1,9 +1,10 @@
 /* Self-contained so the grid also renders outside the 素材库 page shell (AI 创作中心). */
 .assetGrid {
   --marketing-content-assets-material-white-a960: rgba(255, 255, 255, 0.96);
-  --marketing-content-assets-material-brand-a080: rgba(47, 110, 234, 0.08);
+  --marketing-content-assets-material-brand-a080: rgba(110, 86, 207, 0.08);
   --marketing-content-assets-material-neutral-a720: rgba(245, 245, 245, 0.72);
   --marketing-content-assets-material-ink-a780: rgba(26, 26, 26, 0.78);
+  --marketing-content-assets-material-ink-a920: rgba(26, 26, 26, 0.92);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
   gap: 14px;
@@ -13,9 +14,9 @@
 .assetCardSkeleton {
   overflow: hidden;
   min-width: 0;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 18px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .assetCard {
@@ -31,13 +32,13 @@
 }
 
 .assetCard:hover {
-  border-color: var(--brand-border);
+  border-color: var(--lobe-color-border);
   box-shadow: var(--shadow-base);
   transform: translateY(-3px);
 }
 
 .assetCard:focus-visible {
-  outline: 2px solid var(--brand-primary);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 3px;
 }
 
@@ -53,35 +54,35 @@
   background:
     radial-gradient(circle at 18% 18%, var(--marketing-content-assets-material-white-a960), transparent 24%),
     linear-gradient(135deg, var(--marketing-content-assets-material-brand-a080), var(--marketing-content-assets-material-neutral-a720)),
-    var(--bg-subtle);
+    var(--lobe-color-fill-tertiary);
 }
 
 .coverToneCyan {
   background:
     radial-gradient(circle at 80% 18%, var(--marketing-content-assets-material-white-a960), transparent 24%),
-    linear-gradient(135deg, var(--brand-secondary), var(--bg-subtle)),
-    var(--bg-subtle);
+    linear-gradient(135deg, var(--lobe-color-fill-tertiary), var(--lobe-color-fill-tertiary)),
+    var(--lobe-color-fill-tertiary);
 }
 
 .coverToneSlate {
   background:
     radial-gradient(circle at 24% 78%, var(--marketing-content-assets-material-white-a960), transparent 22%),
-    linear-gradient(135deg, var(--bg-subtle), var(--marketing-content-assets-material-neutral-a720)),
-    var(--bg-subtle);
+    linear-gradient(135deg, var(--lobe-color-fill-tertiary), var(--marketing-content-assets-material-neutral-a720)),
+    var(--lobe-color-fill-tertiary);
 }
 
 .coverToneWarm {
   background:
     radial-gradient(circle at 72% 22%, var(--marketing-content-assets-material-white-a960), transparent 22%),
-    linear-gradient(135deg, var(--status-warning-bg), var(--bg-subtle)),
-    var(--bg-subtle);
+    linear-gradient(135deg, var(--lobe-color-warning-bg), var(--lobe-color-fill-tertiary)),
+    var(--lobe-color-fill-tertiary);
 }
 
 .coverToneBlue {
   background:
     radial-gradient(circle at 22% 24%, var(--marketing-content-assets-material-white-a960), transparent 22%),
-    linear-gradient(135deg, var(--brand-secondary), var(--marketing-content-assets-material-brand-a080)),
-    var(--bg-subtle);
+    linear-gradient(135deg, var(--lobe-color-fill-tertiary), var(--marketing-content-assets-material-brand-a080)),
+    var(--lobe-color-fill-tertiary);
 }
 
 .coverFrame::after {
@@ -94,11 +95,18 @@
 }
 
 .coverFrameWithImage {
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
+/* Bottom half only, but fully dark under the title so burned-in subtitles cannot read through it. */
 .coverFrameWithImage::after {
-  height: 68%;
+  height: 52%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--marketing-content-assets-material-ink-a780) 45%,
+    var(--marketing-content-assets-material-ink-a920)
+  );
 }
 
 .coverFramePreviewing::after {
@@ -114,7 +122,7 @@
   align-items: center;
   width: min(72%, 180px);
   gap: 10px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -125,13 +133,13 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--bg-card) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lobe-color-bg-container) 46%, transparent);
   border-radius: 999px;
-  color: var(--text-inverse);
-  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  color: var(--lobe-color-text-light-solid);
+  background: color-mix(in srgb, var(--lobe-color-text) 30%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 24%, transparent),
-    0 10px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--lobe-color-bg-container) 24%, transparent),
+    0 10px 28px color-mix(in srgb, var(--lobe-color-text) 20%, transparent);
   opacity: 0.8;
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
@@ -140,21 +148,21 @@
   transition: transform 160ms cubic-bezier(0.32, 0.72, 0, 1), border-color 160ms cubic-bezier(0.32, 0.72, 0, 1), background 160ms cubic-bezier(0.32, 0.72, 0, 1), opacity 160ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 160ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.coverVisual span :global(.anticon) {
-  color: var(--brand-text);
+.coverVisual span svg {
+  color: var(--lobe-color-text);
 }
 
-.coverPlay :global(.anticon) {
+.coverPlay svg {
   color: currentColor;
   font-size: var(--font-size-xl);
 }
 
 .assetCard:hover .coverPlay {
-  border-color: color-mix(in srgb, var(--bg-card) 68%, transparent);
-  background: color-mix(in srgb, var(--text-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--lobe-color-bg-container) 68%, transparent);
+  background: color-mix(in srgb, var(--lobe-color-text) 40%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 32%, transparent),
-    0 12px 30px color-mix(in srgb, var(--text-primary) 24%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--lobe-color-bg-container) 32%, transparent),
+    0 12px 30px color-mix(in srgb, var(--lobe-color-text) 24%, transparent);
   opacity: 0.96;
   transform: scale(1.04);
 }
@@ -189,10 +197,10 @@
   left: 12px;
   padding: 3px 7px;
   border-radius: 999px;
-  color: var(--text-inverse);
+  color: var(--lobe-color-text-light-solid);
   background: var(--marketing-content-assets-material-ink-a780);
-  font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
   line-height: var(--line-height-snug);
 }
 
@@ -206,7 +214,7 @@
   padding: 3px 7px;
   border: 1px solid var(--marketing-content-assets-material-white-a960);
   border-radius: 999px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   background: var(--marketing-content-assets-material-white-a960);
   font-size: var(--font-size-xs);
   font-weight: 560;
@@ -215,6 +223,7 @@
   white-space: nowrap;
 }
 
+/* The cover's own ::after scrim darkens the bottom; the body adds no second gradient. */
 .cardBody {
   position: absolute;
   z-index: 3;
@@ -224,8 +233,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 64px 14px 14px;
-  background: linear-gradient(180deg, transparent, var(--marketing-content-assets-material-ink-a780));
+  padding: 14px;
   pointer-events: none;
 }
 
@@ -239,7 +247,7 @@
   display: -webkit-box;
   overflow: hidden;
   margin: 0;
-  color: var(--text-inverse);
+  color: var(--lobe-color-text-light-solid);
   font-size: var(--font-size-base);
   font-weight: 660;
   line-height: var(--line-height-tight);
@@ -251,7 +259,7 @@
 .cardMeta {
   overflow: hidden;
   margin: 0;
-  color: var(--text-inverse);
+  color: var(--lobe-color-text-light-solid);
   font-size: var(--font-size-xs);
   font-weight: 520;
   line-height: var(--line-height-snug);
@@ -261,19 +269,19 @@
   white-space: nowrap;
 }
 
-.tagRow {
+.chipRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
-.tagRow span {
+.chipRow span {
   overflow: hidden;
   max-width: 100%;
   padding: 3px 7px;
   border: 1px solid var(--marketing-content-assets-material-white-a960);
   border-radius: 999px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   background: var(--marketing-content-assets-material-white-a960);
   font-size: var(--font-size-xs);
   font-weight: 560;
@@ -282,51 +290,53 @@
   white-space: nowrap;
 }
 
-.tagRow .aiTag {
-  border-color: var(--brand-border);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+.chipRow .aiTag {
+  border-color: var(--aios-ai-border);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
 }
 
-.readinessRow,
 .tableReadinessPills {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
 }
 
-.readinessRow span,
 .tableReadinessPills span {
   min-width: 0;
   padding: 2px 6px;
   border: 1px solid var(--marketing-content-assets-material-white-a960);
   border-radius: 999px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   background: var(--marketing-content-assets-material-white-a960);
   font-size: var(--font-size-xs);
   font-weight: 560;
   line-height: var(--line-height-snug);
 }
 
-.readinessRow .readinessPillReady,
+/* Card pills sit on the media scrim: keep the opaque light material and mark readiness in text. */
+.chipRow .readinessPillReady {
+  color: var(--aios-status-success-strong);
+}
+
 .tableReadinessPills .readinessPillReady {
-  border-color: var(--brand-border);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  border-color: var(--lobe-color-border);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
 }
 
-.readinessRow .readinessPillActive,
+.chipRow .readinessPillActive,
 .tableReadinessPills .readinessPillActive {
-  border-color: var(--status-info-border);
-  color: var(--status-info-strong);
-  background: var(--status-info-bg);
+  border-color: var(--lobe-color-info-border);
+  color: var(--aios-status-info);
+  background: var(--lobe-color-info-bg);
 }
 
-.readinessRow .readinessPillFailed,
+.chipRow .readinessPillFailed,
 .tableReadinessPills .readinessPillFailed {
-  border-color: var(--status-danger-border);
-  color: var(--status-danger-strong);
-  background: var(--status-danger-bg);
+  border-color: var(--lobe-color-error-border);
+  color: var(--aios-status-danger-strong);
+  background: var(--lobe-color-error-bg);
 }
 
 .sourceUploadButton,
@@ -335,10 +345,10 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 999px;
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   font: inherit;
   font-size: var(--font-size-sm);
   font-weight: 620;
@@ -362,24 +372,24 @@
 
 .sourceUploadButton:hover,
 .tableSourceUploadButton:hover {
-  border-color: var(--brand-primary);
-  background: var(--bg-card);
+  border-color: var(--lobe-color-primary);
+  background: var(--lobe-color-bg-container);
   transform: translateY(-1px);
 }
 
 .sourceUploadButton:focus-visible,
 .tableSourceUploadButton:focus-visible {
-  outline: 2px solid var(--brand-primary);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
 .tableReadinessPills span {
-  border-color: var(--border-color);
-  background: var(--bg-subtle);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
 }
 
-.assetTable :global(.ant-table) {
-  border-radius: 14px;
+.assetTable {
+  border-radius: var(--lobe-border-radius-lg);
 }
 
 .assetTableRow {
@@ -388,7 +398,7 @@
 }
 
 .assetTableRow:hover > td {
-  background: var(--brand-secondary) !important;
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .tableTitleButton {
@@ -407,7 +417,7 @@
 
 .tableTitleButton strong {
   overflow: hidden;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -415,7 +425,7 @@
 }
 
 .tableTitleButton span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -426,8 +436,8 @@
   padding: 0;
   background:
     radial-gradient(circle at 18% 16%, var(--marketing-content-assets-material-white-a960), transparent 24%),
-    linear-gradient(135deg, var(--brand-secondary), var(--bg-subtle)),
-    var(--bg-subtle);
+    linear-gradient(135deg, var(--lobe-color-fill-tertiary), var(--lobe-color-fill-tertiary)),
+    var(--lobe-color-fill-tertiary);
 }
 
 .assetCardSkeleton::after {
@@ -459,12 +469,12 @@
   left: 50%;
   width: 44px;
   height: 44px;
-  border: 1px solid color-mix(in srgb, var(--bg-card) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lobe-color-bg-container) 46%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--lobe-color-text) 30%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 24%, transparent),
-    0 10px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--lobe-color-bg-container) 24%, transparent),
+    0 10px 28px color-mix(in srgb, var(--lobe-color-text) 20%, transparent);
   opacity: 0.78;
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
@@ -498,4 +508,12 @@
 
 .skeletonBody i:last-child {
   width: 42%;
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] .assetGrid {
+  --marketing-content-assets-material-white-a960: rgba(13, 13, 13, 0.96);
+  --marketing-content-assets-material-brand-a080: rgba(139, 116, 240, 0.08);
+  --marketing-content-assets-material-neutral-a720: rgba(32, 31, 35, 0.72);
+  --marketing-content-assets-material-ink-a780: rgba(212, 209, 216, 0.78);
 }

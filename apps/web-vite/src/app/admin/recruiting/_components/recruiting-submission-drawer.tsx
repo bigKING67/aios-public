@@ -1,4 +1,4 @@
-import { Alert, Descriptions, Drawer, Spin } from "antd";
+import { Alert, Descriptions, Drawer, Spin, type DescriptionsProps } from "@lobehub/ui";
 import { questionHistory } from "@/lib/recruiting/question-history";
 import { useIsMobile } from "@/hooks/use-media-query";
 import { resolveClientErrorMessage } from "@/lib/client-error";
@@ -35,11 +35,10 @@ export function RecruitingSubmissionDrawer({
     <Drawer
       open={submissionId !== null}
       onClose={onClose}
-      size={isMobile ? "100%" : 960}
+      width={isMobile ? "100%" : 960}
       title={
         submission.data ? `答卷：${submission.data.candidate.name}` : "答卷详情"
       }
-      destroyOnHidden
     >
       {error ? (
         <Alert
@@ -48,7 +47,7 @@ export function RecruitingSubmissionDrawer({
           title={resolveClientErrorMessage(error, "答卷加载失败，请稍后重试")}
         />
       ) : submission.data && rubric.data ? (
-        <SubmissionContent submission={submission.data} rubric={rubric.data} />
+        <SubmissionContent submission={submission.data} rubric={rubric.data} columns={isMobile ? 1 : 2} />
       ) : (
         <div className={styles.drawerLoading}>
           <Spin />
@@ -58,14 +57,44 @@ export function RecruitingSubmissionDrawer({
   );
 }
 
+function candidateItems(submission: RecruitingSubmissionDetail): DescriptionsProps["items"] {
+  const { candidate } = submission;
+  const isCurrentSet = submission.questionSetVersion >= 3;
+  return [
+    { key: "name", label: "姓名", children: candidate.name },
+    { key: "contact", label: "联系方式", children: candidate.contact },
+    { key: "school", label: isCurrentSet ? "学校" : "学校与年级", children: candidate.schoolAndGrade },
+    ...(isCurrentSet
+      ? [{ key: "major", label: "专业", children: candidate.major || "—" }]
+      : [
+          { key: "weekly", label: "每周到岗", children: candidate.weeklyAvailability },
+          { key: "start", label: "最早到岗", children: candidate.earliestStart },
+          {
+            key: "portfolio",
+            label: "作品链接",
+            children: candidate.portfolioUrl ? (
+              <a href={candidate.portfolioUrl} target="_blank" rel="noopener noreferrer nofollow">
+                {candidate.portfolioUrl}
+              </a>
+            ) : (
+              "—"
+            ),
+          },
+        ]),
+    { key: "submitted", label: "提交时间", children: new Date(submission.submittedAt).toLocaleString("zh-CN") },
+    { key: "duration", label: "作答用时", children: formatDuration(submission.durationSeconds) },
+  ];
+}
+
 function SubmissionContent({
   submission,
   rubric,
+  columns,
 }: {
   submission: RecruitingSubmissionDetail;
   rubric: RecruitingRubric;
+  columns: number;
 }) {
-  const { candidate } = submission;
   return (
     <div className={styles.drawerLayout}>
       <div className={styles.drawerMain}>
@@ -73,53 +102,10 @@ function SubmissionContent({
           <h3 className={styles.drawerSectionTitle}>
             候选人信息 · 题目 V{submission.questionSetVersion}
           </h3>
-          <Descriptions size="small" column={{ xs: 1, sm: 2 }}>
-            <Descriptions.Item label="姓名">{candidate.name}</Descriptions.Item>
-            <Descriptions.Item label="联系方式">
-              {candidate.contact}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={submission.questionSetVersion >= 3 ? "学校" : "学校与年级"}
-            >
-              {candidate.schoolAndGrade}
-            </Descriptions.Item>
-            {submission.questionSetVersion >= 3 ? (
-              <Descriptions.Item label="专业">
-                {candidate.major || "—"}
-              </Descriptions.Item>
-            ) : (
-              <>
-                <Descriptions.Item label="每周到岗">
-                  {candidate.weeklyAvailability}
-                </Descriptions.Item>
-                <Descriptions.Item label="最早到岗">
-                  {candidate.earliestStart}
-                </Descriptions.Item>
-                <Descriptions.Item label="作品链接">
-                  {candidate.portfolioUrl ? (
-                    <a
-                      href={candidate.portfolioUrl}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                    >
-                      {candidate.portfolioUrl}
-                    </a>
-                  ) : (
-                    "—"
-                  )}
-                </Descriptions.Item>
-              </>
-            )}
-            <Descriptions.Item label="提交时间">
-              {new Date(submission.submittedAt).toLocaleString("zh-CN")}
-            </Descriptions.Item>
-            <Descriptions.Item label="作答用时">
-              {formatDuration(submission.durationSeconds)}
-            </Descriptions.Item>
-          </Descriptions>
+          <Descriptions column={columns} items={candidateItems(submission)} />
         </section>
 
-        {answerSections(submission.questionSetVersion).map((section) => (
+        {answerSections(submission.questionSetVersion, submission.answers.aiUsage).map((section) => (
           <section key={section.key} className={styles.drawerSection}>
             <h3 className={styles.drawerSectionTitle}>{section.label}</h3>
             <pre

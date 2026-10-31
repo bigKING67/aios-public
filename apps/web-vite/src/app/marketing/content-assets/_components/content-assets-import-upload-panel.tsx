@@ -1,5 +1,5 @@
-import { Button } from 'antd';
-import { InboxOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Inbox, Info } from 'lucide-react';
+import { Button } from '@lobehub/ui';
 import { FileDropzone } from '@/components/molecules/file-dropzone';
 import { formatBytes } from '../_lib/content-assets-formatters';
 import type { ContentAssetUploadProgress } from '../_lib/content-assets-types';
@@ -32,7 +32,7 @@ export function ContentAssetsImportUploadPanel({
       <FileDropzone
         accept="video/*,.mp4,.mov,.m4v,.webm,.avi,.mkv"
         disabled={confirmLoading}
-        icon={<InboxOutlined />}
+        icon={<Inbox size={14} strokeWidth={1.8} aria-hidden="true" />}
         title="点击或拖拽视频源文件到这里"
         hint="支持 MP4 / MOV / M4V / WEBM / AVI / MKV；预览和封面会在后台生成。"
         onFile={onSelectFile}
@@ -73,7 +73,7 @@ export function ContentAssetsImportUploadPanel({
         </div>
       ) : null}
       <div className={uploadStyles.uploadPipelineNote}>
-        <InfoCircleOutlined />
+        <Info size={14} strokeWidth={1.8} aria-hidden="true" />
         <span>
           {isSourceUpload
             ? '这是补传源文件：浏览器会使用短时签名链接把原始视频直传火山 TOS，完成后该素材会从待补源转入处理队列。'

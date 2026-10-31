@@ -8,6 +8,12 @@
 
 export const FRONTEND_DELIVERY_GATES = Object.freeze([
   {
+    name: 'verify:frontend:docker-dependency-cache-behavior',
+    command: 'node scripts/checks/frontend/docker-dependency-cache.behavior.mjs',
+    file: 'scripts/checks/frontend/docker-dependency-cache.behavior.mjs',
+    label: '[verify:ci] frontend Docker dependency cache behavior',
+  },
+  {
     name: 'verify:design:mirror',
     command: 'node scripts/checks/frontend/design-token-mirror-sync.mjs',
     file: 'scripts/checks/frontend/design-token-mirror-sync.mjs',
@@ -163,6 +169,7 @@ export const FRONTEND_DELIVERY_EXPECTED_GATES = Object.freeze([
   FRONTEND_DELIVERY_RUNTIME_TOKEN_BEHAVIOR_GATE,
   frontendDeliveryGate('verify:design:runtime-tokens'),
   FRONTEND_DELIVERY_BUILD_FINGERPRINT_BEHAVIOR_GATE,
+  frontendDeliveryGate('verify:frontend:docker-dependency-cache-behavior'),
   FRONTEND_DELIVERY_BUNDLE_BUDGET_BEHAVIOR_GATE,
   FRONTEND_DELIVERY_SMOKE_BEHAVIOR_GATE,
   FRONTEND_DELIVERY_COVERAGE_RATCHET_BEHAVIOR_GATE,

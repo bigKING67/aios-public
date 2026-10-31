@@ -287,6 +287,7 @@ function assertSectionContainerIsRenderOnly(repoRoot) {
   const bannedTypeNames = [
     'buildDouyinCardAttributionSectionProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinCardProductRow',
     'DouyinCardSourceRow',

@@ -34,20 +34,25 @@ describe('segment display helpers', () => {
       labels: ['mixed_voiceover', 'live_demo', 'street_interview', 'promotion', 'koc'].map((key) => ({ key, name: key, definition: '' })),
     };
     const tones = framework.labels.map((label) => labelToneSeries(framework, label.key));
-    expect(tones).toEqual([1, 6, 2, 5, 4]);
-    expect(new Set(tones).size).toBe(5);
-    // Series 3 is visually the same cobalt as series 1 and is never used.
-    expect(LABEL_TONE_SERIES).not.toContain(3);
+    expect(tones).toEqual([4, 2, 3, 5, 4]);
+    expect(new Set(tones.slice(0, 4)).size).toBe(4);
+    // Violet (series 1) means AI here and series 6 is the muted gray; neither marks a label.
+    expect(LABEL_TONE_SERIES).not.toContain(1);
+    expect(LABEL_TONE_SERIES).not.toContain(6);
     expect(labelToneSeries(framework, 'mixed_voiceover')).not.toBe(labelToneSeries(framework, 'street_interview'));
     expect(labelToneSeries(framework, 'unknown')).toBe('muted');
     expect(labelToneSeries(undefined, 'koc')).toBe('muted');
   });
 
   it('shows the preset version once', () => {
-    expect(presetDisplayName({ name: '框架 v1', version: 1 })).toBe('框架 · v1');
-    expect(presetDisplayName({ name: '框架', version: 2 })).toBe('框架 · v2');
-    expect(presetDisplayName({ name: '框架 v1', version: 2 })).toBe('框架 v1 · v2');
-    expect(presetDisplayName({ name: 'Remixv1', version: 1 })).toBe('Remixv1 · v1');
+    expect(presetDisplayName({ presetKey: 'framework', name: '框架 v1', version: 1 })).toBe('框架');
+    expect(presetDisplayName({ presetKey: 'framework', name: '框架', version: 2 })).toBe('框架');
+    expect(presetDisplayName({ presetKey: 'framework', name: 'Remixv1', version: 1 })).toBe('Remixv1');
+    // The version only shows when the same list holds another version of the preset.
+    const both = [{ presetKey: 'framework', version: 1 }, { presetKey: 'framework', version: 2 }];
+    expect(presetDisplayName({ presetKey: 'framework', name: '框架', version: 2 }, both)).toBe('框架 · v2');
+    expect(presetDisplayName({ presetKey: 'framework', name: '框架 v1', version: 2 }, both)).toBe('框架 v1 · v2');
+    expect(presetDisplayName({ presetKey: 'framework', name: '框架', version: 2 }, [{ presetKey: 'selling_point', version: 1 }])).toBe('框架');
   });
 });
 

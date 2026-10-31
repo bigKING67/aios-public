@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import type { DateRange } from './creator-date-range';
 import { type CreatorCsvExportConfig, useCreatorCsvExport } from './creator-csv-export';
@@ -25,7 +25,7 @@ type UseCreatorShortVideoCsvExportParams = {
   summaryRows?: readonly CreatorShortVideoDetailRow[];
   isAuthenticated: boolean;
   currentRange: DateRange;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
 };
 
 const TRANSACTION_DATE_HEADER_INDEX = 1;

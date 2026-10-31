@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { ColumnsType } from 'antd/es/table';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { TableColumnsType } from '@lobehub/ui';
 
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import { request } from '@/lib/request';
@@ -28,13 +27,14 @@ import {
   buildDataOpsNotificationTraceSloScanMobileColumns,
 } from './dataops-notification-trace-columns';
 import { buildNotificationTraceSloScanMarkdownText } from './dataops-report-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsNotificationTraceSloScanState(options: {
   availableAlertChannels: DataOpsNotificationChannel[];
   copyText: (text: string, label: string) => Promise<void>;
   defaultAlertChannel: DataOpsNotificationChannel | null | undefined;
   hasOperatePermission: boolean;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   onOpenRetryGroupTrace: (retryGroupId: string) => void;
   openAlertDraft: (draftOptions: {
     formValues: BatchHistoryAlertSendFormValues;
@@ -187,7 +187,7 @@ export function useDataOpsNotificationTraceSloScanState(options: {
     ]
   );
 
-  const notificationTraceSloScanColumns: ColumnsType<NotificationTraceSloScanRankedItem> =
+  const notificationTraceSloScanColumns: TableColumnsType<NotificationTraceSloScanRankedItem> =
     useMemo(
       () =>
         buildDataOpsNotificationTraceSloScanColumns({
@@ -195,7 +195,7 @@ export function useDataOpsNotificationTraceSloScanState(options: {
         }),
       [openRetryGroupTraceFromSloScan]
     );
-  const notificationTraceSloScanMobileColumns: ColumnsType<NotificationTraceSloScanRankedItem> =
+  const notificationTraceSloScanMobileColumns: TableColumnsType<NotificationTraceSloScanRankedItem> =
     useMemo(
       () =>
         buildDataOpsNotificationTraceSloScanMobileColumns({

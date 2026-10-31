@@ -52,6 +52,11 @@ const METRIC_CONFIGS = Object.freeze([
     budgetKey: 'vendorEchartsGzipBytes',
   },
   {
+    key: 'vendorLobeUiCssGzipBytes',
+    label: 'vendor-lobe-ui CSS gzip',
+    budgetKey: 'vendorLobeUiCssGzipBytes',
+  },
+  {
     key: 'totalJsGzipBytes',
     label: 'total JS gzip',
     budgetKey: 'totalJsGzipBytes',
@@ -108,10 +113,6 @@ function listFilesRecursive(dirPath, io) {
   }
 
   return files;
-}
-
-function gzipFileSize(filePath, io) {
-  return gzipSync(io.readFile(filePath), { level: 9 }).length;
 }
 
 function readJsonFile(repoRoot, filePath, fail, io, missingMessage) {
@@ -192,11 +193,15 @@ function collectAssets(repoRoot, fail, io) {
     .filter((filePath) => filePath.endsWith('.js') || filePath.endsWith('.css'))
     .map((filePath) => {
       const relativePath = path.relative(repoRoot, filePath).split(path.sep).join('/');
-      const gzipBytes = gzipFileSize(filePath, io);
+      const source = io.readFile(filePath);
+      const type = filePath.endsWith('.js') ? 'js' : 'css';
       return {
-        gzipBytes,
+        gzipBytes: gzipSync(source, { level: 9 }).length,
+        // Lets a build without chart routes (VITE_AIOS_MODULE_PROFILE=ai_studio) omit
+        // vendor-echarts while ECharts merged into another chunk still fails.
+        mentionsEcharts: type === 'js' && String(source).includes('echarts'),
         relativePath,
-        type: filePath.endsWith('.js') ? 'js' : 'css',
+        type,
       };
     });
 
@@ -325,12 +330,20 @@ function computeMetrics(collectedAssets, initialJsAssets, fail) {
     path.basename(asset.relativePath).startsWith('vendor-echarts-')
   ));
 
-  if (vendorEchartsAssets.length === 0) {
+  const bundlesEcharts = jsAssets.some((asset) => asset.mentionsEcharts);
+  if (vendorEchartsAssets.length === 0 && bundlesEcharts) {
     fail(`${DIST_PATH} is missing the vendor-echarts JavaScript chunk. Check apps/web-vite/vite.config.ts codeSplitting groups.`);
   }
 
+  // lobe-ui ships one precompiled stylesheet whose size tracks the pinned package
+  // version, not our CSS; it has its own budget so app CSS keeps the tight per-asset cap.
+  const vendorLobeCssAssets = cssAssets.filter((asset) => (
+    path.basename(asset.relativePath).startsWith('vendor-lobe-ui-')
+  ));
+  const appCssAssets = cssAssets.filter((asset) => !vendorLobeCssAssets.includes(asset));
+
   const largestJsAsset = maxAsset(jsAssets);
-  const largestCssAsset = maxAsset(cssAssets);
+  const largestCssAsset = maxAsset(appCssAssets) ?? { gzipBytes: 0, relativePath: 'no app CSS in this build' };
 
   return {
     initialJsGzipBytes: {
@@ -353,9 +366,17 @@ function computeMetrics(collectedAssets, initialJsAssets, fail) {
       bytes: sumGzipBytes(jsAssets),
       detail: `${jsAssets.length} JS assets`,
     },
+    vendorLobeUiCssGzipBytes: {
+      bytes: sumGzipBytes(vendorLobeCssAssets),
+      detail: vendorLobeCssAssets.length
+        ? vendorLobeCssAssets.map((asset) => asset.relativePath).join(', ')
+        : 'no lobe-ui in this build',
+    },
     vendorEchartsGzipBytes: {
       bytes: sumGzipBytes(vendorEchartsAssets),
-      detail: vendorEchartsAssets.map((asset) => asset.relativePath).join(', '),
+      detail: vendorEchartsAssets.length
+        ? vendorEchartsAssets.map((asset) => asset.relativePath).join(', ')
+        : 'no ECharts in this build',
     },
   };
 }

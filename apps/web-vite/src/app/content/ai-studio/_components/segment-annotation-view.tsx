@@ -1,13 +1,13 @@
-import { ArrowLeftOutlined, ExportOutlined } from '@ant-design/icons';
+import { ArrowLeft, Info } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Popconfirm, Select, Skeleton } from 'antd';
+import { Alert, Button, confirmModal, SkeletonText, Tooltip } from '@lobehub/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { resolveContentAssetDisplayTitle, resolveContentAssetProductText } from '@/app/marketing/content-assets/_lib/content-assets-display';
 import { formatDuration } from '@/app/marketing/content-assets/_lib/content-assets-formatters';
 import { aiStudioQueryKeys, fetchAllStudioSegments, type StudioContentSegment, type StudioSegmentPreset } from '../_lib/ai-studio-api';
-import { buildContentAssetDetailPath } from '../_lib/remix-routes';
-import { segmentListPath } from '../_lib/segment-routes';
+import { readAnnotationSource, segmentListPath } from '../_lib/segment-routes';
 import {
   DEFAULT_PRESET_KEY,
   findPreset,
@@ -17,6 +17,7 @@ import {
   SEGMENT_STATUS_OPTIONS,
   SELLING_POINT_FRAMEWORK_LABEL,
 } from '../_lib/segment-display';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { SegmentCreateForm } from './segment-create-form';
 import { SegmentEditModal } from './segment-edit-modal';
 import { SegmentSourcePlayer } from './segment-source-player';
@@ -26,6 +27,7 @@ import { useRangePlayback } from './use-range-playback';
 import { useSegmentAnnotation } from './use-segment-annotation';
 import pageStyles from '../ai-studio.module.css';
 import styles from './segment-annotation.module.css';
+import workbenchStyles from './studio-workbench.module.css';
 
 /** Status filter value: every segment except rejected ones (the default view). */
 const ACTIVE_STATUSES = 'active';
@@ -42,6 +44,7 @@ interface SegmentAnnotationViewProps {
 }
 
 export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openAccess, presets, preset, onPresetChange }: SegmentAnnotationViewProps) {
+  const [searchParams] = useSearchParams();
   const annotation = useSegmentAnnotation(assetId, preset, presets);
   const sellingPoint = isSellingPointPreset(preset);
   // Selling-point segments live inside confirmed framework segments; show those as a reference lane.
@@ -72,7 +75,7 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
   );
 
   if (annotation.assetQuery.isPending) {
-    return <div className={pageStyles.card} aria-busy="true"><Skeleton active paragraph={{ rows: 6 }} /></div>;
+    return <div className={pageStyles.card} aria-busy="true"><SkeletonText rows={6} /></div>;
   }
   if (annotation.assetQuery.isError) {
     return (
@@ -125,12 +128,21 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
     void annotation.updateSegment(action.segment, { expectedRevision: action.segment.revision, status: action.status });
   };
 
+  // Back to where this annotation was opened: 原片, AI 切段, or the segment library.
+  const from = readAnnotationSource(searchParams);
+  const back =
+    from === 'assets'
+      ? { to: ROUTE_PATHS.contentAiStudioAssets, label: '原片' }
+      : from === 'analysis'
+        ? { to: ROUTE_PATHS.contentAiStudioAnalysis, label: 'AI 切段' }
+        : { to: segmentListPath(sellingPoint ? 'sellingPoint' : 'framework'), label: sellingPoint ? '卖点片段' : '框架片段' };
+
   return (
     <section className={pageStyles.panel} aria-labelledby="ai-studio-page-title">
       <header className={pageStyles.pageHeader}>
         <div>
-          <RouterLink className={styles.backLink} to={segmentListPath(sellingPoint ? 'sellingPoint' : 'framework')}>
-            <ArrowLeftOutlined aria-hidden /> {sellingPoint ? '卖点片段' : '框架片段'}
+          <RouterLink className={styles.backLink} to={back.to}>
+            <ArrowLeft size={14} strokeWidth={1.8} aria-hidden /> {back.label}
           </RouterLink>
           <h1 id="ai-studio-page-title">标注片段 · {resolveContentAssetDisplayTitle(asset)}</h1>
           <p>
@@ -138,9 +150,6 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
             {assetDurationMs === null ? '（原片时长未校验，出点按播放器时长参考）' : ''}
           </p>
         </div>
-        <RouterLink className={styles.secondaryLink} to={buildContentAssetDetailPath(asset.assetId)}>
-          在素材库打开 <ExportOutlined aria-hidden />
-        </RouterLink>
       </header>
 
       {!writable ? (
@@ -162,34 +171,94 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
             onDurationChange={setMediaDurationMs}
           />
         </article>
-        <article className={pageStyles.card}>
-          <div className={styles.cardHeading}>
-            <h2>新建片段</h2>
-            {activePresets.length > 1 ? (
-              <Select
-                aria-label="分类预设"
-                className={styles.presetSelect}
-                value={preset.presetKey}
-                options={activePresets.map((item) => ({ value: item.presetKey, label: presetDisplayName(item) }))}
-                onChange={onPresetChange}
+        <div className={styles.workColumn}>
+          <article className={pageStyles.card}>
+            <div className={styles.cardHeading}>
+              <h2>新建片段</h2>
+              {activePresets.length > 1 ? (
+                <LabeledSelect
+                  label="分类预设"
+                  wrapperClassName={styles.presetSelect}
+                  value={preset.presetKey}
+                  options={activePresets.map((item) => ({ value: item.presetKey, label: presetDisplayName(item, activePresets) }))}
+                  onChange={(value) => typeof value === 'string' && onPresetChange(value)}
+                />
+              ) : (
+                <span className={styles.presetName}>{presetDisplayName(preset)}</span>
+              )}
+            </div>
+            {writable ? (
+              <SegmentCreateForm
+                preset={preset}
+                assetProductName={asset.productName}
+                durationMs={assetDurationMs}
+                busy={annotation.busy}
+                readCurrentMs={canPlay ? playback.readCurrentMs : null}
+                onSubmit={annotation.createSegment}
               />
             ) : (
-              <span className={styles.presetName}>{presetDisplayName(preset)}</span>
+              <p className={styles.fieldHelp}>当前为只读视图。</p>
             )}
+          </article>
+        <article className={pageStyles.card}>
+          <div className={styles.cardHeading}>
+            <h2>片段时间轴</h2>
+            <span className={styles.fieldHelp}>
+              {canPlay ? '点击色块播放该片段（到出点自动暂停）；点击刻度从该时间播放。' : '点击色块定位该片段。'}
+            </span>
           </div>
-          {writable ? (
-            <SegmentCreateForm
-              preset={preset}
-              assetProductName={asset.productName}
-              durationMs={assetDurationMs}
-              busy={annotation.busy}
-              readCurrentMs={canPlay ? playback.readCurrentMs : null}
-              onSubmit={annotation.createSegment}
+          {annotation.segmentsQuery.isPending ? <SkeletonText rows={2} /> : null}
+          {annotation.segmentsQuery.isError ? (
+            <Alert
+              type="error"
+              showIcon
+              title="片段读取失败"
+              action={<Button onClick={() => void annotation.segmentsQuery.refetch()}>重试</Button>}
             />
-          ) : (
-            <p className={styles.fieldHelp}>当前为只读视图。</p>
-          )}
+          ) : null}
+          {annotation.segmentsQuery.isSuccess ? (
+            <SegmentTimeline
+              segments={segments}
+              presets={presets}
+              durationMs={timelineDurationMs}
+              currentMs={playback.currentMs}
+              activeSegmentId={activeSegmentId}
+              highlightedIds={highlightedIds}
+              onSelect={selectSegment}
+              onSeek={canPlay ? playback.seekTo : undefined}
+              context={sellingPoint ? { title: '框架段', segments: frames } : undefined}
+            />
+          ) : null}
+          {sellingPoint && framesQuery.isError ? (
+            <Alert
+              type="error"
+              showIcon
+              title="框架段读取失败，暂时看不到卖点片段该落在哪些框架段内"
+              action={<Button onClick={() => void framesQuery.refetch()}>重试</Button>}
+            />
+          ) : null}
+          {sellingPoint && framesQuery.isSuccess && frames.length === 0 ? (
+            <Alert
+              type="warning"
+              showIcon
+              title="这条原片还没有已确认的框架段"
+              description="卖点片段要落在框架段内才能用于卖点混剪；先切到框架预设确认框架段，再标卖点或发起卖点分析。"
+            />
+          ) : null}
+          {sellingPoint && frames.length > 0 && !hasVoiceover ? (
+            <Alert
+              type="warning"
+              showIcon
+              title="这条原片没有混剪口播段"
+              description="卖点只在混剪口播段中拆解；实拍、街采、机制等段在卖点混剪里整段替换，段内标的卖点不参与组合。"
+            />
+          ) : null}
+          {sellingPoint && hasVoiceover ? (
+            <p className={styles.fieldHelp}>卖点只在混剪口播段中拆解；实拍、街采、机制等段整段替换，段内标的卖点不参与卖点混剪。</p>
+          ) : null}
+          {annotation.truncated ? <p className={styles.fieldHelp}>片段较多，只显示前 1000 条。</p> : null}
         </article>
+        </div>
       </div>
 
       {annotation.notice ? (
@@ -202,97 +271,47 @@ export function SegmentAnnotationView({ assetId, focusSegmentId, canWrite, openA
         />
       ) : null}
 
-      <article className={pageStyles.card}>
-        <div className={styles.cardHeading}>
-          <h2>片段时间轴</h2>
-          <span className={styles.fieldHelp}>
-            {canPlay ? '点击色块播放该片段（到出点自动暂停）；点击刻度从该时间播放。' : '点击色块定位该片段。'}
-          </span>
-        </div>
-        {annotation.segmentsQuery.isPending ? <Skeleton active paragraph={{ rows: 2 }} /> : null}
-        {annotation.segmentsQuery.isError ? (
-          <Alert
-            type="error"
-            showIcon
-            title="片段读取失败"
-            action={<Button onClick={() => void annotation.segmentsQuery.refetch()}>重试</Button>}
-          />
-        ) : null}
-        {annotation.segmentsQuery.isSuccess ? (
-          <SegmentTimeline
-            segments={segments}
-            presets={presets}
-            durationMs={timelineDurationMs}
-            currentMs={playback.currentMs}
-            activeSegmentId={activeSegmentId}
-            highlightedIds={highlightedIds}
-            onSelect={selectSegment}
-            onSeek={canPlay ? playback.seekTo : undefined}
-            context={sellingPoint ? { title: '框架段', segments: frames } : undefined}
-          />
-        ) : null}
-        {sellingPoint && framesQuery.isError ? (
-          <Alert
-            type="error"
-            showIcon
-            title="框架段读取失败，暂时看不到卖点片段该落在哪些框架段内"
-            action={<Button onClick={() => void framesQuery.refetch()}>重试</Button>}
-          />
-        ) : null}
-        {sellingPoint && framesQuery.isSuccess && frames.length === 0 ? (
-          <Alert
-            type="warning"
-            showIcon
-            title="这条原片还没有已确认的框架段"
-            description="卖点片段要落在框架段内才能用于卖点混剪；先切到框架预设确认框架段，再标卖点或发起卖点分析。"
-          />
-        ) : null}
-        {sellingPoint && frames.length > 0 && !hasVoiceover ? (
-          <Alert
-            type="warning"
-            showIcon
-            title="这条原片没有混剪口播段"
-            description="卖点只在混剪口播段中拆解；实拍、街采、机制等段在卖点混剪里整段替换，段内标的卖点不参与组合。"
-          />
-        ) : null}
-        {sellingPoint && hasVoiceover ? (
-          <p className={styles.fieldHelp}>卖点只在混剪口播段中拆解；实拍、街采、机制等段整段替换，段内标的卖点不参与卖点混剪。</p>
-        ) : null}
-        {annotation.truncated ? <p className={styles.fieldHelp}>片段较多，只显示前 1000 条。</p> : null}
-      </article>
 
       <article className={pageStyles.card}>
         <div className={styles.cardHeading}>
           <h2>片段列表</h2>
           <div className={styles.listToolbar}>
-            <Select
-              aria-label="按状态筛选"
-              className={styles.statusSelect}
+            <LabeledSelect
+              label="按状态筛选"
+              wrapperClassName={styles.statusSelect}
               value={statusFilter}
               options={[
                 { value: ACTIVE_STATUSES, label: '未拒绝' },
                 { value: '', label: '全部状态' },
                 ...SEGMENT_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
               ]}
-              onChange={setStatusFilter}
+              onChange={(value) => setStatusFilter(typeof value === 'string' ? value : '')}
             />
             {writable ? (
-              <Popconfirm
-                title={`确认所选 ${selected.length} 条片段？`}
-                description="全部成功或全部不生效：任意一条与已确认片段重叠、已被修改或原片已变化，本次不会确认任何片段。"
-                okText="确认"
-                cancelText="取消"
-                disabled={selected.length === 0}
-                onConfirm={() => void annotation.confirmSegments(selected)}
+              <Button
+                type="primary"
+                className={styles.touchButton}
+                disabled={selected.length === 0 || annotation.busy}
+                onClick={() =>
+                  confirmModal({
+                    title: `确认所选 ${selected.length} 条片段？`,
+                    content: '全部成功或全部不生效：任意一条与已确认片段重叠、已被修改或原片已变化，本次不会确认任何片段。',
+                    okText: '确认',
+                    cancelText: '取消',
+                    onOk: () => annotation.confirmSegments(selected).then(() => undefined),
+                  })
+                }
               >
-                <Button type="primary" className={styles.touchButton} disabled={selected.length === 0 || annotation.busy}>
-                  批量确认{selected.length > 0 ? ` ${selected.length} 条` : ''}
-                </Button>
-              </Popconfirm>
+                批量确认{selected.length > 0 ? ` ${selected.length} 条` : ''}
+              </Button>
+            ) : null}
+            {writable ? (
+              <Tooltip title="只能勾选待确认片段。批量确认整批生效：有一条失败，全部不确认。">
+                <Info size={14} strokeWidth={1.8} className={workbenchStyles.infoIcon} tabIndex={0} role="img" aria-label="批量确认说明" />
+              </Tooltip>
             ) : null}
           </div>
         </div>
-        {writable ? <p className={styles.fieldHelp}>只能勾选待确认片段。批量确认是整批生效：有一条失败，全部不确认。</p> : null}
         <SegmentTable
           segments={visibleSegments}
           presets={presets}

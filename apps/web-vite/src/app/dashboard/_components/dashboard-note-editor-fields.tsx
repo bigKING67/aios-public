@@ -1,4 +1,4 @@
-import { Input, Segmented } from 'antd';
+import { Segmented, TextArea } from '@lobehub/ui';
 
 import {
   NOTE_METRIC_OPTIONS,
@@ -6,8 +6,6 @@ import {
   type NoteMetricKey,
 } from './dashboard-config';
 import styles from './dashboard-note-editor.module.css';
-
-const { TextArea } = Input;
 
 type DashboardNoteTextAreaFieldProps = {
   value: string;
@@ -30,6 +28,7 @@ function DashboardNoteTextAreaField({
         maxLength={NOTE_TEXT_MAX_LENGTH}
         autoSize={{ minRows: 2, maxRows }}
         placeholder={placeholder}
+        aria-label={placeholder}
       />
       <div className={styles.textareaCount}>
         {`${value.length}/${NOTE_TEXT_MAX_LENGTH}`}
@@ -63,13 +62,15 @@ export function DashboardNoteEditorFields({
 }: DashboardNoteEditorFieldsProps) {
   return (
     <>
-      <Segmented<NoteMetricKey>
-        name={metricSegmentName}
-        size="small"
-        value={metricKey}
-        onChange={(value) => onMetricKeyChange(value as NoteMetricKey)}
-        options={NOTE_METRIC_OPTIONS}
-      />
+      <div role="group" aria-label="日报指标">
+        <Segmented<NoteMetricKey>
+          name={metricSegmentName}
+          size="small"
+          value={metricKey}
+          onChange={(value) => onMetricKeyChange(value as NoteMetricKey)}
+          options={NOTE_METRIC_OPTIONS}
+        />
+      </div>
       <DashboardNoteTextAreaField
         value={actionText}
         onChange={onActionTextChange}

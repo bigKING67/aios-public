@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import { Empty } from '@lobehub/ui';
 
 export type DashboardDetailTablePaginationArgs = {
   isMobile: boolean;

@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-import type { FormInstance } from 'antd/es/form';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsActionRequest, DataOpsRuntimePipeline } from '@/types/dataops';
 import type { DataOpsTriggerParameterSpec } from '@/config/dataops-trigger-params';
@@ -8,8 +6,9 @@ import type { BatchOperationOptions } from './dataops-batch-helpers';
 import type { BatchOperationAction } from './dataops-hub-formatters';
 import { buildTriggerParametersPayload } from './dataops-trigger-helpers';
 import { getActionKey } from './dataops-action-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
+import type { DataOpsTriggerForm, TriggerFormValues } from './dataops-trigger-parameter-form';
 
-type TriggerFormValues = Record<string, string | number | boolean>;
 type ExecuteDataOpsAction = (
   payload: DataOpsActionRequest,
   actionKey: string
@@ -19,7 +18,7 @@ export function useDataOpsTriggerSubmitState(options: {
   actionPending: boolean;
   activeActionKey: string | null;
   batchActionKey: BatchOperationAction | null;
-  batchTriggerForm: FormInstance<TriggerFormValues>;
+  batchTriggerForm: DataOpsTriggerForm;
   batchTriggerModalPipelineIds: string[] | null;
   batchTriggerModalSpecs: DataOpsTriggerParameterSpec[];
   batchTriggerPayloadPreview: TriggerFormValues;
@@ -32,8 +31,8 @@ export function useDataOpsTriggerSubmitState(options: {
     options: BatchOperationOptions
   ) => Promise<boolean>;
   hasOperatePermission: boolean;
-  message: MessageInstance;
-  triggerForm: FormInstance<TriggerFormValues>;
+  message: DataOpsMessageApi;
+  triggerForm: DataOpsTriggerForm;
   triggerModalPipeline: DataOpsRuntimePipeline | undefined;
   triggerModalSpecs: DataOpsTriggerParameterSpec[];
 }) {

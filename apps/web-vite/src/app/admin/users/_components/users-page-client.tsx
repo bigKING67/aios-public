@@ -14,16 +14,9 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
-import {
-  App,
-  Alert,
-  Table,
-  Button,
-  Form,
-  Spin,
-  Card,
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Alert, Button, Table, toast } from '@lobehub/ui';
+import { PageHeader, Surface } from '@lobehub/ui/dashboard';
+import { Plus } from 'lucide-react';
 import { ProtectedRoute } from '@/components/protected-route';
 import { Layout } from '@/components/organisms/layout';
 import { useIsMobile } from '@/hooks/use-media-query';
@@ -31,6 +24,7 @@ import { ADMIN_READ_PERMISSIONS } from '@/lib/permissions';
 import { useBackendCapabilities } from '@/hooks/use-backend-capabilities';
 import { isReservedElevatedRoleCode, isSuperAdminByRoleOrIdentity } from '@/lib/role-access';
 import { useAuthStore } from '@/stores/auth.store';
+import styles from '../../_components/admin-page.module.css';
 import type { User, UserFormValues } from '../_lib/users-types';
 import { UserFormModal } from './user-form-modal';
 import { UserRoleAssignmentModal } from './user-role-assignment-modal';
@@ -45,7 +39,6 @@ import { buildUsersTableColumns } from './users-table-columns';
  * 用户管理页面
  */
 export function UsersPageClient() {
-  const { message: messageApi } = App.useApp();
   const isMobile = useIsMobile();
   const currentUser = useAuthStore((state) => state.user);
   const { data: backendCapabilities, isLoading: isCapabilitiesLoading } = useBackendCapabilities();
@@ -61,7 +54,8 @@ export function UsersPageClient() {
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [form] = Form.useForm<UserFormValues>();
+  // A new key per open remounts the form dialog, which starts its fields from `editingUser`.
+  const [formSession, setFormSession] = useState(0);
 
   const {
     userList,
@@ -98,8 +92,6 @@ export function UsersPageClient() {
     updateUserMutation,
     updateUserRolesMutation,
   } = useUsersPageActions({
-    messageApi,
-    form,
     editingUser,
     setIsModalVisible,
     setEditingUser,
@@ -112,18 +104,18 @@ export function UsersPageClient() {
    */
   const handleCreate = useCallback(() => {
     setEditingUser(null);
-    form.resetFields();
+    setFormSession((session) => session + 1);
     setIsModalVisible(true);
-  }, [form]);
+  }, []);
 
   /**
    * 打开编辑对话框
    */
   const handleEdit = useCallback((user: User) => {
     setEditingUser(user);
-    form.setFieldsValue(user);
+    setFormSession((session) => session + 1);
     setIsModalVisible(true);
-  }, [form]);
+  }, []);
 
   /**
    * 提交表单
@@ -154,7 +146,6 @@ export function UsersPageClient() {
   const handleCancel = () => {
     setIsModalVisible(false);
     setEditingUser(null);
-    form.resetFields();
   };
 
   const handleDeleteUser = useCallback(
@@ -180,7 +171,7 @@ export function UsersPageClient() {
     }
 
     if (roleEditBlocked) {
-      messageApi.error('仅超级管理员可维护包含 admin/super_admin 的用户角色。');
+      toast.error('仅超级管理员可维护包含 admin/super_admin 的用户角色。');
       return;
     }
 
@@ -190,7 +181,7 @@ export function UsersPageClient() {
     });
 
     if (!canManageElevatedRoles && includesElevatedRole) {
-      messageApi.error('仅超级管理员可授予 admin/super_admin 角色。');
+      toast.error('仅超级管理员可授予 admin/super_admin 角色。');
       return;
     }
 
@@ -200,7 +191,6 @@ export function UsersPageClient() {
     });
   }, [
     canManageElevatedRoles,
-    messageApi,
     roleEditBlocked,
     roleListItems,
     roleModalUser,
@@ -211,71 +201,79 @@ export function UsersPageClient() {
   return (
     <ProtectedRoute requiredPermission={ADMIN_READ_PERMISSIONS} permissionMode="any">
       <Layout>
-        {!isCapabilitiesLoading && !supportsUsersApi ? (
-          <Card title="用户管理">
+        <section className={styles.page} aria-labelledby="admin-users-title" aria-busy={isCapabilitiesLoading || isLoading}>
+          <PageHeader
+            title={<span id="admin-users-title">用户管理</span>}
+            action={
+              !isCapabilitiesLoading && supportsUsersApi ? (
+                <Button type="primary" icon={<Plus size={16} strokeWidth={1.8} aria-hidden="true" />} onClick={handleCreate}>
+                  新建用户
+                </Button>
+              ) : undefined
+            }
+          />
+          {isCapabilitiesLoading ? <Surface loading /> : null}
+          {!isCapabilitiesLoading && !supportsUsersApi ? (
             <Alert
               type="info"
               showIcon
               title="当前后端未启用用户管理接口"
               description={`检测到后端：${backendCapabilities?.backendName || 'unknown'}。当前环境的用户管理接口不可用，用户列表与增删改操作已自动降级。`}
             />
-          </Card>
-        ) : null}
-        {isCapabilitiesLoading ? (
-          <Card title="用户管理">
-            <Spin />
-          </Card>
-        ) : null}
-        {!isCapabilitiesLoading && supportsUsersApi ? (
-        <Card title="用户管理" extra={<Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>新建用户</Button>}>
-          {isLoading ? (
-            <Spin />
-          ) : isMobile ? (
-            <UsersMobileList
-              users={mobilePagedUsers}
-              current={mobilePaginationCurrent}
-              pageSize={mobilePageSize}
-              total={userList.total}
-              onChange={handleMobilePaginationChange}
-              onEdit={handleEdit}
-              onOpenRoleModal={handleOpenRoleModal}
-              onDelete={handleDeleteUser}
-            />
-          ) : (
-            <Table
-              columns={columns}
-              dataSource={userList.items}
-              rowKey="id"
-              pagination={{ pageSize: 20, total: userList.total }}
-              scroll={{ x: 1200 }}
-            />
-          )}
+          ) : null}
+          {!isCapabilitiesLoading && supportsUsersApi ? (
+            <>
+              {isLoading ? (
+                <Surface loading />
+              ) : isMobile ? (
+                <UsersMobileList
+                  users={mobilePagedUsers}
+                  current={mobilePaginationCurrent}
+                  pageSize={mobilePageSize}
+                  total={userList.total}
+                  onChange={handleMobilePaginationChange}
+                  onEdit={handleEdit}
+                  onOpenRoleModal={handleOpenRoleModal}
+                  onDelete={handleDeleteUser}
+                />
+              ) : (
+                <Surface bleed>
+                  <Table<User>
+                    columns={columns}
+                    dataSource={userList.items}
+                    rowKey="id"
+                    pagination={{ pageSize: 20, total: userList.total }}
+                    scroll={{ x: 'max-content' }}
+                  />
+                </Surface>
+              )}
 
-          <UserFormModal
-            form={form}
-            user={editingUser}
-            open={isModalVisible}
-            isSaving={createUserMutation.isPending || updateUserMutation.isPending}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-          />
+              <UserFormModal
+                key={formSession}
+                user={editingUser}
+                open={isModalVisible}
+                isSaving={createUserMutation.isPending || updateUserMutation.isPending}
+                onSubmit={handleSubmit}
+                onCancel={handleCancel}
+              />
 
-          <UserRoleAssignmentModal
-            user={roleModalUser}
-            roleItems={roleItems}
-            roleOptions={roleOptions}
-            selectedRoleIds={selectedRoleIds}
-            canManageElevatedRoles={canManageElevatedRoles}
-            roleEditBlocked={roleEditBlocked}
-            isRoleListLoading={isRoleListLoading}
-            isRoleSelectionLoading={isRoleSelectionLoading}
-            isSaving={updateUserRolesMutation.isPending}
-            onSubmit={handleSubmitRoleModal}
-            onCancel={handleCancelRoleModal}
-            onSelectedRoleIdsChange={setSelectedRoleIds}
-          />
-        </Card>
-        ) : null}
+              <UserRoleAssignmentModal
+                user={roleModalUser}
+                roleItems={roleItems}
+                roleOptions={roleOptions}
+                selectedRoleIds={selectedRoleIds}
+                canManageElevatedRoles={canManageElevatedRoles}
+                roleEditBlocked={roleEditBlocked}
+                isRoleListLoading={isRoleListLoading}
+                isRoleSelectionLoading={isRoleSelectionLoading}
+                isSaving={updateUserRolesMutation.isPending}
+                onSubmit={handleSubmitRoleModal}
+                onCancel={handleCancelRoleModal}
+                onSelectedRoleIdsChange={setSelectedRoleIds}
+              />
+            </>
+          ) : null}
+        </section>
       </Layout>
     </ProtectedRoute>
   );

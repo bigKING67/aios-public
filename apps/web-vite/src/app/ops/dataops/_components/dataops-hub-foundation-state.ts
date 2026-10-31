@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { App } from 'antd';
+import { toast } from '@lobehub/ui';
 import type { DataOpsStatus } from '@/config/dataops-hub';
 import { DATAOPS_OPERATE_PERMISSIONS } from '@/lib/dataops-permissions';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -18,9 +18,11 @@ import { useDataOpsAuditFilterState } from './dataops-audit-filter-state';
 import { useDataOpsActionExecutorState } from './dataops-action-executor-state';
 import { useDataOpsCoreFilterState } from './dataops-core-filter-state';
 import { useDataOpsClientUtilityState } from './dataops-client-utility-state';
+import { DATAOPS_MODAL_API } from './dataops-feedback-types';
 
 export function useDataOpsHubFoundationState() {
-  const { message, modal } = App.useApp();
+  const message = toast;
+  const modal = DATAOPS_MODAL_API;
   const runtimeQuery = useDataOpsRuntime();
   const actionMutation = useDataOpsActions();
   const hasOperatePermission = usePermission(DATAOPS_OPERATE_PERMISSIONS, 'any');

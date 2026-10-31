@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   buildCreatorAnchorLevelDetailColumns,
   type BuildCreatorAnchorLevelDetailColumnsParams,
@@ -29,9 +29,9 @@ interface UseCreatorDashboardTableStateParams<TRecord extends CreatorDashboardTa
 }
 
 interface UseCreatorDashboardTableStateResult<TRecord> {
-  anchorLevelDetailColumns: ColumnsType<TRecord>;
+  anchorLevelDetailColumns: TableColumnsType<TRecord>;
   anchorLevelTableScrollX: number;
-  detailColumns: ColumnsType<TRecord>;
+  detailColumns: TableColumnsType<TRecord>;
   detailTableScrollX: number;
 }
 
@@ -39,7 +39,7 @@ export function useCreatorDashboardTableState<TRecord extends CreatorDashboardTa
   numericCellClassName,
   config,
 }: UseCreatorDashboardTableStateParams<TRecord>): UseCreatorDashboardTableStateResult<TRecord> {
-  const anchorLevelDetailColumns = useMemo<ColumnsType<TRecord>>(
+  const anchorLevelDetailColumns = useMemo<TableColumnsType<TRecord>>(
     () =>
       buildCreatorAnchorLevelDetailColumns({
         numericCellClassName,
@@ -49,7 +49,7 @@ export function useCreatorDashboardTableState<TRecord extends CreatorDashboardTa
     [config, numericCellClassName]
   );
 
-  const detailColumns = useMemo<ColumnsType<TRecord>>(
+  const detailColumns = useMemo<TableColumnsType<TRecord>>(
     () => buildCreatorDetailColumns<TRecord>(config.detail),
     [config]
   );

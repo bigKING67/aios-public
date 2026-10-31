@@ -7,13 +7,7 @@ use crate::error::{AppError, AppResult};
 use super::types::ContentAssetOwnerOption;
 
 pub(super) async fn query_product_options(_pool: &PgPool) -> AppResult<Vec<String>> {
-    Ok(vec![
-        "焕活精华（绿瓶）".to_string(),
-        "白金精华（白瓶60ml）".to_string(),
-        "发际线精华（20ml）".to_string(),
-        "洗发水（油头）".to_string(),
-        "洗发水（干头）".to_string(),
-    ])
+    Ok(super::validation_taxonomy::product_options())
 }
 
 pub(super) async fn query_array_text_options(

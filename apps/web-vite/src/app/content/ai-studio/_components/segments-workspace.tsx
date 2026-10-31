@@ -1,4 +1,4 @@
-import { Alert, Button, Skeleton } from 'antd';
+import { Alert, Button, SkeletonText } from '@lobehub/ui';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { findPreset, isSellingPointPreset, pickDefaultPreset, SELLING_POINT_PRESET_KEY } from '../_lib/segment-display';
 import { segmentListPath, type SegmentKind } from '../_lib/segment-routes';
@@ -42,7 +42,7 @@ export function SegmentsWorkspace({
     return <Navigate replace to={`${segmentListPath(otherKind)}${query ? `?${query}` : ''}`} />;
   }
   if (presetsQuery.isPending) {
-    return <div className={pageStyles.card} aria-busy="true"><Skeleton active paragraph={{ rows: 5 }} /></div>;
+    return <div className={pageStyles.card} aria-busy="true"><SkeletonText rows={5} /></div>;
   }
   if (presetsQuery.isError) {
     return (

@@ -69,14 +69,9 @@ async fn overview_estimates_owner_scoped_model_spend_and_lists_recent_work() {
     )
     .await;
 
-    let response = overview::overview(
-        &pool,
-        StudioOverviewQuery { period: None },
-        Some(&owner),
-        None,
-    )
-    .await
-    .unwrap();
+    let response = overview::overview(&pool, StudioOverviewQuery::default(), Some(&owner), None)
+        .await
+        .unwrap();
     assert_eq!(response.period.key, "last30");
     assert_eq!(response.scope, "own");
     assert_eq!(response.period.from.len(), 10, "{}", response.period.from);
@@ -121,6 +116,7 @@ async fn overview_estimates_owner_scoped_model_spend_and_lists_recent_work() {
             &pool,
             StudioOverviewQuery {
                 period: Some(period.into()),
+                ..Default::default()
             },
             Some(&owner),
             None,
@@ -129,7 +125,43 @@ async fn overview_estimates_owner_scoped_model_spend_and_lists_recent_work() {
         .unwrap();
         assert_eq!(scoped.costs.model_analysis.calls, 2, "{period}");
     }
-    let team = overview::overview(&pool, StudioOverviewQuery { period: None }, None, None)
+    // A unit without a date anchors on the newest activity (today here); a past month counts nothing.
+    let day = overview::overview(
+        &pool,
+        StudioOverviewQuery {
+            unit: Some("day".into()),
+            ..Default::default()
+        },
+        Some(&owner),
+        None,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        day.period.latest_activity_date.as_deref(),
+        Some(day.period.today.as_str())
+    );
+    assert_eq!(day.period.from, day.period.today);
+    assert_eq!(day.costs.model_analysis.calls, 2);
+    let past = overview::overview(
+        &pool,
+        StudioOverviewQuery {
+            unit: Some("month".into()),
+            date: Some("2020-01-15".into()),
+            ..Default::default()
+        },
+        Some(&owner),
+        None,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        (past.period.from.as_str(), past.period.to.as_str()),
+        ("2020-01-01", "2020-01-31")
+    );
+    assert_eq!(past.costs.model_analysis.calls, 0);
+    assert_eq!(past.pipeline.analysis_succeeded, 0);
+    let team = overview::overview(&pool, StudioOverviewQuery::default(), None, None)
         .await
         .unwrap();
     assert_eq!(team.scope, "team");
@@ -137,7 +169,8 @@ async fn overview_estimates_owner_scoped_model_spend_and_lists_recent_work() {
     assert!(overview::overview(
         &pool,
         StudioOverviewQuery {
-            period: Some("year".into())
+            period: Some("year".into()),
+            ..Default::default()
         },
         None,
         None

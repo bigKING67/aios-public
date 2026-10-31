@@ -23,10 +23,10 @@
 
 .contentBlock {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 14px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .riskAlert {

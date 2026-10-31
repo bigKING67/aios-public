@@ -45,7 +45,7 @@ export interface LineChartProps {
   height?: number | string;
   /** 自定义 className */
   className?: string;
-  /** 自定义颜色数组（支持 CSS 变量，如 'var(--chart-color-this-week)' 或 '#3264F6'） */
+  /** 自定义颜色数组（支持 CSS 变量，如 'var(--chart-color-this-week)' 或 '#2F6FE0'） */
   colors?: string[];
   /** 是否显示数据点标记 */
   showDataLabel?: boolean;

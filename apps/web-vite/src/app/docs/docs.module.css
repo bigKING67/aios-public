@@ -3,33 +3,33 @@
   --docs-docs-material-scrollbar-slate-a780: rgba(100, 116, 139, 0.78);
   --docs-docs-material-slate-a260: rgba(148, 163, 184, 0.26);
   --docs-docs-material-scrollbar-slate-a750: rgba(100, 116, 139, 0.75);
-  --docs-docs-material-blue-ring-a240: rgba(59, 130, 246, 0.24);
+  --docs-docs-material-blue-ring-a240: rgba(110, 86, 207, 0.24);
 }
 .pageWrap {
   display: grid;
   grid-template-columns: 264px minmax(0, 1fr) 232px;
   column-gap: 0;
   width: 100%;
-  height: calc(100dvh - 72px);
-  min-height: calc(100dvh - 72px);
+  height: var(--aios-workspace-height, 100dvh);
+  min-height: var(--aios-workspace-height, 100dvh);
   font-family: var(--font-family-base);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .workspaceState {
-  min-height: calc(100dvh - 72px);
+  min-height: var(--aios-workspace-height, 100dvh);
   display: grid;
   place-content: center;
   justify-items: center;
   gap: var(--spacing-3);
   padding: var(--spacing-6);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   text-align: center;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .workspaceState strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
 }
 
@@ -41,16 +41,16 @@
 .workspaceStateAction {
   min-height: 34px;
   padding: 0 var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--radius-md);
-  color: var(--brand-text);
-  background: var(--bg-card);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-bg-container);
   font: inherit;
   cursor: pointer;
 }
 
 .workspaceStateAction:hover {
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .workspaceStateAction:focus-visible {
@@ -93,8 +93,8 @@
 .mainPanel {
   min-width: 0;
   min-height: 0;
-  border-right: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border-right: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
 }
 
 .contentScroll {
@@ -116,7 +116,7 @@
 
 .heroEyebrow {
   margin: 0;
-  color: var(--status-success);
+  color: var(--aios-status-success);
   font-size: var(--font-size-sm);
   font-weight: 630;
   letter-spacing: var(--letter-spacing-label);
@@ -132,7 +132,7 @@
 
 .heroTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-display);
   line-height: var(--line-height-compact);
   letter-spacing: var(--letter-spacing-title);
@@ -140,7 +140,7 @@
 
 .heroSubtitle {
   margin: 10px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-prose);
   max-width: 44em;
@@ -153,9 +153,9 @@
   height: 34px;
   padding: 0 12px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
-  color: var(--text-secondary);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text-secondary);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: 560;
@@ -163,7 +163,7 @@
 }
 
 .heroAction:hover {
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .docSection {
@@ -173,7 +173,7 @@
 
 .docSection h2 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-2xl);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-title);
@@ -181,14 +181,14 @@
 
 .docSection p {
   margin: 12px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-prose);
   letter-spacing: var(--letter-spacing-normal);
 }
 
 .sectionLead {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: 500;
 }
 
@@ -196,8 +196,8 @@
   max-width: 100%;
   margin-top: 14px;
   overflow-x: auto;
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  border-top: 1px solid var(--lobe-color-border);
+  border-bottom: 1px solid var(--lobe-color-border);
 }
 
 .valueTable {
@@ -209,18 +209,18 @@
 .valueTable td {
   text-align: left;
   padding: 11px 8px;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
   overflow-wrap: anywhere;
 }
 
 .valueTable th {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 620;
 }
 
 .valueTable td {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-prose);
 }
@@ -251,13 +251,13 @@
 .figureLink {
   display: block;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .figureLink:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
@@ -273,11 +273,11 @@
   aspect-ratio: 16 / 9;
   margin-top: 16px;
   border-radius: var(--border-radius-lg);
-  background: var(--text-primary);
+  background: var(--aios-stage);
 }
 
 .figure figcaption {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -288,7 +288,7 @@
 
 .tableTitle {
   margin: 0 0 10px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-title);
@@ -304,16 +304,16 @@
   justify-content: center;
   height: 30px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   padding: 0 10px;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: 620;
 }
 
 .quickCardAction:hover {
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .cardGrid {
@@ -329,15 +329,15 @@
   align-content: start;
   gap: 10px;
   padding: 18px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 16px;
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .infoCard h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-title);
@@ -346,14 +346,14 @@
 
 .infoCard p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-prose);
   overflow-wrap: anywhere;
 }
 
 .infoCard .cardMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   font-weight: 620;
@@ -372,7 +372,7 @@
 }
 
 .cardDetailRow dt {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: 620;
   line-height: var(--line-height-normal);
@@ -380,7 +380,7 @@
 
 .cardDetailRow dd {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -396,10 +396,10 @@
   display: inline-flex;
   align-items: center;
   min-height: 22px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 999px;
   padding: 2px 8px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   background: var(--bg-soft);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
@@ -416,12 +416,12 @@
   margin-top: 14px;
   display: grid;
   gap: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--lobe-color-border);
 }
 
 .stepItem {
   position: relative;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
   padding: 12px 4px 12px 14px;
   background: transparent;
 }
@@ -434,17 +434,17 @@
   bottom: 12px;
   width: 2px;
   border-radius: 999px;
-  background: var(--border-color-hover);
+  background: var(--aios-border-hover);
 }
 
 .stepItem strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
 }
 
 .stepItem p {
   margin: 6px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-prose);
 }
@@ -485,7 +485,7 @@
   .pageWrap {
     grid-template-columns: 1fr;
     height: auto;
-    min-height: calc(100dvh - 72px);
+    min-height: var(--aios-workspace-height, 100dvh);
   }
 
   .mainPanel {
@@ -556,7 +556,7 @@
 
   .docDataTable tr {
     padding: 10px 0;
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--lobe-color-border-secondary);
   }
 
   .docDataTable tbody tr:last-child {
@@ -573,7 +573,7 @@
 
   .docDataTable td::before {
     content: attr(data-label);
-    color: var(--text-tertiary);
+    color: var(--lobe-color-text-tertiary);
     font-size: var(--font-size-xs);
     font-weight: 620;
     line-height: var(--line-height-normal);
@@ -586,4 +586,12 @@
   .quickCardAction {
     justify-self: start;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] :global(:root) {
+  --docs-docs-material-scrollbar-slate-a780: rgba(143, 140, 146, 0.78);
+  --docs-docs-material-slate-a260: rgba(107, 107, 107, 0.26);
+  --docs-docs-material-scrollbar-slate-a750: rgba(143, 140, 146, 0.75);
+  --docs-docs-material-blue-ring-a240: rgba(139, 116, 240, 0.24);
 }

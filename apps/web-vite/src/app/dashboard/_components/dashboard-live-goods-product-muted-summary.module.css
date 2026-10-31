@@ -4,15 +4,15 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 430;
 }
 
 .mutedSummaryBadge {
   border-radius: 999px;
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-weight: 500;
   padding: 4px 8px;
 }

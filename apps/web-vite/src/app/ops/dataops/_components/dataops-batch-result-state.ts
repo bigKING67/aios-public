@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import { request } from '@/lib/request';
 import { getActionErrorMessage } from './dataops-action-helpers';
@@ -10,9 +9,10 @@ import type {
 import { buildDataOpsBatchResultDerivedState } from './dataops-batch-result-selectors';
 import type { BatchResultFilter } from './dataops-hub-formatters';
 import { copyDataOpsBatchFailedPipelineIds } from './dataops-feedback-actions';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsBatchHistoryPersistenceState(options: {
-  message: MessageInstance;
+  message: DataOpsMessageApi;
 }) {
   const { message } = options;
 
@@ -52,7 +52,7 @@ export function useDataOpsBatchResultState(options: {
   copyText: (text: string, label: string) => Promise<void>;
   lastBatchExecutionSummary: BatchExecutionSummary | null;
   lastBatchFailureContext: BatchOperationFailureContext | null;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
 }) {
   const {
     batchResultFilter,

@@ -12,7 +12,7 @@ from collections import Counter, defaultdict
 from . import contract, evaluation
 from . import taxonomy as tx
 
-STATS_VERSION = 'competitor-stats-v1'
+STATS_VERSION = 'competitor-stats-v2'
 ANALYSIS_UNIT = 'film'  # no creative-version de-duplication yet
 
 
@@ -149,18 +149,46 @@ def cohort_key(record):
     return record['card']['product']['category']
 
 
-def compute(records, cohort_id, period=None):
+def input_snapshot(records):
+    """Identity of the inputs (film, source hash, response, text extraction); equal inputs give equal statistics."""
+    return hashlib.sha256(json.dumps(sorted(
+        (r['film'], r.get('input_manifest', {}).get('source_sha256'), r.get('response_id'), r.get('enrichment_id') or '')
+        for r in records),
+        ensure_ascii=False).encode()).hexdigest()[:16]
+
+
+def dimension_status(records, dimension):
+    """assessable / partial / unassessable / blocked per film for one dimension."""
+    return {r['film']: _dimension_status(r['card'], dimension) if usable(r, dimension) else 'blocked'
+            for r in records}
+
+
+def dimension_summary(records, family=None):
+    """Denominators per dimension, including dimensions where no film carries a label (so no stat rows)."""
+    family = opening_families(records) if family is None else family
+    summary = {}
+    for dimension in DIMENSIONS:
+        status = dimension_status(records, dimension)
+        assessable = [film for film, value in status.items() if value == 'assessable']
+        summary[dimension] = {
+            'denominator': len(assessable), 'family_denominator': len({family[film] for film in assessable}),
+            'partial_count': sum(1 for v in status.values() if v == 'partial'),
+            'unassessable_count': sum(1 for v in status.values() if v == 'unassessable'),
+            'blocked_count': sum(1 for v in status.values() if v == 'blocked'),
+        }
+    return summary
+
+
+def compute(records, cohort_id, period=None, family=None):
     """records: dicts with film, card, structure. Returns stat rows sorted by dimension and rate.
 
-    Each row carries the film-level count and the opening-family count (`any_variant_present`)."""
-    family = opening_families(records)
-    snapshot = hashlib.sha256(json.dumps(sorted(
-        (r['film'], r.get('input_manifest', {}).get('source_sha256'), r.get('response_id')) for r in records),
-        ensure_ascii=False).encode()).hexdigest()[:16]
+    Each row carries the film-level count and the opening-family count (`any_variant_present`).
+    `family` (from opening_families) may be passed in when the caller already computed it."""
+    family = opening_families(records) if family is None else family
+    snapshot = input_snapshot(records)
     rows = []
     for dimension in DIMENSIONS:
-        status = {r['film']: _dimension_status(r['card'], dimension) if usable(r, dimension) else 'blocked'
-                  for r in records}
+        status = dimension_status(records, dimension)
         assessable = [r for r in records if status[r['film']] == 'assessable']
         counts, examples, families = Counter(), defaultdict(list), defaultdict(set)
         for record in assessable:

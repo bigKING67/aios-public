@@ -19,7 +19,7 @@
   --dashboard-goods-quadrant-neutral-border: var(--domain-topsis-neutral-border);
 
   /* Traffic hierarchy palette. L1/L2/L3 are business tiers, not success/warning/error states. */
-  --dashboard-traffic-row-hover-bg: var(--bg-hover);
+  --dashboard-traffic-row-hover-bg: var(--lobe-color-fill-tertiary);
   --dashboard-traffic-summary-accent: var(--domain-traffic-summary-accent);
   --dashboard-traffic-summary-row-hover-bg: var(--domain-traffic-summary-bg);
   --dashboard-traffic-summary-first-hover-bg: var(--domain-traffic-summary-bg);
@@ -52,119 +52,118 @@
   --dashboard-traffic-l3-badge-text: var(--domain-traffic-l3-text);
 
   /* Traffic table structural aliases. Keep separate from traffic hierarchy colors. */
-  --dashboard-traffic-level-badge-bg: var(--status-neutral-bg);
-  --dashboard-traffic-level-badge-border: var(--border-color);
-  --dashboard-traffic-level-badge-text: var(--text-secondary);
-  --dashboard-traffic-table-head-bg: var(--bg-hover);
-  --dashboard-traffic-table-head-text: var(--text-secondary);
-  --dashboard-traffic-expand-icon-bg: var(--bg-hover);
-  --dashboard-traffic-expand-icon-border: var(--border-color);
-  --dashboard-traffic-expand-icon-text: var(--text-secondary);
-  --dashboard-traffic-expand-icon-hover-bg: var(--brand-secondary);
-  --dashboard-traffic-expand-icon-hover-border: var(--border-color-hover);
+  --dashboard-traffic-level-badge-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-traffic-level-badge-border: var(--lobe-color-border);
+  --dashboard-traffic-level-badge-text: var(--lobe-color-text-secondary);
+  --dashboard-traffic-table-head-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-traffic-table-head-text: var(--lobe-color-text-secondary);
+  --dashboard-traffic-expand-icon-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-traffic-expand-icon-border: var(--lobe-color-border);
+  --dashboard-traffic-expand-icon-text: var(--lobe-color-text-secondary);
+  --dashboard-traffic-expand-icon-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-traffic-expand-icon-hover-border: var(--aios-border-hover);
 
   /* Live goods table aliases. These are local emphasis tokens for nested traffic/live rows. */
-  --dashboard-live-goods-divider: var(--divider-color);
-  --dashboard-live-goods-summary-metric-bg: var(--bg-hover);
-  --dashboard-live-goods-summary-metric-hover-bg: var(--brand-secondary);
-  --dashboard-live-goods-sku-metric-bg: var(--bg-hover);
-  --dashboard-live-goods-sku-metric-hover-bg: var(--brand-secondary);
-  --dashboard-live-goods-sku-accent: var(--border-color-hover);
-  --dashboard-live-goods-sku-row-hover-bg: var(--bg-hover);
+  --dashboard-live-goods-divider: var(--lobe-color-border-secondary);
+  --dashboard-live-goods-summary-metric-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-goods-summary-metric-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-goods-sku-metric-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-goods-sku-metric-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-goods-sku-accent: var(--aios-border-hover);
+  --dashboard-live-goods-sku-row-hover-bg: var(--lobe-color-fill-tertiary);
 
   /* Dashboard structural tokens shared across this module. */
-  --dashboard-panel-border: var(--border-color);
-  --dashboard-panel-border-muted: var(--border-color);
-  --dashboard-panel-bg-start: var(--bg-card);
-  --dashboard-panel-bg-end: var(--bg-hover);
-  --dashboard-panel-subtle-bg: var(--bg-global);
-  --dashboard-panel-muted-text: var(--text-tertiary);
-  --dashboard-pill-border: var(--border-color);
-  --dashboard-pill-bg: var(--status-neutral-bg);
-  --dashboard-pill-text: var(--text-secondary);
-  --dashboard-id-pill-text: var(--text-secondary);
-  --dashboard-id-pill-border: var(--border-color);
-  --dashboard-id-pill-bg: var(--status-neutral-bg);
-  --dashboard-empty-state-text: var(--text-secondary);
-  --dashboard-disabled-text: var(--text-disabled);
-  --dashboard-control-border: var(--border-color);
+  --dashboard-panel-border: var(--lobe-color-border);
+  --dashboard-panel-border-muted: var(--lobe-color-border);
+  --dashboard-panel-bg-start: var(--lobe-color-bg-container);
+  --dashboard-panel-bg-end: var(--lobe-color-fill-tertiary);
+  --dashboard-panel-subtle-bg: var(--lobe-color-bg-layout);
+  --dashboard-panel-muted-text: var(--lobe-color-text-tertiary);
+  --dashboard-pill-border: var(--lobe-color-border);
+  --dashboard-pill-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-pill-text: var(--lobe-color-text-secondary);
+  --dashboard-id-pill-text: var(--lobe-color-text-secondary);
+  --dashboard-id-pill-border: var(--lobe-color-border);
+  --dashboard-id-pill-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-empty-state-text: var(--lobe-color-text-secondary);
+  --dashboard-disabled-text: var(--lobe-color-text-disabled);
+  --dashboard-control-border: var(--lobe-color-border);
 
   /* Live card/list tokens. */
-  --dashboard-live-card-border: var(--border-color);
-  --dashboard-live-card-hover-bg: var(--bg-hover);
-  --dashboard-live-card-muted-bg: var(--bg-hover);
-  --dashboard-live-card-muted-hover-bg: var(--bg-hover);
-  --dashboard-live-rank-bg: var(--status-neutral-bg);
-  --dashboard-live-tag-border: var(--border-color);
-  --dashboard-live-tag-bg: var(--status-neutral-bg);
-  --dashboard-live-tag-text: var(--text-secondary);
-  --dashboard-live-muted-text: var(--text-tertiary);
-  --dashboard-live-kpi-label: var(--text-tertiary);
-  --dashboard-live-chevron-border: var(--border-color);
-  --dashboard-live-chevron-text: var(--text-secondary);
-  --dashboard-live-meta-border: var(--border-color);
-  --dashboard-live-meta-bg: var(--bg-hover);
-  --dashboard-live-meta-text: var(--text-tertiary);
-  --dashboard-live-meta-muted-border: var(--divider-color);
-  --dashboard-live-meta-muted-text: var(--text-tertiary);
-  --dashboard-live-muted-pill-text: var(--text-tertiary);
-  --dashboard-live-contribution-track: var(--divider-color);
-  --dashboard-live-sku-toggle-border: var(--border-color);
-  --dashboard-live-sku-toggle-hover-bg: var(--bg-hover);
-  --dashboard-live-sku-panel-border: var(--border-color);
-  --dashboard-live-sku-panel-bg: var(--bg-card);
-  --dashboard-live-sku-header-text: var(--text-tertiary);
+  --dashboard-live-card-border: var(--lobe-color-border);
+  --dashboard-live-card-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-card-muted-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-card-muted-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-rank-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-tag-border: var(--lobe-color-border);
+  --dashboard-live-tag-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-tag-text: var(--lobe-color-text-secondary);
+  --dashboard-live-muted-text: var(--lobe-color-text-tertiary);
+  --dashboard-live-kpi-label: var(--lobe-color-text-tertiary);
+  --dashboard-live-chevron-border: var(--lobe-color-border);
+  --dashboard-live-chevron-text: var(--lobe-color-text-secondary);
+  --dashboard-live-meta-border: var(--lobe-color-border);
+  --dashboard-live-meta-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-meta-text: var(--lobe-color-text-tertiary);
+  --dashboard-live-meta-muted-border: var(--lobe-color-border-secondary);
+  --dashboard-live-meta-muted-text: var(--lobe-color-text-tertiary);
+  --dashboard-live-muted-pill-text: var(--lobe-color-text-tertiary);
+  --dashboard-live-contribution-track: var(--lobe-color-border-secondary);
+  --dashboard-live-sku-toggle-border: var(--lobe-color-border);
+  --dashboard-live-sku-toggle-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-sku-panel-border: var(--lobe-color-border);
+  --dashboard-live-sku-panel-bg: var(--lobe-color-bg-container);
+  --dashboard-live-sku-header-text: var(--lobe-color-text-tertiary);
 
   /* Detail drawer/table tokens. */
-  --dashboard-detail-head-border: var(--divider-color);
-  --dashboard-detail-border: var(--divider-color);
-  --dashboard-detail-text: var(--text-secondary);
-  --dashboard-detail-muted-text: var(--text-tertiary);
-  --dashboard-detail-label-text: var(--text-tertiary);
-  --dashboard-detail-type-border: var(--border-color);
-  --dashboard-detail-type-bg: var(--status-neutral-bg);
-  --dashboard-detail-action-border: var(--border-color);
-  --dashboard-detail-action-hover-border: var(--border-color-hover);
-  --dashboard-detail-action-hover-bg: var(--brand-secondary);
-  --dashboard-detail-drawer-border: var(--border-color);
-  --dashboard-detail-drawer-bg: var(--bg-card);
-  --dashboard-detail-drawer-muted-text: var(--text-tertiary);
-  --dashboard-detail-summary-border: var(--border-color);
+  --dashboard-detail-head-border: var(--lobe-color-border-secondary);
+  --dashboard-detail-border: var(--lobe-color-border-secondary);
+  --dashboard-detail-text: var(--lobe-color-text-secondary);
+  --dashboard-detail-muted-text: var(--lobe-color-text-tertiary);
+  --dashboard-detail-label-text: var(--lobe-color-text-tertiary);
+  --dashboard-detail-type-border: var(--lobe-color-border);
+  --dashboard-detail-type-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-detail-action-border: var(--lobe-color-border);
+  --dashboard-detail-action-hover-border: var(--aios-border-hover);
+  --dashboard-detail-action-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-detail-drawer-border: var(--lobe-color-border);
+  --dashboard-detail-drawer-bg: var(--lobe-color-bg-container);
+  --dashboard-detail-drawer-muted-text: var(--lobe-color-text-tertiary);
+  --dashboard-detail-summary-border: var(--lobe-color-border);
 
   /* Goods matrix / score local tokens. */
-  --dashboard-goods-tooltip-divider: var(--border-color-hover);
-  --dashboard-goods-subtitle-text: var(--text-tertiary);
-  --dashboard-goods-hint-border: var(--status-info-border);
-  --dashboard-goods-hint-bg: var(--status-info-bg);
-  --dashboard-goods-hint-text: var(--brand-text);
-  --dashboard-goods-header-underline: var(--border-color-hover);
-  --dashboard-goods-footnote-text: var(--text-tertiary);
-  --dashboard-goods-footnote-label: var(--text-tertiary);
-  --dashboard-goods-table-hover-bg: var(--bg-hover);
-  --dashboard-goods-drilldown-hover-bg: var(--brand-secondary);
-  --dashboard-goods-drilldown-active-bg: var(--brand-secondary);
+  --dashboard-goods-tooltip-divider: var(--aios-border-hover);
+  --dashboard-goods-subtitle-text: var(--lobe-color-text-tertiary);
+  --dashboard-goods-hint-border: var(--lobe-color-info-border);
+  --dashboard-goods-hint-bg: var(--lobe-color-info-bg);
+  --dashboard-goods-hint-text: var(--lobe-color-text);
+  --dashboard-goods-header-underline: var(--aios-border-hover);
+  --dashboard-goods-footnote-text: var(--lobe-color-text-tertiary);
+  --dashboard-goods-footnote-label: var(--lobe-color-text-tertiary);
+  --dashboard-goods-table-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-goods-drilldown-hover-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-goods-drilldown-active-bg: var(--lobe-color-fill-tertiary);
 
-  --dashboard-traffic-metric-meta-text: var(--text-tertiary);
-  --dashboard-traffic-metric-meta-label: var(--text-tertiary);
+  --dashboard-traffic-metric-meta-text: var(--lobe-color-text-tertiary);
+  --dashboard-traffic-metric-meta-label: var(--lobe-color-text-tertiary);
 
   /* Live funnel local controls and geometry colors. */
-  --dashboard-live-funnel-control-text: var(--text-secondary);
-  --dashboard-live-funnel-control-border: var(--border-color);
-  --dashboard-live-funnel-control-hover-border: var(--border-color-hover);
-  --dashboard-live-funnel-control-arrow: var(--text-tertiary);
-  --dashboard-live-funnel-dropdown-text: var(--text-primary);
-  --dashboard-live-funnel-dropdown-selected-bg: var(--brand-secondary);
-  --dashboard-live-funnel-dropdown-selected-text: var(--text-primary);
+  --dashboard-live-funnel-control-text: var(--lobe-color-text-secondary);
+  --dashboard-live-funnel-control-border: var(--lobe-color-border);
+  --dashboard-live-funnel-control-hover-border: var(--aios-border-hover);
+  --dashboard-live-funnel-control-arrow: var(--lobe-color-text-tertiary);
+  --dashboard-live-funnel-dropdown-text: var(--lobe-color-text);
+  --dashboard-live-funnel-dropdown-selected-bg: var(--lobe-color-fill-tertiary);
+  --dashboard-live-funnel-dropdown-selected-text: var(--lobe-color-text);
 
   --dashboard-live-funnel-connector: var(--domain-funnel-connector-color);
-  --dashboard-live-funnel-muted-text: var(--text-tertiary);
+  --dashboard-live-funnel-muted-text: var(--lobe-color-text-tertiary);
   --dashboard-live-funnel-bar-text: var(--domain-funnel-text-on-fill);
-  --dashboard-live-funnel-bar-muted-text: var(--dashboard-material-inverse-text-soft);
 
   /* Dashboard-local material primitives: translucent surfaces/shadows, not semantic colors. */
-  --dashboard-material-glow-brand: rgba(47, 110, 234, 0.18);
-  --dashboard-material-glow-accent: rgba(140, 178, 255, 0.12);
-  --dashboard-material-backdrop-brand: rgba(47, 110, 234, 0.16);
+  --dashboard-material-glow-brand: rgba(110, 86, 207, 0.18);
+  --dashboard-material-glow-accent: rgba(170, 153, 236, 0.12);
+  --dashboard-material-backdrop-brand: rgba(110, 86, 207, 0.16);
   --dashboard-material-backdrop-success: rgba(22, 163, 74, 0.08);
   --dashboard-material-glass-border: rgba(148, 163, 184, 0.3);
   --dashboard-material-topbar-bg: rgba(255, 255, 255, 0.88);
@@ -182,10 +181,10 @@
   --dashboard-material-shadow-fixed-column: rgba(15, 23, 42, 0.35);
   --dashboard-material-shadow-tooltip: rgba(15, 23, 42, 0.7);
   --dashboard-material-tooltip-dark-bg: rgba(15, 23, 42, 0.92);
-  --dashboard-material-shadow-brand-soft: rgba(47, 110, 234, 0.42);
-  --dashboard-material-shadow-brand: rgba(47, 110, 234, 0.58);
-  --dashboard-material-shadow-brand-mobile: rgba(47, 110, 234, 0.52);
-  --dashboard-material-shadow-brand-hover: rgba(47, 110, 234, 0.38);
+  --dashboard-material-shadow-brand-soft: rgba(110, 86, 207, 0.42);
+  --dashboard-material-shadow-brand: rgba(110, 86, 207, 0.58);
+  --dashboard-material-shadow-brand-mobile: rgba(110, 86, 207, 0.52);
+  --dashboard-material-shadow-brand-hover: rgba(110, 86, 207, 0.38);
   --dashboard-material-shadow-danger-notice: rgba(220, 38, 38, 0.55);
   --dashboard-material-inverse-text-strong: rgba(255, 255, 255, 0.92);
   --dashboard-material-inverse-text-soft: rgba(255, 255, 255, 0.9);
@@ -193,8 +192,8 @@
   --dashboard-material-inverse-text-faint: rgba(255, 255, 255, 0.7);
 
   /* Dashboard-local material tokens. Keep local until reused outside dashboard surfaces. */
-  --dashboard-canvas-bg-start: var(--bg-subtle);
-  --dashboard-canvas-bg-end: var(--bg-global);
+  --dashboard-canvas-bg-start: var(--lobe-color-fill-tertiary);
+  --dashboard-canvas-bg-end: var(--lobe-color-bg-layout);
   --dashboard-canvas-brand-glow: var(--dashboard-material-glow-brand);
   --dashboard-canvas-info-glow: var(--dashboard-material-glow-accent);
   --dashboard-backdrop-brand-glow: var(--dashboard-material-backdrop-brand);
@@ -218,7 +217,7 @@
   --dashboard-tooltip-dark-bg: var(--dashboard-material-tooltip-dark-bg);
   --dashboard-tooltip-dark-text: var(--dashboard-material-inverse-text-strong);
   --dashboard-tooltip-dark-muted-text: var(--dashboard-material-inverse-text-muted);
-  --dashboard-tooltip-dark-strong-text: var(--text-inverse);
+  --dashboard-tooltip-dark-strong-text: var(--lobe-color-text-light-solid);
   --dashboard-tooltip-dark-shadow: 0 12px 20px -14px var(--dashboard-material-shadow-tooltip);
   --dashboard-selection-compact-height: var(--spacing-8);
   --dashboard-selection-compact-min-width: calc(var(--spacing-8) + var(--spacing-6));
@@ -228,9 +227,42 @@
   --dashboard-brand-mobile-selected-shadow: 0 8px 16px -14px var(--dashboard-material-shadow-brand-mobile);
   --dashboard-brand-card-hover-shadow: 0 18px 30px -24px var(--dashboard-material-shadow-brand-hover);
   --dashboard-danger-notice-shadow: 0 12px 24px -22px var(--dashboard-material-shadow-danger-notice);
-  --dashboard-inverse-text: var(--brand-on-primary);
-  --dashboard-inverse-muted-text: var(--brand-on-primary-muted);
-  --dashboard-live-contribution-fill-start: var(--chart-series-2);
-  --dashboard-live-contribution-fill-end: var(--chart-series-3);
-  --dashboard-live-trend-hint-bg: var(--brand-secondary);
+  --dashboard-inverse-text: var(--lobe-color-bg-container);
+  --dashboard-inverse-muted-text: color-mix(in srgb, var(--lobe-color-bg-container) 76%, transparent);
+  --dashboard-live-contribution-fill-start: var(--aios-chart-2);
+  --dashboard-live-contribution-fill-end: var(--aios-chart-3);
+  --dashboard-live-trend-hint-bg: var(--lobe-color-fill-tertiary);
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] {
+  --dashboard-material-glow-brand: rgba(139, 116, 240, 0.18);
+  --dashboard-material-glow-accent: rgba(105, 88, 173, 0.12);
+  --dashboard-material-backdrop-brand: rgba(139, 116, 240, 0.16);
+  --dashboard-material-backdrop-success: rgba(73, 183, 114, 0.08);
+  --dashboard-material-glass-border: rgba(107, 107, 107, 0.3);
+  --dashboard-material-topbar-bg: rgba(13, 13, 13, 0.88);
+  --dashboard-material-surface-bg: rgba(13, 13, 13, 0.9);
+  --dashboard-material-surface-bg-strong: rgba(13, 13, 13, 0.92);
+  --dashboard-material-surface-gradient-start: rgba(30, 29, 33, 0.9);
+  --dashboard-material-surface-gradient-end: rgba(13, 13, 13, 0.96);
+  --dashboard-material-shadow-soft: rgba(0, 0, 0, 0.14);
+  --dashboard-material-shadow-strong: rgba(0, 0, 0, 0.55);
+  --dashboard-material-shadow-topbar: rgba(0, 0, 0, 0.32);
+  --dashboard-material-shadow-sidebar: rgba(0, 0, 0, 0.42);
+  --dashboard-material-shadow-chart-panel: rgba(0, 0, 0, 0.6);
+  --dashboard-material-shadow-panel-subtle: rgba(0, 0, 0, 0.2);
+  --dashboard-material-shadow-badge-inset: rgba(0, 0, 0, 0.04);
+  --dashboard-material-shadow-fixed-column: rgba(0, 0, 0, 0.35);
+  --dashboard-material-shadow-tooltip: rgba(0, 0, 0, 0.7);
+  --dashboard-material-tooltip-dark-bg: rgba(215, 211, 218, 0.92);
+  --dashboard-material-shadow-brand-soft: rgba(0, 0, 0, 0.42);
+  --dashboard-material-shadow-brand: rgba(0, 0, 0, 0.58);
+  --dashboard-material-shadow-brand-mobile: rgba(0, 0, 0, 0.52);
+  --dashboard-material-shadow-brand-hover: rgba(0, 0, 0, 0.38);
+  --dashboard-material-shadow-danger-notice: rgba(0, 0, 0, 0.55);
+  --dashboard-material-inverse-text-strong: rgba(13, 13, 13, 0.92);
+  --dashboard-material-inverse-text-soft: rgba(13, 13, 13, 0.9);
+  --dashboard-material-inverse-text-muted: rgba(13, 13, 13, 0.72);
+  --dashboard-material-inverse-text-faint: rgba(13, 13, 13, 0.7);
 }

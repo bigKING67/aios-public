@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import { createIntegerMetricColumn } from './platform-tab-metric-column-builders';
 
 type ChannelCountRow = {
@@ -9,7 +9,7 @@ type ChannelCountRow = {
 
 export function buildChannelCountColumns<
   Row extends ChannelCountRow,
->(): ColumnsType<Row> {
+>(): TableColumnsType<Row> {
   return [
     createIntegerMetricColumn<Row>('支付人数', 'payBuyerCount', 115),
     createIntegerMetricColumn<Row>('访客数', 'visitorCount', 115),

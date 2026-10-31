@@ -27,7 +27,7 @@ struct Edit {
 
 async fn edit_fixture(pool: &PgPool) -> Edit {
     let owner = format!("edit-{}", Uuid::new_v4());
-    let product = format!("精华-{}", Uuid::new_v4().simple());
+    let product = format!("粉底液-{}", Uuid::new_v4().simple());
     let (a, sha_a) = asset(pool, &owner, &product, "authorized").await;
     let (b, sha_b) = asset(pool, &owner, &product, "authorized").await;
     let (r, sha_r) = asset(pool, &owner, &product, "restricted").await;

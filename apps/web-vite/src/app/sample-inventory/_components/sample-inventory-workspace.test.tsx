@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -25,7 +26,7 @@ describe("SampleInventoryWorkspace", () => {
     for (const tab of ["出库登记", "库存", "入库", "出库记录", "入库记录"]) {
       const tabButton = primaryNavigation.getByRole("button", { name: tab });
       expect(tabButton).toBeInTheDocument();
-      expect(tabButton.querySelector(".anticon")).toBeInTheDocument();
+      expect(tabButton.querySelector("svg")).toBeInTheDocument();
     }
     expect(screen.getByRole("heading", { name: "📦 样品库存" })).toBeInTheDocument();
     expect(screen.queryByText("· 共享版")).not.toBeInTheDocument();
@@ -165,7 +166,7 @@ describe("SampleInventoryWorkspace", () => {
     expect(onDownload).toHaveBeenCalledWith("inbound-export");
   });
 
-  it("dispatches the selected inventory kind and stock status filters", () => {
+  it("dispatches the selected inventory kind and stock status filters", async () => {
     const onStockStatusChange = vi.fn();
     const onProductKindChange = vi.fn();
     render(
@@ -190,13 +191,15 @@ describe("SampleInventoryWorkspace", () => {
       />,
     );
 
-    fireEvent.mouseDown(screen.getByRole("combobox", { name: "库存状态" }));
-    fireEvent.click(screen.getByText("主品低库存"));
+    // Base UI selects open and pick on a real pointer sequence.
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("combobox", { name: "库存状态" }));
+    await user.click(await screen.findByRole("option", { name: "主品低库存" }));
 
     expect(onStockStatusChange.mock.calls[0]?.[0]).toBe("low");
 
-    fireEvent.mouseDown(screen.getByRole("combobox", { name: "类别" }));
-    fireEvent.click(screen.getByText("赠品"));
+    await user.click(screen.getByRole("combobox", { name: "类别" }));
+    await user.click(await screen.findByRole("option", { name: "赠品" }));
     expect(onProductKindChange.mock.calls[0]?.[0]).toBe("gift");
   });
 
@@ -248,7 +251,7 @@ describe("SampleInventoryWorkspace", () => {
     );
 
     const trackingButton = screen.getByRole("button", { name: "填单号" });
-    expect(trackingButton.querySelector(".anticon")).toBeInTheDocument();
+    expect(trackingButton.querySelector("svg")).toBeInTheDocument();
     fireEvent.click(trackingButton);
 
     expect(onEditOutboundTracking).toHaveBeenCalledWith(sampledOutbound);
@@ -266,26 +269,24 @@ describe("SampleInventoryWorkspace", () => {
       />,
     );
 
-    const quantity = screen.getByRole("spinbutton", {
-      name: "测试样品出库数量",
-    });
+    const quantity = screen.getByLabelText("测试样品出库数量");
     expect(quantity).toBeDisabled();
     fireEvent.click(screen.getAllByText("测试样品")[0]);
     expect(quantity).toBeEnabled();
     fireEvent.change(quantity, { target: { value: "3" } });
-    fireEvent.change(screen.getByLabelText("申领人 *"), {
+    fireEvent.change(screen.getByLabelText("申领人"), {
       target: { value: "测试申请人" },
     });
-    fireEvent.change(screen.getByLabelText("部门 *"), {
+    fireEvent.change(screen.getByLabelText("部门"), {
       target: { value: "测试部门" },
     });
-    fireEvent.change(screen.getByLabelText("邮寄用途 *"), {
+    fireEvent.change(screen.getByLabelText("邮寄用途"), {
       target: { value: "陈列测试" },
     });
-    fireEvent.change(screen.getByLabelText("收货人 *"), {
+    fireEvent.change(screen.getByLabelText("收货人"), {
       target: { value: "测试收货人" },
     });
-    fireEvent.change(screen.getByLabelText("收货地址 *"), {
+    fireEvent.change(screen.getByLabelText("收货地址"), {
       target: { value: "测试收货地址" },
     });
     fireEvent.click(screen.getByRole("button", { name: /提交出库/ }));

@@ -1,8 +1,8 @@
 'use client';
 
+import { LoaderCircle, Play } from 'lucide-react';
 import { type MouseEvent, type SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Modal } from 'antd';
-import { CaretRightFilled, LoadingOutlined } from '@ant-design/icons';
+import { Modal } from '@lobehub/ui';
 import { createContentAssetPlaybackUrl } from '../_lib/content-assets-api';
 import { resolveContentAssetProductText } from '../_lib/content-assets-display';
 import type { ContentAssetItem, PlaybackUrlResponse } from '../_lib/content-assets-types';
@@ -171,115 +171,112 @@ export function ContentAssetPreviewMedia({
           disabled={isLoading}
           onClick={openFullPreview}
         >
-          {isLoading ? <LoadingOutlined /> : <CaretRightFilled />}
+          {isLoading ? <LoaderCircle className={styles.spinIcon} size="1em" strokeWidth={1.8} aria-hidden="true" /> : <Play size="1em" strokeWidth={1.8} aria-hidden="true" fill="currentColor" />}
         </button>
       ) : null}
 
       {error && !isModalOpen ? <span className={styles.previewError}>{error}</span> : null}
 
       {isModalOpen ? (
-        <Modal
-          open={isModalOpen}
-          title={(
-            <div className={styles.modalTitle}>
-              <span>大窗播放</span>
-              <strong>{displayTitle}</strong>
-            </div>
-          )}
-          footer={null}
-          centered
-          width="min(1180px, calc(100vw - 40px))"
-          destroyOnHidden
-          className={styles.previewModal}
-          transitionName=""
-          maskTransitionName=""
-          onCancel={closeFullPreview}
-          modalRender={(node) => (
-            <div
-              onClick={(event) => event.stopPropagation()}
-              onMouseDown={(event) => event.stopPropagation()}
-            >
-              {node}
-            </div>
-          )}
+        // The dialog renders in a portal, but React events still bubble to the card: stop them here
+        // so playing never opens the detail route.
+        <div
+          className={styles.modalEventBoundary}
+          onClick={(event) => event.stopPropagation()}
+          onMouseDown={(event) => event.stopPropagation()}
         >
-          <div className={styles.modalLayout}>
-            <div className={styles.modalVideoShell}>
-              {playback ? (
-                <video
-                  ref={modalVideoRef}
-                  className={styles.modalVideo}
-                  src={playback.url}
-                  poster={asset.coverUrl ?? undefined}
-                  controls
-                  autoPlay
-                  muted={isMuted}
-                  playsInline
-                  preload="metadata"
-                  onCanPlay={handleModalCanPlay}
-                  onError={handleMediaError}
-                  onVolumeChange={(event) => setIsMuted(event.currentTarget.muted)}
-                />
-              ) : (
-                <div className={`${styles.modalVideoState} ${error ? styles.modalVideoStateError : ''}`}>
-                  {isLoading ? <LoadingOutlined /> : <CaretRightFilled />}
-                  <strong>{isLoading ? '正在打开播放器' : '播放地址生成失败'}</strong>
-                  <span>{isLoading ? '正在生成短时播放地址，稍后会自动播放。' : error || '请重新加载播放地址。'}</span>
-                  {!isLoading ? (
-                    <button type="button" onClick={retryPlayback}>
-                      重新加载
-                    </button>
-                  ) : null}
-                </div>
-              )}
-            </div>
-            <aside className={styles.modalMeta}>
-              <div className={styles.modalMetaHeader}>
-                <span>{playbackVariantLabel}</span>
-                <strong>{isMuted ? '默认静音' : '已开声音'}</strong>
+          <Modal
+            open={isModalOpen}
+            title={(
+              <div className={styles.modalTitle}>
+                <span>大窗播放</span>
+                <strong>{displayTitle}</strong>
               </div>
-              <dl>
-                <div>
-                  <dt>平台</dt>
-                  <dd>{contentAssetPlatformNamesLabel(asset.platformNames, asset.platform)}</dd>
+            )}
+            footer={null}
+            centered
+            width="min(1180px, calc(100vw - 40px))"
+            destroyOnHidden
+            onCancel={closeFullPreview}
+          >
+            <div className={styles.modalLayout}>
+              <div className={styles.modalVideoShell}>
+                {playback ? (
+                  <video
+                    ref={modalVideoRef}
+                    className={styles.modalVideo}
+                    src={playback.url}
+                    poster={asset.coverUrl ?? undefined}
+                    controls
+                    autoPlay
+                    muted={isMuted}
+                    playsInline
+                    preload="metadata"
+                    onCanPlay={handleModalCanPlay}
+                    onError={handleMediaError}
+                    onVolumeChange={(event) => setIsMuted(event.currentTarget.muted)}
+                  />
+                ) : (
+                  <div className={`${styles.modalVideoState} ${error ? styles.modalVideoStateError : ''}`}>
+                    {isLoading ? <LoaderCircle className={styles.spinIcon} size="1em" strokeWidth={1.8} aria-hidden="true" /> : <Play size="1em" strokeWidth={1.8} aria-hidden="true" fill="currentColor" />}
+                    <strong>{isLoading ? '正在打开播放器' : '播放地址生成失败'}</strong>
+                    <span>{isLoading ? '正在生成短时播放地址，稍后会自动播放。' : error || '请重新加载播放地址。'}</span>
+                    {!isLoading ? (
+                      <button type="button" onClick={retryPlayback}>
+                        重新加载
+                      </button>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+              <aside className={styles.modalMeta}>
+                <div className={styles.modalMetaHeader}>
+                  <span>{playbackVariantLabel}</span>
+                  <strong>{isMuted ? '默认静音' : '已开声音'}</strong>
                 </div>
-                <div>
-                  <dt>时长</dt>
-                  <dd>{formatDuration(asset.durationSeconds)}</dd>
-                </div>
-                <div>
-                  <dt>文件</dt>
-                  <dd>{formatBytes(playback?.fileSizeBytes ?? asset.fileSizeBytes)}</dd>
-                </div>
-                <div>
-                  <dt>产品</dt>
-                  <dd>{resolveContentAssetProductText(asset) || '--'}</dd>
-                </div>
-                <div>
-                  <dt>达人</dt>
-                  <dd>{asset.creatorName || '--'}</dd>
-                </div>
-                <div>
-                  <dt>来源</dt>
-                  <dd>{asset.sourceSheetName || '--'}</dd>
-                </div>
-                <div>
-                  <dt>AI</dt>
-                  <dd>{asset.aiScore == null ? '待分析' : asset.aiScore}</dd>
-                </div>
-              </dl>
-              {asset.tags.length > 0 || asset.aiSuggestedTags.length > 0 ? (
-                <div className={styles.modalTagList}>
-                  {(asset.tags.length > 0 ? asset.tags : asset.aiSuggestedTags).slice(0, 4).map((tag) => (
-                    <span className={asset.tags.length === 0 ? styles.aiTag : ''} key={tag}>
-                      {asset.tags.length === 0 ? 'AI ' : ''}{tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </aside>
-          </div>
-        </Modal>
+                <dl>
+                  <div>
+                    <dt>平台</dt>
+                    <dd>{contentAssetPlatformNamesLabel(asset.platformNames, asset.platform)}</dd>
+                  </div>
+                  <div>
+                    <dt>时长</dt>
+                    <dd>{formatDuration(asset.durationSeconds)}</dd>
+                  </div>
+                  <div>
+                    <dt>文件</dt>
+                    <dd>{formatBytes(playback?.fileSizeBytes ?? asset.fileSizeBytes)}</dd>
+                  </div>
+                  <div>
+                    <dt>产品</dt>
+                    <dd>{resolveContentAssetProductText(asset) || '--'}</dd>
+                  </div>
+                  <div>
+                    <dt>达人</dt>
+                    <dd>{asset.creatorName || '--'}</dd>
+                  </div>
+                  <div>
+                    <dt>来源</dt>
+                    <dd>{asset.sourceSheetName || '--'}</dd>
+                  </div>
+                  <div>
+                    <dt>AI</dt>
+                    <dd>{asset.aiScore == null ? '待分析' : asset.aiScore}</dd>
+                  </div>
+                </dl>
+                {asset.tags.length > 0 || asset.aiSuggestedTags.length > 0 ? (
+                  <div className={styles.modalTagList}>
+                    {(asset.tags.length > 0 ? asset.tags : asset.aiSuggestedTags).slice(0, 4).map((tag) => (
+                      <span className={asset.tags.length === 0 ? styles.aiTag : ''} key={tag}>
+                        {asset.tags.length === 0 ? 'AI ' : ''}{tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </aside>
+            </div>
+          </Modal>
+        </div>
       ) : null}
     </>
   );

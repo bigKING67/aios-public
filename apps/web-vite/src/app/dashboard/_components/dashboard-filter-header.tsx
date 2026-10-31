@@ -1,7 +1,6 @@
-import { HomeOutlined } from '@ant-design/icons';
-import { DatePicker, Segmented } from 'antd';
-import datePickerZhCN from 'antd/es/date-picker/locale/zh_CN';
+import { DayjsDatePicker, DayjsDateRangePicker, Segmented, datePickerLocaleZhCN, type PickerLocale } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
+import { House } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -26,12 +25,10 @@ import tabButtonStyles from './dashboard-filter-header-tab-button.module.css';
 import tabStyles from './dashboard-filter-header-tabs.module.css';
 import styles from './dashboard-filter-header.module.css';
 
-const { RangePicker } = DatePicker;
-
-const WEEK_PICKER_LOCALE = {
-  ...datePickerZhCN,
+const WEEK_PICKER_LOCALE: PickerLocale = {
+  ...datePickerLocaleZhCN,
   lang: {
-    ...datePickerZhCN.lang,
+    ...datePickerLocaleZhCN.lang,
     locale: BUSINESS_WEEK_LOCALE,
     shortWeekDays: WEEKDAY_LABELS_SUN_FIRST,
   },
@@ -149,7 +146,7 @@ export function DashboardFilterHeader({
             aria-label="返回首页"
             title="返回首页"
           >
-            <HomeOutlined className={homeEntryStyles.homeEntryIcon} />
+            <House className={homeEntryStyles.homeEntryIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
           </Link>
           <div className={brandStyles.brand}>Groland Dashboard</div>
         </div>
@@ -187,24 +184,27 @@ export function DashboardFilterHeader({
           })}
         </nav>
         <div className={filterStyles.filters}>
-          <Segmented<DateMode>
-            className={filterStyles.dateModeSegmented}
-            name="dashboard-date-mode"
-            value={dateMode}
-            onChange={(value) => onDateModeChange(value)}
-            options={[
-              { label: '月', value: 'month' },
-              { label: '周', value: 'week' },
-              { label: '日', value: 'day' },
-              { label: '年', value: 'year' },
-              { label: '自定义', value: 'custom' },
-            ]}
-          />
+          <div role="group" aria-label="时间维度">
+            <Segmented<DateMode>
+              className={filterStyles.dateModeSegmented}
+              name="dashboard-date-mode"
+              value={dateMode}
+              onChange={(value) => onDateModeChange(value)}
+              options={[
+                { label: '月', value: 'month' },
+                { label: '周', value: 'week' },
+                { label: '日', value: 'day' },
+                { label: '年', value: 'year' },
+                { label: '自定义', value: 'custom' },
+              ]}
+            />
+          </div>
 
           <div className={filterStyles.pickerShell}>
             {dateMode === 'day' ? (
-              <DatePicker
+              <DayjsDatePicker
                 value={dayValue}
+                locale={datePickerLocaleZhCN}
                 onChange={(value) => {
                   if (value) {
                     onDayValueChange(value);
@@ -218,7 +218,7 @@ export function DashboardFilterHeader({
             ) : null}
 
             {dateMode === 'week' ? (
-              <DatePicker
+              <DayjsDatePicker
                 picker="week"
                 value={weekValue}
                 locale={WEEK_PICKER_LOCALE}
@@ -235,9 +235,10 @@ export function DashboardFilterHeader({
             ) : null}
 
             {dateMode === 'month' ? (
-              <DatePicker
+              <DayjsDatePicker
                 picker="month"
                 value={monthValue}
+                locale={datePickerLocaleZhCN}
                 onChange={(value) => {
                   if (value) {
                     onMonthValueChange(value);
@@ -251,9 +252,10 @@ export function DashboardFilterHeader({
             ) : null}
 
             {dateMode === 'year' ? (
-              <DatePicker
+              <DayjsDatePicker
                 picker="year"
                 value={yearValue}
+                locale={datePickerLocaleZhCN}
                 onChange={(value) => {
                   if (value) {
                     onYearValueChange(value);
@@ -267,8 +269,9 @@ export function DashboardFilterHeader({
             ) : null}
 
             {dateMode === 'custom' ? (
-              <RangePicker
+              <DayjsDateRangePicker
                 value={customRange}
+                locale={datePickerLocaleZhCN}
                 allowClear={false}
                 format="YYYY/MM/DD"
                 disabled={!isDateBoundsReady}

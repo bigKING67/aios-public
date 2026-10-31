@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import { Empty } from '@lobehub/ui';
 import { WeeklyBlockDescription } from './weekly-text';
 import styles from './weekly-modern.module.css';
 

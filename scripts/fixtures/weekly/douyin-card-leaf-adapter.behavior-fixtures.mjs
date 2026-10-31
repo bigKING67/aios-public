@@ -168,6 +168,7 @@ function assertLeafAdapterConsumesExternalContracts() {
     'DouyinCardProductAttributionSectionProps',
     'DouyinCardSourceAttributionSectionProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinCardSectionData',
     'DouyinCardProductAttributionOverviewSectionProps',
     'DouyinCardSourceAttributionOverviewSectionProps',

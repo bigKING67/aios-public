@@ -1,4 +1,4 @@
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import styles from '../marketing.module.css';
 import type { MarketingModule } from './marketing-workspace-data';
@@ -40,7 +40,7 @@ export function MarketingModuleCard({ module, variant }: MarketingModuleCardProp
       <div className={styles.moduleFooter}>
         <span className={styles.moduleAction}>
           进入模块
-          <ArrowRightOutlined />
+          <ArrowRight size={14} strokeWidth={1.8} />
         </span>
         <p className={styles.moduleHint}>{module.hint}</p>
       </div>

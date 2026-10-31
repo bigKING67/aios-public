@@ -1,4 +1,4 @@
-import { Drawer, Tag } from 'antd';
+import { Drawer, Tag } from '@lobehub/ui';
 
 import {
   formatCompactWanCurrency,
@@ -41,7 +41,7 @@ export function DashboardLiveDetailDrawer({
       title="直播指标详情"
       placement="right"
       width={isMobile ? '100%' : 560}
-      closable={{ placement: 'end' }}
+      closable
       open={open}
       onClose={onClose}
     >

@@ -1,6 +1,6 @@
 'use client';
 
-import { Empty, Skeleton } from 'antd';
+import { Empty, SkeletonText } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 import shellStyles from './creator-dashboard.module.css';
 import styles from './creator-live-dashboard.module.css';
@@ -47,7 +47,7 @@ export function CreatorChartPanel({
         {showSkeleton ? (
           <div className={styles.chartOverlay}>
             <div className={styles.chartSkeleton}>
-              <Skeleton active title={false} paragraph={{ rows: 7 }} />
+              <SkeletonText rows={7} />
             </div>
           </div>
         ) : null}

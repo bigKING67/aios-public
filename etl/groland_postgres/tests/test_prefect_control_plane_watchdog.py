@@ -56,7 +56,10 @@ class PrefectControlPlaneWatchdogTest(unittest.TestCase):
     )
     self.assertEqual(healthy, [])
 
-    first = next(entry for entry in self.entries if entry["watchdog"].get("success_slo_minutes") is not None)
+    first = next(
+      entry for entry in self.entries
+      if entry["schedule"]["active"] and entry["watchdog"].get("success_slo_minutes") is not None
+    )
     first_id = self.live[(first["flow_name"], first["deployment_name"])]["id"]
     missing_completed = {minutes: set(ids) for minutes, ids in self.completed.items()}
     missing_completed[int(first["watchdog"]["success_slo_minutes"])].remove(first_id)
@@ -78,7 +81,10 @@ class PrefectControlPlaneWatchdogTest(unittest.TestCase):
     self.assertIn("future_run_missing", codes)
 
   def test_success_slo_waits_until_the_first_run_is_due(self) -> None:
-    first = next(entry for entry in self.entries if entry["watchdog"].get("success_slo_minutes") is not None)
+    first = next(
+      entry for entry in self.entries
+      if entry["schedule"]["active"] and entry["watchdog"].get("success_slo_minutes") is not None
+    )
     first_id = self.live[(first["flow_name"], first["deployment_name"])]["id"]
     success_slo = int(first["watchdog"]["success_slo_minutes"])
     completed = {minutes: set(ids) for minutes, ids in self.completed.items()}
@@ -114,6 +120,24 @@ class PrefectControlPlaneWatchdogTest(unittest.TestCase):
       expected_pool_type="process",
     )
     self.assertEqual([issue.code for issue in issues], ["worker_offline"])
+
+  def test_paused_schedules_with_watchdog_settings_do_not_alert(self) -> None:
+    paused = [
+      entry for entry in self.entries
+      if not entry["schedule"]["active"] and entry["watchdog"].get("future_run_lookahead_minutes") is not None
+    ]
+    self.assertTrue(any(entry["deployment_name"] == "douyin-live-center-analysis-jobs" for entry in paused))
+    issues = evaluate_snapshot(
+      entries=paused,
+      live_by_identity=self.live,
+      pool={"type": "process", "is_paused": False},
+      workers=[{"status": "ONLINE"}],
+      completed_by_slo={},
+      due_by_slo={minutes: set(ids) for minutes, ids in self.due.items()},
+      future_by_horizon={},
+      expected_pool_type="process",
+    )
+    self.assertEqual(issues, [])
 
   def test_notification_dedup_reminder_and_recovery(self) -> None:
     notifications: list[str] = []

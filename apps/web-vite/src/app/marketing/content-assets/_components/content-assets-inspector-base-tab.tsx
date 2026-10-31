@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import type { ContentAssetDetailResponse } from '../_lib/content-assets-types';
 import { resolveContentAssetProductText } from '../_lib/content-assets-display';
 import {

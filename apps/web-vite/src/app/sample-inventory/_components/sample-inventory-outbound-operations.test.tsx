@@ -142,12 +142,14 @@ describe("SampleInventoryWorkspace outbound operations", () => {
     const tableScope = within(screen.getByRole("table"));
     const headers = tableScope.getAllByRole("columnheader");
     expect(headers.map((header) => header.textContent?.trim())).not.toContain("操作");
-    expect(headers.filter((header) => header.querySelector(".ant-table-column-sorter"))).toHaveLength(11);
+    expect(headers.filter((header) => header.querySelector(".lobe-table-column-sorter"))).toHaveLength(11);
     expect(tableScope.queryByRole("checkbox")).not.toBeInTheDocument();
     const timeHeader = tableScope.getByRole("columnheader", { name: /时间/ });
     fireEvent.click(within(timeHeader).getByRole("separator", { name: "时间列宽" }));
-    expect(timeHeader).not.toHaveAttribute("aria-sort");
-    fireEvent.click(timeHeader);
+    // Resizing does not sort: lobe marks an unsorted sortable header "none".
+    expect(timeHeader.getAttribute("aria-sort") ?? "none").toBe("none");
+    // lobe sorts from the header's sort button rather than the whole cell.
+    fireEvent.click(timeHeader.querySelector(".lobe-table-column-sorter")!);
     expect(timeHeader).toHaveAttribute("aria-sort", "ascending");
     expect(tableScope.queryByRole("button", { name: "编辑" })).not.toBeInTheDocument();
     expect(tableScope.queryByRole("button", { name: "通过" })).not.toBeInTheDocument();
@@ -186,8 +188,8 @@ describe("SampleInventoryWorkspace outbound operations", () => {
     const editTrackingButton = tableScope.getByRole("button", { name: "编辑单号" });
     const confirmSampleButton = tableScope.getByRole("button", { name: "确认取样" });
     const withdrawButton = tableScope.getByRole("button", { name: "撤回" });
-    expect(editTrackingButton.querySelector(".anticon")).toBeInTheDocument();
-    expect(confirmSampleButton.querySelector(".anticon")).toBeInTheDocument();
+    expect(editTrackingButton.querySelector("svg")).toBeInTheDocument();
+    expect(confirmSampleButton.querySelector("svg")).toBeInTheDocument();
     expect(confirmSampleButton).toHaveAttribute("title", "确认取样只更新流程状态，库存不再变化");
     expect(withdrawButton).toHaveAttribute(
       "title",
@@ -232,8 +234,8 @@ describe("SampleInventoryWorkspace outbound operations", () => {
     expect(tableScope.queryByText("历史记录只读")).not.toBeInTheDocument();
     const returnButton = tableScope.getByRole("button", { name: "退回已审批" });
     const deleteButton = tableScope.getByRole("button", { name: "删除" });
-    expect(returnButton.querySelector(".anticon")).toBeInTheDocument();
-    expect(deleteButton.querySelector(".anticon")).toBeInTheDocument();
+    expect(returnButton.querySelector("svg")).toBeInTheDocument();
+    expect(deleteButton.querySelector("svg")).toBeInTheDocument();
     expect(returnButton).toHaveAttribute("title", "仅回退流程状态，库存保持不变");
     fireEvent.click(returnButton);
     expect(onTransition).toHaveBeenCalledWith(legacySampled, "approved");

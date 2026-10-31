@@ -1854,6 +1854,195 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/marketing/content-assets/studio/competitor/analyses/{analysis_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/analyses/{analysis_id} */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_analyses_analysis_id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/overview */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/patterns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/patterns */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_patterns"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/competitor/reports */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_competitor_reports"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/reports/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/reports/latest */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_reports_latest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/videos */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_videos"];
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/competitor/videos */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_competitor_videos"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/competitor/videos/{aweme_id} */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_competitor_videos_aweme_id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** PATCH /v2/marketing/content-assets/studio/competitor/videos/{aweme_id} */
+        patch: operations["content_ai_studio_patch_marketing_content_assets_studio_competitor_videos_aweme_id"];
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_competitor_videos_aweme_id_analyses"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/daily-remix:pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/daily-remix:pause */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_daily_remix_pause"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/daily-remix:run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/daily-remix:run */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_daily_remix_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/daily-remix/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/daily-remix/plans */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_daily_remix_plans"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/marketing/content-assets/studio/overview": {
         parameters: {
             query?: never;
@@ -1952,6 +2141,41 @@ export interface paths {
         /** POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/cancel */
         post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_cancel"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry */
+        post: operations["content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_delivery_retry"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** PUT /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review */
+        put: operations["content_ai_studio_put_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review"];
+        post?: never;
+        /** DELETE /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review */
+        delete: operations["content_ai_studio_delete_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2110,6 +2334,74 @@ export interface paths {
         head?: never;
         /** PATCH /v2/marketing/content-assets/studio/segments/{segment_id} */
         patch: operations["content_ai_studio_patch_marketing_content_assets_studio_segments_segment_id"];
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/structure-pool": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/structure-pool */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_structure_pool"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/team-output": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/team-output */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_team_output"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/team-output/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/team-output/export */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_team_output_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/marketing/content-assets/studio/team-output/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET /v2/marketing/content-assets/studio/team-output/videos */
+        get: operations["content_ai_studio_get_marketing_content_assets_studio_team_output_videos"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v2/marketing/content-assets/summary": {
@@ -4509,6 +4801,15 @@ export interface components {
             createdAt: string;
             updatedAt: string;
             coverUrl: string | null;
+            sourceSpend?: components["schemas"]["SourceSpend"] | null;
+        };
+        SourceSpend: {
+            spend30d: number | null;
+            class: string;
+            asOf: string | null;
+            complete: boolean;
+            syncedDays: number;
+            windowDays: number;
         };
         SegmentAssetCover: {
             /** Format: uuid */
@@ -4624,6 +4925,87 @@ export interface components {
             items: components["schemas"]["SegmentPoolCell"][];
             productCounts: components["schemas"]["SegmentPoolProductCount"][];
         };
+        TeamOutputMetrics: {
+            uploads: number;
+            spend: number;
+            gmv: number;
+            gmvSpend: number;
+            roi: number | null;
+            newSpend: number;
+            newGmv: number;
+            newRoi: number | null;
+            spentVideos: number;
+        };
+        TeamOutputPerson: {
+            key: string;
+            name: string;
+            roleName: string | null;
+            kind: string;
+            metrics: components["schemas"]["TeamOutputMetrics"];
+        };
+        TeamOutputGroup: {
+            name: string;
+            metrics: components["schemas"]["TeamOutputMetrics"];
+            people: components["schemas"]["TeamOutputPerson"][];
+        };
+        TeamOutputTeam: {
+            name: string;
+            kind: string;
+            metrics: components["schemas"]["TeamOutputMetrics"];
+            groups: components["schemas"]["TeamOutputGroup"][];
+        };
+        TeamOutputQuality: {
+            uploadsWithoutDirector: number;
+            uploadsWithSeveralDirectors: number;
+            uploadsWithoutAuthor: number;
+            unmappedDirectorLabels: number;
+            spendWithoutGmv: number;
+            otherPlatformSpend: number;
+        };
+        TeamOutputSync: {
+            days: number;
+            spendDaysComplete: number;
+            uploadDaysComplete: number;
+            incompleteDays: string[];
+            latestCompleteDay: string | null;
+        };
+        TeamOutputCategory: {
+            id: number;
+            name: string;
+        };
+        TeamOutputResponse: {
+            period: components["schemas"]["StudioOverviewPeriod"];
+            dimension: string;
+            totals: components["schemas"]["TeamOutputMetrics"];
+            teams: components["schemas"]["TeamOutputTeam"][];
+            quality: components["schemas"]["TeamOutputQuality"];
+            sync: components["schemas"]["TeamOutputSync"];
+            categories: components["schemas"]["TeamOutputCategory"][];
+        };
+        TeamOutputVideo: {
+            videoId: number;
+            name: string;
+            authorName: string | null;
+            directorNames: string[];
+            oneLevelTypeName: string | null;
+            videoStateName: string | null;
+            uploadedAt: string;
+            isNew: boolean;
+            spend: number;
+            gmv: number;
+            roi: number | null;
+            otherPlatformSpend: number;
+            totalStatCost: number | null;
+            totalStatCostAt: string | null;
+        };
+        TeamOutputVideosResponse: {
+            items: components["schemas"]["TeamOutputVideo"][];
+            total: number;
+            newTotal: number;
+            previousTotal: number;
+            page: number;
+            pageSize: number;
+        };
         StudioOverviewResponse: {
             period: components["schemas"]["StudioOverviewPeriod"];
             costs: components["schemas"]["StudioOverviewCosts"];
@@ -4635,6 +5017,8 @@ export interface components {
             key: string;
             from: string;
             to: string;
+            today: string;
+            latestActivityDate: string | null;
         };
         StudioOverviewCosts: {
             modelAnalysis: components["schemas"]["StudioModelAnalysisCost"];
@@ -4694,6 +5078,65 @@ export interface components {
             detail: string | null;
             createdAt: string;
         };
+        StructurePoolResponse: {
+            date: string;
+            asOf: string | null;
+            windowFrom: string | null;
+            windowTo: string | null;
+            productName: string;
+            status: string;
+            pending: boolean;
+            requestedCount: number;
+            plannedCount: number;
+            shortfall: number;
+            rows: components["schemas"]["StructurePoolRow"][];
+        };
+        StructurePoolRow: {
+            labels: string[];
+            labelNames: string[];
+            source: string;
+            share: number;
+            plannedCount: number;
+            availableCombinations: number;
+            availableIsLowerBound: boolean;
+            reason: string | null;
+        };
+        DailyRemixPlanResponse: {
+            date: string;
+            status: string;
+            requestedCount: number;
+            plannedCount: number;
+            succeededCount: number;
+            failedCount: number;
+            activeCount: number;
+            shortfall: number;
+            dispatchComplete: boolean;
+            stopReason: string | null;
+            budgetYuan: number | null;
+            estimatedCostYuan: number;
+            structurePool: components["schemas"]["StructurePoolResponse"] | null;
+            batches: components["schemas"]["DailyRemixBatch"][];
+            structures: components["schemas"]["DailyRemixStructureResult"][];
+        };
+        DailyRemixBatch: {
+            /** Format: uuid */
+            batchId: string;
+            structureIndex: number;
+            plannedCount: number;
+        };
+        DailyRemixStructureResult: {
+            structureIndex: number;
+            targetCount: number;
+            plannedCount: number;
+            reason: string | null;
+        };
+        DailyRemixRunRequest: {
+            date: string;
+        };
+        DailyRemixPauseRequest: {
+            date: string;
+            paused: boolean;
+        };
         RemixBatchPreviewRequest: {
             mode?: string | null;
             presetKey: string;
@@ -4714,13 +5157,21 @@ export interface components {
             count: number;
         };
         RemixSlotAvailability: {
+            spendCounts?: components["schemas"]["SpendCounts"] | null;
             ordinal: number;
             labelKey: string;
             candidateCount: number;
             sellingPoints: string[] | null;
             fallback: boolean | null;
         };
+        SpendCounts: {
+            qualified: number;
+            low: number;
+            unknown: number;
+        };
         RemixBatchPreviewResponse: {
+            admissionExcluded?: number | null;
+            admissionExcludedIsLowerBound?: boolean | null;
             mode: string;
             labels: string[];
             sourceAssetId: string | null;
@@ -4739,6 +5190,8 @@ export interface components {
             seed: number;
         };
         RemixBatchSegment: {
+            spendClass?: string | null;
+            spend30d?: number | null;
             /** Format: uuid */
             segmentId: string;
             /** Format: uuid */
@@ -4754,6 +5207,7 @@ export interface components {
             segmentIds: string[] | null;
         };
         RemixBatchItem: {
+            qc?: components["schemas"]["RemixQc"] | null;
             ordinal: number;
             /** Format: uuid */
             runId: string;
@@ -4765,10 +5219,69 @@ export interface components {
             jobStatus: string | null;
             jobError: string | null;
             outputAssetId: string | null;
+            outputDeleted: boolean;
             outputCoverUrl: string | null;
             durationMs: number;
             segments: components["schemas"]["RemixBatchSegment"][];
             pictureReview?: components["schemas"]["RemixPictureReview"] | null;
+            review: components["schemas"]["RemixOutputReview"] | null;
+            delivery?: components["schemas"]["RemixDelivery"] | null;
+            retention?: components["schemas"]["RemixRetention"] | null;
+        };
+        RemixQc: {
+            status: string;
+            reasons: string[];
+            freezeCount: number;
+            timestampGapCount: number;
+            duplicatePairCount: number;
+            maxAvOffsetMs: number | null;
+            sourceStatus: string;
+            report?: components["schemas"]["RemixQcReport"] | null;
+        };
+        RemixDelivery: {
+            status: string;
+            cloudVideoId: string | null;
+            videoName: string | null;
+            errorCode: string | null;
+            attempts: number;
+            updatedAt: string | null;
+            enabled: boolean;
+            canRetry: boolean;
+        };
+        RemixRetention: {
+            reason: string;
+            status: string;
+            cleanupAt: string | null;
+            cleanedAt: string | null;
+            canRestore: boolean;
+        };
+        RemixQcReport: {
+            timingStatus: string;
+            freezeStatus: string;
+            pictureStatus: string;
+            frameCount: number | null;
+            audioStartOffsetMs: number | null;
+            audioEndOffsetMs: number | null;
+            freezeThresholdMs: number | null;
+            avOffsetThresholdMs: number | null;
+            ptsGapThresholdMs: number | null;
+            freezeNoiseDb: number | null;
+            pictureMaxDistance: number | null;
+            pictureMinTexture: number | null;
+            checkedSegments: number | null;
+            errorStage: string | null;
+            freezeEvents: components["schemas"]["RemixQcFreezeEvent"][];
+            freezeEventCount: number;
+            timestampGaps: components["schemas"]["RemixQcTimestampGap"][];
+        };
+        RemixQcFreezeEvent: {
+            startMs: number;
+            endMs: number;
+            sourceExempt: boolean;
+        };
+        RemixQcTimestampGap: {
+            frame: number;
+            deltaMs: number;
         };
         RemixPictureReview: {
             status: string;
@@ -4781,7 +5294,21 @@ export interface components {
             leftMs: number;
             rightMs: number;
         };
+        RemixOutputReview: {
+            decision: string;
+            reasons: string[];
+            note: string | null;
+            reviewerUserId: string;
+            reviewerName: string | null;
+            reviewedAt: string;
+        };
+        RemixOutputReviewRequest: {
+            decision: string;
+            reasons?: string[];
+            note?: string | null;
+        };
         RemixBatch: {
+            qcFailedCount: number;
             /** Format: uuid */
             batchId: string;
             mode: string;
@@ -4802,6 +5329,10 @@ export interface components {
             failedCount: number;
             runningCount: number;
             cancelledCount: number;
+            availableCount: number;
+            reviewableCount: number;
+            approvedCount: number;
+            rejectedCount: number;
             coverUrls: string[];
             failureReason: string | null;
             createdAt: string;
@@ -4813,6 +5344,21 @@ export interface components {
         };
         RemixBatchListResponse: {
             items: components["schemas"]["RemixBatch"][];
+            nextCursor: string | null;
+            counts: components["schemas"]["RemixBatchCounts"];
+        };
+        RemixBatchCounts: {
+            rejected: components["schemas"]["RemixBatchModeCounts"];
+            qcFailed: components["schemas"]["RemixBatchModeCounts"];
+            withOutputs: components["schemas"]["RemixBatchModeCounts"];
+            withoutOutputs: components["schemas"]["RemixBatchModeCounts"];
+            pendingReview: components["schemas"]["RemixBatchModeCounts"];
+        };
+        RemixBatchModeCounts: {
+            all: number;
+            framework: number;
+            sellingPoint: number;
+            edit: number;
         };
         RemixProduct: {
             productName: string;
@@ -4857,6 +5403,178 @@ export interface components {
             durationMs: number;
             exact: components["schemas"]["RemixEditMatch"][];
             similar: components["schemas"]["RemixEditMatch"][];
+        };
+        CreateCompetitorVideoRequest: {
+            shareUrl: string;
+            brandName?: string | null;
+            productCategory?: string | null;
+            notes?: string | null;
+        };
+        UpdateCompetitorVideoRequest: {
+            brandName: string;
+            productCategory: string;
+            notes: string;
+        };
+        CompetitorAnalysisSummary: {
+            /** Format: uuid */
+            analysisId: string;
+            status: string;
+            complete: boolean;
+            costYuan: number | null;
+            createdAt: string;
+            finishedAt: string | null;
+        };
+        CompetitorVideo: {
+            awemeId: string;
+            shareUrl: string;
+            title: string | null;
+            authorName: string | null;
+            brandName: string | null;
+            productCategory: string | null;
+            durationSeconds: number | null;
+            availability: string;
+            source: string;
+            sources: string[];
+            manualAddedAt: string | null;
+            latestRankingDate: string | null;
+            rankingDays: number;
+            bestRank: number | null;
+            relevantDate: string | null;
+            addOutcome: string | null;
+            notes: string | null;
+            firstSeenAt: string;
+            lastResolvedAt: string | null;
+            latestAnalysis: components["schemas"]["CompetitorAnalysisSummary"] | null;
+            coverUrl: string | null;
+        };
+        CompetitorVideoListResponse: {
+            items: components["schemas"]["CompetitorVideo"][];
+            total: number;
+            page: number;
+            pageSize: number;
+            period: components["schemas"]["StudioOverviewPeriod"] | null;
+            latestSyncAt: string | null;
+            latestRankingDate: string | null;
+        };
+        CompetitorAnalysis: {
+            /** Format: uuid */
+            analysisId: string;
+            awemeId: string;
+            status: string;
+            modelId: string | null;
+            promptVersion: string | null;
+            taxonomyVersion: string | null;
+            card: unknown | null;
+            hostErrors: unknown;
+            evidenceObjects: unknown;
+            costYuan: number | null;
+            errorCode: string | null;
+            errorMessage: string | null;
+            createdAt: string;
+            startedAt: string | null;
+            finishedAt: string | null;
+        };
+        CompetitorPatternCategory: {
+            key: string;
+            films: number;
+        };
+        CompetitorPatternSnapshot: {
+            cohort: string;
+            period: string;
+            statsVersion: string;
+            taxonomyVersion: string;
+            normalizationVersion: string;
+            inputSnapshot: string;
+            films: number;
+            families: number;
+            computedAt: string;
+            payload: unknown;
+        };
+        OwnSellingPointCoverage: {
+            labelKey: string;
+            labelName: string;
+            segments: number;
+            assets: number;
+        };
+        OwnStructureRow: {
+            labels: string[];
+            assets: number;
+            spend: number;
+        };
+        OwnStructureLane: {
+            assets: number;
+            spend: number;
+            labels: {
+                [key: string]: string;
+            };
+            rows: components["schemas"]["OwnStructureRow"][];
+        };
+        OwnSpendDays: {
+            days: number | null;
+            synced: number;
+        };
+        OwnStructures: {
+            framework: components["schemas"]["OwnStructureLane"];
+            sellingPoint: components["schemas"]["OwnStructureLane"];
+            spendDays: components["schemas"]["OwnSpendDays"];
+        };
+        CompetitorPatternsResponse: {
+            category: string;
+            period: string;
+            window: components["schemas"]["StudioOverviewPeriod"];
+            categories: components["schemas"]["CompetitorPatternCategory"][];
+            snapshot: components["schemas"]["CompetitorPatternSnapshot"] | null;
+            pending: boolean;
+            ownSellingPoints: components["schemas"]["OwnSellingPointCoverage"][];
+            ownStructures: components["schemas"]["OwnStructures"];
+        };
+        CompetitorOverviewCounts: {
+            analyzed: number;
+            brands: number;
+        };
+        CompetitorOverviewResponse: {
+            category: string;
+            period: string;
+            window: components["schemas"]["StudioOverviewPeriod"];
+            current: components["schemas"]["CompetitorOverviewCounts"];
+            previous: components["schemas"]["CompetitorOverviewCounts"] | null;
+            analyzing: number;
+        };
+        CreateCompetitorReportRequest: {
+            category?: string | null;
+            period?: string | null;
+            unit?: string | null;
+            date?: string | null;
+            from?: string | null;
+            to?: string | null;
+            kind?: string | null;
+            retry?: boolean;
+        };
+        CompetitorReport: {
+            /** Format: uuid */
+            reportId: string;
+            category: string;
+            period: string;
+            inputSnapshot: string;
+            promptVersion: string;
+            status: string;
+            modelId: string | null;
+            inputs: unknown | null;
+            report: unknown | null;
+            issues: unknown;
+            costYuan: number | null;
+            errorCode: string | null;
+            errorMessage: string | null;
+            createdAt: string;
+            finishedAt: string | null;
+        };
+        CompetitorReportLatestResponse: {
+            category: string;
+            period: string;
+            report: components["schemas"]["CompetitorReport"] | null;
+            currentInputSnapshot: string | null;
+            films: number | null;
+            minFilms: number;
         };
         IndustryMaterialInspirationResponse: {
             tab: string;
@@ -10114,10 +10832,568 @@ export interface operations {
             };
         };
     };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_analyses_analysis_id: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                analysis_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorAnalysis"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_overview: {
+        parameters: {
+            query?: {
+                category?: string;
+                period?: "last7" | "last30" | "all";
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorOverviewResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_patterns: {
+        parameters: {
+            query?: {
+                category?: string;
+                period?: "last7" | "last30" | "all";
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorPatternsResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_competitor_reports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCompetitorReportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorReport"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_reports_latest: {
+        parameters: {
+            query?: {
+                category?: string;
+                period?: "last7" | "last30" | "all";
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+                kind?: "openings" | "breakdown";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorReportLatestResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_videos: {
+        parameters: {
+            query?: {
+                source?: "all" | "compass" | "manual";
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorVideoListResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_competitor_videos: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCompetitorVideoRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorVideo"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_competitor_videos_aweme_id: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                aweme_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorVideo"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_patch_marketing_content_assets_studio_competitor_videos_aweme_id: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                aweme_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCompetitorVideoRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorVideo"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_competitor_videos_aweme_id_analyses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                aweme_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitorAnalysis"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_daily_remix_pause: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyRemixPauseRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyRemixPlanResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_daily_remix_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyRemixRunRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyRemixPlanResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_daily_remix_plans: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyRemixPlanResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     content_ai_studio_get_marketing_content_assets_studio_overview: {
         parameters: {
             query?: {
                 period?: "last7" | "last30" | "month";
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
             };
             header?: never;
             path?: never;
@@ -10194,7 +11470,15 @@ export interface operations {
     };
     content_ai_studio_get_marketing_content_assets_studio_remix_batches: {
         parameters: {
-            query?: never;
+            query?: {
+                quality?: "failed";
+                review?: "pending" | "rejected";
+                page?: number;
+                mode?: "framework" | "sellingPoint" | "edit";
+                outputs?: "with" | "without";
+                cursor?: string;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -10381,6 +11665,129 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RemixBatchDetail"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_delivery_retry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+                ordinal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RemixBatchDetail"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_put_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+                ordinal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_delete_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+                ordinal: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Authentication required */
@@ -10713,6 +12120,7 @@ export interface operations {
     content_ai_studio_get_marketing_content_assets_studio_segments: {
         parameters: {
             query?: {
+                spendClass?: "qualified" | "low" | "unknown";
                 assetId?: string;
                 presetKey?: string;
                 labelKey?: string;
@@ -10900,6 +12308,178 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ContentSegmentConflictResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_structure_pool: {
+        parameters: {
+            query?: {
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StructurePoolResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_team_output: {
+        parameters: {
+            query?: {
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+                dimension?: "editor" | "director";
+                oneLevelTypeId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamOutputResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_team_output_export: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    content_ai_studio_get_marketing_content_assets_studio_team_output_videos: {
+        parameters: {
+            query: {
+                unit?: "day" | "month" | "year";
+                date?: string;
+                from?: string;
+                to?: string;
+                dimension?: "editor" | "director";
+                oneLevelTypeId?: number;
+                personKey: string;
+                scope?: "all" | "new" | "previous";
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamOutputVideosResponse"];
+                };
+            };
+            /** @description Authentication required */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
             /** @description Internal server error */

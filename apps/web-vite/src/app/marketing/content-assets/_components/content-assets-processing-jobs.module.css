@@ -8,9 +8,9 @@
   display: grid;
   gap: 8px;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .jobRowMain {
@@ -23,7 +23,7 @@
 .jobRowMain strong {
   display: -webkit-box;
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-snug);
   -webkit-box-orient: vertical;
@@ -33,7 +33,7 @@
 .jobRowMain span,
 .jobMetaGrid,
 .jobOpenButton {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -47,7 +47,7 @@
 
 .jobMetaGrid span:last-child {
   overflow: hidden;
-  font-family: var(--font-family-mono);
+  font-family: var(--aios-font-data);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -64,7 +64,7 @@
   overflow: hidden;
   height: 6px;
   border-radius: 999px;
-  background: var(--status-info-border);
+  background: var(--lobe-color-info-border);
 }
 
 .jobProgressFill {
@@ -72,13 +72,13 @@
   inset: 0 auto 0 0;
   width: 0%;
   border-radius: inherit;
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
   transition: width 280ms ease;
 }
 
 .jobProgress strong {
-  color: var(--brand-text-strong);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   font-weight: 680;
@@ -86,11 +86,11 @@
 }
 
 .jobProgress[data-status="succeeded"] .jobProgressFill {
-  background: var(--status-success-strong);
+  background: var(--aios-status-success-strong);
 }
 
 .jobProgress[data-status="succeeded"] strong {
-  color: var(--status-success-strong);
+  color: var(--aios-status-success-strong);
 }
 
 .jobError {
@@ -98,20 +98,20 @@
   gap: 3px;
   margin: 0;
   padding: 8px 10px;
-  border: 1px solid var(--status-danger-border);
+  border: 1px solid var(--lobe-color-error-border);
   border-radius: 10px;
-  background: var(--status-danger-bg);
+  background: var(--lobe-color-error-bg);
 }
 
 .jobError strong {
-  color: var(--status-danger-strong);
+  color: var(--aios-status-danger-strong);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .jobError span,
 .jobError small {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -133,7 +133,7 @@
   width: fit-content;
   padding: 0;
   border: 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   background: transparent;
   cursor: pointer;
 }

@@ -7,6 +7,7 @@ mod dashboard;
 mod dataops;
 mod error;
 mod health;
+mod http_observability;
 mod llm;
 mod marketing;
 mod permissions;

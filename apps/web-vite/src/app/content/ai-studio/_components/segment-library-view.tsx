@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Alert, Button, Empty, Segmented, Select } from 'antd';
+import { Alert, Button, Empty, Segmented } from '@lobehub/ui';
 import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { ContentAssetsSkeleton } from '@/app/marketing/content-assets/_components/content-assets-asset-list';
@@ -20,8 +20,10 @@ import {
 } from '../_lib/segment-display';
 import type { PoolScope } from '../_lib/segment-pool';
 import { studioProductOptions } from '../_lib/studio-products';
+import { readSourceSpendClass, SOURCE_SPEND_FILTER_OPTIONS } from '../_lib/source-spend';
 import type { SegmentKind } from '../_lib/segment-routes';
 import pageStyles from '../ai-studio.module.css';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './segment-annotation.module.css';
 import { SegmentCard } from './segment-card';
 import libraryStyles from './segment-library.module.css';
@@ -71,6 +73,7 @@ export function SegmentLibraryView({ kind, presets, kindPresets, preset, canWrit
   const status = STATUS_VALUES.has(statusParam) ? (statusParam as StudioSegmentStatus) : undefined;
   const originParam = searchParams.get('origin') ?? '';
   const origin = ORIGIN_VALUES.has(originParam) ? (originParam as StudioSegmentOrigin) : undefined;
+  const spendClass = readSourceSpendClass(searchParams.get('spendClass'));
   const view: SegmentView = searchParams.get('view') === 'table' ? 'table' : 'grid';
   const scope: PoolScope = withoutProduct
     ? { kind: 'withoutProduct' }
@@ -85,6 +88,7 @@ export function SegmentLibraryView({ kind, presets, kindPresets, preset, canWrit
     withoutProduct: withoutProduct || undefined,
     status,
     origin,
+    spendClass,
     limit: PAGE_SIZE,
   };
   const queryKey = aiStudioQueryKeys.segmentList(query);
@@ -170,27 +174,34 @@ export function SegmentLibraryView({ kind, presets, kindPresets, preset, canWrit
           </span>
           <div className={libraryStyles.toolbarFilters}>
             {activePresets.length > 1 ? (
-              <Select
-                aria-label="分类预设"
+              <LabeledSelect
+                label="分类预设"
                 size="small"
                 value={preset.presetKey}
-                options={activePresets.map((item) => ({ value: item.presetKey, label: presetDisplayName(item) }))}
-                onChange={(value: string) => setFilters({ presetKey: value })}
+                options={activePresets.map((item) => ({ value: item.presetKey, label: presetDisplayName(item, activePresets) }))}
+                onChange={(value) => value !== undefined && setFilters({ presetKey: value })}
               />
             ) : null}
-            <Select
-              aria-label="状态"
-              className={libraryStyles.toolbarSelect}
+            <LabeledSelect
+              label="状态"
+              wrapperClassName={libraryStyles.toolbarSelect}
               value={status ?? ALL_STATUSES}
               options={[{ value: ALL_STATUSES, label: '全部状态' }, ...SEGMENT_STATUS_OPTIONS.map(({ value, label }) => ({ value, label }))]}
-              onChange={(value: string) => setFilters({ status: value === DEFAULT_STATUS ? undefined : value })}
+              onChange={(value) => setFilters({ status: value === undefined || value === DEFAULT_STATUS ? undefined : value })}
             />
-            <Select
-              aria-label="来源"
-              className={libraryStyles.toolbarSelect}
+            <LabeledSelect
+              label="来源"
+              wrapperClassName={libraryStyles.toolbarSelect}
               value={origin ?? ''}
               options={[{ value: '', label: '全部来源' }, ...SEGMENT_ORIGIN_OPTIONS]}
-              onChange={(value: string) => setFilters({ origin: value || undefined })}
+              onChange={(value) => setFilters({ origin: value || undefined })}
+            />
+            <LabeledSelect
+              label="原片消耗"
+              wrapperClassName={libraryStyles.toolbarSelect}
+              value={spendClass ?? ''}
+              options={[...SOURCE_SPEND_FILTER_OPTIONS]}
+              onChange={(value) => setFilters({ spendClass: value || undefined })}
             />
             {canWrite && view === 'grid' ? (
               <Button

@@ -1,12 +1,6 @@
 import { memo, useMemo } from 'react';
-import { Button, Drawer, Tag, Tooltip } from 'antd';
-import {
-  CalendarOutlined,
-  CheckCircleOutlined,
-  FileTextOutlined,
-  LinkOutlined,
-  WarningOutlined,
-} from '@ant-design/icons';
+import { Button, Drawer, Tag, Tooltip } from '@lobehub/ui';
+import { Calendar, CircleCheck, FileText, LinkIcon, TriangleAlert } from 'lucide-react';
 import {
   formatCompactNumber,
   formatDate,
@@ -80,9 +74,9 @@ export function WechatStatusPanel({ summary }: { summary: IndustryArticleSummary
     <div className={`${styles.statusPanel} ${isHealthy ? '' : styles.statusPanelDanger}`}>
       <div className={styles.statusMain}>
         {isHealthy ? (
-          <CheckCircleOutlined className={styles.statusIcon} />
+          <CircleCheck size={14} strokeWidth={1.8} className={styles.statusIcon} />
         ) : (
-          <WarningOutlined className={styles.statusIcon} />
+          <TriangleAlert size={14} strokeWidth={1.8} className={styles.statusIcon} />
         )}
         <div>
           <p className={styles.statusTitle}>{title}</p>
@@ -136,7 +130,7 @@ export const ArticleListItem = memo(function ArticleListItem({
         {excerpt ? <p className={styles.articleExcerpt}>{excerpt}</p> : null}
         <div className={styles.articleFooter}>
           <Tag color="success">可读正文</Tag>
-          {item.imageCount > 0 ? <Tag icon={<FileTextOutlined />}>{item.imageCount} 图</Tag> : null}
+          {item.imageCount > 0 ? <Tag icon={<FileText size={14} strokeWidth={1.8} />}>{item.imageCount} 图</Tag> : null}
         </div>
       </div>
       <Cover item={item} />
@@ -151,7 +145,7 @@ function Cover({ item }: { item: IndustryArticleItem }) {
         <img src={item.coverUrl} alt="" loading="lazy" referrerPolicy="no-referrer" />
       ) : (
         <div className={styles.coverFallback}>
-          <CalendarOutlined />
+          <Calendar size={14} strokeWidth={1.8} />
         </div>
       )}
     </div>
@@ -297,7 +291,7 @@ export function ArticleDrawer({
             href={item.articleUrl}
             target="_blank"
             rel="noreferrer"
-            icon={<LinkOutlined />}
+            icon={<LinkIcon size={14} strokeWidth={1.8} />}
             disabled={!item.articleUrl}
           >
             打开原文

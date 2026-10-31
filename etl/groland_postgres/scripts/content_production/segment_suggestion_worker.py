@@ -29,21 +29,23 @@ import psycopg2
 import psycopg2.errors
 
 from marketing_content_assets.repository import connect_pg
+from marketing_content_assets.worker_runtime import claim_after_seconds
 from .execution import Cancelled, file_hash, renderer_env
 from .segment_suggestion_contract import (
     DEFAULT_MIN_SEGMENT_MS, DEFAULT_PROMPT_VERSION, PROMPT_V1, PROMPT_V5, build_prompt, degenerate_label, job_labels, label_absorb_targets, label_bridges, label_minimums,
     merge_usage, postprocess, preset_labels, prompt_version_from_env, snap_boundaries, snap_points,
     response_schema, PROMPT_V13, PROMPT_V15, PROMPT_V16, PROMPT_V17, finalize_framework_segments,
 )
-from . import segment_covers, segment_shot_hints, segment_transcript, selling_point_suggestion, selling_point_boundaries, framework_shot_verifier
+from . import cloud_video_covers, cloud_video_intake, segment_covers, segment_shot_hints, segment_transcript, selling_point_auto, selling_point_screen, selling_point_suggestion, selling_point_boundaries, framework_shot_verifier
 from .segment_suggestion_provider import (
     SuggestionError, build_proxy, call_with_ticks, max_proxy_bytes, provider_from_env,
 )
-from .segment_suggestion_queue import claim, confirmed_frames, fail, heartbeat, load_source, publish, record_request
+from .segment_suggestion_queue import CLOUD_BUCKET, claim, confirmed_frames, fail, heartbeat, load_source, publish, record_request
 from .shot_catalog import probe
 from .worker import download
 
 LOCAL_SOURCE_ENV = 'CONTENT_AI_STUDIO_SEGMENT_LOCAL_SOURCE_DIR'
+CLOUD_CACHE_ENV = 'CLOUD_VIDEO_CACHE_DIR'
 COVERS_ENV = 'CONTENT_AI_STUDIO_SEGMENT_COVERS'
 IDLE_POLL_SECONDS = 5
 UNAVAILABLE_EXIT_CODE = 2
@@ -86,9 +88,42 @@ class LocalSource:
             raise SuggestionError('source_changed', '原片摘要不匹配')
 
 
+class CloudSource:
+    """视频云管家 originals (bucket `cloud_video`): the desktop sync's cache file named by hash, else a
+    download through the inner-network address; hash-verified either way. Other buckets go to `inner`."""
+
+    def __init__(self, inner, cache_dir, opener=None):
+        self.inner, self.cache_dir = inner, Path(cache_dir) if cache_dir else None
+        self.opener = opener
+        self.storage = getattr(inner, 'storage', None)
+
+    def fetch(self, source, expected_sha256, destination, tick):
+        if source.get('bucket') != CLOUD_BUCKET:
+            return self.inner.fetch(source, expected_sha256, destination, tick)
+        cached = self.cache_dir / f'{expected_sha256}.mp4' if self.cache_dir else None
+        tick()
+        if cached and cached.is_file():
+            shutil.copyfile(cached, destination)
+        else:
+            from . import cloud_video_sync
+            try:
+                cloud_video_sync.download(source['cloudUrl'], destination, *([self.opener] if self.opener else []))
+            except Exception as error:  # noqa: BLE001 - any network failure reads the same to the job
+                raise SuggestionError('source_unavailable', f'云管家内网地址不可达：{type(error).__name__}') from error
+        if file_hash(destination) != expected_sha256:
+            raise SuggestionError('source_changed', '云管家原片摘要不匹配')
+
+
 def source_from_env():
     root = os.getenv(LOCAL_SOURCE_ENV)
-    return LocalSource(root) if root else TosSource()
+    inner = LocalSource(root) if root else TosSource()
+    cache = os.getenv(CLOUD_CACHE_ENV)
+    return CloudSource(inner, cache) if cache else inner
+
+
+def reads_cloud():
+    """Only a worker with the cloud cache configured (the desktop, on the company network) claims cloud originals."""
+    return bool(os.getenv(CLOUD_CACHE_ENV))
 
 
 def ensure_enabled():
@@ -132,6 +167,18 @@ MAX_CONCURRENCY = 8
 STOPPING = threading.Event()
 
 
+SELLING_POINT_INPUT_ENV = 'CONTENT_AI_STUDIO_SELLING_POINT_INPUT'
+
+
+def selling_point_input():
+    """`video` (default): the whole proxy goes with the prompt. `text`: only the 混剪口播 transcript and
+    on-screen text (GPU node); falls back to `video` without a cached transcript or a GPU OCR engine."""
+    value = (os.getenv(SELLING_POINT_INPUT_ENV) or 'video').strip()
+    if value not in ('video', 'text'):
+        raise ValueError(f'{SELLING_POINT_INPUT_ENV} must be video or text')
+    return value
+
+
 def heartbeat_seconds():
     """Minimum interval between heartbeats; a remote node over a relay uses ~15s. Must stay well
     inside the 2-minute lease."""
@@ -161,7 +208,8 @@ def claim_filter_from_env():
         raise ValueError(f'{FALLBACK_ENV} needs {DIMENSIONS_ENV}')
     if fallback and (not fallback.isdigit() or int(fallback) < 0):
         raise ValueError(f'{FALLBACK_ENV} must be a non-negative integer')
-    return {'dimensions': dimensions or None, 'fallback_after_seconds': int(fallback) if fallback else None}
+    return {'dimensions': dimensions or None, 'fallback_after_seconds': int(fallback) if fallback else None,
+            'claim_after': claim_after_seconds(), 'cloud': reads_cloud()}
 
 
 def _shot_hint(proxy, duration_ms, shots, env, tick, work):
@@ -274,7 +322,24 @@ def _suggest(conn, job, provider, fetcher, work, *, billed, min_ms, proxy_limit,
         hint, shot_summary = None, {'status': 'skipped'}
         transcript, transcript_settings, transcript_summary = segment_transcript.resolve_cached(
             conn, job['asset_id'], job['source_content_hash'])
-        prompt = selling_point_suggestion.build_prompt(voiceover, labels, transcript)
+        try:
+            point_input = {'mode': selling_point_input()}
+        except ValueError as error:
+            raise SuggestionError('invalid_config', str(error)) from error
+        if point_input['mode'] == 'text' and not transcript:
+            point_input = {'mode': 'video', 'fallback': 'no_cached_transcript'}
+        if point_input['mode'] == 'text':
+            stage[0] = '识别口播段屏幕文字'
+            try:
+                screen, point_input['screen'] = selling_point_screen.screen_lines(local, proxy, voiceover, duration_ms, tick)
+            except selling_point_screen.ScreenTextUnavailable as error:
+                point_input = {'mode': 'video', 'fallback': f'screen_text_unavailable:{error}'}
+        if point_input['mode'] == 'text':
+            prompt_version = selling_point_suggestion.TEXT_PROMPT_VERSION
+            point_input['speechUnits'] = len(selling_point_suggestion.utterances_inside(transcript, voiceover))
+            prompt = selling_point_suggestion.build_text_prompt(voiceover, labels, transcript, screen)
+        else:
+            prompt = selling_point_suggestion.build_prompt(voiceover, labels, transcript)
         schema = selling_point_suggestion.response_schema(label_keys)
     else:
         stage[0] = '镜头切点统计'
@@ -297,14 +362,18 @@ def _suggest(conn, job, provider, fetcher, work, *, billed, min_ms, proxy_limit,
     if transcript_settings:
         settings['transcript'] = transcript_settings
     if points:
+        settings['sellingPointInput'] = point_input
         settings['sellingPointBoundaries'] = {'policy': selling_point_boundaries.POLICY, 'speechMode': 'cache_only',
                                             'maxMoveMs': selling_point_boundaries.MAX_MOVE_MS}
     load_source(conn, job)
     record_request(conn, job, provider.model, prompt_version, settings)
     stage[0] = '等待模型结果'
     initial_completion_repair = False
+    text_input = points and point_input['mode'] == 'text'
     try:
-        result = call_with_ticks(lambda: provider.suggest(proxy, prompt, schema, duration_ms, **suggestion_options), tick, deadline_seconds)
+        result = call_with_ticks((lambda: provider.complete(prompt, schema)) if text_input else
+                                 (lambda: provider.suggest(proxy, prompt, schema, duration_ms, **suggestion_options)),
+                                 tick, deadline_seconds)
     except SuggestionError as first_error:
         if (prompt_version != PROMPT_V17 or first_error.code != 'provider_incomplete'
                 or provider.model != 'doubao-seed-2-1-lite-260915'
@@ -411,6 +480,8 @@ def _suggest(conn, job, provider, fetcher, work, *, billed, min_ms, proxy_limit,
         stats['kept'] = len(segments)
     summary = {'promptVersion': prompt_version, 'provider': provider.name, 'responseId': result.response_id,
                'labelKeys': label_keys, 'shotDetection': shot_summary, 'boundarySnap': snap_summary, **stats}
+    if points:
+        summary['sellingPointInput'] = point_input
     if retry:
         summary['degenerateRetry'] = retry
     if verification is not None:
@@ -484,6 +555,33 @@ def sweep_covers(root, storage):
             return segment_covers.sweep(conn, storage, Path(folder), env=renderer_env(Path(folder)))
     except Exception as error:  # noqa: BLE001 - covers are best effort
         return {'covered': 0, 'failed': 0, 'error': type(error).__name__}
+
+
+def sweep_cloud_covers(root, storage):
+    """Idle-time covers for 视频云管家 originals (only where cloud originals are readable); never raises."""
+    try:
+        with connect_pg() as conn, tempfile.TemporaryDirectory(prefix='cloud-cover-', dir=root) as folder:
+            return cloud_video_covers.sweep(conn, storage, os.getenv(CLOUD_CACHE_ENV), Path(folder))
+    except Exception as error:  # noqa: BLE001 - covers are best effort
+        return {'covered': 0, 'failed': 0, 'error': type(error).__name__}
+
+
+def sweep_cloud_videos():
+    """Idle-time 视频云管家 intake: originals and framework jobs for eligible cloud 成片; never raises."""
+    try:
+        with connect_pg() as conn:
+            return cloud_video_intake.sweep(conn)
+    except Exception as error:  # noqa: BLE001 - intake is best effort; the next idle sweep retries
+        return {'originals': 0, 'queued': 0, 'error': type(error).__name__}
+
+
+def sweep_selling_points():
+    """Idle-time AI 卖点切段 queueing after framework review; never raises into the job loop."""
+    try:
+        with connect_pg() as conn:
+            return {'queued': len(selling_point_auto.sweep(conn))}
+    except Exception as error:  # noqa: BLE001 - queueing is best effort; the next idle sweep retries
+        return {'queued': 0, 'error': type(error).__name__}
 
 
 def process_one(root, provider_factory=provider_from_env, source_factory=source_from_env):
@@ -606,6 +704,21 @@ def main():
             print(json.dumps(result), flush=True)
             if args.once:
                 break
+            if result['status'] == 'idle':
+                cloud = sweep_cloud_videos()
+                if cloud['queued'] or cloud.get('error'):
+                    print(json.dumps({'status': 'cloud_videos', **cloud}), flush=True)
+                points = sweep_selling_points()
+                if points['queued'] or points.get('error'):
+                    print(json.dumps({'status': 'selling_points', **points}), flush=True)
+                if points['queued']:
+                    continue  # claim the new jobs without the idle wait
+            if result['status'] == 'idle' and covers is not None and reads_cloud():
+                made = sweep_cloud_covers(root, covers)
+                if made['covered'] or made['failed'] or made.get('error'):
+                    print(json.dumps({'status': 'cloud_covers', **made}), flush=True)
+                if made['covered']:
+                    continue  # more may be pending; skip the idle wait
             if result['status'] == 'idle' and covers is not None:
                 swept = sweep_covers(root, covers)
                 if swept['covered'] or swept['failed'] or swept.get('error'):

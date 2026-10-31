@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   renderDouyinAccountName,
   type TrendClassNameResolver,
@@ -12,7 +12,7 @@ import { createIntegerMetricColumn } from './platform-tab-metric-column-builders
 
 export function buildDouyinShortvideoColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<DouyinShortvideoRow> {
+): TableColumnsType<DouyinShortvideoRow> {
   return [
     {
       title: '视频标题',

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Alert, Empty } from 'antd';
+import { Alert, Empty } from '@lobehub/ui';
 
 import { resolveClientErrorMessage } from '@/lib/client-error';
 import styles from '../sample-inventory.module.css';

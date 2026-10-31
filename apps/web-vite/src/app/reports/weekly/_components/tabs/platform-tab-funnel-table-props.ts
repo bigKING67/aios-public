@@ -1,5 +1,5 @@
 import type { Key } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   resolveResponsiveTableScroll,
   resolveResponsiveTableSize,
@@ -10,7 +10,7 @@ import type { WeeklyDataTableProps } from './weekly-primitives';
 export interface BuildFunnelTablePropsInput<RowType extends object> {
   isMobile: boolean;
   rows: RowType[];
-  columns: ColumnsType<RowType>;
+  columns: TableColumnsType<RowType>;
   rowKey: (record: RowType) => Key;
   pagination: TablePaginationConfig;
   mobileX: number;

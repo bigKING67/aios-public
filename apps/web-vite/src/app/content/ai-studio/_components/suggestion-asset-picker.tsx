@@ -1,7 +1,6 @@
-import { FileImageOutlined, SearchOutlined } from '@ant-design/icons';
+import { Alert, Button, Table, type TableColumnsType } from '@lobehub/ui';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { Alert, Button, Input, Select, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { ImageIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { fetchContentAssets } from '@/app/marketing/content-assets/_lib/content-assets-api';
@@ -18,6 +17,8 @@ import { ASSET_ANNOTATION_OPTIONS, resolveAnnotationPills } from '../_lib/asset-
 import { isSuggestableAsset } from '../_lib/segment-suggestion-api';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { AnnotationPillText } from './annotation-pill-text';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { StudioSearch } from './studio-search';
 import styles from './segment-annotation.module.css';
 import suggestStyles from './segment-suggest.module.css';
 import { useAssetAnnotationSummaries } from './use-asset-annotation-summaries';
@@ -94,13 +95,13 @@ export function SuggestionAssetPicker({
   const segmentsLink = (asset: ContentAssetItem) => {
     const summary = summaries.get(asset.assetId);
     return summary && summary.suggestedCount + summary.confirmedCount > 0 ? (
-      <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(asset.assetId)}>
+      <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(asset.assetId, undefined, undefined, 'analysis')}>
         查看片段
       </RouterLink>
     ) : null;
   };
 
-  const titleColumn: ColumnsType<ContentAssetItem>[number] = {
+  const titleColumn: TableColumnsType<ContentAssetItem>[number] = {
     title: '原片',
     key: 'title',
     render: (_, asset) => (
@@ -108,7 +109,7 @@ export function SuggestionAssetPicker({
         {asset.coverUrl ? (
           <img className={styles.assetCover} src={asset.coverUrl} alt="" loading="lazy" />
         ) : (
-          <span className={styles.assetCoverEmpty} aria-hidden><FileImageOutlined /></span>
+          <span className={styles.assetCoverEmpty} aria-hidden><ImageIcon size={14} strokeWidth={1.8} /></span>
         )}
         <span className={suggestStyles.assetText}>
           <span className={compact ? suggestStyles.assetTitleWrap : styles.assetTitle}>{resolveContentAssetDisplayTitle(asset)}</span>
@@ -126,7 +127,7 @@ export function SuggestionAssetPicker({
       </div>
     ),
   };
-  const columns: ColumnsType<ContentAssetItem> = compact
+  const columns: TableColumnsType<ContentAssetItem> = compact
     ? [titleColumn]
     : [
         titleColumn,
@@ -149,22 +150,21 @@ export function SuggestionAssetPicker({
   return (
     <div className={suggestStyles.stack}>
       <div className={styles.filterBar} role="search" aria-label="原片筛选">
-        <Input.Search
-          aria-label="搜索原片"
-          enterButton={<Button aria-label="搜索" icon={<SearchOutlined aria-hidden />} />}
+        <StudioSearch
+          label="搜索原片"
           placeholder="搜索标题、达人或备注"
-          allowClear
           onSearch={(value) => {
-            setKeyword(value.trim());
+            setKeyword(value);
             setPage(1);
           }}
         />
-        <Select
-          aria-label="标注状态"
+        <LabeledSelect
+          label="标注状态"
+          wrapperClassName={styles.filterSelect}
           value={segmentStatus}
           options={ASSET_ANNOTATION_OPTIONS}
-          onChange={(value: ContentAssetSegmentStatusFilter | '') => {
-            setSegmentStatus(value);
+          onChange={(value) => {
+            setSegmentStatus((typeof value === 'string' ? value : '') as ContentAssetSegmentStatusFilter | '');
             setPage(1);
           }}
         />
@@ -188,7 +188,7 @@ export function SuggestionAssetPicker({
             locale={{
               emptyText: segmentStatus
                 ? '没有符合条件的已就绪原片，可切换标注状态筛选。'
-                : '还没有可分析的原片，请先在素材库上传原片。',
+                : '还没有可分析的原片，请先在原片页上传。',
             }}
             rowSelection={{
               selectedRowKeys: selectedIds,
@@ -205,6 +205,7 @@ export function SuggestionAssetPicker({
               pageSize: PAGE_SIZE,
               total: assetsQuery.data?.total ?? 0,
               showSizeChanger: false,
+              hideOnSinglePage: true,
               onChange: setPage,
             }}
             scroll={compact ? undefined : { x: 640 }}

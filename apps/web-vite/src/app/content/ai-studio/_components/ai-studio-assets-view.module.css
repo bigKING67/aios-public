@@ -5,33 +5,28 @@
   min-width: 0;
 }
 
-.surfaceHeader {
+/* One toolbar row: filters at their natural widths on the left, the view switch at the end. */
+.toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-3);
+  gap: var(--spacing-2) var(--spacing-3);
   align-items: center;
   justify-content: space-between;
 }
 
-.surfaceHeader h2 {
+.meta {
   margin: 0;
-  color: var(--text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-title);
-  line-height: var(--line-height-tight);
-}
-
-.surfaceHeader p {
-  margin: var(--spacing-1) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
 }
 
-.surfaceTools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-3);
-  align-items: center;
+/* 显示 / 隐藏测试样片: a quiet text action at the end of the count line. */
+.metaToggle {
+  height: auto;
+  margin-left: 8px;
+  padding: 0;
+  font-size: inherit;
 }
 
 .pagination {

@@ -16,6 +16,7 @@ pub(super) const MIN_TOTAL_MS: u64 = 3_000;
 
 #[derive(Clone, Debug)]
 pub(super) struct Candidate {
+    pub(super) low: bool,
     pub(super) segment_id: Uuid,
     pub(super) asset_id: Uuid,
     pub(super) start_ms: i32,
@@ -44,6 +45,7 @@ pub(super) struct Selection {
     pub(super) available: u64,
     pub(super) exact: bool,
     pub(super) previously_used: u64,
+    pub(super) admission_excluded: u64,
     /// The reference original's own combination was met and skipped.
     pub(super) reference_excluded: bool,
 }
@@ -86,6 +88,7 @@ impl SplitMix64 {
 enum Verdict {
     Invalid,
     Used(String),
+    Admission(String),
     Reference,
     Valid(Combination),
 }
@@ -106,6 +109,15 @@ fn evaluate(
     if ids.iter().collect::<HashSet<_>>().len() != ids.len() {
         return Verdict::Invalid;
     }
+    for (i, left) in chosen.iter().enumerate() {
+        if chosen[i + 1..].iter().any(|right| {
+            left.asset_id == right.asset_id
+                && left.start_ms < right.end_ms
+                && right.start_ms < left.end_ms
+        }) {
+            return Verdict::Invalid;
+        }
+    }
     let total_ms: u64 = chosen.iter().map(|c| c.duration_ms()).sum();
     if !(MIN_TOTAL_MS..=max_total_ms).contains(&total_ms) {
         return Verdict::Invalid;
@@ -116,6 +128,10 @@ fn evaluate(
     }
     if used.contains(&hash) {
         return Verdict::Used(hash);
+    }
+    let low = chosen.iter().filter(|c| c.low).count();
+    if low > 2 || low == chosen.len() {
+        return Verdict::Admission(hash);
     }
     Verdict::Valid(Combination { picks, hash })
 }
@@ -153,6 +169,7 @@ pub(super) fn select(
         available: 0,
         exact: true,
         previously_used: 0,
+        admission_excluded: 0,
         reference_excluded: false,
     };
     if slots.is_empty() || space == 0 {
@@ -166,6 +183,7 @@ pub(super) fn select(
             match evaluate(slots, decode(index, slots), max_total_ms, used, reference) {
                 Verdict::Valid(combo) => valid.push(combo),
                 Verdict::Used(_) => selection.previously_used += 1,
+                Verdict::Admission(_) => selection.admission_excluded += 1,
                 Verdict::Reference => selection.reference_excluded = true,
                 Verdict::Invalid => {}
             }
@@ -183,6 +201,7 @@ pub(super) fn select(
     selection.exact = false;
     let mut seen = HashSet::new();
     let mut used_seen = HashSet::new();
+    let mut admission_seen = HashSet::new();
     let attempts = count
         .saturating_mul(SAMPLE_ATTEMPTS_PER_ITEM)
         .min(MAX_SAMPLE_ATTEMPTS);
@@ -203,12 +222,16 @@ pub(super) fn select(
             Verdict::Used(hash) => {
                 used_seen.insert(hash);
             }
+            Verdict::Admission(hash) => {
+                admission_seen.insert(hash);
+            }
             Verdict::Reference => selection.reference_excluded = true,
             Verdict::Invalid => {}
         }
     }
     selection.available = selection.combos.len() as u64;
     selection.previously_used = used_seen.len() as u64;
+    selection.admission_excluded = admission_seen.len() as u64;
     selection
 }
 
@@ -218,8 +241,9 @@ mod tests {
 
     fn candidate(n: u128, label: &str, start: i32, end: i32) -> Candidate {
         Candidate {
+            low: false,
             segment_id: Uuid::from_u128(n),
-            asset_id: Uuid::from_u128(1000 + n % 3),
+            asset_id: Uuid::from_u128(1000 + n),
             start_ms: start,
             end_ms: end,
             label_key: label.into(),
@@ -246,6 +270,68 @@ mod tests {
             .zip(slots)
             .map(|(p, s)| s[*p].segment_id)
             .collect()
+    }
+
+    #[test]
+    fn admission_counts_segments_not_originals_and_requires_one_qualified() {
+        for length in 1..=6 {
+            for low in 0..=length {
+                let slots: Vec<_> = (0..length)
+                    .map(|index| {
+                        let mut c = candidate(100 + index as u128, "a", 0, 3000);
+                        c.low = index < low;
+                        vec![c]
+                    })
+                    .collect();
+                let result = select(&slots, 1, 1, 60000, &HashSet::new(), None);
+                let valid = low <= 2 && low < length;
+                assert_eq!(
+                    result.available,
+                    u64::from(valid),
+                    "length={length} low={low}"
+                );
+                assert_eq!(result.admission_excluded, u64::from(!valid));
+            }
+        }
+    }
+
+    #[test]
+    fn overlapping_source_ranges_rejected_but_adjacent_ranges_allowed() {
+        let a = candidate(100, "a", 0, 2000);
+        let mut b = candidate(101, "b", 1500, 3000);
+        b.asset_id = a.asset_id;
+        let run = |b| {
+            select(
+                &[vec![a.clone()], vec![b]],
+                1,
+                1,
+                60000,
+                &HashSet::new(),
+                None,
+            )
+        };
+        assert_eq!(run(b.clone()).available, 0);
+        b.start_ms = 2000;
+        assert_eq!(run(b).available, 1);
+    }
+
+    #[test]
+    fn sampled_admission_exclusions_count_distinct_combinations() {
+        let slots: Vec<_> = (0..6)
+            .map(|slot| {
+                (0..10)
+                    .map(|i| {
+                        let mut c = candidate(100 + slot * 10 + i, "a", 0, 1000);
+                        c.low = true;
+                        c
+                    })
+                    .collect()
+            })
+            .collect();
+        let result = select(&slots, 10, 1, 60000, &HashSet::new(), None);
+        assert!(!result.exact);
+        assert_eq!(result.available, 0);
+        assert!(result.admission_excluded > 0 && result.admission_excluded <= 640);
     }
 
     #[test]

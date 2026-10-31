@@ -27,7 +27,7 @@ export function resolveAnnotationPills(
   if (!summary) {
     pills.push({ label: '标注读取中', state: 'muted' });
   } else {
-    if (summary.suggestionActive) pills.push({ label: 'AI 分析中', state: 'active' });
+    if (summary.suggestionActive) pills.push({ label: 'AI 切段中', state: 'active' });
     if (summary.suggestedCount > 0) pills.push({ label: `待确认 ${summary.suggestedCount}`, state: 'active' });
     if (summary.confirmedCount > 0) pills.push({ label: `已确认 ${summary.confirmedCount} 段`, state: 'ready' });
     if (pills.length === 0) pills.push({ label: '未标注', state: 'muted' });

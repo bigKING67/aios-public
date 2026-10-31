@@ -53,7 +53,6 @@ fn points_outside_mixed_voiceover_are_ignored() {
         1,
         &limits(&slots, 60_000),
         &HashSet::new(),
-        &reference_hash(&slots),
     );
     assert!(selection.combos.is_empty());
 }
@@ -89,14 +88,7 @@ fn a_partly_covered_voiceover_slot_takes_whole_segments_only_without_block_fills
     assert_eq!(option.clips[0].segment_ids, [Uuid::from_u128(2)]);
     assert_eq!(option.clips[0].point_guard_ids, [Uuid::from_u128(21)]);
     assert_eq!(option.clips[0].selling_points, ["moisturizing", "skincare"]);
-    let selection = select(
-        &[options],
-        1,
-        1,
-        &limits(&slots, 60_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let selection = select(&[options], 1, 1, &limits(&slots, 60_000), &HashSet::new());
     assert_eq!(selection.combos.len(), 1);
     assert_eq!(selection.combos[0].tier, Tier::Varied);
 
@@ -106,4 +98,42 @@ fn a_partly_covered_voiceover_slot_takes_whole_segments_only_without_block_fills
     let options = slot_options(&slots[0], &frames, &blocks, true, 3);
     assert!(options.iter().all(|o| !o.fallback));
     assert!(!options.is_empty());
+}
+
+/// Varied block fills are not same-point fills: whole 口播 segments join them
+/// in the varied tier, so a slot is not stuck with stitched blocks that break
+/// the repeat budget.
+#[test]
+fn whole_segments_join_varied_block_fills_without_a_same_point_fill() {
+    let refs = vec![frame(1, 10, "mixed_voiceover", 0, 12_000)];
+    let slots = reference_slots(
+        &refs,
+        &build_blocks(
+            &refs,
+            &[
+                point(11, 10, "moisturizing", 0, 4_000, false),
+                point(12, 10, "no_caking", 4_000, 9_000, true),
+            ],
+        ),
+    );
+    assert!(!slots[0].fallback);
+    let frames = vec![
+        frame(2, 20, "mixed_voiceover", 0, 6_000),
+        frame(3, 30, "mixed_voiceover", 0, 6_000),
+        frame(4, 40, "mixed_voiceover", 0, 11_000),
+    ];
+    let points = vec![
+        point(21, 20, "no_caking", 0, 5_500, false),
+        point(31, 30, "long_wear", 0, 5_500, false),
+        point(41, 40, "skincare", 0, 5_000, false),
+    ];
+    let options = slot_options(&slots[0], &frames, &all_blocks(&frames, &points), true, 1);
+    assert!(options.iter().all(|o| o.tier == Tier::Varied));
+    assert!(
+        options.iter().any(|o| !o.fallback),
+        "stitched varied blocks stay"
+    );
+    let whole: Vec<_> = options.iter().filter(|o| o.fallback).collect();
+    assert_eq!(whole.len(), 1);
+    assert_eq!(whole[0].clips[0].segment_ids, [Uuid::from_u128(4)]);
 }

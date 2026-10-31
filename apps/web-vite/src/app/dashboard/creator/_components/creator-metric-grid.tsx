@@ -1,6 +1,6 @@
 'use client';
 
-import { Skeleton } from 'antd';
+import { SkeletonText } from '@lobehub/ui';
 import shellStyles from './creator-dashboard.module.css';
 import metricStyles from './creator-live-dashboard-metrics.module.css';
 import { resolveMetricValueSize } from './creator-ui-utils';
@@ -38,7 +38,7 @@ function buildMetricCardClassName(featured: boolean, extraClassName?: string): s
 function CreatorMetricSkeletonCard({ featured = false }: { featured?: boolean }) {
   return (
     <article className={buildMetricCardClassName(featured, metricStyles.liveMetricSkeletonCard)}>
-      <Skeleton active title={{ width: '62%' }} paragraph={{ rows: 1, width: ['76%'] }} />
+      <SkeletonText rows={2} width={['62%', '76%']} />
     </article>
   );
 }

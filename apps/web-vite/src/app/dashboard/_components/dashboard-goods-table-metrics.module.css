@@ -7,7 +7,7 @@
 }
 
 .metricValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 400;
   line-height: var(--line-height-snug);
@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
@@ -29,15 +29,15 @@
 }
 
 .metricTrendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .metricTrendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .metricTrendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 @media (max-width: 768px) {

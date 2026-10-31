@@ -1,11 +1,6 @@
+import { Database, Network, Pencil, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Button, Empty, Skeleton, Tabs } from 'antd';
-import {
-  ApartmentOutlined,
-  DatabaseOutlined,
-  EditOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { Button, Empty, SkeletonText, Tabs } from '@lobehub/ui';
 import type {
   ContentAssetAdMaterial,
   ContentAssetAnalysisProfile,
@@ -90,7 +85,7 @@ export function ContentAssetInspector({
     }
     return (
       <Panel className={panelClassName}>
-        <Skeleton active paragraph={{ rows: 10 }} />
+        <SkeletonText rows={10} />
       </Panel>
     );
   }
@@ -144,18 +139,18 @@ export function ContentAssetInspector({
     adMaterialCount === 0 ? '补素材 ID' : adMaterialCount === 1 && canWrite ? '编辑素材 ID' : '查看素材 ID';
   const actionBar = (
     <div className={inspectorStyles.inspectorActionBar}>
-      <Button icon={<EditOutlined />} disabled={!canWrite} onClick={onEditProfile}>
+      <Button icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onEditProfile}>
         编辑档案
       </Button>
       <Button
-        icon={platformVideoCount > 0 ? undefined : <PlusOutlined />}
+        icon={platformVideoCount > 0 ? undefined : <Plus size={14} strokeWidth={1.8} aria-hidden="true" />}
         disabled={!canWrite && platformVideoCount === 0}
         onClick={handlePlatformVideoShortcut}
       >
         {platformVideoShortcutLabel}
       </Button>
       <Button
-        icon={adMaterialCount > 0 ? undefined : <PlusOutlined />}
+        icon={adMaterialCount > 0 ? undefined : <Plus size={14} strokeWidth={1.8} aria-hidden="true" />}
         disabled={!canWrite && adMaterialCount === 0}
         onClick={handleAdMaterialShortcut}
       >
@@ -165,7 +160,7 @@ export function ContentAssetInspector({
   );
   const tabs = (
     <Tabs
-      className={inspectorStyles.inspectorTabs}
+      classNames={{ list: inspectorStyles.inspectorTabsList }}
       size="small"
       activeKey={activeTabKey}
       onChange={setActiveTabKey}
@@ -256,11 +251,11 @@ export function ContentAssetInspector({
       </div>
       <div className={inspectorStyles.identityHealth}>
         <div>
-          <DatabaseOutlined />
+          <Database size={14} strokeWidth={1.8} aria-hidden="true" />
           <span>{asset.externalOnly ? '待补源文件' : 'TOS 已入库'}</span>
         </div>
         <div>
-          <ApartmentOutlined />
+          <Network size={14} strokeWidth={1.8} aria-hidden="true" />
           <span>
             {platformVideoCount} 视频身份 / {adMaterialCount} 素材实例
           </span>

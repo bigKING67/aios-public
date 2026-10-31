@@ -15,7 +15,7 @@ use crate::{
 mod dtk_client;
 mod page_fallback;
 
-use dtk_client::fetch_douyin_detail_via_dtk;
+use dtk_client::{fetch_douyin_detail_via_dtk, DtkDetail};
 use page_fallback::fetch_douyin_video_page_source;
 
 const DOUYIN_SOURCE_USER_AGENT: &str =
@@ -24,6 +24,8 @@ const DOUYIN_SOURCE_USER_AGENT: &str =
 const DOUYIN_DETAIL_TIMEOUT_SECONDS: u64 = 15;
 const DOUYIN_DETAIL_PATH: &str = "https://www.douyin.com/aweme/v1/web/aweme/detail/";
 const DOUYIN_DETAIL_AID_CANDIDATES: [&str; 2] = ["6383", "1128"];
+const DOUYIN_VIDEO_NOT_FOUND_MESSAGE: &str =
+    "抖音作品不存在或已不可见（已删除、设为私密或被下架），无法下载原视频";
 const DOUYIN_MANUAL_UPLOAD_MESSAGE: &str =
     "当前抖音链接无法直接下载原视频，可能是作品访问受限或抖音接口风控。请改用本地视频上传，上传后再绑定抖音视频 ID。";
 const ALLOWED_DOUYIN_MEDIA_HOST_SUFFIXES: [&str; 5] = [
@@ -65,11 +67,17 @@ pub(super) async fn resolve_douyin_remote_video_source(
 
     let mut detail_source_error: Option<AppError> = None;
     if let Some(settings) = douyin_dtk_settings_from_env() {
-        if let Some(detail) = fetch_douyin_detail_via_dtk(&settings, &aweme_id).await {
-            match build_douyin_remote_video_source_from_detail(&aweme_id, &detail) {
-                Ok(source) => return Ok(source),
-                Err(error) => detail_source_error = Some(error),
+        match fetch_douyin_detail_via_dtk(&settings, &aweme_id).await {
+            DtkDetail::Detail(detail) => {
+                match build_douyin_remote_video_source_from_detail(&aweme_id, &detail) {
+                    Ok(source) => return Ok(source),
+                    Err(error) => detail_source_error = Some(error),
+                }
             }
+            DtkDetail::NotFound => {
+                return Err(AppError::bad_request(DOUYIN_VIDEO_NOT_FOUND_MESSAGE))
+            }
+            DtkDetail::Miss => {}
         }
     }
 
@@ -181,6 +189,12 @@ fn parse_douyin_detail_response(body: &[u8]) -> Option<Value> {
         return None;
     };
     Some(data)
+}
+
+/// True when Douyin itself reported the post missing, as opposed to a download
+/// that may succeed on retry.
+pub(super) fn is_douyin_video_not_found(error: &AppError) -> bool {
+    matches!(error, AppError::BadRequest(message) if message == DOUYIN_VIDEO_NOT_FOUND_MESSAGE)
 }
 
 fn douyin_manual_upload_error() -> AppError {

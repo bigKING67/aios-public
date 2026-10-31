@@ -87,6 +87,18 @@ export function isSuperAdminByRoleOrIdentity(
   });
 }
 
+/** A restricting role: AI 创作中心 shows such an account (HR) only 团队产出. Admins are never limited. */
+export const TEAM_OUTPUT_ONLY_ROLE = 'team_output_only';
+
+export function isTeamOutputOnlyByRole(roles?: string[] | null, identity?: AccessIdentity | null): boolean {
+  const roleSet = collectNormalizedRoleSet(roles);
+  return (
+    roleSet.has(normalizeRole(TEAM_OUTPUT_ONLY_ROLE)) &&
+    !hasAnyRole(roleSet, ADMIN_ROLE_CODES) &&
+    !isSuperAdminByRoleOrIdentity(roles, identity)
+  );
+}
+
 export function canAccessAdminByRole(
   roles?: string[] | null,
   identity?: AccessIdentity | null

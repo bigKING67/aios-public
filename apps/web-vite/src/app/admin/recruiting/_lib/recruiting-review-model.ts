@@ -34,16 +34,16 @@ const V2_ANSWER_SECTIONS = [
   { key: "aiUsage", label: "AI 使用说明", code: false },
 ] as const;
 
-export function answerSections(version: number) {
+export function answerSections(version: number, legacyAiUsage?: string) {
   if (version === 1) return LEGACY_ANSWER_SECTIONS;
   if (version === 2) return V2_ANSWER_SECTIONS;
   if (version === 3)
-    return [
+    return ([
       { key: "videoPractice", label: "视频镜头切分：交付与验证", code: false },
       { key: "workflow", label: "AI 开发方式与规则说明", code: false },
       { key: "workflowRules", label: "开发规则（选填）", code: true },
       { key: "aiUsage", label: "AI 使用说明", code: false },
-    ] as const;
+    ] as const).filter((section) => section.key !== "aiUsage" || Boolean(legacyAiUsage?.trim()));
   throw new Error("不支持的题目版本");
 }
 

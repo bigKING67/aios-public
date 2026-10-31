@@ -1,5 +1,5 @@
 import { useMutation, type QueryClient } from '@tanstack/react-query';
-import { message } from 'antd';
+import { toast } from '@lobehub/ui';
 import { apiClient } from '@/lib/api-client';
 import {
   AIOS_API_PATHS,
@@ -117,13 +117,13 @@ export function useDefaultRoleBootstrapMutation(queryClient: QueryClient) {
       const summary = [createdText, syncedText, skippedText, failedText].filter(Boolean).join('；');
 
       if (result.failedPermissionRoleCodes.length > 0) {
-        message.warning(`默认角色补齐完成（部分异常）：${summary}`);
+        toast.warning(`默认角色补齐完成（部分异常）：${summary}`);
       } else {
-        message.success(`默认角色补齐完成：${summary}`);
+        toast.success(`默认角色补齐完成：${summary}`);
       }
     },
     onError: (error: unknown) => {
-      message.error(getRoleErrorMessage(error, '默认角色补齐失败'));
+      toast.error(getRoleErrorMessage(error, '默认角色补齐失败'));
     },
   });
 }

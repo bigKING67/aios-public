@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { BarChartOutlined } from '@ant-design/icons';
+import { ChartColumn } from 'lucide-react';
 
 import {
   DASHBOARD_DIMENSION_PLACEHOLDER_COPY,
@@ -108,7 +108,7 @@ export function DashboardDimensionContent({
       <aside className={navStyles.dimensionSidebar} aria-label="板块导航">
         <div className={navStyles.dimensionSidebarHead}>
           <div className={navStyles.dimensionTitleLine}>
-            <BarChartOutlined className={navStyles.dimensionTitleIcon} />
+            <ChartColumn className={navStyles.dimensionTitleIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
             <h2>维度</h2>
           </div>
         </div>

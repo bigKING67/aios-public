@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { Alert, Button, Modal, Space, Table } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
+import { Alert, Button, Modal, Table } from '@lobehub/ui';
+import { Inbox } from 'lucide-react';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 import { FileDropzone } from '@/components/molecules/file-dropzone';
 import styles from './creator-library-import-modal.module.css';
 import {
@@ -59,7 +59,7 @@ export function CreatorLibraryImportModal({
       onCancel={onCancel}
       destroyOnHidden
       footer={
-        <Space wrap>
+        <div className={styles.importFooter}>
           <Button onClick={onCancel}>取消</Button>
           <Button
             type="primary"
@@ -69,7 +69,7 @@ export function CreatorLibraryImportModal({
           >
             {errorRows > 0 ? `请先修正 ${errorRows} 行异常` : `确认导入 ${validRows.length} 行`}
           </Button>
-        </Space>
+        </div>
       }
     >
       <div className={styles.importStack}>
@@ -82,7 +82,7 @@ export function CreatorLibraryImportModal({
         <FileDropzone
           accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
           disabled={importing}
-          icon={<InboxOutlined />}
+          icon={<Inbox size={14} strokeWidth={1.8} aria-hidden="true" />}
           title="点击或拖拽 XLSX / CSV 文件到这里"
           hint="请先下载 XLSX 模板，填写“达人表”后保持表头不变再导入。"
           onFile={handleFile}

@@ -3,7 +3,9 @@ mod content_assets;
 pub(crate) use content_assets::{
     douyin_dtk_settings_from_env, studio_products_from_env, DouyinDtkSettings,
 };
+mod daily_remix;
 mod dashboard;
+pub use daily_remix::DailyRemixSettings;
 mod db;
 mod env_file;
 mod llm;
@@ -67,7 +69,12 @@ pub struct Settings {
     pub content_ai_studio_segment_suggest_enabled: bool,
     pub content_ai_studio_segment_suggest_max_assets: usize,
     pub content_ai_studio_remix_enabled: bool,
+    pub content_ai_studio_delivery_enabled: bool,
+    pub content_ai_studio_cloud_remix_enabled: bool,
+    pub daily_remix: DailyRemixSettings,
     pub content_ai_studio_remix_max_seconds: u32,
+    pub content_ai_studio_admission_min_spend: f64,
+    pub content_ai_studio_structure_pool_days: u32,
     pub content_ai_studio_remix_max_per_batch: usize,
     pub content_ai_studio_remix_max_active: usize,
     pub content_asset_cdn_base_url: String,
@@ -78,6 +85,8 @@ pub struct Settings {
     pub tos_endpoint: String,
     pub tos_region: String,
     pub tos_bucket: String,
+    /// Bucket for rebuildable or temporary object keys; empty keeps them in `tos_bucket`.
+    pub tos_derived_bucket: String,
 }
 
 impl Settings {
@@ -171,6 +180,12 @@ impl Settings {
                 .as_deref()
                 == Ok("true"),
             content_ai_studio_remix_max_seconds: content_assets::resolve_remix_max_seconds(),
+            content_ai_studio_cloud_remix_enabled: content_assets::resolve_cloud_remix_enabled(),
+            content_ai_studio_delivery_enabled: std::env::var("CONTENT_AI_STUDIO_DELIVERY_ENABLED")
+                .is_ok_and(|value| value == "true"),
+            daily_remix: DailyRemixSettings::from_env(),
+            content_ai_studio_admission_min_spend: content_assets::resolve_admission_min_spend(),
+            content_ai_studio_structure_pool_days: content_assets::resolve_structure_pool_days(),
             content_ai_studio_remix_max_per_batch: content_assets::resolve_remix_max_per_batch(),
             content_ai_studio_remix_max_active: content_assets::resolve_remix_max_active(),
             douyin_live_recording_upload_signed_url_ttl_seconds: content_assets
@@ -180,6 +195,7 @@ impl Settings {
             tos_endpoint: content_assets.tos_endpoint,
             tos_region: content_assets.tos_region,
             tos_bucket: content_assets.tos_bucket,
+            tos_derived_bucket: content_assets.tos_derived_bucket,
         })
     }
 

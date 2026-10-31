@@ -1,0 +1,318 @@
+/*
+ * 竞品爆款 page. The workbench layout, cards, table helpers and form fields come
+ * from studio-workbench.module.css, ai-studio.module.css and
+ * segment-annotation.module.css; this module owns the video cell, the phone
+ * card list and the analysis drawer (structure sections in competitor-structure.module.css).
+ */
+
+.cardTitle {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.count,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.count {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+/* A 9:16 opening frame beside the title, the size of the 成片 row thumbnails. */
+.videoIdentity {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.videoThumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  width: 36px;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--border-radius-sm);
+  color: var(--lobe-color-text-quaternary);
+  background: var(--lobe-color-fill-secondary);
+}
+
+.videoThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoCell,
+.stackCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.stackCell {
+  align-items: flex-start;
+}
+
+.videoTitle {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--lobe-color-text);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.videoMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: center;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.videoMeta a {
+  min-height: auto;
+}
+
+/* Phones: one card per video, actions in reach (competitor-video-list.tsx). */
+.videoList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  align-items: stretch;
+}
+
+.videoList ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.videoList li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-3);
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  background: var(--lobe-color-bg-container);
+}
+
+.videoList .videoCardActive {
+  border-color: var(--aios-ai-border);
+}
+
+.videoFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: baseline;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.addActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+/* Drawer */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  min-width: 0;
+  color: var(--lobe-color-text);
+  line-height: var(--line-height-relaxed);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: center;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.externalLink {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.externalLink:hover {
+  color: var(--lobe-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.externalLink:focus-visible,
+.chip:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
+  outline-offset: 2px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.section h3 {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.section h3 small {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+.section p {
+  margin: 0;
+}
+
+.lead {
+  font-size: var(--font-size-base);
+}
+
+/* 推广产品 heads the drawer body, above the status line. */
+.product {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-2);
+  align-items: baseline;
+  margin: 0;
+}
+
+.product strong {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.question {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-2);
+  align-items: baseline;
+  color: var(--lobe-color-text-secondary);
+}
+
+.fieldLabel {
+  flex: 0 0 auto;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.muted {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--spacing-2);
+  border: 1px solid var(--lobe-color-border);
+  border-radius: var(--border-radius-sm);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.original {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  align-self: flex-start;
+  width: min(100%, var(--player-width, 340px));
+  margin: 0;
+}
+
+/* Douyin's player lays out once at load and does not reflow, so keep a fixed 9:16 box and let the drawer scroll. */
+.original iframe {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: var(--aios-stage);
+}
+
+.original figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.catalogFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+.sourceSelect {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  width: 184px;
+}
+.sourceSelect > button { flex: 1; }
+.catalogInfo {
+  flex: none;
+  color: var(--lobe-color-text-tertiary);
+}
+.syncMeta {
+  margin: 0 0 var(--spacing-3);
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+.catalogPager {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-4);
+}
+@media (max-width: 680px) {
+  .catalogPager { justify-content: center; }
+  .catalogFilters { gap: var(--spacing-2); }
+}

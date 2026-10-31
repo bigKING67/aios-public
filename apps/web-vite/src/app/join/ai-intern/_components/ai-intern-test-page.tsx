@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Result } from "antd";
+import { Result } from '@lobehub/ui';
+import { Code2, Sparkles } from 'lucide-react';
 import type { RecruitingPublicSubmissionResponse } from "@/lib/generated-api-contract";
 import { AiInternTestForm } from "./ai-intern-test-form";
 import styles from "../ai-intern-test.module.css";
@@ -25,22 +26,26 @@ export function AiInternTestPage() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.topbar}>
+        <div className={styles.brand} aria-label="AIOS 人才招募">
+          <img className={`${styles.wordmark} ${styles.lightWordmark}`} src="/brand/aios-wordmark-black.svg" width={868} height={330} alt="" />
+          <img className={`${styles.wordmark} ${styles.darkWordmark}`} src="/brand/aios-wordmark-white.svg" width={868} height={330} alt="" />
+          <span className={styles.brandDivider} aria-hidden="true" />
+          <span>人才招募</span>
+        </div>
+        <span className={styles.pageLabel}>候选人测试</span>
+      </div>
       <div className={styles.shell}>
         <header className={styles.header}>
-          <div className={styles.brand}>
-            <img src="/favicon.png" alt="" width={28} height={28} />
-            <span>AGI AIOS · 招聘</span>
-          </div>
-          <p className={styles.eyebrow}>AI 应用开发实习生 · 在线测试</p>
+          <p className={styles.eyebrow}>AI 应用开发实习生 <span aria-hidden="true">/</span> 在线测试</p>
           <h1 className={styles.title}>视频镜头切分</h1>
           <p className={styles.lead}>
             我们在做一个短视频自动裂变系统。第一步是把一条成品视频切成镜头片段，
             后面才能做打标、检索和重新组合。这次作业就是把这一步做出来。
           </p>
           <ul className={styles.facts} aria-label="作答说明">
-            <li>建议 2–3 小时</li>
-            <li>编程语言不限</li>
-            <li>可使用 AI</li>
+            <li><Code2 size={14} aria-hidden="true" />编程语言不限</li>
+            <li><Sparkles size={14} aria-hidden="true" />可使用 AI</li>
           </ul>
         </header>
 

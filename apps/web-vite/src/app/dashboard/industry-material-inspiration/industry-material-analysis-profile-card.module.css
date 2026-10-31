@@ -1,7 +1,7 @@
 .analysisProfileCard {
   min-width: 0;
-  border-top: 1px solid var(--divider-color);
-  border-bottom: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisProfileSummary {
@@ -20,7 +20,7 @@
 }
 
 .analysisProfileSummary::after {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   content: '展开';
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -33,12 +33,12 @@
 
 .analysisProfileSummary:focus-visible {
   border-radius: var(--border-radius-sm);
-  outline: 2px solid var(--brand-active);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
 .analysisProfileSummary > span:first-child {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-label);
@@ -47,7 +47,7 @@
 }
 
 .analysisProfileSummary > strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -56,7 +56,7 @@
 
 .analysisProfileSummary > span:nth-child(3) {
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -65,7 +65,7 @@
 .analysisProfileContent {
   min-width: 0;
   padding: 0 0 var(--spacing-4);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisProfileHeader {
@@ -75,7 +75,7 @@
 
 .analysisProfileColumn > span {
   display: block;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-label);
@@ -84,7 +84,7 @@
 
 .analysisProfileHeader strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -93,7 +93,7 @@
 .analysisProfileHeader p {
   max-width: 920px;
   margin: var(--spacing-2) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -115,7 +115,7 @@
 }
 
 .analysisProfileColumn + .analysisProfileColumn {
-  border-left: 1px solid var(--divider-color);
+  border-left: 1px solid var(--lobe-color-border-secondary);
 }
 
 .metricPriorityList {
@@ -134,7 +134,7 @@
 
 .metricPriorityList strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -143,7 +143,7 @@
 .metricPriorityList span {
   display: block;
   margin-top: var(--spacing-1);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -163,10 +163,10 @@
   max-width: 100%;
   align-items: center;
   padding: 0 var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: var(--bg-card);
-  color: var(--text-secondary);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   overflow: hidden;
@@ -193,7 +193,7 @@
   }
 
   .analysisProfileColumn + .analysisProfileColumn {
-    border-top: 1px solid var(--divider-color);
+    border-top: 1px solid var(--lobe-color-border-secondary);
     border-left: 0;
   }
 }

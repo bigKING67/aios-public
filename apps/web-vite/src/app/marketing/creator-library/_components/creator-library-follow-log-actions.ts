@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import type { MessageInstance } from 'antd/es/message/interface';
+import { toast } from '@lobehub/ui';
 import { resolveClientErrorMessage, resolveClientErrorStatus } from '@/lib/client-error';
 import {
   createCreatorFollowLog,
@@ -14,7 +14,6 @@ import type {
 } from '../_lib/creator-library-types';
 
 interface UseCreatorLibraryFollowLogActionsParams {
-  messageApi: MessageInstance;
   followItem: CreatorLibraryItem | null;
   refreshLibrary: () => void;
   refreshActiveCreatorFollowLogs: (creatorId: number) => void;
@@ -39,7 +38,6 @@ interface DeleteFollowLogVariables {
 }
 
 export function useCreatorLibraryFollowLogActions({
-  messageApi,
   followItem,
   refreshLibrary,
   refreshActiveCreatorFollowLogs,
@@ -47,12 +45,12 @@ export function useCreatorLibraryFollowLogActions({
 }: UseCreatorLibraryFollowLogActionsParams) {
   const handleFollowLogMutationSuccess = useCallback(
     (creatorId: number, successMessage: string) => {
-      messageApi.success(successMessage);
+      toast.success(successMessage);
       setFollowLogRevision((revision) => revision + 1);
       refreshLibrary();
       refreshActiveCreatorFollowLogs(creatorId);
     },
-    [messageApi, refreshActiveCreatorFollowLogs, refreshLibrary, setFollowLogRevision]
+    [refreshActiveCreatorFollowLogs, refreshLibrary, setFollowLogRevision]
   );
 
   const createFollowLogMutation = useMutation({
@@ -61,7 +59,7 @@ export function useCreatorLibraryFollowLogActions({
     onSuccess: (_result, variables) => {
       handleFollowLogMutationSuccess(variables.creatorId, '跟进记录已新增');
     },
-    onError: (err) => messageApi.error(resolveClientErrorMessage(err, '新增跟进记录失败')),
+    onError: (err) => toast.error(resolveClientErrorMessage(err, '新增跟进记录失败')),
   });
 
   const updateFollowLogMutation = useMutation({
@@ -77,7 +75,7 @@ export function useCreatorLibraryFollowLogActions({
           refreshActiveCreatorFollowLogs(followItem.id);
         }
       }
-      messageApi.error(resolveClientErrorMessage(err, '更新跟进记录失败'));
+      toast.error(resolveClientErrorMessage(err, '更新跟进记录失败'));
     },
   });
 
@@ -94,7 +92,7 @@ export function useCreatorLibraryFollowLogActions({
           refreshActiveCreatorFollowLogs(followItem.id);
         }
       }
-      messageApi.error(resolveClientErrorMessage(err, '删除跟进记录失败'));
+      toast.error(resolveClientErrorMessage(err, '删除跟进记录失败'));
     },
   });
 

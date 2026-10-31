@@ -77,6 +77,7 @@ function assertLeafAdapterConsumesExternalContracts() {
     'WaterfallChartProps',
     'WaterfallSteps',
     'ColumnsType',
+    'TableColumnsType',
     'GoodsTableRow',
     'ChannelAttributionRow',
     'TmallGoodsAttributionOverviewSectionProps',

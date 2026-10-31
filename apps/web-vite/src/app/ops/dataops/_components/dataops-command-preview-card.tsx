@@ -1,7 +1,8 @@
 'use client';
 
-import { Button } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { Button } from '@lobehub/ui';
+import { Copy } from 'lucide-react';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import commandStyles from './dataops-command-modal.module.css';
 
 interface DataOpsCommandPreviewCardProps {
@@ -23,7 +24,7 @@ export function DataOpsCommandPreviewCard({
         <h4>{title}</h4>
         <Button
           size="small"
-          icon={<CopyOutlined />}
+          icon={<Copy {...DATAOPS_ICON_PROPS} />}
           onClick={() => {
             void onCopy(command, copyLabel);
           }}

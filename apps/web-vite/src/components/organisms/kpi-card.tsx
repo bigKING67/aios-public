@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from 'antd';
+import { Block } from '@lobehub/ui';
 import { KPIMetric } from '../molecules/kpi-metric';
 import type { KPICard as KPICardType } from '@/types/report';
 
@@ -24,17 +24,13 @@ export const KPICard: React.FC<KPICardProps> = ({ data, className = '' }) => {
     : undefined;
 
   return (
-    <Card
-      className={`shadow-sm hover:shadow-md transition-shadow ${className}`}
-      variant="borderless"
-      style={{ borderRadius: '8px' }}
-    >
+    <Block variant="outlined" className={`p-4 ${className}`}>
       <KPIMetric
         label={data.label}
         value={data.value}
         wow={wow}
       />
-    </Card>
+    </Block>
   );
 };
 

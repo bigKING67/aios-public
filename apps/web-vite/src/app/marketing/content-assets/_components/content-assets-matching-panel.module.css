@@ -8,9 +8,9 @@
   display: grid;
   gap: 10px;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .matchingRowHeader {
@@ -22,7 +22,7 @@
 
 .matchingRowHeader strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-snug);
 }
@@ -32,7 +32,7 @@
 .matchingMetricGrid,
 .matchingTargetCard span,
 .matchingTargetCard p {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -49,15 +49,15 @@
   gap: 5px;
   min-width: 0;
   padding: 10px 11px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 12px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .matchingIdGrid code {
   overflow: hidden;
-  color: var(--brand-text);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -75,9 +75,9 @@
   align-items: center;
   min-height: 22px;
   padding: 0 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 999px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .matchingActions {
@@ -87,13 +87,13 @@
 
 .matchingTargetCard {
   margin-top: 14px;
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .matchingTargetCard strong {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-tight);
   text-overflow: ellipsis;

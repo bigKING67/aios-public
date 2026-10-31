@@ -1,5 +1,5 @@
-import { FileImageOutlined } from '@ant-design/icons';
-import { Alert, Button, Skeleton } from 'antd';
+import { ImageIcon } from 'lucide-react';
+import { Alert, Button, SkeletonText } from '@lobehub/ui';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
@@ -30,7 +30,7 @@ function chainText(option: ReferenceAssetOption, preset: StudioSegmentPreset): s
 function Cover({ option }: { option: ReferenceAssetOption }) {
   return (
     <span className={pickerStyles.cover} aria-hidden>
-      {option.coverUrl ? <img src={option.coverUrl} alt="" loading="lazy" /> : <FileImageOutlined />}
+      {option.coverUrl ? <img src={option.coverUrl} alt="" loading="lazy" /> : <ImageIcon size={14} strokeWidth={1.8} />}
     </span>
   );
 }
@@ -69,14 +69,14 @@ export function RemixReferencePicker({
       </div>
     );
   }
-  if (loading) return <Skeleton active paragraph={{ rows: 3 }} title={false} />;
+  if (loading) return <SkeletonText rows={3} />;
   if (error) return <Alert type="error" showIcon title="参考原片读取失败，请刷新后重试。" />;
   if (references.length === 0) {
     return (
       <p className={styles.fieldHelp}>
-        还没有带已确认片段的原片。先在 AI 分析里分析并确认片段，或改用手动排列框架顺序。{' '}
+        还没有带已确认片段的原片。先用 AI 切段生成并确认片段，或改用手动排列框架顺序。{' '}
         <RouterLink className={styles.tableLink} to={ROUTE_PATHS.contentAiStudioAnalysis}>
-          去 AI 分析
+          去 AI 切段
         </RouterLink>
       </p>
     );

@@ -35,16 +35,16 @@
   /* ========== 文字色系 ========== */
 
   /** 一级文字（核心数据、标题） */
-  --text-primary: #1A1A1A;
+  --text-primary: #1F1F1F;
 
   /** 二级文字（正文、标签） */
-  --text-secondary: #5F6368;
+  --text-secondary: #666666;
 
   /** 三级文字（辅助、说明） */
-  --text-tertiary: #8A8F8A;
+  --text-tertiary: #707070;
 
   /** 禁用文字 */
-  --text-disabled: #B8B8B8;
+  --text-disabled: #B0B0B0;
 
   /** 反白文字 */
   --text-inverse: #FFFFFF;
@@ -73,47 +73,47 @@
   --color-warning: #B87503;
 
   /** 信息（默认沿用品牌蓝文字色） */
-  --color-info: #2457C5;
+  --color-info: #0060CC;
 
   /* ========== 状态色系 ========== */
   /* 状态色只用于系统反馈，不与经营趋势色混用。 */
 
   --status-success: var(--color-success);
   --status-success-strong: #0F6F2E;
-  --status-success-bg: #EAF8EE;
-  --status-success-border: #BFE8CA;
+  --status-success-bg: #F8FBF1;
+  --status-success-border: #D4ECCC;
 
   --status-warning: var(--color-warning);
   --status-warning-strong: #8F5E02;
-  --status-warning-bg: #FFF7E6;
-  --status-warning-border: #F3D38D;
+  --status-warning-bg: #FFF8F3;
+  --status-warning-border: #FFE1B3;
 
   --status-danger: var(--color-danger);
   --status-danger-strong: #9F3D35;
-  --status-danger-bg: #FFF1F0;
-  --status-danger-border: #F2C4C0;
+  --status-danger-bg: #FEF8F7;
+  --status-danger-border: #FFDED8;
 
   --status-info: var(--color-info);
-  --status-info-strong: #1F4FBF;
-  --status-info-bg: var(--brand-secondary);
-  --status-info-border: var(--brand-border);
+  --status-info-strong: #0060CC;
+  --status-info-bg: #F8F9FF;
+  --status-info-border: #D7E6FF;
 
   --status-neutral: var(--text-tertiary);
   --status-neutral-strong: var(--text-secondary);
-  --status-neutral-bg: #F5F5F5;
-  --status-neutral-border: #E6E6E6;
+  --status-neutral-bg: #F8F8F8;
+  --status-neutral-border: #E3E3E3;
 
   /* ========== 趋势色系 ========== */
   /* 中文经营看板语义：上涨偏红、下跌偏绿；不要直接复用成功/错误状态色。 */
 
   /** 上升/增长趋势 */
-  --trend-up: #BF3D2F;
+  --trend-up: #D9363E;
 
   /** 下降/回落趋势 */
-  --trend-down: #2F8C5B;
+  --trend-down: #13A05A;
 
   /** 无变化/缺失趋势 */
-  --trend-neutral: #8A8F8A;
+  --trend-neutral: #707070;
 
   /** 上升趋势浅背景 */
   --trend-up-muted: #FFF1EF;
@@ -130,53 +130,45 @@
   --platform-kuaishou: #FF3C21;
   --platform-jd: #DA291C;
   --platform-wechat: #07C160;
-  --platform-unknown: #8A8F8A;
+  --platform-unknown: #8A8A8A;
 
   /* ========== 品牌色系 ========== */
 
   /** 品牌主色（现代 SaaS 蓝，大面积填充和主强调色） */
-  --brand-primary: #2F6EEA;
+  --brand-primary: #222222;
 
   /** 品牌浅色背景 */
-  --brand-secondary: #F2F6FF;
+  --brand-secondary: #F4F0FE;
 
   /** 品牌高亮色（小面积/渐变终点） */
-  --brand-bright: #75B1F8;
+  --brand-bright: #AA99EC;
 
   /** 品牌浅边框 */
-  --brand-border: #C9D8FF;
+  --brand-border: #D4CAFE;
 
   /** 品牌文本色（用于链接、图标、小字号强调） */
-  --brand-text: #2457C5;
+  --brand-text: #5B45B8;
 
-  /** 品牌强文本色（用于 hover 文本和强强调） */
-  --brand-text-strong: #1F4FBF;
 
   /** 品牌填充上的文字色 */
   --brand-on-primary: #FFFFFF;
 
-  /** 品牌填充上的弱文字色 */
-  --brand-on-primary-muted: rgba(255, 255, 255, 0.76);
 
   /** 品牌悬停色 */
-  --brand-dark: #255FD9;
+  --brand-dark: #333333;
 
-  /** 品牌按下色 */
-  --brand-active: #1F4FBF;
 
-  /** 品牌焦点环 */
-  --brand-focus-ring: rgba(47, 110, 234, 0.48);
 
   /* ========== 字体族 ========== */
 
   /** 默认字体族（中英文混排） */
-  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+  --font-family-base: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
 
   /** Display 字体族（英文品牌标题/短标题） */
-  --font-family-display: 'Geist', 'Avenir Next', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-family-display: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
 
   /** 代码/数字字体族（等宽） */
-  --font-family-code: 'Maple Mono', 'SF Mono', 'JetBrains Mono', 'Roboto Mono', 'Cascadia Code', Consolas, monospace;
+  --font-family-code: 'Geist Mono Variable', 'SF Mono', ui-monospace, Menlo, Consolas, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', monospace;
 
   /** 产品语义别名：数字/代码等宽字体 */
   --font-family-mono: var(--font-family-code);
@@ -188,6 +180,7 @@
 
   /** 小（辅助说明、单位） */
   --font-size-sm: 12px;
+  --font-size-md: 13px;
 
   /** 标准（正文、表头） */
   --font-size-base: 14px;
@@ -391,14 +384,14 @@
   /* ========== 图表色系 ========== */
 
   /** 普通图表序列色：只用于无平台/趋势/状态/domain 语义的 bar/line 图 */
-  --chart-series-1: #445DF6;
-  --chart-series-2: #75B1F8;
-  --chart-series-3: #3264F6;
-  --chart-series-4: #4F8CB5;
-  --chart-series-5: #536F86;
-  --chart-series-6: #A4772A;
-  --chart-series-muted: #8A8F8A;
-  --chart-series-highlight: #3264F6;
+  --chart-series-1: #6E56CF;
+  --chart-series-2: #0E9C8E;
+  --chart-series-3: #C76E12;
+  --chart-series-4: #2F6FE0;
+  --chart-series-5: #C2417A;
+  --chart-series-6: #A8A8A8;
+  --chart-series-muted: #A8A8A8;
+  --chart-series-highlight: #6E56CF;
 
   /** 本周/当前数据：普通主序列 */
   --chart-color-this-week: var(--chart-series-1);
@@ -413,7 +406,7 @@
   --chart-color-trend-down: var(--trend-down);
 
   /** 数据点标签颜色（二级文字颜色） */
-  --chart-label-color: #5F6368;
+  --chart-label-color: #666666;
 
   /** 折线宽度 */
   --chart-line-width: 2px;
@@ -421,77 +414,77 @@
   /* ========== Domain taxonomy 色系 ========== */
   /* 业务分类色只用于 chips、图表 marker/bar/pie slice、行强调，不用于 status/trend/action。 */
 
-  --domain-traffic-summary-accent: #8795AA;
-  --domain-traffic-summary-text: #3F5067;
-  --domain-traffic-summary-bg: #F1F5FB;
-  --domain-traffic-summary-border: #A6B4C7;
-  --domain-traffic-l1-accent: #445DF6;
-  --domain-traffic-l1-text: #243CB5;
-  --domain-traffic-l1-bg: #F2F5FF;
-  --domain-traffic-l1-border: #B8C4FF;
-  --domain-traffic-l2-accent: #2F6EEA;
-  --domain-traffic-l2-text: #2457C5;
-  --domain-traffic-l2-bg: #F2F6FF;
-  --domain-traffic-l2-border: #C9D8FF;
-  --domain-traffic-l3-accent: #75B1F8;
-  --domain-traffic-l3-text: #2F6EA8;
-  --domain-traffic-l3-bg: #F4FAFF;
-  --domain-traffic-l3-border: #CDE6FE;
+  --domain-traffic-summary-accent: #8A8A8A;
+  --domain-traffic-summary-text: #505050;
+  --domain-traffic-summary-bg: #F3F3F3;
+  --domain-traffic-summary-border: #B0B0B0;
+  --domain-traffic-l1-accent: #1854BC;
+  --domain-traffic-l1-text: #17489F;
+  --domain-traffic-l1-bg: #F4F7FC;
+  --domain-traffic-l1-border: #ADCAFB;
+  --domain-traffic-l2-accent: #2F6FE0;
+  --domain-traffic-l2-text: #235ABC;
+  --domain-traffic-l2-bg: #F4F7FC;
+  --domain-traffic-l2-border: #C5DAFE;
+  --domain-traffic-l3-accent: #81ABF3;
+  --domain-traffic-l3-text: #3766B8;
+  --domain-traffic-l3-bg: #F4F7FC;
+  --domain-traffic-l3-border: #DBE7FC;
 
   --domain-topsis-star-text: #BF3D2F;
   --domain-topsis-star-bg: #FFF1EF;
   --domain-topsis-star-border: #F2C4C0;
-  --domain-topsis-stable-text: #2457C5;
-  --domain-topsis-stable-bg: #F2F6FF;
-  --domain-topsis-stable-border: #C9D8FF;
-  --domain-topsis-opportunity-text: #2F6F9F;
-  --domain-topsis-opportunity-bg: #EAF3FA;
-  --domain-topsis-opportunity-border: #BFD5E5;
+  --domain-topsis-stable-text: #235ABC;
+  --domain-topsis-stable-bg: #F4F7FC;
+  --domain-topsis-stable-border: #C5DAFE;
+  --domain-topsis-opportunity-text: #9B4595;
+  --domain-topsis-opportunity-bg: #FCF3FA;
+  --domain-topsis-opportunity-border: #E5C6E1;
   --domain-topsis-long-tail-text: #2F8C5B;
   --domain-topsis-long-tail-bg: #ECF8F1;
   --domain-topsis-long-tail-border: #BFE8CA;
-  --domain-topsis-neutral-text: #8A8F8A;
-  --domain-topsis-neutral-bg: #FAFAFA;
-  --domain-topsis-neutral-border: #E6E6E6;
+  --domain-topsis-neutral-text: #8A8A8A;
+  --domain-topsis-neutral-bg: #F8F8F8;
+  --domain-topsis-neutral-border: #E3E3E3;
 
-  --domain-funnel-track-color: #C9D8FF;
-  --domain-funnel-track-bg: #F2F6FF;
-  --domain-funnel-exposure-color: #7EA1F7;
-  --domain-funnel-exposure-bg: #F2F6FF;
-  --domain-funnel-visit-color: #5D86F1;
-  --domain-funnel-visit-bg: #EFF4FF;
-  --domain-funnel-intent-color: #4476ED;
-  --domain-funnel-intent-bg: #E8F0FF;
-  --domain-funnel-conversion-color: #2F6EEA;
-  --domain-funnel-conversion-bg: #F5F8FF;
-  --domain-funnel-connector-color: #D7DEE0;
+  --domain-funnel-track-color: #C5DAFE;
+  --domain-funnel-track-bg: #F4F7FC;
+  --domain-funnel-exposure-color: #98BBF8;
+  --domain-funnel-exposure-bg: #F4F7FC;
+  --domain-funnel-visit-color: #6397F1;
+  --domain-funnel-visit-bg: #EAF1FC;
+  --domain-funnel-intent-color: #2F6FE0;
+  --domain-funnel-intent-bg: #EAF1FC;
+  --domain-funnel-conversion-color: #1854BC;
+  --domain-funnel-conversion-bg: #F4F7FC;
+  --domain-funnel-connector-color: #E3E3E3;
   --domain-funnel-text-on-fill: #FFFFFF;
 
-  --domain-creator-s-from: #1F4FBF;
-  --domain-creator-s-to: #445DF6;
-  --domain-creator-s-bg: #D6E0FF;
-  --domain-creator-s-text: #1F4FBF;
-  --domain-creator-a-from: #3264F6;
-  --domain-creator-a-to: #5D86F1;
-  --domain-creator-a-bg: #DDE7FF;
-  --domain-creator-a-text: #243CB5;
-  --domain-creator-b-from: #2F6EEA;
-  --domain-creator-b-to: #75B1F8;
-  --domain-creator-b-bg: #E5EEFF;
-  --domain-creator-b-text: #2457C5;
-  --domain-creator-c-from: #75B1F8;
-  --domain-creator-c-to: #CDE6FE;
-  --domain-creator-c-bg: #EAF7FF;
-  --domain-creator-c-text: #2F6EA8;
-  --domain-creator-d-from: #C9D8FF;
-  --domain-creator-d-to: #F2F6FF;
-  --domain-creator-d-bg: #F0F5FF;
-  --domain-creator-d-text: #536F86;
+  --domain-creator-s-from: #17489F;
+  --domain-creator-s-to: #1854BC;
+  --domain-creator-s-bg: #DBE7FC;
+  --domain-creator-s-text: #17489F;
+  --domain-creator-a-from: #1854BC;
+  --domain-creator-a-to: #2F6FE0;
+  --domain-creator-a-bg: #DBE7FC;
+  --domain-creator-a-text: #1854BC;
+  --domain-creator-b-from: #2F6FE0;
+  --domain-creator-b-to: #6397F1;
+  --domain-creator-b-bg: #EAF1FC;
+  --domain-creator-b-text: #235ABC;
+  --domain-creator-c-from: #6397F1;
+  --domain-creator-c-to: #ADCAFB;
+  --domain-creator-c-bg: #EAF1FC;
+  --domain-creator-c-text: #3766B8;
+  --domain-creator-d-from: #ADCAFB;
+  --domain-creator-d-to: #DBE7FC;
+  --domain-creator-d-bg: #F3F3F3;
+  --domain-creator-d-text: #666666;
 
-  --domain-cooperation-unclassified-text: #5F6368;
-  --domain-cooperation-unclassified-bg: #EFEFEF;
-  --domain-cooperation-initial-contact-text: #2457C5;
-  --domain-cooperation-initial-contact-bg: #E4ECFF;
+  --domain-cooperation-unclassified-text: #666666;
+  --domain-cooperation-unclassified-bg: #F3F3F3;
+  --domain-cooperation-initial-contact-text: #235ABC;
+  --domain-cooperation-initial-contact-bg: #DBE7FC;
   --domain-cooperation-sample-negotiation-text: #8F5E02;
   --domain-cooperation-sample-negotiation-bg: #FFF0C7;
   --domain-cooperation-not-considering-text: #A65F3E;

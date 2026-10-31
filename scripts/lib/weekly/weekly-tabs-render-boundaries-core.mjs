@@ -20,9 +20,9 @@ export const WEEKLY_TABS_RENDER_BOUNDARIES_GUARD_NAME = 'weekly-tabs-render-boun
 const WEEKLY_TABS_ROOT = 'apps/web-vite/src/app/reports/weekly/_components/tabs';
 const WEEKLY_DATA_TABLE_PATH = `${WEEKLY_TABS_ROOT}/weekly-data-table.tsx`;
 
-const COLUMNS_IMPORT_PATTERN = /\bColumnsType\b|['"]antd\/es\/table['"]/g;
+const COLUMNS_IMPORT_PATTERN = /\b(?:Table)?ColumnsType\b|['"]antd\/es\/table['"]/g;
 const DIRECT_TABLE_IMPORT_PATTERN =
-  /\bimport\s+(?:type\s+)?(?:\{[^}]*\bTable\b[^}]*\}|[^'"]*\bTableProps\b[^'"]*)\s+from\s+['"]antd['"]/g;
+  /\bimport\s+(?:type\s+)?(?:\{[^}]*\bTable\b[^}]*\}|[^'"]*\bTableProps\b[^'"]*)\s+from\s+['"](?:antd|@lobehub\/ui)['"]/g;
 const DIRECT_TABLE_JSX_PATTERN = /<Table(?:\b|<)/g;
 const RAW_TABLE_PROP_PATTERN = /\b(?:rowKey|dataSource|pagination|scroll)\s*(?::|=)/g;
 const RAW_SECTION_DATA_PATTERN = /\b(?:DouyinSectionData|TmallSectionData)\b/g;

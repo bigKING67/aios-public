@@ -101,6 +101,34 @@ class ContractTest(unittest.TestCase):
         value['claims'][0]['shown_refs'] = []
         self.assertTrue(errors(value))
 
+    def test_user_testimony_can_state_unshown_effects_without_mutating_support(self):
+        for modality, ref in [('speech', 's3'), ('onscreen_text', 't3')]:
+            with self.subTest(modality=modality):
+                value = card()
+                value['evidence'][2].update(id=ref, modality=modality)
+                value['claims'][0].update(stated_refs=[ref], shown_refs=[],
+                                          evidence_form='user_testimony', support='not_shown')
+                before = copy.deepcopy(value)
+                self.assertEqual(contract.validate(value, CONTEXT), [])
+                self.assertEqual(value, before)
+
+    def test_user_testimony_without_valid_stated_evidence_still_warns(self):
+        for refs in ([], ['missing'], ['v4'], ['s3', 'missing']):
+            with self.subTest(refs=refs):
+                value = card()
+                value['claims'][0].update(stated_refs=refs, shown_refs=[],
+                                          evidence_form='user_testimony', support='not_shown')
+                self.assertTrue(any(issue[0] == 'warning' and 'user_testimony' in issue[2]
+                                    for issue in contract.validate(value, CONTEXT)))
+
+    def test_testimony_never_substitutes_for_visual_proof_or_hides_on_face_warning(self):
+        value = card()
+        value['claims'][0].update(shown_refs=[], evidence_form='user_testimony')
+        self.assertTrue(any('没有画面证据' in issue[2] for issue in errors(value)))
+        value['claims'][0].update(support='not_shown', evidence_form='on_face')
+        self.assertTrue(any(issue[0] == 'warning' and 'on_face' in issue[2]
+                            for issue in contract.validate(value, CONTEXT)))
+
     def test_undefined_and_out_of_range_references(self):
         value = card()
         value['segments'][0]['evidence_refs'] = ['4']

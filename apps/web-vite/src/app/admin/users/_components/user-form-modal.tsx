@@ -1,11 +1,14 @@
 'use client';
 
-import { Alert, Form, Input, Modal } from 'antd';
-import type { FormInstance } from 'antd';
+import type { FormEvent } from 'react';
+import { Alert, Input, InputPassword, Modal } from '@lobehub/ui';
+import { FormField } from '@/components/molecules/form-field';
+import { PASSWORD_TOGGLE_LABELS } from '@/components/molecules/password-toggle-labels';
+import { bindTextField, type ControlledFormRule, useControlledForm } from '@/hooks/use-controlled-form';
+import styles from '../../_components/admin-page.module.css';
 import type { User, UserFormValues } from '../_lib/users-types';
 
 export interface UserFormModalProps {
-  form: FormInstance<UserFormValues>;
   user: User | null;
   open: boolean;
   isSaving: boolean;
@@ -13,84 +16,81 @@ export interface UserFormModalProps {
   onCancel: () => void;
 }
 
-export function UserFormModal({
-  form,
-  user,
-  open,
-  isSaving,
-  onSubmit,
-  onCancel,
-}: UserFormModalProps) {
+type UserFormFields = Record<'username' | 'password' | 'full_name', string | undefined>;
+
+const USERNAME_RULES: ControlledFormRule<UserFormFields>[] = [
+  { required: true, message: '请输入用户名' },
+  { min: 3, message: '用户名至少 3 个字符' },
+];
+const PASSWORD_RULES: ControlledFormRule<UserFormFields>[] = [
+  { required: true, message: '请输入密码' },
+  { min: 8, message: '密码至少 8 个字符' },
+  { validator: (value) => /[A-Za-z]/.test(String(value)) && /\d/.test(String(value)), message: '密码需包含字母和数字' },
+];
+
+/**
+ * Create / edit user dialog. The parent remounts it (a new `key`) for every open, so the fields
+ * start from `user` each time. Editing submits only 全名, as the antd form did.
+ */
+export function UserFormModal({ user, open, isSaving, onSubmit, onCancel }: UserFormModalProps) {
   const isEditing = !!user;
+  const form = useControlledForm<UserFormFields>({
+    initialValues: { username: undefined, password: undefined, full_name: user?.full_name },
+    rules: isEditing ? {} : { username: USERNAME_RULES, password: PASSWORD_RULES },
+  });
+
+  const submit = () => {
+    form.validateFields().then(
+      (valid) =>
+        onSubmit(
+          isEditing
+            ? { full_name: valid.full_name }
+            : { username: valid.username, password: valid.password, full_name: valid.full_name },
+        ),
+      () => undefined,
+    );
+  };
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    submit();
+  };
 
   return (
     <Modal
       title={isEditing ? '编辑用户' : '新建用户'}
       open={open}
-      onOk={form.submit}
+      onOk={submit}
       onCancel={onCancel}
+      okText="确定"
+      cancelText="取消"
       confirmLoading={isSaving}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onSubmit}
-      >
-        {!isEditing && (
-          <Form.Item
-            name="username"
-            label="用户名"
-            rules={[
-              { required: true, message: '请输入用户名' },
-              { min: 3, message: '用户名至少 3 个字符' },
-            ]}
-          >
-            <Input placeholder="输入用户名" />
-          </Form.Item>
-        )}
-
-        {!isEditing && (
-          <Form.Item
-            name="password"
-            label="密码"
-            rules={[
-              { required: true, message: '请输入密码' },
-              { min: 8, message: '密码至少 8 个字符' },
-              {
-                validator: (_, value) => {
-                  if (!value || typeof value !== 'string') {
-                    return Promise.resolve();
-                  }
-                  const hasLetter = /[A-Za-z]/.test(value);
-                  const hasDigit = /\d/.test(value);
-                  if (!hasLetter || !hasDigit) {
-                    return Promise.reject(new Error('密码需包含字母和数字'));
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}
-          >
-            <Input.Password placeholder="至少 8 位，包含字母和数字" />
-          </Form.Item>
-        )}
-
+      <form className={styles.form} onSubmit={handleFormSubmit} noValidate>
         {!isEditing ? (
-          <Alert
-            className="mb-4"
-            type="info"
-            showIcon
-            title="新建用户仅需账号和密码，邮箱将由系统自动生成内部占位值。"
-          />
+          <FormField form={form} name="username" label="用户名" required>
+            <Input {...bindTextField(form, 'username')} placeholder="输入用户名" />
+          </FormField>
         ) : null}
 
-        <Form.Item
-          name="full_name"
-          label="全名"
-        >
-          <Input placeholder="输入全名" />
-        </Form.Item>
-      </Form>
+        {!isEditing ? (
+          <FormField form={form} name="password" label="密码" required>
+            <InputPassword
+              {...bindTextField(form, 'password')}
+              placeholder="至少 8 位，包含字母和数字"
+              autoComplete="new-password"
+              visibilityToggleLabels={PASSWORD_TOGGLE_LABELS}
+            />
+          </FormField>
+        ) : null}
+
+        {!isEditing ? (
+          <Alert type="info" showIcon title="新建用户仅需账号和密码，邮箱将由系统自动生成内部占位值。" />
+        ) : null}
+
+        <FormField form={form} name="full_name" label="全名">
+          <Input {...bindTextField(form, 'full_name')} placeholder="输入全名" />
+        </FormField>
+      </form>
     </Modal>
   );
 }

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LobeProvider } from '@/components/lobe-provider';
 import { fetchStudioCapabilities } from '../_lib/ai-studio-api';
 import { AiStudioCapabilityGate } from './ai-studio-capability-gate';
 
@@ -12,11 +13,13 @@ vi.mock('../_lib/ai-studio-api', async (original) => ({
 function renderGate() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   render(
-    <QueryClientProvider client={client}>
-      <AiStudioCapabilityGate title="片段素材" purpose="说明">
-        {(capabilities) => <button type="button">{capabilities.canWrite ? '可写控件' : '只读内容'}</button>}
-      </AiStudioCapabilityGate>
-    </QueryClientProvider>,
+    <LobeProvider>
+      <QueryClientProvider client={client}>
+        <AiStudioCapabilityGate title="片段素材" purpose="说明">
+          {(capabilities) => <button type="button">{capabilities.canWrite ? '可写控件' : '只读内容'}</button>}
+        </AiStudioCapabilityGate>
+      </QueryClientProvider>
+    </LobeProvider>,
   );
 }
 

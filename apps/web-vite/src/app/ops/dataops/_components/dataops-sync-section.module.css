@@ -5,8 +5,8 @@
 
 .syncSummaryBar {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 8px 10px;
   display: flex;
   flex-wrap: wrap;
@@ -15,7 +15,7 @@
 }
 
 .syncSummaryHint {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -28,8 +28,8 @@
 
 .syncCard {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 14px;
 }
 
@@ -42,14 +42,14 @@
 
 .syncCardHead h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 660;
 }
 
 .syncCardHead p {
   margin: 4px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -62,9 +62,9 @@
 
 .layerChip {
   border-radius: 999px;
-  border: 1px solid var(--status-info-border);
-  background: var(--status-info-bg);
-  color: var(--status-info-strong);
+  border: 1px solid var(--lobe-color-info-border);
+  background: var(--lobe-color-info-bg);
+  color: var(--aios-status-info);
   padding: 4px 9px;
   font-size: var(--font-size-xs);
   font-weight: 620;
@@ -82,7 +82,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -96,10 +96,10 @@
 .syncNote {
   margin: 10px 0 0;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 8px 10px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }

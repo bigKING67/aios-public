@@ -27,54 +27,6 @@ function resolveNodeModulePackage(id: string): string | null {
   return segments[0];
 }
 
-function resolveAntdFamilyChunk(id: string): string | null {
-  const normalizedId = id.split(path.sep).join('/');
-  const antdMatch = normalizedId.match(/\/node_modules\/antd\/es\/([^/]+)/);
-  if (antdMatch) {
-    const component = antdMatch[1];
-    if (['_util', 'app', 'config-provider', 'locale', 'style', 'theme', 'version'].includes(component)) {
-      return 'vendor-antd-lazy-core';
-    }
-    if (['cascader', 'checkbox', 'date-picker', 'form', 'input', 'input-number', 'radio', 'select', 'switch', 'upload'].includes(component)) {
-      return 'vendor-antd-lazy-input';
-    }
-    if (['descriptions', 'list', 'pagination', 'table', 'tree'].includes(component)) {
-      return 'vendor-antd-lazy-data';
-    }
-    if (['anchor', 'breadcrumb', 'dropdown', 'menu', 'segmented', 'steps', 'tabs'].includes(component)) {
-      return 'vendor-antd-lazy-navigation';
-    }
-    if (['drawer', 'message', 'modal', 'notification', 'popconfirm', 'popover', 'tooltip'].includes(component)) {
-      return 'vendor-antd-lazy-overlay';
-    }
-    return 'vendor-antd-lazy-display';
-  }
-
-  const packageName = resolveNodeModulePackage(normalizedId);
-  if (!packageName) {
-    return null;
-  }
-  if (packageName.startsWith('@ant-design/')) {
-    return 'vendor-antd-lazy-core';
-  }
-  if (['@rc-component/cascader', '@rc-component/form', '@rc-component/input', '@rc-component/input-number', '@rc-component/picker', '@rc-component/select', '@rc-component/switch', '@rc-component/textarea', '@rc-component/upload', '@rc-component/async-validator', '@rc-component/mini-decimal'].includes(packageName)) {
-    return 'vendor-antd-lazy-input';
-  }
-  if (['@rc-component/pagination', '@rc-component/table', '@rc-component/tree', '@rc-component/virtual-list'].includes(packageName)) {
-    return 'vendor-antd-lazy-data';
-  }
-  if (['@rc-component/dropdown', '@rc-component/menu', '@rc-component/overflow', '@rc-component/segmented', '@rc-component/tabs'].includes(packageName)) {
-    return 'vendor-antd-lazy-navigation';
-  }
-  if (['@rc-component/dialog', '@rc-component/drawer', '@rc-component/notification', '@rc-component/portal', '@rc-component/tooltip', '@rc-component/trigger'].includes(packageName)) {
-    return 'vendor-antd-lazy-overlay';
-  }
-  if (packageName.startsWith('@rc-component/')) {
-    return 'vendor-antd-lazy-core';
-  }
-  return null;
-}
-
 function resolveVendorChunk(id: string): string | null {
   const pkg = resolveNodeModulePackage(id);
   if (!pkg) {
@@ -98,6 +50,8 @@ function resolveVendorChunk(id: string): string | null {
   ) {
     return 'vendor-markdown';
   }
+  // lobe-ui, Base UI, motion and lucide are not grouped: the import graph keeps what the first
+  // screen uses in the initial chunks and lets each route chunk carry the components it renders.
   if (pkg.startsWith('@tanstack/')) {
     return 'vendor-react-query';
   }
@@ -124,9 +78,29 @@ function resolveGatewayPrefix(rawPrefix: string): string {
   return withoutTrailingSlash || '/v1';
 }
 
+// Mirrors backend AIOS_MODULE_PROFILE; an unknown value fails the build instead of
+// silently shipping every module. Without a value, `vite build` (local and CI, which
+// the bundle budget measures) targets the deployed AI 创作中心 profile and the dev
+// server keeps every module; build the groland modules with
+// VITE_AIOS_MODULE_PROFILE=full. Docker builds always pass the value explicitly.
+function resolveModuleProfile(rawProfile: string | undefined, command: 'build' | 'serve'): 'full' | 'ai_studio' {
+  const profile = (rawProfile || '').trim() || (command === 'build' ? 'ai_studio' : 'full');
+  if (profile !== 'full' && profile !== 'ai_studio') {
+    throw new Error(`VITE_AIOS_MODULE_PROFILE must be full or ai_studio; got ${profile}`);
+  }
+  return profile;
+}
+
 function resolveApplicationStyleChunk(id: string): string | null {
   const normalizedId = id.split(path.sep).join('/');
-  if (!normalizedId.endsWith('.css') || normalizedId.includes('/node_modules/')) {
+  if (!normalizedId.endsWith('.css')) {
+    return null;
+  }
+  // The precompiled lobe-ui stylesheet is measured by its own budget (vendorLobeUiCssGzipBytes).
+  if (normalizedId.includes('/node_modules/@lobehub/ui/')) {
+    return 'vendor-lobe-ui';
+  }
+  if (normalizedId.includes('/node_modules/')) {
     return null;
   }
 
@@ -136,10 +110,6 @@ function resolveApplicationStyleChunk(id: string): string | null {
   // Keep CSS module maps with their consuming route so unused keys can be
   // eliminated. A forced shared JS chunk retains every exported class map.
   if (normalizedId.includes('/app/marketing/content-assets/')) {
-    return null;
-  }
-  // The immersive-rail account entry is only used inside the lazy AI 创作中心 routes.
-  if (normalizedId.includes('/components/rail-user-menu')) {
     return null;
   }
   if (normalizedId.includes('/app/dashboard/creator/')) {
@@ -192,9 +162,10 @@ function resolveApplicationStyleChunk(id: string): string | null {
   return null;
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, projectRoot, '');
   const apiGatewayPrefix = resolveGatewayPrefix(env.VITE_API_GATEWAY_PREFIX || '/v1');
+  const moduleProfile = resolveModuleProfile(env.VITE_AIOS_MODULE_PROFILE, command);
   const apiGatewayTarget = (env.VITE_API_GATEWAY_TARGET || 'http://localhost:8000')
     .trim()
     .replace(/\/+$/, '');
@@ -212,6 +183,8 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
+      // A literal of its own so `routes.tsx` can drop groland chunks from ai_studio builds.
+      'process.env.VITE_AIOS_MODULE_PROFILE': JSON.stringify(moduleProfile),
       'process.env': {
         NODE_ENV: mode === 'production' ? 'production' : 'development',
         VITE_API_GATEWAY_PREFIX: apiGatewayPrefix,
@@ -223,6 +196,7 @@ export default defineConfig(({ mode }) => {
         VITE_DASHBOARD_MAX_QUERY_DAYS: env.VITE_DASHBOARD_MAX_QUERY_DAYS || '',
         VITE_FORCE_FRESH_DATA: env.VITE_FORCE_FRESH_DATA || '0',
         VITE_API_DEBUG_LOGS: env.VITE_API_DEBUG_LOGS || '0',
+        VITE_AIOS_MODULE_PROFILE: moduleProfile,
         AIOS_ACCESS_COOKIE_NAME: env.AIOS_ACCESS_COOKIE_NAME || '',
         AIOS_REFRESH_COOKIE_NAME: env.AIOS_REFRESH_COOKIE_NAME || '',
       },
@@ -282,15 +256,11 @@ export default defineConfig(({ mode }) => {
               },
               {
                 name: 'vendor-ui-initial',
-                // React/router/query and the UI provider always load together.
-                // Share their compression window while keeping route-only modules lazy.
-                test: (id) => resolveAntdFamilyChunk(id) !== null || resolveVendorChunk(id) === 'vendor-react-query',
+                // React, router and query always load together on the first screen; route-only
+                // modules stay lazy.
+                test: (id) => resolveVendorChunk(id) === 'vendor-react-query',
                 tags: ['$initial'],
                 priority: 90,
-              },
-              {
-                name: (id) => resolveAntdFamilyChunk(id),
-                priority: 80,
               },
               {
                 name: (id) => resolveVendorChunk(id),

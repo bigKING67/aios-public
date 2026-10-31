@@ -9,7 +9,7 @@ use super::access::batch_in_enterprise_sql;
 use super::domain;
 use super::error::StudioResult;
 use super::remix_types::{
-    RemixBatch, RemixBatchDetail, RemixBatchItem, RemixBatchListResponse, RemixBatchSegment,
+    RemixBatch, RemixBatchDetail, RemixBatchItem, RemixBatchSegment, RemixOutputReview,
     RemixProduct, RemixProductListQuery, RemixProductListResponse,
 };
 use super::repository::db_error;
@@ -21,10 +21,11 @@ use sqlx::{postgres::PgRow, PgPool, Row};
 use std::collections::HashMap;
 use uuid::Uuid;
 
-const BATCH_LIST_LIMIT: i64 = 50;
 const PRODUCT_LIST_LIMIT: i64 = 200;
 
-const BATCH_SELECT: &str = "SELECT b.batch_id, b.owner_user_id, b.preset_key, b.preset_version, b.structure, b.constraints, b.requested_count, b.planned_count, b.seed, b.shortfall_reason, b.created_at::TEXT AS created_at, b.updated_at::TEXT AS updated_at, ARRAY(SELECT oa.cover_object_key FROM ads.content_remix_batch_runs cbr JOIN ads.marketing_content_assets oa ON oa.asset_id = cbr.output_asset_id WHERE cbr.batch_id = b.batch_id AND oa.is_deleted = FALSE AND oa.cover_object_key IS NOT NULL ORDER BY cbr.ordinal LIMIT 4) AS cover_keys, (SELECT fr.waiting_reason FROM ads.content_remix_batch_runs fbr JOIN ads.content_production_runs fr ON fr.run_id = fbr.run_id WHERE fbr.batch_id = b.batch_id AND fr.waiting_reason IS NOT NULL AND fr.status NOT IN ('succeeded', 'cancelled', 'queued', 'running', 'cancelling', 'paused') ORDER BY fbr.ordinal LIMIT 1) AS failure_reason, COUNT(*) FILTER (WHERE r.status = 'succeeded') AS succeeded, COUNT(*) FILTER (WHERE r.status IN ('queued', 'running', 'cancelling', 'paused')) AS running, COUNT(*) FILTER (WHERE r.status = 'cancelled') AS cancelled, COUNT(*) AS total FROM ads.content_remix_batches b JOIN ads.content_remix_batch_runs br ON br.batch_id = b.batch_id JOIN ads.content_production_runs r ON r.run_id = br.run_id WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1)";
+/// One batch with its live counts; `created_at_ts` keeps the raw timestamp for keyset paging.
+/// A review counts only for the output asset it was given for (reviews are one row per Run).
+pub(super) const BATCH_SELECT: &str = "SELECT b.batch_id, b.owner_user_id, b.preset_key, b.preset_version, b.structure, b.constraints, b.requested_count, b.planned_count, b.seed, b.shortfall_reason, b.created_at::TEXT AS created_at, b.created_at AS created_at_ts, b.updated_at::TEXT AS updated_at, ARRAY(SELECT oa.cover_object_key FROM ads.content_remix_batch_runs cbr JOIN ads.marketing_content_assets oa ON oa.asset_id = cbr.output_asset_id WHERE cbr.batch_id = b.batch_id AND oa.is_deleted = FALSE AND oa.cover_object_key IS NOT NULL AND NOT EXISTS (SELECT 1 FROM ads.content_remix_output_reviews crv WHERE crv.run_id=cbr.run_id AND crv.output_asset_id=cbr.output_asset_id AND crv.decision='rejected') ORDER BY cbr.ordinal LIMIT 4) AS cover_keys, (SELECT fr.waiting_reason FROM ads.content_remix_batch_runs fbr JOIN ads.content_production_runs fr ON fr.run_id = fbr.run_id WHERE fbr.batch_id = b.batch_id AND fr.waiting_reason IS NOT NULL AND fr.status NOT IN ('succeeded', 'cancelled', 'queued', 'running', 'cancelling', 'paused') ORDER BY fbr.ordinal LIMIT 1) AS failure_reason, COUNT(*) FILTER (WHERE r.status = 'succeeded') AS succeeded, COUNT(*) FILTER (WHERE r.status IN ('queued', 'running', 'cancelling', 'paused')) AS running, COUNT(*) FILTER (WHERE r.status = 'cancelled') AS cancelled, COUNT(*) AS total, COUNT(*) FILTER (WHERE r.status = 'failed' AND r.waiting_reason IN ('remix_qc_failed', 'remix_qc_incomplete', 'remix_qc_sources_changed')) AS qc_failed, COUNT(*) FILTER (WHERE r.status = 'succeeded' AND (br.output_asset_id IS NULL OR ao.asset_id IS NOT NULL) AND NOT COALESCE(rv.output_asset_id=br.output_asset_id AND rv.decision='rejected',FALSE)) AS available, COUNT(*) FILTER (WHERE r.status = 'succeeded' AND (ao.asset_id IS NOT NULL OR (rv.output_asset_id=br.output_asset_id AND rv.decision='rejected'))) AS reviewable, COUNT(*) FILTER (WHERE r.status = 'succeeded' AND ao.asset_id IS NOT NULL AND rv.output_asset_id = br.output_asset_id AND rv.decision = 'approved') AS approved, COUNT(*) FILTER (WHERE r.status = 'succeeded' AND rv.output_asset_id = br.output_asset_id AND rv.decision = 'rejected') AS rejected FROM ads.content_remix_batches b JOIN ads.content_remix_batch_runs br ON br.batch_id = b.batch_id JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.marketing_content_assets ao ON ao.asset_id = br.output_asset_id AND ao.is_deleted = FALSE LEFT JOIN ads.content_remix_output_reviews rv ON rv.run_id = br.run_id WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1)";
 
 /// Run status → item outcome. Paused/queued/running/cancelling stay running
 /// (a cancelling render may still be stopping); cancelled is its own outcome;
@@ -63,7 +64,7 @@ pub(super) fn batch_status(
 }
 
 /// `settings` resolves output covers; summary-only reads (status refresh) pass `None`.
-fn batch_from_row(row: &PgRow, viewer: &str, settings: Option<&Settings>) -> RemixBatch {
+pub(super) fn batch_from_row(row: &PgRow, viewer: &str, settings: Option<&Settings>) -> RemixBatch {
     let structure: Value = row.get("structure");
     let constraints: Value = row.get("constraints");
     let (total, succeeded, running, cancelled): (i64, i64, i64, i64) = (
@@ -74,6 +75,7 @@ fn batch_from_row(row: &PgRow, viewer: &str, settings: Option<&Settings>) -> Rem
     );
     let owner_user_id: String = row.get("owner_user_id");
     RemixBatch {
+        qc_failed_count: row.get::<i64, _>("qc_failed") as i32,
         batch_id: row.get("batch_id"),
         mode: structure["mode"].as_str().unwrap_or("framework").to_owned(),
         owned_by_current_user: owner_user_id == viewer,
@@ -103,6 +105,10 @@ fn batch_from_row(row: &PgRow, viewer: &str, settings: Option<&Settings>) -> Rem
         failed_count: (total - succeeded - running - cancelled) as i32,
         running_count: running as i32,
         cancelled_count: cancelled as i32,
+        available_count: row.get::<i64, _>("available") as i32,
+        reviewable_count: row.get::<i64, _>("reviewable") as i32,
+        approved_count: row.get::<i64, _>("approved") as i32,
+        rejected_count: row.get::<i64, _>("rejected") as i32,
         cover_urls: settings
             .map(|settings| {
                 row.get::<Vec<String>, _>("cover_keys")
@@ -117,55 +123,45 @@ fn batch_from_row(row: &PgRow, viewer: &str, settings: Option<&Settings>) -> Rem
     }
 }
 
-/// Best-effort creator display names (one lookup per distinct owner, at most
-/// `BATCH_LIST_LIMIT`). Only the display name is exposed — never the login
-/// username or email, since every signed-in user may read these batches in
-/// open access; an unresolvable user keeps `None` rather than failing the read.
-async fn attach_owner_names(pool: &PgPool, batches: &mut [RemixBatch]) {
+/// Best-effort display names (one lookup per distinct user). Only the display
+/// name is exposed — never the login username or email, since every signed-in
+/// user may read these batches in open access; an unresolvable user maps to
+/// `None` rather than failing the read.
+pub(super) async fn display_names(
+    pool: &PgPool,
+    user_ids: &[String],
+) -> HashMap<String, Option<String>> {
     let mut names: HashMap<String, Option<String>> = HashMap::new();
-    for batch in batches.iter_mut() {
-        if !names.contains_key(&batch.owner_user_id) {
-            let name = match crate::auth::fetch_user_profile(pool, &batch.owner_user_id).await {
-                Ok(Some(profile)) => profile
-                    .full_name
-                    .map(|name| name.trim().to_string())
-                    .filter(|name| !name.is_empty()),
-                Ok(None) => None,
-                Err(error) => {
-                    tracing::warn!(?error, "remix batch owner name lookup failed");
-                    None
-                }
-            };
-            names.insert(batch.owner_user_id.clone(), name);
+    for user_id in user_ids {
+        if names.contains_key(user_id) {
+            continue;
         }
-        batch.owner_name = names.get(&batch.owner_user_id).cloned().flatten();
+        let name = match crate::auth::fetch_user_profile(pool, user_id).await {
+            Ok(Some(profile)) => profile
+                .full_name
+                .map(|name| name.trim().to_string())
+                .filter(|name| !name.is_empty()),
+            Ok(None) => None,
+            Err(error) => {
+                tracing::warn!(?error, "remix batch user name lookup failed");
+                None
+            }
+        };
+        names.insert(user_id.clone(), name);
     }
+    names
 }
 
-pub(super) async fn list(
-    pool: &PgPool,
-    settings: &Settings,
-    viewer: &str,
-    owner: Option<&str>,
-    enterprise_tag: Option<&str>,
-) -> StudioResult<RemixBatchListResponse> {
-    let sql = format!(
-        "{BATCH_SELECT} AND {} GROUP BY b.batch_id ORDER BY b.created_at DESC, b.batch_id DESC LIMIT $2",
-        batch_in_enterprise_sql(3)
-    );
-    let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
-        .bind(owner)
-        .bind(BATCH_LIST_LIMIT)
-        .bind(enterprise_tag)
-        .fetch_all(pool)
-        .await
-        .map_err(db_error)?;
-    let mut items: Vec<RemixBatch> = rows
+/// Creator display names for at most one list page (see `display_names`).
+pub(super) async fn attach_owner_names(pool: &PgPool, batches: &mut [RemixBatch]) {
+    let owners: Vec<String> = batches
         .iter()
-        .map(|row| batch_from_row(row, viewer, Some(settings)))
+        .map(|batch| batch.owner_user_id.clone())
         .collect();
-    attach_owner_names(pool, &mut items).await;
-    Ok(RemixBatchListResponse { items })
+    let names = display_names(pool, &owners).await;
+    for batch in batches.iter_mut() {
+        batch.owner_name = names.get(&batch.owner_user_id).cloned().flatten();
+    }
 }
 
 /// Refreshes the stored summary `status` with the live rule. The batch row is
@@ -225,6 +221,10 @@ pub(super) async fn refresh_stored_status(
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct StoredSegment {
+    #[serde(default)]
+    spend_class: Option<String>,
+    #[serde(default)]
+    spend30d: Option<f64>,
     segment_id: Uuid,
     asset_id: Uuid,
     start_ms: i32,
@@ -242,7 +242,7 @@ struct StoredSegment {
     segment_ids: Option<Vec<Uuid>>,
 }
 
-/// 404 unless the batch is in the enterprise (same predicate as `list`); a
+/// 404 unless the batch is in the enterprise (same predicate as `remix_list::list`); a
 /// no-op without an enterprise tag. Guards the by-id read and cancel routes.
 pub(super) async fn ensure_in_enterprise(
     pool: &PgPool,
@@ -286,7 +286,7 @@ pub(super) async fn detail(
         .ok_or(AppError::NotFound)?;
     let mut batch = batch_from_row(&row, viewer, Some(settings));
     attach_owner_names(pool, std::slice::from_mut(&mut batch)).await;
-    let rows = sqlx::query("SELECT br.ordinal, br.run_id, br.combination_hash, br.segments, br.output_asset_id, oa.cover_object_key AS output_cover_key, r.status, r.stage, r.waiting_reason, j.status AS job_status, j.error_message AS job_error, j.receipt->'host_remix_picture_review' AS picture_review, j.receipt->'host_inspection'->>'sha256' AS inspected_sha FROM ads.content_remix_batch_runs br JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.content_production_jobs j ON j.job_id = r.render_job_id LEFT JOIN ads.marketing_content_assets oa ON oa.asset_id = br.output_asset_id AND oa.is_deleted = FALSE WHERE br.batch_id = $1 ORDER BY br.ordinal")
+    let rows = sqlx::query("SELECT br.ordinal, br.run_id, br.combination_hash, br.segments, br.output_asset_id, (br.output_asset_id IS NOT NULL AND oa.asset_id IS NULL) AS output_deleted, oa.cover_object_key AS output_cover_key, r.status, r.stage, r.waiting_reason, j.status AS job_status, j.error_message AS job_error, j.receipt->'host_remix_qc' AS qc, j.receipt->'host_remix_picture_review' AS picture_review, j.receipt->'host_inspection'->>'sha256' AS inspected_sha, (r.status = 'succeeded' AND (oa.asset_id IS NOT NULL OR rv.decision='rejected') AND rv.output_asset_id = br.output_asset_id) AS review_current, rv.decision AS review_decision, rv.reasons AS review_reasons, rv.note AS review_note, rv.reviewer_user_id, rv.reviewed_at::TEXT AS reviewed_at FROM ads.content_remix_batch_runs br JOIN ads.content_production_runs r ON r.run_id = br.run_id LEFT JOIN ads.content_production_jobs j ON j.job_id = r.render_job_id LEFT JOIN ads.marketing_content_assets oa ON oa.asset_id = br.output_asset_id AND oa.is_deleted = FALSE LEFT JOIN ads.content_remix_output_reviews rv ON rv.run_id = br.run_id WHERE br.batch_id = $1 ORDER BY br.ordinal")
         .bind(batch_id).fetch_all(pool).await.map_err(db_error)?;
     let mut stored = Vec::with_capacity(rows.len());
     for row in &rows {
@@ -308,12 +308,39 @@ pub(super) async fn detail(
     .into_iter()
     .map(|row| (row.get("asset_id"), row.get("title")))
     .collect();
-    let items = rows
+    // A review stays on its Run after the output is replaced or deleted; only a
+    // review of the current, still-present output is shown.
+    fn current(row: &PgRow) -> bool {
+        row.get::<Option<bool>, _>("review_current") == Some(true)
+    }
+    let reviewer_ids: Vec<String> = rows
+        .iter()
+        .filter(|row| current(row))
+        .map(|row| row.get("reviewer_user_id"))
+        .collect();
+    let reviewers = display_names(pool, &reviewer_ids).await;
+    let mut items: Vec<RemixBatchItem> = rows
         .iter()
         .zip(stored)
         .map(|(row, segments)| {
             let status: String = row.get("status");
+            let review = current(row).then(|| {
+                let reviewer_user_id: String = row.get("reviewer_user_id");
+                RemixOutputReview {
+                    decision: row.get("review_decision"),
+                    reasons: row.get("review_reasons"),
+                    note: row.get("review_note"),
+                    reviewer_name: reviewers.get(&reviewer_user_id).cloned().flatten(),
+                    reviewer_user_id,
+                    reviewed_at: row.get("reviewed_at"),
+                }
+            });
             RemixBatchItem {
+                qc: super::remix_quality::project(
+                    row.get("qc"),
+                    row.get("inspected_sha"),
+                    row.get::<Option<String>, _>("waiting_reason").as_deref(),
+                ),
                 ordinal: row.get("ordinal"),
                 run_id: row.get("run_id"),
                 combination_hash: row.get("combination_hash"),
@@ -327,7 +354,11 @@ pub(super) async fn detail(
                     row.get("picture_review"),
                     row.get("inspected_sha"),
                 ),
+                review,
+                delivery: None,
+                retention: None,
                 output_asset_id: row.get("output_asset_id"),
+                output_deleted: row.get("output_deleted"),
                 output_cover_url: row
                     .get::<Option<String>, _>("output_cover_key")
                     .and_then(|key| build_cover_url_for_key(settings, &key)),
@@ -338,6 +369,8 @@ pub(super) async fn detail(
                 segments: segments
                     .into_iter()
                     .map(|s| RemixBatchSegment {
+                        spend_class: s.spend_class,
+                        spend30d: s.spend30d,
                         asset_title: titles.get(&s.asset_id).cloned().unwrap_or_default(),
                         segment_id: s.segment_id,
                         asset_id: s.asset_id,
@@ -354,6 +387,8 @@ pub(super) async fn detail(
             }
         })
         .collect();
+    super::remix_delivery::attach(pool, settings, &mut items).await?;
+    super::remix_retention::attach(pool, &mut items).await?;
     Ok(RemixBatchDetail { batch, items })
 }
 
@@ -362,12 +397,13 @@ pub(super) async fn products(
     pool: &PgPool,
     query: &RemixProductListQuery,
     enterprise_tag: Option<&str>,
+    cloud_enabled: bool,
 ) -> StudioResult<RemixProductListResponse> {
     if let Some(key) = query.preset_key.as_deref() {
         domain::validate_key(key, "presetKey")?;
     }
-    let rows = sqlx::query("SELECT s.product_name, COUNT(*) AS segment_count FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.status = 'confirmed' AND s.product_name IS NOT NULL AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($1::TEXT IS NULL OR s.preset_key = $1) AND ($2::INTEGER IS NULL OR s.preset_version = $2) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) GROUP BY s.product_name ORDER BY segment_count DESC, s.product_name LIMIT $3")
-        .bind(query.preset_key.as_deref()).bind(query.preset_version).bind(PRODUCT_LIST_LIMIT).bind(enterprise_tag)
+    let rows = sqlx::query("SELECT s.product_name, COUNT(*) AS segment_count FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.status = 'confirmed' AND s.product_name IS NOT NULL AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($5::BOOLEAN OR a.bucket <> 'cloud_video') AND ($1::TEXT IS NULL OR s.preset_key = $1) AND ($2::INTEGER IS NULL OR s.preset_version = $2) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) GROUP BY s.product_name ORDER BY segment_count DESC, s.product_name LIMIT $3")
+        .bind(query.preset_key.as_deref()).bind(query.preset_version).bind(PRODUCT_LIST_LIMIT).bind(enterprise_tag).bind(cloud_enabled)
         .fetch_all(pool).await.map_err(db_error)?;
     Ok(RemixProductListResponse {
         items: rows

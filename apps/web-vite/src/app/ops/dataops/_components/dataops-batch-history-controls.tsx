@@ -1,7 +1,9 @@
 'use client';
 
-import { Button, Input, Select, Tooltip } from 'antd';
-import { CopyOutlined, DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Input, Tooltip } from '@lobehub/ui';
+import { Copy, Download, RotateCw } from 'lucide-react';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import type {
   BatchHistoryFailureFilter,
   BatchHistoryTimeRangeFilter,
@@ -60,38 +62,41 @@ export function DataOpsBatchHistoryControls({
 }: DataOpsBatchHistoryControlsProps) {
   return (
     <div className={batchResultStyles.batchResultControls}>
-      <Select<BatchOperationAction | 'all'>
+      <LabeledSelect<BatchOperationAction | 'all'>
+        label="批量动作"
         size="small"
         value={actionFilter}
-        onChange={onActionFilterChange}
+        onChange={(value) => value && onActionFilterChange(value)}
         options={[
           { label: '全部动作', value: 'all' },
           { label: '触发', value: 'trigger_pipeline' },
           { label: '暂停', value: 'pause_deployment' },
           { label: '恢复', value: 'resume_deployment' },
         ]}
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
       />
-      <Select<BatchHistoryFailureFilter>
+      <LabeledSelect<BatchHistoryFailureFilter>
+        label="批量结果"
         size="small"
         value={failureFilter}
-        onChange={onFailureFilterChange}
+        onChange={(value) => value && onFailureFilterChange(value)}
         options={[
           { label: '全部结果', value: 'all' },
           { label: '仅含失败', value: 'has_failed' },
         ]}
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
       />
-      <Select<BatchHistoryTimeRangeFilter>
+      <LabeledSelect<BatchHistoryTimeRangeFilter>
+        label="批量时间范围"
         size="small"
         value={timeRangeFilter}
-        onChange={onTimeRangeFilterChange}
+        onChange={(value) => value && onTimeRangeFilterChange(value)}
         options={[
           { label: '全部时间', value: 'all' },
           { label: '近24小时', value: '24h' },
           { label: '近7天', value: '7d' },
         ]}
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
       />
       <Input
         allowClear
@@ -101,12 +106,12 @@ export function DataOpsBatchHistoryControls({
         placeholder="搜索批次名 / 执行人 / 任务ID / 失败原因"
         className={batchResultStyles.batchHistoryKeywordInput}
       />
-      <Button size="small" icon={<DownloadOutlined />} onClick={onExportCsv}>
+      <Button size="small" icon={<Download {...DATAOPS_ICON_PROPS} />} onClick={onExportCsv}>
         导出CSV
       </Button>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={!markdownText}
         onClick={() => {
           void onCopyMarkdown();
@@ -116,7 +121,7 @@ export function DataOpsBatchHistoryControls({
       </Button>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={!failedPipelineCount}
         onClick={() => {
           void onCopyFailedPipelineIds();
@@ -125,29 +130,33 @@ export function DataOpsBatchHistoryControls({
         复制失败任务ID{failedPipelineCount ? `(${failedPipelineCount})` : ''}
       </Button>
       <Tooltip title={`将按动作+参数分 ${retryGroupCount} 组顺序执行`}>
-        <Button
-          size="small"
-          icon={<ReloadOutlined />}
-          disabled={!hasOperatePermission || globalActionBusy || retryGroupCount === 0}
-          onClick={() => {
-            void onRetryFiltered({ retryableOnly: false });
-          }}
-        >
-          按筛选重试失败{failedPipelineCount ? `(${failedPipelineCount})` : ''}
-        </Button>
+        <span className="inline-flex">
+          <Button
+            size="small"
+            icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
+            disabled={!hasOperatePermission || globalActionBusy || retryGroupCount === 0}
+            onClick={() => {
+              void onRetryFiltered({ retryableOnly: false });
+            }}
+          >
+            按筛选重试失败{failedPipelineCount ? `(${failedPipelineCount})` : ''}
+          </Button>
+        </span>
       </Tooltip>
       <Tooltip title={`仅重试可重试失败项，按动作+参数分 ${retryableGroupCount} 组`}>
-        <Button
-          size="small"
-          icon={<ReloadOutlined />}
-          disabled={!hasOperatePermission || globalActionBusy || retryableGroupCount === 0}
-          onClick={() => {
-            void onRetryFiltered({ retryableOnly: true });
-          }}
-        >
-          按筛选重试可重试
-          {retryableFailedPipelineCount ? `(${retryableFailedPipelineCount})` : ''}
-        </Button>
+        <span className="inline-flex">
+          <Button
+            size="small"
+            icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
+            disabled={!hasOperatePermission || globalActionBusy || retryableGroupCount === 0}
+            onClick={() => {
+              void onRetryFiltered({ retryableOnly: true });
+            }}
+          >
+            按筛选重试可重试
+            {retryableFailedPipelineCount ? `(${retryableFailedPipelineCount})` : ''}
+          </Button>
+        </span>
       </Tooltip>
       <Button size="small" onClick={onResetFilters}>
         重置筛选

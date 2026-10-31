@@ -1,13 +1,13 @@
 'use client';
 
-import { Alert, Form } from 'antd';
-import type { FormInstance } from 'antd';
+import { Alert } from '@lobehub/ui';
 import type { DataOpsTriggerParameterSpec } from '@/config/dataops-trigger-params';
 import { DataOpsTriggerParameterFormItems } from './dataops-trigger-parameter-form-items';
+import type { DataOpsTriggerForm } from './dataops-trigger-parameter-form';
 import styles from './dataops-hub.module.css';
 
 interface DataOpsTriggerParameterModalBodyProps {
-  form: FormInstance;
+  form: DataOpsTriggerForm;
   specs: DataOpsTriggerParameterSpec[];
 }
 
@@ -15,7 +15,7 @@ export function DataOpsTriggerParameterModalBody({
   form,
   specs,
 }: DataOpsTriggerParameterModalBodyProps) {
-  const deliveryMode = Form.useWatch('delivery_mode', form);
+  const deliveryMode = form.values.delivery_mode;
 
   if (!specs.length) {
     return (
@@ -35,7 +35,7 @@ export function DataOpsTriggerParameterModalBody({
   const isProductionMode = deliveryMode === 'production';
 
   return (
-    <Form form={form} layout="vertical" preserve={false}>
+    <div>
       {hasProductionDeliveryContract ? (
         <Alert
           type={isProductionMode ? 'warning' : 'info'}
@@ -49,7 +49,7 @@ export function DataOpsTriggerParameterModalBody({
           className={styles.batchTriggerSummaryAlert}
         />
       ) : null}
-      <DataOpsTriggerParameterFormItems specs={specs} />
+      <DataOpsTriggerParameterFormItems form={form} specs={specs} />
 
       {describedSpecs.length ? (
         <div className={styles.parameterHelpList}>
@@ -58,6 +58,6 @@ export function DataOpsTriggerParameterModalBody({
           ))}
         </div>
       ) : null}
-    </Form>
+    </div>
   );
 }

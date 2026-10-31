@@ -1,7 +1,7 @@
 'use client';
 
 import type { Dispatch, SetStateAction } from 'react';
-import { Empty, Skeleton } from 'antd';
+import { Empty, SkeletonText } from '@lobehub/ui';
 import shellStyles from './creator-dashboard.module.css';
 import type { CreatorCooperationStageRows } from './creator-cooperation-stages';
 import { CreatorStatusFlow } from './creator-status-flow';
@@ -52,8 +52,8 @@ export function CreatorStatusSection<TKey extends string, TRecord extends Creato
       </header>
       {loading ? (
         <div className={styles.statusLoadingSkeleton}>
-          <Skeleton active title={{ width: '32%' }} paragraph={{ rows: 2 }} />
-          <Skeleton active title={false} paragraph={{ rows: 7 }} />
+          <SkeletonText rows={3} width={['32%', '100%', '61%']} />
+          <SkeletonText rows={7} />
         </div>
       ) : hasDetails ? (
         <>

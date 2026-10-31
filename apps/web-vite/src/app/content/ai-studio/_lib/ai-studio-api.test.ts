@@ -5,6 +5,7 @@ import {
   confirmStudioSegments,
   createStudioSegment,
   fetchAllStudioSegments,
+  fetchStudioPresets,
   fetchStudioSegments,
   updateStudioSegment,
 } from './ai-studio-api';
@@ -18,6 +19,15 @@ const segment = (id: string) => ({ segmentId: id });
 afterEach(() => vi.clearAllMocks());
 
 describe('AI studio API client', () => {
+  it('drops labels the business no longer uses (KOC) from every preset', async () => {
+    const label = (key: string) => ({ key, name: key, definition: '' });
+    vi.mocked(apiClient.get).mockResolvedValue({
+      data: { items: [{ presetKey: 'framework', version: 2, dimension: 'framework', name: '框架', status: 'active', labels: [label('mixed_voiceover'), label('koc')] }] },
+    } as never);
+    const [preset] = await fetchStudioPresets();
+    expect(preset.labels.map((item) => item.key)).toEqual(['mixed_voiceover']);
+  });
+
   it('drops empty filters from list params', () => {
     expect(buildStudioSegmentParams({ assetId: ' a ', labelKey: '', productName: undefined, limit: 50 })).toEqual({ assetId: 'a', limit: 50 });
   });
@@ -28,6 +38,15 @@ describe('AI studio API client', () => {
     await fetchStudioSegments({ presetKey: 'framework', origin: 'human', limit: 50 });
     expect(apiClient.get).toHaveBeenCalledWith('/marketing/content-assets/studio/segments', {
       params: { presetKey: 'framework', origin: 'human', limit: 50 },
+      signal: undefined,
+    });
+  });
+
+  it('sends the source-spend class to the list endpoint', async () => {
+    vi.mocked(apiClient.get).mockResolvedValue({ data: { items: [], nextCursor: null, assets: [] } } as never);
+    await fetchStudioSegments({ presetKey: 'framework', spendClass: 'qualified', limit: 50 });
+    expect(apiClient.get).toHaveBeenCalledWith('/marketing/content-assets/studio/segments', {
+      params: { presetKey: 'framework', spendClass: 'qualified', limit: 50 },
       signal: undefined,
     });
   });

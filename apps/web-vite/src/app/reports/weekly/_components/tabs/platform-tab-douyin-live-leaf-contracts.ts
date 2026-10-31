@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { AttributionTableProps } from './platform-tab-attribution-table-props';
 import type { AttributionWaterfallChartProps } from './platform-tab-attribution-waterfall-props';
 import type { DouyinLiveSectionData } from './platform-tab-douyin-live-section-types';
@@ -53,7 +53,7 @@ export interface BuildDouyinLiveSessionAttributionLeafPropsInput {
     | 'douyinLiveTotalDelta'
     | 'douyinLiveWaterfallSteps'
   >;
-  douyinLiveColumns: ColumnsType<DouyinLiveSessionRow>;
+  douyinLiveColumns: TableColumnsType<DouyinLiveSessionRow>;
   waterfallTotalColor: string;
 }
 
@@ -66,7 +66,7 @@ export interface BuildDouyinLiveFunnelAttributionLeafPropsInput {
     | 'selectedDouyinLiveDetailRows'
     | 'selectedDouyinLiveQuantRows'
   >;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
   resolveFunnelStageColor: (index: number) => string;
 }

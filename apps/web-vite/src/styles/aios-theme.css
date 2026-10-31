@@ -1,0 +1,274 @@
+/*
+ * AIOS visual language v2 on lobe-ui 6 (DESIGN.md "Visual Language v2").
+ *
+ * Ink is people and structure; AI violet is AI presence (AI actions, AI output, AI work state,
+ * focus, selection, links). lobe-ui owns the UI primitives (surfaces, text, borders, radius,
+ * shadow; untinted gray neutrals, no neutral palette). This file owns the AIOS layer on top:
+ * the AI violet scale and roles, the AI sweep, the media stage, status text, trend and chart v2,
+ * plus the bridge that re-points the legacy AIOS token names app-wide.
+ *
+ * lobe's theme variables are unlayered `:root` / `[data-theme]` rules, so overrides use `html:root`
+ * to win on specificity instead of depending on chunk order. Dark values apply on
+ * `[data-theme='dark']`, which setLobeTheme writes on <html>.
+ */
+
+html:root {
+  /* Tertiary text (meta, captions) darkened from lobe's light #8A8A8A to keep 4.5:1 on white and
+     the #F8F8F8 ground; lobe's dark value (#8F8F8F on #0D0D0D) already passes and is not touched. */
+  --lobe-color-text-tertiary: #707070;
+
+  /* AI violet scale (light). */
+  --aios-ai-1: #FDFCFE;
+  --aios-ai-2: #FAF8FF;
+  --aios-ai-3: #F4F0FE;
+  --aios-ai-4: #EBE4FF;
+  --aios-ai-5: #E1D9FF;
+  --aios-ai-6: #D4CAFE;
+  --aios-ai-7: #C2B5F5;
+  --aios-ai-8: #AA99EC;
+  --aios-ai-9: #6E56CF;
+  --aios-ai-10: #654DC4;
+  --aios-ai-11: #5B45B8;
+  --aios-ai-12: #2F265F;
+
+  /* AI roles. The fill stays step 9 in both themes so white text keeps 5:1 contrast. */
+  --aios-ai-fill: #6E56CF;
+  --aios-ai-fill-hover: #654DC4;
+  --aios-ai-on-fill: #FFFFFF;
+  --aios-ai-mark: var(--aios-ai-9);
+  --aios-ai-text: var(--aios-ai-11);
+  --aios-ai-soft: var(--aios-ai-3);
+  --aios-ai-soft-hover: var(--aios-ai-4);
+  --aios-ai-border: var(--aios-ai-6);
+  --aios-ai-sweep-from: var(--aios-ai-9);
+  --aios-ai-sweep-to: #B79CFF;
+
+  /* Media stage: video and image previews stay dark in both themes. */
+  --aios-stage: #0B0C0E;
+  --aios-stage-text: rgba(255, 255, 255, 0.82);
+  /* Hover / emphasis border: text mixed into the card, so it follows the theme on its own. */
+  --aios-border-hover: color-mix(in srgb, var(--lobe-color-text) 18%, var(--lobe-color-bg-container));
+
+  /* Status text keeps AA on light surfaces; soft fills and borders come from lobe. */
+  --aios-status-success: #168A3A;
+  --aios-status-success-strong: #0F6F2E;
+  --aios-status-warning: #B87503;
+  --aios-status-warning-strong: #8F5E02;
+  --aios-status-danger: #C93A32;
+  --aios-status-danger-strong: #9F3D35;
+  --aios-status-info: #0060CC;
+
+  /* Business deltas: red up, green down. */
+  --aios-trend-up: #D9363E;
+  --aios-trend-down: #13A05A;
+
+  /* Ordinary chart series v2 (fixed order, validated for CVD on light and dark). */
+  --aios-chart-1: #6E56CF;
+  --aios-chart-2: #0E9C8E;
+  --aios-chart-3: #C76E12;
+  --aios-chart-4: #2F6FE0;
+  --aios-chart-5: #C2417A;
+  --aios-chart-muted: #A8A8A8;
+
+  /* HarmonyOS Sans SC draws Chinese where PingFang is missing (Windows); macOS never fetches it. */
+  --aios-font-ui: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+  --aios-font-data: 'Geist Mono Variable', 'SF Mono', ui-monospace, Menlo, Consolas, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', monospace;
+
+  --lobe-font-family: var(--aios-font-ui);
+  --lobe-font-family-code: var(--aios-font-data);
+  --lobe-focus-ring-color: var(--lobe-color-primary);
+}
+
+/* Lobe defaults to filled fields in Dark. Keep the focus affordance on the
+ * root in every variant, without competing with validation or disabled states. */
+:is(.lobe-input, .lobe-input-number, .lobe-text-area):focus-within:not([data-disabled], :has([data-invalid], [aria-invalid='true'], :disabled)) {
+  border-color: var(--lobe-color-primary);
+  box-shadow: 0 0 0 2px var(--lobe-color-primary-bg);
+}
+
+html:root[data-theme='dark'] {
+  /* lobe's dark tertiary text (5.9:1 on the #0D0D0D panel); the light override above must not leak. */
+  --lobe-color-text-tertiary: #8F8F8F;
+
+  --aios-ai-1: #14121F;
+  --aios-ai-2: #1B1525;
+  --aios-ai-3: #291F43;
+  --aios-ai-4: #33255B;
+  --aios-ai-5: #3C2E69;
+  --aios-ai-6: #473876;
+  --aios-ai-7: #56468B;
+  --aios-ai-8: #6958AD;
+  --aios-ai-9: #6E56CF;
+  --aios-ai-10: #7D66D9;
+  --aios-ai-11: #BAA7FF;
+  --aios-ai-12: #E2DDFE;
+
+  --aios-ai-mark: #8B74F0;
+  --aios-ai-sweep-to: #D2C4FF;
+
+  --aios-status-success: #4CC76F;
+  --aios-status-success-strong: #80C933;
+  --aios-status-warning: #F0B43C;
+  --aios-status-warning-strong: #FFBE45;
+  --aios-status-danger: #FF6B57;
+  --aios-status-danger-strong: #FF8A7A;
+  --aios-status-info: #4CB3FF;
+
+  --aios-trend-up: #FF6B6B;
+  --aios-trend-down: #4ADE80;
+
+  --aios-chart-1: #8B74F0;
+  --aios-chart-2: #1FA89A;
+  --aios-chart-3: #C9802F;
+  --aios-chart-4: #4C8DF6;
+  --aios-chart-5: #D45B8E;
+  --aios-chart-muted: #5C5C5C;
+
+  /* Domain taxonomy (dark): soft fills and borders from each entry's hue on the dark surface,
+   * text lifted toward white until it reaches 4.5:1 on that fill. Accents and fills keep their
+   * light values. Generated from the light tokens in design-tokens.css. */
+  --domain-cooperation-initial-contact-bg: #1D263A;
+  --domain-cooperation-initial-contact-text: #678DD1;
+  --domain-cooperation-live-started-bg: #1A2A21;
+  --domain-cooperation-live-started-text: #599C6F;
+  --domain-cooperation-not-considering-bg: #352724;
+  --domain-cooperation-not-considering-text: #BB856C;
+  --domain-cooperation-paused-bg: #342122;
+  --domain-cooperation-paused-text: #BE7B76;
+  --domain-cooperation-sample-negotiation-bg: #312719;
+  --domain-cooperation-sample-negotiation-text: #AE8B49;
+  --domain-cooperation-unclassified-bg: #2A282C;
+  --domain-cooperation-unclassified-text: #908F93;
+  --domain-creator-a-bg: #1B253A;
+  --domain-creator-a-text: #648CD2;
+  --domain-creator-b-bg: #1D263A;
+  --domain-creator-b-text: #678DD1;
+  --domain-creator-c-bg: #21293A;
+  --domain-creator-c-text: #6F91CC;
+  --domain-creator-d-bg: #2A282C;
+  --domain-creator-d-text: #908F93;
+  --domain-creator-s-bg: #1B2335;
+  --domain-creator-s-text: #6B8AC2;
+  --domain-funnel-conversion-bg: #1B253A;
+  --domain-funnel-exposure-bg: #323845;
+  --domain-funnel-intent-bg: #1F2A41;
+  --domain-funnel-track-bg: #3A3D46;
+  --domain-funnel-visit-bg: #293144;
+  --domain-topsis-long-tail-bg: #1F2F29;
+  --domain-topsis-long-tail-border: #254E39;
+  --domain-topsis-long-tail-text: #54A179;
+  --domain-topsis-neutral-bg: #302F32;
+  --domain-topsis-neutral-border: #4E4D51;
+  --domain-topsis-neutral-text: #98969B;
+  --domain-topsis-opportunity-bg: #332333;
+  --domain-topsis-opportunity-border: #552E54;
+  --domain-topsis-opportunity-text: #B87BB4;
+  --domain-topsis-stable-bg: #1D263A;
+  --domain-topsis-stable-border: #1F3765;
+  --domain-topsis-stable-text: #678DD1;
+  --domain-topsis-star-bg: #392121;
+  --domain-topsis-star-border: #652A26;
+  --domain-topsis-star-text: #D17369;
+  --domain-traffic-l1-bg: #1B253A;
+  --domain-traffic-l1-border: #1A3565;
+  --domain-traffic-l1-text: #6D8CC3;
+  --domain-traffic-l2-bg: #1F2A41;
+  --domain-traffic-l2-border: #254175;
+  --domain-traffic-l2-text: #6E92D3;
+  --domain-traffic-l3-bg: #2E3544;
+  --domain-traffic-l3-border: #495C7E;
+  --domain-traffic-l3-text: #819FD2;
+  --domain-traffic-summary-bg: #302F32;
+  --domain-traffic-summary-border: #4E4D51;
+  --domain-traffic-summary-text: #98979A;
+
+}
+
+/*
+ * Bridge: the shared color names (--bg-*, --text-*, --brand-*, --border-color*, --status-*,
+ * --trend-*, --chart-series-*) are the token layer behind the Tailwind utilities, the ECharts CSS
+ * variables and theme-provider's root reads. Here they resolve to lobe primitives and v2 roles so
+ * they follow the theme; design-tokens.css keeps their light values for code outside the app.
+ * Pages and components write the lobe and --aios-* names (verify:design:legacy-colors).
+ * Font families need no bridge: design-tokens.css already holds the v2 stacks.
+ */
+html:root {
+  --bg-global: var(--lobe-color-bg-layout);
+  --bg-card: var(--lobe-color-bg-container);
+  --bg-hover: var(--lobe-color-fill-tertiary);
+  --bg-subtle: var(--lobe-color-fill-tertiary);
+  --bg-disabled: var(--lobe-color-bg-container-disabled);
+  --bg-input: var(--lobe-color-bg-container);
+
+  --text-primary: var(--lobe-color-text);
+  --text-secondary: var(--lobe-color-text-secondary);
+  --text-tertiary: var(--lobe-color-text-tertiary);
+  --text-disabled: var(--lobe-color-text-disabled);
+  --text-inverse: var(--lobe-color-text-light-solid);
+
+  --border-color: var(--lobe-color-border);
+  --border-color-hover: var(--aios-border-hover);
+  --divider-color: var(--lobe-color-border-secondary);
+
+  /* Human primary action is ink; selection, links and focus are AI violet. */
+  --brand-primary: var(--lobe-color-primary);
+  --brand-dark: var(--lobe-color-primary-hover);
+  --brand-on-primary: var(--lobe-color-bg-container);
+  --brand-text: var(--aios-ai-text);
+  --brand-secondary: var(--aios-ai-soft);
+  --brand-border: var(--aios-ai-border);
+  --brand-bright: var(--aios-ai-8);
+
+  --status-success: var(--aios-status-success);
+  --status-success-strong: var(--aios-status-success-strong);
+  --status-success-bg: var(--lobe-color-success-bg);
+  --status-success-border: var(--lobe-color-success-border);
+  --status-warning: var(--aios-status-warning);
+  --status-warning-strong: var(--aios-status-warning-strong);
+  --status-warning-bg: var(--lobe-color-warning-bg);
+  --status-warning-border: var(--lobe-color-warning-border);
+  --status-danger: var(--aios-status-danger);
+  --status-danger-strong: var(--aios-status-danger-strong);
+  --status-danger-bg: var(--lobe-color-error-bg);
+  --status-danger-border: var(--lobe-color-error-border);
+  --status-info: var(--aios-status-info);
+  --status-info-strong: var(--aios-status-info);
+  --status-info-bg: var(--lobe-color-info-bg);
+  --status-info-border: var(--lobe-color-info-border);
+  --status-neutral: var(--lobe-color-text-tertiary);
+  --status-neutral-strong: var(--lobe-color-text-secondary);
+  --status-neutral-bg: var(--lobe-color-fill-tertiary);
+  --status-neutral-border: var(--lobe-color-border);
+
+  --trend-up: var(--aios-trend-up);
+  --trend-down: var(--aios-trend-down);
+  --trend-neutral: var(--lobe-color-text-tertiary);
+
+  --chart-series-1: var(--aios-chart-1);
+  --chart-series-2: var(--aios-chart-2);
+  --chart-series-3: var(--aios-chart-3);
+  --chart-series-4: var(--aios-chart-4);
+  --chart-series-5: var(--aios-chart-5);
+  --chart-series-6: var(--aios-chart-muted);
+  --chart-series-muted: var(--aios-chart-muted);
+  --chart-series-highlight: var(--aios-ai-9);
+
+  --shadow-sm: var(--lobe-box-shadow-tertiary);
+
+  font-family: var(--aios-font-ui);
+}
+
+/* Touch screens: every button is at least a 44px target (small buttons are 27-32px). */
+@media (pointer: coarse) {
+  .lobe-button {
+    min-height: 44px;
+  }
+}
+
+/*
+ * lobe draws an unchecked checkbox in border-secondary (#eee), nearly invisible on white; selection
+ * lists need the box to read before it is ticked, so it takes the quaternary text tone in both themes.
+ */
+.lobe-checkbox__checkbox[data-unchecked] {
+  border-color: var(--lobe-color-text-quaternary);
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, Row, Col, Skeleton } from 'antd';
+import { Block, SkeletonText } from '@lobehub/ui';
 
 export interface ReportSkeletonProps {
   cardCount?: number;
@@ -19,21 +19,19 @@ export const ReportSkeleton: React.FC<ReportSkeletonProps> = ({
   return (
     <div className="space-y-6">
       {/* KPI 卡片骨架 */}
-      <Row gutter={[16, 16]}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: cardCount }).map((_, i) => (
-          <Col key={i} xs={24} sm={12} lg={6}>
-            <Card variant="borderless" style={{ borderRadius: '8px' }}>
-              <Skeleton active paragraph={{ rows: 3 }} />
-            </Card>
-          </Col>
+          <Block key={i} variant="outlined" className="p-4">
+            <SkeletonText rows={3} />
+          </Block>
         ))}
-      </Row>
+      </div>
 
       {/* 图表骨架 */}
       {hasChart && (
-        <Card variant="borderless" style={{ borderRadius: '8px' }}>
-          <Skeleton active paragraph={{ rows: 10 }} />
-        </Card>
+        <Block variant="outlined" className="p-4">
+          <SkeletonText rows={10} />
+        </Block>
       )}
     </div>
   );

@@ -1,0 +1,283 @@
+/*
+ * Competitor structure (competitor-structure.tsx): the 框架结构 timeline (segment-timeline.module.css
+ * grammar: lanes over the ruler, label tones blue, teal, amber, rose, the 卖点 counts as its legend),
+ * the player + the whole timed transcript, and the closing 30-frame sample sheet.
+ */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.section h3 {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.section h3 small {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+.empty {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.time {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 30 frames: 2 rows of 15 in the drawer, 3 rows of 10 on phones; a frame opens the viewer. */
+.samples {
+  display: grid;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.samples img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 2px;
+  background: var(--lobe-color-fill-tertiary);
+  object-fit: cover;
+  cursor: zoom-in;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color 150ms ease;
+}
+
+.sample {
+  width: 100%;
+}
+
+.samples img:hover {
+  outline-color: var(--lobe-color-text-quaternary);
+}
+
+.samples img:focus-visible {
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 1px;
+}
+
+.sampleTime {
+  padding-inline: var(--spacing-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The player keeps its 9:16 box (Douyin does not reflow and crops below ~340px); the script column is as tall and scrolls. */
+.workbench {
+  --player-width: 340px;
+
+  display: grid;
+  grid-template-columns: var(--player-width) minmax(0, 1fr);
+  gap: var(--spacing-5);
+  align-items: start;
+}
+
+.scriptColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+  max-height: calc(var(--player-width) * 16 / 9);
+}
+
+/* The drawer is 820px: the lane titles stay narrow and the tracks take the rest. */
+.timeline {
+  --lane-title: 40px;
+
+  min-width: 520px;
+}
+
+.timeline > div {
+  grid-template-columns: var(--lane-title) minmax(0, 1fr);
+}
+
+.track {
+  height: 32px;
+}
+
+.laneEmpty {
+  position: absolute;
+  top: 50%;
+  left: var(--spacing-2);
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+  transform: translateY(-50%);
+}
+
+/* 口播转写, then the picked block's name and time once, and 全部 to clear it. */
+.scriptHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: baseline;
+  color: var(--lobe-color-text);
+}
+
+.scriptHead strong {
+  font-weight: var(--font-weight-medium);
+}
+
+.picked {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: baseline;
+  color: var(--lobe-color-text-secondary);
+}
+
+.clear {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  color: var(--lobe-color-text);
+  background: none;
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.clear:hover {
+  text-decoration: underline;
+}
+
+.clear:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
+}
+
+.quote {
+  margin: 0;
+  color: var(--lobe-color-text);
+}
+
+.script {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-top: 1px solid var(--lobe-color-border-secondary);
+  list-style: none;
+}
+
+.script li {
+  display: grid;
+  grid-template-columns: 3px 52px minmax(0, 1fr);
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-2) var(--spacing-2) 0;
+  border-radius: var(--border-radius-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+/* The line's framework segment, as a tone bar on its left edge (the tone class paints it). */
+.lineTone {
+  align-self: stretch;
+  border-radius: 2px;
+}
+
+/* A line outside every framework segment. */
+.lineToneNone {
+  background: var(--lobe-color-fill-secondary);
+}
+
+/* A picked block: its lines on the tertiary fill, the others step back to secondary text. */
+.script[data-picked] li {
+  color: var(--lobe-color-text-secondary);
+}
+
+.script[data-picked] li[data-lit] {
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
+}
+
+/* The 卖点 lane's legend under the ruler: tone, name, count. */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-4);
+  margin: 0;
+  padding: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  list-style: none;
+}
+
+.legend li {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+/* A structure with a failed part: one tertiary line, then the re-run. */
+.partial {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.partial p {
+  margin: 0;
+}
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  color: var(--lobe-color-text-secondary);
+}
+
+.missing p {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .samples {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+
+  .workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scriptColumn {
+    max-height: none;
+  }
+
+  .script {
+    overflow-y: visible;
+  }
+}

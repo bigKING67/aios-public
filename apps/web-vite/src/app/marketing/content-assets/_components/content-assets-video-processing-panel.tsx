@@ -1,10 +1,11 @@
-import { Button, Popconfirm, Segmented, Select } from 'antd';
-import { CheckCircleOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { CircleCheck, Video } from 'lucide-react';
+import { Button, confirmModal, Segmented } from '@lobehub/ui';
 import { formatCompactNumber, formatDateTime } from '../_lib/content-assets-formatters';
 import type {
   ContentAssetProcessingJobListResponse,
   ContentAssetSummary,
 } from '../_lib/content-assets-types';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { ProcessingJobList } from './content-assets-processing-job-list';
 import {
   PROCESSING_JOB_STATUS_FILTER_OPTIONS,
@@ -64,7 +65,7 @@ export function VideoProcessingPanel({
   return (
     <section className={styles.workspacePanel}>
       <div className={styles.moduleHero}>
-        <div className={styles.moduleIcon}><VideoCameraOutlined /></div>
+        <div className={styles.moduleIcon}><Video size={14} strokeWidth={1.8} aria-hidden="true" /></div>
         <div>
           <span>视频处理链路</span>
           <h1>视频处理</h1>
@@ -85,7 +86,7 @@ export function VideoProcessingPanel({
       <section className={styles.videoProcessingGrid}>
         <article className={styles.flowCard}>
           <div className={styles.sectionTitle}>
-            <VideoCameraOutlined />
+            <Video size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>处理任务队列</strong>
               <p>
@@ -98,17 +99,20 @@ export function VideoProcessingPanel({
             </Button>
           </div>
           <div className={styles.queueToolbar}>
-            <Segmented<ProcessingJobStatusFilter>
-              value={processingJobStatus}
-              options={PROCESSING_JOB_STATUS_FILTER_OPTIONS}
-              onChange={onProcessingJobStatusChange}
-            />
-            <Select<ProcessingJobTypeFilter>
-              className={styles.queueTypeSelect}
+            <div role="group" aria-label="任务状态">
+              <Segmented<ProcessingJobStatusFilter>
+                value={processingJobStatus}
+                options={PROCESSING_JOB_STATUS_FILTER_OPTIONS}
+                onChange={onProcessingJobStatusChange}
+              />
+            </div>
+            <LabeledSelect<ProcessingJobTypeFilter>
+              label="任务类型"
+              wrapperClassName={styles.queueTypeSelect}
               size="small"
               value={processingJobType}
               options={PROCESSING_JOB_TYPE_FILTER_OPTIONS}
-              onChange={onProcessingJobTypeChange}
+              onChange={(type) => type && onProcessingJobTypeChange(type)}
             />
           </div>
           <ProcessingJobList
@@ -127,7 +131,7 @@ export function VideoProcessingPanel({
 
         <article className={styles.actionCard}>
           <div className={styles.sectionTitle}>
-            <CheckCircleOutlined />
+            <CircleCheck size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>处理说明</strong>
               <p>上传完成后自动排队。处理进程运行时才会下载原片并消耗 TOS 流量。</p>
@@ -138,17 +142,22 @@ export function VideoProcessingPanel({
               <strong>补建预览 / 封面队列</strong>
               <p>为已入库但缺少派生文件的原片视频补建处理任务。这里只写入数据库队列，不会启动处理进程。</p>
             </div>
-            <Popconfirm
-              title="确认补建队列任务？"
-              description="该操作只创建预览 / 封面队列，不会下载 TOS 原片，也不会触发转码。"
-              okText="补建队列"
-              cancelText="取消"
-              onConfirm={onBackfillDerivativeJobs}
+            <Button
+              type="primary"
+              loading={actionLoading}
+              disabled={!canManage || summary.pendingAssets <= 0}
+              onClick={() =>
+                confirmModal({
+                  title: '确认补建队列任务？',
+                  content: '该操作只创建预览 / 封面队列，不会下载 TOS 原片，也不会触发转码。',
+                  okText: '补建队列',
+                  cancelText: '取消',
+                  onOk: onBackfillDerivativeJobs,
+                })
+              }
             >
-              <Button type="primary" loading={actionLoading} disabled={!canManage || summary.pendingAssets <= 0}>
-                补建队列
-              </Button>
-            </Popconfirm>
+              补建队列
+            </Button>
           </div>
           <div className={styles.actionList}>
             {[

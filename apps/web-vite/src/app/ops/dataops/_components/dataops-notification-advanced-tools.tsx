@@ -1,9 +1,10 @@
 'use client';
 
-import { Button, Input, Tooltip } from 'antd';
-import { BellOutlined, CopyOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Button, Input, Tooltip } from '@lobehub/ui';
+import { Bell, Copy, Download } from 'lucide-react';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import type { NotificationRetryReport } from './dataops-notification-retry-helpers';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import notifyStyles from './dataops-notify-panel.module.css';
 import styles from './dataops-hub.module.css';
 
@@ -102,7 +103,7 @@ export function DataOpsNotificationAdvancedTools({
         </Button>
         <Button
           size="small"
-          icon={<DownloadOutlined />}
+          icon={<Download {...DATAOPS_ICON_PROPS} />}
           onClick={() => {
             void onExportEventsCsv();
           }}
@@ -111,7 +112,7 @@ export function DataOpsNotificationAdvancedTools({
         </Button>
         <Button
           size="small"
-          icon={<DownloadOutlined />}
+          icon={<Download {...DATAOPS_ICON_PROPS} />}
           disabled={!notificationRetryReport || notificationRetryReport.items.length === 0}
           onClick={() => {
             void onExportRetryReportCsv();
@@ -121,7 +122,7 @@ export function DataOpsNotificationAdvancedTools({
         </Button>
         <Button
           size="small"
-          icon={<CopyOutlined />}
+          icon={<Copy {...DATAOPS_ICON_PROPS} />}
           disabled={!notificationMarkdownText}
           onClick={() => {
             void onCopyMarkdown();
@@ -136,23 +137,25 @@ export function DataOpsNotificationAdvancedTools({
               : '当前没有可用通道'
           }
         >
-          <Button
-            size="small"
-            icon={<BellOutlined />}
-            disabled={
-              !hasOperatePermission ||
-              globalActionBusy ||
-              !notificationMarkdownText ||
-              !defaultAlertChannel
-            }
-            onClick={onSendMarkdown}
-          >
-            发送Markdown
-          </Button>
+          <span className="inline-flex">
+            <Button
+              size="small"
+              icon={<Bell {...DATAOPS_ICON_PROPS} />}
+              disabled={
+                !hasOperatePermission ||
+                globalActionBusy ||
+                !notificationMarkdownText ||
+                !defaultAlertChannel
+              }
+              onClick={onSendMarkdown}
+            >
+              发送Markdown
+            </Button>
+          </span>
         </Tooltip>
         <Button
           size="small"
-          icon={<CopyOutlined />}
+          icon={<Copy {...DATAOPS_ICON_PROPS} />}
           disabled={!failedNotificationEventIdCount}
           onClick={() => {
             void onCopyFailedEventIds();
@@ -163,7 +166,7 @@ export function DataOpsNotificationAdvancedTools({
         </Button>
         <Button
           size="small"
-          icon={<CopyOutlined />}
+          icon={<Copy {...DATAOPS_ICON_PROPS} />}
           onClick={() => {
             void onCopyFilterLink();
           }}

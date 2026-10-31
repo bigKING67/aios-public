@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { ChannelAttributionRow } from './platform-tab-types';
 import type { TrendClassNameResolver } from './platform-tab-column-contracts';
 import {
@@ -12,7 +12,7 @@ import { buildChannelCountColumns } from './platform-tab-channel-count-columns';
 
 export function buildChannelColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<ChannelAttributionRow> {
+): TableColumnsType<ChannelAttributionRow> {
   return [
     {
       title: '商品ID',

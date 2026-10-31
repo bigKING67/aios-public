@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -55,7 +56,7 @@ function segment(id: string, extra: Partial<StudioContentSegment> = {}): StudioC
   return {
     segmentId: id, ownerUserId: 'u', assetId: 'a-1', assetTitle: '百雀羚整片-001.mp4', sourceContentHash: 'h', sourceCurrent: true,
     sourceDurationMs: 60_000, startMs: 0, endMs: 8_000, presetKey: 'framework', presetVersion: 1, labelKey: 'voice', labelKeys: ['voice'],
-    productName: '精华', continuesPrevious: false, origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
+    productName: '粉底液', continuesPrevious: false, origin: 'human', status: 'confirmed', evidence: null, revision: 1, confirmedBy: 'u', confirmedAt: null,
     createdAt: '', updatedAt: '', coverUrl: null, ...extra,
   };
 }
@@ -63,18 +64,18 @@ function segment(id: string, extra: Partial<StudioContentSegment> = {}): StudioC
 const SEGMENTS = [
   segment('s-voice'),
   segment('s-demo', { labelKey: 'demo', startMs: 10_000, endMs: 16_000 }),
-  segment('s-other', { assetId: 'a-2', assetTitle: '面霜整片.mp4', productName: '面霜', labelKey: 'demo' }),
+  segment('s-other', { assetId: 'a-2', assetTitle: '口红整片.mp4', productName: '口红', labelKey: 'demo' }),
 ];
 
 function match(extra: Partial<StudioRemixEditMatch> = {}): StudioRemixEditMatch {
   return {
-    batchId: 'b-old', ordinal: 1, mode: 'edit', productName: '精华', outcome: 'succeeded', outputAssetId: 'o-1',
+    batchId: 'b-old', ordinal: 1, mode: 'edit', productName: '粉底液', outcome: 'succeeded', outputAssetId: 'o-1',
     outputCoverUrl: null, durationMs: 14_000, overlap: 1, createdAt: '2026-10-01T02:00:00Z', ...extra,
   };
 }
 
 function checkResult(extra: Partial<StudioRemixEditCheckResponse> = {}): StudioRemixEditCheckResponse {
-  return { productName: '精华', durationMs: 14_000, exact: [], similar: [], ...extra };
+  return { productName: '粉底液', durationMs: 14_000, exact: [], similar: [], ...extra };
 }
 
 function LocationProbe() {
@@ -126,9 +127,9 @@ describe('单条剪辑 workbench', () => {
     renderPanel();
     expect(await screen.findByRole('button', { name: /AI 先起草/ })).toBeDisabled();
     fireEvent.click(screen.getByRole('button', { name: /从片段库挑着拼/ }));
-    await addFromLibrary(/面霜整片/);
+    await addFromLibrary(/口红整片/);
     // The first clip fixes the product; other products leave the library.
-    await waitFor(() => expect(screen.queryByText(/只显示「面霜」的片段/)).toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText(/只显示「口红」的片段/)).toBeInTheDocument());
     expect(within(screen.getByRole('dialog', { name: '从片段库添加' })).queryByText('百雀羚整片-001.mp4')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     fireEvent.click(await screen.findByRole('button', { name: /删除/ }));
@@ -138,7 +139,8 @@ describe('单条剪辑 workbench', () => {
     await addFromLibrary(/^混剪口播$/);
     await addFromLibrary(/^实拍内容$/);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-    const timeline = screen.getByRole('list', { name: '剪辑台片段' });
+    // The drawer closes asynchronously; the page leaves the inert state once it has unmounted.
+    const timeline = await screen.findByRole('list', { name: '剪辑台片段' });
     expect(within(timeline).getAllByRole('button', { name: /^第 \d 段/ })).toHaveLength(2);
     // Arrow keys move the out-point handle; it stops at the segment's end.
     const outPoint = screen.getByRole('slider', { name: '出点' });
@@ -173,7 +175,7 @@ describe('单条剪辑 workbench', () => {
     expect(screen.getByText(/重叠 86%/)).toBeInTheDocument();
     const generate = screen.getByRole('button', { name: '生成这条成片' });
     expect(generate).toBeDisabled();
-    fireEvent.click(screen.getByRole('checkbox', { name: '仍然生成' }));
+    await userEvent.click(screen.getByRole('checkbox', { name: '仍然生成' }));
     await waitFor(() => expect(generate).toBeEnabled());
     fireEvent.click(generate);
     fireEvent.click(await screen.findByRole('button', { name: '开始生成' }));
@@ -199,7 +201,7 @@ describe('单条剪辑 workbench', () => {
     } as never);
     renderPanel(capabilities(), '/content/ai-studio/editing?mode=single&fromBatch=b-old&ordinal=2');
     const timeline = await screen.findByRole('list', { name: '剪辑台片段' });
-    expect(within(timeline).getByRole('button', { name: /第 1 段：实拍内容 4\.0 秒/ })).toBeInTheDocument();
+    expect(within(timeline).getByRole('button', { name: /第 1 段：实拍内容 0:04\.0/ })).toBeInTheDocument();
     expect(within(timeline).getByRole('button', { name: /第 2 段：片段不可用.*（不可用）/ })).toBeInTheDocument();
     expect(await screen.findByText('1 段已不可用（取消确认或原片更新），请删除或替换。')).toBeInTheDocument();
     expect(checkRemixEdit).not.toHaveBeenCalled();

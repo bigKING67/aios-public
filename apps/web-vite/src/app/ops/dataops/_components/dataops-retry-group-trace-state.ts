@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { ColumnsType } from 'antd/es/table';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { TableColumnsType } from '@lobehub/ui';
 
 import type {
   DataOpsNotificationChannel,
@@ -34,6 +33,7 @@ import {
 } from './dataops-notification-trace-columns';
 import type { DataOpsNotifyFilterState } from './dataops-query-helpers';
 import { buildRetryGroupTraceMarkdownText } from './dataops-report-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 type NotificationChannelMap = Map<string, DataOpsNotificationChannel>;
 
@@ -43,7 +43,7 @@ export function useDataOpsRetryGroupTraceState(options: {
   exportCsv: (options: DataOpsCsvExportActionOptions) => Promise<void>;
   getCurrentNotifyShareFilters: () => DataOpsNotifyFilterState;
   isCompactViewport: boolean;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   notificationChannelMap: NotificationChannelMap;
   notificationEvents: DataOpsNotificationEvent[];
   setActiveTab: (value: TabKey) => void;
@@ -241,11 +241,11 @@ export function useDataOpsRetryGroupTraceState(options: {
     });
   }, []);
 
-  const retryGroupTraceDesktopColumns: ColumnsType<DataOpsNotificationEvent> = useMemo(
+  const retryGroupTraceDesktopColumns: TableColumnsType<DataOpsNotificationEvent> = useMemo(
     () => buildDataOpsRetryGroupTraceColumns({ notificationChannelMap }),
     [notificationChannelMap]
   );
-  const retryGroupTraceMobileColumns: ColumnsType<DataOpsNotificationEvent> = useMemo(
+  const retryGroupTraceMobileColumns: TableColumnsType<DataOpsNotificationEvent> = useMemo(
     () => buildDataOpsRetryGroupTraceMobileColumns({ notificationChannelMap }),
     [notificationChannelMap]
   );

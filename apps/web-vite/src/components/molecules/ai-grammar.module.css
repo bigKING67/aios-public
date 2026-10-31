@@ -1,0 +1,230 @@
+/*
+ * DESIGN.md Visual Language v2 › AI Grammar. AI violet marks AI presence; the sweep and the pulse
+ * run only while AI works and stop under reduced motion.
+ */
+
+.actionButton {
+  border-color: var(--aios-ai-fill);
+  color: var(--aios-ai-on-fill);
+  background: var(--aios-ai-fill);
+}
+
+.actionButton:not(:disabled):hover {
+  border-color: var(--aios-ai-fill-hover);
+  color: var(--aios-ai-on-fill);
+  background: var(--aios-ai-fill-hover);
+}
+
+.actionButton:disabled {
+  border-color: var(--lobe-color-border);
+  color: var(--lobe-color-text-disabled);
+  background: var(--lobe-color-bg-container-disabled);
+}
+
+.actionButtonQuiet:not(:disabled) svg {
+  color: var(--aios-ai-mark);
+}
+
+.actionButtonQuiet:not(:disabled):hover {
+  border-color: var(--aios-ai-border);
+  color: var(--aios-ai-text);
+}
+
+.mark {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  padding: 0 var(--spacing-2);
+  border-radius: var(--lobe-border-radius-sm);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  white-space: nowrap;
+}
+
+.markConfirmed {
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+}
+
+.task {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+  min-width: 0;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--lobe-border-radius);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-bg-container);
+  font-size: var(--font-size-base);
+}
+
+/* A page's own status line (成片 batch detail): full size, no box. */
+.task.taskBare {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+/* Table cells, side lists and card heads: the same states without the box. */
+.taskCompact {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px var(--spacing-2);
+  align-items: center;
+  min-width: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+}
+
+.taskCompact .label {
+  flex: 0 1 auto;
+}
+
+.state {
+  display: inline-flex;
+  white-space: nowrap;
+  flex: none;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lobe-color-text-tertiary);
+}
+
+.label {
+  flex: 1 1 12em;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.detail {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.thinking .state {
+  color: var(--aios-ai-text);
+}
+
+.thinking .dot {
+  background: var(--aios-ai-mark);
+  animation: ai-pulse 1.4s ease-in-out infinite;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--lobe-color-text-secondary) 0%,
+    var(--aios-ai-sweep-from) 40%,
+    var(--aios-ai-sweep-to) 50%,
+    var(--lobe-color-text-secondary) 70%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  color: transparent;
+  animation: ai-sweep 2.4s linear infinite;
+}
+
+.generating {
+  border-color: transparent;
+}
+
+.generating::before {
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--aios-ai-sweep-from), var(--aios-ai-sweep-to), var(--aios-ai-sweep-from));
+  background-size: 200% 100%;
+  content: '';
+  pointer-events: none;
+  mask: linear-gradient(white 0 0) content-box exclude, linear-gradient(white 0 0);
+  animation: ai-sweep 2.4s linear infinite;
+}
+
+.generating .state {
+  color: var(--aios-ai-text);
+}
+
+.generating .dot {
+  background: var(--aios-ai-sweep-to);
+}
+
+.progress {
+  display: inline-flex;
+  flex: 0 1 10em;
+  gap: var(--spacing-2);
+  align-items: center;
+  min-width: 6em;
+}
+
+.track {
+  flex: 1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--lobe-color-fill-secondary);
+}
+
+.fill {
+  /* A span: without a block box its width and height are ignored and the bar stays empty. */
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--aios-ai-sweep-from), var(--aios-ai-sweep-to));
+}
+
+.percent {
+  color: var(--lobe-color-text-tertiary);
+  font-family: var(--aios-font-data);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.done .dot {
+  background: var(--aios-status-success);
+}
+
+.failed .state {
+  color: var(--aios-status-danger);
+}
+
+.failed .dot {
+  background: var(--aios-status-danger);
+}
+
+@keyframes ai-sweep {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes ai-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thinking .dot,
+  .shimmer,
+  .generating::before {
+    animation: none;
+  }
+
+  .shimmer {
+    color: var(--aios-ai-text);
+    background: none;
+  }
+}

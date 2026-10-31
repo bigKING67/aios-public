@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { NavigateFunction } from 'react-router-dom';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 
 import { MAX_DASHBOARD_QUERY_DAYS } from './dashboard-config';
@@ -17,7 +17,7 @@ type DashboardShellHandlersArgs = {
   monthValue: Dayjs;
   yearValue: Dayjs;
   customRange: [Dayjs, Dayjs];
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   navigate: NavigateFunction;
 };
 

@@ -1,5 +1,5 @@
-import { Alert, Button, Empty, Skeleton, Spin } from 'antd';
-import { CloudUploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Alert, Button, Empty, SkeletonText, Spin } from '@lobehub/ui';
+import { CloudUpload, VideoIcon } from 'lucide-react';
 import { Badge } from '@/components/atoms/badge';
 import type { LineChartData } from '@/components/organisms/line-chart';
 import { resolveClientErrorMessage } from '@/lib/client-error';
@@ -40,7 +40,7 @@ export function LiveCenterDetailEmptyState() {
   return (
     <div className={styles.panel}>
       <div className={styles.detailEmptyState}>
-        <VideoCameraOutlined />
+        <VideoIcon size={14} strokeWidth={1.8} aria-hidden="true" />
         <div className={styles.detailEmptyCopy}>
           <h2>选择一场直播开始复盘</h2>
           <p>左侧选择 Groland 自播场次后查看录屏、分钟订单和 AI 结果。</p>
@@ -94,7 +94,7 @@ export function SessionDetail({
   if (isDetailLoading && !detail && !selectedSession) {
     return (
       <div className={styles.panel}>
-        <Skeleton active paragraph={{ rows: 6 }} title />
+        <SkeletonText rows={6} />
       </div>
     );
   }
@@ -224,7 +224,7 @@ function SessionReviewHeader({
       </div>
       <div className={styles.sessionReviewActions}>
         <span className={styles.recordingInlineMeta} aria-label="录屏分段数">
-          <VideoCameraOutlined />
+          <VideoIcon size={14} strokeWidth={1.8} aria-hidden="true" />
           <span>{recordingSegmentStats.displayLabel}</span>
           <strong>{formatInteger(recordingSegmentStats.displayCount)}</strong>
           <span>段</span>
@@ -236,7 +236,7 @@ function SessionReviewHeader({
         </span>
         <RecordingUploadButton
           disabled={uploadRunning}
-          icon={<CloudUploadOutlined />}
+          icon={<CloudUpload size={14} strokeWidth={1.8} aria-hidden="true" />}
           loading={uploadRunning}
           onSelectFile={onUploadFile}
           type="primary"

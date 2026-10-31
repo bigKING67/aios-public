@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import { formatInteger, formatRatioPercent } from './platform-tab-formatters';
 import type { FunnelChannelRow } from './platform-tab-types';
 import {
@@ -6,7 +6,7 @@ import {
   createRatioPercentMetricColumn,
 } from './platform-tab-metric-column-builders';
 
-export function buildFunnelNonClickStageColumns(): ColumnsType<FunnelChannelRow> {
+export function buildFunnelNonClickStageColumns(): TableColumnsType<FunnelChannelRow> {
   return [
     {
       title: '访客数',

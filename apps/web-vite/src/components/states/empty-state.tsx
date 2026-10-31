@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Empty, EmptyProps } from 'antd';
+import { Empty, type EmptyProps } from '@lobehub/ui';
 
 /**
  * EmptyState - 空数据状态组件

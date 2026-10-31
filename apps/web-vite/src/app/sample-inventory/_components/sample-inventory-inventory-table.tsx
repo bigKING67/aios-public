@@ -1,6 +1,6 @@
-import { ControlOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table, Tooltip } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { Pencil, SlidersHorizontal, Trash2 } from 'lucide-react';
+import { Button, confirmModal, Flexbox, Table, Tooltip } from '@lobehub/ui';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 
 import { Badge } from "@/components/atoms/badge";
 import type { SampleInventorySample } from "@/lib/generated-api-contract";
@@ -173,11 +173,11 @@ export function InventoryTable({
       render: (_, item) => {
         const archiveDisabled = item.onHandQuantity !== 0 || item.reservedQuantity !== 0;
         return (
-          <Space size="small">
+          <Flexbox horizontal gap={8}>
             <Button
               type="link"
               size="small"
-              icon={<EditOutlined aria-hidden="true" />}
+              icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
               onClick={() => onEdit(item)}
             >
               编辑
@@ -185,32 +185,36 @@ export function InventoryTable({
             <Button
               type="link"
               size="small"
-              icon={<ControlOutlined aria-hidden="true" />}
+              icon={<SlidersHorizontal size={14} strokeWidth={1.8} aria-hidden="true" />}
               onClick={() => onAdjust(item)}
             >
               调整
             </Button>
-            <Popconfirm
-              title="归档样品"
-              description="仅零库存且无预留的样品可归档。"
-              okText="归档"
-              cancelText="取消"
-              onConfirm={() => onArchive(item)}
-              disabled={archiveDisabled}
-            >
-              <Tooltip title={archiveDisabled ? "请先清零库存和预留" : undefined}>
+            <Tooltip title={archiveDisabled ? "请先清零库存和预留" : undefined}>
+              {/* The span keeps the tooltip reachable while the button is disabled. */}
+              <span>
                 <Button
                   danger
                   type="link"
                   size="small"
-                  icon={<DeleteOutlined aria-hidden="true" />}
+                  icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
                   disabled={archiveDisabled}
+                  onClick={() =>
+                    confirmModal({
+                      title: "归档样品",
+                      content: "仅零库存且无预留的样品可归档。",
+                      okText: "归档",
+                      cancelText: "取消",
+                      okButtonProps: { danger: true },
+                      onOk: () => onArchive(item),
+                    })
+                  }
                 >
                   归档
                 </Button>
-              </Tooltip>
-            </Popconfirm>
-          </Space>
+              </span>
+            </Tooltip>
+          </Flexbox>
         );
       },
     },

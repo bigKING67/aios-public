@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Input } from '@lobehub/ui';
 import type {
   ContentAssetDetailResponse,
   ContentAssetPlatformVideo,
@@ -8,8 +8,14 @@ import {
   contentAssetPlatformLabel,
 } from '../_lib/content-assets-platforms';
 import styles from '../content-assets.module.css';
+import { FormField, TextFormField } from '@/components/molecules/form-field';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { buildContentAssetPlatformSelectOptions } from './content-assets-platform-select';
-import platformSelectStyles from './content-assets-platform-select.module.css';
+import {
+  bindSelectField,
+  bindTextField,
+  type ControlledForm,
+} from '@/hooks/use-controlled-form';
 
 export interface IdentityFormValues {
   platform?: string;
@@ -30,86 +36,81 @@ export interface IdentityFormValues {
   materialStatus?: string;
 }
 
+type IdentityForm = ControlledForm<IdentityFormValues>;
+
 export function PlatformVideoFields({
+  form,
   resolvingDouyinVideoId,
   onResolveDouyinVideoId,
 }: {
+  form: IdentityForm;
   resolvingDouyinVideoId: boolean;
   onResolveDouyinVideoId: () => void;
 }) {
   return (
     <div className={styles.formGrid}>
-      <Form.Item
-        name="platform"
-        label="平台"
-        rules={[{ required: true, message: '请输入平台' }]}
-      >
-        <Select
-          className={platformSelectStyles.platformSelect}
-          showSearch={false}
+      <FormField form={form} name="platform" label="平台" required>
+        <LabeledSelect
+          {...bindSelectField(form, 'platform')}
           placeholder="选择平台"
-          optionFilterProp="searchText"
           options={buildContentAssetPlatformSelectOptions(
             CONTENT_ASSET_PLATFORM_OPTIONS.map((option) => option.value)
           )}
         />
-      </Form.Item>
-      <Form.Item name="accountName" label="达人昵称">
-        <Input placeholder="请输入达人昵称" maxLength={120} />
-      </Form.Item>
-      <Form.Item name="accountId" label="达人账号">
-        <Input placeholder="请输入达人账号或平台账号 ID" maxLength={80} />
-      </Form.Item>
-      <Form.Item name="advertiserId" label="广告主 ID">
-        <Input placeholder="千川/巨量广告主 ID" maxLength={80} />
-      </Form.Item>
-      <Form.Item
+      </FormField>
+      <TextFormField form={form} name="accountName" label="达人昵称" placeholder="请输入达人昵称" maxLength={120} />
+      <TextFormField form={form} name="accountId" label="达人账号" placeholder="请输入达人账号或平台账号 ID" maxLength={80} />
+      <TextFormField form={form} name="advertiserId" label="广告主 ID" placeholder="千川/巨量广告主 ID" maxLength={80} />
+      <FormField
+        form={form}
         name="externalUrl"
         label="抖音视频链接/平台链接"
         className={styles.formWide}
         extra="支持抖音长链或 v.douyin.com 分享短链；短链会调用后端解析。"
       >
-        <Input.Search
-          placeholder="粘贴抖音视频链接或分享文案"
-          maxLength={800}
-          enterButton={<Button type="primary" loading={resolvingDouyinVideoId}>提取 ID</Button>}
-          loading={resolvingDouyinVideoId}
-          onSearch={onResolveDouyinVideoId}
-        />
-      </Form.Item>
-      <Form.Item name="externalVideoId" label="抖音视频ID（抖音网页视频链接后面数字部分）">
-        <Input placeholder="抖音网页视频链接后面的数字部分" maxLength={160} />
-      </Form.Item>
-      <Form.Item name="externalItemId" label="千川素材ID（同步广告素材实例）">
-        <Input placeholder="千川素材 ID，保存后会同步广告素材实例" maxLength={160} />
-      </Form.Item>
-      <Form.Item name="externalNoteId" label="小红书笔记 ID">
-        <Input placeholder="note_id" maxLength={160} />
-      </Form.Item>
-      <Form.Item name="publishStatus" label="发布状态">
-        <Input placeholder="unknown / published / deleted" maxLength={60} />
-      </Form.Item>
-      <Form.Item name="publishTitle" label="发布标题" className={styles.formWide}>
-        <Input placeholder="平台侧标题，可为空" maxLength={240} />
-      </Form.Item>
+        <div className={styles.inputWithAction}>
+          <Input
+            {...bindTextField(form, 'externalUrl')}
+            placeholder="粘贴抖音视频链接或分享文案"
+            maxLength={800}
+            onPressEnter={onResolveDouyinVideoId}
+          />
+          <Button type="primary" loading={resolvingDouyinVideoId} onClick={onResolveDouyinVideoId}>
+            提取 ID
+          </Button>
+        </div>
+      </FormField>
+      <TextFormField
+        form={form}
+        name="externalVideoId"
+        label="抖音视频ID（抖音网页视频链接后面数字部分）"
+        placeholder="抖音网页视频链接后面的数字部分"
+        maxLength={160}
+      />
+      <TextFormField
+        form={form}
+        name="externalItemId"
+        label="千川素材ID（同步广告素材实例）"
+        placeholder="千川素材 ID，保存后会同步广告素材实例"
+        maxLength={160}
+      />
+      <TextFormField form={form} name="externalNoteId" label="小红书笔记 ID" placeholder="note_id" maxLength={160} />
+      <TextFormField form={form} name="publishStatus" label="发布状态" placeholder="unknown / published / deleted" maxLength={60} />
+      <TextFormField form={form} name="publishTitle" label="发布标题" placeholder="平台侧标题，可为空" maxLength={240} className={styles.formWide} />
     </div>
   );
 }
 
-export function AdMaterialFields({ detail }: { detail: ContentAssetDetailResponse | null }) {
+export function AdMaterialFields({ form, detail }: { form: IdentityForm; detail: ContentAssetDetailResponse | null }) {
   const platformVideoOptions = buildPlatformVideoIdentityOptions(detail?.platformVideos || []);
 
   return (
     <div className={styles.formGrid}>
-      <Form.Item
-        name="adPlatform"
-        label="广告平台"
-        rules={[{ required: true, message: '请输入广告平台' }]}
-      >
-        <Select
+      <FormField form={form} name="adPlatform" label="广告平台" required>
+        <LabeledSelect
+          {...bindSelectField(form, 'adPlatform')}
           showSearch
           placeholder="选择广告平台"
-          optionFilterProp="label"
           options={[
             { label: '千川', value: 'qianchuan' },
             { label: '巨量引擎', value: 'ocean_engine' },
@@ -117,16 +118,13 @@ export function AdMaterialFields({ detail }: { detail: ContentAssetDetailRespons
             { label: '其他', value: 'other' },
           ]}
         />
-      </Form.Item>
-      <Form.Item
-        name="externalMaterialId"
-        label="千川素材ID"
-        rules={[{ required: true, message: '请输入千川素材ID' }]}
-      >
-        <Input placeholder="请输入千川素材ID" maxLength={180} />
-      </Form.Item>
-      <Form.Item name="platformVideoId" label="关联平台视频身份">
-        <Select
+      </FormField>
+      <FormField form={form} name="externalMaterialId" label="千川素材ID" required>
+        <Input {...bindTextField(form, 'externalMaterialId')} placeholder="请输入千川素材ID" maxLength={180} />
+      </FormField>
+      <FormField form={form} name="platformVideoId" label="关联平台视频身份">
+        <LabeledSelect
+          {...bindSelectField(form, 'platformVideoId')}
           allowClear
           placeholder="可选：绑定到已维护的视频 ID"
           options={platformVideoOptions.map((item) => ({
@@ -134,28 +132,20 @@ export function AdMaterialFields({ detail }: { detail: ContentAssetDetailRespons
             label: item.label,
           }))}
         />
-      </Form.Item>
-      <Form.Item name="externalVideoId" label="抖音视频ID（抖音网页视频链接后面数字部分）">
-        <Input placeholder="同一个物理视频可被多个素材 ID 复用" maxLength={160} />
-      </Form.Item>
-      <Form.Item name="accountName" label="广告账户名称">
-        <Input placeholder="账户名称" maxLength={120} />
-      </Form.Item>
-      <Form.Item name="accountId" label="广告账户 ID">
-        <Input placeholder="账户 ID" maxLength={80} />
-      </Form.Item>
-      <Form.Item name="advertiserId" label="广告主 ID">
-        <Input placeholder="广告主 ID" maxLength={80} />
-      </Form.Item>
-      <Form.Item name="materialStatus" label="素材状态">
-        <Input placeholder="unknown / active / paused" maxLength={60} />
-      </Form.Item>
-      <Form.Item name="materialName" label="素材名称" className={styles.formWide}>
-        <Input placeholder="广告后台素材名称" maxLength={240} />
-      </Form.Item>
-      <Form.Item name="materialTitle" label="投放标题" className={styles.formWide}>
-        <Input placeholder="广告标题/创意标题，可为空" maxLength={240} />
-      </Form.Item>
+      </FormField>
+      <TextFormField
+        form={form}
+        name="externalVideoId"
+        label="抖音视频ID（抖音网页视频链接后面数字部分）"
+        placeholder="同一个物理视频可被多个素材 ID 复用"
+        maxLength={160}
+      />
+      <TextFormField form={form} name="accountName" label="广告账户名称" placeholder="账户名称" maxLength={120} />
+      <TextFormField form={form} name="accountId" label="广告账户 ID" placeholder="账户 ID" maxLength={80} />
+      <TextFormField form={form} name="advertiserId" label="广告主 ID" placeholder="广告主 ID" maxLength={80} />
+      <TextFormField form={form} name="materialStatus" label="素材状态" placeholder="unknown / active / paused" maxLength={60} />
+      <TextFormField form={form} name="materialName" label="素材名称" placeholder="广告后台素材名称" maxLength={240} className={styles.formWide} />
+      <TextFormField form={form} name="materialTitle" label="投放标题" placeholder="广告标题/创意标题，可为空" maxLength={240} className={styles.formWide} />
     </div>
   );
 }

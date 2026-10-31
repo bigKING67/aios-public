@@ -3,11 +3,18 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-/// `period`: `last7` | `last30` (default) | `month` (current calendar month, Asia/Shanghai).
-#[derive(Debug, Deserialize)]
+/// Asia/Shanghai calendar dates (`YYYY-MM-DD`), first match wins:
+/// - `from` + `to`: a custom inclusive range (at most 366 days);
+/// - `unit` (`day` | `month` | `year`) with an optional `date` inside it (default: the newest activity);
+/// - legacy `period`: `last7` | `last30` (default) | `month` (current calendar month).
+#[derive(Debug, Default, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(super) struct StudioOverviewQuery {
     pub(super) period: Option<String>,
+    pub(super) unit: Option<String>,
+    pub(super) date: Option<String>,
+    pub(super) from: Option<String>,
+    pub(super) to: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -25,9 +32,12 @@ pub(super) struct StudioOverviewResponse {
 #[serde(rename_all = "camelCase")]
 pub(super) struct StudioOverviewPeriod {
     pub(super) key: String,
-    /// Inclusive Asia/Shanghai calendar dates (`YYYY-MM-DD`).
+    /// Inclusive Asia/Shanghai calendar dates (`YYYY-MM-DD`); a running period ends today.
     pub(super) from: String,
     pub(super) to: String,
+    pub(super) today: String,
+    /// Newest date with period-scoped work (analysis, batch or output) in scope.
+    pub(super) latest_activity_date: Option<String>,
 }
 
 /// Estimates from recorded usage and published list prices; not a bill.
@@ -111,6 +121,8 @@ pub(super) struct StudioOverviewActivity {
     pub(super) kind: String,
     pub(super) id: Uuid,
     pub(super) title: String,
+    /// Job or batch status; a settled batch whose delivered outputs were all
+    /// deleted from the library reads `outputs_deleted` (same rule as 成片).
     pub(super) status: String,
     pub(super) detail: Option<String>,
     pub(super) created_at: String,

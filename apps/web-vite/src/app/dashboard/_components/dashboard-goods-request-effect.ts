@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { buildDashboardCompareQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
 import {
@@ -12,7 +12,7 @@ import type { DashboardGoodsApiResponse } from './dashboard-types';
 
 type DashboardGoodsRequestEffectArgs = {
   isEnabled: boolean;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   currentRange: DashboardDateRangeLike;
   previousRange: DashboardDateRangeLike;
   setGoodsData: Dispatch<SetStateAction<DashboardGoodsApiResponse | null>>;

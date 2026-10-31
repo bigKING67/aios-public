@@ -87,7 +87,7 @@ describe("SampleInventoryImportModal", () => {
       "分类",
       "期初库存",
     ]);
-    expect(headerCells.every((cell) => cell.querySelector(".ant-table-column-sorter"))).toBe(true);
+    expect(headerCells.every((cell) => cell.querySelector(".lobe-table-column-sorter"))).toBe(true);
     expect(headerCells.every((cell) => cell.classList.contains(tableStyles.centeredTableHeaderCell))).toBe(true);
     expect(
       within(screen.getByRole("table"))

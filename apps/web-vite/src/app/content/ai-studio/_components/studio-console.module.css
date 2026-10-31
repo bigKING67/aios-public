@@ -1,0 +1,117 @@
+/*
+ * AI 创作中心 console chrome on lobe-ui ConsoleShell (DESIGN.md "Visual Language v2"). Colors and
+ * radii come from the --lobe-* theme and the --aios-* layer, so light and dark follow data-theme.
+ */
+
+.shell {
+  /* One screen tall: the sidebar keeps the account at its foot and the workspace scrolls itself. */
+  height: var(--aios-workspace-height, 100dvh);
+}
+
+/* ConsoleShell's main already pads 24px; this adds only a little air at the top and bottom. */
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+  padding: var(--spacing-2) var(--spacing-2) var(--spacing-10);
+}
+
+/*
+ * v3 sidebar: lighter than the content. Rows stay at lobe's 36px because CJK glyphs fill the whole
+ * em box: at 32px the 14px labels left less air between rows than Latin text does at the same
+ * pitch. The current page reads from ink text against gray siblings, so its fill can be faint and
+ * smaller-radius than lobe's 6% / 8px.
+ */
+.shell :global(.lobe-dashboard-console-nav__item) {
+  height: 36px;
+  min-height: 36px;
+  border-radius: var(--lobe-border-radius-sm);
+}
+
+/* Groups are separated by space alone, not lobe's rules under the top items and above each group. */
+.shell :global(.lobe-dashboard-console-nav__top-items) {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.shell :global(.lobe-dashboard-console-nav__group) {
+  margin-top: var(--spacing-5);
+}
+
+.shell :global(.lobe-dashboard-console-nav__group)::before {
+  display: none;
+}
+
+.shell :global(.lobe-dashboard-console-nav__item[data-active='true']) {
+  background: var(--lobe-color-fill-tertiary);
+}
+
+/*
+ * Sidebar type ladder (DESIGN.md › Layout Grammar v3): brand 16/600 > nav 14/400 > group label
+ * 13/500, with 16px icons so no label reads smaller than the glyph beside it.
+ */
+.shell :global(.lobe-dashboard-console-brand__name) {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.shell :global(.lobe-dashboard-console-nav__group-header),
+.shell :global(.lobe-dashboard-console-nav__group-header .lobe-dashboard-console-nav__label) {
+  font-size: var(--font-size-md);
+}
+
+.shell :global(.lobe-dashboard-console-nav__icon),
+.shell :global(.lobe-dashboard-console-nav__icon svg) {
+  width: 16px;
+  height: 16px;
+}
+
+/* The studio home has no breadcrumb; lobe still draws the rule after the toggle, so drop it there. */
+.shell :global(.lobe-dashboard-console-shell__topbar-divider:has(+ .lobe-dashboard-console-shell__topbar-main:empty)) {
+  display: none;
+}
+
+/* 220px instead of lobe's 248px when expanded on desktop; collapsed rail and phone drawer keep theirs. */
+@media (min-width: 761px) {
+  .shell :global(.lobe-dashboard-console-shell__sidebar[data-collapsed='false']) {
+    width: 220px;
+  }
+}
+
+/* lobe PageHeader / Surface on the competitor pages follow the studio page header and v3 frames. */
+.shell :global(.lobe-dashboard-page-header__title) {
+  font-size: var(--font-size-section-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-title);
+}
+
+.shell :global(.lobe-dashboard-page-header__description) {
+  max-width: 52em;
+  color: var(--lobe-color-text-tertiary);
+  text-wrap: pretty;
+}
+
+.shell :global(.lobe-dashboard-surface) {
+  border-color: var(--lobe-color-border-secondary);
+}
+
+/* The module mark is outlined: the solid mark belongs to AIOS in the global bar above. */
+.logo {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--lobe-color-border);
+  border-radius: var(--lobe-border-radius-sm);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-bg-container);
+}
+
+@media (max-width: 760px) {
+  .workspace {
+    padding: 0 0 var(--spacing-8);
+  }
+}
+

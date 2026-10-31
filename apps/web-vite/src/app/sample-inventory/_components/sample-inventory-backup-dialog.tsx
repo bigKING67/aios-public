@@ -1,4 +1,4 @@
-import { Alert, Descriptions, Modal } from "antd";
+import { Alert, Descriptions, Modal } from '@lobehub/ui';
 
 import type { SampleInventoryBackupPlanResponse } from "@/lib/generated-api-contract";
 import styles from "../sample-inventory.module.css";
@@ -34,7 +34,7 @@ export function SampleInventoryBackupDialog({
       okButtonProps={{ danger: true, disabled: !preview || parsing }}
       confirmLoading={restoring}
       closable={!restoring}
-      mask={{ closable: !restoring }}
+      maskClosable={!restoring}
       onCancel={onCancel}
       onOk={onRestore}
       destroyOnHidden
@@ -57,20 +57,30 @@ export function SampleInventoryBackupDialog({
               title="恢复会把当前业务状态调整为备份状态"
               description="新增记录将归档或作废，库存差额通过补偿流水对账；历史流水和业务事件不会删除或覆盖。"
             />
-            <Descriptions bordered size="small" column={3} title="备份内容">
-              <Descriptions.Item label="样品">{preview.sampleCount}</Descriptions.Item>
-              <Descriptions.Item label="入库记录">{preview.inboundCount}</Descriptions.Item>
-              <Descriptions.Item label="出库记录">{preview.outboundCount}</Descriptions.Item>
-            </Descriptions>
-            <Descriptions bordered size="small" column={2} title="预计变更">
-              <Descriptions.Item label="设置更新">{changes.settingsToUpdate}</Descriptions.Item>
-              <Descriptions.Item label="样品更新">{changes.samplesToUpdate}</Descriptions.Item>
-              <Descriptions.Item label="样品归档">{changes.samplesToArchive}</Descriptions.Item>
-              <Descriptions.Item label="入库更新">{changes.inboundsToUpdate}</Descriptions.Item>
-              <Descriptions.Item label="入库作废">{changes.inboundsToVoid}</Descriptions.Item>
-              <Descriptions.Item label="出库更新">{changes.outboundsToUpdate}</Descriptions.Item>
-              <Descriptions.Item label="出库归档">{changes.outboundsToArchive}</Descriptions.Item>
-            </Descriptions>
+            <Descriptions
+              bordered
+              column={3}
+              title="备份内容"
+              items={[
+                { key: "样品", label: "样品", children: preview.sampleCount },
+                { key: "入库记录", label: "入库记录", children: preview.inboundCount },
+                { key: "出库记录", label: "出库记录", children: preview.outboundCount },
+              ]}
+            />
+            <Descriptions
+              bordered
+              column={2}
+              title="预计变更"
+              items={[
+                { key: "设置更新", label: "设置更新", children: changes.settingsToUpdate },
+                { key: "样品更新", label: "样品更新", children: changes.samplesToUpdate },
+                { key: "样品归档", label: "样品归档", children: changes.samplesToArchive },
+                { key: "入库更新", label: "入库更新", children: changes.inboundsToUpdate },
+                { key: "入库作废", label: "入库作废", children: changes.inboundsToVoid },
+                { key: "出库更新", label: "出库更新", children: changes.outboundsToUpdate },
+                { key: "出库归档", label: "出库归档", children: changes.outboundsToArchive },
+              ]}
+            />
           </>
         )}
       </div>

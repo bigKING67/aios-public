@@ -1,5 +1,5 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import dayjs from 'dayjs';
 
 import {
@@ -14,7 +14,7 @@ import type {
 } from './dashboard-types';
 
 type DashboardLiveHandlersArgs = {
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   liveRowsByDate: ReadonlyMap<string, DashboardLiveDetailRow[]>;
   selectedLiveFunnelDayRows: DashboardLiveDetailRow[];
   activeLiveTrendRows: DashboardLiveTrendRow[];

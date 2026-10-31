@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type {
   DouyinChannelAttributionLeafPropsBundle,
 } from './platform-tab-douyin-channel-leaf-contracts';
@@ -18,12 +18,12 @@ import type {
 export interface BuildDouyinAttributionSectionPropsParams {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinLiveColumns: ColumnsType<DouyinLiveSessionRow>;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  douyinShortvideoColumns: ColumnsType<DouyinShortvideoRow>;
-  douyinCardProductColumns: ColumnsType<DouyinCardProductRow>;
-  douyinCardSourceColumns: ColumnsType<DouyinCardSourceRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  douyinLiveColumns: TableColumnsType<DouyinLiveSessionRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  douyinShortvideoColumns: TableColumnsType<DouyinShortvideoRow>;
+  douyinCardProductColumns: TableColumnsType<DouyinCardProductRow>;
+  douyinCardSourceColumns: TableColumnsType<DouyinCardSourceRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
   resolveFunnelStageColor: (index: number) => string;
   waterfallTotalColor: string;
 }

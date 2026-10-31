@@ -31,7 +31,7 @@
   border-radius:
     var(--dashboard-platform-thumb-radius-x, var(--border-radius-full)) /
     var(--dashboard-platform-thumb-radius-y, var(--border-radius-full));
-  background-color: var(--brand-primary);
+  background-color: var(--lobe-color-primary);
   background-image: none;
   box-shadow: var(--dashboard-brand-tab-shadow);
   opacity: 0;

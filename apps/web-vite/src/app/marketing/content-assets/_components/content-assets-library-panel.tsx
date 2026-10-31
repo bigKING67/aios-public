@@ -1,4 +1,4 @@
-import { Pagination, Segmented, Select } from 'antd';
+import { Pagination, Segmented } from '@lobehub/ui';
 import { CONTENT_ASSET_SORT_OPTIONS } from '../_lib/content-assets-filter-constants';
 import { formatCompactNumber } from '../_lib/content-assets-formatters';
 import type {
@@ -17,6 +17,7 @@ import { ContentAssetsGrid, ContentAssetsSkeleton, ContentAssetsTable } from './
 import { ContentAssetsEmptyResult, ContentAssetsListUnavailable } from './content-assets-empty-states';
 import { ContentAssetsFilterBar } from './content-assets-filter-bar';
 import { ContentAssetsLibraryHeader } from './content-assets-library-header';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 
 export function ContentAssetsLibraryPanel({
   assetStatus,
@@ -171,21 +172,24 @@ export function ContentAssetsLibraryPanel({
               </p>
             </div>
             <div className={controlsStyles.surfaceTools}>
-              <Select<ContentAssetSort>
-                className={controlsStyles.surfaceSort}
+              <LabeledSelect<ContentAssetSort>
+                label="排序"
+                wrapperClassName={controlsStyles.surfaceSort}
                 size="small"
                 value={sort}
                 options={CONTENT_ASSET_SORT_OPTIONS}
-                onChange={onSortChange}
+                onChange={(next) => next && onSortChange(next)}
               />
-              <Segmented<ContentAssetView>
-                value={view}
-                options={[
-                  { label: '卡片', value: 'grid' },
-                  { label: '表格', value: 'table' },
-                ]}
-                onChange={onViewChange}
-              />
+              <div role="group" aria-label="展示方式">
+                <Segmented<ContentAssetView>
+                  value={view}
+                  options={[
+                    { label: '卡片', value: 'grid' },
+                    { label: '表格', value: 'table' },
+                  ]}
+                  onChange={onViewChange}
+                />
+              </div>
             </div>
           </div>
 

@@ -41,6 +41,7 @@ function main() {
   const bannedIdentifiers = [
     'buildTmallChannelAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'WaterfallChart',
     'ComponentProps',
     'resolveResponsiveTableSize',

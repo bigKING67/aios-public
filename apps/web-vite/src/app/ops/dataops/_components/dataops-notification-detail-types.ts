@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel, DataOpsNotificationEvent } from '@/config/dataops-hub';
 import type {
   NotificationFailureReasonSummaryItem,
@@ -39,7 +39,7 @@ export interface DataOpsNotificationDetailProps {
   selectedReasonRetryableCount: number;
   notificationFailureSummaryText: string;
   notificationFailureAlertTemplateText: string;
-  columns: ColumnsType<DataOpsNotificationEvent>;
+  columns: TableColumnsType<DataOpsNotificationEvent>;
   isCompactViewport: boolean;
   renderExpandedRow: (record: DataOpsNotificationEvent) => ReactNode;
   renderPaginationTotal: (total: number, range: [number, number]) => string;

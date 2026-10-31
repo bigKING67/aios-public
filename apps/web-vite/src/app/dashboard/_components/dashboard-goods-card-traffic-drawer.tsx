@@ -1,6 +1,5 @@
 import { useMemo, type Key, type ReactNode } from 'react';
-import { Drawer, Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Drawer, Empty, Table, type TableColumnsType } from '@lobehub/ui';
 
 import drawerStyles from './dashboard-goods-card-traffic-drawer.module.css';
 import noticeStyles from './dashboard-notice.module.css';
@@ -17,7 +16,7 @@ export type DashboardGoodsCardTrafficDrawerProps = {
   asOfDate: string;
   loadError: string | null;
   rows: DashboardGoodsCardTrafficTreeNode[];
-  columns: ColumnsType<DashboardGoodsCardTrafficTreeNode>;
+  columns: TableColumnsType<DashboardGoodsCardTrafficTreeNode>;
   loading: boolean;
   expandedRowKeys: Key[];
   onExpandedRowKeysChange: (keys: Key[]) => void;
@@ -80,7 +79,7 @@ export function DashboardGoodsCardTrafficDrawer({
   onClose,
 }: DashboardGoodsCardTrafficDrawerProps) {
   const title = `流量来源 · ${selectedRow?.product_title?.trim() || selectedRow?.product_id || '商品卡'}`;
-  const tableColumns = useMemo<ColumnsType<DashboardGoodsCardTrafficTreeNode>>(
+  const tableColumns = useMemo<TableColumnsType<DashboardGoodsCardTrafficTreeNode>>(
     () =>
       columns.map((column, index) => {
         if (index !== 0) {
@@ -108,7 +107,7 @@ export function DashboardGoodsCardTrafficDrawer({
       title={title}
       placement="right"
       width={isMobile ? '100%' : 1100}
-      closable={{ placement: 'end' }}
+      closable
       open={open}
       onClose={onClose}
     >

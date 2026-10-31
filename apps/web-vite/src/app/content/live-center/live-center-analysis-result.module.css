@@ -1,7 +1,7 @@
 .analysisResultShell {
   min-height: 100dvh;
   padding: var(--spacing-4);
-  background: var(--bg-global);
+  background: var(--lobe-color-bg-layout);
 }
 
 .analysisResultConsole {
@@ -17,10 +17,10 @@
   gap: var(--spacing-4);
   align-items: center;
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .analysisResultBackLink {
@@ -28,7 +28,7 @@
   gap: var(--spacing-2);
   align-items: center;
   min-height: 32px;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-none);
@@ -36,7 +36,7 @@
 }
 
 .analysisResultBackLink:hover {
-  color: var(--brand-text-strong);
+  color: var(--aios-ai-text);
 }
 
 .analysisResultTitleBlock {
@@ -46,7 +46,7 @@
 }
 
 .analysisResultTitleBlock span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -55,7 +55,7 @@
 .analysisResultTitleBlock h1 {
   margin: 0;
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-page-title);
   font-weight: var(--font-weight-page-title);
   line-height: var(--line-height-tight);
@@ -68,10 +68,10 @@
   display: grid;
   gap: var(--spacing-4);
   padding: var(--spacing-5);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .reviewCover {
@@ -80,9 +80,9 @@
   gap: var(--spacing-4);
   min-width: 0;
   padding: var(--spacing-5);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .reviewCoverMain,
@@ -97,7 +97,7 @@
 }
 
 .reviewEyebrow {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -109,7 +109,7 @@
 .reviewCoverMain h2 {
   max-width: 820px;
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-4xl));
   font-weight: var(--font-weight-page-title);
   line-height: var(--line-height-tight);
@@ -120,7 +120,7 @@
 .reviewCoverMain p,
 .reviewCoverAside p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -136,7 +136,7 @@
 .reviewEvidenceLine span,
 .reviewCoverAside span,
 .reviewCoverAside small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -149,13 +149,13 @@
   gap: var(--spacing-2);
   align-content: start;
   padding: var(--spacing-4);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: var(--border-radius-xl);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .reviewCoverAside strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -165,7 +165,7 @@
   height: auto;
   min-height: 0;
   padding: 0;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -173,7 +173,7 @@
 }
 
 .analysisResultInlineAction:disabled {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .analysisResultStatusLine {
@@ -190,9 +190,9 @@
   gap: var(--spacing-3);
   min-width: 0;
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .analysisResultSectionHeader,
@@ -205,7 +205,7 @@
 }
 
 .analysisResultSectionMeta > span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -224,7 +224,7 @@
 .analysisResultRowTitle strong {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -233,14 +233,14 @@
 
 .analysisResultExcerpt {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
 
 .analysisResultSectionHeader {
   padding-bottom: var(--spacing-2);
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisResultSectionHeaderMetaOnly {
@@ -251,7 +251,7 @@
 
 .analysisResultSectionHeader h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -261,7 +261,7 @@
 .analysisResultSubMeta,
 .analysisResultTaskMeta span,
 .analysisResultUsageList span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -272,7 +272,7 @@
   display: grid;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
 }
 
@@ -284,15 +284,15 @@
 }
 
 .analysisResultEvidenceHeader {
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .analysisResultEvidenceHeader span,
 .analysisResultEvidenceRow > span {
   min-width: 0;
   padding: var(--spacing-3);
-  border-right: 1px solid var(--divider-color);
-  color: var(--text-secondary);
+  border-right: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -300,7 +300,7 @@
 }
 
 .analysisResultEvidenceHeader span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -312,7 +312,7 @@
 }
 
 .analysisResultEvidenceRow + .analysisResultEvidenceRow {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisResultMonoStack {
@@ -333,11 +333,11 @@
 }
 
 .analysisResultMonoStack strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 .analysisResultMonoStack small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .analysisResultTwoColumnGrid {
@@ -354,12 +354,12 @@
 }
 
 .analysisResultScriptCard {
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .analysisResultScriptText {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -398,9 +398,9 @@
   gap: var(--spacing-1);
   min-width: 0;
   padding: var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .analysisResultMetaGrid dt,
@@ -413,13 +413,13 @@
 }
 
 .analysisResultMetaGrid dt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-none);
 }
 
 .analysisResultMetaGrid dd {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
@@ -432,9 +432,9 @@
   gap: var(--spacing-3);
   min-width: 0;
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .analysisResultAppendixHeader {
@@ -444,7 +444,7 @@
 }
 
 .analysisResultAppendixHeader span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -454,7 +454,7 @@
 }
 
 .analysisResultAppendixHeader strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -463,29 +463,29 @@
 .analysisResultAppendixHeader p {
   max-width: 720px;
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
 
 .analysisResultAppendixDetails {
   min-width: 0;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .analysisResultAppendixDetails > summary {
   cursor: pointer;
   padding: var(--spacing-3) var(--spacing-4);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
 }
 
 .analysisResultAppendixDetails[open] > summary {
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisResultAppendixDetails > .analysisResultSection {
@@ -530,14 +530,14 @@
 
   .analysisResultEvidenceRow > span::before {
     content: attr(data-label);
-    color: var(--text-tertiary);
+    color: var(--lobe-color-text-tertiary);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-snug);
   }
 
   .analysisResultEvidenceRow > span + span {
-    border-top: 1px solid var(--divider-color);
+    border-top: 1px solid var(--lobe-color-border-secondary);
   }
 }
 

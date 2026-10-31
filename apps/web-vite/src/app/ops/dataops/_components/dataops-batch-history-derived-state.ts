@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import {
@@ -24,6 +23,7 @@ import type {
   BatchOperationAction,
   AlertSendModalSource,
 } from './dataops-hub-formatters';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsBatchHistoryDerivedState(options: {
   availableAlertChannels: DataOpsNotificationChannel[];
@@ -36,7 +36,7 @@ export function useDataOpsBatchHistoryDerivedState(options: {
   defaultAlertChannelId?: string;
   exportCsv: (options: DataOpsCsvExportActionOptions) => Promise<void>;
   hasOperatePermission: boolean;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   openAlertDraft: (draftOptions: {
     formValues: {
       channelId: string;

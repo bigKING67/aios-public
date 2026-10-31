@@ -1,6 +1,8 @@
 'use client';
 
-import { Card, Pagination, Tag } from 'antd';
+import { Tag } from '@lobehub/ui';
+import { AdminMobilePagination } from '../../_components/admin-mobile-pagination';
+import styles from '../../_components/admin-page.module.css';
 import type { AuditLog } from './audit-logs-types';
 import {
   formatAuditLogCreatedAt,
@@ -27,51 +29,33 @@ export function AuditLogsMobileList({
   onShowSizeChange,
 }: AuditLogsMobileListProps) {
   return (
-    <div className="space-y-3">
+    <div className={styles.mobileList}>
       {auditItems.map((item) => {
         const resultState = getAuditLogResultState(item);
 
         return (
-          <Card key={String(item.id)} size="small" className="w-full">
-            <div className="space-y-2">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="m-0 text-sm font-semibold text-text-primary">{item.action || '-'}</p>
-                  <p className="m-0 text-xs text-text-tertiary">{item.module || '-'}</p>
-                </div>
-                <Tag color={resultState.color}>{resultState.label}</Tag>
+          <article key={String(item.id)} className={styles.mobileCard}>
+            <div className={styles.cardHead}>
+              <div className={styles.cardHeadText}>
+                <p className={`${styles.cardTitle} ${styles.cardTitleWrap}`}>{item.action || '-'}</p>
+                <p className={styles.metaMuted}>{item.module || '-'}</p>
               </div>
-              <p className="m-0 break-all text-xs text-text-secondary">
-                资源：{getAuditLogResourceText(item)}
-              </p>
-              <p className="m-0 text-xs text-text-secondary">
-                操作者：{getAuditLogOperator(item)}
-              </p>
-              <p className="m-0 text-xs text-text-tertiary">
-                时间：{formatAuditLogCreatedAt(item.created_at)}
-              </p>
-              {item.ip_address ? (
-                <p className="m-0 text-xs text-text-tertiary">IP：{item.ip_address}</p>
-              ) : null}
-              {item.detail ? (
-                <p className="m-0 whitespace-pre-wrap break-words text-xs text-text-secondary">
-                  详情：{item.detail}
-                </p>
-              ) : null}
+              <Tag color={resultState.color}>{resultState.label}</Tag>
             </div>
-          </Card>
+            <p className={styles.meta}>资源：{getAuditLogResourceText(item)}</p>
+            <p className={styles.meta}>操作者：{getAuditLogOperator(item)}</p>
+            <p className={styles.metaMuted}>时间：{formatAuditLogCreatedAt(item.created_at)}</p>
+            {item.ip_address ? <p className={styles.metaMuted}>IP：{item.ip_address}</p> : null}
+            {item.detail ? <p className={`${styles.meta} ${styles.preWrap}`}>详情：{item.detail}</p> : null}
+          </article>
         );
       })}
-      <Pagination
-        size="small"
+      <AdminMobilePagination
         current={page}
         pageSize={pageSize}
         total={total}
-        showSizeChanger
-        showTotal={(totalCount) => `共 ${totalCount} 条`}
         onChange={onChange}
-        onShowSizeChange={onShowSizeChange}
-        hideOnSinglePage
+        onPageSizeChange={onShowSizeChange}
       />
     </div>
   );

@@ -5,15 +5,15 @@ function resolvePipelineTableCellClassName(className: string | undefined) {
   const classNames = [className];
 
   if (
-    className?.includes('ant-table-row-expand-icon-cell') ||
-    className?.includes('ant-table-selection-column')
+    className?.includes('lobe-table-row-expand-icon-cell') ||
+    className?.includes('lobe-table-selection-column')
   ) {
     classNames.push(pipelineStyles.pipelineCompactTableCell);
   }
 
   if (
-    className?.includes('ant-table-cell-fix-left') ||
-    className?.includes('ant-table-cell-fix-right')
+    className?.includes('lobe-table-cell-fix-start') ||
+    className?.includes('lobe-table-cell-fix-end')
   ) {
     classNames.push(pipelineStyles.pipelineFixedCell);
   }

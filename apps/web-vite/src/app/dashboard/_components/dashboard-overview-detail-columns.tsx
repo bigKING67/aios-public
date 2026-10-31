@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   formatTableInteger,
   formatTableNumber,
@@ -27,7 +27,7 @@ export function buildDashboardOverviewDetailColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardOverviewDetailTableClassNames;
-}): ColumnsType<DashboardOverviewDetailRow> {
+}): TableColumnsType<DashboardOverviewDetailRow> {
   const pendingMetricHeaderCellProps = () => buildPendingMetricHeaderCellProps(classNames);
 
   return [

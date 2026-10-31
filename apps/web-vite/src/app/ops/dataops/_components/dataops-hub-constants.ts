@@ -26,16 +26,19 @@ export const TAB_ITEMS: Array<{ key: TabKey; label: string }> = [
   { key: 'audit', label: '运行审计' },
 ];
 
-export const LEVEL_TAG_COLOR: Record<DataOpsNotificationEvent['level'], string> = {
-  info: 'blue',
-  warning: 'gold',
-  error: 'red',
+/** Tone of a DataOps status chip; the chip text always states the status. */
+export type DataOpsTagTone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+
+export const LEVEL_TAG_TONE: Record<DataOpsNotificationEvent['level'], DataOpsTagTone> = {
+  info: 'info',
+  warning: 'warning',
+  error: 'danger',
 };
 
-export const STATUS_TAG_COLOR: Record<DataOpsNotificationEvent['status'], string> = {
-  sent: 'green',
-  failed: 'red',
-  skipped: 'default',
+export const STATUS_TAG_TONE: Record<DataOpsNotificationEvent['status'], DataOpsTagTone> = {
+  sent: 'success',
+  failed: 'danger',
+  skipped: 'neutral',
 };
 
 export const BATCH_OPERATION_CONCURRENCY = 4;

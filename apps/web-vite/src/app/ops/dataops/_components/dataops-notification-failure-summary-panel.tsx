@@ -1,7 +1,10 @@
 'use client';
 
-import { Button, Select, Tag } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { Button } from '@lobehub/ui';
+import { RotateCw } from 'lucide-react';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { DataOpsToneTag } from './dataops-tone-tag';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import { DataOpsFailureSummaryActions } from './dataops-failure-summary-actions';
 import type { NotificationFailureReasonSummaryItem } from './dataops-notification-retry-helpers';
 import { truncateText } from './dataops-hub-formatters';
@@ -79,16 +82,17 @@ export function DataOpsNotificationFailureSummaryPanel({
             <span>选中一条原因后可直接重发对应失败通知</span>
           </div>
           <div className={notifyStyles.notifyFailureActions}>
-            <Select<string>
+            <LabeledSelect<string>
+              label="失败通道"
               size="small"
               value={channelFocus}
-              onChange={onChannelFocusChange}
+              onChange={(value) => value !== undefined && onChannelFocusChange(value)}
               options={channelOptions}
-              className={styles.notifyFailureChannelSelect}
+              wrapperClassName={styles.notifyFailureChannelSelect}
             />
             <Button
               size="small"
-              icon={<ReloadOutlined />}
+              icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
               disabled={
                 !hasOperatePermission || globalActionBusy || selectedReasonRetryableCount === 0
               }
@@ -156,7 +160,7 @@ export function DataOpsNotificationFailureSummaryPanel({
               }`}
               onClick={() => onApplyReasonFilter(item.reason)}
             >
-              <Tag color="red">x{item.count}</Tag>
+              <DataOpsToneTag tone="danger">x{item.count}</DataOpsToneTag>
               <p>{truncateText(item.reason, 120)}</p>
               <span>
                 可重发：{item.retryableCount} · 事件：

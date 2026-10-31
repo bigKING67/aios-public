@@ -212,8 +212,8 @@ export const echartsTheme = {
  * 获取第 n 个推荐颜色（循环）
  *
  * @example
- * const color = getChartColor(0); // '#445DF6'
- * const color = getChartColor(6); // '#445DF6' (循环)
+ * const color = getChartColor(0); // '#6E56CF'
+ * const color = getChartColor(6); // '#6E56CF' (循环)
  */
 export function getChartColor(index: number): string {
   return ECHARTS_COLORS[index % ECHARTS_COLORS.length];
@@ -226,7 +226,7 @@ export function getChartColor(index: number): string {
  * @returns 渐变配置对象
  *
  * @example
- * const gradient = createGradientColor('#445DF6');
+ * const gradient = createGradientColor('#6E56CF');
  * areaStyle: { color: gradient }
  */
 export function createGradientColor(baseColor: string) {

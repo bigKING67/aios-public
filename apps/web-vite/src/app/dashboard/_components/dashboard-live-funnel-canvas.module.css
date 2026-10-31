@@ -27,7 +27,7 @@
   height: var(--live-funnel-overall-span);
   border-left: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
   border-bottom: var(--live-funnel-link-width) solid var(--live-funnel-link-color);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   pointer-events: none;
 }
 
@@ -62,7 +62,7 @@
 
 .overallBracketValue {
   top: 46%;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 480;
   letter-spacing: var(--letter-spacing-title);
@@ -106,7 +106,7 @@
   align-items: flex-end;
   justify-content: center;
   gap: 5px;
-  color: var(--dashboard-live-funnel-bar-text);
+  color: var(--live-funnel-bar-text, var(--dashboard-live-funnel-bar-text));
   padding: 10px 26px 10px 58px;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 6.5% 100%);
   animation: live-funnel-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -115,7 +115,7 @@
 }
 
 .barValue {
-  color: var(--dashboard-live-funnel-bar-text);
+  color: var(--live-funnel-bar-text, var(--dashboard-live-funnel-bar-text));
   font-size: var(--font-size-section-title);
   font-weight: 500;
   letter-spacing: var(--letter-spacing-title);
@@ -123,7 +123,7 @@
 }
 
 .barLabel {
-  color: var(--dashboard-live-funnel-bar-muted-text);
+  color: color-mix(in srgb, var(--live-funnel-bar-text, var(--dashboard-live-funnel-bar-text)) 88%, transparent);
   font-size: var(--font-size-base);
   font-weight: 400;
   line-height: var(--line-height-compact);
@@ -177,7 +177,7 @@
 }
 
 .sideRateValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 480;
   letter-spacing: var(--letter-spacing-title);

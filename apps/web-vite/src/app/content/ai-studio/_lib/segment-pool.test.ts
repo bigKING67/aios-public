@@ -30,9 +30,9 @@ describe('buildSegmentPoolRows', () => {
 describe('poolScopeCounts', () => {
   const rows = buildSegmentPoolRows(
     [
-      { productName: '面霜', labelKey: 'mixed_voiceover', confirmedCount: 8 },
-      { productName: '面霜', labelKey: 'live_demo', confirmedCount: 4 },
-      { productName: '精华', labelKey: 'mixed_voiceover', confirmedCount: 2 },
+      { productName: '口红', labelKey: 'mixed_voiceover', confirmedCount: 8 },
+      { productName: '口红', labelKey: 'live_demo', confirmedCount: 4 },
+      { productName: '粉底液', labelKey: 'mixed_voiceover', confirmedCount: 2 },
       { productName: null, labelKey: 'live_demo', confirmedCount: 1 },
     ],
     labels,
@@ -40,7 +40,7 @@ describe('poolScopeCounts', () => {
 
   it('sums every product, one product or the product-less segments for the label strip', () => {
     expect(poolScopeCounts(rows, { kind: 'all' })).toEqual({ total: 15, counts: { mixed_voiceover: 10, live_demo: 5 } });
-    expect(poolScopeCounts(rows, { kind: 'product', productName: '面霜' })).toEqual({
+    expect(poolScopeCounts(rows, { kind: 'product', productName: '口红' })).toEqual({
       total: 12,
       counts: { mixed_voiceover: 8, live_demo: 4 },
     });

@@ -1,4 +1,5 @@
 import type { ECharts, EChartsCoreOption } from 'echarts/core';
+import { adaptChartOptionToAppearance } from '@/lib/echarts-appearance';
 
 interface LeanTooltipOption {
   formatter?: (params: unknown) => unknown;
@@ -206,8 +207,36 @@ function disposeLeanEchartsTooltip(chart: ECharts): void {
   tooltipBindings.delete(chart);
 }
 
+// Charts keep their last option so a theme switch can redraw them in the new appearance
+// (canvas cannot follow CSS variables; see lib/echarts-appearance.ts).
+const liveCharts = new Map<ECharts, { option: EChartsCoreOption; setOptionOptions?: LeanSetOptionOptions }>();
+let appearanceObserver: MutationObserver | null = null;
+
+function currentAppearance(): 'light' | 'dark' {
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
+
+function applyOption(chart: ECharts, option: EChartsCoreOption, setOptionOptions?: LeanSetOptionOptions): void {
+  chart.setOption(withoutNativeTooltip(adaptChartOptionToAppearance(option, currentAppearance())), setOptionOptions);
+}
+
+function watchAppearance(): void {
+  if (appearanceObserver || typeof MutationObserver === 'undefined') return;
+  appearanceObserver = new MutationObserver(() => {
+    for (const [chart, entry] of liveCharts) {
+      if (chart.isDisposed()) {
+        liveCharts.delete(chart);
+        continue;
+      }
+      applyOption(chart, entry.option, entry.setOptionOptions);
+    }
+  });
+  appearanceObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+
 export function disposeLeanEcharts(chart: ECharts): void {
   disposeLeanEchartsTooltip(chart);
+  liveCharts.delete(chart);
   chart.dispose();
 }
 
@@ -267,5 +296,7 @@ export function setLeanEchartsOption(
   setOptionOptions?: LeanSetOptionOptions,
 ): void {
   bindLeanTooltip(chart, option, readTooltipOption(option));
-  chart.setOption(withoutNativeTooltip(option), setOptionOptions);
+  liveCharts.set(chart, { option, setOptionOptions });
+  watchAppearance();
+  applyOption(chart, option, setOptionOptions);
 }

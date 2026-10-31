@@ -5,15 +5,15 @@ from pathlib import Path
 from typing import Dict, Optional
 
 from .models import ProcessingBatch
-from .repository import (
+from .processing_batch_repository import (
   claim_next_processing_batch,
   complete_processing_batch,
-  connect_pg,
   fail_processing_batch,
 )
+from .repository import connect_pg
 from .tos_storage import TosStorageClient, TosStorageConfig, sha256_file
 from .video_processing import process_video
-from .worker_runtime import update_processing_job_stage
+from .worker_runtime import claim_after_seconds, update_processing_job_stage
 
 
 def process_content_asset_jobs(limit: int = 10, temp_root: Optional[Path] = None) -> Dict[str, int]:
@@ -28,7 +28,7 @@ def process_content_asset_jobs(limit: int = 10, temp_root: Optional[Path] = None
     work_root = Path(tmp_dir)
     for _ in range(max(1, limit)):
       with connect_pg() as conn:
-        batch = claim_next_processing_batch(conn)
+        batch = claim_next_processing_batch(conn, claim_after_seconds())
       if batch is None:
         stats["empty"] += 1
         break

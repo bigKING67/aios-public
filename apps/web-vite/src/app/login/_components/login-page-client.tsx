@@ -10,26 +10,39 @@
 
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { App, Alert, Button, Card, Form, Input, Space } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Alert, Button, Input, InputPassword, toast } from '@lobehub/ui';
+import { AuthLayout } from '@lobehub/ui/dashboard';
+import { LockKeyhole, UserRound } from 'lucide-react';
+import { FormField } from '@/components/molecules/form-field';
+import { PASSWORD_TOGGLE_LABELS } from '@/components/molecules/password-toggle-labels';
+import { bindTextField, type ControlledFormRules, useControlledForm } from '@/hooks/use-controlled-form';
 import { useAuth } from '@/hooks/use-auth';
 import { useAuthStore } from '@/stores/auth.store';
 import { resolveSafeEntryPath } from '@/lib/auth-navigation';
 import { resolveClientErrorMessage } from '@/lib/client-error';
 import styles from '../login.module.css';
 
-interface LoginFormValues {
-  username: string;
-  password: string;
-}
+type LoginFormValues = Record<'username' | 'password', string | undefined>;
+
+const LOGIN_RULES: ControlledFormRules<LoginFormValues> = {
+  username: [
+    { required: true, message: '请输入用户名' },
+    { min: 3, message: '用户名至少 3 个字符' },
+  ],
+  password: [{ required: true, message: '请输入密码' }],
+};
 
 export function LoginPageClient() {
-  const { message: messageApi } = App.useApp();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading, error, signIn } = useAuth();
-  const [form] = Form.useForm<LoginFormValues>();
+  const form = useControlledForm<LoginFormValues>({
+    initialValues: { username: undefined, password: undefined },
+    rules: LOGIN_RULES,
+    // Stable ids: password managers and the browser sign-in profile target #username / #password.
+    ids: { username: 'username', password: 'password' },
+  });
   const [localError, setLocalError] = useState<string | null>(null);
   const redirectPath = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -64,105 +77,72 @@ export function LoginPageClient() {
   /**
    * 处理登录表单提交
    */
-  const handleLogin = async (values: LoginFormValues) => {
+  const handleLogin = async (formValues: LoginFormValues) => {
     setLocalError(null);
 
     try {
-      await signIn(values.username, values.password);
-      messageApi.success('登录成功！');
+      await signIn(formValues.username ?? '', formValues.password ?? '');
+      toast.success('登录成功！');
 
       // 登录成功后跳转到首屏可访问页面
       navigate(getPostLoginPath(), { replace: true });
     } catch (err: unknown) {
       const errorMsg = resolveClientErrorMessage(err, error || '登录失败，请重试');
       setLocalError(errorMsg);
-      messageApi.error(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    form.validateFields().then(
+      (valid) => void handleLogin(valid),
+      () => undefined,
+    );
+  };
+
   return (
-    <div className={styles.loginContainer}>
-      <Card className={styles.loginCard}>
-        <Space orientation="vertical" size="large" className="w-full">
-          {/* 页面标题 */}
-          <div className={styles.loginHeader}>
-            <h1 className={styles.loginTitle}>
-              AGI AIOS
-            </h1>
-            <p className={styles.loginSubtitle}>
-              AI 驱动的业务生产力系统
-            </p>
-          </div>
+    <AuthLayout
+      logo={
+        <span className={styles.logo} aria-hidden="true">
+          ✦
+        </span>
+      }
+      title="AGI AIOS"
+      description="AI 驱动的业务生产力系统"
+      alert={
+        localError || error ? (
+          <Alert title="登录失败" description={localError || error} type="error" showIcon closable />
+        ) : null
+      }
+      footer={<p className={styles.footnote}>使用公司账号登录，权限按角色自动收敛。</p>}
+    >
+      <form className={styles.form} onSubmit={handleSubmit} autoComplete="off" noValidate>
+        <FormField form={form} name="username" label="用户名" required>
+          <Input
+            {...bindTextField(form, 'username')}
+            prefix={<UserRound size={16} strokeWidth={1.8} aria-hidden="true" className={styles.prefixIcon} />}
+            placeholder="输入用户名"
+            disabled={isLoading}
+            size="large"
+          />
+        </FormField>
 
-          {/* 错误提示 */}
-          {(localError || error) && (
-            <Alert
-              title="登录失败"
-              description={localError || error}
-              type="error"
-              showIcon
-              closable
-            />
-          )}
+        <FormField form={form} name="password" label="密码" required>
+          <InputPassword
+            {...bindTextField(form, 'password')}
+            prefix={<LockKeyhole size={16} strokeWidth={1.8} aria-hidden="true" className={styles.prefixIcon} />}
+            placeholder="输入密码"
+            disabled={isLoading}
+            size="large"
+            visibilityToggleLabels={PASSWORD_TOGGLE_LABELS}
+          />
+        </FormField>
 
-          {/* 登录表单 */}
-          <Form<LoginFormValues>
-            form={form}
-            layout="vertical"
-            onFinish={handleLogin}
-            autoComplete="off"
-            className={styles.loginForm}
-          >
-            {/* 用户名 */}
-            <Form.Item
-              name="username"
-              label="用户名"
-              rules={[
-                { required: true, message: '请输入用户名' },
-                { min: 3, message: '用户名至少 3 个字符' },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined />}
-                placeholder="输入用户名"
-                disabled={isLoading}
-                size="large"
-              />
-            </Form.Item>
-
-            {/* 密码 */}
-            <Form.Item
-              name="password"
-              label="密码"
-              rules={[{ required: true, message: '请输入密码' }]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="输入密码"
-                disabled={isLoading}
-                size="large"
-              />
-            </Form.Item>
-
-            {/* 登录按钮 */}
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={isLoading}
-                block
-                size="large"
-              >
-                登录
-              </Button>
-            </Form.Item>
-          </Form>
-
-          <p className={styles.loginFootnote}>
-            使用公司账号登录，权限按角色自动收敛。
-          </p>
-        </Space>
-      </Card>
-    </div>
+        <Button type="primary" htmlType="submit" loading={isLoading} block size="large">
+          登录
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }

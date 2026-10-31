@@ -1,5 +1,5 @@
-import { App, Button } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import { Button, toast } from '@lobehub/ui';
+import { Copy } from 'lucide-react';
 import { copyText } from "@/lib/copy-text";
 import {
   VIDEO_TASK_MOCK_SOURCE,
@@ -8,14 +8,13 @@ import {
 import styles from "../ai-intern-test.module.css";
 
 export function VideoTaskQuestion() {
-  const { message } = App.useApp();
 
   const handleCopyMock = () => {
     void copyText(VIDEO_TASK_MOCK_SOURCE).then((copied) => {
       if (copied) {
-        message.success("模拟接口已复制");
+        toast.success("模拟接口已复制");
       } else {
-        message.error("复制失败，请手动选中代码复制");
+        toast.error("复制失败，请手动选中代码复制");
       }
     });
   };
@@ -44,7 +43,7 @@ export function VideoTaskQuestion() {
       <div className={styles.mockBlock}>
         <div className={styles.mockHeader}>
           <p className={styles.mockIntro}>{VIDEO_TASK_QUESTION.mockIntro}</p>
-          <Button size="small" icon={<CopyOutlined />} onClick={handleCopyMock}>
+          <Button size="small" icon={<Copy size={14} strokeWidth={1.8} />} onClick={handleCopyMock}>
             复制代码
           </Button>
         </div>

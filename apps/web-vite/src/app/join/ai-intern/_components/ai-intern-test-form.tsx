@@ -1,5 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Button, Form, Input } from "antd";
+import { type ComponentProps, type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { Alert, Button, Input, TextArea } from '@lobehub/ui';
+import { ArrowRight } from 'lucide-react';
+import { FormField } from "@/components/molecules/form-field";
+import { bindTextField, type ControlledFormRules, useControlledForm } from "@/hooks/use-controlled-form";
 import { resolveClientErrorMessage } from "@/lib/client-error";
 import type { RecruitingPublicSubmissionResponse } from "@/lib/generated-api-contract";
 import { submitAiInternTest } from "../_lib/ai-intern-test-api";
@@ -27,12 +30,38 @@ const REQUIRED_FIELDS = [
   "schoolAndGrade",
   "major",
   "workflow",
-  "aiUsage",
   "videoPractice",
 ] as const satisfies readonly (keyof AiInternTestFormValues)[];
 
 function required(label: string) {
-  return [{ required: true, whitespace: true, message: `请填写${label}` }];
+  const message = `请填写${label}`;
+  // Whitespace-only answers count as empty, like the antd `whitespace` rule this replaces.
+  return [{ required: true, message, validator: (value: unknown) => String(value ?? "").trim().length > 0 }];
+}
+
+const RULES: ControlledFormRules<AiInternTestFormValues> = {
+  name: required("姓名"),
+  schoolAndGrade: required("学校"),
+  major: required("专业"),
+  contact: required("联系方式"),
+  videoPractice: required("作业链接与说明"),
+  workflow: required("开发规则与说明"),
+};
+
+/** Answer box with a character count (lobe TextArea has no `showCount`). */
+function CountedTextArea({
+  count,
+  limit,
+  ...props
+}: ComponentProps<typeof TextArea> & { count: number; limit: number }) {
+  return (
+    <div className={styles.countedField}>
+      <TextArea {...props} maxLength={limit} />
+      <span className={styles.charCount} aria-hidden="true">
+        {count}/{limit}
+      </span>
+    </div>
+  );
 }
 
 function formatTime(iso: string): string {
@@ -53,7 +82,6 @@ type AiInternTestFormProps = {
 };
 
 export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
-  const [form] = Form.useForm<AiInternTestFormValues>();
   const initialDraft = useMemo(() => loadDraft(), []);
   const [savedAt, setSavedAt] = useState<string | null>(initialDraft.savedAt);
   const [storageBlocked, setStorageBlocked] = useState(false);
@@ -85,6 +113,24 @@ export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
     }, DRAFT_SAVE_DELAY_MS);
   };
 
+  const form = useControlledForm<AiInternTestFormValues>({
+    initialValues: initialDraft.values as AiInternTestFormValues,
+    rules: RULES,
+    onValuesChange: (changed, values) => handleValuesChange(changed, values),
+  });
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    form.validateFields().then(
+      (values) => void handleFinish(values),
+      () => {
+        const first = REQUIRED_FIELDS.find((field) => form.errors[field]);
+        if (first) document.getElementById(form.fieldId(first))?.scrollIntoView({ block: "center" });
+      },
+    );
+  };
+  const answerLength = (field: keyof AiInternTestFormValues) => (form.values[field] ?? "").length;
+
   const handleFinish = async (values: AiInternTestFormValues) => {
     setSubmitting(true);
     setSubmitError(null);
@@ -111,7 +157,8 @@ export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
           remixPlan: "",
           workflow: values.workflow,
           workflowRules: values.workflowRules || "",
-          aiUsage: values.aiUsage,
+          // Preserve answers from existing drafts without requiring a separate field.
+          aiUsage: values.aiUsage || "",
           agentPlan: "",
           videoPractice: values.videoPractice,
         },
@@ -132,56 +179,42 @@ export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
   };
 
   return (
-    <Form<AiInternTestFormValues>
-      form={form}
-      layout="vertical"
-      initialValues={initialDraft.values}
-      onValuesChange={handleValuesChange}
-      onFinish={handleFinish}
-      onFinishFailed={({ errorFields }) => {
-        const first = errorFields[0]?.name;
-        if (first) form.scrollToField(first, { block: "center" });
-      }}
-      scrollToFirstError={false}
-      requiredMark
-      className={styles.form}
-    >
+    <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <section className={styles.section} aria-labelledby="ai-intern-basic">
         <h2 id="ai-intern-basic" className={styles.sectionTitle}>
+          <span className={styles.sectionIndex} aria-hidden="true">01</span>
           基本信息
         </h2>
         <p className={styles.sectionHint}>{PRIVACY_NOTE}</p>
         <div className={styles.fieldGrid}>
-          <Form.Item name="name" label="姓名" rules={required("姓名")}>
-            <Input maxLength={40} autoComplete="name" />
-          </Form.Item>
-          <Form.Item
-            name="schoolAndGrade"
-            label="学校"
-            rules={required("学校")}
-          >
-            <Input maxLength={100} placeholder="例如：某某大学" />
-          </Form.Item>
-          <Form.Item name="major" label="专业" rules={required("专业")}>
-            <Input maxLength={100} placeholder="例如：计算机科学与技术" />
-          </Form.Item>
-          <Form.Item
-            name="contact"
-            label="联系方式"
-            rules={required("联系方式")}
-            extra="微信、手机号或邮箱，任选一种。"
-          >
-            <Input maxLength={100} />
-          </Form.Item>
+          <FormField form={form} name="name" label="姓名" required>
+            <Input {...bindTextField(form, "name")} size="large" maxLength={40} autoComplete="name" />
+          </FormField>
+          <FormField form={form} name="schoolAndGrade" label="学校" required>
+            <Input {...bindTextField(form, "schoolAndGrade")} size="large" maxLength={100} placeholder="例如：某某大学" />
+          </FormField>
+          <FormField form={form} name="major" label="专业" required>
+            <Input {...bindTextField(form, "major")} size="large" maxLength={100} placeholder="例如：计算机科学与技术" />
+          </FormField>
+          <FormField form={form} name="contact" label="联系方式" required>
+            <Input {...bindTextField(form, "contact")} size="large" maxLength={100} placeholder="微信、手机号或邮箱，任选一种。" />
+          </FormField>
         </div>
-        <Form.Item name="website" hidden>
-          <Input tabIndex={-1} autoComplete="off" aria-hidden="true" />
-        </Form.Item>
+        {/* Honeypot: hidden from people and assistive tech; bots that fill it are rejected server-side. */}
+        <div hidden>
+          <input
+            {...bindTextField(form, "website")}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+        </div>
       </section>
 
       <section className={styles.section} aria-labelledby="assignment-title">
         <h2 id="assignment-title" className={styles.sectionTitle}>
-          任务
+          <span className={styles.sectionIndex} aria-hidden="true">02</span>
+          视频任务与交付
         </h2>
         <div className={styles.questionBody}>
           <p>{VIDEO_PRACTICE_QUESTION.intro}</p>
@@ -192,100 +225,38 @@ export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
               <li key={prompt}>{prompt}</li>
             ))}
           </ol>
-          <h3 className={styles.subheading}>交付</h3>
-          <p>可运行代码和一份说明：怎么运行、输出长什么样、做了哪些取舍。</p>
-          <p>建议投入 2–3 小时；如超时，请注明实际用时及卡在哪一步。</p>
-          <p>
-            可选加分：做一个简单的预览页面或可视化输出，让人一眼能看出切分结果对不对。
-          </p>
+          <p>提交可运行代码、运行方法和主要设计取舍。</p>
         </div>
+        <FormField form={form} name="videoPractice" required label="作业链接与说明">
+          <CountedTextArea
+            {...bindTextField(form, "videoPractice")}
+            placeholder="粘贴代码仓库或文件链接，并补充运行方法、输出示例和验证结果。"
+            autoSize={{ minRows: 4, maxRows: 24 }}
+            limit={8000}
+            count={answerLength("videoPractice")}
+          />
+        </FormField>
       </section>
-      {[
-        {
-          key: "videoPractice",
-          question: VIDEO_PRACTICE_QUESTION,
-          limit: 8000,
-        },
-        { key: "workflow", question: WORKFLOW_QUESTION, limit: 6000 },
-      ].map(({ key, question, limit }) => (
-        <section
-          key={key}
-          className={styles.section}
-          aria-labelledby={`ai-intern-${key}`}
-        >
-          <h2 id={`ai-intern-${key}`} className={styles.sectionTitle}>
-            {key === "videoPractice" ? "提交作业" : "AI 开发方式"}
-          </h2>
-          {key === "workflow" && (
-            <div className={styles.questionBody}>
-              <p>{question.intro}</p>
-              <div>
-                <ol className={styles.promptList}>
-                  {question.prompts.map((prompt) => (
-                    <li key={prompt}>{prompt}</li>
-                  ))}
-                </ol>
-                <p className={styles.questionNote}>{question.note}</p>
-              </div>
-            </div>
-          )}
-          <Form.Item
-            name={key}
-            label={
-              key === "videoPractice"
-                ? "代码与输出链接、运行说明及验证结果"
-                : "规则与实际使用说明"
-            }
-            rules={required(question.title)}
-          >
-            <Input.TextArea
-              placeholder={
-                key === "videoPractice"
-                  ? "粘贴代码仓库或交付文件链接，并补充运行方法、设计取舍和验证结果。"
-                  : "选出两三条规则，结合实际经历说明它们为什么有用。"
-              }
-              autoSize={{ minRows: 4, maxRows: 24 }}
-              maxLength={limit}
-              showCount
-            />
-          </Form.Item>
-          {key === "workflow" ? (
-            <details
-              className={styles.rulesDisclosure}
-              open={Boolean(initialDraft.values.workflowRules)}
-            >
-              <summary>附上开发规则或文件链接（选填）</summary>
-              <Form.Item
-                name="workflowRules"
-                label="开发规则内容或链接（选填）"
-                extra="可粘贴 AGENTS.md / CLAUDE.md 等文件的脱敏节选，也可在上方回答中描述。"
-              >
-                <Input.TextArea
-                  className="font-mono"
-                  autoSize={{ minRows: 3, maxRows: 24 }}
-                  maxLength={10000}
-                  showCount
-                  spellCheck={false}
-                />
-              </Form.Item>
-            </details>
-          ) : null}
-          {key === "workflow" ? (
-            <Form.Item
-              name="aiUsage"
-              label="AI 使用说明"
-              rules={required("AI 使用说明")}
-              extra="简述本次答题使用了哪些 AI 工具、用于哪些部分，以及你亲自检查或修改了什么。未使用可写“未使用”。"
-            >
-              <Input.TextArea
-                autoSize={{ minRows: 3, maxRows: 10 }}
-                maxLength={1500}
-                showCount
-              />
-            </Form.Item>
-          ) : null}
-        </section>
-      ))}
+
+      <section className={styles.section} aria-labelledby="ai-intern-workflow">
+        <h2 id="ai-intern-workflow" className={styles.sectionTitle}>
+          <span className={styles.sectionIndex} aria-hidden="true">03</span>
+          AI 开发方式
+        </h2>
+        <div className={styles.questionBody}>
+          <p>{WORKFLOW_QUESTION.intro}</p>
+          <p className={styles.questionNote}>{WORKFLOW_QUESTION.note}</p>
+        </div>
+        <FormField form={form} name="workflow" required label="开发规则与说明">
+          <CountedTextArea
+            {...bindTextField(form, "workflow")}
+            placeholder="例如 AGENTS.md、CLAUDE.md、Cursor Rules 中的规则节选或链接，以及它们解决过的实际问题。"
+            autoSize={{ minRows: 4, maxRows: 24 }}
+            limit={20000}
+            count={answerLength("workflow")}
+          />
+        </FormField>
+      </section>
 
       <footer className={styles.submitBar}>
         {submitError ? (
@@ -305,12 +276,14 @@ export function AiInternTestForm({ onSubmitted }: AiInternTestFormProps) {
             size="large"
             htmlType="submit"
             loading={submitting}
+            disabled={submitting}
           >
             提交答卷
+            <ArrowRight size={16} aria-hidden="true" />
           </Button>
         </div>
         <p className={styles.sectionHint}>提交后不能修改，请确认内容完整。</p>
       </footer>
-    </Form>
+    </form>
   );
 }

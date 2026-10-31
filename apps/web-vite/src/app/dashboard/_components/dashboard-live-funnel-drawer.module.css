@@ -1,18 +1,14 @@
-.drawer :global(.ant-drawer-body) {
+.body {
   overflow-x: hidden;
   padding: 0 22px 22px;
 }
 
-.drawer :global(.ant-drawer-title) {
+.title {
   min-width: 0;
 }
 
-.drawer :global(.ant-drawer-header) {
+.header {
   padding: 17px 28px 17px 26px;
-}
-
-.drawer :global(.ant-drawer-header-title) {
-  min-width: 0;
 }
 
 .panel {
@@ -31,7 +27,7 @@
     padding: 6px 0 0;
   }
 
-  .drawer :global(.ant-drawer-body) {
+  .body {
     padding: 12px 14px 18px;
   }
 }

@@ -13,13 +13,13 @@
 }
 
 .label {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .help {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
@@ -28,10 +28,15 @@
   margin: 0;
 }
 
+.dropTitle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
 .dropIcon {
-  margin-bottom: var(--spacing-2);
-  color: var(--brand-primary);
-  font-size: var(--font-size-3xl);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .fileList {
@@ -51,7 +56,7 @@
 }
 
 .fileMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -63,14 +68,14 @@
 }
 
 .done {
-  color: var(--status-success-strong);
+  color: var(--aios-status-success-strong);
   font-size: var(--font-size-sm);
 }
 
 .error {
   overflow: hidden;
   max-width: 200px;
-  color: var(--status-danger);
+  color: var(--aios-status-danger);
   font-size: var(--font-size-sm);
   text-overflow: ellipsis;
   white-space: nowrap;

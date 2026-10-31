@@ -4,8 +4,8 @@
   justify-content: space-between;
   gap: 16px;
   padding: 18px 20px;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border-bottom: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
 }
 
 .toolbarMeta {
@@ -16,19 +16,22 @@
 
 .toolbarTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
 }
 
 .toolbarHint {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .toolbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
   justify-content: flex-end;
 }
 

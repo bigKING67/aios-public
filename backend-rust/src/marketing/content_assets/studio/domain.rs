@@ -241,8 +241,8 @@ mod tests {
         assert_eq!(normalize_sha256(Some(&"g".repeat(64))), None);
         assert_eq!(normalize_product_name(Some("  ")).unwrap(), None);
         assert_eq!(
-            normalize_product_name(Some(" 精华 ")).unwrap().as_deref(),
-            Some("精华")
+            normalize_product_name(Some(" 粉底液 ")).unwrap().as_deref(),
+            Some("粉底液")
         );
         assert!(normalize_product_name(Some(&"x".repeat(201))).is_err());
         assert!(normalize_product_name(Some("a\u{0007}b")).is_err());

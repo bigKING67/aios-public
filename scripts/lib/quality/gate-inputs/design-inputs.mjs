@@ -133,21 +133,6 @@ function tailwindUtilitiesInputs(name, { allowlistConfigInputs, scriptInputs, sh
   ];
 }
 
-function antdThemeTokenSyncInputs(name, { scriptInputs, shared, targetFiles }) {
-  return [
-    ...(name.endsWith('-behavior') ? [] : [
-      'DESIGN_TOKENS.json',
-      'apps/web-vite/src/theme/ant-theme.ts',
-      'apps/web-vite/src/ViteProviders.tsx',
-    ]),
-    'scripts/lib/design/antd-theme-token-sync-core.mjs',
-    ...(name.endsWith('-behavior') ? ['scripts/fixtures/design/antd-theme-token-sync.behavior-fixtures.mjs'] : []),
-    ...scriptInputs,
-    ...(name.endsWith('-behavior') ? pairedBehaviorTargetFiles(targetFiles) : []),
-    ...shared,
-  ];
-}
-
 function echartsCssTokenSyncInputs(name, { scriptInputs, shared, targetFiles }) {
   return [
     ...(name.endsWith('-behavior') ? [] : [
@@ -173,18 +158,6 @@ function echartsThemeTokenSyncInputs(name, { scriptInputs, shared, targetFiles }
     ]),
     'scripts/lib/design/echarts-theme-token-sync-core.mjs',
     ...(name.endsWith('-behavior') ? ['scripts/lib/design/echarts-theme-token-sync-behavior-fixtures.mjs'] : []),
-    ...scriptInputs,
-    ...(name.endsWith('-behavior') ? pairedBehaviorTargetFiles(targetFiles) : []),
-    ...shared,
-  ];
-}
-
-function antdTableSelectorsInputs(name, { allowlistConfigInputs, scriptInputs, shared, targetFiles }) {
-  return [
-    ...allowlistConfigInputs,
-    ...(name.endsWith('-behavior') ? [] : ['apps/web-vite/src/**/*.css']),
-    'scripts/lib/design/antd-table-selectors-core.mjs',
-    ...(name.endsWith('-behavior') ? ['scripts/fixtures/design/antd-table-selectors.behavior-fixtures.mjs'] : []),
     ...scriptInputs,
     ...(name.endsWith('-behavior') ? pairedBehaviorTargetFiles(targetFiles) : []),
     ...shared,
@@ -259,14 +232,10 @@ const DESIGN_INPUT_BUILDERS = Object.freeze({
   'verify:design:tailwind-non-color-aliases-behavior': tailwindNonColorAliasesInputs,
   'verify:design:tailwind-utilities': tailwindUtilitiesInputs,
   'verify:design:tailwind-utilities-behavior': tailwindUtilitiesInputs,
-  'verify:design:antd-theme-token-sync': antdThemeTokenSyncInputs,
-  'verify:design:antd-theme-token-sync-behavior': antdThemeTokenSyncInputs,
   'verify:design:echarts-css-token-sync': echartsCssTokenSyncInputs,
   'verify:design:echarts-css-token-sync-behavior': echartsCssTokenSyncInputs,
   'verify:design:echarts-theme-token-sync': echartsThemeTokenSyncInputs,
   'verify:design:echarts-theme-token-sync-behavior': echartsThemeTokenSyncInputs,
-  'verify:design:antd-table-selectors': antdTableSelectorsInputs,
-  'verify:design:antd-table-selectors-behavior': antdTableSelectorsInputs,
   'verify:design:behavior-gate-registry-behavior': behaviorGateRegistryInputs,
   'verify:design:behavior-guard-quality': behaviorGuardQualityInputs,
   'verify:design:behavior-guard-quality-behavior': behaviorGuardQualityInputs,

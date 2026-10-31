@@ -151,6 +151,15 @@ def _read_flow_run_deployment_ids(
   }
 
 
+def _schedule_paused(entry: dict[str, Any]) -> bool:
+  """A deliberately paused schedule (manifest `schedule.active: false`) has no runs to expect.
+
+  verify_live already reports a live schedule whose active state drifts from the manifest,
+  so an accidental pause still surfaces as manifest_drift.
+  """
+  return entry["schedule"]["active"] is False
+
+
 def evaluate_snapshot(
   *,
   entries: list[dict[str, Any]],
@@ -177,7 +186,7 @@ def evaluate_snapshot(
     identity = (entry["flow_name"], entry["deployment_name"])
     rendered = f"{identity[0]}/{identity[1]}"
     live = live_by_identity.get(identity)
-    if live is None:
+    if live is None or _schedule_paused(entry):
       continue
     deployment_id = str(live["id"])
     success_slo = entry["watchdog"].get("success_slo_minutes")
@@ -217,7 +226,7 @@ def collect_issues(
   except ManifestError as error:
     return [Issue("manifest_drift", "control-plane", str(error))]
 
-  entries = active_entries(manifest)
+  entries = [entry for entry in active_entries(manifest) if not _schedule_paused(entry)]
   live = fetch_live_deployments(client)
   live_by_identity = {
     (item["flow_name"], item["name"]): item

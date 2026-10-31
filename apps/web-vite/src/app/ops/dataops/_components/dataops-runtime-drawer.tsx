@@ -1,7 +1,8 @@
 'use client';
 
-import { Drawer } from 'antd';
-import { ClockCircleOutlined, DatabaseOutlined, SyncOutlined } from '@ant-design/icons';
+import { Drawer } from '@lobehub/ui';
+import { Clock, Database, RefreshCw } from 'lucide-react';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import hubStyles from './dataops-hub.module.css';
 import styles from './dataops-runtime-drawer.module.css';
 
@@ -74,12 +75,11 @@ export function DataOpsRuntimeDrawer({
       open={open}
       onClose={onClose}
       width={compact ? 'calc(100vw - 24px)' : 620}
-      destroyOnHidden
     >
       <div className={styles.runtimeDrawerBody}>
         <section className={styles.runtimeDrawerSection}>
           <div className={styles.runtimeDrawerHead}>
-            <DatabaseOutlined />
+            <Database {...DATAOPS_ICON_PROPS} />
             <strong>运行态存储</strong>
           </div>
           <div className={styles.runtimeStoreOverview}>
@@ -137,7 +137,7 @@ export function DataOpsRuntimeDrawer({
 
         <section className={styles.runtimeDrawerSection}>
           <div className={styles.runtimeDrawerHead}>
-            <SyncOutlined />
+            <RefreshCw {...DATAOPS_ICON_PROPS} />
             <strong>运行上下文</strong>
           </div>
           <div className={styles.snapshotBar}>
@@ -150,7 +150,7 @@ export function DataOpsRuntimeDrawer({
         {runtimeWarnings.length ? (
           <section className={styles.runtimeDrawerSection}>
             <div className={styles.runtimeDrawerHead}>
-              <ClockCircleOutlined />
+              <Clock {...DATAOPS_ICON_PROPS} />
               <strong>运行态提示</strong>
             </div>
             <ul className={hubStyles.noticeWarningList}>

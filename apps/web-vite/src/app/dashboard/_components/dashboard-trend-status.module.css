@@ -6,13 +6,13 @@
 }
 
 .trendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .trendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .trendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }

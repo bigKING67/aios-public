@@ -11,7 +11,7 @@
 }
 
 .brandCell {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-weight: var(--component-table-detail-body-font-weight);
 }
 
@@ -30,19 +30,19 @@
 }
 
 .brandPill:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
-.brandPillKnown { border-color: var(--brand-border); background: var(--brand-secondary); color: var(--brand-text); }
+.brandPillKnown { border-color: var(--lobe-color-border); background: var(--lobe-color-fill-tertiary); color: var(--lobe-color-text); }
 
-.brandPillReview { border-color: var(--status-warning-border); background: var(--status-warning-bg); color: var(--status-warning-strong); }
+.brandPillReview { border-color: var(--lobe-color-warning-border); background: var(--lobe-color-warning-bg); color: var(--aios-status-warning-strong); }
 
-.brandPillUnknown { border-color: var(--status-neutral-border); background: var(--status-neutral-bg); color: var(--status-neutral-strong); }
+.brandPillUnknown { border-color: var(--lobe-color-border); background: var(--lobe-color-fill-tertiary); color: var(--lobe-color-text-secondary); }
 
-.textCell { color: var(--text-secondary); }
+.textCell { color: var(--lobe-color-text-secondary); }
 
-.mutedText { color: var(--text-tertiary); }
+.mutedText { color: var(--lobe-color-text-tertiary); }
 
 .tagGroupCell {
   display: grid;
@@ -92,16 +92,16 @@
 
 .audienceTagGroup .tagChip {
   max-width: 104px;
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  border-color: var(--aios-border-hover);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text);
 }
 
 .sellingPointTagGroup .tagChip {
   max-width: 132px;
-  border-color: var(--border-color);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  border-color: transparent;
+  background: var(--lobe-color-fill-secondary);
+  color: var(--lobe-color-text-secondary);
 }
 
 .sellingPointTagGroup .tagChipMedium {
@@ -117,16 +117,16 @@
 }
 
 .moreTagChip {
-  border-color: var(--border-color);
-  background: var(--status-neutral-bg);
-  color: var(--text-tertiary);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .numericCell,
 .exposureCell,
 .rankCell {
   display: inline-block;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--component-table-detail-numeric-letter-spacing);
@@ -154,7 +154,7 @@
   align-items: center;
   gap: var(--spacing-1);
   overflow: hidden;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-weight: var(--component-table-detail-link-font-weight);
   text-decoration: none;
   transition:
@@ -163,16 +163,16 @@
 }
 
 .assetLink:hover {
-  color: var(--brand-active);
+  color: var(--lobe-color-primary-active);
   text-decoration: none;
 }
 
 .assetLink:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
 }
 
-.assetLink :global(.anticon) {
+.assetLink :global(.lucide) {
   flex: 0 0 auto;
 }
 

@@ -134,7 +134,23 @@ pub(super) fn push_filters(
         }
         _ => {}
     }
+    match query.test_samples.as_deref() {
+        Some("exclude") => {
+            builder.push(" AND NOT (");
+            builder.push_bind(TEST_SAMPLE_TAG);
+            builder.push(" = ANY(asset.tags))");
+        }
+        Some("only") => {
+            builder.push(" AND ");
+            builder.push_bind(TEST_SAMPLE_TAG);
+            builder.push(" = ANY(asset.tags)");
+        }
+        _ => {}
+    }
 }
+
+/// Tag carried by the AI 创作中心 test originals (整片-001…005); hidden from 原片 by default.
+pub(super) const TEST_SAMPLE_TAG: &str = "测试样片";
 
 fn product_filter_values(product_name: &str) -> Vec<String> {
     match product_name {

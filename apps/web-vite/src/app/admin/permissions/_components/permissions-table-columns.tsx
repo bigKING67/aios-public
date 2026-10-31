@@ -1,14 +1,14 @@
-import { Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Tag, type TableColumnsType } from '@lobehub/ui';
+import styles from '../../_components/admin-page.module.css';
 import type { PermissionItem } from './permissions-types';
 
-export const PERMISSIONS_TABLE_COLUMNS: ColumnsType<PermissionItem> = [
+export const PERMISSIONS_TABLE_COLUMNS: TableColumnsType<PermissionItem> = [
   {
     title: '权限代码',
     dataIndex: 'code',
     key: 'code',
     width: 240,
-    render: (value: string) => <code>{value}</code>,
+    render: (value: string) => <code className={styles.code}>{value}</code>,
   },
   {
     title: '权限名称',
@@ -28,7 +28,7 @@ export const PERMISSIONS_TABLE_COLUMNS: ColumnsType<PermissionItem> = [
     dataIndex: 'action',
     key: 'action',
     width: 120,
-    render: (value?: string) => <Tag color="blue">{value || '-'}</Tag>,
+    render: (value?: string) => <Tag>{value || '-'}</Tag>,
   },
   {
     title: '资源',
@@ -43,9 +43,7 @@ export const PERMISSIONS_TABLE_COLUMNS: ColumnsType<PermissionItem> = [
     key: 'is_active',
     width: 100,
     render: (value?: boolean) => (
-      <Tag color={value === false ? 'default' : 'green'}>
-        {value === false ? '禁用' : '启用'}
-      </Tag>
+      <Tag color={value === false ? undefined : 'success'}>{value === false ? '禁用' : '启用'}</Tag>
     ),
   },
   {

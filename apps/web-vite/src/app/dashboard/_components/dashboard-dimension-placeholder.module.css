@@ -1,6 +1,6 @@
 .dimensionPlaceholderPanel {
   border-radius: 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg);
   padding: 18px;
   display: flex;

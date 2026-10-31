@@ -73,7 +73,7 @@
 }
 
 .sourceName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   font-weight: 400;
@@ -93,7 +93,7 @@
 }
 
 .goodsProductName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   font-weight: 400;
@@ -139,7 +139,7 @@
 }
 
 .metricValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: 400;
   line-height: var(--line-height-tight);
@@ -161,15 +161,15 @@
 }
 
 .metricTrendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .metricTrendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .metricTrendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .metricMetaLabel {
@@ -184,7 +184,7 @@
 :global(.traffic-row-l3) .sourceName,
 :global(.traffic-goods-row-l3) .sourceName,
 :global(.traffic-goods-row-summary) .sourceName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 @media (max-width: 768px) {

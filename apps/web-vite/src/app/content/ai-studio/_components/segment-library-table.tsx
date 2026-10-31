@@ -1,5 +1,4 @@
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table, type TableColumnsType } from '@lobehub/ui';
 import { Link as RouterLink } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
 import type { StudioContentSegment, StudioSegmentPreset } from '../_lib/ai-studio-api';
@@ -8,6 +7,7 @@ import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
 import styles from './segment-annotation.module.css';
 import libraryStyles from './segment-library.module.css';
+import { SourceSpendLabel } from './source-spend-label';
 
 interface SegmentLibraryTableProps {
   segments: StudioContentSegment[];
@@ -28,7 +28,7 @@ export function SegmentLibraryTable({
   onSelectedIdsChange,
   cardNotes,
 }: SegmentLibraryTableProps) {
-  const columns: ColumnsType<StudioContentSegment> = [
+  const columns: TableColumnsType<StudioContentSegment> = [
     { title: '原片', dataIndex: 'assetTitle', key: 'asset', ellipsis: true },
     {
       title: '起止',
@@ -55,6 +55,11 @@ export function SegmentLibraryTable({
           name
         );
       },
+    },
+    {
+      title: '原片消耗',
+      key: 'sourceSpend',
+      render: (_, segment) => <SourceSpendLabel spend={segment.sourceSpend} />,
     },
     { title: '产品', dataIndex: 'productName', key: 'product', render: (value: string | null) => value || '缺产品' },
     { title: '来源', dataIndex: 'origin', key: 'origin', render: (value: string) => segmentOriginLabel(value) },
@@ -90,7 +95,7 @@ export function SegmentLibraryTable({
           getCheckboxProps: (segment) => ({ disabled: isSegmentReadOnly(segment) }),
         } : undefined}
         locale={{ emptyText: '没有符合条件的片段。可从原片页选一条原片开始标注。' }}
-        scroll={{ x: 820 }}
+        scroll={{ x: 940 }}
       />
     </div>
   );

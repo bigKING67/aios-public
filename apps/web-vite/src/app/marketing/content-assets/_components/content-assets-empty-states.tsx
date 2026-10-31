@@ -1,4 +1,4 @@
-import { Button, Empty } from 'antd';
+import { Button, Empty } from '@lobehub/ui';
 import { resolveContentAssetRequestError } from '../_lib/content-assets-ui-helpers';
 import styles from '../content-assets.module.css';
 

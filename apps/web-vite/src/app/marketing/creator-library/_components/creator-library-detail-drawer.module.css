@@ -8,11 +8,11 @@
   justify-content: space-between;
   gap: 12px;
   padding: 18px 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
   background:
     radial-gradient(circle at 88% 8%, var(--creator-library-material-brand-a120), transparent 36%),
-    var(--bg-subtle);
+    var(--lobe-color-fill-tertiary);
 }
 
 .detailHeaderTags {
@@ -29,7 +29,7 @@
 }
 
 .detailHeader p {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-normal);
@@ -37,7 +37,7 @@
 }
 
 .detailHeader h2 {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-display);
   line-height: var(--line-height-snug);
@@ -47,7 +47,7 @@
 .detailList {
   margin: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-base);
 }
 
@@ -57,7 +57,7 @@
 }
 
 .detailRow + .detailRow {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--lobe-color-border);
 }
 
 .detailRow dt,
@@ -67,11 +67,11 @@
 }
 
 .detailRow dt {
-  color: var(--text-secondary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .detailRow dd {
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid var(--lobe-color-border);
   overflow-wrap: anywhere;
 }

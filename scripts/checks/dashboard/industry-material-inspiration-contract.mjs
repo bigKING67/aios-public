@@ -359,8 +359,8 @@ function assertStaticContracts(sources) {
   );
   assertIncludes(
     sources.registry,
-    "kind: 'content_assets_write'",
-    'route registry should restrict industry material inspiration to content operations write access'
+    "kind: 'super_admin'",
+    'route registry should keep industry material inspiration (off the 看板 menu) to the super admin'
   );
   assertIncludes(
     sources.routes,
@@ -372,15 +372,11 @@ function assertStaticContracts(sources) {
     'ROUTE_PATHS.dashboardIndustryMaterialInspiration',
     'Vite routes should register the route through ROUTE_PATHS'
   );
-  assertIncludes(
-    sources.navigation,
-    '行业素材灵感',
-    'layout navigation should expose 行业素材灵感 under 看板'
-  );
-  assertIncludes(
+  // 行业素材灵感 left the 看板 menu (2026-10-27); the page stays for direct links.
+  assertNotIncludes(
     sources.navigation,
     'ROUTE_PATHS.dashboardIndustryMaterialInspiration',
-    'layout navigation should use the route constant for 行业素材灵感'
+    'layout navigation should not list 行业素材灵感 under 看板'
   );
 
   assertIncludes(sources.page, '<ProtectedRoute>', 'page should remain protected');
@@ -444,7 +440,7 @@ function assertStaticContracts(sources) {
     'Douyin video material',
     'client should not expose the English Douyin table eyebrow'
   );
-  assertIncludes(sources.client, 'HomeOutlined', 'client top bar should keep the same home icon entry as dashboard');
+  assertIncludes(sources.client, "import { House, RotateCw } from 'lucide-react';", 'client top bar should keep the same home icon entry as dashboard');
   assertIncludes(sources.client, 'to="/"', 'client top bar home icon should link back to the home page');
   assertNotIncludes(
     sources.client,
@@ -482,7 +478,7 @@ function assertStaticContracts(sources) {
   assertIncludes(sellingPointColumn, "align: 'left'", 'marketing selling-point column body should be left-aligned');
   assertNotIncludes(sellingPointColumn, "align: 'center'", 'marketing selling-point column should not stay centered');
 
-  assertIncludes(sources.client, 'locale={datePickerZhCN}', 'month picker should use the Chinese AntD locale');
+  assertIncludes(sources.client, 'locale={datePickerLocaleZhCN}', 'month picker should use the Chinese date picker locale');
   assertNotIncludes(
     sources.client,
     '业务表格只展示品牌',
@@ -1504,7 +1500,7 @@ function assertStaticContracts(sources) {
   assertCssRuleIncludes(
     sources.brandEvidenceSectionCss,
     '.titleLine a,\n.titleLine > strong',
-    'color: var(--brand-text);',
+    'color: var(--aios-ai-text);',
     'AI evidence titles should stay brand blue whether or not an asset link is available'
   );
   assertCssRuleIncludes(
@@ -1516,7 +1512,7 @@ function assertStaticContracts(sources) {
   assertCssRuleIncludes(
     sources.brandEvidenceSectionCss,
     '.titleLine a:hover',
-    'color: var(--brand-active);',
+    'color: var(--aios-ai-12);',
     'linked AI evidence titles should deepen the brand blue on hover'
   );
   assertCssRuleIncludes(
@@ -1527,7 +1523,7 @@ function assertStaticContracts(sources) {
   );
   assertIncludes(
     sources.brandEvidenceSection,
-    '<LinkOutlined className={styles.evidenceTitleIcon} aria-hidden />',
+    '<LinkIcon className={styles.evidenceTitleIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />',
     'linked AI evidence titles should keep the external-link icon'
   );
   assertIncludes(
@@ -2009,7 +2005,7 @@ function assertStaticContracts(sources) {
   assertCssRuleIncludes(
     sources.cellCss,
     '.brandPill:focus-visible',
-    'var(--brand-focus-ring)',
+    'var(--lobe-focus-ring-color)',
     'brand pill focus should use the shared AIOS focus token'
   );
   assertNotIncludes(
@@ -2104,13 +2100,13 @@ function assertStaticContracts(sources) {
   );
   assertCssRuleIncludes(
     sources.css,
-    '.materialTable :global(.ant-table-thead > tr > th)',
+    '.materialTable :global(.lobe-table-thead > tr > th)',
     'font-size: var(--component-table-detail-header-font-size);',
     'industry material headers should consume the shared dense detail table header token'
   );
   assertCssRuleIncludes(
     sources.css,
-    '.materialTable :global(.ant-table-tbody > tr > td)',
+    '.materialTable :global(.lobe-table-tbody > tr > td)',
     'font-size: var(--component-table-detail-body-font-size);',
     'industry material body cells should consume the shared dense detail table body token'
   );
@@ -2364,13 +2360,13 @@ function assertStaticContracts(sources) {
   assertCssRuleIncludes(
     sources.cellCss,
     '.audienceTagGroup .tagChip',
-    'background: var(--brand-secondary);',
-    'core audience chips should use the blue-soft brand background'
+    'background: var(--lobe-color-bg-container);',
+    'core audience chips should stay outlined so they read apart from the filled selling-point chips'
   );
   assertCssRuleIncludes(
     sources.cellCss,
     '.sellingPointTagGroup .tagChip',
-    'background: var(--bg-hover);',
+    'background: var(--lobe-color-fill-secondary);',
     'marketing selling-point chips should use a restrained neutral gray background'
   );
   assertCssRuleIncludes(
@@ -2394,7 +2390,7 @@ function assertStaticContracts(sources) {
   assertCssRuleIncludes(
     sources.cellCss,
     '.brandPillUnknown',
-    'background: var(--status-neutral-bg);',
+    'background: var(--lobe-color-fill-tertiary);',
     'unrecognized brand pills should render with a visible neutral gray fill'
   );
   assertIncludes(

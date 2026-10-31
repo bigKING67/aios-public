@@ -23,24 +23,36 @@ LEASE_SQL = "INTERVAL '2 minutes'"
 MAX_PRODUCT_NAME_CHARS = 200
 
 
-def claim(conn, dimensions=None, fallback_after_seconds=None):
+# Originals that live in 视频云管家 (bucket `cloud_video`) are only readable where the vendor's file server is.
+CLOUD_BUCKET = 'cloud_video'
+CLOUD_FILTER = """ AND NOT EXISTS (SELECT 1 FROM ads.marketing_content_assets ca
+  WHERE ca.asset_id = j.asset_id AND ca.bucket = 'cloud_video')"""
+
+
+def claim(conn, dimensions=None, fallback_after_seconds=None, claim_after=None, cloud=True):
     """Claims the oldest queued job. With `dimensions`, only jobs whose preset dimension is listed;
     with `fallback_after_seconds` as well, other jobs once they have waited that long (a GPU node takes
-    framework jobs first, the VPS worker still serves them when the node is away)."""
+    framework jobs first, the VPS worker still serves them when the node is away). `claim_after`
+    (seconds) holds back every job until it has waited that long (a fallback instance). `cloud=False`
+    leaves jobs of 视频云管家 originals to a worker that can read them (the desktop)."""
+    cloud_filter = '' if cloud else CLOUD_FILTER
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(f"""UPDATE ads.content_segment_suggestion_jobs SET status='failed',stage='执行租约过期',
           error_code='lease_expired',error_message='worker 已中断；模型调用可能已计费，请检查后手动重新发起',
           finished_at=NOW(),updated_at=NOW()
           WHERE status='running' AND heartbeat_at<NOW()-{LEASE_SQL}""")
         if dimensions:
-            cur.execute("""SELECT j.job_id FROM ads.content_segment_suggestion_jobs j
+            cur.execute(f"""SELECT j.job_id FROM ads.content_segment_suggestion_jobs j
               JOIN ads.content_segment_presets p ON p.preset_key=j.preset_key AND p.version=j.preset_version
               WHERE j.status='queued' AND (p.dimension = ANY(%s)
                 OR (%s::INTEGER IS NOT NULL AND j.created_at < NOW() - make_interval(secs => %s::INTEGER)))
+                AND (%s::INTEGER IS NULL OR j.created_at < NOW() - make_interval(secs => %s::INTEGER)){cloud_filter}
               ORDER BY j.created_at FOR UPDATE OF j SKIP LOCKED LIMIT 1""",
-                        (list(dimensions), fallback_after_seconds, fallback_after_seconds))
+                        (list(dimensions), fallback_after_seconds, fallback_after_seconds, claim_after, claim_after))
         else:
-            cur.execute("SELECT job_id FROM ads.content_segment_suggestion_jobs WHERE status='queued' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1")
+            cur.execute(f"""SELECT j.job_id FROM ads.content_segment_suggestion_jobs j WHERE j.status='queued'
+              AND (%s::INTEGER IS NULL OR j.created_at < NOW() - make_interval(secs => %s::INTEGER)){cloud_filter}
+              ORDER BY j.created_at FOR UPDATE OF j SKIP LOCKED LIMIT 1""", (claim_after, claim_after))
         row = cur.fetchone()
         if not row:
             conn.commit()
@@ -129,9 +141,24 @@ def load_source(conn, job):
         raise SuggestionError('source_changed', '原片内容已变化，请重新发起切段')
     if not preset or preset['status'] != 'active':
         raise SuggestionError('preset_retired', '分类预设已停用')
-    return {'objectKey': asset['raw_object_key'], 'bucket': asset['bucket'], 'durationMs': asset_duration_ms(asset['duration_seconds']),
-            'productName': normalize_product(asset['product_name']), 'presetName': preset['name'], 'labels': preset['labels'],
-            'presetDimension': preset['dimension']}
+    source = {'objectKey': asset['raw_object_key'], 'bucket': asset['bucket'], 'durationMs': asset_duration_ms(asset['duration_seconds']),
+              'productName': normalize_product(asset['product_name']), 'presetName': preset['name'], 'labels': preset['labels'],
+              'presetDimension': preset['dimension']}
+    if asset['bucket'] == CLOUD_BUCKET:
+        source['cloudUrl'] = cloud_inner_url(conn, job['asset_id'])
+    return source
+
+
+def cloud_inner_url(conn, asset_id):
+    """The inner-network file address of a 视频云管家 original (cloud_video.videos, written by the desktop sync)."""
+    with conn.cursor() as cur:
+        cur.execute('SELECT inner_host, url_path FROM cloud_video.videos WHERE asset_id = %s ORDER BY video_id LIMIT 1',
+                    (asset_id,))
+        row = cur.fetchone()
+    conn.commit()
+    if not row:
+        raise SuggestionError('source_unavailable', '云管家原片没有同步记录')
+    return f'https://{row[0]}{row[1]}'
 
 
 def confirmed_frames(conn, job):

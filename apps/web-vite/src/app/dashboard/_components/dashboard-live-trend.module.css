@@ -1,5 +1,5 @@
 .panel {
-  border-color: var(--border-color);
+  border-color: var(--lobe-color-border);
   box-shadow: var(--dashboard-live-trend-panel-shadow);
 }
 
@@ -20,7 +20,7 @@
   margin-top: 8px;
   border-radius: 999px;
   background: var(--dashboard-live-trend-hint-bg);
-  color: var(--brand-text-strong);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 540;
   letter-spacing: var(--letter-spacing-normal);

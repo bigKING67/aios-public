@@ -6,7 +6,7 @@
 
 .detailMetaTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 680;
 }

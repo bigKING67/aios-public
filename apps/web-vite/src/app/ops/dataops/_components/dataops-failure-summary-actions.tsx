@@ -1,7 +1,8 @@
 'use client';
 
-import { Button, Tooltip } from 'antd';
-import { BellOutlined, CopyOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from '@lobehub/ui';
+import { Bell, Copy } from 'lucide-react';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 
 interface DataOpsFailureSummaryReportAction {
   tooltipTitle: string;
@@ -39,7 +40,7 @@ export function DataOpsFailureSummaryActions({
     <>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         onClick={() => {
           void onCopy(summaryText, summaryCopyLabel);
         }}
@@ -48,7 +49,7 @@ export function DataOpsFailureSummaryActions({
       </Button>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={alertTemplateCopyDisabled}
         onClick={() => {
           void onCopy(alertTemplateText, alertTemplateCopyLabel);
@@ -56,26 +57,30 @@ export function DataOpsFailureSummaryActions({
       >
         复制告警模板
       </Button>
-      <Tooltip title={alertTooltipTitle}>
-        <Button
-          size="small"
-          icon={<BellOutlined />}
-          disabled={alertSendDisabled}
-          onClick={onSendAlertTemplate}
-        >
-          发送告警模板
-        </Button>
-      </Tooltip>
-      {reportAction ? (
-        <Tooltip title={reportAction.tooltipTitle}>
+      <Tooltip title={alertTooltipTitle || undefined}>
+        <span className="inline-flex">
           <Button
             size="small"
-            icon={<BellOutlined />}
-            disabled={reportAction.sendDisabled}
-            onClick={reportAction.onSend}
+            icon={<Bell {...DATAOPS_ICON_PROPS} />}
+            disabled={alertSendDisabled}
+            onClick={onSendAlertTemplate}
           >
-            {reportAction.label}
+            发送告警模板
           </Button>
+        </span>
+      </Tooltip>
+      {reportAction ? (
+        <Tooltip title={reportAction.tooltipTitle || undefined}>
+          <span className="inline-flex">
+            <Button
+              size="small"
+              icon={<Bell {...DATAOPS_ICON_PROPS} />}
+              disabled={reportAction.sendDisabled}
+              onClick={reportAction.onSend}
+            >
+              {reportAction.label}
+            </Button>
+          </span>
         </Tooltip>
       ) : null}
     </>

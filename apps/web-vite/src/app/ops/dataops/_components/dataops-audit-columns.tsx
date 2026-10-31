@@ -1,9 +1,10 @@
 'use client';
 
-import { Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { DataOpsAuditEvent } from '@/config/dataops-hub';
+import type { DataOpsTagTone } from './dataops-hub-constants';
 import { formatDateTime, truncateText } from './dataops-hub-formatters';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import styles from './dataops-hub.module.css';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
@@ -11,13 +12,13 @@ interface DataOpsAuditColumnsOptions {
   resolveAuditScopeLabel: (scope: string) => string;
 }
 
-function getAuditResultTagColor(result: DataOpsAuditEvent['result']) {
-  return result === '成功' ? 'green' : 'red';
+function getAuditResultTagTone(result: DataOpsAuditEvent['result']): DataOpsTagTone {
+  return result === '成功' ? 'success' : 'danger';
 }
 
 export function buildDataOpsAuditColumns({
   resolveAuditScopeLabel,
-}: DataOpsAuditColumnsOptions): ColumnsType<DataOpsAuditEvent> {
+}: DataOpsAuditColumnsOptions): TableColumnsType<DataOpsAuditEvent> {
   return [
     { title: '操作', dataIndex: 'action', key: 'action', width: 220 },
     {
@@ -42,7 +43,7 @@ export function buildDataOpsAuditColumns({
       key: 'result',
       width: 120,
       render: (value: DataOpsAuditEvent['result']) => (
-        <Tag color={getAuditResultTagColor(value)}>{value}</Tag>
+        <DataOpsToneTag tone={getAuditResultTagTone(value)}>{value}</DataOpsToneTag>
       ),
     },
     {
@@ -58,7 +59,7 @@ export function buildDataOpsAuditColumns({
 
 export function buildDataOpsAuditMobileColumns({
   resolveAuditScopeLabel,
-}: DataOpsAuditColumnsOptions): ColumnsType<DataOpsAuditEvent> {
+}: DataOpsAuditColumnsOptions): TableColumnsType<DataOpsAuditEvent> {
   return [
     {
       title: '运行审计',
@@ -69,7 +70,7 @@ export function buildDataOpsAuditMobileColumns({
           <div className="space-y-2 py-1">
             <div className="flex items-start justify-between gap-2">
               <p className="m-0 text-sm font-semibold text-text-primary">{record.action}</p>
-              <Tag color={getAuditResultTagColor(record.result)}>{record.result}</Tag>
+              <DataOpsToneTag tone={getAuditResultTagTone(record.result)}>{record.result}</DataOpsToneTag>
             </div>
             <div className={pipelineStyles.pipelineTextCell}>
               <p>

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Checkbox, Select } from 'antd';
+import { Checkbox } from '@lobehub/ui';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { AssetCardPill } from '@/app/marketing/content-assets/_components/content-assets-asset-intelligence';
@@ -9,7 +9,11 @@ import { segmentLabelName, findPreset, isSegmentReadOnly } from '../_lib/segment
 import { hasSegmentProduct, resolveSegmentPills } from '../_lib/segment-pills';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
+import { isLongOptionList } from '../_lib/studio-products';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './segment-library.module.css';
+import { usePlayableUrl } from '../_lib/reachable-url';
+import { SourceSpendLabel } from './source-spend-label';
 
 function pillToneClass(pill: AssetCardPill): string {
   if (pill.state === 'ready') return styles.pillReady;
@@ -102,7 +106,7 @@ export function SegmentCard({
             <Checkbox
               aria-label={`选择片段：${segment.assetTitle} ${label}`}
               checked={selected}
-              onChange={(event) => onSelectedChange(segment.segmentId, event.target.checked)}
+              onChange={(checked) => onSelectedChange(segment.segmentId, checked)}
             />
           </span>
         ) : null}
@@ -117,6 +121,7 @@ export function SegmentCard({
         <p className={styles.segmentSource} title={segment.assetTitle}>
           {segment.assetTitle}
         </p>
+        <SourceSpendLabel spend={segment.sourceSpend} />
         {pills.length > 0 || missingProduct || notes.length > 0 ? (
           <div className={styles.segmentPills}>
             {notes.map((note) => (
@@ -132,15 +137,15 @@ export function SegmentCard({
         ) : null}
         {editable && missingProduct ? (
           <div className={styles.cardActions} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
-            <Select
-              className={styles.productSelect}
+            <LabeledSelect
+              wrapperClassName={styles.productSelect}
               size="small"
-              showSearch
+              showSearch={isLongOptionList(productOptions)}
               placeholder="补填产品"
-              aria-label="补填产品"
+              label="补填产品"
               disabled={busy}
               options={[...productOptions]}
-              onChange={(value: string) => onSetProduct(segment, value)}
+              onChange={(value) => value !== undefined && onSetProduct(segment, value)}
             />
           </div>
         ) : null}
@@ -158,13 +163,14 @@ function SegmentClipVideo({ segment }: { segment: StudioContentSegment }) {
     refetchOnWindowFocus: false,
     retry: false,
   });
-  if (!playback.data) return null;
+  const url = usePlayableUrl(playback.data);
+  if (!url) return null;
   const start = segment.startMs / 1000;
   const end = segment.endMs / 1000;
   return (
     <video
       className={styles.coverMedia}
-      src={`${playback.data.url}#t=${start},${end}`}
+      src={`${url}#t=${start},${end}`}
       muted
       autoPlay
       playsInline

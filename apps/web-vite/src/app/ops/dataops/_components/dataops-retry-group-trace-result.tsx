@@ -1,7 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationEvent } from '@/config/dataops-hub';
 import type {
   DataOpsNotificationTraceReasonHashRecoveryItem,
@@ -37,7 +36,7 @@ interface DataOpsRetryGroupTraceResultProps {
   hasOperatePermission: boolean;
   globalActionBusy: boolean;
   retrySubmitting: boolean;
-  columns: ColumnsType<DataOpsNotificationEvent>;
+  columns: TableColumnsType<DataOpsNotificationEvent>;
   isCompactViewport: boolean;
   onFocusReasonHash: (reasonHashKey: string) => void;
   onTraceFilterChange: (value: NotificationTraceFilter) => void;

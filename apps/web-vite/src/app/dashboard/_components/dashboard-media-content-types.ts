@@ -1,4 +1,4 @@
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import type {
   Dispatch,
   Key,
@@ -29,7 +29,7 @@ export type DashboardMediaContentsArgs = {
   isAuthenticated: boolean;
   isMobile: boolean;
   currentRange: DashboardDateRangeLike;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   detailSectionShellProps: DashboardDetailSectionShellProps;
   getTrendClassNameByRate: (value: number | null | undefined) => string;
 

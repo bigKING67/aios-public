@@ -1,5 +1,5 @@
 import type { Key } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   resolveResponsiveTablePagination,
   resolveResponsiveTableScroll,
@@ -12,7 +12,7 @@ export type AttributionTableProps<RowType extends object> = WeeklyDataTableProps
 interface BuildAttributionTablePropsInput<RowType extends object> {
   isMobile: boolean;
   rows: RowType[];
-  columns: ColumnsType<RowType>;
+  columns: TableColumnsType<RowType>;
   rowKey: (record: RowType) => Key;
   mobileX: number;
   desktopX: number;

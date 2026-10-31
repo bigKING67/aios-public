@@ -1,8 +1,8 @@
 .batchPreviewPanel {
   margin-top: 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
 }
 
@@ -16,13 +16,13 @@
 
 .batchPreviewHead h4 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }
 
 .batchPreviewHead span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -35,14 +35,14 @@
 
 .batchPreviewItem {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 8px;
 }
 
 .batchPreviewItem strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   margin-bottom: 6px;
 }
@@ -50,9 +50,9 @@
 .batchPreviewCode {
   margin: 0;
   border-radius: 8px;
-  border: 1px solid var(--border-color-hover);
-  background: var(--bg-hover);
-  color: var(--text-primary);
+  border: 1px solid var(--aios-border-hover);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
@@ -70,11 +70,11 @@
 }
 
 .batchResultMetric {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 4px 9px;
 }
 
@@ -94,7 +94,11 @@
   min-width: 280px;
 }
 
+.batchResultFilterSelect :global(.lobe-select) {
+  width: 100%;
+}
+
 .batchHistoryStatsText {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }

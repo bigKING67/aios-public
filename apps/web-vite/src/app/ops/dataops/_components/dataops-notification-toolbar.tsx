@@ -1,12 +1,14 @@
-import { Button, Select } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { Button } from '@lobehub/ui';
+import { RotateCw } from 'lucide-react';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import type { NotificationRetryReport } from './dataops-notification-retry-helpers';
 import type {
   NotificationRetryConcurrency,
   NotificationStatusFilter,
 } from './dataops-hub-formatters';
 import { DataOpsNotificationAdvancedTools } from './dataops-notification-advanced-tools';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import notifyStyles from './dataops-notify-panel.module.css';
 import styles from './dataops-hub.module.css';
 
@@ -93,28 +95,31 @@ export function DataOpsNotificationToolbar({
     <div className={notifyStyles.notifyToolbox}>
       <div className={notifyStyles.notifyToolbarRow}>
         <div className={notifyStyles.notifyFilterGroup}>
-          <Select<string>
+          <LabeledSelect<string>
+            label="通知通道"
             value={channelFilter}
-            onChange={onChannelFilterChange}
+            onChange={(value) => value !== undefined && onChannelFilterChange(value)}
             options={notificationChannelSelectOptions}
-            className={styles.channelSelect}
+            wrapperClassName={styles.channelSelect}
           />
-          <Select<string>
+          <LabeledSelect<string>
+            label="事件类型"
             value={notificationEventTypeFilter}
-            onChange={onEventTypeFilterChange}
+            onChange={(value) => value !== undefined && onEventTypeFilterChange(value)}
             options={notificationEventTypeOptions}
-            className={styles.channelSelect}
+            wrapperClassName={styles.channelSelect}
           />
-          <Select<NotificationStatusFilter>
+          <LabeledSelect<NotificationStatusFilter>
+            label="发送状态"
             value={notificationStatusFilter}
-            onChange={onStatusFilterChange}
+            onChange={(value) => value && onStatusFilterChange(value)}
             options={[
               { label: '全部状态', value: 'all' },
               { label: '已发送', value: 'sent' },
               { label: '发送失败', value: 'failed' },
               { label: '已跳过', value: 'skipped' },
             ]}
-            className={styles.channelSelect}
+            wrapperClassName={styles.channelSelect}
           />
           <Button size="small" onClick={onResetFilters}>
             重置筛选
@@ -122,20 +127,21 @@ export function DataOpsNotificationToolbar({
         </div>
 
         <div className={notifyStyles.notifyActionGroup}>
-          <Select<NotificationRetryConcurrency>
+          <LabeledSelect<NotificationRetryConcurrency>
+            label="重发并发"
             size="small"
             value={notificationRetryConcurrency}
-            onChange={onRetryConcurrencyChange}
+            onChange={(value) => value && onRetryConcurrencyChange(value)}
             options={[
               { label: '重发并发 x1', value: 1 },
               { label: '重发并发 x2', value: 2 },
               { label: '重发并发 x4', value: 4 },
             ]}
-            className={styles.notifyConcurrencySelect}
+            wrapperClassName={styles.notifyConcurrencySelect}
           />
           <Button
             size="small"
-            icon={<ReloadOutlined />}
+            icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
             loading={notificationBatchRetrySubmitting}
             disabled={!hasOperatePermission || globalActionBusy || filteredRetryableFailedCount === 0}
             onClick={() => {

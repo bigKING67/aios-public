@@ -10,25 +10,25 @@
 }
 
 .confidenceHigh {
-  color: var(--status-success-strong);
-  background: var(--status-success-bg);
-  border-color: var(--status-success-border);
+  color: var(--aios-status-success-strong);
+  background: var(--lobe-color-success-bg);
+  border-color: var(--lobe-color-success-border);
 }
 
 .confidenceMedium {
-  color: var(--status-warning-strong);
-  background: var(--status-warning-bg);
-  border-color: var(--status-warning-border);
+  color: var(--aios-status-warning-strong);
+  background: var(--lobe-color-warning-bg);
+  border-color: var(--lobe-color-warning-border);
 }
 
 .confidenceLow {
-  color: var(--status-danger-strong);
-  background: var(--status-danger-bg);
-  border-color: var(--status-danger-border);
+  color: var(--aios-status-danger-strong);
+  background: var(--lobe-color-error-bg);
+  border-color: var(--lobe-color-error-border);
 }
 
 .confidenceNeutral {
-  color: var(--status-neutral-strong);
-  background: var(--status-neutral-bg);
-  border-color: var(--status-neutral-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  border-color: var(--lobe-color-border);
 }

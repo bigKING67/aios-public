@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 
 import type { PlatformTabKey, QueryPlatform, NoteMetricKey } from './dashboard-config';
@@ -30,7 +30,7 @@ export type DashboardBusinessContentArgs = {
   activeTab: PlatformTabKey;
   activeQueryPlatform: QueryPlatform;
   canWriteDailyNote: boolean;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   dayValue: Dayjs;
   detailSectionShellProps: DashboardDetailSectionShellProps;
   overviewLoadError: string | null;

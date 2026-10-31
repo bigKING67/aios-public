@@ -5,7 +5,6 @@ import styles from './creator-dashboard.module.css';
 import { CreatorDashboardTopBar, type CreatorDashboardTopBarProps } from './creator-dashboard-top-bar';
 
 export interface CreatorDashboardFrameProps extends CreatorDashboardTopBarProps {
-  messageContextHolder: ReactNode;
   loadError: string;
   mainClassName: string;
   errorClassName: string;
@@ -13,7 +12,6 @@ export interface CreatorDashboardFrameProps extends CreatorDashboardTopBarProps 
 }
 
 export function CreatorDashboardFrame({
-  messageContextHolder,
   loadError,
   mainClassName,
   errorClassName,
@@ -22,7 +20,6 @@ export function CreatorDashboardFrame({
 }: CreatorDashboardFrameProps) {
   return (
     <div className={styles.pageRoot}>
-      {messageContextHolder}
       <div className={styles.backdropGlow} aria-hidden />
       <div className={styles.surface}>
         <CreatorDashboardTopBar {...topBarProps} />

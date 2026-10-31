@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { AttributionTableProps } from './platform-tab-attribution-table-props';
 import type { AttributionWaterfallChartProps } from './platform-tab-attribution-waterfall-props';
 import type { DouyinCardSectionData } from './platform-tab-douyin-card-section-types';
@@ -67,7 +67,7 @@ export interface BuildDouyinCardProductAttributionLeafPropsInput {
     | 'douyinCardTotalDelta'
     | 'douyinCardProductWaterfallSteps'
   >;
-  douyinCardProductColumns: ColumnsType<DouyinCardProductRow>;
+  douyinCardProductColumns: TableColumnsType<DouyinCardProductRow>;
   waterfallTotalColor: string;
 }
 
@@ -83,7 +83,7 @@ export interface BuildDouyinCardSourceAttributionLeafPropsInput {
     | 'douyinCardSourceTotalDelta'
     | 'douyinCardSourceWaterfallSteps'
   >;
-  douyinCardSourceColumns: ColumnsType<DouyinCardSourceRow>;
+  douyinCardSourceColumns: TableColumnsType<DouyinCardSourceRow>;
   waterfallTotalColor: string;
 }
 
@@ -96,7 +96,7 @@ export interface BuildDouyinCardSourceFunnelLeafPropsInput {
     | 'selectedDouyinCardQuantRows'
     | 'selectedDouyinCardDetailRows'
   >;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
   resolveFunnelStageColor: (index: number) => string;
 }

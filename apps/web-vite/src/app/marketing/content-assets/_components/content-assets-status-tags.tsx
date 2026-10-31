@@ -1,4 +1,4 @@
-import { Tag } from 'antd';
+import { Tag } from '@lobehub/ui';
 
 const ASSET_STATUS_LABELS: Record<string, { label: string; color: string }> = {
   ready: { label: '已就绪', color: 'green' },

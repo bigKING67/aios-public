@@ -92,13 +92,13 @@ export function runDesignTokenValuesSyncBehaviorFixtures({
   withFixture(
     {
       tokenMirrorSource: TOKEN_MIRROR_SOURCE.replace(
-        '"primary": "#2F6EEA"',
+        '"primary": "#222222"',
         '"primary": "#FFFFFF"',
       ),
     },
     (result) => {
       assertEqual(result.status, 1, 'canonical generated color drift should fail');
-      assertIncludes(result.stderr, 'primary must mirror "#2F6EEA"', 'color drift should report the canonical value');
+      assertIncludes(result.stderr, 'primary must mirror "#222222"', 'color drift should report the canonical value');
     },
   );
 

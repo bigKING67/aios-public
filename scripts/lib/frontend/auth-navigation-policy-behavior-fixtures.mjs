@@ -13,6 +13,7 @@ async function bundleEntry(entryPoint, name) {
     bundle: true,
     entryPoints: [entryPoint],
     external: [],
+    define: { 'process.env': JSON.stringify({ VITE_SUPER_ADMIN_ACCOUNTS: 'fixture-super-admin' }) },
     format: 'esm',
     logLevel: 'silent',
     outfile: outputFile,
@@ -112,31 +113,49 @@ export async function runAuthNavigationPolicyBehaviorFixtures({
       canAccess(ROUTE_PATHS.marketingCreatorLibrary, { permissions: ['marketing:creator_library:manage'], roles: [] }),
       'creator library manage permission should include creator library read/navigation access',
     );
-    assertTrue(
+    // 素材库 and 直播中台 are super-admin modules for now: content-asset permissions alone (which the
+    // AI 创作中心 data needs) do not open them; the super-admin identity or role does.
+    assertFalse(
       canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: ['marketing:content_assets:read'], roles: [] }),
-      'content assets read permission should make content assets route visible',
+      'content assets read permission alone should not open the content assets library',
+    );
+    assertFalse(
+      canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: ['marketing:content_assets:manage'], roles: ['content_ops', 'content_ops_manager'] }),
+      'content operations roles should not open the content assets library',
+    );
+    assertFalse(
+      canAccess(ROUTE_PATHS.contentLiveCenter, { permissions: [], roles: [] }),
+      'regular authenticated users should not open the live center',
     );
     assertTrue(
-      canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: ['marketing:content_assets:write'], roles: [] }),
-      'content assets write permission should include content assets navigation access',
+      canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: [], roles: [], identity: identity({ username: 'fixture-super-admin' }) }),
+      'the super-admin identity should open the content assets library',
     );
     assertTrue(
-      canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: [], roles: [] }),
-      'authenticated users should make content assets route visible',
+      canAccess(`${ROUTE_PATHS.marketingContentAssets}/asset-fixture-001`, { permissions: [], roles: ['super_admin'] }),
+      'the super-admin role should open a content asset detail page',
+    );
+    assertTrue(
+      canAccess(ROUTE_PATHS.contentLiveCenter, { permissions: [], roles: [], identity: identity({ username: 'fixture-super-admin' }) }),
+      'the super-admin identity should open the live center',
+    );
+    assertTrue(
+      canAccess(ROUTE_PATHS.contentAiStudio, { permissions: [], roles: [] }),
+      'every authenticated user should keep AI 创作中心',
+    );
+    assertFalse(
+      canAccess(ROUTE_PATHS.dashboardIndustryMaterialInspiration, {
+        permissions: ['marketing:content_assets:write'],
+        roles: ['content_ops'],
+      }),
+      'content operations access alone should not open industry material inspiration (super admin only)',
     );
     assertTrue(
       canAccess(ROUTE_PATHS.dashboardIndustryMaterialInspiration, {
         permissions: [],
-        roles: ['content_ops'],
+        roles: ['super_admin'],
       }),
-      'content_ops role should make industry material inspiration dashboard visible',
-    );
-    assertTrue(
-      canAccess(ROUTE_PATHS.dashboardIndustryMaterialInspiration, {
-        permissions: ['marketing:content_assets:write'],
-        roles: [],
-      }),
-      'content assets write permission should make industry material inspiration dashboard visible',
+      'the super admin should keep industry material inspiration through direct links',
     );
     assertFalse(
       canAccess(ROUTE_PATHS.dashboardIndustryMaterialInspiration, {

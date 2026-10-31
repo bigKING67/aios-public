@@ -1,6 +1,6 @@
 'use client';
 
-import { InputNumber, Switch } from 'antd';
+import { InputNumber, Switch } from '@lobehub/ui';
 import {
   NOTIFICATION_TRACE_SLO_SCAN_CONCURRENCY_MAX,
   NOTIFICATION_TRACE_SLO_SCAN_CONCURRENCY_MIN,
@@ -40,6 +40,7 @@ export function DataOpsNotificationTraceSloScanControls({
       <span className={batchResultStyles.batchHistoryStatsText}>巡检模式</span>
       <Switch
         size="small"
+        aria-label="巡检模式"
         checked={dryRun}
         disabled={running}
         checkedChildren="Dry Run"
@@ -65,8 +66,9 @@ export function DataOpsNotificationTraceSloScanControls({
             })
           );
         }}
-        addonBefore="回看"
-        addonAfter="小时"
+        aria-label="回看小时数"
+        prefix="回看"
+        suffix="小时"
       />
       <InputNumber
         size="small"
@@ -84,8 +86,9 @@ export function DataOpsNotificationTraceSloScanControls({
             })
           );
         }}
-        addonBefore="最多"
-        addonAfter="组"
+        aria-label="最多巡检组数"
+        prefix="最多"
+        suffix="组"
       />
       <InputNumber
         size="small"
@@ -103,7 +106,8 @@ export function DataOpsNotificationTraceSloScanControls({
             })
           );
         }}
-        addonBefore="并发"
+        aria-label="巡检并发"
+        prefix="并发"
       />
     </div>
   );

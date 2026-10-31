@@ -1,15 +1,6 @@
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  DeleteOutlined,
-  FileImageOutlined,
-  PlayCircleOutlined,
-  PlusOutlined,
-  SwapOutlined,
-  UndoOutlined,
-  WarningFilled,
-} from '@ant-design/icons';
-import { Alert, Button, Modal, Slider } from 'antd';
+import { Slider } from '@base-ui/react/slider';
+import { Alert, Button, Modal } from '@lobehub/ui';
+import { ArrowLeft, ArrowLeftRight, ArrowRight, CirclePlay, ImageIcon, Plus, Trash2, TriangleAlert, Undo2 } from 'lucide-react';
 import { useState } from 'react';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { EDIT_TRIM_STEP_MS, isClipTrimmed, trimClip, type EditClip, type EditSegment } from '../_lib/remix-edit';
@@ -87,9 +78,9 @@ export function EditTimeline({ preset, clips, segments, selectedKey, highlightId
               onClick={() => onSelect(clip.key)}
             >
               <span className={editStyles.clipCover}>
-                {segment?.coverUrl ? <img src={segment.coverUrl} alt="" loading="lazy" /> : unavailable ? <WarningFilled aria-hidden /> : <FileImageOutlined aria-hidden />}
+                {segment?.coverUrl ? <img src={segment.coverUrl} alt="" loading="lazy" /> : unavailable ? <TriangleAlert size={14} strokeWidth={1.8} aria-hidden="true" /> : <ImageIcon size={14} strokeWidth={1.8} aria-hidden />}
                 <span className={editStyles.clipIndex}>{index + 1}</span>
-                <span className={editStyles.clipDuration}>{((clip.endMs - clip.startMs) / 1000).toFixed(1)}s</span>
+                <span className={editStyles.clipDuration}>{formatSegmentDuration(clip.startMs, clip.endMs)}</span>
                 {segment && isClipTrimmed(clip, segment) ? <span className={editStyles.clipTrimmed}>已修剪</span> : null}
               </span>
               <span className={editStyles.clipName}>{name}</span>
@@ -102,7 +93,7 @@ export function EditTimeline({ preset, clips, segments, selectedKey, highlightId
       })}
       <li>
         <button type="button" className={editStyles.addClip} onClick={onAdd} disabled={disabled} aria-label="从片段库添加片段">
-          <PlusOutlined aria-hidden />
+          <Plus size={14} strokeWidth={1.8} aria-hidden />
           <span>添加片段</span>
         </button>
       </li>
@@ -129,20 +120,20 @@ export function ClipEditor({ preset, clip, index, count, segment, disabled, onCh
   const actions = (
     <div className={editStyles.editorActions}>
       {segment ? (
-        <Button icon={<PlayCircleOutlined />} onClick={() => setPreviewing(true)}>
+        <Button icon={<CirclePlay size={14} strokeWidth={1.8} />} onClick={() => setPreviewing(true)}>
           预览本段
         </Button>
       ) : null}
-      <Button icon={<ArrowLeftOutlined />} disabled={disabled || index === 0} onClick={() => onMove(-1)} aria-label="前移一位">
+      <Button icon={<ArrowLeft size={14} strokeWidth={1.8} />} disabled={disabled || index === 0} onClick={() => onMove(-1)} aria-label="前移一位">
         前移
       </Button>
-      <Button icon={<ArrowRightOutlined />} disabled={disabled || index === count - 1} onClick={() => onMove(1)} aria-label="后移一位">
+      <Button icon={<ArrowRight size={14} strokeWidth={1.8} />} disabled={disabled || index === count - 1} onClick={() => onMove(1)} aria-label="后移一位">
         后移
       </Button>
-      <Button icon={<SwapOutlined />} disabled={disabled} onClick={onReplace}>
+      <Button icon={<ArrowLeftRight size={14} strokeWidth={1.8} />} disabled={disabled} onClick={onReplace}>
         替换
       </Button>
-      <Button icon={<DeleteOutlined />} danger disabled={disabled} onClick={onRemove}>
+      <Button icon={<Trash2 size={14} strokeWidth={1.8} />} danger disabled={disabled} onClick={onRemove}>
         删除
       </Button>
     </div>
@@ -170,17 +161,33 @@ export function ClipEditor({ preset, clip, index, count, segment, disabled, onCh
         </span>
       </div>
       <div className={editStyles.trim}>
-        <Slider
-          range
+        {/* lobe Slider is single-valued; trimming needs both handles, so Base UI's range slider. */}
+        <Slider.Root
+          className={editStyles.rangeSlider}
           min={segment.startMs}
           max={segment.endMs}
           step={EDIT_TRIM_STEP_MS}
           value={[clip.startMs, clip.endMs]}
           disabled={disabled}
-          tooltip={{ formatter: (value) => formatSegmentTime(value ?? 0) }}
-          ariaLabelForHandle={['入点', '出点']}
-          onChange={(value) => onChange(trimClip(clip, segment, value as [number, number]))}
-        />
+          onValueChange={(value) => {
+            if (Array.isArray(value)) onChange(trimClip(clip, segment, [value[0], value[1]]));
+          }}
+        >
+          <Slider.Control className={editStyles.rangeControl}>
+            <Slider.Track className={editStyles.rangeTrack}>
+              <Slider.Indicator className={editStyles.rangeIndicator} />
+              {(['入点', '出点'] as const).map((name, index) => (
+                <Slider.Thumb
+                  key={name}
+                  index={index}
+                  className={editStyles.rangeThumb}
+                  getAriaLabel={() => name}
+                  getAriaValueText={(_, value) => formatSegmentTime(value)}
+                />
+              ))}
+            </Slider.Track>
+          </Slider.Control>
+        </Slider.Root>
         <p className={editStyles.trimText}>
           入点 {formatSegmentTime(clip.startMs)} · 出点 {formatSegmentTime(clip.endMs)} · 本段 {formatSegmentDuration(clip.startMs, clip.endMs)}
           <span className={editStyles.trimBounds}>
@@ -190,7 +197,7 @@ export function ClipEditor({ preset, clip, index, count, segment, disabled, onCh
             <Button
               type="link"
               size="small"
-              icon={<UndoOutlined />}
+              icon={<Undo2 size={14} strokeWidth={1.8} />}
               disabled={disabled}
               onClick={() => onChange({ ...clip, startMs: segment.startMs, endMs: segment.endMs })}
             >

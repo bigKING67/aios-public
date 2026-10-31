@@ -89,17 +89,21 @@ function normalizeHexColor(input: string): string | null {
   return null;
 }
 
+// Stage fills keep their values in dark mode, so the text on them is fixed too.
+const INK_ON_FILL = FUNNEL_COLORS.exposure.textOnFill;
+const WHITE_ON_FILL = FUNNEL_COLORS.conversion.textOnFill;
+
 function getReadableTextColor(background: string): string {
   const normalized = normalizeHexColor(background);
   if (!normalized) {
-    return 'var(--text-primary)';
+    return 'var(--lobe-color-text)';
   }
 
   const red = parseInt(normalized.slice(1, 3), 16);
   const green = parseInt(normalized.slice(3, 5), 16);
   const blue = parseInt(normalized.slice(5, 7), 16);
   const luminance = (red * 299 + green * 587 + blue * 114) / 1000;
-  return luminance >= 145 ? 'var(--text-primary)' : 'var(--text-inverse)';
+  return luminance >= 145 ? INK_ON_FILL : WHITE_ON_FILL;
 }
 
 function createFunnelRootStyle(height: number, loading = false): FunnelRootStyleVars {

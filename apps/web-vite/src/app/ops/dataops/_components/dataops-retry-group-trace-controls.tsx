@@ -1,11 +1,13 @@
 'use client';
 
-import { CopyOutlined, DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Select } from 'antd';
+import { Button } from '@lobehub/ui';
+import { Copy, Download, RotateCw } from 'lucide-react';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import {
   formatTokenPreview,
   type NotificationTraceFilter,
 } from './dataops-hub-formatters';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import batchResultStyles from './dataops-batch-result.module.css';
 import traceReasonHashStyles from './dataops-trace-reason-hash.module.css';
 
@@ -54,10 +56,11 @@ export function DataOpsRetryGroupTraceControls({
 }: DataOpsRetryGroupTraceControlsProps) {
   return (
     <div className={batchResultStyles.batchResultControls}>
-      <Select<NotificationTraceFilter>
+      <LabeledSelect<NotificationTraceFilter>
+        label="链路事件筛选"
         size="small"
         value={traceFilter}
-        onChange={onTraceFilterChange}
+        onChange={(value) => value && onTraceFilterChange(value)}
         options={[
           { label: `全部事件 (${totalEventCount})`, value: 'all' },
           { label: `仅失败 (${failedEventCount})`, value: 'failed' },
@@ -66,11 +69,11 @@ export function DataOpsRetryGroupTraceControls({
             value: 'retryable_failed',
           },
         ]}
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
       />
       <Button
         size="small"
-        icon={<ReloadOutlined />}
+        icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
         loading={retrySubmitting}
         disabled={!hasOperatePermission || globalActionBusy || failedEventCount === 0}
         onClick={() => {
@@ -81,7 +84,7 @@ export function DataOpsRetryGroupTraceControls({
       </Button>
       <Button
         size="small"
-        icon={<ReloadOutlined />}
+        icon={<RotateCw {...DATAOPS_ICON_PROPS} />}
         loading={retrySubmitting}
         disabled={!hasOperatePermission || globalActionBusy || retryableFailedEventCount === 0}
         onClick={() => {
@@ -96,7 +99,7 @@ export function DataOpsRetryGroupTraceControls({
       </Button>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         onClick={() => {
           void onCopyLink();
         }}
@@ -105,7 +108,7 @@ export function DataOpsRetryGroupTraceControls({
       </Button>
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={!markdownText}
         onClick={() => {
           void onCopyMarkdown();
@@ -115,7 +118,7 @@ export function DataOpsRetryGroupTraceControls({
       </Button>
       <Button
         size="small"
-        icon={<DownloadOutlined />}
+        icon={<Download {...DATAOPS_ICON_PROPS} />}
         onClick={() => {
           void onExportCsv();
         }}

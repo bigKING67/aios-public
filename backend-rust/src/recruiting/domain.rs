@@ -50,13 +50,18 @@ pub(super) fn validate_submission(
     if workflow_rules.chars().count() > 10000 {
         return Err(AppError::bad_request("开发规则不能超过 10000 字"));
     }
+    // Retain legacy draft answers; the current form asks about AI work in `workflow`.
+    let ai_usage = answers.ai_usage.trim().to_string();
+    if ai_usage.chars().count() > 1500 {
+        return Err(AppError::bad_request("AI 使用说明不能超过 1500 字"));
+    }
     let answers = SubmissionAnswers {
-        workflow: required_text(answers.workflow, "AI 开发方式与规则说明", 6000)?,
+        workflow: required_text(answers.workflow, "AI 开发方式与规则说明", 20000)?,
         workflow_rules,
         project: String::new(),
         agent_plan: String::new(),
         video_practice: required_text(answers.video_practice, "视频镜头切分：交付与验证", 8000)?,
-        ai_usage: required_text(answers.ai_usage, "AI 使用说明", 1500)?,
+        ai_usage,
         video_task_code: String::new(),
         video_task_notes: String::new(),
         remix_plan: String::new(),
@@ -255,7 +260,7 @@ mod tests {
     #[test]
     fn submission_rejects_missing_or_oversized_fields() {
         let mut missing = request();
-        missing.answers.ai_usage = "  ".into();
+        missing.answers.workflow = "  ".into();
         assert!(validate_submission(missing, Utc::now()).is_err());
 
         let mut oversized = request();
@@ -269,6 +274,51 @@ mod tests {
         let mut bad_url = request();
         bad_url.candidate.portfolio_url = Some("javascript:alert(1)".into());
         assert!(validate_submission(bad_url, Utc::now()).is_err());
+    }
+
+    #[test]
+    fn legacy_ai_usage_is_optional_but_still_bounded() {
+        let mut blank = request();
+        blank.answers.ai_usage = "  ".into();
+        assert_eq!(
+            validate_submission(blank, Utc::now())
+                .unwrap()
+                .answers
+                .ai_usage,
+            ""
+        );
+
+        let mut legacy = request();
+        legacy.answers.ai_usage = "  AI 写初稿，我检查了切点  ".into();
+        assert_eq!(
+            validate_submission(legacy, Utc::now())
+                .unwrap()
+                .answers
+                .ai_usage,
+            "AI 写初稿，我检查了切点"
+        );
+
+        let mut oversized = request();
+        oversized.answers.ai_usage = "字".repeat(1501);
+        assert!(validate_submission(oversized, Utc::now()).is_err());
+    }
+
+    #[test]
+    fn merged_workflow_accepts_previous_answer_limits_and_remains_bounded() {
+        let mut merged = request();
+        let answer = format!("{}\n\n{}", "说".repeat(6000), "规".repeat(10000));
+        merged.answers.workflow = answer.clone();
+        assert_eq!(
+            validate_submission(merged, Utc::now())
+                .unwrap()
+                .answers
+                .workflow,
+            answer
+        );
+
+        let mut oversized = request();
+        oversized.answers.workflow = "字".repeat(20001);
+        assert!(validate_submission(oversized, Utc::now()).is_err());
     }
 
     #[test]

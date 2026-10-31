@@ -12,17 +12,13 @@
   display: grid;
   place-items: center;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--bg-card) 46%, transparent);
-  color: var(--text-inverse);
-  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 24%, transparent),
-    0 10px 28px color-mix(in srgb, var(--text-primary) 20%, transparent);
-  opacity: 0.78;
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  /* One layer on the media stage in both themes: a dark disc, no ring, no glass highlight. */
+  border: 0;
+  color: var(--aios-stage-text);
+  background: color-mix(in srgb, var(--aios-stage) 48%, transparent);
+  opacity: 0.88;
   cursor: pointer;
-  transition: transform 160ms cubic-bezier(0.32, 0.72, 0, 1), background 160ms cubic-bezier(0.32, 0.72, 0, 1), border-color 160ms cubic-bezier(0.32, 0.72, 0, 1), opacity 160ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 160ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 160ms cubic-bezier(0.32, 0.72, 0, 1), background 160ms cubic-bezier(0.32, 0.72, 0, 1), opacity 160ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .primaryControl {
@@ -38,12 +34,8 @@
 }
 
 .primaryControl:hover {
-  border-color: color-mix(in srgb, var(--bg-card) 68%, transparent);
-  background: color-mix(in srgb, var(--text-primary) 40%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 32%, transparent),
-    0 12px 30px color-mix(in srgb, var(--text-primary) 24%, transparent);
-  opacity: 0.96;
+  background: color-mix(in srgb, var(--aios-stage) 64%, transparent);
+  opacity: 1;
   transform: translate(-50%, -50%) scale(1.04);
 }
 
@@ -57,7 +49,7 @@
   transform: translate(-50%, -50%);
 }
 
-.primaryControl :global(.anticon) {
+.primaryControl svg {
   font-size: var(--font-size-xl);
 }
 
@@ -68,7 +60,7 @@
 }
 
 .primaryControl:focus-visible {
-  outline: 2px solid var(--brand-primary);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 3px;
   opacity: 1;
 }
@@ -80,10 +72,10 @@
   right: 12px;
   left: 12px;
   padding: 7px 9px;
-  border: 1px solid var(--status-danger-border);
+  border: 1px solid var(--lobe-color-error-border);
   border-radius: 10px;
-  color: var(--status-danger-strong);
-  background: var(--bg-card);
+  color: var(--aios-status-danger-strong);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-xs);
   font-weight: 620;
   line-height: var(--line-height-snug);
@@ -91,19 +83,24 @@
   transform: translateY(-50%);
 }
 
-.previewModal :global(.ant-modal-content) {
-  padding: 0;
-  overflow: hidden;
-  border-radius: 22px;
+.modalEventBoundary {
+  display: contents;
 }
 
-.previewModal :global(.ant-modal-header) {
-  margin: 0;
-  padding: 18px 20px 0;
+.spinIcon {
+  animation: preview-spin 1s linear infinite;
 }
 
-.previewModal :global(.ant-modal-body) {
-  padding: 16px 20px 20px;
+@keyframes preview-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinIcon {
+    animation: none;
+  }
 }
 
 .modalTitle {
@@ -114,7 +111,7 @@
 }
 
 .modalTitle span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 560;
   line-height: var(--line-height-snug);
@@ -122,7 +119,7 @@
 
 .modalTitle strong {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 660;
   line-height: var(--line-height-tight);
@@ -141,8 +138,8 @@
   place-items: center;
   min-height: min(70vh, 760px);
   overflow: hidden;
-  border-radius: 16px;
-  background: var(--text-primary);
+  border-radius: var(--lobe-border-radius-lg);
+  background: var(--aios-stage);
 }
 
 .modalVideo {
@@ -156,21 +153,21 @@
   justify-items: center;
   width: min(100% - 32px, 420px);
   padding: 28px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 18px;
-  color: var(--text-primary);
-  background: var(--bg-card);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-bg-container);
   text-align: center;
 }
 
-.modalVideoState :global(.anticon) {
+.modalVideoState svg {
   margin-bottom: 12px;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-2xl);
 }
 
 .modalVideoState strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 640;
   line-height: var(--line-height-tight);
@@ -178,7 +175,7 @@
 
 .modalVideoState span {
   margin-top: 6px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -186,10 +183,10 @@
 .modalVideoState button {
   margin-top: 14px;
   padding: 7px 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 999px;
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   font: inherit;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
@@ -198,7 +195,7 @@
 }
 
 .modalVideoState button:hover {
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .modalVideoState button:active {
@@ -206,12 +203,12 @@
 }
 
 .modalVideoState button:focus-visible {
-  outline: 2px solid var(--brand-primary);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 3px;
 }
 
 .modalVideoStateError {
-  border-color: var(--status-danger-border);
+  border-color: var(--lobe-color-error-border);
 }
 
 .modalMeta {
@@ -221,9 +218,9 @@
   gap: 12px;
   min-width: 0;
   padding: 14px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 16px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .modalMetaHeader {
@@ -246,15 +243,15 @@
 }
 
 .modalMetaHeader span {
-  border: 1px solid var(--brand-border);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  border: 1px solid var(--lobe-color-border);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .modalMetaHeader strong {
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
   font-weight: 560;
 }
 
@@ -279,12 +276,12 @@
 }
 
 .modalMeta dt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .modalMeta dd {
-  color: var(--text-primary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   overflow-wrap: anywhere;
   text-align: right;
 }
@@ -297,18 +294,18 @@
 
 .modalTagList span {
   padding: 3px 7px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 999px;
-  color: var(--text-secondary);
-  background: var(--bg-card);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
 
 .modalTagList .aiTag {
-  border-color: var(--brand-border);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
 }
 
 @media (max-width: 860px) {

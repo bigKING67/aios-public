@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, Space, message } from 'antd';
-import { DownloadOutlined, PrinterOutlined } from '@ant-design/icons';
+import { Button, toast } from '@lobehub/ui';
+import { Download, Printer } from 'lucide-react';
 import { usePermission } from '@/hooks/use-permission';
 import { REPORT_EXPORT_PERMISSIONS } from '@/lib/report-permissions';
 
@@ -25,7 +25,7 @@ export function ReportHeader({ report, reportId }: ReportHeaderProps) {
   const canExportReport = usePermission(REPORT_EXPORT_PERMISSIONS, 'any');
 
   const handleExportPDF = () => {
-    message.info('PDF 导出功能开发中...');
+    toast.info('PDF 导出功能开发中...');
   };
 
   const handlePrint = () => {
@@ -72,24 +72,22 @@ export function ReportHeader({ report, reportId }: ReportHeaderProps) {
           </div>
         </div>
 
-        <Space wrap>
+        <div className="flex flex-wrap gap-2">
           {canExportReport ? (
             <Button
-              type="default"
-              icon={<DownloadOutlined />}
+              icon={<Download size={16} strokeWidth={1.8} aria-hidden="true" />}
               onClick={handleExportPDF}
             >
               导出 PDF
             </Button>
           ) : null}
           <Button
-            type="default"
-            icon={<PrinterOutlined />}
+            icon={<Printer size={16} strokeWidth={1.8} aria-hidden="true" />}
             onClick={handlePrint}
           >
             打印
           </Button>
-        </Space>
+        </div>
       </div>
     </div>
   );

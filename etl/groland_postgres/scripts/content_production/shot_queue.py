@@ -6,13 +6,16 @@ from psycopg2.extras import RealDictCursor
 from .execution import Cancelled
 
 
-def claim(conn):
+def claim(conn, claim_after=None):
+    """`claim_after` (seconds): only jobs queued at least that long (fallback instance)."""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute("""UPDATE ads.content_production_shot_jobs SET
           status=CASE WHEN status='cancel_requested' THEN 'cancelled' ELSE 'failed' END,
           stage='执行租约过期',error_message='worker 已中断，请检查后重新提取',finished_at=NOW()
           WHERE status IN ('running','cancel_requested') AND heartbeat_at<NOW()-INTERVAL '2 minutes'""")
-        cur.execute("SELECT job_id FROM ads.content_production_shot_jobs WHERE status='queued' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1")
+        cur.execute("""SELECT job_id FROM ads.content_production_shot_jobs WHERE status='queued'
+          AND (%s::INTEGER IS NULL OR created_at < NOW() - make_interval(secs => %s::INTEGER))
+          ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1""", (claim_after, claim_after))
         row = cur.fetchone()
         if not row:
             conn.commit()

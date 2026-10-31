@@ -9,7 +9,7 @@
   border: none;
   border-radius: var(--border-radius-full);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 600;
   line-height: var(--line-height-none);
@@ -25,8 +25,8 @@
 }
 
 .tabButton:hover {
-  color: var(--brand-dark);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-primary-hover);
+  background: var(--lobe-color-fill-tertiary);
   box-shadow: none;
   text-decoration: none;
 }
@@ -42,14 +42,14 @@
 
 .tabButton:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   text-decoration: none;
 }
 
 .tabButtonActive {
-  color: var(--brand-on-primary) !important;
+  color: var(--lobe-color-bg-container) !important;
   border-radius: var(--border-radius-full) !important;
-  background-color: var(--brand-primary) !important;
+  background-color: var(--lobe-color-primary) !important;
   background-image: none !important;
   box-shadow: var(--dashboard-brand-tab-shadow) !important;
   text-decoration: none !important;
@@ -57,24 +57,24 @@
 
 .tabButtonActive:hover,
 .tabButtonActive:focus-visible {
-  color: var(--brand-on-primary) !important;
-  background-color: var(--brand-dark) !important;
+  color: var(--lobe-color-bg-container) !important;
+  background-color: var(--lobe-color-primary-hover) !important;
   background-image: none !important;
 }
 
 .tabButtonActiveWithThumb,
 .tabButtonActiveWithThumb:hover {
-  color: var(--brand-on-primary) !important;
+  color: var(--lobe-color-bg-container) !important;
   background-color: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
 }
 
 .tabButtonActiveWithThumb:focus-visible {
-  color: var(--brand-on-primary) !important;
+  color: var(--lobe-color-bg-container) !important;
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

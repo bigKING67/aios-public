@@ -2,19 +2,16 @@
 
 import { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { FormInstance } from 'antd';
 import { apiClient } from '@/lib/api-client';
 import { AIOS_API_PATHS, type AuditLogListResponse } from '@/lib/generated-api-contract';
 import { parseListPayload } from '@/lib/list-payload';
 import type { AuditFilters, AuditLog } from './audit-logs-types';
 
 export interface UseAuditLogsListStateArgs {
-  form: FormInstance<AuditFilters>;
   supportsAuditLogsApi: boolean;
 }
 
 export function useAuditLogsListState({
-  form,
   supportsAuditLogsApi,
 }: UseAuditLogsListStateArgs) {
   const [filters, setFilters] = useState<AuditFilters>({});
@@ -53,10 +50,9 @@ export function useAuditLogsListState({
   }, []);
 
   const handleReset = useCallback(() => {
-    form.resetFields();
     setPage(1);
     setFilters({});
-  }, [form]);
+  }, []);
 
   const handlePageChange = useCallback(
     (nextPage: number, nextSize?: number) => {

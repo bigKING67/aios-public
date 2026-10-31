@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeft } from 'lucide-react';
 import { Link as RouterLink, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { ContentEditingWorkspace } from '@/app/marketing/content-assets/_components/content-editing-workspace';
@@ -33,11 +33,11 @@ export default function AiStudioEditingPage() {
     <AiStudioShell>
       <div className={styles.panel}>
         {remix ? (
-          <AiStudioCapabilityGate title="AI 剪辑" purpose={remixPurpose(remixMode)}>
+          <AiStudioCapabilityGate title="AI 合成" purpose={remixPurpose(remixMode)}>
             {(capabilities) => <FrameworkRemixPanel capabilities={capabilities} mode={remixMode} />}
           </AiStudioCapabilityGate>
         ) : !legacyRun ? (
-          <AiStudioCapabilityGate title="AI 剪辑" purpose={SINGLE_EDIT_PURPOSE}>
+          <AiStudioCapabilityGate title="AI 合成" purpose={SINGLE_EDIT_PURPOSE}>
             {(capabilities) => <SingleEditPanel capabilities={capabilities} />}
           </AiStudioCapabilityGate>
         ) : (
@@ -48,7 +48,7 @@ export default function AiStudioEditingPage() {
                 <div>
                   {/* Task details are reached from 成片 (both remix modes), so no mode tab is highlighted here. */}
                   <RouterLink className={annotationStyles.backLink} to={ROUTE_PATHS.contentAiStudioOutputs}>
-                    <ArrowLeftOutlined aria-hidden /> 成片
+                    <ArrowLeft size={14} strokeWidth={1.8} aria-hidden /> 成片
                   </RouterLink>
                   <h1 id="ai-studio-page-title">任务详情</h1>
                   <p>{RUN_DETAIL_PURPOSE}</p>

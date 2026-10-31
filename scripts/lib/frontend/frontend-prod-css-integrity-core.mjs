@@ -85,9 +85,13 @@ export function findPureGlobalRootCssModules(files) {
   return findings;
 }
 
+/**
+ * A critical token must be defined wherever built CSS uses it. A build without the
+ * dashboard routes (VITE_AIOS_MODULE_PROFILE=ai_studio) neither uses nor needs them.
+ */
 export function findMissingProductionCssTokens(cssSources, requiredTokens = REQUIRED_PRODUCTION_CSS_TOKENS) {
   const joinedCss = cssSources.map((source) => source.content ?? '').join('\n');
-  return requiredTokens.filter((token) => !joinedCss.includes(`${token}:`));
+  return requiredTokens.filter((token) => joinedCss.includes(`var(${token}`) && !joinedCss.includes(`${token}:`));
 }
 
 export function checkFrontendProdCssIntegrity(repoRoot) {
@@ -138,5 +142,5 @@ export function formatFrontendProdCssIntegrityFindings(result) {
 }
 
 export function summarizeFrontendProdCssIntegrity(result) {
-  return `${result.distCssFiles.length} production CSS assets include ${REQUIRED_PRODUCTION_CSS_TOKENS.length} critical runtime tokens; CSS Module side effects are clean.`;
+  return `${result.distCssFiles.length} production CSS assets define every used critical runtime token (${REQUIRED_PRODUCTION_CSS_TOKENS.length} tracked); CSS Module side effects are clean.`;
 }

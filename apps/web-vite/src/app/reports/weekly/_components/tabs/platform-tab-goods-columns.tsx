@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { GoodsTableRow } from './platform-tab-types';
 import type { TrendClassNameResolver } from './platform-tab-column-contracts';
 import {
@@ -17,7 +17,7 @@ import {
 
 export function buildGoodsColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<GoodsTableRow> {
+): TableColumnsType<GoodsTableRow> {
   return [
     {
       title: '商品名称',

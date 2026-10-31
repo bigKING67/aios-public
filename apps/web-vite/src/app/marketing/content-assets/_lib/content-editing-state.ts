@@ -16,7 +16,7 @@ export const frozenPlanReasons: Record<string, string> = {
   invalid_render_receipt: '成片检查失败，可重新制作。',
   render_superseded: '结果已失效，可重新制作。',
   render_failed: '制作失败，可恢复任务重新制作。',
-  missing_material: '素材已不可用，请在 AI 剪辑重新生成这条成片。',
+  missing_material: '素材已不可用，请在 AI 合成重新生成这条成片。',
 };
 export const editingReasons: Record<string, string> = {
   awaiting_plan_confirmation: '方案就绪，确认后开始制作。', awaiting_execution_adapter: '方案就绪，可以制作。', render_paused: '已暂停，可修改或恢复。',

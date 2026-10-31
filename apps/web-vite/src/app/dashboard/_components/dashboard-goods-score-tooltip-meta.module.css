@@ -6,7 +6,7 @@
 }
 
 .rank {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
 }

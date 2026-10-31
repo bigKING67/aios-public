@@ -38,6 +38,7 @@ async function bundleEntry(entryPoint, name) {
     bundle: true,
     entryPoints: [entryPoint],
     external: [],
+    define: { 'process.env': JSON.stringify({ VITE_SUPER_ADMIN_ACCOUNTS: 'fixture-super-admin' }) },
     format: 'esm',
     logLevel: 'silent',
     platform: 'node',
@@ -213,11 +214,11 @@ export async function runFrontendPermissionPolicyBehaviorFixtures(assertions) {
       identity: {
         email: null,
         fullName: null,
-        roles: ['admin'],
-        username: 'operator',
+        roles: [],
+        username: 'fixture-super-admin',
       },
     })),
-    'admin role should receive elevated permission access',
+    'configured super-admin identity should receive elevated permission access',
   );
   assertTrue(
     hasEffectivePermission({
@@ -344,12 +345,12 @@ export async function runFrontendPermissionPolicyBehaviorFixtures(assertions) {
     'admin role should keep report navigation visible through shared policy',
   );
   assertTrue(
-    canAccessPath('/reports/weekly', [], ['admin'], {
+    canAccessPath('/reports/weekly', [], [], {
       email: null,
       fullName: null,
-      username: 'operator',
+      username: 'fixture-super-admin',
     }, true),
-    'admin role should keep report navigation visible through shared policy',
+    'super-admin identity should keep report navigation visible through shared policy',
   );
   assertTrue(
     canAccessPath('/dashboard/creator', [], ['admin'], {
@@ -359,13 +360,21 @@ export async function runFrontendPermissionPolicyBehaviorFixtures(assertions) {
     }, true),
     'admin role should receive creator dashboard access through shared elevated policy',
   );
-  assertTrue(
+  assertFalse(
     canAccessPath('/dashboard/industry-material-inspiration', [], ['content_ops'], {
       email: 'content@example.com',
       fullName: 'Content Ops',
       username: 'content-ops-user',
     }, true),
-    'content_ops role should receive industry material inspiration dashboard access',
+    'content_ops role should not receive industry material inspiration (super admin only)',
+  );
+  assertTrue(
+    canAccessPath('/dashboard/industry-material-inspiration', [], [], {
+      email: null,
+      fullName: null,
+      username: 'fixture-super-admin',
+    }, true),
+    'the super-admin identity should keep industry material inspiration through direct links',
   );
   assertFalse(
     canAccessPath('/dashboard/industry-material-inspiration', [], ['dashboard_view'], {

@@ -6,7 +6,7 @@
     radial-gradient(circle at 16% 8%, var(--dashboard-canvas-brand-glow), transparent 42%),
     radial-gradient(circle at 86% 0%, var(--dashboard-canvas-info-glow), transparent 38%),
     linear-gradient(180deg, var(--dashboard-canvas-bg-start) 0%, var(--dashboard-canvas-bg-end) 100%);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-base);
 }
 
@@ -82,7 +82,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   line-height: var(--line-height-zero);
   opacity: 0.82;
   text-decoration: none;
@@ -94,7 +94,7 @@
 
 .homeEntryLink:hover,
 .homeEntryLink:focus-visible {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   opacity: 1;
   text-decoration: none;
 }
@@ -102,7 +102,7 @@
 .homeEntryLink:focus-visible {
   outline: none;
   border-radius: var(--spacing-2);
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
 }
 
 .homeEntryLink:active {
@@ -122,7 +122,7 @@
 }
 
 .brand {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 680;
   letter-spacing: var(--letter-spacing-normal);
@@ -149,49 +149,57 @@
   min-width: 220px;
 }
 
-.monthPicker:global(.ant-picker),
-.pickerShell :global(.ant-picker) {
+.monthPicker:global(.lobe-picker),
+.pickerShell :global(.lobe-picker) {
   width: 100%;
   height: 38px;
   border-width: 1px;
   border-style: solid;
-  border-color: var(--border-color);
+  border-color: var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background-color: color-mix(in srgb, var(--bg-card) 88%, transparent);
+  background-color: color-mix(in srgb, var(--lobe-color-bg-container) 88%, transparent);
   background-image: none;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 72%, transparent),
-    var(--shadow-sm);
+    inset 0 1px 0 color-mix(in srgb, var(--lobe-color-bg-container) 72%, transparent),
+    var(--lobe-box-shadow-tertiary);
 }
 
-.monthPicker:global(.ant-picker:hover),
-.monthPicker:global(.ant-picker-focused),
-.pickerShell :global(.ant-picker:hover),
-.pickerShell :global(.ant-picker-focused) {
-  border-color: color-mix(in srgb, var(--brand-primary) 36%, var(--border-color));
-  background-color: var(--bg-card);
-  box-shadow: 0 0 0 2px var(--brand-secondary);
+.monthPicker:global(.lobe-picker:hover),
+.pickerShell :global(.lobe-picker:hover) {
+  border-color: var(--aios-border-hover);
+  background-color: var(--lobe-color-bg-container);
+}
+
+.monthPicker:global(.lobe-picker:focus-within),
+.pickerShell :global(.lobe-picker:focus-within) {
+  border-color: var(--lobe-focus-ring-color);
+  background-color: var(--lobe-color-bg-container);
+  box-shadow: 0 0 0 2px var(--aios-ai-soft);
 }
 
 .refreshButton {
   min-height: var(--dashboard-selection-compact-height);
-  border-color: var(--border-color);
+  border-color: var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: color-mix(in srgb, var(--bg-card) 88%, transparent);
-  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--lobe-color-bg-container) 88%, transparent);
+  color: var(--lobe-color-text-secondary);
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
-.refreshButton:hover,
+.refreshButton:hover {
+  border-color: var(--aios-border-hover);
+  color: var(--lobe-color-text);
+}
+
 .refreshButton:focus-visible {
-  border-color: var(--brand-border);
-  color: var(--brand-text);
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
 }
 
 .eyebrow {
   margin: 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -213,16 +221,16 @@
   min-width: 0;
   min-height: 116px;
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
   background: var(--dashboard-surface-bg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .summaryItem span {
   display: block;
   margin-bottom: var(--spacing-2);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
@@ -230,7 +238,7 @@
 
 .summaryItem strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-data-md);
   font-weight: var(--font-weight-data);
@@ -241,7 +249,7 @@
 
 .summaryItem p {
   margin: var(--spacing-2) 0 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
 }
@@ -249,7 +257,7 @@
 .tablePanel,
 .placeholderPanel {
   min-width: 0;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
   background: var(--dashboard-surface-bg-strong);
   box-shadow: var(--dashboard-sidebar-shadow);
@@ -265,12 +273,12 @@
   justify-content: space-between;
   gap: var(--spacing-4);
   padding: var(--spacing-5) var(--spacing-5) var(--spacing-4);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--lobe-color-border);
 }
 
 .tableHeader h2 {
   margin: var(--spacing-1) 0 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: var(--font-weight-section-title);
   line-height: var(--line-height-tight);
@@ -280,7 +288,7 @@
 .tableHeader p:last-child {
   max-width: 760px;
   margin: var(--spacing-2) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -298,37 +306,41 @@
   width: 100%;
 }
 
-.brandSelect :global(.ant-select-selector) {
+.brandSelect :global(.lobe-select) {
+  width: 100%;
   min-height: var(--dashboard-selection-compact-height);
-  border-color: var(--border-color) !important;
+  border-color: var(--lobe-color-border) !important;
   border-radius: var(--border-radius-lg);
-  background: color-mix(in srgb, var(--bg-card) 90%, transparent) !important;
-  box-shadow: var(--shadow-sm);
+  background: color-mix(in srgb, var(--lobe-color-bg-container) 90%, transparent) !important;
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
-.brandSelect:hover :global(.ant-select-selector),
-.brandSelect:global(.ant-select-focused) :global(.ant-select-selector) {
-  border-color: var(--brand-border) !important;
-  box-shadow: 0 0 0 2px var(--brand-secondary) !important;
+.brandSelect :global(.lobe-select:hover) {
+  border-color: var(--aios-border-hover) !important;
+}
+
+.brandSelect :global(.lobe-select:focus-visible) {
+  border-color: var(--lobe-focus-ring-color) !important;
+  box-shadow: 0 0 0 2px var(--aios-ai-soft) !important;
 }
 
 .exportButton {
   flex: 0 0 auto;
   min-height: var(--dashboard-selection-compact-height);
   padding-inline: var(--spacing-4);
-  border-color: var(--brand-primary);
+  border-color: var(--lobe-color-primary);
   border-radius: var(--border-radius-lg);
-  background: var(--brand-primary);
-  color: var(--brand-on-primary);
+  background: var(--lobe-color-primary);
+  color: var(--lobe-color-bg-container);
   font-weight: var(--font-weight-semibold);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .exportButton:hover,
 .exportButton:focus-visible {
-  border-color: var(--brand-active);
-  background: var(--brand-active);
-  color: var(--brand-on-primary);
+  border-color: var(--lobe-color-primary-active);
+  background: var(--lobe-color-primary-active);
+  color: var(--lobe-color-bg-container);
 }
 
 .tableViewport {
@@ -339,20 +351,20 @@
   min-width: 0;
 }
 
-.materialTable :global(.ant-table) {
-  color: var(--text-primary);
+.materialTable :global(.lobe-table) {
+  color: var(--lobe-color-text);
   background: transparent;
 }
 
-.materialTable :global(.ant-table-container) {
+.materialTable :global(.lobe-table-container) {
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
 }
 
-.materialTable :global(.ant-table-thead > tr > th) {
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+.materialTable :global(.lobe-table-thead > tr > th) {
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--component-table-detail-header-font-size);
   font-weight: var(--component-table-detail-header-font-weight);
   line-height: var(--component-table-detail-header-line-height);
@@ -360,21 +372,21 @@
   text-align: center !important;
 }
 
-.materialTable :global(.ant-table-tbody > tr > td) {
-  color: var(--text-secondary);
+.materialTable :global(.lobe-table-tbody > tr > td) {
+  color: var(--lobe-color-text-secondary);
   font-size: var(--component-table-detail-body-font-size);
   font-weight: var(--component-table-detail-body-font-weight);
   line-height: var(--component-table-detail-body-line-height);
   letter-spacing: var(--component-table-detail-body-letter-spacing);
 }
 
-.materialTable :global(.ant-table-tbody > tr:hover > td) { background: var(--bg-hover); }
+.materialTable :global(.lobe-table-tbody > tr:hover > td) { background: var(--lobe-color-fill-tertiary); }
 
 .placeholderLink {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-1);
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   text-decoration: none;
   transition:
     color var(--transition-fast),
@@ -383,13 +395,13 @@
 }
 
 .placeholderLink:hover {
-  color: var(--brand-active);
+  color: var(--aios-ai-12);
   text-decoration: none;
 }
 
 .placeholderLink:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
 }
 
 .placeholderPanel {
@@ -403,7 +415,7 @@
 .placeholderText {
   max-width: 520px;
   margin: 0 0 var(--spacing-3);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -479,7 +491,7 @@
   .controlPanel,
   .pickerShell,
   .brandPickerShell,
-  .controlPanel :global(.ant-btn) {
+  .controlPanel :global(.lobe-button) {
     min-width: 0;
     width: 100%;
   }

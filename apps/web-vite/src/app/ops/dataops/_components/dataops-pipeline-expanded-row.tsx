@@ -1,6 +1,6 @@
 'use client';
 
-import { Tooltip } from 'antd';
+import { Tooltip } from '@lobehub/ui';
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import { joinTableList } from './dataops-hub-formatters';
 import pipelineStyles from './dataops-pipeline-table.module.css';

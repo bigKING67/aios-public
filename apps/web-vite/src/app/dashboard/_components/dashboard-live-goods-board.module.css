@@ -1,6 +1,6 @@
 .panel {
   border-color: var(--dashboard-panel-border-muted);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   box-shadow: none;
 }
 
@@ -9,7 +9,7 @@
 }
 
 .panel .title {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 620;
   letter-spacing: var(--letter-spacing-normal);
@@ -17,7 +17,7 @@
 
 .inlineStatus {
   align-self: flex-start;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 560;
 }

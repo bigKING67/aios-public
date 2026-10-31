@@ -1,5 +1,5 @@
-import { Empty, Table, Tooltip } from 'antd';
-import type { TableProps } from 'antd/es/table';
+import { Empty, Table, Tooltip } from '@lobehub/ui';
+import type { TableProps } from '@lobehub/ui';
 import tableStyles from '../creator-library-table.module.css';
 import {
   DEFAULT_CREATOR_LIBRARY_SORT,
@@ -65,7 +65,7 @@ export function CreatorLibraryTable({
           emptyText: (
             <Empty
               description="没有找到匹配的达人"
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
+             
             />
           ),
         }}

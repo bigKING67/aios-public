@@ -10,8 +10,8 @@ html {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--bg-global);
+  color: var(--lobe-color-text);
+  background-color: var(--lobe-color-bg-layout);
   transition: background-color var(--transition-base),
               color var(--transition-base);
 }
@@ -19,8 +19,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-global);
-  color: var(--text-primary);
+  background-color: var(--lobe-color-bg-layout);
+  color: var(--lobe-color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -33,7 +33,7 @@ h1 {
   line-height: 1.18;
   letter-spacing: var(--letter-spacing-tight);
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 h2 {
@@ -42,7 +42,7 @@ h2 {
   line-height: 1.25;
   letter-spacing: var(--letter-spacing-title);
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 h3 {
@@ -50,30 +50,30 @@ h3 {
   font-weight: var(--font-weight-title);
   line-height: 1.35;
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 p {
   margin: 0;
   font-size: var(--font-size-base);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   line-height: var(--line-height-relaxed);
 }
 
 a {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   text-decoration: none;
   cursor: pointer;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--brand-text-strong);
+  color: var(--aios-ai-text);
   text-decoration: underline;
 }
 
 a:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -94,8 +94,8 @@ a:focus-visible {
 
 .card,
 .dashboard-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background-color: var(--lobe-color-bg-container);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-base);
   padding: var(--component-card-padding);
   transition: all var(--transition-base);
@@ -103,7 +103,7 @@ a:focus-visible {
 
 .card:hover,
 .dashboard-card:hover {
-  border-color: var(--border-color-hover);
+  border-color: var(--aios-border-hover);
   box-shadow: var(--shadow-base);
 }
 
@@ -124,7 +124,7 @@ button:disabled {
 }
 
 button:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
@@ -135,25 +135,25 @@ textarea,
 select {
   font-family: inherit;
   font-size: var(--font-size-base);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-base);
   padding: var(--spacing-2) var(--spacing-3);
   transition: all var(--transition-fast);
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+/* Lobe's field root owns focus and validation. Its native child must not draw
+ * a second ring inside that root. Password and search also use lobe-input. */
+:is(input, textarea, select):focus:not(.lobe-input__input, .lobe-input-number__input, .lobe-text-area__input) {
   outline: none;
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
+  border-color: var(--lobe-color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lobe-focus-ring-color) 48%, transparent);
 }
 
 input:disabled,
 textarea:disabled,
 select:disabled {
-  background-color: var(--bg-disabled);
-  color: var(--text-disabled);
+  background-color: var(--lobe-color-bg-container-disabled);
+  color: var(--lobe-color-text-disabled);
   cursor: not-allowed;
 }
 
@@ -171,12 +171,12 @@ select:disabled {
   }
 
   html {
-    background-color: var(--bg-global);
+    background-color: var(--lobe-color-bg-layout);
   }
 
   body {
-    background-color: var(--bg-global);
-    color: var(--text-primary);
+    background-color: var(--lobe-color-bg-layout);
+    color: var(--lobe-color-text);
   }
 }
 
@@ -184,7 +184,7 @@ select:disabled {
 
 @media print {
   body {
-    background-color: var(--bg-card);
+    background-color: var(--lobe-color-bg-container);
   }
 
   .no-print {

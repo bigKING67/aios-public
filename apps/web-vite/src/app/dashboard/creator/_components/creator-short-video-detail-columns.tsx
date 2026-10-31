@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   formatCreatorCurrencyCell,
   formatCreatorIntegerCell,
@@ -41,14 +41,14 @@ import detailStyles from './creator-short-video-detail-renderers.module.css';
 import manualAttrStyles from './creator-short-video-manual-attrs.module.css';
 
 interface BuildCreatorShortVideoDetailColumnsParams {
-  manualAttrColumns?: ColumnsType<CreatorShortVideoDetailRow>;
+  manualAttrColumns?: TableColumnsType<CreatorShortVideoDetailRow>;
   resolveStageKey: (normalizedValue: string, value?: string | null) => string;
   formatDisplay: (value?: string | null) => string;
 }
 
-type CreatorShortVideoColumn = ColumnsType<CreatorShortVideoDetailRow>[number];
+type CreatorShortVideoColumn = TableColumnsType<CreatorShortVideoDetailRow>[number];
 type CreatorShortVideoColumnGroup = CreatorShortVideoColumn & {
-  children: ColumnsType<CreatorShortVideoDetailRow>;
+  children: TableColumnsType<CreatorShortVideoDetailRow>;
 };
 
 const ASSET_TAXONOMY_COLUMN_CONFIGS = [
@@ -82,7 +82,7 @@ const ASSET_TAXONOMY_COLUMN_CONFIGS = [
   },
 ] as const;
 
-function groupColumns(title: string, children: ColumnsType<CreatorShortVideoDetailRow>): CreatorShortVideoColumnGroup {
+function groupColumns(title: string, children: TableColumnsType<CreatorShortVideoDetailRow>): CreatorShortVideoColumnGroup {
   return {
     title,
     children,
@@ -101,8 +101,8 @@ function withoutFixedColumn<T extends { fixed?: unknown }>(column: T): Omit<T, '
 }
 
 function withManualAttrColumnTone(
-  columns: ColumnsType<CreatorShortVideoDetailRow>
-): ColumnsType<CreatorShortVideoDetailRow> {
+  columns: TableColumnsType<CreatorShortVideoDetailRow>
+): TableColumnsType<CreatorShortVideoDetailRow> {
   return columns.map((column) => ({
     ...column,
     className: mergeColumnClassName(column.className, manualAttrStyles.manualAttrColumnCell),
@@ -110,7 +110,7 @@ function withManualAttrColumnTone(
   }));
 }
 
-function buildAssetTaxonomyColumns(): ColumnsType<CreatorShortVideoDetailRow> {
+function buildAssetTaxonomyColumns(): TableColumnsType<CreatorShortVideoDetailRow> {
   return ASSET_TAXONOMY_COLUMN_CONFIGS.map(({ sourceKeys, formatValues, ...column }) => ({
     ...column,
     align: 'center',
@@ -140,7 +140,7 @@ function buildQianchuanGmvColumn(): CreatorShortVideoColumn {
   };
 }
 
-function buildPerformanceColumns(): ColumnsType<CreatorShortVideoDetailRow> {
+function buildPerformanceColumns(): TableColumnsType<CreatorShortVideoDetailRow> {
   return [
     buildQianchuanGmvColumn(),
     {
@@ -212,9 +212,9 @@ export function buildCreatorShortVideoDetailColumns({
   manualAttrColumns = [],
   resolveStageKey,
   formatDisplay,
-}: BuildCreatorShortVideoDetailColumnsParams): ColumnsType<CreatorShortVideoDetailRow> {
+}: BuildCreatorShortVideoDetailColumnsParams): TableColumnsType<CreatorShortVideoDetailRow> {
   const columns = CREATOR_SHORT_VIDEO_DETAIL_TABLE_COLUMN_CONFIG.columns;
-  const groupedColumns: ColumnsType<CreatorShortVideoDetailRow> = [
+  const groupedColumns: TableColumnsType<CreatorShortVideoDetailRow> = [
     groupColumns('达人与挂车视频', [
       {
         ...columns.assetProductNames,

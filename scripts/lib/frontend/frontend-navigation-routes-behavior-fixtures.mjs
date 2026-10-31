@@ -113,7 +113,7 @@ export function runFrontendNavigationRoutesBehaviorFixtures(assertions) {
       ...baseFiles,
       'apps/web-vite/src/app/_components/home-page.tsx': `
 import { Link } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 
 const entryItems = [
   { href: '/dashboard' },

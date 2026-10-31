@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import type {
   IndustryMaterialBrandAiBackfillResponse,
   IndustryMaterialBrandInsight,
@@ -147,8 +147,7 @@ export function BrandAiInsightPanel({
             ) : null}
           </div>
           {canBackfillMissingAnalysis ? (
-            <Button
-              type="primary"
+            <AiActionButton
               size="small"
               className={styles.aiBackfillButton}
               disabled={isBackfillPending}
@@ -156,7 +155,7 @@ export function BrandAiInsightPanel({
               onClick={onBackfillMissingAnalysis}
             >
               {backfillButtonCopy}
-            </Button>
+            </AiActionButton>
           ) : null}
           {coverageState.activeAssets > 0 ? (
             <p className={styles.aiBackfillHelper}>页面会自动更新处理进度，无需重复提交。</p>

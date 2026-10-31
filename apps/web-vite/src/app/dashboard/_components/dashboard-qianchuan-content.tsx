@@ -1,9 +1,7 @@
-import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Empty, Segmented, Table } from 'antd';
-import type { MessageInstance } from 'antd/es/message/interface';
+import { Button, Empty, Segmented, Table, type TableColumnsType, type ToastAPI } from '@lobehub/ui';
+import { Download } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import type { ColumnsType } from 'antd/es/table';
 
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
 import { DashboardChart } from './dashboard-chart';
@@ -56,7 +54,7 @@ export type DashboardQianchuanContentProps = {
   qianchuanLoadError?: unknown;
   currentRange?: DashboardDateRangeLike;
   isAuthenticated?: boolean;
-  messageApi?: MessageInstance;
+  messageApi?: ToastAPI;
   tableClassNames?: DashboardQianchuanTableClassNames;
 };
 
@@ -598,7 +596,7 @@ function renderDataTable<Row extends object>({
 }: {
   rows: Row[];
   loading: boolean;
-  columns: ColumnsType<Row>;
+  columns: TableColumnsType<Row>;
   emptyText: ReactNode;
   rowKey: (row: Row, index?: number) => string;
   isMobile: boolean;
@@ -795,9 +793,8 @@ export function DashboardQianchuanContent({
             <div
               className={`${trafficSectionHeaderStyles.meta} ${trafficSectionHeaderStyles.liveScopeMeta} ${styles.metricScopeControl}`}
             >
-              <div className={`${trafficSectionControlStyles.liveScopeSwitch} ${styles.scopeSwitch}`}>
+              <div className={`${trafficSectionControlStyles.liveScopeSwitch} ${styles.scopeSwitch}`} role="group" aria-label="千川内容范围">
                 <Segmented<DashboardQianchuanMaterialScopeKey>
-                  aria-label="千川内容范围"
                   name="dashboard-qianchuan-material-scope"
                   size="small"
                   value={activeScope}
@@ -852,7 +849,7 @@ export function DashboardQianchuanContent({
               <Button
                 type="primary"
                 size="small"
-                icon={<DownloadOutlined />}
+                icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
                 loading={isExportingMaterialTypeMixDetails}
                 disabled={disableMaterialTypeMixDetailExport}
                 onClick={handleExportMaterialTypeMixDetails}
@@ -888,7 +885,7 @@ export function DashboardQianchuanContent({
               <Button
                 type="primary"
                 size="small"
-                icon={<DownloadOutlined />}
+                icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
                 loading={isExportingLiveVideoDetails}
                 disabled={disableLiveVideoDetailExport}
                 onClick={handleExportLiveVideoDetails}
@@ -921,7 +918,7 @@ export function DashboardQianchuanContent({
               <Button
                 type="primary"
                 size="small"
-                icon={<DownloadOutlined />}
+                icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
                 loading={isExportingLiveRoomScreenDetails}
                 disabled={disableLiveRoomScreenDetailExport}
                 onClick={handleExportLiveRoomScreenDetails}

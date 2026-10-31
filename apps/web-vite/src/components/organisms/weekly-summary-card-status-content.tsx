@@ -1,5 +1,6 @@
-import { Alert, Button, Skeleton, Spin } from 'antd';
-import { RobotOutlined, SyncOutlined } from '@ant-design/icons';
+import { Alert, Button } from '@lobehub/ui';
+import { Bot } from 'lucide-react';
+import { AiTaskStatus } from '@/components/molecules/ai-task-status';
 import type { SummaryData } from '@/hooks/use-weekly-summary';
 import styles from './weekly-summary-card-modern.module.css';
 
@@ -35,7 +36,6 @@ export function WeeklySummaryLoadingContent() {
         <div className={styles.loadingLineLong} />
         <div className={styles.loadingLineShort} />
       </div>
-      <Skeleton active paragraph={{ rows: 0 }} title={false} className={styles.loadingFallback} />
     </div>
   );
 }
@@ -85,8 +85,7 @@ export function WeeklySummaryFailedContent({
 export function WeeklySummaryPendingContent() {
   return (
     <div className={styles.statusPanel}>
-      <SyncOutlined spin className={styles.statusIcon} />
-      <p className={styles.statusText}>任务已入队，正在等待工作线程处理...</p>
+      <AiTaskStatus state="queued" label="任务已入队，正在等待工作线程处理..." />
     </div>
   );
 }
@@ -94,7 +93,7 @@ export function WeeklySummaryPendingContent() {
 export function WeeklySummaryGeneratingContent() {
   return (
     <div className={styles.statusPanel}>
-      <Spin size="large" description="AI 正在深度分析本周数据，请稍候..." />
+      <AiTaskStatus state="thinking" label="AI 正在深度分析本周数据，请稍候..." />
     </div>
   );
 }
@@ -105,7 +104,7 @@ export function WeeklySummaryEmptyContent({
 }: WeeklySummaryEmptyContentProps) {
   return (
     <div className={styles.statusPanel}>
-      <RobotOutlined className={styles.emptyIcon} />
+      <Bot className={styles.emptyIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
       <p className={styles.emptyText}>
         暂无{summaryLabel}
         {canGenerateSummary ? '，点击右上角按钮一键生成洞察。' : '，当前账号无生成权限，请联系管理员开通。'}

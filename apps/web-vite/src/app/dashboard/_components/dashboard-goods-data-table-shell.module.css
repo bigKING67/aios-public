@@ -1,19 +1,19 @@
-.goodsDataTable :global(.ant-table),
-.goodsCardDataTable :global(.ant-table) {
+.goodsDataTable :global(.lobe-table),
+.goodsCardDataTable :global(.lobe-table) {
   background: transparent;
   font-size: var(--font-size-sm);
 }
 
-.goodsDataTable :global(.ant-table-container),
-.goodsCardDataTable :global(.ant-table-container) {
+.goodsDataTable :global(.lobe-table-container),
+.goodsCardDataTable :global(.lobe-table-container) {
   border-inline: none !important;
   border-top: none !important;
 }
 
 .goodsDataShellHeaderCell {
-  background: var(--bg-hover) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  color: var(--text-secondary) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  color: var(--lobe-color-text-secondary) !important;
   padding: var(--spacing-3) calc(var(--spacing-2) + 2px) !important;
   white-space: nowrap;
 }
@@ -23,14 +23,14 @@
 }
 
 .goodsDataShellBodyCell {
-  background: var(--bg-card) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  color: var(--text-primary);
+  background: var(--lobe-color-bg-container) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  color: var(--lobe-color-text);
   line-height: var(--line-height-relaxed);
   vertical-align: middle;
 }
 
-.goodsDataTableRow:hover > :global(.ant-table-cell),
-.goodsCardDataTableRow:hover > :global(.ant-table-cell) {
+.goodsDataTableRow:hover > :global(.lobe-table-cell),
+.goodsCardDataTableRow:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-goods-table-hover-bg) !important;
 }

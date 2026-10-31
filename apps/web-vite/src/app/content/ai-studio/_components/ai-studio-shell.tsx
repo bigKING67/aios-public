@@ -1,57 +1,75 @@
-import { RobotOutlined } from '@ant-design/icons';
-import { ConfigProvider } from 'antd';
+import { Breadcrumb, ConsoleBrand, ConsoleShell, type BreadcrumbProps, type ConsoleBrandProps } from '@lobehub/ui/dashboard';
+import { Sparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import consoleStyles from '@/app/marketing/content-assets/_components/content-assets-console.module.css';
-import { Layout } from '@/components/organisms/layout';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '@/components/protected-route';
-import { RailUserMenu } from '@/components/rail-user-menu';
-import { UserMenu } from '@/components/user-menu';
-import { useMediaQuery } from '@/hooks/use-media-query';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
-import { AiStudioCompactNav, AiStudioRailNav } from './ai-studio-nav';
-import styles from '../ai-studio.module.css';
+import { AiStudioNav } from './ai-studio-nav';
+import { studioLocation } from './ai-studio-nav-config';
+import styles from './studio-console.module.css';
 
-// Matches the breakpoint where the shared console rail collapses.
-const COMPACT_NAV_QUERY = '(max-width: 980px)';
+type ConsoleBrandLinkProps = Parameters<NonNullable<ConsoleBrandProps['renderLink']>>[0];
+type BreadcrumbLinkProps = Parameters<NonNullable<BreadcrumbProps['renderLink']>>[0];
+
+// The global AIOS mark leads to the module directory; this mark stays in the studio.
+const BRAND_LINK = { path: ROUTE_PATHS.contentAiStudio, label: 'AI 创作中心首页' };
+
+function renderBrandLink({ href, children, ...rest }: ConsoleBrandLinkProps) {
+  return (
+    <RouterLink to={href} {...rest}>
+      {children}
+    </RouterLink>
+  );
+}
+
+function renderBreadcrumbLink({ href, children, ...rest }: BreadcrumbLinkProps) {
+  return (
+    <RouterLink to={href} {...rest}>
+      {children}
+    </RouterLink>
+  );
+}
+
+/**
+ * "竞品爆款 / 爆款视频" from the nav config; a subpage or an annotation adds itself after a link
+ * back to where it was opened ("原片 / AI 切段 / 标注片段"). The studio home has no trail.
+ */
+function StudioBreadcrumb() {
+  const { pathname, search } = useLocation();
+  const { item, crumbs } = studioLocation(pathname, search);
+  if (!item || item.path === ROUTE_PATHS.contentAiStudio) return null;
+  return <Breadcrumb label="当前位置" renderLink={renderBreadcrumbLink} items={crumbs} />;
+}
 
 export function AiStudioShell({ children }: { children: ReactNode }) {
-  const isCompact = useMediaQuery(COMPACT_NAV_QUERY);
-
   return (
     <ProtectedRoute>
-      <Layout variant="immersive">
-        <main className={styles.pageShell}>
-          <div className={consoleStyles.consoleShell}>
-            <aside className={consoleStyles.moduleRail} aria-label="AI 创作中心">
-              <div className={`${consoleStyles.brandLockup} ${styles.railBrand}`}>
-                <RouterLink className={consoleStyles.brandMark} to={ROUTE_PATHS.home} aria-label="返回首页" title="返回首页">
-                  <RobotOutlined aria-hidden />
-                  <span className="sr-only">返回首页</span>
-                </RouterLink>
-                <div className={consoleStyles.brandText}>
-                  <strong>AI 创作中心</strong>
-                  <span>片段 / 混剪 / 成片</span>
-                </div>
-              </div>
-              {!isCompact && <AiStudioRailNav />}
-              {!isCompact && <RailUserMenu />}
-            </aside>
-            <section className={consoleStyles.consoleMain}>
-              {isCompact && (
-                <div className={styles.compactBar}>
-                  <AiStudioCompactNav />
-                  <UserMenu />
-                </div>
-              )}
-              {/* Two-character buttons (刷新、清空) keep normal spacing like their four-character neighbours. */}
-              <ConfigProvider button={{ autoInsertSpace: false }}>
-                <div className={consoleStyles.workspaceScroll}>{children}</div>
-              </ConfigProvider>
-            </section>
-          </div>
-        </main>
-      </Layout>
+      <ConsoleShell
+        className={styles.shell}
+        storageKey="aios.aiStudio.sidebarCollapsed"
+        brand={
+          <ConsoleBrand
+            href={BRAND_LINK.path}
+            label={BRAND_LINK.label}
+            title="AI 创作中心"
+            logo={
+              <span className={styles.logo} aria-hidden="true">
+                <Sparkles size={16} strokeWidth={1.8} />
+              </span>
+            }
+            renderLink={renderBrandLink}
+          />
+        }
+        navigation={<AiStudioNav />}
+        breadcrumb={<StudioBreadcrumb />}
+        collapseLabel="收起侧栏"
+        expandLabel="展开侧栏"
+        openNavigationLabel="打开导航"
+        closeNavigationLabel="关闭导航"
+        skipToContentLabel="跳到正文"
+      >
+        <div className={styles.workspace}>{children}</div>
+      </ConsoleShell>
     </ProtectedRoute>
   );
 }

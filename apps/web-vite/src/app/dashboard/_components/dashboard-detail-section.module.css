@@ -1,7 +1,7 @@
 .detailPanel {
   border-radius: calc(var(--border-radius-2xl) + 2px);
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: calc(var(--spacing-3) + 2px) var(--spacing-4);
   display: flex;
   flex-direction: column;
@@ -9,20 +9,15 @@
 }
 
 .liveDetailPanel {
-  border-color: var(--border-color);
-  background: var(--bg-card);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   box-shadow: none;
 }
 
-.liveDetailPanel :global(.ant-btn-primary) {
+.liveDetailPanel :global(.lobe-button[data-type='primary']) {
   height: calc(var(--spacing-8) + 2px);
-  border-radius: calc(var(--border-radius-lg) - 1px);
-  background: var(--brand-primary);
+  border-radius: calc(var(--lobe-border-radius-lg) - 1px);
   box-shadow: none;
   font-size: var(--font-size-sm);
   font-weight: 560;
-}
-
-.liveDetailPanel :global(.ant-btn-primary:hover) {
-  background: var(--brand-active) !important;
 }

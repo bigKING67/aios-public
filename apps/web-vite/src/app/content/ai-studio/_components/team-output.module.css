@@ -1,0 +1,267 @@
+/*
+ * 团队产出 (DESIGN.md "Layout Grammar v3"): no boxed sections. The totals strip is the one framed
+ * unit (like the home's chain strip); the team table is hairline rows with tabular figures.
+ */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.categorySelect {
+  width: 160px;
+}
+
+.notes {
+  display: grid;
+  gap: var(--spacing-1);
+  margin-top: calc(-1 * var(--spacing-4));
+}
+
+.note {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+}
+
+/* A 1px gap over the border color draws the dividers, as on the home's chain strip. */
+.totals {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--lobe-border-radius-lg);
+  background: var(--lobe-color-border-secondary);
+}
+
+.total {
+  display: grid;
+  gap: var(--spacing-1);
+  align-content: start;
+  min-width: 0;
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--lobe-color-bg-container);
+}
+
+.total dd {
+  margin: 0;
+}
+
+/* Phones: like the home's chain strip, a list with the label on the left and the figure on the right. */
+@media (max-width: 760px) {
+  .totals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .total {
+    grid-template-areas:
+      'label value'
+      'caption value';
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+}
+
+.tableWrap {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+}
+
+.table th,
+.table td {
+  padding: 10px var(--spacing-3);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table thead th {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+.table tbody tr:hover {
+  background: var(--lobe-color-fill-tertiary);
+}
+
+.table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.nameHead,
+.name {
+  min-width: 180px;
+  padding-left: 0;
+}
+
+.name {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-regular);
+}
+
+.hinted {
+  border-bottom: 1px dotted var(--lobe-color-text-quaternary);
+  cursor: help;
+}
+
+.teamRow .name,
+.teamRow .num {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.fold {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  background: none;
+  cursor: pointer;
+}
+
+/* 导出 and 全部展开 / 全部收起 sit at the table's end, above the header. */
+.tableActions {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fold [data-muted] {
+  color: var(--lobe-color-text-secondary);
+}
+
+.groupRow .name,
+.groupRow .num {
+  color: var(--lobe-color-text-secondary);
+}
+
+.groupName {
+  padding-left: 18px;
+}
+
+/* A group row's count reads with its name, not as a sub-heading. */
+.groupRow .fold .role {
+  margin-left: var(--spacing-1);
+}
+
+.personRow .num {
+  color: var(--lobe-color-text-secondary);
+}
+
+.personRow .name {
+  padding-left: 36px;
+}
+
+.personRow[data-sentinel] .name {
+  padding-left: 18px;
+}
+
+/* An inline text action: ink, underlined on hover (DESIGN.md › Controls). */
+.person {
+  padding: 0;
+  border: 0;
+  color: var(--lobe-color-text);
+  font: inherit;
+  font-weight: var(--font-weight-medium);
+  background: none;
+  cursor: pointer;
+}
+
+.person:hover {
+  text-decoration: underline;
+}
+
+.fold:focus-visible,
+.person:focus-visible {
+  border-radius: var(--lobe-border-radius-sm);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
+  outline-offset: 2px;
+}
+
+.role {
+  margin-left: var(--spacing-2);
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+/* The freshness dot sits on the text's first line rather than as a flex item of its own. */
+.noteDot {
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: 0.1em;
+}
+
+.empty {
+  padding: var(--spacing-12) 0;
+}
+
+.drawerBody {
+  display: grid;
+  gap: var(--spacing-4);
+}
+
+/* The scope switch on the left, the person's export at the end. */
+.drawerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawerBody .name,
+.drawerBody .nameHead {
+  min-width: 0;
+}
+
+/* The title cell takes the remaining width and wraps; figures stay on one line. */
+.table .videoCell {
+  width: 100%;
+  min-width: 220px;
+  padding-left: 0;
+  font-weight: var(--font-weight-regular);
+  white-space: normal;
+}
+
+.videoCellBody {
+  display: grid;
+  gap: 2px;
+}
+
+.videoCell .role {
+  margin-left: 0;
+  overflow-wrap: anywhere;
+}
+
+.videoName {
+  color: var(--lobe-color-text);
+  overflow-wrap: anywhere;
+}
+
+.pager {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  justify-content: flex-end;
+}

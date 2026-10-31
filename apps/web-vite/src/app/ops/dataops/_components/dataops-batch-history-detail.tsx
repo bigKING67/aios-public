@@ -1,7 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, type TableColumnsType } from '@lobehub/ui';
 import type {
   BatchHistoryFailureFilter,
   BatchHistoryTimeRangeFilter,
@@ -33,7 +32,7 @@ interface DataOpsBatchHistoryDetailProps {
   alertSendDisabled: boolean;
   hasOperatePermission: boolean;
   globalActionBusy: boolean;
-  columns: ColumnsType<BatchExecutionSummary>;
+  columns: TableColumnsType<BatchExecutionSummary>;
   isCompactViewport: boolean;
   onActionFilterChange: (value: BatchOperationAction | 'all') => void;
   onFailureFilterChange: (value: BatchHistoryFailureFilter) => void;

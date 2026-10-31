@@ -9,7 +9,8 @@ use super::error::StudioError;
 use super::overview;
 use super::overview_types::StudioOverviewQuery;
 use super::postgres_tests::{asset, create, pool, OWNER};
-use super::remix_read;
+use super::remix_list;
+use super::remix_types::RemixBatchListQuery;
 use super::repository;
 use super::suggestions;
 use super::types::{ContentSegmentListQuery, CreateSegmentSuggestionsRequest, SegmentPoolQuery};
@@ -51,8 +52,8 @@ async fn enterprise_scope_admits_and_reads_only_tagged_originals() {
     let enterprise = format!("企业:测试{}", Uuid::new_v4().simple());
     let scoped = StudioAccess::OPEN.with_enterprise_tag(&enterprise);
     let actor = user();
-    let (inside, _) = asset(&pool, Some(OWNER), Some(10.0), Some("面霜")).await;
-    let (outside, _) = asset(&pool, Some(OWNER), Some(10.0), Some("面霜")).await;
+    let (inside, _) = asset(&pool, Some(OWNER), Some(10.0), Some("口红")).await;
+    let (outside, _) = asset(&pool, Some(OWNER), Some(10.0), Some("口红")).await;
     tag(&pool, inside, &enterprise).await;
     // A segment written before the scope existed stays in the library but out of view.
     repository::create_segment(&pool, &actor, StudioAccess::OPEN, create(outside, 0, 1000))
@@ -78,20 +79,20 @@ async fn enterprise_scope_admits_and_reads_only_tagged_originals() {
         .unwrap();
 
     let tag = Some(enterprise.as_str());
-    let hidden = repository::list_segments(&pool, segments_of(outside), tag)
+    let hidden = repository::list_segments(&pool, segments_of(outside), tag, 5000.0)
         .await
         .unwrap();
     assert!(hidden.items.is_empty());
-    let shown = repository::list_segments(&pool, segments_of(inside), tag)
+    let shown = repository::list_segments(&pool, segments_of(inside), tag, 5000.0)
         .await
         .unwrap();
     assert_eq!(shown.items.len(), 1);
-    let unscoped = repository::list_segments(&pool, segments_of(outside), None)
+    let unscoped = repository::list_segments(&pool, segments_of(outside), None, 5000.0)
         .await
         .unwrap();
     assert_eq!(unscoped.items.len(), 1);
 
-    let cells = asset_summaries::segment_pool(&pool, SegmentPoolQuery::default(), tag)
+    let cells = asset_summaries::segment_pool(&pool, SegmentPoolQuery::default(), tag, false)
         .await
         .unwrap();
     assert_eq!(
@@ -99,7 +100,7 @@ async fn enterprise_scope_admits_and_reads_only_tagged_originals() {
         1
     );
 
-    let overview = overview::overview(&pool, StudioOverviewQuery { period: None }, None, tag)
+    let overview = overview::overview(&pool, StudioOverviewQuery::default(), None, tag)
         .await
         .unwrap();
     assert_eq!(overview.pipeline.ready_assets, 1);
@@ -117,12 +118,13 @@ async fn enterprise_scope_admits_and_reads_only_tagged_originals() {
     ));
     assert!(suggestions::fetch_job(&pool, job, None).await.is_ok());
     // Batches only count when one of their segments comes from a tagged original.
-    let batches = remix_read::list(
+    let batches = remix_list::list(
         &pool,
         &super::remix_postgres_tests::settings(),
         OWNER,
         None,
         tag,
+        &RemixBatchListQuery::default(),
     )
     .await
     .unwrap();

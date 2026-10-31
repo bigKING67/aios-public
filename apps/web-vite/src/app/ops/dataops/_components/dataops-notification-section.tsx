@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel, DataOpsNotificationEvent } from '@/config/dataops-hub';
 import {
   DataOpsNotificationChannelDetail,
@@ -21,8 +21,8 @@ interface DataOpsNotificationSectionProps {
   channels: DataOpsNotificationChannel[];
   channelSummary: DataOpsNotificationChannelSummary;
   defaultAlertChannel: DataOpsNotificationChannel | null;
-  channelColumns: ColumnsType<DataOpsNotificationChannel>;
-  notificationColumns: ColumnsType<DataOpsNotificationEvent>;
+  channelColumns: TableColumnsType<DataOpsNotificationChannel>;
+  notificationColumns: TableColumnsType<DataOpsNotificationEvent>;
   filteredEvents: DataOpsNotificationEvent[];
   notificationEvents: DataOpsNotificationEvent[];
   filteredFailedCount: number;

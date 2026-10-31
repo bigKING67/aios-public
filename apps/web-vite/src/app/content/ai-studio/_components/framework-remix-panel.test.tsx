@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchAllStudioSegments, fetchStudioPresets, type StudioCapabilitiesResponse } from '../_lib/ai-studio-api';
@@ -13,6 +14,7 @@ import {
 } from '../_lib/remix-api';
 import { buildRemixPreviewRequest } from '../_lib/remix-form';
 import { FrameworkRemixPanel } from './framework-remix-panel';
+import { RemixCandidates } from './remix-candidates';
 
 vi.mock('@/app/marketing/content-assets/_lib/content-assets-api', async (original) => ({
   ...await original<object>(),
@@ -49,20 +51,25 @@ function capabilities(extra: Partial<StudioCapabilitiesResponse> = {}): StudioCa
 
 function preview(extra: Partial<StudioRemixBatchPreviewResponse> = {}): StudioRemixBatchPreviewResponse {
   return {
-    mode: 'framework', labels: ['voice', 'demo'], sourceAssetId: null, productName: '精华',
-    slots: [{ ordinal: 1, labelKey: 'voice', candidateCount: 2, sellingPoints: null, fallback: null }, { ordinal: 2, labelKey: 'demo', candidateCount: 1, sellingPoints: null, fallback: null }],
+    mode: 'framework', labels: ['voice', 'demo'], sourceAssetId: null, productName: '粉底液',
+    slots: [
+      { ordinal: 1, labelKey: 'voice', candidateCount: 2, sellingPoints: null, fallback: null, spendCounts: { qualified: 1, low: 1, unknown: 0 } },
+      { ordinal: 2, labelKey: 'demo', candidateCount: 1, sellingPoints: null, fallback: null, spendCounts: { qualified: 1, low: 0, unknown: 0 } },
+    ],
     missingLabels: [], excludedAssetCount: 1, theoreticalCombinations: 2, availableCombinations: 2,
     availableIsLowerBound: false, previouslyUsedCombinations: 0, referenceCombinationExcluded: false, requestedCount: 3, plannableCount: 2,
-    shortfallReason: '可用组合只有 2 种，少于请求的 3 条', seed: 7, ...extra,
+    shortfallReason: '可用组合只有 2 种，少于请求的 3 条', seed: 7,
+    admissionExcluded: 7, admissionExcludedIsLowerBound: true, ...extra,
   };
 }
 
 function batch(extra: Partial<StudioRemixBatch> = {}): StudioRemixBatch {
   return {
+    qcFailedCount: 0,
     batchId: 'b-9', mode: 'framework', ownerUserId: 'u2', ownerName: '小王', ownedByCurrentUser: false, presetKey: 'framework', presetVersion: 1,
-    labels: ['voice', 'demo'], sourceAssetId: null, productName: '精华', requestedCount: 3, plannedCount: 3, seed: 1,
-    status: 'running', shortfallReason: null, succeededCount: 1, failedCount: 0, runningCount: 2, cancelledCount: 0,
-    coverUrls: [], failureReason: null,
+    labels: ['voice', 'demo'], sourceAssetId: null, productName: '粉底液', requestedCount: 3, plannedCount: 3, seed: 1,
+    status: 'running', shortfallReason: null, succeededCount: 1, failedCount: 0, runningCount: 2, cancelledCount: 0, availableCount: 1,
+    reviewableCount: 1, approvedCount: 0, rejectedCount: 0, coverUrls: [], failureReason: null,
     createdAt: '2026-10-01T02:00:00Z', updatedAt: '2026-10-01T02:00:00Z', ...extra,
   };
 }
@@ -89,21 +96,22 @@ function renderPanel(caps: StudioCapabilitiesResponse) {
 
 async function chooseOption(label: string, option: string) {
   fireEvent.mouseDown(await screen.findByLabelText(label));
-  fireEvent.click(await screen.findByTitle(option));
+  // Base UI options react to full pointer sequences.
+  await userEvent.click(await screen.findByRole('option', { name: option }));
 }
 
 async function fillManualForm() {
-  fireEvent.click(await screen.findByRole('radio', { name: '手动排列框架顺序' }));
+  fireEvent.click(within(await screen.findByRole('group', { name: '结构来源' })).getByText('手动排列框架顺序'));
   fireEvent.click(screen.getByRole('button', { name: /添加一位/ }));
   fireEvent.click(screen.getByRole('button', { name: /添加一位/ }));
   await chooseOption('第 2 位框架', '实拍内容');
-  await chooseOption('产品', '精华（3 段）');
+  await chooseOption('产品', '粉底液（3 段）');
 }
 
 beforeEach(() => {
   vi.mocked(fetchStudioPresets).mockResolvedValue([PRESET]);
   vi.mocked(fetchAllStudioSegments).mockResolvedValue({ items: [], truncated: false });
-  vi.mocked(fetchRemixProducts).mockResolvedValue([{ productName: '精华', confirmedSegmentCount: 3 }]);
+  vi.mocked(fetchRemixProducts).mockResolvedValue([{ productName: '粉底液', confirmedSegmentCount: 3 }]);
   vi.mocked(previewRemixBatch).mockResolvedValue(preview());
   vi.mocked(fetchRemixBatches).mockResolvedValue([]);
 });
@@ -126,12 +134,15 @@ describe('框架混剪 panel', () => {
     renderPanel(capabilities());
     await fillManualForm();
     await waitFor(() => expect(previewRemixBatch).toHaveBeenLastCalledWith(
-      { presetKey: 'framework', presetVersion: 1, labels: ['voice', 'demo'], productName: '精华', count: 3 },
+      { presetKey: 'framework', presetVersion: 1, labels: ['voice', 'demo'], productName: '粉底液', count: 3 },
       expect.anything(),
     ));
     expect(await screen.findByText('2 / 3 条')).toBeInTheDocument();
     expect(screen.getByText('可用组合只有 2 种，少于请求的 3 条')).toBeInTheDocument();
     expect(screen.getByText(/1 条原片因授权受限/)).toBeInTheDocument();
+    expect(screen.getByText('达标 1 · 低消耗 1 · 无数据 0')).toBeInTheDocument();
+    expect(screen.getByText('素材准入至少排除了 7 种抽样组合。')).toBeInTheDocument();
+    expect(screen.getByText('组合量较大，这个数是已抽样组合的下限，不代表全部排除数。')).toBeInTheDocument();
     const slots = screen.getByRole('list', { name: '框架结构' });
     expect(within(slots).getByText('实拍内容')).toBeInTheDocument();
     expect(within(slots).getByText('1 段')).toBeInTheDocument();
@@ -140,7 +151,7 @@ describe('框架混剪 panel', () => {
     fireEvent.click(await screen.findByRole('button', { name: '开始生成' }));
     await waitFor(() => expect(createRemixBatch).toHaveBeenCalledTimes(1));
     const request = vi.mocked(createRemixBatch).mock.calls[0][0];
-    expect(request).toMatchObject({ labels: ['voice', 'demo'], productName: '精华', count: 3, presetKey: 'framework' });
+    expect(request).toMatchObject({ labels: ['voice', 'demo'], productName: '粉底液', count: 3, presetKey: 'framework' });
     expect(request.idempotencyKey).toMatch(/^remix-[A-Za-z0-9_-]+$/);
     expect(await screen.findByLabelText('当前地址')).toHaveTextContent('/content/ai-studio/outputs?batch=b-1');
   });
@@ -195,8 +206,10 @@ describe('框架混剪 workbench', () => {
     const steps = screen.getByRole('list', { name: '生成步骤' });
     expect(within(steps).getByText('选择产品')).toBeInTheDocument();
     expect(within(steps).getByText('选一条参考原片定结构')).toBeInTheDocument();
-    expect(screen.getByText('框架标签 v1')).toBeInTheDocument();
+    // The label-set version is an internal detail kept in the rules tooltip, not the header.
+    expect(screen.queryByText('框架标签 v1')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /成片$/ })).toBeDisabled();
+    expect(screen.getByText('选择百雀羚香粉后查看今日结构池。')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '单条剪辑' })).toHaveAttribute('href', '/content/ai-studio/editing?mode=single');
     expect(screen.getByRole('link', { name: '卖点混剪' })).toHaveAttribute('href', '/content/ai-studio/editing?mode=sellingPoint');
   });
@@ -204,21 +217,21 @@ describe('框架混剪 workbench', () => {
   it('takes the product from the picked reference original', async () => {
     vi.mocked(fetchAllStudioSegments).mockResolvedValue({
       items: [
-        { assetId: 'a1', assetTitle: '整片-001', labelKey: 'voice', startMs: 0, sourceCurrent: true, productName: '精华', presetVersion: 1 },
-        { assetId: 'a1', assetTitle: '整片-001', labelKey: 'demo', startMs: 9000, sourceCurrent: true, productName: '精华', presetVersion: 1 },
+        { assetId: 'a1', assetTitle: '整片-001', labelKey: 'voice', startMs: 0, sourceCurrent: true, productName: '粉底液', presetVersion: 1 },
+        { assetId: 'a1', assetTitle: '整片-001', labelKey: 'demo', startMs: 9000, sourceCurrent: true, productName: '粉底液', presetVersion: 1 },
       ],
       truncated: false,
     } as never);
     renderPanel(capabilities());
     const card = await screen.findByRole('button', { name: '选择参考原片 整片-001' });
     expect(within(card).getByText('混剪口播 → 实拍内容')).toBeInTheDocument();
-    expect(within(card).getByText('精华 · 2 段')).toBeInTheDocument();
+    expect(within(card).getByText('粉底液 · 2 段')).toBeInTheDocument();
     fireEvent.click(card);
     // Picked: the cards collapse to one line that can be undone.
     expect(within(await screen.findByLabelText('已选参考原片')).getByRole('button', { name: '换一个' })).toBeInTheDocument();
     expect(screen.queryByRole('list', { name: '参考原片' })).not.toBeInTheDocument();
     await waitFor(() => expect(previewRemixBatch).toHaveBeenLastCalledWith(
-      { presetKey: 'framework', presetVersion: 1, sourceAssetId: 'a1', productName: '精华', count: 3 },
+      { presetKey: 'framework', presetVersion: 1, sourceAssetId: 'a1', productName: '粉底液', count: 3 },
       expect.anything(),
     ));
   });
@@ -236,12 +249,13 @@ describe('框架混剪 workbench', () => {
 
 describe('候选片段', () => {
   it('lists each framework pool once and plays a candidate in place', async () => {
-    const seg = (segmentId: string, labelKey: string, startMs: number, productName = '精华') => ({
+    const seg = (segmentId: string, labelKey: string, startMs: number, productName = '粉底液') => ({
       segmentId, assetId: 'a1', assetTitle: '整片-001', labelKey, startMs, endMs: startMs + 6000, presetVersion: 1,
       productName, sourceCurrent: true, coverUrl: null,
+      sourceSpend: { spend30d: 5_000, class: 'qualified', asOf: '2026-10-29', complete: true, syncedDays: 30, windowDays: 30 },
     });
     vi.mocked(fetchAllStudioSegments).mockResolvedValue({
-      items: [seg('v1', 'voice', 0), seg('v2', 'voice', 20000), seg('d1', 'demo', 9000), seg('d2', 'demo', 30000, '面霜')],
+      items: [seg('v1', 'voice', 0), seg('v2', 'voice', 20000), seg('d1', 'demo', 9000), seg('d2', 'demo', 30000, '口红')],
       truncated: false,
     } as never);
     renderPanel(capabilities());
@@ -249,6 +263,7 @@ describe('候选片段', () => {
     const voice = await screen.findByRole('region', { name: '候选片段：混剪口播' });
     expect(within(voice).getByText('第 1 位 · 2 段')).toBeInTheDocument();
     expect(within(voice).getAllByRole('button')).toHaveLength(2);
+    expect(within(voice).getAllByText('达标 ¥5,000')).toHaveLength(2);
     const demo = screen.getByRole('region', { name: '候选片段：实拍内容' });
     expect(within(demo).getAllByRole('button')).toHaveLength(1);
     fireEvent.click(within(voice).getByRole('button', { name: '播放 整片-001 0:20–0:26' }));
@@ -256,15 +271,50 @@ describe('候选片段', () => {
   });
 });
 
+describe('候选片段（参考原片）', () => {
+  it('shows each slot its own count when the ±20% span bound differs per slot', async () => {
+    const seg = (segmentId: string, startMs: number, endMs: number) => ({
+      segmentId, assetId: 'a1', assetTitle: '整片-001', labelKey: 'voice', startMs, endMs, presetVersion: 1,
+      productName: '粉底液', sourceCurrent: true, coverUrl: null,
+    });
+    vi.mocked(fetchAllStudioSegments).mockResolvedValue({
+      items: [seg('v1', 0, 5000), seg('v2', 10000, 25000), seg('v3', 30000, 45000)],
+      truncated: false,
+    } as never);
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter>
+          <RemixCandidates
+            preset={PRESET as never}
+            preview={preview({
+              labels: ['voice', 'demo', 'voice'],
+              sourceAssetId: 'ref-1',
+              slots: [
+                { ordinal: 1, labelKey: 'voice', candidateCount: 1, sellingPoints: null, fallback: null },
+                { ordinal: 2, labelKey: 'demo', candidateCount: 0, sellingPoints: null, fallback: null },
+                { ordinal: 3, labelKey: 'voice', candidateCount: 2, sellingPoints: null, fallback: null },
+              ],
+            })}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    const voice = await screen.findByRole('region', { name: '候选片段：混剪口播' });
+    expect(within(voice).getByText('第 1 位 1 段、第 3 位 2 段')).toBeInTheDocument();
+    expect(within(voice).getByText(/时长不在参考段 ±20% 内/)).toBeInTheDocument();
+  });
+});
+
 describe('buildRemixPreviewRequest', () => {
   it('names the missing input instead of building a partial request', () => {
-    expect(buildRemixPreviewRequest(null, { mode: 'manual', labels: ['voice'] }, '精华', 1)).toBe('没有可用的分类预设。');
-    expect(buildRemixPreviewRequest(PRESET, { mode: 'reference', sourceAssetId: null }, '精华', 1)).toMatch(/参考原片/);
-    expect(buildRemixPreviewRequest(PRESET, { mode: 'manual', labels: [] }, '精华', 1)).toMatch(/至少添加/);
+    expect(buildRemixPreviewRequest(null, { mode: 'manual', labels: ['voice'] }, '粉底液', 1)).toBe('没有可用的分类预设。');
+    expect(buildRemixPreviewRequest(PRESET, { mode: 'reference', sourceAssetId: null }, '粉底液', 1)).toMatch(/参考原片/);
+    expect(buildRemixPreviewRequest(PRESET, { mode: 'manual', labels: [] }, '粉底液', 1)).toMatch(/至少添加/);
     expect(buildRemixPreviewRequest(PRESET, { mode: 'manual', labels: ['voice'] }, null, 1)).toMatch(/产品/);
-    expect(buildRemixPreviewRequest(PRESET, { mode: 'manual', labels: ['voice'] }, '精华', null)).toMatch(/数量/);
-    expect(buildRemixPreviewRequest(PRESET, { mode: 'reference', sourceAssetId: 'a1' }, '精华', 2)).toEqual({
-      presetKey: 'framework', presetVersion: 1, sourceAssetId: 'a1', productName: '精华', count: 2,
+    expect(buildRemixPreviewRequest(PRESET, { mode: 'manual', labels: ['voice'] }, '粉底液', null)).toMatch(/数量/);
+    expect(buildRemixPreviewRequest(PRESET, { mode: 'reference', sourceAssetId: 'a1' }, '粉底液', 2)).toEqual({
+      presetKey: 'framework', presetVersion: 1, sourceAssetId: 'a1', productName: '粉底液', count: 2,
     });
   });
 });

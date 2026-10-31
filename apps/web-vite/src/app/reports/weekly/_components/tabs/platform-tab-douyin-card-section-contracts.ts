@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type {
   DouyinCardProductAttributionLeafPropsBundle,
   DouyinCardSourceAttributionLeafPropsBundle,
@@ -21,10 +21,10 @@ export interface DouyinCardAttributionSubsectionDescriptor {
 export interface BuildDouyinCardAttributionSectionPropsParams {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinCardProductColumns: ColumnsType<DouyinCardProductRow>;
-  douyinCardSourceColumns: ColumnsType<DouyinCardSourceRow>;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  douyinCardProductColumns: TableColumnsType<DouyinCardProductRow>;
+  douyinCardSourceColumns: TableColumnsType<DouyinCardSourceRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
   resolveFunnelStageColor: (index: number) => string;
   waterfallTotalColor: string;
 }

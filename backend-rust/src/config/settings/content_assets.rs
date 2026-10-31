@@ -10,6 +10,7 @@ pub(super) struct ContentAssetSettings {
     pub(super) tos_endpoint: String,
     pub(super) tos_region: String,
     pub(super) tos_bucket: String,
+    pub(super) tos_derived_bucket: String,
 }
 
 const DEFAULT_CONTENT_ASSET_SIGNED_URL_TTL_SECONDS: u64 = 600;
@@ -37,6 +38,7 @@ pub(super) fn resolve_content_asset_settings() -> ContentAssetSettings {
         tos_endpoint: env_var_or("TOS_ENDPOINT", "https://tos-s3-cn-shanghai.volces.com"),
         tos_region: env_var_or("TOS_REGION", "cn-shanghai"),
         tos_bucket: env_var_or("TOS_BUCKET", "aios-content-assets"),
+        tos_derived_bucket: env_var_or("TOS_DERIVED_BUCKET", ""),
     }
 }
 
@@ -49,6 +51,22 @@ pub(super) fn resolve_segment_suggest_max_assets() -> usize {
 /// 3–600; 600 is the legacy clip engine and Run hard limit).
 pub(super) fn resolve_remix_max_seconds() -> u32 {
     env_u64_clamped("CONTENT_AI_STUDIO_REMIX_MAX_SECONDS", 600, 3, 600) as u32
+}
+
+/// Cloud originals require the shared API/worker switch and MediaKit engine.
+pub(super) fn resolve_cloud_remix_enabled() -> bool {
+    cloud_remix_enabled(
+        std::env::var("CONTENT_AI_STUDIO_CLOUD_REMIX_ENABLED")
+            .ok()
+            .as_deref(),
+        std::env::var("CONTENT_PRODUCTION_REMIX_ENGINE")
+            .ok()
+            .as_deref(),
+    )
+}
+
+fn cloud_remix_enabled(enabled: Option<&str>, engine: Option<&str>) -> bool {
+    enabled == Some("true") && engine.map(str::trim) == Some("mediakit")
 }
 
 /// Runs created per framework remix batch (default 10, clamped 1–100).
@@ -155,8 +173,34 @@ fn env_u64_clamped(key: &str, default_value: u64, min_value: u64, max_value: u64
         .clamp(min_value, max_value)
 }
 
+/// Admission threshold in provider currency units; invalid values retain the safe default.
+pub(super) fn resolve_admission_min_spend() -> f64 {
+    std::env::var("CONTENT_AI_STUDIO_ADMISSION_MIN_SPEND")
+        .ok()
+        .and_then(|value| value.parse::<f64>().ok())
+        .filter(|value| value.is_finite() && *value > 0.0)
+        .unwrap_or(5000.0)
+}
+
+pub(super) fn resolve_structure_pool_days() -> u32 {
+    env_u64_clamped("CONTENT_AI_STUDIO_STRUCTURE_POOL_DAYS", 30, 1, 365) as u32
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn cloud_originals_require_both_switch_and_supported_engine() {
+        for (enabled, engine, expected) in [
+            (None, None, false),
+            (Some("true"), None, false),
+            (Some("false"), Some("mediakit"), false),
+            (Some("true"), Some("renderer"), false),
+            (Some("true"), Some("mediakit"), true),
+            (Some("true"), Some(" mediakit "), true),
+        ] {
+            assert_eq!(super::cloud_remix_enabled(enabled, engine), expected);
+        }
+    }
     use super::{
         parse_douyin_dtk_settings, parse_studio_enterprise_tag, parse_studio_open_access,
         parse_studio_products,

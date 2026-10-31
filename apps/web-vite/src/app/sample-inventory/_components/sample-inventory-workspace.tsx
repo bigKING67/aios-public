@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from "react";
-import { ExportOutlined, FileTextOutlined, ImportOutlined, InboxOutlined } from "@ant-design/icons";
-import { Alert } from "antd";
+import { ExternalLink, FileText, Import, Inbox } from 'lucide-react';
+import { Alert } from '@lobehub/ui';
 
 import type {
   CreateSampleInventoryInboundItem,
@@ -34,11 +34,11 @@ import { SampleInventoryWorkspaceToolbar } from "./sample-inventory-workspace-to
 import styles from "../sample-inventory-workspace.module.css";
 
 const PRIMARY_TABS: Array<{ key: SampleInventoryTab; label: string; icon: ReactNode }> = [
-  { key: "outbound", label: "出库登记", icon: <ExportOutlined aria-hidden="true" /> },
-  { key: "inventory", label: "库存", icon: <InboxOutlined aria-hidden="true" /> },
-  { key: "inbound", label: "入库", icon: <ImportOutlined aria-hidden="true" /> },
-  { key: "outbound-records", label: "出库记录", icon: <FileTextOutlined aria-hidden="true" /> },
-  { key: "inbound-records", label: "入库记录", icon: <FileTextOutlined aria-hidden="true" /> },
+  { key: "outbound", label: "出库登记", icon: <ExternalLink size={14} strokeWidth={1.8} aria-hidden="true" /> },
+  { key: "inventory", label: "库存", icon: <Inbox size={14} strokeWidth={1.8} aria-hidden="true" /> },
+  { key: "inbound", label: "入库", icon: <Import size={14} strokeWidth={1.8} aria-hidden="true" /> },
+  { key: "outbound-records", label: "出库记录", icon: <FileText size={14} strokeWidth={1.8} aria-hidden="true" /> },
+  { key: "inbound-records", label: "入库记录", icon: <FileText size={14} strokeWidth={1.8} aria-hidden="true" /> },
 ];
 
 const OUTBOUND_SUB_TABS: Array<{ status?: SampleInventoryOutboundStatus; label: string; countKey?: keyof SampleInventorySummary }> = [

@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsStatus } from '@/config/dataops-hub';
 import type {
@@ -16,10 +15,11 @@ import {
   sortDataOpsSyncStreams,
   summarizeDataOpsStatuses,
 } from './dataops-hub-selectors';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsCoreFilterState(options: {
   feishuSyncJobs: DataOpsRuntimeFeishuSyncJob[];
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   normalizedKeyword: string;
   pipelineMap: Map<string, DataOpsRuntimePipeline>;
   pipelines: DataOpsRuntimePipeline[];

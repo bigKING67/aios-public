@@ -1,7 +1,6 @@
 'use client';
 
-import { Button, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Table, type TableColumnsType } from '@lobehub/ui';
 import { formatInteger } from './creator-formatters';
 import shellStyles from './creator-dashboard.module.css';
 import styles from './creator-live-dashboard.module.css';
@@ -15,7 +14,7 @@ export interface CreatorAnchorLevelDetailRecord {
 export interface CreatorAnchorLevelDetailSectionProps<TRecord extends CreatorAnchorLevelDetailRecord> {
   selectedAnchorLevel: string | null;
   rows: TRecord[];
-  columns: ColumnsType<TRecord>;
+  columns: TableColumnsType<TRecord>;
   loading: boolean;
   scrollX: number;
   onClear: () => void;

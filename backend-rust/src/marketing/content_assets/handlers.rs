@@ -20,8 +20,9 @@ use crate::{
 use super::{
     asset_lookup::list_asset_lookup,
     asset_mutations::{create_manual_upload_asset, update_asset_profile, ManualUploadActor},
+    cloud_video,
     coverage::{query_content_asset_coverage, ContentAssetCoverageResponse},
-    delivery::{build_object_read_url, build_playback_url, build_upload_url},
+    delivery::{build_object_read_url, build_upload_url},
     douyin_video_link::{preview_video_links, resolve_douyin_video_id},
     handler_support::{
         attach_cover_urls, build_delivery_health, build_raw_object_key, build_storage_health,
@@ -599,11 +600,9 @@ async fn create_playback_url(
     let asset = query_asset_by_id(&state.pool, asset_id)
         .await?
         .ok_or(crate::error::AppError::NotFound)?;
-    Ok(Json(build_playback_url(
-        &state.settings,
-        &asset,
-        payload.variant,
-    )?))
+    let playback =
+        cloud_video::playback_url(&state.pool, &state.settings, &asset, payload.variant).await?;
+    Ok(Json(playback))
 }
 
 async fn post_asset_analysis_job(

@@ -58,12 +58,18 @@ export function loadDraft(now: Date = new Date()): AiInternTestDraft {
     ) {
       return fresh;
     }
+    const values = { ...parsed.values };
+    // Fold the former optional rules box into the editable answer once, without losing its text.
+    if (typeof values.workflowRules === "string" && values.workflowRules.trim()) {
+      values.workflow = [values.workflow, values.workflowRules].filter(Boolean).join("\n\n");
+      values.workflowRules = "";
+    }
     return {
       version: AI_INTERN_QUESTION_SET_VERSION,
       submissionId: parsed.submissionId,
       startedAt: parsed.startedAt,
       savedAt: typeof parsed.savedAt === "string" ? parsed.savedAt : null,
-      values: parsed.values,
+      values,
     };
   } catch {
     return fresh;

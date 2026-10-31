@@ -1,4 +1,4 @@
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import { DASHBOARD_RANGE_LIMIT_MESSAGE_KEY } from './dashboard-config';
 
 const DEFAULT_OVERVIEW_LOAD_ERROR_MESSAGE = '看板数据加载失败，请检查数据库迁移与 ETL 刷新状态后重试。';
@@ -51,7 +51,7 @@ export function extractDateRangeLimitErrorMessage(error: unknown): string | null
   return message.includes('日期跨度不能超过') ? message : null;
 }
 
-export function showDashboardDateRangeLimitWarning(messageApi: MessageInstance, error: unknown): void {
+export function showDashboardDateRangeLimitWarning(messageApi: ToastAPI, error: unknown): void {
   const rangeLimitMessage = extractDateRangeLimitErrorMessage(error);
   if (!rangeLimitMessage) {
     return;
@@ -60,10 +60,10 @@ export function showDashboardDateRangeLimitWarning(messageApi: MessageInstance, 
   showDashboardRangeLimitWarning(messageApi, rangeLimitMessage);
 }
 
-export function showDashboardRangeLimitWarning(messageApi: MessageInstance, content: string): void {
+export function showDashboardRangeLimitWarning(messageApi: ToastAPI, content: string): void {
   messageApi.warning({
-    key: DASHBOARD_RANGE_LIMIT_MESSAGE_KEY,
-    content,
+    id: DASHBOARD_RANGE_LIMIT_MESSAGE_KEY,
+    title: content,
   });
 }
 

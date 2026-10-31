@@ -43,6 +43,8 @@ export interface ContentAssetQueryParams {
   segmentPreset?: string;
   /** AI 创作中心 remix outputs (`source_type = ai_studio_output`). */
   studioOutputs?: 'exclude' | 'only';
+  /** AI 创作中心 test originals (tagged `测试样片`). */
+  testSamples?: 'exclude' | 'only';
   page: number;
   pageSize: number;
   sort: ContentAssetSort;
@@ -672,6 +674,8 @@ export interface PlaybackUrlResponse {
   provider: 'tos_signed_url' | 'volc_cdn' | string;
   contentType: string;
   fileSizeBytes: number | null;
+  /** Other addresses of the same file (a 视频云管家 original's inner-network address); the player picks a reachable one. */
+  alternateUrls?: string[];
 }
 
 export interface ContentAssetUploadCreatePayload {

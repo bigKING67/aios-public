@@ -1,5 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
-import type { SelectProps } from 'antd';
+import type { ReactNode } from 'react';
 import {
   CONTENT_ASSET_PLATFORM_OPTIONS,
   contentAssetPlatformLabel,
@@ -36,45 +35,6 @@ export function renderContentAssetPlatformPill(value?: string | null) {
     </span>
   );
 }
-
-export const renderContentAssetPlatformSelectTag: NonNullable<SelectProps['tagRender']> = ({
-  value,
-  closable,
-  onClose,
-}) => {
-  const normalizedValue = String(value || 'other');
-  const label = contentAssetPlatformLabel(normalizedValue);
-
-  const handleMouseDown = (event: MouseEvent<HTMLSpanElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleRemove = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    onClose(event);
-  };
-
-  return (
-    <span
-      className={`${styles.platformTag} ${getPlatformToneClassName(normalizedValue)}`}
-      onMouseDown={handleMouseDown}
-    >
-      <span className={styles.platformTagLabel}>{label}</span>
-      {closable ? (
-        <button
-          aria-label={`移除${label}`}
-          className={styles.platformTagRemove}
-          onClick={handleRemove}
-          type="button"
-        >
-          ×
-        </button>
-      ) : null}
-    </span>
-  );
-};
 
 function uniquePlatformValues(values: readonly string[]): string[] {
   const result: string[] = [];

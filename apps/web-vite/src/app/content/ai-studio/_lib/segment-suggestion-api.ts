@@ -1,5 +1,5 @@
 import type { ContentAssetItem } from '@/app/marketing/content-assets/_lib/content-assets-types';
-import type { BadgeStatus } from '@/components/atoms/badge';
+import type { AiTaskView } from '@/components/molecules/ai-task-status';
 import { apiClient } from '@/lib/api-client';
 import {
   AIOS_API_PATHS,
@@ -44,16 +44,16 @@ export function isSuggestionJobActive(job: Pick<StudioSegmentSuggestionJob, 'sta
   return job.status === 'queued' || job.status === 'running';
 }
 
-const JOB_STATUS_VIEWS: Record<string, { label: string; tone: BadgeStatus }> = {
-  queued: { label: '排队中', tone: 'neutral' },
-  running: { label: '分析中', tone: 'info' },
-  succeeded: { label: '已完成', tone: 'success' },
-  failed: { label: '失败', tone: 'danger' },
-  cancelled: { label: '已取消', tone: 'neutral' },
+const JOB_STATUS_VIEWS: Record<string, AiTaskView> = {
+  queued: { label: '排队中', state: 'queued' },
+  running: { label: '分析中', state: 'thinking' },
+  succeeded: { label: '已完成', state: 'done' },
+  failed: { label: '失败', state: 'failed' },
+  cancelled: { label: '已取消', state: 'cancelled' },
 };
 
-export function suggestionJobStatusView(status: string): { label: string; tone: BadgeStatus } {
-  return JOB_STATUS_VIEWS[status] ?? { label: status, tone: 'neutral' };
+export function suggestionJobStatusView(status: string): AiTaskView {
+  return JOB_STATUS_VIEWS[status] ?? { label: status, state: 'queued' };
 }
 
 export interface SuggestionJobOutcome {

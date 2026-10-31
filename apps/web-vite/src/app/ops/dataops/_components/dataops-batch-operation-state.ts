@@ -1,6 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
-import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import {
@@ -21,11 +19,12 @@ import {
   buildDataOpsBatchResultCloseState,
   buildDataOpsBatchResultOpenState,
 } from './dataops-batch-result-modal-helpers';
+import type { DataOpsMessageApi, DataOpsModalApi } from './dataops-feedback-types';
 
 export function useDataOpsBatchOperationState(options: {
   hasOperatePermission: boolean;
-  message: MessageInstance;
-  modal: Pick<ModalStaticFunctions, 'confirm'>;
+  message: DataOpsMessageApi;
+  modal: DataOpsModalApi;
   persistBatchExecutionHistory: (summary: BatchExecutionSummary) => Promise<void>;
   pipelineMap: ReadonlyMap<string, DataOpsRuntimePipeline>;
   refetchRuntime: () => Promise<unknown>;

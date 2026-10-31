@@ -1,5 +1,5 @@
-import { Alert, Button } from "antd";
-import { PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { Alert, Button } from '@lobehub/ui';
+import { Plus, Settings } from 'lucide-react';
 
 import type { SampleInventorySummary } from "@/lib/generated-api-contract";
 import styles from "../sample-inventory.module.css";
@@ -41,10 +41,10 @@ export function SampleInventoryHeader({
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Button icon={<SettingOutlined />} onClick={onOpenSettings}>
+          <Button icon={<Settings size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onOpenSettings}>
             设置
           </Button>
-          <Button type="primary" icon={<PlusOutlined />} onClick={onOpenSample}>
+          <Button type="primary" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onOpenSample}>
             新建样品
           </Button>
         </div>

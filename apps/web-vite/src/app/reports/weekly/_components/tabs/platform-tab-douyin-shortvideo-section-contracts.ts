@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type {
   DouyinShortvideoAnalysisLeafPropsBundle,
   DouyinShortvideoOverviewLeafPropsBundle,
@@ -15,7 +15,7 @@ export interface DouyinShortvideoAttributionSubsectionDescriptor {
 export interface BuildDouyinShortvideoAttributionSectionPropsParams {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinShortvideoColumns: ColumnsType<DouyinShortvideoRow>;
+  douyinShortvideoColumns: TableColumnsType<DouyinShortvideoRow>;
   waterfallTotalColor: string;
 }
 

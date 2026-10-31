@@ -181,6 +181,8 @@ class RenderTests(unittest.TestCase):
             self.assertEqual(receipt["mediakit"]["expectedFrames"], rm.timeline_frames(SNAPSHOT))
             self.assertNotIn("Signature", json.dumps(receipt))
             submitted = json.loads(kit.bodies[0][1])
+            self.assertEqual(receipt["mediakit"]["timelineSha256"], rm.timeline_digest(submitted))
+            self.assertNotEqual(receipt["mediakit"]["timelineSha256"], receipt["output"]["sha256"])
             self.assertEqual(submitted["client_token"], rm.client_token(JOB))
             self.assertIn("Signature=secret", submitted["track"][0][0]["source"])
             self.assertEqual(submitted["track"][0][1]["extra"][1]["width"], 1080)

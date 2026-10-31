@@ -1,18 +1,30 @@
 /* ========== 导入设计系统与样式 ========== */
+/*
+ * Layer order first: lobe-ui ships in lobe-base / lobe-popup / lobe-ui, and any unlayered rule
+ * beats a layered one. Element-level rules (design-system-base, then Tailwind preflight, which
+ * keeps winning over it exactly as when both were unlayered in that order) therefore live in
+ * earlier layers so they never restyle lobe components. AntD overrides (light-theme),
+ * CSS Modules and Tailwind utilities stay unlayered, so legacy pages keep their cascade.
+ * The lobe stylesheets themselves load with the lobe-ui route shells (components/lobe-provider);
+ * this declaration fixes their place in the cascade before they arrive.
+ */
+@layer theme, aios-base, reset, lobe-base, lobe-popup, lobe-ui;
 @import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(reset);
 @import './design-tokens.css';  /* AIOS 设计 Token 系统 */
 @import './design-system-globals.css';  /* 基础元素与工具类 */
 @import './echarts.css';        /* ECharts 主题与样式 */
 @import './light-theme.css';
-/* Preserve the existing unlayered cascade with AntD and CSS Modules. */
-@import 'tailwindcss/preflight.css';
 @import 'tailwindcss/utilities.css' source(none);
 
 @config '../../../../tailwind.config.ts';
 
-/* v3 default border color; explicit semantic border utilities still win. */
-*, ::before, ::after, ::backdrop, ::file-selector-button {
-  border-color: var(--color-gray-200, currentColor);
+/* v3 default border color; explicit semantic border utilities still win. Layered so it never
+   overrides lobe-ui component borders. */
+@layer reset {
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
 /* ========== 全局基础样式 ========== */
@@ -26,8 +38,8 @@ html {
   font-size: var(--font-size-base);
   font-family: var(--font-family-base);
   line-height: var(--line-height-normal);
-  background-color: var(--bg-global);
-  color: var(--text-primary);
+  background-color: var(--lobe-color-bg-layout);
+  color: var(--lobe-color-text);
   transition: background-color var(--transition-base),
               color var(--transition-base);
 
@@ -46,15 +58,9 @@ body {
 
 /* ========== UI 组件全局样式 ========== */
 
-/* Ant Design / Arco Design 覆盖 - 禁用默认模糊 */
-.ant-modal-mask,
-.ant-drawer-mask {
-  backdrop-filter: blur(0px) !important;
-}
-
 /* 报告容器 */
 .report-container {
-  background-color: var(--bg-card);
+  background-color: var(--lobe-color-bg-container);
   border-radius: var(--border-radius-base);
   box-shadow: var(--shadow-base);
   padding: var(--spacing-6);
@@ -63,7 +69,7 @@ body {
 .report-section {
   margin-bottom: var(--spacing-8);
   padding-bottom: var(--spacing-8);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--lobe-color-border);
 }
 
 .report-section:last-child {
@@ -73,13 +79,13 @@ body {
 .report-section-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   margin-bottom: var(--spacing-4);
 }
 
 .report-section-subtitle {
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   margin-bottom: var(--spacing-3);
 }
 
@@ -115,7 +121,7 @@ body {
   .report-container {
     box-shadow: none;
     page-break-after: avoid;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--lobe-color-border);
   }
 
   .report-section {

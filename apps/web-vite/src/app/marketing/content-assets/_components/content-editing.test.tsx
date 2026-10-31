@@ -1,8 +1,10 @@
 import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LobeProvider } from '@/components/lobe-provider';
 import { APIError } from '@/lib/request';
 import { controlEditingRun, editingKeys, fetchEditingResult, fetchEditingRun, type EditingDetail, type EditingRequest } from '../_lib/content-editing-api';
 import { editingActions } from '../_lib/content-editing-state';
@@ -25,7 +27,7 @@ describe('editing result access', () => {
     const run = { ...fixture('succeeded').run, renderJobId: 'render-1' };
     vi.mocked(fetchEditingResult).mockResolvedValueOnce({ ready: true, playbackUrl: '/signed-video.mp4', job: null })
       .mockRejectedValueOnce(new APIError('forbidden', 403, '源素材授权已失效'));
-    render(<QueryClientProvider client={client}><ContentEditingResult run={run} /></QueryClientProvider>);
+    render(<QueryClientProvider client={client}><ContentEditingResult run={run} /></QueryClientProvider>, { wrapper: LobeProvider });
     await screen.findByLabelText('剪辑成片');
     await waitFor(() => expect(client.isFetching()).toBe(0));
     fireEvent.click(screen.getByRole('button', { name: /刷新成片/ }));
@@ -56,10 +58,10 @@ describe('editing task deep link', () => {
 describe('editing plan interaction', () => {
   it('requires explicit unlock, saves exact base version, and preserves edits after a conflict', async () => {
     const onSave = vi.fn().mockResolvedValue(false); const onEditing = vi.fn(); const detail = fixture();
-    const view = render(<ContentEditingPlan detail={detail} editable busy={false} onSave={onSave} onEditing={onEditing} />);
+    const view = render(<ContentEditingPlan detail={detail} editable busy={false} onSave={onSave} onEditing={onEditing} />, { wrapper: LobeProvider });
     fireEvent.click(screen.getByText('修改方案'));
     expect(screen.getByLabelText('片段 1 字幕')).toBeDisabled();
-    fireEvent.click(screen.getByLabelText('锁定片段 1'));
+    await userEvent.click(screen.getByRole('checkbox', { name: '锁定片段 1' }));
     fireEvent.change(screen.getByLabelText('片段 1 字幕'), { target: { value: '新的字幕' } });
     fireEvent.click(screen.getByText('保存方案'));
     await waitFor(() => expect(onSave).toHaveBeenCalledWith(detail.run, expect.objectContaining({ lockedClipIds: [], clips: [expect.objectContaining({ caption: '新的字幕' })] }), ['c1']));
@@ -111,7 +113,7 @@ describe('editing lifecycle', () => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     const detail = fixture(); detail.plan!.document.lockedClipIds = [];
     vi.mocked(fetchEditingRun).mockResolvedValue(detail);
-    render(<MemoryRouter initialEntries={['/?editingRun=run-1']}><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>);
+    render(<MemoryRouter initialEntries={['/?editingRun=run-1']}><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>, { wrapper: LobeProvider });
     fireEvent.click(await screen.findByText('修改方案'));
     fireEvent.change(screen.getByLabelText('片段 1 字幕'), { target: { value: '保留这份草稿' } });
     vi.mocked(fetchEditingRun).mockRejectedValue(new Error('网络连接失败'));
@@ -127,7 +129,7 @@ describe('editing lifecycle', () => {
     detail.run.request = { ...detail.run.request, taskType: 'framework_remix' } as unknown as EditingRequest; // remix Runs carry a type outside EditingTaskType
     detail.run.waitingReason = 'invalid_render_receipt';
     vi.mocked(fetchEditingRun).mockResolvedValue(detail);
-    render(<MemoryRouter initialEntries={['/?editingRun=run-1']}><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>);
+    render(<MemoryRouter initialEntries={['/?editingRun=run-1']}><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>, { wrapper: LobeProvider });
     expect(await screen.findByText(/片段组合在生成时已锁定/)).toBeInTheDocument();
     expect(screen.queryByText('修改方案')).not.toBeInTheDocument();
     expect(screen.getByText('成片检查失败，可重新制作。')).toBeInTheDocument();
@@ -142,7 +144,7 @@ describe('editing lifecycle', () => {
   });
   it('no longer offers creating tasks or a task list without a task link', async () => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-    render(<MemoryRouter><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>);
+    render(<MemoryRouter><QueryClientProvider client={client}><ContentEditingWorkspace /></QueryClientProvider></MemoryRouter>, { wrapper: LobeProvider });
     expect(await screen.findByText('没有指定剪辑任务')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: '开始剪辑' })).not.toBeInTheDocument();
     expect(screen.queryByRole('complementary', { name: '最近剪辑任务' })).not.toBeInTheDocument();

@@ -1,5 +1,4 @@
-import { Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Tooltip, type TableColumnsType } from '@lobehub/ui';
 import { GOODS_SCORE_CONFIDENCE_TOOLTIP_TEXT } from './dashboard-config';
 import {
   formatSignedRatePercent,
@@ -58,7 +57,7 @@ export function buildDashboardGoodsColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardGoodsTableClassNames;
-}): ColumnsType<DashboardGoodsTableItem> {
+}): TableColumnsType<DashboardGoodsTableItem> {
   const headerCellProps = () => buildGoodsDataHeaderCellProps(classNames);
   const metricHeaderCellProps = () => buildGoodsDataMetricHeaderCellProps(classNames);
   const bodyCellProps = () => buildGoodsDataBodyCellProps(classNames);

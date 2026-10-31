@@ -1,7 +1,8 @@
-import { ArrowDownOutlined, ArrowUpOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Select } from 'antd';
+import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
+import { Button } from '@lobehub/ui';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { MAX_REMIX_SLOTS, referenceAssetOptions, type ReferenceAssetOption, type RemixStructure } from '../_lib/remix-form';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { RemixReferencePicker } from './remix-reference-picker';
 import { useRemixConfirmedSegments } from './use-remix-batches';
 import styles from './segment-annotation.module.css';
@@ -49,29 +50,29 @@ export function FrameworkRemixStructure({ preset, value, onChange, onReferencePi
             {value.labels.map((labelKey, index) => (
               <li key={`${index}-${labelKey}`} className={remixStyles.slotRow}>
                 <span className={remixStyles.slotIndex}>{index + 1}</span>
-                <Select
-                  aria-label={`第 ${index + 1} 位框架`}
+                <LabeledSelect
+                  label={`第 ${index + 1} 位框架`}
                   value={labelKey}
                   options={labelOptions}
                   disabled={disabled}
-                  onChange={(next: string) => updateLabels(value.labels.map((key, i) => (i === index ? next : key)))}
+                  onChange={(next) => next !== undefined && updateLabels(value.labels.map((key, i) => (i === index ? next : key)))}
                 />
                 <span className={styles.rowActions}>
                   <Button
                     aria-label={`上移第 ${index + 1} 位`}
-                    icon={<ArrowUpOutlined />}
+                    icon={<ArrowUp size={14} strokeWidth={1.8} aria-hidden="true" />}
                     disabled={disabled || index === 0}
                     onClick={() => updateLabels(move(value.labels, index, index - 1))}
                   />
                   <Button
                     aria-label={`下移第 ${index + 1} 位`}
-                    icon={<ArrowDownOutlined />}
+                    icon={<ArrowDown size={14} strokeWidth={1.8} aria-hidden="true" />}
                     disabled={disabled || index === value.labels.length - 1}
                     onClick={() => updateLabels(move(value.labels, index, index + 1))}
                   />
                   <Button
                     aria-label={`删除第 ${index + 1} 位`}
-                    icon={<DeleteOutlined />}
+                    icon={<Trash2 size={14} strokeWidth={1.8} />}
                     disabled={disabled}
                     onClick={() => updateLabels(value.labels.filter((_, i) => i !== index))}
                   />
@@ -81,7 +82,7 @@ export function FrameworkRemixStructure({ preset, value, onChange, onReferencePi
           </ol>
           <div className={styles.rowActions}>
             <Button
-              icon={<PlusOutlined />}
+              icon={<Plus size={14} strokeWidth={1.8} />}
               disabled={disabled || value.labels.length >= MAX_REMIX_SLOTS || labelOptions.length === 0}
               onClick={() => updateLabels([...value.labels, labelOptions[0]?.value ?? ''])}
             >

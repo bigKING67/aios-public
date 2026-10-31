@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { CalendarOutlined, HomeOutlined } from '@ant-design/icons';
-import { Empty } from 'antd';
+import { Empty } from '@lobehub/ui';
+import { Calendar, House } from 'lucide-react';
 import styles from './creator-dashboard.module.css';
 import targetStyles from './creator-target-list-shell.module.css';
 import { CREATOR_DASHBOARD_TABS, type CreatorDashboardTabKey } from './creator-tabs';
@@ -76,7 +76,7 @@ export function CreatorDashboardShell({ activeTab }: CreatorDashboardShellProps)
               aria-label="返回首页"
               title="返回首页"
             >
-              <HomeOutlined className={styles.homeEntryIcon} />
+              <House className={styles.homeEntryIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
             </Link>
             <div className={styles.brand}>Groland Shopping Influencer</div>
           </div>
@@ -112,7 +112,7 @@ export function CreatorDashboardShell({ activeTab }: CreatorDashboardShellProps)
             </div>
             <div className={targetStyles.dateSurface} aria-label="时间选择">
               <span>2026/03</span>
-              <CalendarOutlined />
+              <Calendar size={14} strokeWidth={1.8} aria-hidden="true" />
             </div>
           </div>
         </header>

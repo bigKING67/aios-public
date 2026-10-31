@@ -1,0 +1,40 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 1px var(--spacing-2);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.stack {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.coverage {
+  color: var(--aios-status-warning-strong);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.compact {
+  max-width: 100%;
+}
+
+.compact .label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact .coverage {
+  white-space: normal;
+}

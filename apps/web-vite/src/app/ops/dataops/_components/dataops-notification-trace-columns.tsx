@@ -1,20 +1,20 @@
 'use client';
 
-import { Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Tag, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationEvent } from '@/config/dataops-hub';
 import {
-  STATUS_TAG_COLOR,
+  STATUS_TAG_TONE,
   formatDateTime,
   formatTokenPreview,
   getNotificationEventTypeLabel,
-  getNotificationEventTypeTagColor,
+  getNotificationEventTypeTagTone,
   getNotificationStatusLabel,
-  getNotificationTraceSloRiskLevelColor,
+  getNotificationTraceSloRiskLevelTone,
   getNotificationTraceSloRiskLevelLabel,
   truncateText,
   type NotificationTraceSloScanRankedItem,
 } from './dataops-hub-formatters';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import batchResultStyles from './dataops-batch-result.module.css';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
@@ -30,20 +30,20 @@ interface NotificationTraceSloScanColumnsOptions {
 
 function renderSloStatusTag(record: NotificationTraceSloScanRankedItem) {
   if (!record.breached) {
-    return <Tag color="green">正常</Tag>;
+    return <DataOpsToneTag tone="success">正常</DataOpsToneTag>;
   }
   if (record.triggeredCount > 0) {
-    return <Tag color="red">已触发</Tag>;
+    return <DataOpsToneTag tone="danger">已触发</DataOpsToneTag>;
   }
   if (record.cooldownCount > 0) {
-    return <Tag color="gold">冷却中</Tag>;
+    return <DataOpsToneTag tone="warning">冷却中</DataOpsToneTag>;
   }
-  return <Tag color="orange">已命中</Tag>;
+  return <DataOpsToneTag tone="warning">已命中</DataOpsToneTag>;
 }
 
 export function buildDataOpsRetryGroupTraceColumns({
   notificationChannelMap,
-}: NotificationTraceColumnsOptions): ColumnsType<DataOpsNotificationEvent> {
+}: NotificationTraceColumnsOptions): TableColumnsType<DataOpsNotificationEvent> {
   return [
     {
       title: '时间',
@@ -65,7 +65,7 @@ export function buildDataOpsRetryGroupTraceColumns({
       key: 'status',
       width: 110,
       render: (value: DataOpsNotificationEvent['status']) => (
-        <Tag color={STATUS_TAG_COLOR[value]}>{value}</Tag>
+        <DataOpsToneTag tone={STATUS_TAG_TONE[value]}>{value}</DataOpsToneTag>
       ),
     },
     {
@@ -74,9 +74,9 @@ export function buildDataOpsRetryGroupTraceColumns({
       key: 'eventType',
       width: 170,
       render: (value: string) => (
-        <Tag color={getNotificationEventTypeTagColor(value)}>
+        <DataOpsToneTag tone={getNotificationEventTypeTagTone(value)}>
           {getNotificationEventTypeLabel(value)}
-        </Tag>
+        </DataOpsToneTag>
       ),
     },
     {
@@ -107,7 +107,7 @@ export function buildDataOpsRetryGroupTraceColumns({
 
 export function buildDataOpsRetryGroupTraceMobileColumns({
   notificationChannelMap,
-}: NotificationTraceColumnsOptions): ColumnsType<DataOpsNotificationEvent> {
+}: NotificationTraceColumnsOptions): TableColumnsType<DataOpsNotificationEvent> {
   return [
     {
       title: '链路事件',
@@ -119,12 +119,12 @@ export function buildDataOpsRetryGroupTraceMobileColumns({
               <p className="m-0 text-sm font-semibold text-text-primary">{record.title}</p>
               <p className="m-0 text-xs text-text-tertiary">{formatDateTime(record.sentAt)}</p>
             </div>
-            <Tag color={STATUS_TAG_COLOR[record.status]}>{getNotificationStatusLabel(record.status)}</Tag>
+            <DataOpsToneTag tone={STATUS_TAG_TONE[record.status]}>{getNotificationStatusLabel(record.status)}</DataOpsToneTag>
           </div>
           <div className="flex flex-wrap gap-1">
-            <Tag color={getNotificationEventTypeTagColor(record.eventType)}>
+            <DataOpsToneTag tone={getNotificationEventTypeTagTone(record.eventType)}>
               {getNotificationEventTypeLabel(record.eventType)}
-            </Tag>
+            </DataOpsToneTag>
             <Tag>
               {notificationChannelMap.get(record.channelId)?.channelName || record.channelId}
             </Tag>
@@ -147,7 +147,7 @@ export function buildDataOpsRetryGroupTraceMobileColumns({
 
 export function buildDataOpsNotificationTraceSloScanColumns({
   onOpenRetryGroupTrace,
-}: NotificationTraceSloScanColumnsOptions): ColumnsType<NotificationTraceSloScanRankedItem> {
+}: NotificationTraceSloScanColumnsOptions): TableColumnsType<NotificationTraceSloScanRankedItem> {
   return [
     {
       title: '优先级',
@@ -161,9 +161,9 @@ export function buildDataOpsNotificationTraceSloScanColumns({
       width: 150,
       render: (_value, record) => (
         <div className={pipelineStyles.pipelineTextCell}>
-          <Tag color={getNotificationTraceSloRiskLevelColor(record.riskLevel)}>
+          <DataOpsToneTag tone={getNotificationTraceSloRiskLevelTone(record.riskLevel)}>
             {getNotificationTraceSloRiskLevelLabel(record.riskLevel)}
-          </Tag>
+          </DataOpsToneTag>
           <span className={batchResultStyles.batchHistoryStatsText}>分值 {record.riskScore}</span>
         </div>
       ),
@@ -241,7 +241,7 @@ export function buildDataOpsNotificationTraceSloScanColumns({
 
 export function buildDataOpsNotificationTraceSloScanMobileColumns({
   onOpenRetryGroupTrace,
-}: NotificationTraceSloScanColumnsOptions): ColumnsType<NotificationTraceSloScanRankedItem> {
+}: NotificationTraceSloScanColumnsOptions): TableColumnsType<NotificationTraceSloScanRankedItem> {
   return [
     {
       title: '巡检结果',
@@ -257,9 +257,9 @@ export function buildDataOpsNotificationTraceSloScanMobileColumns({
                 最新事件：{formatDateTime(record.latestEventAt)}
               </p>
             </div>
-            <Tag color={getNotificationTraceSloRiskLevelColor(record.riskLevel)}>
+            <DataOpsToneTag tone={getNotificationTraceSloRiskLevelTone(record.riskLevel)}>
               {getNotificationTraceSloRiskLevelLabel(record.riskLevel)}
-            </Tag>
+            </DataOpsToneTag>
           </div>
           <div className={pipelineStyles.pipelineTextCell}>
             <p>

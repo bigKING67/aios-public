@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
+import { LobeProvider } from '@/components/lobe-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ContentEditingSelectedReview } from './content-editing-selected-review';
 import { ContentEditingResult } from './content-editing-result';
@@ -18,13 +19,13 @@ const summary = { schema: 'aios.selected-review-summary.v1', status: 'sampled_ch
 };
 afterEach(cleanup);
 it('states sampled scope and pending checks without approving delivery', () => {
-  render(<ContentEditingSelectedReview summary={summary} run={run} />);
+  render(<ContentEditingSelectedReview summary={summary} run={run} />, { wrapper: LobeProvider });
   expect(screen.getByText('片段采样检查通过')).toBeInTheDocument();
   expect(screen.getByText(/已检查 1 个片段，通过 1 个/)).toHaveTextContent('不代表整片可交付');
   expect(screen.getByText(/尚未验证/)).toHaveTextContent('声画同步、声音听检、商品身份核对、发布授权');
 });
 it.each(['needs_revision', 'evidence_required'])('keeps %s separate from pass', (status) => {
-  render(<ContentEditingSelectedReview summary={{ ...summary, status, passedWindowCount: 0 }} run={run} />);
+  render(<ContentEditingSelectedReview summary={{ ...summary, status, passedWindowCount: 0 }} run={run} />, { wrapper: LobeProvider });
   expect(screen.queryByText('片段采样检查通过')).not.toBeInTheDocument();
   expect(screen.getByText(/通过 0 个/)).toBeInTheDocument();
 });
@@ -32,7 +33,7 @@ it.each([undefined, null, { ...summary, status: 'future_status' }, { ...summary,
   { ...summary, passedWindowCount: 2 }, { ...summary, passedWindowCount: 0 },
   { ...summary, binding: { runId: 'other', jobId: 'job' } }, { ...summary, deliveryApproved: true },
   { ...summary, unverified: [null] }, { ...summary, schema: 'future' }])('rejects unusable summary %#', (value) => {
-  render(<ContentEditingSelectedReview summary={value} run={run} />);
+  render(<ContentEditingSelectedReview summary={value} run={run} />, { wrapper: LobeProvider });
   expect(screen.getByText('片段检查摘要暂不可用')).toBeInTheDocument();
   expect(screen.queryByText('片段采样检查通过')).not.toBeInTheDocument();
 });
@@ -41,7 +42,7 @@ it.each([true, false])('result integration preserves ready=false, summary presen
   client.setQueryData(editingKeys.result(run.runId, run.version), {
     ready: false, job: null, ...(present ? { selectedReview: { summary } } : {}),
   } satisfies EditingResult);
-  render(<QueryClientProvider client={client}><ContentEditingResult run={run} /></QueryClientProvider>);
+  render(<QueryClientProvider client={client}><ContentEditingResult run={run} /></QueryClientProvider>, { wrapper: LobeProvider });
   // The read-only summary cannot create playback/download or adoption actions.
   expect(screen.queryByRole('link', { name: '打开视频 / 下载' })).not.toBeInTheDocument();
   expect(screen.queryByLabelText('剪辑成片')).not.toBeInTheDocument();

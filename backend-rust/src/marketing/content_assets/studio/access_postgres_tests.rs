@@ -7,8 +7,10 @@ use super::error::StudioError;
 use super::postgres_tests::{asset, confirm, create, patch, pool, OWNER};
 use super::remix;
 use super::remix_cancel;
+use super::remix_list;
 use super::remix_postgres_tests::{create_request, fixture, preview_request, settings};
 use super::remix_read;
+use super::remix_types::RemixBatchListQuery;
 use super::repository;
 use super::suggestions;
 use super::types::CreateSegmentSuggestionsRequest;
@@ -36,7 +38,7 @@ fn basic(id: &str) -> CurrentUser {
 async fn open_access_lets_a_basic_user_write_segments_and_request_suggestions() {
     let pool = pool().await;
     let actor = basic(&format!("basic-{}", Uuid::new_v4()));
-    let (owned, _) = asset(&pool, Some(OWNER), Some(10.0), Some("面霜")).await;
+    let (owned, _) = asset(&pool, Some(OWNER), Some(10.0), Some("口红")).await;
 
     // Scoped access keeps the per-asset edit permission.
     assert!(matches!(
@@ -52,7 +54,7 @@ async fn open_access_lets_a_basic_user_write_segments_and_request_suggestions() 
         segment.confirmed_by.as_deref(),
         Some(actor.user_id.as_str())
     );
-    assert_eq!(segment.product_name.as_deref(), Some("面霜"));
+    assert_eq!(segment.product_name.as_deref(), Some("口红"));
 
     let relabel = || {
         let mut request = patch(segment.revision);
@@ -211,12 +213,13 @@ async fn open_access_batches_are_created_seen_and_cancelled_by_any_user() {
     assert_eq!(run_owners, vec![creator.user_id.clone(); 2]);
 
     // Scoped reads stay owner-only; open reads show every batch.
-    assert!(remix_read::list(
+    assert!(remix_list::list(
         &pool,
         &settings(),
         &viewer.user_id,
         Some(&viewer.user_id),
-        None
+        None,
+        &RemixBatchListQuery::default(),
     )
     .await
     .unwrap()
@@ -233,9 +236,16 @@ async fn open_access_batches_are_created_seen_and_cancelled_by_any_user() {
         .await,
         Err(StudioError::App(AppError::NotFound))
     ));
-    let listed = remix_read::list(&pool, &settings(), &viewer.user_id, None, None)
-        .await
-        .unwrap();
+    let listed = remix_list::list(
+        &pool,
+        &settings(),
+        &viewer.user_id,
+        None,
+        None,
+        &RemixBatchListQuery::default(),
+    )
+    .await
+    .unwrap();
     let seen = listed
         .items
         .iter()

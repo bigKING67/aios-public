@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, Button, Empty, Skeleton } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Alert, Button, Empty, SkeletonText } from '@lobehub/ui';
+import { ArrowLeft } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/organisms/layout';
@@ -41,7 +41,7 @@ export function LiveCenterAnalysisResultClient({
           <section className={resultStyles.analysisResultConsole}>
             <header className={resultStyles.analysisResultTopbar}>
               <Link className={resultStyles.analysisResultBackLink} to={ROUTE_PATHS.contentLiveCenter}>
-                <ArrowLeftOutlined />
+                <ArrowLeft size={14} strokeWidth={1.8} aria-hidden="true" />
                 返回直播中台
               </Link>
               <div className={resultStyles.analysisResultTitleBlock}>
@@ -58,7 +58,7 @@ export function LiveCenterAnalysisResultClient({
 
             {detailQuery.isLoading && !detail ? (
               <section className={styles.panel}>
-                <Skeleton active paragraph={{ rows: 8 }} title />
+                <SkeletonText rows={8} />
               </section>
             ) : null}
 

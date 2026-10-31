@@ -14,7 +14,7 @@
 
 .metricValue {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 640;
@@ -24,11 +24,11 @@
 
 .metricItemPrimary {
   border-radius: 12px;
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
   padding: 7px 9px;
 }
 
 .metricValuePrimary {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: 680;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Tag } from 'antd';
+import { Tag } from '@lobehub/ui';
 import { resolveCreatorMatchStatusTagMeta, type CreatorMatchStatusTagMeta } from './creator-ui-utils';
 
 export interface CreatorMatchStatusTagProps {

@@ -117,12 +117,13 @@ async fn load_segments(
     clips: &[RemixEditClip],
     enterprise_tag: Option<&str>,
     lock: bool,
+    cloud_enabled: bool,
 ) -> StudioResult<HashMap<Uuid, Segment>> {
     let mut ids: Vec<Uuid> = clips.iter().map(|clip| clip.segment_id).collect();
     ids.sort();
     ids.dedup();
     let sql = format!(
-        "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.product_name, s.source_content_hash FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.segment_id = ANY($1) AND s.status = 'confirmed' AND s.preset_key = $2 AND s.preset_version = $3 AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.segment_id{}",
+        "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.product_name, s.source_content_hash FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.segment_id = ANY($1) AND s.status = 'confirmed' AND s.preset_key = $2 AND s.preset_version = $3 AND a.is_deleted = FALSE AND ($5::BOOLEAN OR a.bucket <> 'cloud_video') AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.segment_id{}",
         if lock { " FOR SHARE OF s" } else { "" }
     );
     let rows = sqlx::query(sqlx::AssertSqlSafe(sql.as_str()))
@@ -130,6 +131,7 @@ async fn load_segments(
         .bind(preset_key)
         .bind(preset_version)
         .bind(enterprise_tag)
+        .bind(cloud_enabled)
         .fetch_all(&mut *db)
         .await
         .map_err(db_error)?;
@@ -386,6 +388,7 @@ pub(super) async fn check(
         &request.clips,
         access.enterprise_tag(),
         false,
+        settings.content_ai_studio_cloud_remix_enabled,
     )
     .await?;
     let resolved = resolve(&request.clips, segments)?;
@@ -492,6 +495,7 @@ pub(super) async fn create(
         &request.clips,
         access.enterprise_tag(),
         true,
+        settings.content_ai_studio_cloud_remix_enabled,
     )
     .await?;
     let resolved = resolve(&request.clips, segments)?;

@@ -22,6 +22,7 @@ from .mediakit_client import MediaKitClient, MediaKitError
 from .output_profile import canvas
 from .remix_normalization import FPS, probe
 from .render_binding import MEDIAKIT_ENGINE
+from . import remix_cloud_sources
 
 ENGINE = MEDIAKIT_ENGINE
 ENGINE_ENV = "CONTENT_PRODUCTION_REMIX_ENGINE"
@@ -203,7 +204,7 @@ def _resumable(kit: MediaKitClient, resume: dict | None, digest: str, tick) -> t
 
 def render(job: dict, storage, work: Path, preview: bool, tick,
            lock_fd: int | None = None, kit: MediaKitClient | None = None,
-           resume: dict | None = None) -> tuple[Path, dict]:
+           resume: dict | None = None, cloud_urls: dict[str, str] | None = None) -> tuple[Path, dict]:
     """Renders the frozen clip snapshot in the cloud; returns (video, receipt) like render_local.
 
     Sources are never downloaded to the worker: MediaKit reads presigned URLs and the
@@ -214,6 +215,7 @@ def render(job: dict, storage, work: Path, preview: bool, tick,
     worker can record it for that reuse.
     """
     snapshot = job["snapshot"]
+    remix_cloud_sources.require_cloud_render(snapshot, True)
     target = canvas(snapshot, preview)
     max_seconds = _int_env("CONTENT_PRODUCTION_MEDIAKIT_MAX_SECONDS", 600, 3, 3600)
     if timeline_ms(snapshot) > max_seconds * 1000:
@@ -222,13 +224,20 @@ def render(job: dict, storage, work: Path, preview: bool, tick,
     kit = kit or MediaKitClient(os.getenv("AIOS_MEDIAKIT_API_KEY") or "")
     assets = {str(a["assetId"]): a for a in snapshot["assets"]}
     used = {str(clip["assetId"]) for clip in snapshot["clips"]}
-    urls = {asset: storage.presign_get_url(assets[asset]["objectKey"], PRESIGN_SECONDS) for asset in sorted(used)}
+    urls = {}
+    for asset in sorted(used):
+        if remix_cloud_sources.video_id(assets[asset]["objectKey"]) is not None:
+            if not cloud_urls or not cloud_urls.get(asset):
+                raise ValueError("云原片缺少已验证的外网地址")
+            urls[asset] = cloud_urls[asset]
+        else:
+            urls[asset] = storage.presign_get_url(assets[asset]["objectKey"], PRESIGN_SECONDS)
     sizes = {asset: source_size(urls[asset], work, lock_fd) for asset in sorted(used)}
     token = client_token(job)
     body = {**build_timeline(snapshot, urls, sizes, target), "client_token": token}
-    digest = timeline_digest(body)
+    timeline_sha = timeline_digest(body)
     started = time.monotonic()
-    reused = _resumable(kit, resume, digest, tick)
+    reused = _resumable(kit, resume, timeline_sha, tick)
     task_id = reused[0] if reused else submit(kit, body, tick)
     try:
         state = reused[1] if reused else None
@@ -242,20 +251,21 @@ def render(job: dict, storage, work: Path, preview: bool, tick,
         size = read_with_retries(lambda: kit.fetch(result.get("video_url", ""), video, tick, MAX_OUTPUT_BYTES),
                                  tick, task_id)
     except Exception as error:
-        error.mediakit_attempt = {"taskId": task_id, "timelineSha256": digest}  # type: ignore[attr-defined]
+        error.mediakit_attempt = {"taskId": task_id, "timelineSha256": timeline_sha}  # type: ignore[attr-defined]
         raise
-    digest = file_hash(video)
+    output_sha = file_hash(video)
     public_timeline = json.loads(json.dumps(body))
-    for element in public_timeline["track"][0]:
-        element["source"] = "presigned-tos-get"  # signed URLs never enter receipts
+    for element, clip in zip(public_timeline["track"][0], snapshot["clips"]):
+        is_cloud = remix_cloud_sources.video_id(assets[str(clip["assetId"])]["objectKey"]) is not None
+        element["source"] = "cloud-video-external-get" if is_cloud else "presigned-tos-get"
     receipt = {
         "status": "completed", "engine": ENGINE, "preview": preview,
         "assets": [{"id": "a" + asset.replace("-", ""), "sha256": assets[asset]["sha256"]}
                    for asset in (str(a["assetId"]) for a in snapshot["assets"])],
-        "output": {"file": "video.mp4", "sha256": digest, "bytes": size, "video": True,
+        "output": {"file": "video.mp4", "sha256": output_sha, "bytes": size, "video": True,
                    "width": target["width"], "height": target["height"]},
         "mediakit": {"tool": "multi-track-edit", "taskId": task_id, "clientToken": token,
-                     "timelineSha256": digest, "reusedTask": bool(reused),
+                     "timelineSha256": timeline_sha, "reusedTask": bool(reused),
                      "elapsedSeconds": round(time.monotonic() - started, 1),
                      "resultDurationSeconds": result.get("duration"), "resultResolution": result.get("resolution"),
                      "timelineMs": timeline_ms(snapshot), "expectedFrames": timeline_frames(snapshot),

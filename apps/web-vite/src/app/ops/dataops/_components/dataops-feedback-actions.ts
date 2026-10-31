@@ -1,5 +1,3 @@
-import type { MessageInstance } from 'antd/es/message/interface';
-
 import type { DataOpsNotificationEvent } from '@/config/dataops-hub';
 import {
   buildBatchHistoryCsvRows,
@@ -26,6 +24,7 @@ import {
 } from './dataops-notification-retry-helpers';
 import { buildRetryGroupTraceCsvExportPayload } from './dataops-notification-trace-interaction-helpers';
 import { copyDataOpsBatchResultFailedPipelineIds } from './dataops-batch-result-modal-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 type NotificationChannelMap = Map<string, { channelName: string }>;
 
@@ -37,7 +36,7 @@ export type DataOpsCsvExportActionOptions = {
   clipboardSuccessText: string;
 };
 
-export function createDataOpsFeedbackActions(message: MessageInstance) {
+export function createDataOpsFeedbackActions(message: DataOpsMessageApi) {
   const copyTextToClipboard = async (text: string, label: string) => {
     await copyDataOpsTextToClipboard({
       text,

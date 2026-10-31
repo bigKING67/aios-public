@@ -5,7 +5,7 @@ export const PLATFORM_LEGEND_COLORS = {
   kuaishou: '#FF3C21',
   jd: '#DA291C',
   wechat: '#07C160',
-  unknown: '#8A8F8A',
+  unknown: '#8A8A8A',
 } as const;
 
 export type PlatformLegendColorKey = keyof typeof PLATFORM_LEGEND_COLORS;

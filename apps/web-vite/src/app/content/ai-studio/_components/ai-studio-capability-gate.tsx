@@ -1,4 +1,5 @@
-import { Alert, Button, Skeleton } from 'antd';
+import { Alert, Button, SkeletonText } from '@lobehub/ui';
+import { Surface } from '@lobehub/ui/dashboard';
 import type { ReactNode } from 'react';
 import { Badge } from '@/components/atoms/badge';
 import type { StudioCapabilitiesResponse } from '../_lib/ai-studio-api';
@@ -22,9 +23,9 @@ export function AiStudioCapabilityGate({ title, purpose, children }: AiStudioCap
     return (
       <section className={styles.panel} aria-labelledby="ai-studio-page-title" aria-busy="true">
         <GateHeader title={title} purpose={purpose} />
-        <div className={styles.card}>
-          <Skeleton active paragraph={{ rows: 4 }} />
-        </div>
+        <Surface>
+          <SkeletonText rows={4} />
+        </Surface>
       </section>
     );
   }

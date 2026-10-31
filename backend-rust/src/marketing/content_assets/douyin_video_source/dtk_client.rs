@@ -3,7 +3,9 @@
 //! Douyin's detail API now refuses unsigned requests (`403 ... Uifid Not
 //! Found`). dtk signs them with a pooled identity; AIOS only asks it for the
 //! raw `aweme_detail` and keeps its own stream selection and host allowlist.
-//! Every failure here is a miss, so the caller falls through to the direct path.
+//! Douyin's "no such post" ends the lookup (the unsigned fallbacks can only add
+//! a misleading 403); every other failure is a miss, so the caller falls
+//! through to the direct path.
 
 use std::time::Duration;
 
@@ -20,25 +22,60 @@ const DTK_TIMEOUT_SECONDS: u64 = DTK_WAIT_SECONDS + 3;
 /// One raw post is a few hundred KB.
 const DTK_RESPONSE_MAX_BYTES: u64 = 8 * 1024 * 1024;
 
+/// Douyin's own answer is only trusted for `Detail` and `NotFound`; every other
+/// outcome is a miss and the caller falls through to the direct path.
+#[derive(Debug)]
+pub(super) enum DtkDetail {
+    Detail(Value),
+    /// Douyin returned no post for the id (deleted, private or taken down).
+    NotFound,
+    Miss,
+}
+
+#[derive(Debug, PartialEq)]
+enum DtkFailure {
+    /// The task outlived `?wait=`; dtk keeps running it, so asking again collects it.
+    Pending(String),
+    NotFound(String),
+    Other(String),
+}
+
+/// A pending task gets this many further `?wait=` rounds before it counts as a miss.
+const DTK_PENDING_RETRIES: usize = 1;
+
 pub(super) async fn fetch_douyin_detail_via_dtk(
     settings: &DouyinDtkSettings,
     aweme_id: &str,
-) -> Option<Value> {
-    match request_dtk_detail(settings, aweme_id).await {
-        Ok(detail) => Some(detail),
-        Err(reason) => {
-            warn!(%aweme_id, reason = %reason, "douyin dtk sidecar miss");
-            None
+) -> DtkDetail {
+    let mut pending_retries = DTK_PENDING_RETRIES;
+    loop {
+        match request_dtk_detail(settings, aweme_id).await {
+            Ok(detail) => return DtkDetail::Detail(detail),
+            Err(DtkFailure::Pending(reason)) if pending_retries > 0 => {
+                pending_retries -= 1;
+                warn!(%aweme_id, reason = %reason, "douyin dtk task still running; waiting again");
+            }
+            Err(DtkFailure::NotFound(reason)) => {
+                warn!(%aweme_id, reason = %reason, "douyin dtk reports post not found");
+                return DtkDetail::NotFound;
+            }
+            Err(DtkFailure::Pending(reason) | DtkFailure::Other(reason)) => {
+                warn!(%aweme_id, reason = %reason, "douyin dtk sidecar miss");
+                return DtkDetail::Miss;
+            }
         }
     }
 }
 
-async fn request_dtk_detail(settings: &DouyinDtkSettings, aweme_id: &str) -> Result<Value, String> {
+async fn request_dtk_detail(
+    settings: &DouyinDtkSettings,
+    aweme_id: &str,
+) -> Result<Value, DtkFailure> {
     let client = Client::builder()
         .redirect(Policy::none())
         .timeout(Duration::from_secs(DTK_TIMEOUT_SECONDS))
         .build()
-        .map_err(|_| "client build failed".to_string())?;
+        .map_err(|_| DtkFailure::Other("client build failed".to_string()))?;
     let response = client
         .get(format!("{}/api/v1/douyin/video", settings.base_url))
         .query(&[
@@ -50,11 +87,11 @@ async fn request_dtk_detail(settings: &DouyinDtkSettings, aweme_id: &str) -> Res
         .header(ACCEPT, "application/json")
         .send()
         .await
-        .map_err(|error| format!("request failed: {}", error.without_url()))?;
+        .map_err(|error| DtkFailure::Other(format!("request failed: {}", error.without_url())))?;
     let status = response.status();
     let body = read_bounded_body(response)
         .await
-        .map_err(|reason| format!("HTTP {} {reason}", status.as_u16()))?;
+        .map_err(|reason| DtkFailure::Other(format!("HTTP {} {reason}", status.as_u16())))?;
     extract_dtk_aweme_detail(status, &body, aweme_id)
 }
 
@@ -85,39 +122,46 @@ fn extract_dtk_aweme_detail(
     status: StatusCode,
     body: &[u8],
     aweme_id: &str,
-) -> Result<Value, String> {
+) -> Result<Value, DtkFailure> {
     let envelope: Value = serde_json::from_slice(body)
-        .map_err(|_| format!("HTTP {} non-JSON body", status.as_u16()))?;
+        .map_err(|_| DtkFailure::Other(format!("HTTP {} non-JSON body", status.as_u16())))?;
     let request_id = envelope
         .pointer("/meta/request_id")
         .and_then(Value::as_str)
         .unwrap_or("-");
     if status == StatusCode::ACCEPTED {
-        return Err(format!(
+        return Err(DtkFailure::Pending(format!(
             "wait elapsed before task finished (request_id {request_id})"
-        ));
+        )));
     }
     if !status.is_success() || envelope.get("success").and_then(Value::as_bool) != Some(true) {
         let code = envelope
             .pointer("/error/code")
             .and_then(Value::as_str)
             .unwrap_or("UNKNOWN");
-        return Err(format!(
+        let reason = format!(
             "HTTP {} error {code} (request_id {request_id})",
             status.as_u16()
-        ));
+        );
+        return Err(if code == "NOT_FOUND" {
+            DtkFailure::NotFound(reason)
+        } else {
+            DtkFailure::Other(reason)
+        });
     }
     let raw = envelope
         .pointer("/data/raw")
         .filter(|value| value.is_object())
-        .ok_or_else(|| format!("no raw detail (request_id {request_id})"))?;
+        .ok_or_else(|| DtkFailure::Other(format!("no raw detail (request_id {request_id})")))?;
     let raw_id = raw.get("aweme_id").and_then(|value| match value {
         Value::String(text) => Some(text.clone()),
         Value::Number(number) => Some(number.to_string()),
         _ => None,
     });
     if raw_id.as_deref() != Some(aweme_id) {
-        return Err(format!("raw detail id mismatch (request_id {request_id})"));
+        return Err(DtkFailure::Other(format!(
+            "raw detail id mismatch (request_id {request_id})"
+        )));
     }
     Ok(raw.clone())
 }
@@ -129,7 +173,7 @@ mod tests {
 
     const ID: &str = "7380000000000000001";
 
-    fn extract(status: u16, body: Value) -> Result<Value, String> {
+    fn extract(status: u16, body: Value) -> Result<Value, DtkFailure> {
         extract_dtk_aweme_detail(
             StatusCode::from_u16(status).unwrap(),
             body.to_string().as_bytes(),
@@ -159,7 +203,10 @@ mod tests {
             json!({"success": true, "data": {"task_id": "t", "state": "running"}, "meta": {"request_id": "r2"}}),
         )
         .unwrap_err();
-        assert!(error.contains("wait elapsed"), "{error}");
+        assert!(
+            matches!(&error, DtkFailure::Pending(reason) if reason.contains("wait elapsed")),
+            "{error:?}"
+        );
     }
 
     #[test]
@@ -170,9 +217,19 @@ mod tests {
         )
         .unwrap_err();
         assert!(
-            error.contains("NO_IDENTITY") && error.contains("r3"),
-            "{error}"
+            matches!(&error, DtkFailure::Other(reason) if reason.contains("NO_IDENTITY") && reason.contains("r3")),
+            "{error:?}"
         );
+    }
+
+    #[test]
+    fn reports_not_found_separately() {
+        let error = extract(
+            404,
+            json!({"success": false, "data": null, "error": {"code": "NOT_FOUND", "message": "x"}, "meta": {"request_id": "r4"}}),
+        )
+        .unwrap_err();
+        assert!(matches!(error, DtkFailure::NotFound(_)), "{error:?}");
     }
 
     #[test]

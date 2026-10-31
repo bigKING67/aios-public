@@ -29,7 +29,8 @@ describe('segment table AI evidence', () => {
         onAction={() => undefined}
       />,
     );
-    expect(screen.getByText('· 模型自评 0.82', { exact: false })).toBeInTheDocument();
+    // The model's self-rated confidence is a hover detail, not row text.
+    expect(screen.getByTitle('模型自评置信度 0.82')).toHaveTextContent('AI 建议');
     expect(screen.getByText('素人口吻分享使用体验')).toBeInTheDocument();
     expect(screen.queryByText('不应显示')).not.toBeInTheDocument();
     expect(screen.getByText('人工')).toBeInTheDocument();

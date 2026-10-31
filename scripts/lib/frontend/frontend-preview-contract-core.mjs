@@ -308,7 +308,7 @@ export function summarizeFrontendPreviewContract(result) {
     `${result.assetRefs.length} HTML asset refs exist`,
     `${result.moduleScripts.length} module script refs`,
     `${result.stylesheets.length} stylesheet refs`,
-    `${result.cssFiles.length} CSS assets include ${REQUIRED_PRODUCTION_CSS_TOKENS.length} critical tokens`,
+    `${result.cssFiles.length} CSS assets define every used critical token (${REQUIRED_PRODUCTION_CSS_TOKENS.length} tracked)`,
     `manifest tracks ${result.manifest?.files?.length ?? 0} source/config/env inputs`,
   ].join('; ');
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, Spin } from 'antd';
+import { Block, Spin } from '@lobehub/ui';
 import styles from './chart-container.module.css';
 
 export interface ChartContainerProps {
@@ -29,23 +29,14 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   } as React.CSSProperties;
 
   return (
-    <Card
-      title={
-        title ? (
-          <span className={styles.title}>
-            {title}
-          </span>
-        ) : undefined
-      }
-      variant="borderless"
-      className={cardClassName}
-    >
+    <Block variant="outlined" className={cardClassName}>
+      {title ? <div className={styles.header}><span className={styles.title}>{title}</span></div> : null}
       <div className={styles.body} style={bodyStyle}>
-        <Spin spinning={loading} description="加载中...">
+        <Spin spinning={loading} tip="加载中...">
           {children}
         </Spin>
       </div>
-    </Card>
+    </Block>
   );
 };
 

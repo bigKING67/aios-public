@@ -10,7 +10,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   outline: none;
-  color: var(--text-primary) !important;
+  color: var(--lobe-color-text) !important;
   opacity: 0.82;
   line-height: var(--line-height-zero);
   display: inline-flex;
@@ -23,7 +23,7 @@
 }
 
 .homeEntryLink:hover {
-  color: var(--brand-text) !important;
+  color: var(--aios-ai-text) !important;
   opacity: 1;
   background: transparent !important;
   text-decoration: none !important;
@@ -31,16 +31,16 @@
 
 .homeEntryLink:focus,
 .homeEntryLink:focus-visible {
-  color: var(--brand-text) !important;
+  color: var(--aios-ai-text) !important;
   outline: none !important;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent) !important;
   border-radius: var(--spacing-2) !important;
   background: transparent !important;
   text-decoration: none !important;
 }
 
 .homeEntryLink:active {
-  color: var(--brand-text) !important;
+  color: var(--aios-ai-text) !important;
   transform: translateY(1px);
   opacity: 0.7;
 }

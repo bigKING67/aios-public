@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   renderDouyinMetricTrend,
   type TrendClassNameResolver,
@@ -13,7 +13,7 @@ import {
 
 export function buildDouyinCardSourceColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<DouyinCardSourceRow> {
+): TableColumnsType<DouyinCardSourceRow> {
   return [
     {
       title: '一级来源渠道',

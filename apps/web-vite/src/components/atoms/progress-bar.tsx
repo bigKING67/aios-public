@@ -22,16 +22,16 @@ export interface ProgressBarProps {
 }
 
 const progressColorMap: Record<NonNullable<ProgressBarProps['color']>, string> = {
-  primary: 'var(--brand-primary)',
-  info: 'var(--status-info)',
-  success: 'var(--status-success)',
-  warning: 'var(--status-warning)',
-  danger: 'var(--status-danger)',
-  neutral: 'var(--status-neutral)',
-  blue: 'var(--brand-primary)',
-  green: 'var(--status-success)',
-  orange: 'var(--status-warning)',
-  red: 'var(--status-danger)',
+  primary: 'var(--lobe-color-primary)',
+  info: 'var(--aios-status-info)',
+  success: 'var(--aios-status-success)',
+  warning: 'var(--aios-status-warning)',
+  danger: 'var(--aios-status-danger)',
+  neutral: 'var(--lobe-color-text-tertiary)',
+  blue: 'var(--lobe-color-primary)',
+  green: 'var(--aios-status-success)',
+  orange: 'var(--aios-status-warning)',
+  red: 'var(--aios-status-danger)',
 };
 
 type ProgressBarStyleVars = CSSProperties & {

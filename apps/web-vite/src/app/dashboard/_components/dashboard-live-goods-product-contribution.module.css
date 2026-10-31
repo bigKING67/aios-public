@@ -5,7 +5,7 @@
 }
 
 .contributionLabel {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 560;
 }

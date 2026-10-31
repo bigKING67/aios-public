@@ -32,7 +32,7 @@ const ALL_FRAMEWORK: [&str; 5] = [
 #[ignore = "requires a disposable CONTENT_PRODUCTION_TEST_DATABASE_URL with migration 030"]
 async fn jobs_are_reused_while_active_and_recreated_after_finishing() {
     let pool = pool().await;
-    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(60.0), Some("精华")).await;
+    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(60.0), Some("粉底液")).await;
     let (asset_b, _) = asset(&pool, Some(OWNER), None, None).await;
 
     let created =

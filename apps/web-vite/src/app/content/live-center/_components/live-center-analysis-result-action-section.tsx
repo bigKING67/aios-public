@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import { Empty } from '@lobehub/ui';
 import { Badge } from '@/components/atoms/badge';
 import { formatInteger, resolveStatusBadge } from '../_lib/live-center-formatters';
 import type { LiveCenterAnalysisReviewTaskItem } from '../_lib/live-center-view-helpers';

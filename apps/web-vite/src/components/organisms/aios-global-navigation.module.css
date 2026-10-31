@@ -1,0 +1,105 @@
+.frame {
+  --aios-global-header-height: 56px;
+  --aios-workspace-height: calc(100dvh - var(--aios-global-header-height));
+  min-height: 100dvh;
+  background: var(--lobe-color-bg-layout);
+}
+
+/*
+ * Brand, centered product groups, account: the groups center on the whole bar, not on the space
+ * left between the brand and the account. No bottom rule — the bar shares the page background and
+ * the module workspace below floats as its own card.
+ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: calc(var(--lobe-z-index-popup-base) - 1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--spacing-5);
+  align-items: center;
+  height: var(--aios-global-header-height, 56px);
+  padding: 0 var(--spacing-5);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-bg-layout);
+}
+
+.brand {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.wordmark {
+  display: block;
+  width: 96px;
+  height: auto;
+}
+
+.darkWordmark { display: none; }
+:global(:root[data-theme='dark']) .lightWordmark { display: none; }
+:global(:root[data-theme='dark']) .darkWordmark { display: block; }
+
+.desktop { display: flex; align-items: center; gap: var(--spacing-1); }
+.mobile { display: none; }
+.account { justify-self: end; }
+.content { min-width: 0; }
+
+/* The same 14px as the module sidebars: product navigation never reads smaller than the level below it. */
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  height: 32px;
+  padding: 0 var(--spacing-3);
+  border: 0;
+  border-radius: var(--lobe-border-radius);
+  color: var(--lobe-color-text-secondary);
+  background: transparent;
+  font: inherit;
+  font-size: var(--font-size-base);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.tab:hover,
+.tab[data-popup-open] { color: var(--lobe-color-text); background: var(--lobe-color-fill-tertiary); }
+.tab[data-active] { color: var(--lobe-color-text); font-weight: var(--font-weight-medium); background: var(--lobe-color-fill-tertiary); }
+.tab:focus-visible,
+.brand:focus-visible { outline: 2px solid var(--lobe-focus-ring-color); outline-offset: 2px; }
+
+/* Group menus: 36px rows sized to their labels, never a fixed wide panel. */
+.menu {
+  min-width: 168px;
+}
+
+.menu :global(.lobe-dropdown-menu__item) {
+  height: 36px;
+}
+
+/* The module workspace card and its sidebar brand row start 12px under the bar (lobe: 8px). */
+@media (min-width: 761px) {
+  .content :global(.lobe-dashboard-console-shell__workspace) { margin-top: var(--spacing-3); }
+  .content :global(.lobe-dashboard-console-shell__brand) { margin-top: var(--spacing-3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab { transition: none; }
+}
+
+/* Too narrow to center six groups between brand and account: they follow the brand instead. */
+@media (max-width: 900px) {
+  .header { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .desktop { justify-self: start; }
+}
+
+@media (max-width: 760px) {
+  .header { grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--spacing-3); padding: 0 var(--spacing-4); }
+  .desktop { display: none; }
+  .mobile { display: flex; justify-self: end; }
+  .tab { height: 44px; }
+}

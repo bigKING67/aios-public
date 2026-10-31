@@ -1,7 +1,9 @@
 'use client';
 
-import { CopyOutlined } from '@ant-design/icons';
-import { Button, Select } from 'antd';
+import { Button } from '@lobehub/ui';
+import { Copy } from 'lucide-react';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import { type BatchResultFilter } from './dataops-hub-formatters';
 import batchResultStyles from './dataops-batch-result.module.css';
 
@@ -22,10 +24,11 @@ export function DataOpsBatchResultControls({
 }: DataOpsBatchResultControlsProps) {
   return (
     <div className={batchResultStyles.batchResultControls}>
-      <Select<BatchResultFilter>
+      <LabeledSelect<BatchResultFilter>
+        label="批量结果筛选"
         size="small"
         value={resultFilter}
-        onChange={onResultFilterChange}
+        onChange={(value) => value && onResultFilterChange(value)}
         options={[
           { label: '全部结果', value: 'all' },
           {
@@ -37,11 +40,11 @@ export function DataOpsBatchResultControls({
             value: 'retryable_failed',
           },
         ]}
-        className={batchResultStyles.batchResultFilterSelect}
+        wrapperClassName={batchResultStyles.batchResultFilterSelect}
       />
       <Button
         size="small"
-        icon={<CopyOutlined />}
+        icon={<Copy {...DATAOPS_ICON_PROPS} />}
         disabled={failedPipelineCount === 0}
         onClick={() => {
           void onCopyFailedPipelineIds();

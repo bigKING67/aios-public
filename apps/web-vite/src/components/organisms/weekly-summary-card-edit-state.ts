@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { App } from 'antd';
+import { confirmModal } from '@lobehub/ui';
 import type { UseMutateFunction } from '@tanstack/react-query';
 import type {
   APIErrorLike,
@@ -30,7 +30,6 @@ export function useWeeklySummaryCardEditState({
   updateSummary,
   confirmLoading,
 }: UseWeeklySummaryCardEditStateArgs) {
-  const { modal } = App.useApp();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editOverall, setEditOverall] = useState('');
   const [editHighlightsText, setEditHighlightsText] = useState('');
@@ -60,7 +59,7 @@ export function useWeeklySummaryCardEditState({
     };
 
     setEditErrorText(null);
-    modal.confirm({
+    confirmModal({
       title: '确认提交总结更新？',
       content: '保存后会写入数据库，并作为当前页最新总结展示。',
       okText: '确认提交',

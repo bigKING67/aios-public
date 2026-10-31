@@ -1,5 +1,5 @@
-import { Button, Empty, Tag } from 'antd';
-import { EditOutlined, LinkOutlined, PlusOutlined } from '@ant-design/icons';
+import { Link, Pencil, Plus } from 'lucide-react';
+import { Button, Empty, Tag } from '@lobehub/ui';
 import type {
   ContentAssetAdMaterial,
   ContentAssetDetailResponse,
@@ -74,17 +74,20 @@ export function IdentityTab({
       <section className={styles.detailSection}>
         <div className={inspectorStyles.sectionTitleRow}>
           <h3>平台发布身份</h3>
-          <Button size="small" icon={<PlusOutlined />} disabled={!canWrite} onClick={onAddPlatformVideo}>
+          <Button size="small" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onAddPlatformVideo}>
             {platformVideos.length > 0 ? '补充另一条' : '新增'}
           </Button>
         </div>
         {platformVideos.length === 0 ? (
           <div className={inspectorStyles.identityEmptyAction}>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="待补充平台发布身份">
-              <Button size="small" type="primary" icon={<PlusOutlined />} disabled={!canWrite} onClick={onAddPlatformVideo}>
-                新增平台身份
-              </Button>
-            </Empty>
+            <Empty
+              description="待补充平台发布身份"
+              action={
+                <Button size="small" type="primary" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onAddPlatformVideo}>
+                  新增平台身份
+                </Button>
+              }
+            />
           </div>
         ) : (
           <div className={inspectorStyles.identityList}>
@@ -103,17 +106,20 @@ export function IdentityTab({
       <section className={styles.detailSection}>
         <div className={inspectorStyles.sectionTitleRow}>
           <h3>投放素材实例</h3>
-          <Button size="small" icon={<PlusOutlined />} disabled={!canWrite} onClick={onAddAdMaterial}>
+          <Button size="small" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onAddAdMaterial}>
             {adMaterials.length > 0 ? '补充另一条' : '新增'}
           </Button>
         </div>
         {adMaterials.length === 0 ? (
           <div className={inspectorStyles.identityEmptyAction}>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={adMaterialEmptyDescription}>
-              <Button size="small" type="primary" icon={<PlusOutlined />} disabled={!canWrite} onClick={onAddAdMaterial}>
-                新增素材实例
-              </Button>
-            </Empty>
+            <Empty
+              description={adMaterialEmptyDescription}
+              action={
+                <Button size="small" type="primary" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onAddAdMaterial}>
+                  新增素材实例
+                </Button>
+              }
+            />
           </div>
         ) : (
           <div className={inspectorStyles.identityList}>
@@ -199,10 +205,10 @@ function PlatformVideoIdentityCard({
         ) : null}
         {item.externalUrl ? (
           <a href={item.externalUrl} target="_blank" rel="noreferrer">
-            <LinkOutlined /> 打开
+            <Link size={14} strokeWidth={1.8} aria-hidden="true" /> 打开
           </a>
         ) : null}
-        <Button size="small" type="text" icon={<EditOutlined />} disabled={!canWrite} onClick={() => onEdit(item)}>
+        <Button size="small" type="text" icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={() => onEdit(item)}>
           编辑
         </Button>
       </div>
@@ -268,7 +274,7 @@ function AdMaterialIdentityCard({
         ) : (
           <span className={inspectorStyles.identityRelationPillMuted}>待确认平台身份</span>
         )}
-        <Button size="small" type="text" icon={<EditOutlined />} disabled={!canWrite} onClick={() => onEdit(item)}>
+        <Button size="small" type="text" icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={() => onEdit(item)}>
           编辑
         </Button>
       </div>

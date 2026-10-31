@@ -1,4 +1,4 @@
-import { Drawer, Tag } from 'antd';
+import { Drawer, Tag } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { DashboardChart } from './dashboard-chart';
@@ -52,8 +52,8 @@ export function DashboardGoodsScoreDrawer({
     <Drawer
       title="商品评分分解"
       placement="right"
-      size={isMobile ? 'large' : 'default'}
-      closable={{ placement: 'end' }}
+      width={isMobile ? '100%' : 378}
+      closable
       open={open}
       onClose={onClose}
     >

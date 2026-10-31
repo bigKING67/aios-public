@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Alert, Button, Tag } from 'antd';
+import { Alert, Button, Tag } from '@lobehub/ui';
 import type { CaptionCandidate, EditingRequest } from '../_lib/content-editing-api';
 import styles from './content-editing.module.css';
 

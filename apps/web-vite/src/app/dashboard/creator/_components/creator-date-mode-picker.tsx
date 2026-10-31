@@ -1,6 +1,6 @@
 'use client';
 
-import { DatePicker } from 'antd';
+import { DayjsDatePicker, DayjsDateRangePicker, datePickerLocaleZhCN } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 import {
   BUSINESS_WEEK_LOCALE,
@@ -9,8 +9,6 @@ import {
   type DateMode,
 } from './creator-date-range';
 import styles from './creator-live-dashboard.module.css';
-
-const { RangePicker } = DatePicker;
 
 type CreatorDatePickerPeriodUnit = 'week' | 'month' | 'year';
 
@@ -76,8 +74,9 @@ export function CreatorDateModePicker({
 
   if (dateMode === 'day') {
     return (
-      <DatePicker
+      <DayjsDatePicker
         value={dayValue}
+        locale={datePickerLocaleZhCN}
         onChange={(value) => {
           if (value) {
             onDayValueChange(value.startOf('day'));
@@ -93,7 +92,7 @@ export function CreatorDateModePicker({
 
   if (dateMode === 'week') {
     return (
-      <DatePicker
+      <DayjsDatePicker
         picker="week"
         value={weekValue}
         locale={CREATOR_WEEK_PICKER_LOCALE}
@@ -112,9 +111,10 @@ export function CreatorDateModePicker({
 
   if (dateMode === 'month') {
     return (
-      <DatePicker
+      <DayjsDatePicker
         picker="month"
         value={monthValue}
+        locale={datePickerLocaleZhCN}
         onChange={(value) => {
           if (value) {
             onMonthValueChange(value.startOf('month'));
@@ -130,9 +130,10 @@ export function CreatorDateModePicker({
 
   if (dateMode === 'year') {
     return (
-      <DatePicker
+      <DayjsDatePicker
         picker="year"
         value={yearValue}
+        locale={datePickerLocaleZhCN}
         onChange={(value) => {
           if (value) {
             onYearValueChange(value.startOf('year'));
@@ -148,8 +149,9 @@ export function CreatorDateModePicker({
 
   return (
     <div className={styles.customRangeWrap}>
-      <RangePicker
+      <DayjsDateRangePicker
         value={customRange}
+        locale={datePickerLocaleZhCN}
         allowClear={false}
         format="YYYY/MM/DD"
         disabled={!isDateBoundsReady}

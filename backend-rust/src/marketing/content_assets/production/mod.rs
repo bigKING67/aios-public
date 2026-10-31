@@ -4,6 +4,7 @@ mod catalogs;
 mod domain;
 mod jobs;
 mod planning;
+mod remix_cloud_sources;
 mod render_binding;
 mod repository;
 mod runs;

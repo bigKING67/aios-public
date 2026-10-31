@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input, Popconfirm, Space } from "antd";
+import { Button, confirmModal, Flexbox, Input } from '@lobehub/ui';
 
 import type { SampleInventoryOutboundStatus } from "../_lib/sample-inventory-types";
 import type { SampleInventoryPendingBatchEdit } from "../_hooks/use-sample-inventory-batch-actions";
@@ -45,10 +45,11 @@ export function SampleInventoryBatchActionsBar({
   return (
     <div className={styles.batchBar}>
       <strong>{batchLabel[activeStatus]}</strong>
-      <Space size="small" wrap>
+      <Flexbox horizontal gap={8} align="center" wrap="wrap">
         {(effectiveStatus === "approved" || effectiveStatus === "sampled") && (
-          <Space.Compact>
+          <Flexbox horizontal gap={4}>
             <Input
+              className={styles.batchTrackingInput}
               size="small"
               value={trackingNumber}
               placeholder="输入快递单号"
@@ -65,7 +66,7 @@ export function SampleInventoryBatchActionsBar({
             >
               📦 批量填单号
             </Button>
-          </Space.Compact>
+          </Flexbox>
         )}
         {effectiveStatus === "pending" && (
           <>
@@ -168,18 +169,22 @@ export function SampleInventoryBatchActionsBar({
           </Button>
         )}
         {effectiveStatus && (
-          <Popconfirm
-            title={`确认删除已选择的 ${selectedCount} 条记录？`}
-            description="已审批或已取样记录会通过补偿流水恢复对应库存。"
-            okText="确认删除"
-            cancelText="取消"
+          <Button
+            size="small"
+            danger
             disabled={!hasSelection}
-            onConfirm={onArchive}
+            onClick={() =>
+              confirmModal({
+                title: `确认删除已选择的 ${selectedCount} 条记录？`,
+                content: '已审批或已取样记录会通过补偿流水恢复对应库存。',
+                okText: '确认删除',
+                cancelText: '取消',
+                onOk: onArchive,
+              })
+            }
           >
-            <Button size="small" danger disabled={!hasSelection}>
               🗑 批量删除
             </Button>
-          </Popconfirm>
         )}
         {hasSelection && !selectedStatus ? (
           <span>请选择相同状态的记录后批量处理</span>
@@ -188,7 +193,7 @@ export function SampleInventoryBatchActionsBar({
             {hasSelection ? `已选择 ${selectedCount} 条` : "已选择 0 条 · 先勾选记录，表头复选框可全选当前页"}
           </span>
         )}
-      </Space>
+      </Flexbox>
     </div>
   );
 }

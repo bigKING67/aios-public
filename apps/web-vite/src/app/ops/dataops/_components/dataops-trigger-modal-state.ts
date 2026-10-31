@@ -1,6 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Form } from 'antd';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import {
@@ -10,12 +8,13 @@ import {
   getTriggerParameterSpecs,
   resolveCommonBatchTriggerSpecs,
 } from './dataops-trigger-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
+import { useDataOpsTriggerForm } from './dataops-trigger-parameter-form';
 
-type TriggerFormValues = Record<string, string | number | boolean>;
 
 export function useDataOpsTriggerModalState(options: {
   hasOperatePermission: boolean;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   pipelineMap: Map<string, DataOpsRuntimePipeline>;
   selectedPipelines: DataOpsRuntimePipeline[];
 }) {
@@ -25,9 +24,6 @@ export function useDataOpsTriggerModalState(options: {
     string[] | null
   >(null);
   const [commandModalPipelineId, setCommandModalPipelineId] = useState<string | null>(null);
-  const [triggerForm] = Form.useForm<TriggerFormValues>();
-  const [batchTriggerForm] = Form.useForm<TriggerFormValues>();
-  const [commandForm] = Form.useForm<TriggerFormValues>();
 
   const triggerModalPipeline = triggerModalPipelineId
     ? pipelineMap.get(triggerModalPipelineId)
@@ -51,11 +47,13 @@ export function useDataOpsTriggerModalState(options: {
     () => resolveCommonBatchTriggerSpecs(batchTriggerModalPipelines),
     [batchTriggerModalPipelines]
   );
-  const batchTriggerFormValues = Form.useWatch([], batchTriggerForm) as TriggerFormValues | undefined;
+  const triggerForm = useDataOpsTriggerForm(triggerModalSpecs);
+  const batchTriggerForm = useDataOpsTriggerForm(batchTriggerModalSpecs);
+  const batchTriggerFormValues = batchTriggerForm.values;
   const batchTriggerFormResolvedValues = useMemo(
     () => ({
       ...getDefaultTriggerParameters(batchTriggerModalSpecs),
-      ...(batchTriggerFormValues || {}),
+      ...batchTriggerFormValues,
     }),
     [batchTriggerFormValues, batchTriggerModalSpecs]
   );
@@ -76,9 +74,10 @@ export function useDataOpsTriggerModalState(options: {
     () => (commandModalPipeline ? getTriggerParameterSpecs(commandModalPipeline.id) : []),
     [commandModalPipeline]
   );
-  const commandFormValues = Form.useWatch([], commandForm) as TriggerFormValues | undefined;
+  const commandForm = useDataOpsTriggerForm(commandModalSpecs);
+  const commandFormValues = commandForm.values;
   const commandFormResolvedValues = useMemo(
-    () => ({ ...getDefaultTriggerParameters(commandModalSpecs), ...(commandFormValues || {}) }),
+    () => ({ ...getDefaultTriggerParameters(commandModalSpecs), ...commandFormValues }),
     [commandFormValues, commandModalSpecs]
   );
   const commandModalCommandPreview = useMemo(

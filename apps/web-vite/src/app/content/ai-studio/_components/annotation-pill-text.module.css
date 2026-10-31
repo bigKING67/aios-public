@@ -6,15 +6,16 @@
 }
 
 .pill {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   white-space: nowrap;
 }
 
 .active {
-  color: var(--status-info-strong);
+  color: var(--aios-status-info);
 }
 
+/* Confirmed segments are a person's work, so they read in ink rather than AI violet (DESIGN.md). */
 .ready {
-  color: var(--brand-text-strong);
+  color: var(--lobe-color-text);
 }

@@ -6,9 +6,9 @@
   min-height: 160px;
   margin: var(--spacing-3) var(--spacing-4) var(--spacing-4);
   padding: var(--spacing-4);
-  border: 1px dashed var(--brand-border);
+  border: 1px dashed var(--lobe-color-border);
   border-radius: var(--border-radius-xl);
-  background: color-mix(in srgb, var(--brand-secondary) 42%, var(--bg-card));
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 42%, var(--lobe-color-bg-container));
 }
 
 .recordingUploadPromptCopy {
@@ -19,15 +19,15 @@
   min-width: 0;
 }
 
-.recordingUploadPromptCopy > :global(.anticon) {
+.recordingUploadPromptCopy > svg {
   display: inline-grid;
   place-items: center;
   width: var(--spacing-10);
   height: var(--spacing-10);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: var(--bg-card);
-  color: var(--brand-text);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xl);
 }
 
@@ -38,14 +38,14 @@
 }
 
 .recordingUploadPromptCopy strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
 }
 
 .recordingUploadPromptCopy span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -56,8 +56,8 @@
   gap: var(--spacing-3);
   align-items: center;
   padding: var(--spacing-3) var(--spacing-4);
-  border-top: 1px solid var(--divider-color);
-  background: color-mix(in srgb, var(--bg-subtle) 72%, var(--bg-card));
+  border-top: 1px solid var(--lobe-color-border-secondary);
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 72%, var(--lobe-color-bg-container));
 }
 
 .recordingAnalysisCopy {
@@ -74,20 +74,20 @@
   min-width: 0;
 }
 
-.recordingAnalysisTitle > :global(.anticon) {
-  color: var(--brand-text);
+.recordingAnalysisTitle > svg {
+  color: var(--aios-ai-text);
   font-size: var(--font-size-lg);
 }
 
 .recordingAnalysisTitle strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
 }
 
 .recordingAnalysisMetaText {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -98,7 +98,7 @@
 .recordingAnalysisSummary {
   margin: 0;
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -114,7 +114,7 @@
   min-width: 0;
 }
 
-.recordingAnalysisControls :global(.ant-input-affix-wrapper) {
+.recordingAnalysisControls > * {
   min-width: 0;
 }
 
@@ -125,10 +125,10 @@
   justify-content: center;
   min-height: 32px;
   padding: 0 var(--spacing-4);
-  border: 1px solid var(--brand-primary);
+  border: 1px solid var(--lobe-color-primary);
   border-radius: var(--border-radius-lg);
-  background: var(--brand-primary);
-  color: var(--text-inverse);
+  background: var(--lobe-color-primary);
+  color: var(--lobe-color-text-light-solid);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-none);
@@ -139,8 +139,8 @@
 }
 
 .recordingAnalysisResultButton:hover {
-  color: var(--text-inverse);
-  box-shadow: var(--shadow-sm);
+  color: var(--lobe-color-text-light-solid);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 @media (max-width: 860px) {

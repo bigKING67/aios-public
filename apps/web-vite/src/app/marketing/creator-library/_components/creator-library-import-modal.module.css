@@ -12,11 +12,18 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .importPreviewMeta strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
+}
+
+.importFooter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
 }

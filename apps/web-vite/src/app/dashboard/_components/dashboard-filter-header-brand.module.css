@@ -6,7 +6,7 @@
 }
 
 .brand {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 680;
   letter-spacing: var(--letter-spacing-normal);

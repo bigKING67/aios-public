@@ -1,15 +1,4 @@
-import {
-  BarChartOutlined,
-  FileImageOutlined,
-  HomeOutlined,
-  LinkOutlined,
-  RobotOutlined,
-  SafetyCertificateOutlined,
-  SendOutlined,
-  SettingOutlined,
-  TeamOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
+import { Bot, ChartColumn, FileImage, House, Link, Send, Settings, ShieldCheck, Users, Video } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 
@@ -37,27 +26,27 @@ export const CONTENT_ASSETS_MODULE_GROUPS: Array<{
   {
     title: '核心工作台',
     items: [
-      { key: 'home', label: '首页', icon: <HomeOutlined /> },
-      { key: 'assets', label: '素材库', icon: <FileImageOutlined /> },
-      { key: 'production', label: 'AI 剪辑', icon: <VideoCameraOutlined />, href: ROUTE_PATHS.contentAiStudioEditing },
+      { key: 'home', label: '首页', icon: <House size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'assets', label: '素材库', icon: <FileImage size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'production', label: 'AI 剪辑', icon: <Video size={14} strokeWidth={1.8} aria-hidden="true" />, href: ROUTE_PATHS.contentAiStudioEditing },
     ],
   },
   {
     title: '处理链路',
     items: [
-      { key: 'ai', label: 'AI分析中心', icon: <RobotOutlined /> },
-      { key: 'video', label: '视频处理', icon: <VideoCameraOutlined /> },
-      { key: 'review', label: '内容审核', icon: <SafetyCertificateOutlined /> },
-      { key: 'publish', label: '发布管理', icon: <SendOutlined /> },
-      { key: 'matching', label: '回流匹配', icon: <LinkOutlined /> },
-      { key: 'tasks', label: '协作任务', icon: <TeamOutlined /> },
+      { key: 'ai', label: 'AI分析中心', icon: <Bot size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'video', label: '视频处理', icon: <Video size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'review', label: '内容审核', icon: <ShieldCheck size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'publish', label: '发布管理', icon: <Send size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'matching', label: '回流匹配', icon: <Link size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'tasks', label: '协作任务', icon: <Users size={14} strokeWidth={1.8} aria-hidden="true" /> },
     ],
   },
   {
     title: '资产运营',
     items: [
-      { key: 'stats', label: '数据统计', icon: <BarChartOutlined /> },
-      { key: 'settings', label: '系统设置', icon: <SettingOutlined /> },
+      { key: 'stats', label: '数据统计', icon: <ChartColumn size={14} strokeWidth={1.8} aria-hidden="true" /> },
+      { key: 'settings', label: '系统设置', icon: <Settings size={14} strokeWidth={1.8} aria-hidden="true" /> },
     ],
   },
 ];

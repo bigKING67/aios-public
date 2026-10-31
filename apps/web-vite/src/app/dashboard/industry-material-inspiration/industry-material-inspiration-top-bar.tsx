@@ -1,8 +1,8 @@
-import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Select } from 'antd';
-import datePickerZhCN from 'antd/es/date-picker/locale/zh_CN';
+import { Button, DayjsDatePicker, datePickerLocaleZhCN } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
+import { House, RotateCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { useDashboardPlatformThumb } from '../_components/dashboard-platform-thumb-motion';
 import dashboardTabButtonStyles from '../_components/dashboard-filter-header-tab-button.module.css';
 import dashboardTabRailStyles from '../_components/dashboard-filter-header-tabs.module.css';
@@ -70,7 +70,7 @@ export function IndustryMaterialTopBar({
       <div className={styles.topBar}>
         <div className={styles.brandBlock}>
           <Link to="/" className={styles.homeEntryLink} aria-label="返回首页" title="返回首页">
-            <HomeOutlined className={styles.homeEntryIcon} />
+            <House className={styles.homeEntryIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
           </Link>
           <div className={styles.brand}>Groland Intelligence</div>
         </div>
@@ -109,23 +109,26 @@ export function IndustryMaterialTopBar({
 
         <div className={styles.controlPanel} aria-label="行业素材灵感筛选">
           <div className={styles.brandPickerShell}>
-            <Select
+            <LabeledSelect<string>
+              label="品牌筛选"
               showSearch
               value={isDouyinTab ? selectedBrandKey : ALL_BRANDS_KEY}
               options={brandFilterOptions}
-              optionFilterProp="label"
-              aria-label="品牌筛选"
-              className={styles.brandSelect}
+              wrapperClassName={styles.brandSelect}
               disabled={!isDouyinTab || (isFetching && !hasTableRows && brandOptionCount === 0)}
-              onChange={(nextBrandKey) => onCommitControls(activeTab, month, nextBrandKey)}
+              onChange={(nextBrandKey) => {
+                if (nextBrandKey !== undefined) {
+                  onCommitControls(activeTab, month, nextBrandKey);
+                }
+              }}
             />
           </div>
           <div className={styles.pickerShell}>
-            <DatePicker
+            <DayjsDatePicker
               picker="month"
               allowClear={false}
               value={monthValue}
-              locale={datePickerZhCN}
+              locale={datePickerLocaleZhCN}
               disabledDate={disableUnavailableMonth}
               format="YYYY/MM"
               className={styles.monthPicker}
@@ -139,7 +142,7 @@ export function IndustryMaterialTopBar({
           </div>
           <Button
             className={styles.refreshButton}
-            icon={<ReloadOutlined />}
+            icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />}
             loading={isDouyinTab && isFetching}
             disabled={!isDouyinTab}
             onClick={onRefresh}

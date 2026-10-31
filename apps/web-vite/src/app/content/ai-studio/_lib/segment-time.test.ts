@@ -13,7 +13,8 @@ describe('segment time formatting', () => {
   });
 
   it('formats durations in seconds', () => {
-    expect(formatSegmentDuration(1_000, 3_450)).toBe('2.5 秒');
+    expect(formatSegmentDuration(1_000, 3_450)).toBe('0:02.5');
+    expect(formatSegmentDuration(0, 226_800)).toBe('3:46.8');
   });
 });
 

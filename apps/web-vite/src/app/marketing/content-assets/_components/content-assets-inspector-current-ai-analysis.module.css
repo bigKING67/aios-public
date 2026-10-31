@@ -2,18 +2,18 @@
   display: grid;
   gap: 14px;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .currentAnalysisHero {
   display: grid;
   gap: 8px;
   padding: 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: 12px;
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 .currentAnalysisHero > div:first-child {
@@ -26,18 +26,18 @@
 
 .currentAnalysisHero span,
 .diagnosisBoundaryPanel strong {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .currentAnalysisHero span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-weight: 620;
 }
 
 .currentAnalysisHero strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 680;
   line-height: var(--line-height-tight);
@@ -46,7 +46,7 @@
 .currentAnalysisHero p,
 .diagnosisBoundaryPanel p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -63,10 +63,10 @@
   min-height: 22px;
   align-items: center;
   padding: 0 7px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 999px;
-  color: var(--text-secondary);
-  background: var(--bg-card);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-xs);
   font-weight: 520;
   line-height: var(--line-height-snug);
@@ -76,9 +76,9 @@
   display: grid;
   gap: 8px;
   padding: 11px 12px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 12px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .diagnosisBoundaryPanel > div:first-child {
@@ -90,12 +90,12 @@
 }
 
 .diagnosisBoundaryPanel small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
 }
 
-.diagnosisBoundaryPanel :global(.ant-btn) {
+.diagnosisBoundaryPanel :global(.lobe-button) {
   justify-self: start;
   height: auto;
   padding: 0;

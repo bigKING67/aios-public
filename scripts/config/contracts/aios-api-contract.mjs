@@ -262,6 +262,7 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
       'SegmentPreset',
       'SegmentPresetListResponse',
       'ContentSegment',
+      'SourceSpend',
       'SegmentAssetCover',
       'ContentSegmentListResponse',
       { name: 'CreateContentSegmentRequest', request: true },
@@ -282,6 +283,21 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
     ],
   },
   {
+    file: 'backend-rust/src/marketing/content_assets/studio/team_output_types.rs',
+    names: [
+      'TeamOutputMetrics',
+      'TeamOutputPerson',
+      'TeamOutputGroup',
+      'TeamOutputTeam',
+      'TeamOutputQuality',
+      'TeamOutputSync',
+      'TeamOutputCategory',
+      'TeamOutputResponse',
+      'TeamOutputVideo',
+      'TeamOutputVideosResponse',
+    ],
+  },
+  {
     file: 'backend-rust/src/marketing/content_assets/studio/overview_types.rs',
     names: [
       'StudioOverviewResponse',
@@ -296,19 +312,40 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
     ],
   },
   {
+    file: 'backend-rust/src/marketing/content_assets/studio/structure_pool_types.rs',
+    names: ['StructurePoolResponse', 'StructurePoolRow'],
+  },
+  {
+    file: 'backend-rust/src/marketing/content_assets/studio/daily_remix_types.rs',
+    names: ['DailyRemixPlanResponse', 'DailyRemixBatch', 'DailyRemixStructureResult',
+      { name: 'DailyRemixRunRequest', request: true },
+      { name: 'DailyRemixPauseRequest', request: true }],
+  },
+  {
     file: 'backend-rust/src/marketing/content_assets/studio/remix_types.rs',
     names: [
       { name: 'RemixBatchPreviewRequest', request: true },
       { name: 'CreateRemixBatchRequest', request: true },
       'RemixSlotAvailability',
+      'SpendCounts',
       'RemixBatchPreviewResponse',
       'RemixBatchSegment',
       'RemixBatchItem',
+      'RemixQc',
+      'RemixDelivery',
+      'RemixRetention',
+      'RemixQcReport',
+      'RemixQcFreezeEvent',
+      'RemixQcTimestampGap',
       'RemixPictureReview',
       'RemixPicturePair',
+      'RemixOutputReview',
+      { name: 'RemixOutputReviewRequest', request: true },
       'RemixBatch',
       'RemixBatchDetail',
       'RemixBatchListResponse',
+      'RemixBatchCounts',
+      'RemixBatchModeCounts',
       'RemixProduct',
       'RemixProductListResponse',
       { name: 'RemixEditClip', request: true },
@@ -316,6 +353,30 @@ export const AIOS_RUST_SCHEMA_SOURCES = Object.freeze([
       { name: 'CreateRemixEditRequest', request: true },
       'RemixEditMatch',
       'RemixEditCheckResponse',
+    ],
+  },
+  {
+    file: 'backend-rust/src/marketing/content_assets/studio/competitor_types.rs',
+    names: [
+      { name: 'CreateCompetitorVideoRequest', request: true },
+      { name: 'UpdateCompetitorVideoRequest', request: true },
+      'CompetitorAnalysisSummary',
+      'CompetitorVideo',
+      'CompetitorVideoListResponse',
+      'CompetitorAnalysis',
+      'CompetitorPatternCategory',
+      'CompetitorPatternSnapshot',
+      'OwnSellingPointCoverage',
+      'OwnStructureRow',
+      'OwnStructureLane',
+      'OwnSpendDays',
+      'OwnStructures',
+      'CompetitorPatternsResponse',
+      'CompetitorOverviewCounts',
+      'CompetitorOverviewResponse',
+      { name: 'CreateCompetitorReportRequest', request: true },
+      'CompetitorReport',
+      'CompetitorReportLatestResponse',
     ],
   },
   {
@@ -880,8 +941,38 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
   'GET /v2/marketing/content-assets/studio/overview': {
     queryParameters: [
       { name: 'period', in: 'query', required: false, schema: { type: 'string', enum: ['last7', 'last30', 'month'] } },
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
     ],
     response: 'StudioOverviewResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/team-output': {
+    queryParameters: [
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'dimension', in: 'query', required: false, schema: { type: 'string', enum: ['editor', 'director'] } },
+      { name: 'oneLevelTypeId', in: 'query', required: false, schema: { type: 'integer', format: 'int64' } },
+    ],
+    response: 'TeamOutputResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/team-output/videos': {
+    queryParameters: [
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'dimension', in: 'query', required: false, schema: { type: 'string', enum: ['editor', 'director'] } },
+      { name: 'oneLevelTypeId', in: 'query', required: false, schema: { type: 'integer', format: 'int64' } },
+      { name: 'personKey', in: 'query', required: true, schema: { type: 'string', maxLength: 128 } },
+      { name: 'scope', in: 'query', required: false, schema: { type: 'string', enum: ['all', 'new', 'previous'] } },
+      { name: 'page', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } },
+      { name: 'pageSize', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: 200 } },
+    ],
+    response: 'TeamOutputVideosResponse',
   },
   'GET /v2/marketing/content-assets/studio/presets': {
     response: 'SegmentPresetListResponse',
@@ -893,6 +984,23 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
     ],
     response: 'AssetSegmentSummaryListResponse',
   },
+  'GET /v2/marketing/content-assets/studio/structure-pool': {
+    queryParameters: [{ name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } }],
+    response: 'StructurePoolResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/daily-remix:run': {
+    request: 'DailyRemixRunRequest',
+    response: 'DailyRemixPlanResponse',
+    security: [{ dailyRemixServiceToken: [] }],
+  },
+  'GET /v2/marketing/content-assets/studio/daily-remix/plans': {
+    queryParameters: [{ name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } }],
+    response: 'DailyRemixPlanResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/daily-remix:pause': {
+    request: 'DailyRemixPauseRequest',
+    response: 'DailyRemixPlanResponse',
+  },
   'GET /v2/marketing/content-assets/studio/segment-pool': {
     queryParameters: [
       { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
@@ -902,6 +1010,7 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
   },
   'GET /v2/marketing/content-assets/studio/segments': {
     queryParameters: [
+      { name: 'spendClass', in: 'query', required: false, schema: { type: 'string', enum: ['qualified', 'low', 'unknown'] } },
       { name: 'assetId', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
       { name: 'presetKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
       { name: 'labelKey', in: 'query', required: false, schema: { type: 'string', maxLength: 64 } },
@@ -971,12 +1080,24 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
     response: 'RemixProductListResponse',
   },
   'GET /v2/marketing/content-assets/studio/remix-batches': {
+    queryParameters: [
+      { name: 'quality', in: 'query', required: false, schema: { type: 'string', enum: ['failed'] } },
+      { name: 'review', in: 'query', required: false, schema: { type: 'string', enum: ['pending', 'rejected'] } },
+      { name: 'page', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } },
+      { name: 'mode', in: 'query', required: false, schema: { type: 'string', enum: ['framework', 'sellingPoint', 'edit'] } },
+      { name: 'outputs', in: 'query', required: false, schema: { type: 'string', enum: ['with', 'without'] } },
+      { name: 'cursor', in: 'query', required: false, schema: { type: 'string', maxLength: 256 } },
+      { name: 'limit', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: 100 } },
+    ],
     response: 'RemixBatchListResponse',
   },
   'POST /v2/marketing/content-assets/studio/remix-batches': {
     request: 'CreateRemixBatchRequest',
     response: 'RemixBatchDetail',
     conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry': {
+    response: 'RemixBatchDetail',
   },
   'POST /v2/marketing/content-assets/studio/remix-batches:preview': {
     request: 'RemixBatchPreviewRequest',
@@ -997,6 +1118,66 @@ export const AIOS_TYPED_OPERATION_OVERRIDES = Object.freeze({
     request: 'RemixEditCheckRequest',
     response: 'RemixEditCheckResponse',
     conflictResponse: 'ContentSegmentConflictResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/videos': {
+    queryParameters: [
+      { name: 'source', in: 'query', required: false, schema: { type: 'string', enum: ['all', 'compass', 'manual'] } },
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      ...['date', 'from', 'to'].map((name) => ({ name, in: 'query', required: false, schema: { type: 'string', format: 'date' } })),
+      { name: 'page', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: 100000 } },
+      { name: 'pageSize', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: 100 } },
+    ],
+    response: 'CompetitorVideoListResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/competitor/videos': {
+    request: 'CreateCompetitorVideoRequest',
+    response: 'CompetitorVideo',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}': { response: 'CompetitorVideo' },
+  'PATCH /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}': { request: 'UpdateCompetitorVideoRequest', response: 'CompetitorVideo' },
+  'POST /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses': {
+    response: 'CompetitorAnalysis',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/analyses/{analysis_id}': {
+    response: 'CompetitorAnalysis',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/overview': {
+    queryParameters: [
+      { name: 'category', in: 'query', required: false, schema: { type: 'string', pattern: '^[a-z_]{1,40}$' } },
+      { name: 'period', in: 'query', required: false, schema: { type: 'string', enum: ['last7', 'last30', 'all'] } },
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+    ],
+    response: 'CompetitorOverviewResponse',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/patterns': {
+    queryParameters: [
+      { name: 'category', in: 'query', required: false, schema: { type: 'string', pattern: '^[a-z_]{1,40}$' } },
+      { name: 'period', in: 'query', required: false, schema: { type: 'string', enum: ['last7', 'last30', 'all'] } },
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+    ],
+    response: 'CompetitorPatternsResponse',
+  },
+  'POST /v2/marketing/content-assets/studio/competitor/reports': {
+    request: 'CreateCompetitorReportRequest',
+    response: 'CompetitorReport',
+  },
+  'GET /v2/marketing/content-assets/studio/competitor/reports/latest': {
+    queryParameters: [
+      { name: 'category', in: 'query', required: false, schema: { type: 'string', pattern: '^[a-z_]{1,40}$' } },
+      { name: 'period', in: 'query', required: false, schema: { type: 'string', enum: ['last7', 'last30', 'all'] } },
+      { name: 'unit', in: 'query', required: false, schema: { type: 'string', enum: ['day', 'month', 'year'] } },
+      { name: 'date', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'from', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'to', in: 'query', required: false, schema: { type: 'string', format: 'date' } },
+      { name: 'kind', in: 'query', required: false, schema: { type: 'string', enum: ['openings', 'breakdown'] } },
+    ],
+    response: 'CompetitorReportLatestResponse',
   },
   'GET /v2/sample-inventory/access-policy': {
     response: 'SampleInventoryAccessPolicyResponse',

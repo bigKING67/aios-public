@@ -1,18 +1,18 @@
 .formArea {
-  --sample-inventory-registration-material-frame-border: #dbeafe;
-  --sample-inventory-registration-material-frame-surface: #f8fbff;
-  --sample-inventory-registration-material-text: #1e293b;
-  --sample-inventory-registration-material-muted: #94a3b8;
-  --sample-inventory-registration-material-card-border: #dbe2ea;
-  --sample-inventory-registration-material-card-surface: #fff;
-  --sample-inventory-registration-material-card-hover: #93c5fd;
-  --sample-inventory-registration-material-primary: #2563eb;
-  --sample-inventory-registration-material-selected-surface: #eff6ff;
+  --sample-inventory-registration-material-frame-border: #F3F3F3;
+  --sample-inventory-registration-material-frame-surface: #F8F8F8;
+  --sample-inventory-registration-material-text: #1E293B;
+  --sample-inventory-registration-material-muted: #94A3B8;
+  --sample-inventory-registration-material-card-border: #DBE2EA;
+  --sample-inventory-registration-material-card-surface: #FFFFFF;
+  --sample-inventory-registration-material-card-hover: #AA99EC;
+  --sample-inventory-registration-material-primary: #6E56CF;
+  --sample-inventory-registration-material-selected-surface: #F8F8F8;
   --sample-inventory-registration-material-selected-ring: rgb(37 99 235 / 12%);
-  --sample-inventory-registration-material-secondary: #64748b;
+  --sample-inventory-registration-material-secondary: #64748B;
   --sample-inventory-registration-material-label: #475569;
-  --sample-inventory-registration-material-info-border: #bfdbfe;
-  --sample-inventory-registration-material-info-text: #1d4ed8;
+  --sample-inventory-registration-material-info-border: #AA99EC;
+  --sample-inventory-registration-material-info-text: #6E56CF;
   --font-size-sample-inventory-legacy-compact: 10px;
 
   margin-bottom: 10px;
@@ -107,7 +107,7 @@
 }
 
 .sampleStockLow {
-  color: var(--status-danger);
+  color: var(--aios-status-danger);
 }
 
 .sampleQuantity {
@@ -135,32 +135,21 @@
   margin-top: 0;
 }
 
-.inlineForm :global(.ant-form-item),
-.inboundInlineForm :global(.ant-form-item) {
+/* Compact inline rows: FormField items share the grid and keep their labels small. */
+.inlineForm > *,
+.inboundInlineForm > * {
   min-width: 0;
   margin-bottom: 0;
 }
 
-.inlineForm :global(.ant-form-item-label),
-.inboundInlineForm :global(.ant-form-item-label) {
-  padding-bottom: 3px;
-}
-
-.inlineForm :global(.ant-form-item-label > label),
-.inboundInlineForm :global(.ant-form-item-label > label) {
-  height: auto;
+.inlineForm label,
+.inboundInlineForm label {
   color: var(--sample-inventory-registration-material-label);
   font-size: var(--font-size-xs);
 }
 
-.inlineForm :global(.ant-input),
-.inboundInlineForm :global(.ant-input),
-.inboundInlineForm :global(.ant-input-number),
-.inboundInlineForm :global(.ant-select) {
-  width: 100%;
-}
-
 .submitField {
+  align-self: end;
   min-width: max-content;
 }
 
@@ -234,4 +223,21 @@
   .inboundSubmitField {
     grid-column: auto;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] .formArea {
+  --sample-inventory-registration-material-frame-border: #222125;
+  --sample-inventory-registration-material-frame-surface: #1E1D21;
+  --sample-inventory-registration-material-text: #C9C6CD;
+  --sample-inventory-registration-material-muted: #6B6B6B;
+  --sample-inventory-registration-material-card-border: #29282C;
+  --sample-inventory-registration-material-card-surface: #0D0D0D;
+  --sample-inventory-registration-material-card-hover: #6958AD;
+  --sample-inventory-registration-material-primary: #8B74F0;
+  --sample-inventory-registration-material-selected-surface: #1E1D21;
+  --sample-inventory-registration-material-secondary: #8F8C92;
+  --sample-inventory-registration-material-label: #A7A4AB;
+  --sample-inventory-registration-material-info-border: #6958AD;
+  --sample-inventory-registration-material-info-text: #8B74F0;
 }

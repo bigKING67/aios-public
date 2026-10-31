@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "ledgerTable": "public.aios_schema_migrations",
+  "advisoryLockKey": "bql-aios-schema-migrations-v1",
+  "databaseName": "bql_aios",
+  "namespaces": {
+    "backend": {
+      "directory": "sql/bql/backend",
+      "versionPattern": "^(\\d{3})_.*\\.sql$",
+      "nonTransactionalVersions": []
+    },
+    "warehouse": {
+      "directory": "sql/bql/warehouse",
+      "versionPattern": "^(\\d{8}_\\d{4})__.*\\.sql$",
+      "nonTransactionalVersions": []
+    }
+  }
+}

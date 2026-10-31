@@ -4,8 +4,13 @@ use sqlx::postgres::PgPoolOptions;
 use tracing::{info, warn};
 
 use crate::{
-    config::Settings, content_live_center, cors::build_cors_layer, marketing, reports,
-    routes::build_app_with_runtime_mode, schema_compat, state::AppState,
+    config::{ModuleProfile, Settings},
+    content_live_center,
+    cors::build_cors_layer,
+    marketing, reports,
+    routes::build_app_with_runtime_mode,
+    schema_compat,
+    state::AppState,
 };
 
 pub(crate) async fn run() -> anyhow::Result<()> {
@@ -13,7 +18,11 @@ pub(crate) async fn run() -> anyhow::Result<()> {
 
     let settings = Arc::new(Settings::from_env()?);
     let runtime_read_only = Settings::runtime_read_only_from_env();
+    let module_profile = ModuleProfile::from_env()?;
     let startup_policy = RuntimeStartupPolicy::for_read_only(runtime_read_only);
+    if !module_profile.serves_groland_modules() {
+        info!("AIOS_MODULE_PROFILE=ai_studio; groland route groups and background tasks are off");
+    }
     if startup_policy.enforce_db_read_only {
         warn!(
             "AIOS_RUNTIME_READ_ONLY is enabled; database sessions reject writes and startup mutations are disabled"
@@ -37,7 +46,7 @@ pub(crate) async fn run() -> anyhow::Result<()> {
         .connect(settings.database_url.as_str())
         .await?;
     if startup_policy.run_schema_compat {
-        schema_compat::ensure_runtime_schema(&pool).await?;
+        schema_compat::ensure_runtime_schema(&pool, module_profile).await?;
     }
 
     let dragonfly_client = dragonfly_client::Client::open(settings.dragonfly_url.as_str())?;
@@ -56,13 +65,16 @@ pub(crate) async fn run() -> anyhow::Result<()> {
     });
     if startup_policy.spawn_background_tasks {
         marketing::spawn_content_planner(Arc::clone(&state));
-        reports::spawn_report_cache_warmup(Arc::clone(&state));
         marketing::spawn_content_asset_stale_upload_cleanup(Arc::clone(&state));
-        content_live_center::spawn_stale_upload_cleanup(Arc::clone(&state));
+        marketing::spawn_competitor_auto_analysis(Arc::clone(&state));
+        if module_profile.serves_groland_modules() {
+            reports::spawn_report_cache_warmup(Arc::clone(&state));
+            content_live_center::spawn_stale_upload_cleanup(Arc::clone(&state));
+        }
     }
 
     let cors = build_cors_layer(&settings)?;
-    let app = build_app_with_runtime_mode(state, cors, runtime_read_only);
+    let app = build_app_with_runtime_mode(state, cors, runtime_read_only, module_profile);
     let bind_address = format!("{}:{}", settings.host, settings.port);
     info!(%bind_address, "aios rust backend listening");
 

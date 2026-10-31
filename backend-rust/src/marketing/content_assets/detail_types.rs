@@ -390,6 +390,14 @@ pub(super) struct PlaybackUrlResponse {
     pub(super) content_type: String,
     #[serde(rename = "fileSizeBytes")]
     pub(super) file_size_bytes: Option<i64>,
+    /// Other addresses of the same file, tried by the player when `url` does not load: a 视频云管家
+    /// original has an outer-network and an inner-network address (in the company only the latter works).
+    #[serde(
+        rename = "alternateUrls",
+        default,
+        skip_serializing_if = "Vec::is_empty"
+    )]
+    pub(super) alternate_urls: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]

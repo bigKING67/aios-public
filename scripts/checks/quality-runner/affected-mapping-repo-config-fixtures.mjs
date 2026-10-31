@@ -592,7 +592,6 @@ export function assertRepoConfigAffectedMapping({
       'verify:design:token-values-sync',
       'verify:design:tailwind',
       'verify:design:tailwind-non-color-aliases',
-      'verify:design:antd-theme-token-sync',
       'verify:design:echarts-theme-token-sync',
       'verify:design:echarts-css-token-sync',
       'verify:frontend:design-evolution',

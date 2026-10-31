@@ -1,6 +1,7 @@
-import { Button, Popconfirm, Space, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Tag, type TableColumnsType } from '@lobehub/ui';
+import { Pencil, Trash2 } from 'lucide-react';
+import { confirmDelete } from '../../_components/confirm-delete';
+import styles from '../../_components/admin-page.module.css';
 import { formatAdminDateTime } from '../../_components/admin-date-formatters';
 import { getDisplayEmail } from './user-email-helpers';
 import type { User } from '../_lib/users-types';
@@ -15,7 +16,7 @@ export function buildUsersTableColumns({
   onDelete,
   onEdit,
   onOpenRoleModal,
-}: UsersTableColumnsOptions): ColumnsType<User> {
+}: UsersTableColumnsOptions): TableColumnsType<User> {
   return [
     {
       title: '用户名',
@@ -41,7 +42,7 @@ export function buildUsersTableColumns({
       dataIndex: 'is_active',
       key: 'is_active',
       render: (isActive: boolean) => (
-        <Tag color={isActive ? 'green' : 'red'}>{isActive ? '活跃' : '禁用'}</Tag>
+        <Tag color={isActive ? 'success' : 'error'}>{isActive ? '活跃' : '禁用'}</Tag>
       ),
       width: 100,
     },
@@ -57,26 +58,34 @@ export function buildUsersTableColumns({
       key: 'action',
       width: 180,
       render: (_, record) => (
-        <Space size="small">
+        <div className={styles.toolbar}>
           <Button
             type="text"
             size="small"
-            icon={<EditOutlined />}
+            aria-label="编辑"
+            title="编辑"
+            icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onEdit(record)}
           />
           <Button type="text" size="small" onClick={() => onOpenRoleModal(record)}>
             角色
           </Button>
-          <Popconfirm
-            title="删除用户"
-            description={`确定要删除用户 ${record.username} 吗？`}
-            onConfirm={() => onDelete(record)}
-            okText="删除"
-            cancelText="取消"
-          >
-            <Button type="text" danger size="small" icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </Space>
+          <Button
+            type="text"
+            danger
+            size="small"
+            aria-label="删除"
+            title="删除"
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+            onClick={() =>
+              confirmDelete({
+                title: '删除用户',
+                content: `确定要删除用户 ${record.username} 吗？`,
+                onConfirm: () => onDelete(record),
+              })
+            }
+          />
+        </div>
       ),
     },
   ];

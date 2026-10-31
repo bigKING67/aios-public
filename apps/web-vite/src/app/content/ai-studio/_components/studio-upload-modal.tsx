@@ -1,13 +1,14 @@
-import { InboxOutlined } from '@ant-design/icons';
+import { Alert, Button, Input, Modal, Progress, Tag, Upload } from '@lobehub/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import { Alert, Button, Input, Modal, Progress, Select, Tag, Upload } from 'antd';
-import { useState } from 'react';
+import { Inbox } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { completeContentAssetUpload, createContentAssetUpload } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import { contentAssetsQueryKeys } from '@/app/marketing/content-assets/_lib/content-assets-query-keys';
 import { calculateFileSha256, uploadFileToTos } from '@/app/marketing/content-assets/_lib/content-assets-upload';
 import { aiStudioQueryKeys } from '../_lib/ai-studio-api';
 import { enterpriseLabel } from '../_lib/studio-overview';
-import { studioProductOptions } from '../_lib/studio-products';
+import { isLongOptionList, studioProductOptions } from '../_lib/studio-products';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './studio-upload-modal.module.css';
 
 const MAX_FILES = 10;
@@ -47,6 +48,7 @@ export function StudioUploadModal({ open, onClose, enterpriseTag, products }: St
   const [files, setFiles] = useState<PendingFile[]>([]);
   const [product, setProduct] = useState<string | undefined>(products.length === 1 ? products[0] : undefined);
   const [running, setRunning] = useState(false);
+  const nextUid = useRef(0);
   const productOptions = studioProductOptions(products);
   const isFailed = (item: PendingFile) => Boolean(item.state && typeof item.state === 'object');
   const failed = files.filter(isFailed).length;
@@ -130,38 +132,43 @@ export function StudioUploadModal({ open, onClose, enterpriseTag, products }: St
           <span className={styles.label}>归属企业</span>
           {enterpriseTag ? <Tag className={styles.fixedTag}>{enterpriseLabel(enterpriseTag)}</Tag> : <span className={styles.help}>未配置企业，上传后在全库可见</span>}
         </div>
-        <label className={styles.field}>
-          <span className={styles.label}>产品（必填）</span>
-          <Select
-            aria-label="产品"
-            showSearch
-            placeholder="选择这批原片的产品"
-            value={product}
-            options={productOptions}
-            onChange={(value: string) => setProduct(value)}
-            disabled={running || files.some((item) => item.state !== null)}
-          />
-        </label>
+        <LabeledSelect
+          label="产品（必填）"
+          visibleLabel
+          wrapperClassName={styles.field}
+          showSearch={isLongOptionList(productOptions)}
+          placeholder="选择这批原片的产品"
+          value={product}
+          options={productOptions}
+          onChange={(value) => setProduct(typeof value === 'string' ? value : undefined)}
+          disabled={running || files.some((item) => item.state !== null)}
+        />
         {!running && files.every((item) => item.state === null) ? (
-          <Upload.Dragger
+          <Upload
+            dragger
             multiple
             accept="video/*"
-            showUploadList={false}
             disabled={running}
-            beforeUpload={(file, list) => {
-              // Collect only; uploading starts from the button so a product is chosen first.
-              if (file === list[0]) {
-                setFiles((current) =>
-                  [...current, ...list.map((item) => ({ uid: item.uid, file: item, title: titleFromFileName(item.name), state: null }))].slice(0, MAX_FILES),
-                );
-              }
-              return Upload.LIST_IGNORE;
-            }}
-          >
-            <p className={styles.dropIcon}><InboxOutlined /></p>
-            <p>点击或拖入视频文件，每次最多 {MAX_FILES} 个</p>
-            <p className={styles.help}>上传后自动生成封面和预览，完成后即可在 AI 分析里开始分析</p>
-          </Upload.Dragger>
+            // Collect only; uploading starts from the button so a product is chosen first.
+            onFiles={(list) =>
+              setFiles((current) =>
+                [
+                  ...current,
+                  ...list.map((file) => {
+                    nextUid.current += 1;
+                    return { uid: `upload-${nextUid.current}`, file, title: titleFromFileName(file.name), state: null };
+                  }),
+                ].slice(0, MAX_FILES),
+              )
+            }
+            title={
+              <span className={styles.dropTitle}>
+                <Inbox className={styles.dropIcon} size={28} strokeWidth={1.5} aria-hidden="true" />
+                点击或拖入视频文件，每次最多 {MAX_FILES} 个
+              </span>
+            }
+            description={<span className={styles.help}>上传后自动生成封面和预览，完成后即可在 AI 切段里发起切段</span>}
+          />
         ) : null}
         {files.length > 0 ? (
           <ul className={styles.fileList} aria-label="待上传文件">
@@ -175,7 +182,9 @@ export function StudioUploadModal({ open, onClose, enterpriseTag, products }: St
                   onChange={(event) => patch(item.uid, { title: event.target.value })}
                 />
                 <span className={styles.fileMeta}>{(item.file.size / 1024 / 1024).toFixed(1)} MB</span>
-                {typeof item.state === 'number' ? <Progress percent={item.state} size="small" className={styles.progress} /> : null}
+                {typeof item.state === 'number' ? (
+                  <Progress percent={item.state} size="small" className={styles.progress} aria-label={`${item.file.name} 上传进度`} />
+                ) : null}
                 {item.state === 'done' ? <span className={styles.done}>已上传</span> : null}
                 {item.state && typeof item.state === 'object' ? <span className={styles.error} title={item.state.error}>{item.state.error}</span> : null}
                 {item.state === null && !running ? (
@@ -192,7 +201,7 @@ export function StudioUploadModal({ open, onClose, enterpriseTag, products }: St
             type={failed > 0 ? 'warning' : 'success'}
             showIcon
             title={failed > 0 ? `${files.length - failed} 个已上传，${failed} 个失败` : `${files.length} 个原片已上传`}
-            description="封面和预览生成需要几分钟，生成后即可在 AI 分析里开始分析。"
+            description="封面和预览生成需要几分钟，生成后即可在 AI 切段里发起切段。"
           />
         ) : null}
       </div>

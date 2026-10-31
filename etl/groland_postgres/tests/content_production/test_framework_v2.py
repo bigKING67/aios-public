@@ -280,16 +280,28 @@ class WorkerConfigTests(unittest.TestCase):
         stack.enter_context(patch.dict(os.environ, env, clear=True))
 
     def test_claim_filter_defaults_to_claiming_everything(self):
-        self.assertEqual(worker.claim_filter_from_env(), {'dimensions': None, 'fallback_after_seconds': None})
+        self.assertEqual(worker.claim_filter_from_env(), {'dimensions': None, 'fallback_after_seconds': None, 'claim_after': None,
+                                                          'cloud': False})
+        # Only the desktop, with the 视频云管家 cache configured, claims cloud originals.
+        os.environ[worker.CLOUD_CACHE_ENV] = '/tmp/cloud-cache'
+        self.assertTrue(worker.claim_filter_from_env()['cloud'])
 
     def test_claim_filter_parses_and_validates(self):
         os.environ[worker.DIMENSIONS_ENV] = 'framework'
         os.environ[worker.FALLBACK_ENV] = '600'
-        self.assertEqual(worker.claim_filter_from_env(), {'dimensions': ['framework'], 'fallback_after_seconds': 600})
+        self.assertEqual(worker.claim_filter_from_env(), {'dimensions': ['framework'], 'fallback_after_seconds': 600, 'claim_after': None,
+                                                          'cloud': False})
         os.environ[worker.DIMENSIONS_ENV] = 'framework,unknown'
         with self.assertRaises(ValueError):
             worker.claim_filter_from_env()
         del os.environ[worker.DIMENSIONS_ENV]
+        with self.assertRaises(ValueError):
+            worker.claim_filter_from_env()
+
+    def test_claim_after_holds_back_every_job_on_a_fallback_instance(self):
+        os.environ['CONTENT_WORKER_CLAIM_AFTER_SECONDS'] = '600'
+        self.assertEqual(worker.claim_filter_from_env()['claim_after'], 600)
+        os.environ['CONTENT_WORKER_CLAIM_AFTER_SECONDS'] = '-1'
         with self.assertRaises(ValueError):
             worker.claim_filter_from_env()
 
@@ -354,7 +366,7 @@ class ClaimSqlTests(unittest.TestCase):
         sql, params = cur.sql[1]
         self.assertIn('p.dimension = ANY(%s)', sql)
         self.assertIn('FOR UPDATE OF j SKIP LOCKED', sql)
-        self.assertEqual(params, (['framework'], 600, 600))
+        self.assertEqual(params, (['framework'], 600, 600, None, None))
 
 
 if __name__ == '__main__':

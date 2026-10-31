@@ -10,6 +10,7 @@ import copy
 import numpy as np
 
 from ..segment_suggestion_contract import merge_usage
+from ..stage_timings import StageTimings
 from . import local_vlm, mouth, ocr, persons, review, rules, shots
 from .frames import Frames
 
@@ -38,11 +39,12 @@ def frame_requests(spans):
 
 
 def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage, *,
-        evidence_sink=None, sampling=None):
+        evidence_sink=None, sampling=None, timings=None):
     """Returns (segments, summary, usage). `stage` is a one-item list the worker shows in the UI."""
+    timings = timings or StageTimings()
     duration = duration_ms / 1000
     stage[0] = '镜头切点'
-    cuts = shots.cut_times(proxy)
+    cuts = timings.call('framework_cuts', shots.cut_times, proxy)
     spans = shots.spans(cuts, duration)
     if sampling is not None:
         if evidence_sink is None:
@@ -50,37 +52,39 @@ def run(source, proxy, duration_ms, label_keys, provider, work, env, tick, stage
         cuts, spans = sampling.layout(source, cuts, duration_ms)
     stage[0] = '解码画面'
     requests = frame_requests(spans)
-    frames = (Frames(source, requests, tick) if sampling is None else sampling.decode(source, requests, tick))
+    frames = timings.call('framework_decode', Frames if sampling is None else sampling.decode, source, requests, tick)
     stage[0] = '人物特征'
-    feats = persons.extract(frames, spans, tick)
+    feats = timings.call('framework_person_features', persons.extract, frames, spans, tick)
     chain = persons.chains(feats)
     vlm = local_vlm.LocalVlm()
     stage[0] = '人物确认'
     gray = persons.gray_pairs(feats, chain)
     merged_pairs = 0
-    for i, j, verdict in vlm.same_person(frames, gray, feats['start'], feats['end'], tick):
+    for i, j, verdict in timings.call('framework_person_vlm', vlm.same_person, frames, gray,
+                                     feats['start'], feats['end'], tick):
         if verdict and verdict.get('same_person') == 'yes' and verdict.get('same_session') == 'yes':
             chain = persons.merge(chain, i, j)
             merged_pairs += 1
     stage[0] = '镜头事实'
-    facts = vlm.shot_facts(frames, spans, tick)
+    facts = timings.call('framework_facts_vlm', vlm.shot_facts, frames, spans, tick)
     stage[0] = '画面文字'
-    texts, ocr_engine = ocr.shot_text(frames, spans, tick)
+    texts, ocr_engine = timings.call('framework_ocr', ocr.shot_text, frames, spans, tick, timings=timings)
     del frames
     shot_rows = [{'start': a, 'end': b, 'facts': f, 'chain': chain.get(k), 'ocr': t, 'bg_near': _bg_near(feats, k)}
                  for k, ((a, b), f, t) in enumerate(zip(spans, facts, texts))]
-    rule_segments, runs = rules.segment(shot_rows, duration)
+    rule_segments, runs = timings.call('framework_rules', rules.segment, shot_rows, duration)
     # Explicit evaluation hook only; the worker does not retain frame observations.
     evidence = None if evidence_sink is None else copy.deepcopy(dict(
         shots=shot_rows, cuts=cuts, runs=runs, ruleSegments=rule_segments, durationMs=duration_ms))
     stage[0] = '复核'
-    final, receipts = review.review(provider, source, rule_segments, runs, cuts, duration, work, env, tick)
+    final, receipts = timings.call('framework_review', review.review, provider, source, rule_segments, runs,
+                                   cuts, duration, work, env, tick, timings=timings)
     stage[0] = '口型'
     probed = []
 
     def measure(mouth_spans):
         probed.extend(mouth_spans)
-        return mouth.shot_mouth(source, mouth_spans, tick)
+        return timings.call('framework_mouth', mouth.shot_mouth, source, mouth_spans, tick)
     final = rules.finalize(final, shot_rows, measure)
     usage = {}
     for receipt in receipts:

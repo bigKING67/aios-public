@@ -2,13 +2,12 @@
 
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
-import { Button, DatePicker, message } from 'antd';
-import datePickerZhCN from 'antd/es/date-picker/locale/zh_CN';
-import { DownloadOutlined, HomeOutlined } from '@ant-design/icons';
+import { Button, DayjsDatePicker, datePickerLocaleZhCN, toast, type PickerLocale } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import zhCnDayjsLocale from 'dayjs/locale/zh-cn';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import { Download, House } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useWeeklyPeriods } from '@/hooks/use-weekly-periods';
 import { usePermission } from '@/hooks/use-permission';
@@ -23,6 +22,7 @@ interface CompactHeaderProps {
 }
 
 const BUSINESS_WEEK_LOCALE = 'zh-cn-business-week';
+const WEEK_PICKER_ID = 'weekly-report-week-picker';
 const WEEKDAY_LABELS_SUN_FIRST = ['日', '一', '二', '三', '四', '五', '六'];
 
 dayjs.extend(isoWeek);
@@ -37,10 +37,10 @@ dayjs.locale(
   true
 );
 
-const WEEK_PICKER_LOCALE = {
-  ...datePickerZhCN,
+const WEEK_PICKER_LOCALE: PickerLocale = {
+  ...datePickerLocaleZhCN,
   lang: {
-    ...datePickerZhCN.lang,
+    ...datePickerLocaleZhCN.lang,
     locale: BUSINESS_WEEK_LOCALE,
     shortWeekDays: WEEKDAY_LABELS_SUN_FIRST,
   },
@@ -117,9 +117,9 @@ function toWeekPeriodByStart(start: Dayjs): string {
  * 紧凑水平 Header 组件 - 新设计系统
  *
  * 设计：
- * - 背景：var(--bg-card)
- * - 下边界：var(--border-color)
- * - 文字色：var(--text-primary)
+ * - 背景：var(--lobe-color-bg-container)
+ * - 下边界：var(--lobe-color-border)
+ * - 文字色：var(--lobe-color-text)
  * - 高度：48-56px
  *
  * 布局：左侧品牌 | 右侧操作区（周选择 + PDF导出）
@@ -148,7 +148,7 @@ export function CompactHeader({
   }, [weekPeriod]);
 
   const handleExportPDF = () => {
-    message.info('PDF 导出功能开发中...');
+    toast.info('PDF 导出功能开发中...');
   };
 
   const handleWeekChange = (value: Dayjs | null) => {
@@ -199,7 +199,12 @@ export function CompactHeader({
           aria-label="返回首页"
           title="返回首页"
         >
-          <HomeOutlined className="compact-header-home-entry-icon" />
+          <House
+            className="compact-header-home-entry-icon"
+            size="1em"
+            strokeWidth={1.8}
+            aria-hidden="true"
+          />
         </Link>
       </div>
 
@@ -216,10 +221,11 @@ export function CompactHeader({
       >
         {/* 周期选择 */}
         <div className={styles.periodControl}>
-          <span className={styles.periodLabel}>
+          <label htmlFor={WEEK_PICKER_ID} className={styles.periodLabel}>
             周：
-          </span>
-          <DatePicker
+          </label>
+          <DayjsDatePicker
+            id={WEEK_PICKER_ID}
             picker="week"
             value={weekPickerValue}
             locale={WEEK_PICKER_LOCALE}
@@ -235,9 +241,8 @@ export function CompactHeader({
         {canExportReport ? (
           <Button
             type="primary"
-            icon={<DownloadOutlined />}
+            icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={handleExportPDF}
-            className={`font-medium ${styles.exportButton}`}
           >
             导出 PDF
           </Button>

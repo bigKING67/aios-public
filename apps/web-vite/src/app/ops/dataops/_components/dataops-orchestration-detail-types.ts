@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import type { BatchOperationAction } from './dataops-hub-formatters';
 import type {
@@ -20,7 +20,7 @@ export interface DataOpsOrchestrationDetailProps {
   globalActionBusy: boolean;
   batchActionKey: BatchOperationAction | null;
   batchExecutionHistoryCount: number;
-  columns: ColumnsType<DataOpsRuntimePipeline>;
+  columns: TableColumnsType<DataOpsRuntimePipeline>;
   isCompactViewport: boolean;
   renderExpandedRow: (record: DataOpsRuntimePipeline) => ReactNode;
   renderPaginationTotal: (total: number, range: [number, number]) => string;

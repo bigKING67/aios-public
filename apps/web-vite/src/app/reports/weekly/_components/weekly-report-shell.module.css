@@ -4,8 +4,8 @@
   justify-content: flex-start;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border-bottom: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
 }
 
 .brandWrap {
@@ -14,7 +14,7 @@
   gap: 8px;
   min-width: clamp(140px, 18vw, 220px);
   flex-shrink: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -42,7 +42,7 @@
 }
 
 .periodLabel {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
@@ -50,12 +50,6 @@
 
 .weekPicker {
   width: clamp(160px, 34vw, 220px);
-}
-
-.exportButton {
-  border-color: var(--brand-primary) !important;
-  background: var(--brand-primary) !important;
-  color: var(--brand-on-primary) !important;
 }
 
 .headerTabList {
@@ -66,19 +60,19 @@
   overflow-x: auto;
   padding: 4px;
   border-radius: var(--border-radius-full);
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .headerTabButton {
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
 
 .headerTabButton.headerTabButtonActive {
-  background: var(--bg-card);
-  color: var(--brand-text);
+  background: var(--lobe-color-bg-container);
+  color: var(--aios-ai-text);
   font-weight: var(--font-weight-semibold);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }

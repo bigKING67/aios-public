@@ -1,7 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, type TableColumnsType } from '@lobehub/ui';
 import type { BatchResultFilter } from './dataops-hub-formatters';
 import type {
   BatchExecutionResultItem,
@@ -16,7 +15,7 @@ interface DataOpsBatchResultDetailProps {
   failedPipelineCount: number;
   retryableFailedCount: number;
   filteredItems: BatchExecutionResultItem[];
-  columns: ColumnsType<BatchExecutionResultItem>;
+  columns: TableColumnsType<BatchExecutionResultItem>;
   isCompactViewport: boolean;
   onResultFilterChange: (value: BatchResultFilter) => void;
   onCopyFailedPipelineIds: () => Promise<void>;

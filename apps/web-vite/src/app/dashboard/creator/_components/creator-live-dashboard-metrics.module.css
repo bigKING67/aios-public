@@ -53,7 +53,7 @@
   margin: 0;
   font-size: var(--font-size-sm);
   font-weight: 460;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   letter-spacing: var(--letter-spacing-normal);
   line-height: var(--line-height-normal);
   white-space: normal;
@@ -83,7 +83,7 @@
   justify-content: center;
   gap: 6px;
   min-height: 18px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 520;
   line-height: var(--line-height-tight);
@@ -100,15 +100,15 @@
 }
 
 .liveMetricTrendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .liveMetricTrendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .liveMetricTrendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .liveMetricCardFeatured .liveMetricValueRegular,
@@ -133,12 +133,8 @@
   min-height: 136px;
 }
 
-.liveMetricSkeletonCard :global(.ant-skeleton-title) {
-  margin-bottom: 18px !important;
-}
-
-.liveMetricSkeletonCard :global(.ant-skeleton-paragraph) {
-  margin-block-start: 0 !important;
+.liveMetricSkeletonCard :global(.lobe-skeleton-text) {
+  gap: 18px;
 }
 
 @media (max-width: 1320px) {

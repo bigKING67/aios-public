@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   GOODS_CARD_TRAFFIC_METRIC_DEFINITIONS,
 } from './dashboard-metric-definitions';
@@ -25,14 +25,14 @@ export function buildDashboardGoodsCardTrafficColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardTrafficTableClassNames;
-}): ColumnsType<DashboardGoodsCardTrafficTreeNode> {
+}): TableColumnsType<DashboardGoodsCardTrafficTreeNode> {
   const firstHeaderCellProps = () =>
     buildTrafficHeaderCellProps(classNames, classNames.trafficFirstHeaderCell);
   const metricHeaderCellProps = () =>
     buildTrafficHeaderCellProps(classNames, classNames.trafficMetricHeaderCell);
   const bodyCellProps = () => buildTrafficBodyCellProps(classNames);
 
-  const sourceColumn: ColumnsType<DashboardGoodsCardTrafficTreeNode>[number] = {
+  const sourceColumn: TableColumnsType<DashboardGoodsCardTrafficTreeNode>[number] = {
     title: '来源渠道',
     key: 'sourceName',
     width: isMobile ? 230 : 280,
@@ -49,7 +49,7 @@ export function buildDashboardGoodsCardTrafficColumns({
     render: (_value, row) => renderGoodsCardTrafficSourceCell({ row, classNames }),
   };
 
-  const metricColumns: ColumnsType<DashboardGoodsCardTrafficTreeNode> = GOODS_CARD_TRAFFIC_METRIC_DEFINITIONS.map(
+  const metricColumns: TableColumnsType<DashboardGoodsCardTrafficTreeNode> = GOODS_CARD_TRAFFIC_METRIC_DEFINITIONS.map(
     (item) => ({
       title: item.title,
       key: item.key,

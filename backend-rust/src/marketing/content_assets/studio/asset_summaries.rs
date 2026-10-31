@@ -134,6 +134,7 @@ pub(super) async fn segment_pool(
     pool: &PgPool,
     query: SegmentPoolQuery,
     enterprise_tag: Option<&str>,
+    cloud_enabled: bool,
 ) -> StudioResult<SegmentPoolResponse> {
     let preset_key = query
         .preset_key
@@ -151,6 +152,7 @@ pub(super) async fn segment_pool(
          JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id \
          WHERE s.status = 'confirmed' AND s.preset_key = $1 AND s.preset_version = $2 \
            AND a.is_deleted = FALSE \
+           AND ($4::BOOLEAN OR a.bucket <> 'cloud_video') \
            AND LOWER(TRIM(a.raw_sha256)) = s.source_content_hash \
            AND ($3::TEXT IS NULL OR $3 = ANY(a.tags)) \
          GROUP BY GROUPING SETS ((NULLIF(BTRIM(s.product_name), ''), label.label_key), (NULLIF(BTRIM(s.product_name), ''))) \
@@ -159,6 +161,7 @@ pub(super) async fn segment_pool(
     .bind(&preset_key)
     .bind(preset_version)
     .bind(enterprise_tag)
+    .bind(cloud_enabled)
     .fetch_all(pool)
     .await
     .map_err(db_error)?;

@@ -23,7 +23,7 @@ describe('resolveAnnotationPills', () => {
 
   it('shows running AI, pending suggestions and confirmed counts together', () => {
     expect(resolveAnnotationPills(summary({ suggestionActive: true, suggestedCount: 2, confirmedCount: 3 }), true)).toEqual([
-      { label: 'AI 分析中', state: 'active' },
+      { label: 'AI 切段中', state: 'active' },
       { label: '待确认 2', state: 'active' },
       { label: '已确认 3 段', state: 'ready' },
     ]);

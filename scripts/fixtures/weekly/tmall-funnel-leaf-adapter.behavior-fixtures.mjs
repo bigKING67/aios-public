@@ -214,6 +214,7 @@ function assertChannelSectionIsRenderOnly() {
   for (const identifierName of [
     'buildTmallFunnelChannelLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'QuantAttributionRow',
     'isMobile',
     'channelSection',

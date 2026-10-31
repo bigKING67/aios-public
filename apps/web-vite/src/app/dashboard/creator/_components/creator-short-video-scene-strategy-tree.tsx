@@ -1,7 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, type TableColumnsType } from '@lobehub/ui';
 import { useEffect, useMemo, useRef, useState, type Key } from 'react';
 import type { DateRange } from './creator-date-range';
 import { creatorDetailTableComponents } from './creator-detail-table-components';
@@ -87,7 +86,7 @@ function renderShare(value: number, total: number) {
   );
 }
 
-function buildSceneStrategyColumns(totalQianchuanGsv: number): ColumnsType<SceneStrategyTreeRow> {
+function buildSceneStrategyColumns(totalQianchuanGsv: number): TableColumnsType<SceneStrategyTreeRow> {
   return [
     {
       title: '场景',
@@ -245,7 +244,7 @@ export function CreatorShortVideoSceneStrategyTree({
         locale={{
           emptyText: (
             <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
+             
               description="当前区间暂无可聚合的场景策略数据"
             />
           ),

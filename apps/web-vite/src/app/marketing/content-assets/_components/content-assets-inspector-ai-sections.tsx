@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Button, message } from 'antd';
+import { Button, toast } from '@lobehub/ui';
 import {
   type ContentAssetAnalysisDiagnosis,
   type ContentAssetCurrentAiAnalysis,
@@ -1200,11 +1200,11 @@ function analysisProfileLabel(profile: string): string {
 function copyText(value: string, successMessage: string) {
   if (!value) return;
   if (!navigator.clipboard?.writeText) {
-    message.error('浏览器不支持复制，请手动选择');
+    toast.error('浏览器不支持复制，请手动选择');
     return;
   }
   void navigator.clipboard.writeText(value).then(
-    () => message.success(successMessage),
-    () => message.error('复制失败，请手动选择')
+    () => toast.success(successMessage),
+    () => toast.error('复制失败，请手动选择')
   );
 }

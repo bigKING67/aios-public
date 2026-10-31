@@ -1,12 +1,5 @@
-import { Button, Tooltip } from 'antd';
-import {
-  AppstoreOutlined,
-  FileImageOutlined,
-  FileTextOutlined,
-  ReloadOutlined,
-  RobotOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
+import { Bot, FileImage, FileText, LayoutGrid, RotateCw, Video } from 'lucide-react';
+import { Button, Tooltip } from '@lobehub/ui';
 import { formatBytes, formatCompactNumber } from '../_lib/content-assets-formatters';
 import type { ContentAssetSummary } from '../_lib/content-assets-types';
 import styles from './content-assets-console.module.css';
@@ -25,31 +18,31 @@ export function ContentAssetsLibraryHeader({
       label: '视频素材',
       value: formatCompactNumber(summary.totalAssets),
       helper: '全部素材',
-      icon: <VideoCameraOutlined />,
+      icon: <Video size={14} strokeWidth={1.8} aria-hidden="true" />,
     },
     {
       label: '已就绪',
       value: formatCompactNumber(summary.readyAssets),
       helper: '封面 / 预览已生成',
-      icon: <AppstoreOutlined />,
+      icon: <LayoutGrid size={14} strokeWidth={1.8} aria-hidden="true" />,
     },
     {
       label: '待补源',
       value: formatCompactNumber(summary.externalOnlyAssets),
       helper: '外链素材待入库',
-      icon: <FileImageOutlined />,
+      icon: <FileImage size={14} strokeWidth={1.8} aria-hidden="true" />,
     },
     {
       label: '待生成',
       value: formatCompactNumber(summary.pendingAssets),
       helper: '原片已入库',
-      icon: <FileTextOutlined />,
+      icon: <FileText size={14} strokeWidth={1.8} aria-hidden="true" />,
     },
     {
       label: '原片体积',
       value: formatBytes(summary.totalRawSizeBytes),
       helper: 'TOS 原片合计',
-      icon: <RobotOutlined />,
+      icon: <Bot size={14} strokeWidth={1.8} aria-hidden="true" />,
     },
   ];
 
@@ -60,7 +53,7 @@ export function ContentAssetsLibraryHeader({
           <div className={styles.libraryTitle}>
             <h1>素材库</h1>
             <Tooltip title="刷新素材库">
-              <Button className={styles.viewButton} icon={<ReloadOutlined />} loading={isFetching} onClick={onRefresh} />
+              <Button className={styles.viewButton} aria-label="刷新素材库" icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />} loading={isFetching} onClick={onRefresh} />
             </Tooltip>
           </div>
           <p>集中管理视频原片、预览视频、封面、平台视频 ID、广告素材 ID 与投放表现回流。</p>

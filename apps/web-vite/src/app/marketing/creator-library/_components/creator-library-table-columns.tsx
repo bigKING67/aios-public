@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 import tableStyles from '../creator-library-table.module.css';
 import {
   formatCurrencyText,

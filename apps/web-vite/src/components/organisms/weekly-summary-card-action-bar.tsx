@@ -1,13 +1,9 @@
 'use client';
 
-import { Button, Space, Tag } from 'antd';
-import {
-  EditOutlined,
-  RobotOutlined,
-  SettingOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
+import { Button, Tag } from '@lobehub/ui';
+import { Pencil, Settings } from 'lucide-react';
 import dayjs from 'dayjs';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import styles from './weekly-summary-card-modern.module.css';
 
 export interface WeeklySummaryCardActionBarProps {
@@ -49,7 +45,10 @@ export function WeeklySummaryCardActionBar({
 }: WeeklySummaryCardActionBarProps) {
   return (
     <div className={`weekly-summary-extra ${styles.actionBar}`}>
-      <Tag color={statusTagColor} className={styles.statusTag}>
+      <Tag
+        color={statusTagColor === 'default' ? undefined : statusTagColor}
+        className={styles.statusTag}
+      >
         {statusTagLabel}
       </Tag>
       {generatedAt && (
@@ -65,11 +64,10 @@ export function WeeklySummaryCardActionBar({
       {updatedBy && (
         <span className={styles.generatedAt}>编辑人: {updatedBy}</span>
       )}
-      <Space size={8} wrap>
+      <div className={styles.actionButtons}>
         {canConfigureSummary && (
           <Button
-            type="default"
-            icon={<SettingOutlined />}
+            icon={<Settings size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={onOpenConfig}
             disabled={isBusy}
           >
@@ -78,24 +76,21 @@ export function WeeklySummaryCardActionBar({
         )}
         {canEditSummary && (
           <Button
-            type="default"
-            icon={<EditOutlined />}
+            icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={onOpenEdit}
             disabled={!hasData || isBusy}
           >
             编辑总结
           </Button>
         )}
-        <Button
-          type={hasData ? 'default' : 'primary'}
-          icon={isGenerating ? <SyncOutlined spin /> : <RobotOutlined />}
+        <AiActionButton
           loading={isGenerating}
           onClick={() => onGenerateSummary(hasData)}
           disabled={isBusy || !canGenerateSummary}
         >
           {isGenerating ? '生成中...' : hasData ? '重新生成' : `生成${summaryLabel}`}
-        </Button>
-      </Space>
+        </AiActionButton>
+      </div>
     </div>
   );
 }

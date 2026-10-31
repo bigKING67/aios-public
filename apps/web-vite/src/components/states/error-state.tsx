@@ -1,7 +1,7 @@
 'use client';
 
 import type { HTMLAttributes, ReactNode } from 'react';
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 
 type ErrorStateStatus = 'error' | '404' | '500' | '503';
 type ErrorStateTone = 'danger' | 'info' | 'warning';

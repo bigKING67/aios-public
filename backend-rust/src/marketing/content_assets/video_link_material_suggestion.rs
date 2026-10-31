@@ -5,14 +5,17 @@ use tracing::error;
 
 use crate::error::{AppError, AppResult};
 
-use super::types::ContentAssetVideoLinkMaterialSuggestionResponse;
+use super::{
+    relation_guard::{relation_exists, DOUYIN_SHORTVIDEO_DETAIL},
+    types::ContentAssetVideoLinkMaterialSuggestionResponse,
+};
 
 pub(super) async fn query_qianchuan_material_suggestion_for_video(
     pool: &PgPool,
     external_video_id: &str,
 ) -> AppResult<Option<ContentAssetVideoLinkMaterialSuggestionResponse>> {
     let external_video_id = external_video_id.trim();
-    if external_video_id.is_empty() {
+    if external_video_id.is_empty() || !relation_exists(pool, DOUYIN_SHORTVIDEO_DETAIL).await? {
         return Ok(None);
     }
 

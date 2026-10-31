@@ -1,20 +1,29 @@
 # syntax=docker/dockerfile:1.7
 
+FROM node:24.22.1-alpine AS dependency-manifests
+WORKDIR /input
+COPY scripts/build/prepare-docker-dependencies.mjs /prepare-docker-dependencies.mjs
+COPY package.json package-lock.json ./
+RUN node /prepare-docker-dependencies.mjs /input /normalized
+
 FROM node:24.22.1-alpine AS deps
 WORKDIR /app
-COPY package*.json ./
+# Release-only version bumps must not reinstall unchanged dependencies.
+COPY --from=dependency-manifests /normalized/ ./
 RUN --mount=type=cache,target=/root/.npm npm ci --no-audit
 
-FROM node:24.22.1-alpine AS builder
+FROM deps AS builder
 WORKDIR /app
 
 ARG VITE_API_GATEWAY_PREFIX=/v1
 ARG VITE_FORCE_FRESH_DATA=0
+ARG VITE_AIOS_MODULE_PROFILE=full
 
 ENV VITE_API_GATEWAY_PREFIX=${VITE_API_GATEWAY_PREFIX}
 ENV VITE_FORCE_FRESH_DATA=${VITE_FORCE_FRESH_DATA}
+ENV VITE_AIOS_MODULE_PROFILE=${VITE_AIOS_MODULE_PROFILE}
 
-COPY --from=deps /app/node_modules ./node_modules
+# Restore the real package/lock versions before running application build scripts.
 COPY . .
 RUN npm run build:vite
 

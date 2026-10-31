@@ -16,7 +16,6 @@ import type {
 } from './dashboard-date-bounds-state';
 
 export type DashboardPageShellProps = {
-  messageContextHolder: ReactNode;
   activeTab: PlatformTabKey;
   allowedTabs: readonly PlatformTabKey[];
   visibleTabs: readonly { key: PlatformTabKey; label: string }[];
@@ -47,7 +46,6 @@ export type DashboardPageShellProps = {
 };
 
 export function DashboardPageShell({
-  messageContextHolder,
   activeTab,
   allowedTabs,
   visibleTabs,
@@ -80,7 +78,6 @@ export function DashboardPageShell({
     <div className={styles.pageRoot}>
       <div className={styles.backdropGlow} aria-hidden />
       <div className={styles.surface}>
-        {messageContextHolder}
         <DashboardFilterHeader
           activeTab={activeTab}
           allowedTabs={allowedTabs}

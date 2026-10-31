@@ -92,6 +92,7 @@ function fixtureSources() {
     'app-fixture.js': 'export const app = "x".repeat(120);\nconsole.log(app);\n',
     'page-fixture.css': '.fixture { color: #123456; padding: 12px; margin: 8px; }\n',
     'vendor-echarts-fixture.js': 'export const chart = "echarts".repeat(80);\nconsole.log(chart);\n',
+    'vendor-lobe-ui-fixture.css': `${Array.from({ length: 40 }, (_, i) => `.lobe-${i} { color: #${String(i).padStart(6, '0')}; }`).join('\n')}\n`,
   };
 }
 
@@ -99,17 +100,22 @@ function fixtureMetrics(sources = fixtureSources()) {
   const jsEntries = Object.entries(sources).filter(([name]) => name.endsWith('.js'));
   const cssEntries = Object.entries(sources).filter(([name]) => name.endsWith('.css'));
   const vendorEntries = jsEntries.filter(([name]) => name.startsWith('vendor-echarts-'));
+  const lobeCssEntries = cssEntries.filter(([name]) => name.startsWith('vendor-lobe-ui-'));
   const jsSizes = jsEntries.map(([, source]) => gzipSize(source));
   const cssSizes = cssEntries.map(([, source]) => gzipSize(source));
+  const appCssSizes = cssEntries
+    .filter(([name]) => !name.startsWith('vendor-lobe-ui-'))
+    .map(([, source]) => gzipSize(source));
 
   return {
     // DEFAULT_INDEX_HTML references app-fixture.js twice; it is counted once.
     initialJsGzipBytes: gzipSize(sources['app-fixture.js'] ?? ''),
-    maxCssAssetGzipBytes: Math.max(...cssSizes),
+    maxCssAssetGzipBytes: Math.max(0, ...appCssSizes),
     maxJsChunkGzipBytes: Math.max(...jsSizes),
     totalCssGzipBytes: cssSizes.reduce((total, size) => total + size, 0),
     totalJsGzipBytes: jsSizes.reduce((total, size) => total + size, 0),
     vendorEchartsGzipBytes: vendorEntries.reduce((total, [, source]) => total + gzipSize(source), 0),
+    vendorLobeUiCssGzipBytes: lobeCssEntries.reduce((total, [, source]) => total + gzipSize(source), 0),
   };
 }
 
@@ -424,14 +430,56 @@ export function runFrontendBundleBudgetBehaviorFixtures(assertions) {
 
   withFixture(
     {
+      budgets: passingBudgets(),
+      sources: {
+        'app-fixture.js': 'export const chart = "echarts".repeat(80);\nconsole.log(chart);\n',
+        'page-fixture.css': fixtureSources()['page-fixture.css'],
+      },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'ECharts merged outside vendor-echarts should fail');
+      assertIncludes(result.stderr, 'codeSplitting groups', 'missing vendor output should reference the current Vite chunk architecture');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: passingBudgets(),
       sources: {
         'app-fixture.js': fixtureSources()['app-fixture.js'],
         'page-fixture.css': fixtureSources()['page-fixture.css'],
       },
     },
     (result) => {
-      assertEqual(result.status, 1, 'missing vendor-echarts chunk should fail');
-      assertIncludes(result.stderr, 'codeSplitting groups', 'missing vendor output should reference the current Vite chunk architecture');
+      assertEqual(result.status, 0, 'a build without ECharts (ai_studio profile) should pass without vendor-echarts');
+      assertIncludes(result.stdout, 'no ECharts in this build', 'a chart-free build should say why vendor-echarts is empty');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: passingBudgets(),
+    },
+    (result) => {
+      const metrics = fixtureMetrics();
+      assertEqual(
+        metrics.vendorLobeUiCssGzipBytes > metrics.maxCssAssetGzipBytes,
+        true,
+        'fixture lobe-ui stylesheet must outweigh the app CSS asset',
+      );
+      assertEqual(result.status, 0, 'the lobe-ui stylesheet should be measured by its own budget, not the app CSS cap');
+      assertIncludes(result.stdout, 'vendor-lobe-ui CSS gzip', 'output should report the lobe-ui stylesheet budget');
+      assertIncludes(result.stdout, 'page-fixture.css', 'the largest CSS asset should be the app stylesheet');
+    },
+  );
+
+  withFixture(
+    {
+      budgets: { ...passingBudgets(), vendorLobeUiCssGzipBytes: 1 },
+    },
+    (result) => {
+      assertEqual(result.status, 1, 'an over-budget lobe-ui stylesheet should fail');
+      assertIncludes(result.stderr, 'vendor-lobe-ui-fixture.css', 'lobe-ui failure should name the stylesheet');
     },
   );
 
@@ -505,5 +553,5 @@ export function runFrontendBundleBudgetBehaviorFixtures(assertions) {
     },
   );
 
-  return 'missing dist/budget/target/vendor, manifest freshness, strict boundary, output detail, passing baseline, over-budget, hard-only enforcement and initial JS behavior checks passed.';
+  return 'missing dist/budget/target/vendor, lobe-ui stylesheet, manifest freshness, strict boundary, output detail, passing baseline, over-budget, hard-only enforcement and initial JS behavior checks passed.';
 }

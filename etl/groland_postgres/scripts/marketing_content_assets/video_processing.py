@@ -49,6 +49,17 @@ def process_video(input_path: Path, output_dir: Path, stem: str) -> ProcessedVid
     "+faststart",
     str(preview_path),
   ])
+  extract_cover(input_path, cover_path)
+  return ProcessedVideo(
+    preview_path=preview_path,
+    cover_path=cover_path,
+    probe=probe_video(input_path),
+  )
+
+
+def extract_cover(input_path: Path, cover_path: Path) -> None:
+  """The original's cover: the frame at 1 s, at most 960 px wide, as WebP."""
+  ensure_ffmpeg_available()
   _run([
     "ffmpeg",
     "-y",
@@ -64,11 +75,6 @@ def process_video(input_path: Path, output_dir: Path, stem: str) -> ProcessedVid
     "72",
     str(cover_path),
   ])
-  return ProcessedVideo(
-    preview_path=preview_path,
-    cover_path=cover_path,
-    probe=probe_video(input_path),
-  )
 
 
 def build_analysis_proxy_video(

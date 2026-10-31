@@ -8,12 +8,12 @@
   text-align: center;
 }
 
-.shortVideoTextHeaderCell :global(.ant-table-column-sorters) {
+.shortVideoTextHeaderCell :global(.lobe-table-column-sorters) {
   justify-content: center;
   gap: 6px;
 }
 
-.shortVideoTextHeaderCell :global(.ant-table-column-title) {
+.shortVideoTextHeaderCell :global(.lobe-table-column-title) {
   text-align: center;
 }
 

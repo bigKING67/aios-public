@@ -1,4 +1,4 @@
-import { Alert, Empty } from 'antd';
+import { Alert, Empty } from '@lobehub/ui';
 import { LineChart } from '@/components/organisms/line-chart';
 import type { LineChartData } from '@/components/organisms/line-chart';
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
@@ -77,12 +77,9 @@ export function MinuteTrendPanel({
         </div>
       ) : (
         <Empty
-          className={
-            hasOrdersWithoutMinuteMetrics
-              ? `${styles.emptyBlock} ${styles.emptyBlockWarning}`
-              : styles.emptyBlock
-          }
+          className={styles.emptyBlock}
           description={resolveMinuteEmptyDescription(liveOrderCount)}
+          descriptionProps={hasOrdersWithoutMinuteMetrics ? { className: styles.emptyBlockWarning } : undefined}
         />
       )}
     </section>

@@ -11,9 +11,22 @@ use super::{
     types::ContentAssetItem,
 };
 
+/// A restricting role: its accounts (HR) may open only 团队产出, which has its own permission check.
+pub(crate) const TEAM_OUTPUT_ONLY_ROLE: &str = "team_output_only";
+
+/// True for an account limited to 团队产出; admins and the super admin are never limited.
+pub(crate) fn is_team_output_only(current_user: &CurrentUser) -> bool {
+    current_user.has_role(TEAM_OUTPUT_ONLY_ROLE) && !current_user.is_admin()
+}
+
+/// Every content-asset and AI 创作中心 endpoint passes here first: any signed-in account except one
+/// limited to 团队产出.
 pub(super) fn ensure_content_asset_read_permission(current_user: &CurrentUser) -> AppResult<()> {
     if current_user.user_id.trim().is_empty() {
         return Err(AppError::Unauthorized);
+    }
+    if is_team_output_only(current_user) {
+        return Err(AppError::Forbidden);
     }
     Ok(())
 }
@@ -143,6 +156,31 @@ mod tests {
                 .map(|value| (*value).to_string())
                 .collect(),
         }
+    }
+
+    #[test]
+    fn a_team_output_only_account_cannot_read_content_assets_unless_admin() {
+        use super::{ensure_content_asset_read_permission, is_team_output_only};
+        use crate::error::AppError;
+        let hr = user(
+            "hr",
+            &["team_output_viewer", "team_output_only"],
+            &["marketing:team_output:read"],
+        );
+        assert!(is_team_output_only(&hr));
+        assert!(matches!(
+            ensure_content_asset_read_permission(&hr),
+            Err(AppError::Forbidden)
+        ));
+        let admin = user("a", &["admin", "team_output_only"], &[]);
+        assert!(ensure_content_asset_read_permission(&admin).is_ok());
+        assert!(ensure_content_asset_read_permission(&user(
+            "boss",
+            &["content_ops", "team_output_viewer"],
+            &[]
+        ))
+        .is_ok());
+        assert!(ensure_content_asset_read_permission(&user("plain", &[], &[])).is_ok());
     }
 
     #[test]

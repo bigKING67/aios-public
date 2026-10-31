@@ -1,12 +1,12 @@
 import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from 'react';
-import { Table } from 'antd';
-import type { TableProps } from 'antd';
+import { Table, type TableProps } from '@lobehub/ui';
 import { mergeWeeklyClassNames } from './weekly-class-names';
 import styles from './weekly-table.module.css';
 
 type WeeklyDataTableVariant = 'default' | 'quant';
 
-export type WeeklyDataTableProps<RecordType extends object> = TableProps<RecordType> & {
+// `variant` picks the weekly cell styling; lobe Table's own visual `variant` keeps its default (borderless).
+export type WeeklyDataTableProps<RecordType extends object> = Omit<TableProps<RecordType>, 'variant'> & {
   variant?: WeeklyDataTableVariant;
 };
 
@@ -17,8 +17,8 @@ function resolveWeeklyTableCellClassName(
   fixedLeftClassName: string,
   fixedLeftLastClassName: string
 ) {
-  const isFixedLeft = className?.includes('ant-table-cell-fix-left');
-  const isFixedLeftLast = className?.includes('ant-table-cell-fix-left-last');
+  const isFixedLeft = className?.includes('lobe-table-cell-fix-start');
+  const isFixedLeftLast = className?.includes('lobe-table-cell-fix-start-shadow');
 
   return mergeWeeklyClassNames(
     className,

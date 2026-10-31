@@ -88,7 +88,7 @@ describe("SampleInventoryWorkspace record actions", () => {
 
     expect(screen.getByText("已选择 1 条")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "🗑 批量删除入库记录" }));
-    const confirmation = await screen.findByRole("tooltip");
+    const confirmation = await screen.findByRole("dialog", { name: /入库记录/ });
     fireEvent.click(within(confirmation).getByRole("button", { name: "确认删除" }));
     expect(onBatchVoidInbounds).toHaveBeenCalledOnce();
   });

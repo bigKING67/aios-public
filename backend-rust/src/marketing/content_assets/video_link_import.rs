@@ -54,19 +54,19 @@ const DOUYIN_MANUAL_UPLOAD_FALLBACK_MESSAGES: [&str; 2] = [
     "当前抖音链接无法直接下载原视频，可能是作品访问受限或抖音接口风控。请上传本地视频文件，上传完成后系统会自动绑定该抖音视频 ID。",
 ];
 
-struct RemoteVideoDownload {
-    bytes: Vec<u8>,
-    size_bytes: i64,
-    sha256: String,
-    content_type: String,
+pub(super) struct RemoteVideoDownload {
+    pub(super) bytes: Vec<u8>,
+    pub(super) size_bytes: i64,
+    pub(super) sha256: String,
+    pub(super) content_type: String,
 }
 
-struct ResolvedVideoLinkImportSource {
+pub(super) struct ResolvedVideoLinkImportSource {
     source_type: VideoLinkSourceType,
     download_url: Url,
     download_headers: Vec<(String, String)>,
     content_type_hint: Option<String>,
-    default_title: Option<String>,
+    pub(super) default_title: Option<String>,
     file_name_prefix: String,
     source_label: &'static str,
 }
@@ -312,7 +312,7 @@ fn select_video_link_import_candidate(
     Ok(candidate)
 }
 
-async fn resolve_video_link_import_source(
+pub(super) async fn resolve_video_link_import_source(
     candidate: &VideoLinkPreviewCandidate,
 ) -> AppResult<ResolvedVideoLinkImportSource> {
     match candidate.source_type {
@@ -373,12 +373,12 @@ fn ensure_importable_qianchuan_video_url(url: &Url) -> AppResult<()> {
     }
 }
 
-async fn download_remote_video(
+pub(super) async fn download_remote_video(
     source: &ResolvedVideoLinkImportSource,
 ) -> AppResult<RemoteVideoDownload> {
     let client = Client::builder()
         .redirect(Policy::none())
-        .timeout(Duration::from_secs(VIDEO_LINK_IMPORT_TIMEOUT_SECONDS))
+        .read_timeout(Duration::from_secs(VIDEO_LINK_IMPORT_TIMEOUT_SECONDS))
         .build()
         .map_err(|_| AppError::Internal)?;
     let mut request = client.get(source.download_url.clone());
@@ -498,7 +498,7 @@ fn parse_content_length(value: Option<&reqwest::header::HeaderValue>) -> AppResu
         .map_err(|_| AppError::bad_request("千川视频文件大小响应头不合法"))
 }
 
-async fn upload_downloaded_video_to_tos(
+pub(super) async fn upload_downloaded_video_to_tos(
     http_client: &Client,
     upload: &PresignedUploadUrl,
     bytes: Vec<u8>,

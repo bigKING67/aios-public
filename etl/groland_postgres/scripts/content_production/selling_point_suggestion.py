@@ -4,11 +4,18 @@ A selling-point job runs only on an asset whose framework segments are confirmed
 marks selling-point spans inside its 混剪口播 segments, each with `continues_previous` (cannot be
 cut from the previous span of the same framework segment). 实拍、街采、机制、KOC are whole 类型 1
 units and are not split. Output stays a suggestion for human review.
+
+Two inputs: `video` sends the whole proxy with the prompt (PROMPT_VERSION); `text` sends only the
+transcript and the on-screen text of the 混剪口播 segments (TEXT_PROMPT_VERSION, about 1/7 of the
+cost; precheck in .trellis/tasks/10-26-selling-point-cost/research).
 Prototype and first draft: 框架识别测试/selling_point_draft.py (10 蜜粉 films, 2026-10-13).
 """
 import math
 
 PROMPT_VERSION = 'selling-point-v7'
+TEXT_PROMPT_VERSION = 'selling-point-text-v1'
+# The same text rules over every framework segment of a competitor film (scope='film').
+FILM_TEXT_PROMPT_VERSION = 'selling-point-text-film-v2'
 DIMENSION = 'selling_point'
 # The only framework label whose segments carry selling points (framework presets v1 and v2).
 POINT_FRAMEWORK_LABEL = 'mixed_voiceover'
@@ -57,8 +64,20 @@ def _transcript_hint(utterances):
               '转写可能跨越镜头或人物，不能仅因处在同一转写单元就合并不同人物或跨框架片段。')
 
 
-def build_prompt(frames, labels, utterances=None):
-    """`frames`: confirmed 混剪口播 segments [{start_ms, end_ms, label_name}] in time order."""
+# Who reads the spans: our remix (混剪口播 only, other segments are whole units) or a competitor
+# breakdown (every framework segment, since a 实拍 or 街采 segment states selling points too).
+SCOPE_INTRO = {
+    'voiceover': ('你在给美妆信息流视频标注卖点片段，用于按卖点替换画面的混剪。视频已经人工分好框架段，卖点只在混剪口播段里拆，'
+                  '下面只列出这些段（实拍、街采、机制等其他段整段使用，不在其中标卖点）：'),
+    'film': ('你在拆解一条竞品美妆信息流视频的卖点，帮业务看懂它在每一段说了哪些卖点。视频已经按框架分好段，'
+             '下面列出全部框架段，每一段（混剪口播、实拍、街采、机制等）都可能讲卖点：'),
+}
+SCOPE_TEXT = {'voiceover': '混剪口播段内', 'film': '全片'}
+
+
+def build_prompt(frames, labels, utterances=None, scope='voiceover'):
+    """`frames`: the segments to mark in, [{start_ms, end_ms, label_name}] in time order (confirmed
+    混剪口播 segments for the remix scope, every framework segment for `film`)."""
     points = '\n'.join(f"- {label['key']}（{label['name']}）：{label.get('definition', '')}" for label in labels)
     evidence = '\n'.join(f"- {label['key']}：{LABEL_EVIDENCE[label['key']]}" for label in labels
                          if label['key'] in LABEL_EVIDENCE)
@@ -66,7 +85,7 @@ def build_prompt(frames, labels, utterances=None):
         f"- 第 {index} 段 {f['start_ms'] / 1000:.3f}–{f['end_ms'] / 1000:.3f} 秒"
         f"（{_clock(f['start_ms'])}–{_clock(f['end_ms'])}）：{f['label_name']}"
         for index, f in enumerate(frames))
-    return f"""你在给美妆信息流视频标注卖点片段，用于按卖点替换画面的混剪。视频已经人工分好框架段，卖点只在混剪口播段里拆，下面只列出这些段（实拍、街采、机制等其他段整段使用，不在其中标卖点）：
+    return f"""{SCOPE_INTRO[scope]}
 {framework}
 
 卖点只能从下面这些里选：
@@ -86,6 +105,30 @@ def build_prompt(frames, labels, utterances=None):
 8. 时间用秒，最多保留三位小数。{_transcript_hint(utterances)}"""
 
 
+TEXT_NOTE = ('\n\n本次没有视频画面，只有同一原片{where}的口播转写（本地语音识别，可能有误识别或省略）和屏幕文字。'
+             '依据口播和屏幕文字判断；只能靠画面演示、口播和屏幕文字都没有说明的功效，以及口播和屏幕文字都无法核对身份的背书，不标。'
+             '切点采用完整口播单元首尾的时间，保留毫秒精度。continues_previous 无法从画面核对时，同一句或相邻句连续讲同一件事填 true，否则填 false。')
+SCREEN_NOTE = ('\n\n屏幕文字来自本地文字识别，已去掉水印和全片常驻字幕，可能有错字。屏幕上写明的人物身份（例如“某某推荐”“演员某某同款”“@账号”）'
+               '可作为背书的身份依据；屏幕文字里的功效宣称与口播一样可作依据，但字幕只是重复口播时不重复计。')
+
+
+def utterances_inside(utterances, frames):
+    """Transcript units that lie within a 混剪口播 segment (500 ms tolerance)."""
+    return [u for u in utterances or []
+            if any(f['start_ms'] - CLAMP_TOLERANCE_MS <= u[0] and u[1] <= f['end_ms'] + CLAMP_TOLERANCE_MS for f in frames)]
+
+
+def build_text_prompt(frames, labels, utterances, screen_lines, scope='voiceover'):
+    """The `text` input: same rules as build_prompt, the transcript and on-screen text of `frames` instead of video."""
+    speech = '\n'.join(f'[{a / 1000:.3f}–{b / 1000:.3f} 秒] {text}' for a, b, text in utterances_inside(utterances, frames))
+    where = SCOPE_TEXT[scope]
+    minimum = ('\n每个卖点片段至少 1.000 秒。相邻转写单元可能是被 ASR 拆开的同一句；'
+               '按完整口播句的已有首尾时间标注，必要时纳入同一句的前后文，'
+               '不要把不足 1 秒的半句单独输出，不凭空延伸时间或补写原句。') if scope == 'film' else ''
+    return (build_prompt(frames, labels, None, scope) + TEXT_NOTE.format(where=where) + minimum + f'\n\n{where}的口播转写：\n'
+            + (speech or '（无口播）') + SCREEN_NOTE + f'\n\n{where}的屏幕文字：\n' + ('\n'.join(screen_lines) or '（无）'))
+
+
 def response_schema(label_keys):
     return {
         'type': 'object', 'additionalProperties': False, 'required': ['segments'],
@@ -103,11 +146,13 @@ def response_schema(label_keys):
     }
 
 
-def _check_retained_continuity(items, retained, frame_count):
-    """A filtered span must not detach its successor or truncate its predecessor.
+def _broken_chains(items, retained, frame_count):
+    """Positions of retained spans whose continuous chain lost a member.
 
-    Independent bad spans may still be dropped. A partially retained continuous
-    chain makes the response invalid; do not invent a replacement link or cut.
+    A filtered span must not detach its successor or truncate its predecessor, and no replacement
+    link or cut is invented: every retained member of such a chain is dropped with it (before 2026-10-26
+    the whole response was rejected and the billed job failed). A frame whose linked span cannot be
+    placed in time drops all its retained spans.
     """
     ordered, unplaced_frames, linked_frames = [], set(), set()
     for position, item in enumerate(items):
@@ -127,25 +172,29 @@ def _check_retained_continuity(items, retained, frame_count):
             continue
         ordered.append((index, start, end, position, item))
     ordered.sort(key=lambda span: span[:4])
-    previous = None
+    chains, chain, previous_index = [], [], None
     for index, _, _, position, item in ordered:
-        if index in unplaced_frames & linked_frames and position in retained:
-            raise ValueError('continuous selling-point predecessor cannot be located')
-        if item.get('continues_previous'):
-            if previous and previous[0] == index and ((position in retained) != (previous[1] in retained)):
-                raise ValueError('continuous selling-point chain lost a filtered span')
-        previous = (index, position)
+        if not (item.get('continues_previous') and previous_index == index):
+            chain = []
+            chains.append((index, chain))
+        chain.append(position)
+        previous_index = index
+    drop = set()
+    for index, members in chains:
+        if index in unplaced_frames & linked_frames or (len(members) > 1 and not set(members) <= retained):
+            drop.update(position for position in members if position in retained)
+    return drop
 
 
 def postprocess(payload, frames, label_keys):
     """Clamp spans into their declared framework segment, drop unknown labels, short and
     overlapping spans, and force `continues_previous=False` on the first span of a segment.
-    Reject partially filtered continuous chains. Returns (segments, stats) in the
+    Drop every span of a partially filtered continuous chain. Returns (segments, stats) in the
     worker's segment shape plus framework and quote fields."""
     items = payload.get('segments') if isinstance(payload, dict) else None
     if not isinstance(items, list):
         raise ValueError('segments must be a list')
-    dropped = {'unknown_label': 0, 'bad_framework': 0, 'too_short': 0, 'overlap': 0}
+    dropped = {'unknown_label': 0, 'bad_framework': 0, 'too_short': 0, 'overlap': 0, 'broken_chain': 0}
     spans = []
     for position, item in enumerate(items):
         # Accept old single-label fixtures/replays; v6 live schema requires label_keys.
@@ -175,19 +224,26 @@ def postprocess(payload, frames, label_keys):
             continue
         spans.append((start, end, index, {**item, 'label_keys': sorted(keys)}, position))
     spans.sort(key=lambda span: (span[0], span[1]))
-    kept, retained = [], set()
+    kept, retained, kept_positions = [], set(), []
     for start, end, index, item, position in spans:
         if kept and start < kept[-1]['end_ms']:
             dropped['overlap'] += 1
             continue
         first = not kept or kept[-1]['framework_index'] != index
         retained.add(position)
+        kept_positions.append(position)
         kept.append({'start_ms': start, 'end_ms': end, 'label_key': item['label_keys'][0],
                      'label_keys': item['label_keys'], 'framework_index': index,
                      'framework_segment_id': frames[index]['segment_id'],
                      'continues_previous': bool(item.get('continues_previous')) and not first,
                      'confidence': None, 'reason': str(item.get('reason') or '')[:500],
                      'quote': str(item.get('quote') or '')[:500]})
-    _check_retained_continuity(items, retained, len(frames))
+    broken = _broken_chains(items, retained, len(frames))
+    if broken:
+        kept = [segment for segment, position in zip(kept, kept_positions) if position not in broken]
+        dropped['broken_chain'] = len(broken)
+        for k, segment in enumerate(kept):
+            if k == 0 or kept[k - 1]['framework_index'] != segment['framework_index']:
+                segment['continues_previous'] = False
     return kept, {'received': len(items), 'kept': len(kept), 'dropped': dropped,
                   'continuousCount': sum(1 for segment in kept if segment['continues_previous'])}

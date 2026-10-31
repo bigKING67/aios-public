@@ -11,6 +11,8 @@ use crate::state::AppState;
 
 mod domain;
 mod handlers;
+#[cfg(test)]
+mod http_route_tests;
 mod intake_guard;
 #[cfg(test)]
 mod postgres_tests;
@@ -22,12 +24,7 @@ mod types;
 const PUBLIC_SUBMISSION_BODY_LIMIT_BYTES: usize = 128 * 1024;
 
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new()
-        .route(
-            "/public/submissions",
-            post(handlers::create_public_submission)
-                .layer(DefaultBodyLimit::max(PUBLIC_SUBMISSION_BODY_LIMIT_BYTES)),
-        )
+    public_router()
         .route("/submissions", get(handlers::list_submissions))
         .route(
             "/submissions/{submission_id}",
@@ -38,4 +35,13 @@ pub fn router() -> Router<Arc<AppState>> {
             put(handlers::save_review),
         )
         .route("/rubric", get(handlers::get_rubric))
+}
+
+/// Candidate intake only; never mounts answer reads, scoring or the internal rubric.
+pub fn public_router() -> Router<Arc<AppState>> {
+    Router::new().route(
+        "/public/submissions",
+        post(handlers::create_public_submission)
+            .layer(DefaultBodyLimit::max(PUBLIC_SUBMISSION_BODY_LIMIT_BYTES)),
+    )
 }

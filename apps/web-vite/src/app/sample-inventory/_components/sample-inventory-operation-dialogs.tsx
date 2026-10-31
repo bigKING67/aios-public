@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Table,
-  Upload,
-} from "antd";
-import type { UploadProps } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Alert, Button, InputNumber, Modal, Table, TextArea, Upload, type UploadProps } from "@lobehub/ui";
+import { UploadIcon } from 'lucide-react';
 
 import type {
   SampleInventoryInbound,
@@ -23,6 +13,13 @@ import {
   compareSampleInventoryText,
   compareSampleInventoryTimestamp,
 } from "../_lib/sample-inventory-table-sorters";
+import { FormField } from "@/components/molecules/form-field";
+import {
+  bindNumberField,
+  bindTextField,
+  type ControlledFormRules,
+  useControlledForm,
+} from "@/hooks/use-controlled-form";
 import { sampleInventoryTableComponents } from "./sample-inventory-table-cells";
 import styles from "../sample-inventory.module.css";
 
@@ -45,11 +42,13 @@ export function SettingsModal({
   onCancel,
   onSubmit,
 }: SettingsModalProps) {
-  const [form] = Form.useForm<SettingsFormValues>();
+  const form = useControlledForm<Partial<SettingsFormValues>>({
+    initialValues: settings ? { lowStockThreshold: settings.lowStockThreshold } : {},
+    rules: { lowStockThreshold: [{ required: true, message: "请输入主品低库存阈值" }] },
+    onFinish: (values) => onSubmit(values as SettingsFormValues),
+  });
   useEffect(() => {
-    if (open && settings) {
-      form.setFieldsValue({ lowStockThreshold: settings.lowStockThreshold });
-    }
+    if (open) form.resetFields();
   }, [form, open, settings]);
   return (
     <Modal
@@ -60,28 +59,11 @@ export function SettingsModal({
       confirmLoading={loading}
       onCancel={onCancel}
       onOk={() => form.submit()}
-      afterClose={() => form.resetFields()}
       destroyOnHidden
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onSubmit}
-        requiredMark="optional"
-      >
-        <Form.Item
-          label="主品低库存阈值"
-          name="lowStockThreshold"
-          extra="赠品不参与低库存预警。"
-          rules={[{ required: true }]}
-        >
-          <InputNumber
-            min={0}
-            precision={0}
-            className={styles.fullWidthControl}
-          />
-        </Form.Item>
-      </Form>
+      <FormField form={form} name="lowStockThreshold" label="主品低库存阈值" required extra="赠品不参与低库存预警。">
+        <InputNumber {...bindNumberField(form, "lowStockThreshold")} min={0} precision={0} className={styles.fullWidthControl} />
+      </FormField>
     </Modal>
   );
 }
@@ -120,7 +102,6 @@ export function SampleInventoryImportModal({
   const uploadProps: UploadProps = {
     accept: ".xlsx",
     maxCount: 1,
-    showUploadList: false,
     beforeUpload: (file) => {
       setFileName(file.name);
       onParse(file);
@@ -152,7 +133,7 @@ export function SampleInventoryImportModal({
       <div className={styles.importStack}>
         <div className={styles.importActions}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />} loading={parsing}>
+            <Button icon={<UploadIcon size={14} strokeWidth={1.8} aria-hidden="true" />} loading={parsing}>
               选择 XLSX 文件
             </Button>
           </Upload>
@@ -270,6 +251,10 @@ type VoidInboundModalProps = {
   onSubmit: (values: VoidInboundFormValues) => void;
 };
 
+const VOID_INBOUND_RULES: ControlledFormRules<Partial<VoidInboundFormValues>> = {
+  reason: [{ required: true, message: "请输入删除原因" }],
+};
+
 export function VoidInboundModal({
   open,
   item,
@@ -277,7 +262,14 @@ export function VoidInboundModal({
   onCancel,
   onSubmit,
 }: VoidInboundModalProps) {
-  const [form] = Form.useForm<VoidInboundFormValues>();
+  const form = useControlledForm<Partial<VoidInboundFormValues>>({
+    initialValues: {},
+    rules: VOID_INBOUND_RULES,
+    onFinish: (values) => onSubmit(values as VoidInboundFormValues),
+  });
+  useEffect(() => {
+    if (open) form.resetFields();
+  }, [form, open, item]);
   return (
     <Modal
       open={open}
@@ -288,7 +280,6 @@ export function VoidInboundModal({
       confirmLoading={loading}
       onCancel={onCancel}
       onOk={() => form.submit()}
-      afterClose={() => form.resetFields()}
       destroyOnHidden
     >
       {item && (
@@ -300,20 +291,9 @@ export function VoidInboundModal({
           description="记录会保留审计痕迹；若扣减后在手库存低于已预留库存，服务端会拒绝本次操作。"
         />
       )}
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onSubmit}
-        requiredMark="optional"
-      >
-        <Form.Item
-          label="删除原因"
-          name="reason"
-          rules={[{ required: true, message: "请输入删除原因" }]}
-        >
-          <Input.TextArea maxLength={500} rows={3} showCount />
-        </Form.Item>
-      </Form>
+      <FormField form={form} name="reason" label="删除原因" required>
+        <TextArea {...bindTextField(form, "reason")} maxLength={500} rows={3} showCount />
+      </FormField>
     </Modal>
   );
 }

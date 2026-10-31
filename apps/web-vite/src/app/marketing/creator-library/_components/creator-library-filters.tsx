@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
-import { Button, Form, Input, Select, Space } from 'antd';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { type FormEvent, useState } from 'react';
+import { Button, Input } from '@lobehub/ui';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { RotateCw, Search } from 'lucide-react';
 import sharedStyles from '../creator-library-shared.module.css';
 import styles from './creator-library-filters.module.css';
 import {
@@ -15,7 +16,6 @@ import {
   resolveCooperationStatusTone,
   resolvePlatformTone,
 } from '../_lib/creator-library-options';
-import { normalizeCreatorTagKey } from '../_lib/creator-library-tags';
 import type { CreatorLibraryFilterOptions, CreatorLibraryFilters } from '../_lib/creator-library-types';
 
 interface CreatorLibraryFiltersProps {
@@ -39,120 +39,116 @@ export function CreatorLibraryFilters({
   onSearch,
   onReset,
 }: CreatorLibraryFiltersProps) {
-  const [form] = Form.useForm<CreatorLibraryFilters>();
-  const selectedAnchorTags = (Form.useWatch('anchorTags', form) ?? []) as string[];
+  // Like the antd form it replaces: the draft starts from the filters at mount and 重置 returns to them.
+  const [initialFilters] = useState(filters);
+  const [draft, setDraft] = useState<CreatorLibraryFilters>(filters);
   const ownerFilterFieldName = filterOptions.bdUsers.length > 0 ? 'ownerUserId' : 'ownerName';
   const ownerFilterOptions = filterOptions.bdUsers.length
     ? buildBdUserSelectOptions(filterOptions.bdUsers)
     : buildPlainSelectOptions(filterOptions.owners);
+  const setField = <K extends keyof CreatorLibraryFilters>(name: K, value: CreatorLibraryFilters[K]) =>
+    setDraft((current) => ({ ...current, [name]: value }));
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSearch({
+      ...draft,
+      ownerName: draft.ownerUserId ? undefined : draft.ownerName,
+    });
+  };
 
   return (
     <section className={styles.filterPanel}>
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={filters}
-        onFinish={(values) =>
-          onSearch({
-            ...values,
-            ownerName: values.ownerUserId ? undefined : values.ownerName,
-          })
-        }
-      >
+      <form onSubmit={submit}>
         <div className={styles.filterHeader}>
-          <div className={styles.filterRail} aria-label="达人筛选项">
-            <Form.Item name="platform" className={styles.filterRailItem}>
-              <Select
-                allowClear
-                aria-label="平台"
-                placeholder="平台"
-                optionFilterProp="searchText"
-                filterOption={filterSelectOption}
-                options={buildPlatformSelectOptions(filterOptions.platforms)}
-              />
-            </Form.Item>
-            <Form.Item name="anchorTags" className={styles.filterRailItem}>
-              <Select<string[]>
-                allowClear
-                className={styles.anchorTagFilterSelect}
-                mode="multiple"
-                maxTagCount="responsive"
-                showSearch={false}
-                aria-label="主播标签"
-                placeholder="主播标签"
-                optionFilterProp="searchText"
-                filterOption={filterSelectOption}
-                popupClassName={sharedStyles.anchorTagDropdown}
-                optionRender={(option) =>
-                  renderAnchorTagOption(option.value, option.label, selectedAnchorTags)
-                }
-                options={buildPlainSelectOptions(filterOptions.anchorTags)}
-              />
-            </Form.Item>
-            <Form.Item name="fansBand" className={styles.filterRailItem}>
-              <Select allowClear aria-label="粉丝量级" placeholder="粉丝量级" options={FANS_BAND_OPTIONS} />
-            </Form.Item>
-            <Form.Item name="anchorLevel" className={styles.filterRailItem}>
-              <Select
-                allowClear
-                aria-label="达人等级"
-                placeholder="达人等级"
-                optionFilterProp="searchText"
-                filterOption={filterSelectOption}
-                options={buildCreatorAnchorLevelSelectOptions(filterOptions.anchorLevels)}
-              />
-            </Form.Item>
-            <Form.Item name="cooperationStatus" className={styles.filterRailItem}>
-              <Select
-                allowClear
-                aria-label="合作状态"
-                placeholder="合作状态"
-                optionFilterProp="searchText"
-                filterOption={filterSelectOption}
-                options={buildCooperationStatusSelectOptions(filterOptions.cooperationStatuses)}
-              />
-            </Form.Item>
-            <Form.Item name={ownerFilterFieldName} className={styles.filterRailItem}>
-              <Select
-                allowClear
-                showSearch
-                aria-label="归属BD"
-                placeholder="归属BD"
-                optionFilterProp="searchText"
-                filterOption={filterSelectOption}
-                options={ownerFilterOptions}
-              />
-            </Form.Item>
+          <div className={styles.filterRail} role="group" aria-label="达人筛选项">
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              label="平台"
+              placeholder="平台"
+              options={buildPlatformSelectOptions(filterOptions.platforms)}
+              value={draft.platform}
+              onChange={(value) => setField('platform', value)}
+            />
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              mode="multiple"
+              label="主播标签"
+              placeholder="主播标签"
+              options={buildPlainSelectOptions(filterOptions.anchorTags)}
+              value={draft.anchorTags ?? []}
+              onChange={(values) => setField('anchorTags', values)}
+            />
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              label="粉丝量级"
+              placeholder="粉丝量级"
+              options={FANS_BAND_OPTIONS}
+              value={draft.fansBand}
+              onChange={(value) => setField('fansBand', value)}
+            />
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              label="达人等级"
+              placeholder="达人等级"
+              options={buildCreatorAnchorLevelSelectOptions(filterOptions.anchorLevels)}
+              value={draft.anchorLevel}
+              onChange={(value) => setField('anchorLevel', value)}
+            />
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              label="合作状态"
+              placeholder="合作状态"
+              options={buildCooperationStatusSelectOptions(filterOptions.cooperationStatuses)}
+              value={draft.cooperationStatus}
+              onChange={(value) => setField('cooperationStatus', value)}
+            />
+            <LabeledSelect
+              wrapperClassName={styles.filterRailItem}
+              allowClear
+              showSearch
+              label="归属BD"
+              placeholder="归属BD"
+              options={ownerFilterOptions}
+              value={draft[ownerFilterFieldName]}
+              onChange={(value) => setField(ownerFilterFieldName, value)}
+            />
           </div>
         </div>
 
         <div className={styles.searchRow}>
-          <Form.Item name="keyword" className={styles.searchField}>
-            <Input
-              allowClear
+          <Input
+            className={styles.searchField}
+            allowClear
+            size="large"
+            aria-label="搜索达人"
+            placeholder="请输入达人昵称 / 达人ID"
+            value={draft.keyword ?? ''}
+            onChange={(event) => setField('keyword', event.target.value)}
+            onClear={() => setField('keyword', undefined)}
+          />
+          <div className={styles.searchAction}>
+            <Button type="primary" size="large" htmlType="submit" icon={<Search size={14} strokeWidth={1.8} aria-hidden="true" />}>
+              查询
+            </Button>
+            <Button
               size="large"
-              placeholder="请输入达人昵称 / 达人ID"
-            />
-          </Form.Item>
-          <Form.Item className={styles.searchAction}>
-            <Space wrap>
-              <Button type="primary" size="large" htmlType="submit" icon={<SearchOutlined />}>
-                查询
-              </Button>
-              <Button
-                size="large"
-                icon={<ReloadOutlined />}
-                onClick={() => {
-                  form.resetFields();
-                  onReset();
-                }}
-              >
-                重置
-              </Button>
-            </Space>
-          </Form.Item>
+              icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />}
+              onClick={() => {
+                setDraft(initialFilters);
+                onReset();
+              }}
+            >
+              重置
+            </Button>
+          </div>
         </div>
-      </Form>
+      </form>
     </section>
   );
 }
@@ -214,37 +210,6 @@ function buildBdUserSelectOptions(
         .join(' '),
     };
   });
-}
-
-function renderAnchorTagOption(
-  value: unknown,
-  label: ReactNode,
-  selectedValues: string[]
-) {
-  const optionValue = String(value ?? '');
-  const checked = selectedValues.some(
-    (selected) => normalizeCreatorTagKey(selected) === normalizeCreatorTagKey(optionValue)
-  );
-  return (
-    <span className={sharedStyles.checkboxOption}>
-      <span
-        className={`${sharedStyles.checkboxOptionBox} ${
-          checked ? sharedStyles.checkboxOptionBoxChecked : ''
-        }`}
-        aria-hidden
-      />
-      <span className={sharedStyles.checkboxOptionLabel}>{label}</span>
-    </span>
-  );
-}
-
-function filterSelectOption(
-  inputValue: string,
-  option?: { value?: string | number | null; searchText?: string }
-) {
-  const keyword = inputValue.toLowerCase();
-  const searchText = String(option?.searchText ?? option?.value ?? '').toLowerCase();
-  return searchText.includes(keyword);
 }
 
 function getPlatformToneClassName(value: string): string {

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import type { MessageInstance } from 'antd/es/message/interface';
+import { toast } from '@lobehub/ui';
 import { resolveClientErrorMessage } from '@/lib/client-error';
 import {
   downloadCreatorLibraryTemplate,
@@ -10,14 +10,12 @@ import { downloadBlobFile, downloadTextFile } from '../_lib/creator-library-csv'
 import type { CreatorLibraryQueryParams } from '../_lib/creator-library-types';
 
 interface UseCreatorLibraryFileActionsParams {
-  messageApi: MessageInstance;
   queryParams: CreatorLibraryQueryParams;
   onImportSuccess: (importedCount: number) => void;
   onImportClose: () => void;
 }
 
 export function useCreatorLibraryFileActions({
-  messageApi,
   queryParams,
   onImportClose,
   onImportSuccess,
@@ -25,11 +23,11 @@ export function useCreatorLibraryFileActions({
   const importMutation = useMutation({
     mutationFn: importCreators,
     onSuccess: (result) => {
-      messageApi.success(`导入完成：成功 ${result.imported} 行，异常 ${result.failed} 行`);
+      toast.success(`导入完成：成功 ${result.imported} 行，异常 ${result.failed} 行`);
       onImportClose();
       onImportSuccess(result.imported);
     },
-    onError: (err) => messageApi.error(resolveClientErrorMessage(err, '导入失败')),
+    onError: (err) => toast.error(resolveClientErrorMessage(err, '导入失败')),
   });
 
   const templateMutation = useMutation({
@@ -37,7 +35,7 @@ export function useCreatorLibraryFileActions({
     onSuccess: (blob) => {
       downloadBlobFile('influencer_library_template.xlsx', blob);
     },
-    onError: (err) => messageApi.error(resolveClientErrorMessage(err, '下载模板失败')),
+    onError: (err) => toast.error(resolveClientErrorMessage(err, '下载模板失败')),
   });
 
   const exportMutation = useMutation({
@@ -45,7 +43,7 @@ export function useCreatorLibraryFileActions({
     onSuccess: (csv) => {
       downloadTextFile('influencer_library_export.csv', csv);
     },
-    onError: (err) => messageApi.error(resolveClientErrorMessage(err, '导出失败')),
+    onError: (err) => toast.error(resolveClientErrorMessage(err, '导出失败')),
   });
 
   return {

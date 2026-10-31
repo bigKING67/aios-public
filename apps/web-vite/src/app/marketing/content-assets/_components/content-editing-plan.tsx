@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Button, Input, Tag } from 'antd';
+import { Alert, Button, Tag, TextArea } from '@lobehub/ui';
 import type { EditingDetail, EditingPlan, EditingRun } from '../_lib/content-editing-api';
 import styles from './content-editing.module.css';
 import { ContentProductionTimeline } from './content-production-timeline';
@@ -30,7 +30,7 @@ export function ContentEditingPlan({ detail, editable, frozen = false, busy, onE
     <div className={styles.heading}><h2>剪辑方案 <Tag>版本 {plan.revision}</Tag></h2>{!draft && !frozen && <Button disabled={!editable || busy} onClick={() => { setDraft({ run: detail.run, document: structuredClone(plan.document), originalLocks: [...plan.document.lockedClipIds] }); onEditing(true); }}>修改方案</Button>}</div>
     {picture && <Alert type="info" title={`保留主讲原片开头 ${detail.run.request.targetSeconds} 秒原声`} description="画面静音、总时长固定，暂不添加字幕。" />}
     {conflict && <Alert type="warning" title="任务已有更新，本地修改已保留" description="请放弃本地修改、重读方案后调整，避免覆盖新版本。" />}
-    {draft ? <label htmlFor="plan-summary">表达重点<Input.TextArea id="plan-summary" value={doc.summary} maxLength={2000} disabled={busy || conflict} onChange={(e) => change({ ...doc, summary: e.target.value })} /></label> : <p className={styles.summary}>{doc.summary}</p>}
+    {draft ? <label htmlFor="plan-summary">表达重点<TextArea id="plan-summary" value={doc.summary} maxLength={2000} disabled={busy || conflict} onChange={(e) => change({ ...doc, summary: e.target.value })} /></label> : <p className={styles.summary}>{doc.summary}</p>}
     {draft ? <ContentProductionTimeline pictureOnly={picture} draft={{ title: detail.run.request.title, aspect: detail.run.request.aspect, clips: doc.clips, rightsConfirmed: true }} disabled={busy || conflict} locks={doc.lockedClipIds}
       onToggleLock={(id, locked) => change({ ...doc, lockedClipIds: locked ? [...doc.lockedClipIds, id] : doc.lockedClipIds.filter((value) => value !== id) })}
       onChange={(next) => change({ ...doc, clips: next.clips, reasons: next.clips.map((clip) => doc.reasons[doc.clips.findIndex((old) => old.id === clip.id)]) })} />
@@ -40,7 +40,7 @@ export function ContentEditingPlan({ detail, editable, frozen = false, busy, onE
         <small className={styles.source} title={clip.assetId}>原片 {detail.run.request.assetIds.indexOf(clip.assetId) + 1} · {clip.assetId.slice(0, 8)}</small>
         <p className={styles.helper}>{clip.volume > 0 ? '保留原声' : '原声静音'}{clip.caption ? ` · 字幕：${clip.caption}` : ' · 无新增字幕'}</p>
       </article>)}</div>}
-    {draft ? <label htmlFor="plan-gaps">待补内容（每行一项，解决后移除）<Input.TextArea id="plan-gaps" value={doc.gaps.join('\n')} disabled={busy || conflict} onChange={(e) => change({ ...doc, gaps: e.target.value.split('\n') })} /></label> : !!doc.gaps.length && <Alert type="warning" title="需要处理的素材缺口" description={<ul>{doc.gaps.map((gap, i) => <li key={i}>{gap}</li>)}</ul>} />}
+    {draft ? <label htmlFor="plan-gaps">待补内容（每行一项，解决后移除）<TextArea id="plan-gaps" value={doc.gaps.join('\n')} disabled={busy || conflict} onChange={(e) => change({ ...doc, gaps: e.target.value.split('\n') })} /></label> : !!doc.gaps.length && <Alert type="warning" title="需要处理的素材缺口" description={<ul>{doc.gaps.map((gap, i) => <li key={i}>{gap}</li>)}</ul>} />}
     {draft && <div className={styles.actions}><Button type="primary" loading={busy} disabled={conflict || !editable} onClick={() => void (async () => { const next = { ...doc, gaps: doc.gaps.map((g) => g.trim()).filter(Boolean) }; if (await onSave(draft.run, next, draft.originalLocks.filter((id) => !next.lockedClipIds.includes(id)))) stop(); })()}>保存方案</Button><Button disabled={busy} onClick={stop}>放弃本地修改</Button><span className={styles.helper}>保存后开始制作；锁定项须先解锁。</span></div>}
   </section>;
 }

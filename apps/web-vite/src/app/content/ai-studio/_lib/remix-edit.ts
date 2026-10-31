@@ -1,7 +1,7 @@
 import type { StudioContentSegment, StudioSegmentPreset } from './ai-studio-api';
 import type { StudioRemixBatchSegment, StudioRemixEditCheckRequest } from './remix-api';
 
-/** AI 剪辑 page purpose in single mode. */
+/** AI 合成 page purpose in single mode. */
 export const SINGLE_EDIT_PURPOSE = '单条剪辑：从一个起点出发，在剪辑台上调顺序、修剪、替换片段，满意后出一条成片。';
 
 /** Mirrors the server's 单条剪辑 limits (`remix_edit.rs`). */

@@ -224,6 +224,7 @@ function assertSectionContainerIsRenderOnly(repoRoot) {
   for (const identifierName of [
     'buildDouyinShortvideoAttributionSectionProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinShortvideoRow',
     'isMobile',

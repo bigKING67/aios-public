@@ -6,57 +6,53 @@
  * segments; 成片 cards live in remix-outputs.module.css.
  */
 
+/* Title, summary and the mode tabs read as one block; the panel's 32px gap starts after the tabs. */
+.pageTop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  min-width: 0;
+}
+
+/*
+ * Page tabs (Linear / Vercel): plain labels on one hairline, the current mode in ink with a 2px ink
+ * underline. They switch the page, so they sit under the title rather than beside it like a filter.
+ */
 .modeTabs {
-  display: inline-flex;
-  flex: none;
-  gap: 2px;
-  padding: 3px;
-  border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  display: flex;
+  gap: var(--spacing-6);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .modeTab {
   display: inline-flex;
+  flex: none;
   align-items: center;
-  min-height: 32px;
-  padding: 0 var(--spacing-3);
-  border-radius: var(--border-radius-md);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  min-height: 36px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-base);
   text-decoration: none;
 }
 
 .modeTab:hover {
-  color: var(--brand-text-strong);
+  color: var(--lobe-color-text);
   text-decoration: none;
 }
 
 .modeTab:focus-visible,
 .slotRow button:focus-visible,
 .gapLink:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
-/* Same "you are here" fill as the active rail item, so the chosen mode reads at a glance. */
 .modeTabActive,
 .modeTabActive:hover {
-  color: var(--brand-on-primary);
-  background: var(--brand-primary);
-  box-shadow: var(--shadow-sm);
-}
-
-.modeTabActive:hover {
-  background: var(--brand-dark);
-}
-
-.headerEnd {
-  display: flex;
-  flex: none;
-  flex-wrap: wrap;
-  gap: var(--spacing-2);
-  align-items: center;
+  border-bottom-color: var(--lobe-color-text);
+  color: var(--lobe-color-text);
 }
 
 /* Structure as an ordered row of slots with their candidate counts. */
@@ -82,9 +78,9 @@
   align-items: center;
   min-height: 36px;
   padding: var(--spacing-1) var(--spacing-3) var(--spacing-1) var(--spacing-1);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-sm);
 }
 
@@ -94,20 +90,29 @@
   width: 24px;
   height: 24px;
   border-radius: var(--border-radius-full);
-  color: var(--brand-text-strong);
-  background: var(--brand-secondary);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
 }
 
 .slotName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: var(--font-weight-medium);
 }
 
 .slotCount {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-variant-numeric: tabular-nums;
+}
+
+.slotSpendCounts {
+  padding-left: var(--spacing-2);
+  border-left: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .timeline li:has(.slotTarget) {
@@ -130,24 +135,24 @@
   max-width: 240px;
   padding-left: var(--spacing-2);
   overflow: hidden;
-  border-left: 1px solid var(--divider-color);
-  color: var(--text-secondary);
+  border-left: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .slotGap {
-  border-color: var(--status-warning-border);
-  background: var(--status-warning-bg);
+  border-color: var(--lobe-color-warning-border);
+  background: var(--lobe-color-warning-bg);
 }
 
 .slotGap .slotOrdinal {
-  color: var(--status-warning-strong);
-  background: var(--bg-card);
+  color: var(--aios-status-warning-strong);
+  background: var(--lobe-color-bg-container);
 }
 
 .slotGap .slotCount {
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
 }
 
 .candidateGroup {
@@ -167,7 +172,7 @@
 }
 
 .candidateNote {
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
   font-size: var(--font-size-xs);
 }
 
@@ -186,7 +191,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
-  width: 76px;
+  width: 88px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -197,7 +202,7 @@
 
 .candidate:focus-visible {
   border-radius: var(--border-radius-md);
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
@@ -207,10 +212,10 @@
   place-items: center;
   overflow: hidden;
   aspect-ratio: 9 / 16;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-md);
-  color: var(--text-tertiary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .candidateCover img {
@@ -221,7 +226,7 @@
 
 .candidatePlay {
   position: absolute;
-  color: var(--bg-card);
+  color: var(--lobe-color-bg-container);
   font-size: var(--font-size-2xl);
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -238,7 +243,7 @@
   bottom: var(--spacing-1);
   padding: 0 var(--spacing-1);
   border-radius: var(--border-radius-sm);
-  color: var(--bg-card);
+  color: var(--lobe-color-bg-container);
   background: var(--remix-material-ink-a780);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -246,7 +251,7 @@
 
 .candidateTitle {
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -259,7 +264,7 @@
   max-height: 70svh;
   border-radius: var(--border-radius-lg);
   object-fit: contain;
-  background: var(--text-primary);
+  background: var(--aios-stage);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -269,19 +274,25 @@
 }
 
 .slotArrow {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .gapLink {
-  color: var(--brand-text-strong);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.gapLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .sectionTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .summary {
@@ -293,22 +304,24 @@
 
 
 /* Product and structure source side by side, each at a readable width. */
+/* Top-aligned so the 产品 and 框架结构 labels share a baseline whatever control sits under each. */
 .setupRow {
   display: grid;
   grid-template-columns: minmax(220px, 360px) auto;
   gap: var(--spacing-3) var(--spacing-6);
-  align-items: end;
+  align-items: start;
   justify-content: start;
 }
 
+/* Numbered progress, not radio buttons: a step shows its number until done, then a check. */
 .steps {
   display: grid;
   gap: var(--spacing-2);
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-md);
 }
 
 .steps li {
@@ -318,23 +331,40 @@
 }
 
 .steps .stepDone {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
-.stepDone :global(.anticon) {
-  color: var(--status-success);
+.stepDone svg {
+  color: var(--aios-status-success);
 }
 
-.stepDot {
+.stepNumber {
+  display: inline-grid;
   flex: none;
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid var(--border-color);
+  place-items: center;
+  width: 18px;
+  height: 18px;
   border-radius: var(--border-radius-full);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-none);
+}
+
+.stepDone svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+/* A batch count is one or two digits: the field is sized to them, not to the column. */
+.countInput {
+  width: 120px;
 }
 
 .fieldLabel {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
@@ -363,7 +393,7 @@
 }
 
 .slotIndex {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -381,31 +411,21 @@
   gap: var(--spacing-1);
   min-width: 0;
   padding: var(--spacing-3);
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: var(--border-radius-lg);
 }
 
 .metric dt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
 .metric dd {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
-}
-
-.outputVideo {
-  display: block;
-  width: 100%;
-  max-height: 70vh;
-  max-height: 70svh;
-  border-radius: var(--border-radius-lg);
-  object-fit: contain;
-  background: var(--text-primary);
 }
 
 @media (max-width: 680px) {
@@ -422,10 +442,3 @@
   }
 }
 
-.recentStructure {
-  overflow: hidden;
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}

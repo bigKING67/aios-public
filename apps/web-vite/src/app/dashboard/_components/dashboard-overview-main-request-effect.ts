@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { TAB_TO_QUERY_PLATFORM, type DateMode, type PlatformTabKey } from './dashboard-config';
 import { buildDashboardCompareQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
@@ -19,7 +19,7 @@ type DashboardOverviewMainRequestEffectArgs = {
   isEnabled: boolean;
   activeTab: PlatformTabKey;
   dateMode: DateMode;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   currentRange: DashboardDateRangeLike;
   previousRange: DashboardDateRangeLike;
   fetchOverviewWithCache: DashboardOverviewWithCacheFetcher;

@@ -244,6 +244,7 @@ function assertSectionContainerIsRenderOnly(repoRoot) {
   const bannedIdentifiers = [
     'buildDouyinLiveAttributionSectionProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinLiveSessionRow',
     'DouyinMetricDetailRow',

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Form, message, Modal } from 'antd';
+import { confirmModal, Modal, toast } from '@lobehub/ui';
 import {
   isImportableVideoLinkCandidate,
   previewVideoLinkFromInput,
@@ -43,6 +43,7 @@ import {
 } from './content-assets-import-modal-values';
 import { ContentAssetsImportUploadPanel } from './content-assets-import-upload-panel';
 import uploadStyles from './content-assets-upload-modal.module.css';
+import { useControlledForm } from '@/hooks/use-controlled-form';
 
 export function ContentAssetsUploadModal({
   confirmLoading,
@@ -65,10 +66,8 @@ export function ContentAssetsUploadModal({
   uploadPrefill?: ContentAssetUploadPrefill | null;
   filterOptions: ContentAssetFilterOptions;
 }) {
-  const [form] = Form.useForm<UploadFormValues>();
-  const videoType = Form.useWatch('videoType', form);
-  const productNames = Form.useWatch('productNames', form);
-  const externalUrl = Form.useWatch('externalUrl', form);
+  const form = useControlledForm<UploadFormValues>({ initialValues: {}, onValuesChange: (changed) => handleFormValuesChange(changed) });
+  const { videoType, productNames, externalUrl } = form.values;
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState('');
   const [resolvingVideoLinkPreview, setResolvingVideoLinkPreview] = useState(false);
@@ -237,7 +236,7 @@ export function ContentAssetsUploadModal({
       if (awaitingManualUpload) {
         const errorMessage = '请先选择本地视频源文件，上传后系统会自动绑定已识别的抖音视频 ID。';
         setFileError(errorMessage);
-        message.warning(errorMessage);
+        toast.warning(errorMessage);
         return;
       }
       await submitVideoLinkImport(rawValues);
@@ -316,7 +315,7 @@ export function ContentAssetsUploadModal({
       if (selectedIndex == null) {
         const errorMessage = '识别到多个视频链接，请先选择要导入的视频链接';
         form.setFields([{ name: 'externalUrl', errors: [errorMessage] }]);
-        message.warning(errorMessage);
+        toast.warning(errorMessage);
         return null;
       }
       const candidate = videoLinkPreviewCandidates[selectedIndex];
@@ -436,7 +435,7 @@ export function ContentAssetsUploadModal({
       ]);
       if (response.candidates.length > 1) {
         if (options.allowMultiple) {
-          message.info('识别到多个视频链接，请选择要使用的链接');
+          toast.info('识别到多个视频链接，请选择要使用的链接');
         } else {
           form.setFields([{ name: 'externalUrl', errors: ['识别到多个视频链接，请先点击“解析链接”并选择一个链接'] }]);
         }
@@ -448,7 +447,7 @@ export function ContentAssetsUploadModal({
       const conflict = resolveVideoLinkCandidateConflict(candidateBaseValues, selectedCandidate);
       if (conflict) {
         form.setFields([{ name: conflict.field, errors: [conflict.message] }]);
-        message.warning('当前表单已有不同的平台 ID，请先确认后再应用解析结果');
+        toast.warning('当前表单已有不同的平台 ID，请先确认后再应用解析结果');
         return null;
       }
       const nextValues = applyVideoLinkCandidateToFormValues(candidateBaseValues, selectedCandidate);
@@ -460,7 +459,7 @@ export function ContentAssetsUploadModal({
       form.setFieldsValue(nextValues);
       rememberAutoAppliedVideoLinkIdentity(selectedCandidate);
       if (options.showSuccess) {
-        message.success(resolveVideoLinkApplySuccessMessage(selectedCandidate));
+        toast.success(resolveVideoLinkApplySuccessMessage(selectedCandidate));
       }
       return {
         candidate: selectedCandidate,
@@ -475,7 +474,7 @@ export function ContentAssetsUploadModal({
       }
       const errorMessage = resolveVideoLinkPreviewErrorMessage(error);
       form.setFields([{ name: 'externalUrl', errors: [errorMessage] }]);
-      message.error(errorMessage);
+      toast.error(errorMessage);
       return null;
     } finally {
       if (requestId === videoLinkPreviewRequestIdRef.current) {
@@ -492,7 +491,7 @@ export function ContentAssetsUploadModal({
     const conflict = resolveVideoLinkCandidateConflict(currentValues, candidate);
     if (conflict) {
       form.setFields([{ name: conflict.field, errors: [conflict.message] }]);
-      message.warning('当前表单已有不同的平台 ID，请先确认后再应用解析结果');
+      toast.warning('当前表单已有不同的平台 ID，请先确认后再应用解析结果');
       return;
     }
     const nextValues = applyVideoLinkCandidateToFormValues(currentValues, candidate);
@@ -509,7 +508,7 @@ export function ContentAssetsUploadModal({
     ]);
     form.setFieldsValue(nextValues);
     rememberAutoAppliedVideoLinkIdentity(candidate);
-    message.success(resolveVideoLinkApplySuccessMessage(candidate));
+    toast.success(resolveVideoLinkApplySuccessMessage(candidate));
   };
 
   const clearAutoAppliedVideoLinkIdentityFromValues = (values: UploadFormValues): UploadFormValues => {
@@ -574,7 +573,7 @@ export function ContentAssetsUploadModal({
       externalVideoId: response.externalVideoId,
       externalItemId: emptyToNull(nextValues.externalItemId),
     };
-    message.warning(response.nextAction.label || '请上传本地视频并绑定抖音视频 ID');
+    toast.warning(response.nextAction.label || '请上传本地视频并绑定抖音视频 ID');
   };
 
   const confirmQianchuanMaterialReviewBeforeSubmit = async (
@@ -601,7 +600,7 @@ export function ContentAssetsUploadModal({
       ? '请确认业务已核对该素材 ID 与当前抖音视频/素材一致。'
       : '请确认业务已核对是否需要手动填写或修改千川素材 ID。';
     return new Promise((resolve) => {
-      Modal.confirm({
+      confirmModal({
         title: '确认千川素材 ID',
         content: [
           materialIdSummary,
@@ -669,9 +668,8 @@ export function ContentAssetsUploadModal({
       }
       cancelText="取消"
       cancelButtonProps={{ disabled: confirmLoading }}
-      className={uploadStyles.uploadModal}
       destroyOnHidden
-      mask={{ closable: !confirmLoading }}
+      maskClosable={!confirmLoading}
       closable={!confirmLoading}
     >
       <ContentAssetsImportUploadPanel
@@ -684,7 +682,7 @@ export function ContentAssetsUploadModal({
         onSelectFile={handleSelectFile}
         onRemoveFile={() => setFile(null)}
       />
-      {!isSourceUpload ? <Form form={form} layout="vertical" className={uploadStyles.uploadForm} onValuesChange={handleFormValuesChange}>
+      {!isSourceUpload ? <div className={uploadStyles.uploadForm}>
         <ContentAssetsImportFormFields
           confirmLoading={confirmLoading}
           contentSceneGroupOptions={contentSceneGroupOptions}
@@ -711,7 +709,7 @@ export function ContentAssetsUploadModal({
           onVideoLinkInputChange={handleVideoLinkInputChange}
           onPreviewVideoLink={() => void handlePreviewVideoLink()}
         />
-      </Form> : null}
+      </div> : null}
     </Modal>
   );
 }

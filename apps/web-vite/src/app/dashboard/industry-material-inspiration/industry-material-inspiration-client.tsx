@@ -1,8 +1,8 @@
 'use client';
 
+import { Alert, Empty } from '@lobehub/ui';
 import { startTransition, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Alert, Empty } from 'antd';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
@@ -370,7 +370,7 @@ export function IndustryMaterialInspirationClient() {
           </>
         ) : (
           <section className={styles.placeholderPanel}>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="小红书笔记数据源暂未接入">
+            <Empty description="小红书笔记数据源暂未接入">
               <p className={styles.placeholderText}>
                 当前仅保留 Tab 与月份筛选入口，待笔记 ADS 和素材归档链路接入后展示同一套业务指标。
               </p>

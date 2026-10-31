@@ -15,8 +15,9 @@ use super::overview_types::{
     StudioOverviewActivity, StudioOverviewCosts, StudioOverviewPeriod, StudioOverviewPipeline,
     StudioOverviewQuery, StudioOverviewResponse, StudioResolutionUsage,
 };
+use super::overview_window::{resolve, shanghai_date};
 use super::repository::db_error;
-use crate::error::AppError;
+use chrono::{DateTime, Utc};
 use sqlx::{PgPool, Row};
 
 const VERIFIED_ON: &str = "2026-09-30";
@@ -60,33 +61,32 @@ fn round_cny(value: f64) -> f64 {
     (value * 10_000.0).round() / 10_000.0
 }
 
-fn period_start_sql(period: &str) -> Result<&'static str, AppError> {
-    Ok(match period {
-        "last7" => "NOW() - INTERVAL '7 days'",
-        "last30" => "NOW() - INTERVAL '30 days'",
-        "month" => {
-            "(DATE_TRUNC('month', NOW() AT TIME ZONE 'Asia/Shanghai') AT TIME ZONE 'Asia/Shanghai')"
-        }
-        _ => return Err(AppError::bad_request("period 只支持 last7、last30、month")),
-    })
-}
-
 pub(super) async fn overview(
     pool: &PgPool,
     query: StudioOverviewQuery,
     owner: Option<&str>,
     enterprise_tag: Option<&str>,
 ) -> StudioResult<StudioOverviewResponse> {
-    let key = query.period.unwrap_or_else(|| "last30".to_string());
     let batch_in_scope = batch_in_enterprise_sql(2);
-    let start = period_start_sql(&key)?;
-    let period = sqlx::query(sqlx::AssertSqlSafe(format!(
-        "SELECT TO_CHAR(({start}) AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS from_at, \
-                TO_CHAR(NOW() AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS to_at"
+    // Newest period-scoped work in scope: the default anchor of a day/month/year view.
+    let latest: Option<DateTime<Utc>> = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+        "SELECT GREATEST( \
+           (SELECT MAX(created_at) FROM ads.content_segment_suggestion_jobs j \
+              WHERE ($1::TEXT IS NULL OR owner_user_id = $1) AND {JOB_IN_SCOPE}), \
+           (SELECT MAX(created_at) FROM ads.content_remix_batches b \
+              WHERE ($1::TEXT IS NULL OR owner_user_id = $1) AND {batch_in_scope}), \
+           (SELECT MAX(created_at) FROM ads.marketing_content_assets \
+              WHERE is_deleted = FALSE AND source_type = 'ai_studio_output' \
+                AND ($2::TEXT IS NULL OR $2 = ANY(tags))))"
     )))
+    .bind(owner)
+    .bind(enterprise_tag)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
+    let latest = latest.map(shanghai_date);
+    let window = resolve(&query, Utc::now(), latest)?;
+    let (start, end) = (window.start, window.end);
 
     let model = sqlx::query(sqlx::AssertSqlSafe(format!(
         "SELECT COUNT(*) AS calls, \
@@ -96,11 +96,13 @@ pub(super) async fn overview(
                 COALESCE(SUM((usage->>'output_tokens')::BIGINT), 0)::BIGINT AS output_tokens, \
                 COUNT(*) FILTER (WHERE model IS NULL OR model NOT LIKE '{PRICED_MODEL_PREFIX}%') AS unpriced \
          FROM ads.content_segment_suggestion_jobs j \
-         WHERE created_at >= {start} AND usage ? 'input_tokens' AND ($1::TEXT IS NULL OR owner_user_id = $1) \
+         WHERE created_at >= $3 AND created_at < $4 AND usage ? 'input_tokens' AND ($1::TEXT IS NULL OR owner_user_id = $1) \
            AND {JOB_IN_SCOPE}"
     )))
     .bind(owner)
     .bind(enterprise_tag)
+    .bind(start)
+    .bind(end)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
@@ -111,11 +113,13 @@ pub(super) async fn overview(
                 COALESCE(SUM((usage->'input_tokens_details'->>'cached_tokens')::BIGINT), 0)::BIGINT AS cached_tokens, \
                 COALESCE(SUM((usage->>'output_tokens')::BIGINT), 0)::BIGINT AS output_tokens \
          FROM ads.content_segment_suggestion_jobs j \
-         WHERE created_at >= {start} AND usage ? 'input_tokens' AND model LIKE '{PRICED_MODEL_PREFIX}%' \
+         WHERE created_at >= $3 AND created_at < $4 AND usage ? 'input_tokens' AND model LIKE '{PRICED_MODEL_PREFIX}%' \
            AND ($1::TEXT IS NULL OR owner_user_id = $1) AND {JOB_IN_SCOPE}"
     )))
     .bind(owner)
     .bind(enterprise_tag)
+    .bind(start)
+    .bind(end)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
@@ -134,12 +138,14 @@ pub(super) async fn overview(
          JOIN ads.content_production_run_renders l ON l.job_id = j.job_id \
          JOIN ads.content_remix_batch_runs br ON br.run_id = l.run_id \
          JOIN ads.content_remix_batches b ON b.batch_id = br.batch_id \
-         WHERE j.receipt->>'engine' = '{MEDIAKIT_ENGINE}' AND j.finished_at >= {start} \
+         WHERE j.receipt->>'engine' = '{MEDIAKIT_ENGINE}' AND j.finished_at >= $3 AND j.finished_at < $4 \
            AND ($1::TEXT IS NULL OR b.owner_user_id = $1) AND {batch_in_scope} \
          GROUP BY 1 ORDER BY 1"
     )))
     .bind(owner)
     .bind(enterprise_tag)
+    .bind(start)
+    .bind(end)
     .fetch_all(pool)
     .await
     .map_err(db_error)?;
@@ -175,10 +181,10 @@ pub(super) async fn overview(
               WHERE status IN ('queued', 'running') AND ($1::TEXT IS NULL OR owner_user_id = $1) \
                 AND {JOB_IN_SCOPE}) AS analysis_active, \
            (SELECT COUNT(*) FROM ads.content_segment_suggestion_jobs j \
-              WHERE status = 'succeeded' AND created_at >= {start} AND ($1::TEXT IS NULL OR owner_user_id = $1) \
+              WHERE status = 'succeeded' AND created_at >= $3 AND created_at < $4 AND ($1::TEXT IS NULL OR owner_user_id = $1) \
                 AND {JOB_IN_SCOPE}) AS analysis_succeeded, \
            (SELECT COUNT(*) FROM ads.content_segment_suggestion_jobs j \
-              WHERE status = 'failed' AND created_at >= {start} AND ($1::TEXT IS NULL OR owner_user_id = $1) \
+              WHERE status = 'failed' AND created_at >= $3 AND created_at < $4 AND ($1::TEXT IS NULL OR owner_user_id = $1) \
                 AND {JOB_IN_SCOPE}) AS analysis_failed, \
            (SELECT COUNT(*) FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id \
               WHERE s.status = 'suggested' AND a.is_deleted = FALSE \
@@ -192,14 +198,16 @@ pub(super) async fn overview(
               WHERE status = 'running' AND ($1::TEXT IS NULL OR owner_user_id = $1) \
                 AND {batch_in_scope}) AS remix_running, \
            (SELECT COUNT(*) FROM ads.content_remix_batches b \
-              WHERE status IN ('failed', 'partially_failed') AND created_at >= {start} \
+              WHERE status IN ('failed', 'partially_failed') AND created_at >= $3 AND created_at < $4 \
                 AND ($1::TEXT IS NULL OR owner_user_id = $1) AND {batch_in_scope}) AS remix_failed, \
            (SELECT COUNT(*) FROM ads.marketing_content_assets \
-              WHERE is_deleted = FALSE AND source_type = 'ai_studio_output' AND created_at >= {start} \
+              WHERE is_deleted = FALSE AND source_type = 'ai_studio_output' AND created_at >= $3 AND created_at < $4 \
                 AND ($2::TEXT IS NULL OR $2 = ANY(tags))) AS outputs"
     )))
     .bind(owner)
     .bind(enterprise_tag)
+    .bind(start)
+    .bind(end)
     .fetch_one(pool)
     .await
     .map_err(db_error)?;
@@ -212,7 +220,14 @@ pub(super) async fn overview(
            LEFT JOIN ads.marketing_content_assets a ON a.asset_id = j.asset_id \
            WHERE ($1::TEXT IS NULL OR j.owner_user_id = $1) AND {JOB_IN_SCOPE} \
            UNION ALL \
-           SELECT CASE b.structure->>'mode' WHEN 'edit' THEN 'edit' WHEN 'sellingPoint' THEN 'sellingPoint' ELSE 'remix' END, b.batch_id, COALESCE(NULLIF(b.constraints->>'productName', ''), CASE b.structure->>'mode' WHEN 'edit' THEN '单条剪辑' WHEN 'sellingPoint' THEN '卖点混剪' ELSE '框架混剪' END), b.status, \
+           SELECT CASE b.structure->>'mode' WHEN 'edit' THEN 'edit' WHEN 'sellingPoint' THEN 'sellingPoint' ELSE 'remix' END, b.batch_id, COALESCE(NULLIF(b.constraints->>'productName', ''), CASE b.structure->>'mode' WHEN 'edit' THEN '单条剪辑' WHEN 'sellingPoint' THEN '卖点混剪' ELSE '框架混剪' END), \
+                  CASE WHEN b.status <> 'running' \
+                    AND EXISTS (SELECT 1 FROM ads.content_remix_batch_runs dbr JOIN ads.content_production_runs dr ON dr.run_id = dbr.run_id \
+                      WHERE dbr.batch_id = b.batch_id AND dr.status = 'succeeded') \
+                    AND NOT EXISTS (SELECT 1 FROM ads.content_remix_batch_runs dbr JOIN ads.content_production_runs dr ON dr.run_id = dbr.run_id \
+                      LEFT JOIN ads.marketing_content_assets da ON da.asset_id = dbr.output_asset_id AND da.is_deleted = FALSE \
+                      WHERE dbr.batch_id = b.batch_id AND dr.status = 'succeeded' AND (dbr.output_asset_id IS NULL OR da.asset_id IS NOT NULL)) \
+                  THEN 'outputs_deleted' ELSE b.status END, \
                   b.planned_count::TEXT || ' 条', b.created_at \
            FROM ads.content_remix_batches b \
            WHERE ($1::TEXT IS NULL OR b.owner_user_id = $1) AND {batch_in_scope} \
@@ -238,9 +253,11 @@ pub(super) async fn overview(
     let composition_cny = round_cny(composition_cny);
     Ok(StudioOverviewResponse {
         period: StudioOverviewPeriod {
-            key,
-            from: period.get("from_at"),
-            to: period.get("to_at"),
+            key: window.key,
+            from: window.from.format("%Y-%m-%d").to_string(),
+            to: window.to.format("%Y-%m-%d").to_string(),
+            today: shanghai_date(Utc::now()).format("%Y-%m-%d").to_string(),
+            latest_activity_date: latest.map(|date| date.format("%Y-%m-%d").to_string()),
         },
         costs: StudioOverviewCosts {
             model_analysis: StudioModelAnalysisCost {
@@ -308,12 +325,5 @@ mod tests {
         assert_eq!(resolution_coefficient("540p"), 2.0);
         assert_eq!(resolution_coefficient("4k"), 24.0);
         assert_eq!(resolution_coefficient("unknown"), 6.0);
-    }
-
-    #[test]
-    fn unknown_period_is_rejected() {
-        assert!(period_start_sql("last30").is_ok());
-        assert!(period_start_sql("month").is_ok());
-        assert!(period_start_sql("year").is_err());
     }
 }

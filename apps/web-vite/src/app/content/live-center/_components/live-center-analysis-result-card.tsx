@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Alert } from 'antd';
+import { Alert } from '@lobehub/ui';
 import { formatFullDateTime } from '../_lib/live-center-formatters';
 import type {
   LiveCenterAnalysisJob,

@@ -26,8 +26,8 @@ export type { BarChartProps, BarDataItem } from './bar-chart-model';
 export const BarChart: React.FC<BarChartComponentProps> = ({
   title,
   data,
-  barColor = 'var(--chart-series-1)',
-  secondaryBarColor = 'var(--chart-series-2)',
+  barColor = 'var(--aios-chart-1)',
+  secondaryBarColor = 'var(--aios-chart-2)',
   primarySeriesName = 'GMV',
   secondarySeriesName = 'GSV',
   primaryAxisName = 'GMV',

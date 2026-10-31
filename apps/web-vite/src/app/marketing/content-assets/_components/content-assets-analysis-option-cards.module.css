@@ -3,7 +3,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .analysisOptionCard {
@@ -13,23 +13,23 @@
   min-width: 0;
   min-height: 158px;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 10px;
   background: var(--surface-color);
 }
 
 .analysisOptionCard[data-active="true"] {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
 }
 
 .analysisOptionCard[data-selected="true"] {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
 }
 
 .analysisOptionCard[data-current="true"] {
-  border-color: var(--brand-border);
+  border-color: var(--aios-ai-border);
 }
 
 .analysisOptionHeader {
@@ -45,7 +45,7 @@
 
 .analysisOptionHeader strong {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-section-title);
   letter-spacing: var(--letter-spacing-title);
@@ -65,7 +65,7 @@
 .analysisOptionBadge,
 .analysisOptionStateBadge,
 .analysisOptionCard p {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -77,33 +77,33 @@
   width: fit-content;
   min-height: var(--component-control-line-height-xs);
   padding: 0 7px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 6px;
-  background: var(--bg-subtle);
-  color: var(--text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-family: inherit;
   font-variant-numeric: tabular-nums;
 }
 
 .analysisOptionStateBadge {
-  border-color: var(--status-neutral-border);
-  background: var(--status-neutral-bg);
-  color: var(--text-secondary);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
 
 .analysisOptionStateBadge[data-tone="recommended"] {
-  border-color: var(--status-info-border);
-  background: var(--status-info-bg);
-  color: var(--brand-text-strong);
+  border-color: var(--lobe-color-info-border);
+  background: var(--lobe-color-info-bg);
+  color: var(--aios-ai-text);
 }
 
 .analysisOptionStateBadge[data-tone="active"],
 .analysisOptionStateBadge[data-tone="current"],
 .analysisOptionStateBadge[data-tone="selected"] {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
-  color: var(--brand-text-strong);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
+  color: var(--aios-ai-text);
 }
 
 .analysisOptionCard p {
@@ -126,53 +126,7 @@
     transform var(--transition-fast);
 }
 
-/* Ant v6 injects variant styles after CSS Modules; keep this override scoped to option CTAs. */
-.analysisOptionCard
-  .analysisOptionAction.analysisOptionAction:global(
-    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled)
-  ) {
-  border-color: transparent !important;
-  background: var(--brand-secondary) !important;
-  background-color: var(--brand-secondary) !important;
-  color: var(--brand-text-strong) !important;
-}
-
-.analysisOptionCard
-  .analysisOptionAction.analysisOptionAction:global(
-    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled):hover
-  ),
-.analysisOptionCard
-  .analysisOptionAction.analysisOptionAction:global(
-    .ant-btn.ant-btn-default.ant-btn-color-default:not(:disabled):not(.ant-btn-disabled):focus-visible
-  ) {
-  border-color: var(--brand-border) !important;
-  background: var(--status-info-bg) !important;
-  background-color: var(--status-info-bg) !important;
-  color: var(--brand-text-strong) !important;
-}
-
-.analysisOptionCard
-  .analysisOptionAction.analysisOptionAction:global(
-    .ant-btn.ant-btn-primary.ant-btn-color-primary:not(:disabled):not(.ant-btn-disabled)
-  ) {
-  border-color: var(--brand-primary) !important;
-  background: var(--brand-primary) !important;
-  background-color: var(--brand-primary) !important;
-  color: var(--brand-on-primary) !important;
-}
-
-.analysisOptionCard[data-emphasized="true"]
-  .analysisOptionAction.analysisOptionAction:global(.ant-btn.ant-btn-primary:disabled),
-.analysisOptionCard[data-emphasized="true"]
-  .analysisOptionAction.analysisOptionAction:global(.ant-btn.ant-btn-primary.ant-btn-disabled) {
-  border-color: var(--brand-primary) !important;
-  background: var(--brand-primary) !important;
-  background-color: var(--brand-primary) !important;
-  color: var(--brand-on-primary) !important;
-  opacity: 0.86;
-}
-
-.analysisOptionAction:global(.ant-btn:not(:disabled):active) {
+.analysisOptionAction:not(:disabled):active {
   transform: translateY(1px);
 }
 
@@ -192,7 +146,7 @@
 .analysisJobProgressHeader span {
   overflow: hidden;
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -201,8 +155,8 @@
 
 .analysisJobProgressHeader strong {
   flex: 0 0 auto;
-  color: var(--brand-text-strong);
-  font-family: var(--font-family-mono);
+  color: var(--aios-ai-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   font-weight: 680;
@@ -214,7 +168,7 @@
   overflow: hidden;
   height: 6px;
   border-radius: 999px;
-  background: var(--status-info-border);
+  background: var(--lobe-color-info-border);
 }
 
 .analysisJobProgressFill {
@@ -222,7 +176,7 @@
   inset: 0 auto 0 0;
   width: 0%;
   border-radius: inherit;
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
   transition: width 280ms ease;
 }
 
@@ -235,12 +189,12 @@
 }
 
 .analysisJobProgress[data-status="succeeded"] .analysisJobProgressHeader strong {
-  color: var(--status-success-strong);
+  color: var(--aios-status-success-strong);
 }
 
 .analysisJobProgress[data-status="succeeded"] .analysisJobProgressFill {
   width: 100%;
-  background: var(--status-success-strong);
+  background: var(--aios-status-success-strong);
 }
 
 @media (max-width: 640px) {

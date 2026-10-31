@@ -1,8 +1,8 @@
 .pageShell {
   --marketing-content-assets-material-white-a960: rgba(255, 255, 255, 0.96);
   --marketing-content-assets-material-neutral-a900: rgba(248, 248, 248, 0.9);
-  --marketing-content-assets-material-brand-a120: rgba(47, 110, 234, 0.12);
-  --marketing-content-assets-material-brand-a080: rgba(47, 110, 234, 0.08);
+  --marketing-content-assets-material-brand-a120: rgba(110, 86, 207, 0.12);
+  --marketing-content-assets-material-brand-a080: rgba(110, 86, 207, 0.08);
   --marketing-content-assets-material-neutral-a720: rgba(245, 245, 245, 0.72);
   --marketing-content-assets-material-ink-a780: rgba(26, 26, 26, 0.78);
   display: flex;
@@ -10,24 +10,24 @@
   gap: 0;
   box-sizing: border-box;
   width: 100%;
-  height: 100dvh;
+  height: var(--aios-workspace-height, 100dvh);
   margin: 0 auto;
   padding: 12px;
-  background: var(--bg-global);
+  background: var(--lobe-color-bg-layout);
 }
 
 .surfaceHeader h2,
 .detailSection h3 {
   margin: 0;
-  color: var(--text-primary);
-  font-family: var(--font-family-base);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-ui);
 }
 
 .detailItem span,
 .surfaceHeader p,
 .playerMetaRow span,
 .sourceItem span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -37,9 +37,9 @@
   flex-direction: column;
   gap: 12px;
   padding: 14px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 20px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .surfaceHeader {
@@ -70,7 +70,7 @@
   justify-content: flex-end;
 }
 
-.paginationWrap :global(.ant-pagination) {
+.paginationWrap :global(.lobe-pagination) {
   max-width: 100%;
 }
 
@@ -82,24 +82,24 @@
   align-items: center;
   justify-content: center;
   min-height: 196px;
-  border: 1px dashed var(--border-color);
+  border: 1px dashed var(--lobe-color-border);
   border-radius: 16px;
-  background: var(--bg-subtle);
-  color: var(--text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-tertiary);
   text-align: center;
 }
 
-.playerEmpty :global(.anticon) {
-  color: var(--brand-text);
+.playerEmpty svg {
+  color: var(--lobe-color-text);
   font-size: var(--font-size-2xl);
 }
 
-.emptySurface strong { color: var(--text-primary); font-size: var(--font-size-lg); line-height: var(--line-height-tight); }
+.emptySurface strong { color: var(--lobe-color-text); font-size: var(--font-size-lg); line-height: var(--line-height-tight); }
 
 .playerEmpty p {
   max-width: 48ch;
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -123,7 +123,7 @@
 
 .playerShellHero {
   --content-assets-player-toolbar-height: 56px;
-  --content-assets-player-material-frame-border: rgba(255, 255, 255, 0.10);
+  --content-assets-player-material-frame-border: rgba(255, 255, 255, 0.1);
   --content-assets-player-material-frame-shadow: rgba(7, 10, 16, 0.24);
   --content-assets-player-material-frame-highlight: rgba(255, 255, 255, 0.08);
   display: grid;
@@ -142,7 +142,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 16px;
-  background: var(--text-primary);
+  background: var(--aios-stage);
 }
 
 .video {
@@ -155,7 +155,7 @@
   max-height: 54vh;
   aspect-ratio: 9 / 16;
   border-radius: 18px;
-  background: var(--text-primary);
+  background: var(--aios-stage);
   box-shadow: var(--shadow-lg);
 }
 
@@ -166,7 +166,7 @@
   max-height: min(62vh, 620px);
   aspect-ratio: 9 / 16;
   border-radius: 20px;
-  background: var(--text-primary);
+  background: var(--aios-stage);
   border: 1px solid var(--content-assets-player-material-frame-border);
   box-shadow:
     0 24px 48px var(--content-assets-player-material-frame-shadow),
@@ -192,7 +192,7 @@
 
 .playerMetaText {
   min-width: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -242,7 +242,7 @@
 .playerMetaList dd {
   margin-top: 3px;
   color: var(--content-assets-material-stage-button-text);
-  font-family: var(--font-family-mono);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   font-weight: 620;
   line-height: var(--line-height-snug);
@@ -256,7 +256,7 @@
   color: var(--content-assets-material-stage-text);
 }
 
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn) {
+.playerShellHero .playerDownloadButton.playerDownloadButton {
   display: inline-flex;
   align-self: stretch;
   align-items: center;
@@ -264,52 +264,35 @@
   min-height: var(--content-assets-player-toolbar-height);
   height: auto;
   padding: 0 20px;
-  border-radius: 12px;
+  border-radius: var(--lobe-border-radius);
   font-weight: 620;
   line-height: var(--line-height-snug);
   white-space: nowrap;
   transition:
     border-color 180ms cubic-bezier(0.32, 0.72, 0, 1),
     color 180ms cubic-bezier(0.32, 0.72, 0, 1),
-    background 180ms cubic-bezier(0.32, 0.72, 0, 1),
-    transform 180ms cubic-bezier(0.32, 0.72, 0, 1),
-    box-shadow 180ms cubic-bezier(0.32, 0.72, 0, 1);
+    background 180ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn):not(:disabled) {
-  border-color: var(--brand-primary);
-  color: var(--brand-on-primary);
-  background: var(--brand-primary);
-  box-shadow: inset 0 1px 0 var(--content-assets-player-material-frame-highlight);
+/* On the media stage the human primary action inverts: stage text as fill, stage as text. */
+.playerShellHero .playerDownloadButton.playerDownloadButton:not(:disabled) {
+  border-color: var(--aios-stage-text);
+  color: var(--aios-stage);
+  background: var(--aios-stage-text);
 }
 
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn) :global(.anticon),
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn) > span {
-  color: inherit;
+.playerShellHero .playerDownloadButton.playerDownloadButton:not(:disabled):hover {
+  border-color: color-mix(in srgb, var(--aios-stage-text) 86%, var(--aios-stage));
+  color: var(--aios-stage);
+  background: color-mix(in srgb, var(--aios-stage-text) 86%, var(--aios-stage));
 }
 
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn):not(:disabled):hover {
-  border-color: var(--brand-dark);
-  color: var(--brand-on-primary);
-  background: var(--brand-dark);
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 var(--content-assets-player-material-frame-highlight),
-    0 12px 26px var(--marketing-content-assets-material-brand-a120);
-}
-
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn):not(:disabled):active {
-  border-color: var(--brand-active);
-  background: var(--brand-active);
-  transform: translateY(0);
-}
-
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn):focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+.playerShellHero .playerDownloadButton.playerDownloadButton:focus-visible {
+  outline: 2px solid var(--aios-ai-9);
   outline-offset: 2px;
 }
 
-.playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn):disabled {
+.playerShellHero .playerDownloadButton.playerDownloadButton:disabled {
   border-color: var(--content-assets-material-stage-button-border);
   color: var(--content-assets-material-stage-text);
   background: var(--content-assets-material-stage-button-bg);
@@ -321,7 +304,7 @@
   flex-direction: column;
   gap: 14px;
   padding-top: 18px;
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .detailSection h3 {
@@ -339,16 +322,16 @@
 .detailItem {
   min-width: 0;
   padding: 10px 12px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 12px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .detailItem strong {
   display: block;
   overflow: hidden;
   margin-top: 5px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 620;
   line-height: var(--line-height-normal);
@@ -358,7 +341,7 @@
 
 .detailNote {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -366,23 +349,23 @@
 .detailInlineNote,
 .detailInlineWarning {
   margin: 0;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-2) var(--spacing-3);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .detailInlineNote {
-  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--divider-color));
-  background: color-mix(in srgb, var(--brand-secondary) 22%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--lobe-color-primary) 18%, var(--lobe-color-border-secondary));
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 22%, var(--lobe-color-bg-container));
 }
 
 .detailInlineWarning {
-  border-color: var(--status-warning-border);
-  background: var(--status-warning-bg);
-  color: var(--status-warning-strong);
+  border-color: var(--lobe-color-warning-border);
+  background: var(--lobe-color-warning-bg);
+  color: var(--aios-status-warning-strong);
 }
 
 .sourceList {
@@ -397,12 +380,12 @@
   gap: 10px;
   align-items: center;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 12px;
 }
 
 .sourceItem strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -421,35 +404,16 @@
   grid-column: 1 / -1;
 }
 
-.formGrid :global(.ant-select-multiple .ant-select-selection-item) {
-  border-color: var(--brand-border);
-  border-radius: 999px;
-  background: var(--brand-secondary);
-  color: var(--brand-text);
-  font-size: var(--font-size-sm);
+.inputWithAction {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
 }
 
-.formGrid :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search),
-.formGrid :global(.ant-select:not(.ant-select-show-search) .ant-select-content-item-suffix) {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  flex: 0 0 0 !important;
-  margin-inline-start: 0 !important;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.formGrid :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search-input),
-.formGrid :global(.ant-select:not(.ant-select-show-search) .ant-select-input),
-.formGrid :global(.ant-cascader-picker .ant-select-selection-search-input) {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  padding: 0 !important;
-  color: transparent;
-  caret-color: transparent;
-  opacity: 0;
+.inputWithAction > :first-child {
+  flex: 1;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
@@ -470,7 +434,7 @@
     border-bottom: 1px solid var(--content-assets-material-stage-button-border);
   }
 
-  .playerShellHero .playerDownloadButton.playerDownloadButton:global(.ant-btn) {
+  .playerShellHero .playerDownloadButton.playerDownloadButton {
     width: 100%;
     min-height: 48px;
   }
@@ -498,11 +462,8 @@
     justify-content: stretch;
   }
 
-  .paginationWrap :global(.ant-pagination) {
+  .paginationWrap :global(.lobe-pagination) {
     width: 100%;
-  }
-
-  .paginationWrap :global(.ant-pagination-simple) {
     justify-content: space-between;
   }
 
@@ -510,4 +471,14 @@
   .sourceItem {
     grid-template-columns: 1fr;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] .pageShell {
+  --marketing-content-assets-material-white-a960: rgba(13, 13, 13, 0.96);
+  --marketing-content-assets-material-neutral-a900: rgba(31, 30, 33, 0.9);
+  --marketing-content-assets-material-brand-a120: rgba(139, 116, 240, 0.12);
+  --marketing-content-assets-material-brand-a080: rgba(139, 116, 240, 0.08);
+  --marketing-content-assets-material-neutral-a720: rgba(32, 31, 35, 0.72);
+  --marketing-content-assets-material-ink-a780: rgba(212, 209, 216, 0.78);
 }

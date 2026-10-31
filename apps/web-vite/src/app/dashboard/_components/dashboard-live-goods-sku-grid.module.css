@@ -8,7 +8,7 @@
 }
 
 .skuHeader {
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
   color: var(--dashboard-live-sku-header-text);
   font-size: var(--font-size-xs);
   font-weight: 560;
@@ -16,7 +16,7 @@
 
 .skuRow {
   border-top: 1px solid var(--dashboard-live-meta-muted-border);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 430;
 }
@@ -29,12 +29,12 @@
 }
 
 .skuName {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-weight: 480;
 }
 
 .skuPrefix {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-weight: 430;
 }
 

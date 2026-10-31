@@ -1,4 +1,4 @@
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip } from '@lobehub/ui';
 import sharedStyles from '../creator-library-shared.module.css';
 import tableStyles from '../creator-library-table.module.css';
 import { formatOptionalText } from '../_lib/creator-library-formatters';

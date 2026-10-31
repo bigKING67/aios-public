@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   renderDouyinMetricTrend,
   type TrendClassNameResolver,
@@ -12,7 +12,7 @@ import { buildDouyinCardCountColumns } from './platform-tab-douyin-card-count-co
 
 export function buildDouyinCardProductColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<DouyinCardProductRow> {
+): TableColumnsType<DouyinCardProductRow> {
   return [
     {
       title: '商品名称',

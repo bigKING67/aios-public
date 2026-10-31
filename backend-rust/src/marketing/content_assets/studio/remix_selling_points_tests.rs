@@ -59,16 +59,9 @@ fn one_span_covers_both_required_points_and_renders_only_once() {
     );
     assert_eq!(options[0][0].clips[0].segment_ids, [Uuid::from_u128(21)]);
     assert_eq!(
-        select(
-            &options,
-            1,
-            1,
-            &limits(&slots, 60_000),
-            &HashSet::new(),
-            &reference_hash(&slots)
-        )
-        .combos
-        .len(),
+        select(&options, 1, 1, &limits(&slots, 60_000), &HashSet::new())
+            .combos
+            .len(),
         1
     );
 }
@@ -117,6 +110,7 @@ fn star_and_kol_share_reference_repeat_budget_across_slots() {
                 clips: vec![block_clip(block)],
                 tier: Tier::Exact,
                 fallback: false,
+                reference: false,
             }]
         })
         .collect();
@@ -126,12 +120,12 @@ fn star_and_kol_share_reference_repeat_budget_across_slots() {
         allowance: HashMap::from([("public_endorsement".into(), 1)]),
     };
     assert!(matches!(
-        evaluate(&options, vec![0, 0], &budget, &HashSet::new(), ""),
+        evaluate(&options, vec![0, 0], &budget, &HashSet::new()),
         Verdict::Invalid
     ));
     budget.allowance.insert("public_endorsement".into(), 2);
     assert!(matches!(
-        evaluate(&options, vec![0, 0], &budget, &HashSet::new(), ""),
+        evaluate(&options, vec![0, 0], &budget, &HashSet::new()),
         Verdict::Valid(_)
     ));
 }
@@ -189,12 +183,9 @@ fn reference_slots_target_blocks_and_fall_back_without_points_or_on_long_chains(
         slots[0].target,
         vec!["moisturizing".to_string(), "skincare".into()]
     );
-    assert_eq!(
-        slots[0].reference_ids,
-        vec![Uuid::from_u128(11), Uuid::from_u128(12)]
-    );
+    assert_eq!(slots[0].frame_id, Uuid::from_u128(1));
     assert!(slots[1].fallback, "promotion has no selling points");
-    assert_eq!(slots[1].reference_ids, vec![Uuid::from_u128(2)]);
+    assert_eq!(slots[1].frame_id, Uuid::from_u128(2));
     // One continuous chain covering the whole segment is a long chain.
     let frames = vec![frame(1, 10, "mixed_voiceover", 0, 20_000)];
     let points = vec![
@@ -304,14 +295,7 @@ fn fallback_points_outside_mixed_voiceover_do_not_count_as_repetition() {
         .unwrap();
     assert!(options[1][fallback].clips[0].selling_points.is_empty());
     assert!(options[1][fallback].clips[0].point_guard_ids.is_empty());
-    let selected = select(
-        &options,
-        50,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let selected = select(&options, 50, 5, &limits(&slots, 600_000), &HashSet::new());
     assert!(selected.combos.iter().any(|c| c.picks[1] == fallback));
 }
 
@@ -329,6 +313,7 @@ fn fallback_and_point_clips_cannot_reuse_overlapping_source_time() {
         clips: vec![frame_clip(&frames[0], &blocks)],
         tier: Tier::Exact,
         fallback: true,
+        reference: false,
     };
     let limits = Limits {
         max_total_ms: 60_000,
@@ -350,13 +335,14 @@ fn fallback_and_point_clips_cannot_reuse_overlapping_source_time() {
             clips: vec![clip],
             tier: Tier::Spliced,
             fallback: false,
+            reference: false,
         };
         // The fallback and point have distinct IDs. Both slot orders must be safe.
         for options in [
             vec![vec![whole.clone()], vec![part.clone()]],
             vec![vec![part.clone()], vec![whole.clone()]],
         ] {
-            let selected = select(&options, 1, 5, &limits, &HashSet::new(), "");
+            let selected = select(&options, 1, 5, &limits, &HashSet::new());
             assert_eq!(
                 selected.combos.len(),
                 usize::from(valid),
@@ -401,14 +387,7 @@ fn fallback_reference_retains_its_repeat_budget() {
         true,
         7,
     )];
-    let selected = select(
-        &options,
-        10,
-        7,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let selected = select(&options, 10, 7, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(
         selected.combos.len(),
         1,
@@ -509,14 +488,7 @@ fn every_output_requires_both_business_points_including_fallbacks_without_fixed_
         3,
     )];
     assert!(options[0].iter().all(|option| option.fallback));
-    let selected = select(
-        &options,
-        10,
-        3,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let selected = select(&options, 10, 3, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(
         selected.combos.len(),
         1,
@@ -537,7 +509,6 @@ fn every_output_requires_both_business_points_including_fallbacks_without_fixed_
             3,
             &limits(&slots, 600_000),
             &HashSet::new(),
-            ""
         )
         .available,
         0,
@@ -559,26 +530,12 @@ fn mandatory_points_are_checked_across_slots_and_all_fill_tiers() {
             }
         }
     }
-    let absent = select(
-        &options,
-        50,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        "",
-    );
+    let absent = select(&options, 50, 5, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(absent.available, 0);
     for option in &mut options[1] {
         option.clips[0].selling_points.push("skincare".into());
     }
-    let present = select(
-        &options,
-        50,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        "",
-    );
+    let present = select(&options, 50, 5, &limits(&slots, 600_000), &HashSet::new());
     assert!(present.available > 0);
     assert!([Tier::Exact, Tier::Spliced, Tier::Varied]
         .iter()
@@ -600,15 +557,8 @@ fn plan_options(allow_variation: bool) -> (Vec<RefSlot>, Vec<Vec<SlotOption>>) {
 #[test]
 fn selection_prefers_lower_tiers_is_deterministic_and_excludes_history() {
     let (slots, options) = plan_options(true);
-    let reference = reference_hash(&slots);
-    let all = select(
-        &options,
-        10,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let reference = combination_hash(&[11, 12, 2].map(Uuid::from_u128));
+    let all = select(&options, 10, 5, &limits(&slots, 600_000), &HashSet::new());
     assert!(all.exact);
     // mixed_voiceover: exact / spliced / varied (3); promotion: own + other asset (2) → 6, minus the reference.
     let tiers: Vec<Tier> = all.combos.iter().map(|c| c.tier).collect();
@@ -617,38 +567,17 @@ fn selection_prefers_lower_tiers_is_deterministic_and_excludes_history() {
     assert_eq!(tiers, sorted, "lower tiers come first");
     assert!(tiers.contains(&Tier::Varied));
     assert!(all.combos.iter().all(|c| c.hash != reference));
-    let again = select(
-        &options,
-        10,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let again = select(&options, 10, 5, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(
         all.combos.iter().map(|c| &c.hash).collect::<Vec<_>>(),
         again.combos.iter().map(|c| &c.hash).collect::<Vec<_>>()
     );
     let used: HashSet<String> = all.combos.iter().take(2).map(|c| c.hash.clone()).collect();
-    let next = select(
-        &options,
-        10,
-        5,
-        &limits(&slots, 600_000),
-        &used,
-        &reference_hash(&slots),
-    );
+    let next = select(&options, 10, 5, &limits(&slots, 600_000), &used);
     assert_eq!(next.previously_used, 2);
     assert!(next.combos.iter().all(|c| !used.contains(&c.hash)));
     // Only exact fills when one combination is enough.
-    let one = select(
-        &options,
-        1,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let one = select(&options, 1, 5, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(one.combos[0].tier, Tier::Exact);
 }
 
@@ -657,24 +586,10 @@ fn a_selling_point_never_repeats_across_the_film_and_duration_is_bounded() {
     let (slots, mut options) = plan_options(false);
     // Duplicate the mixed_voiceover slot: the same selling points twice are invalid.
     options.push(options[0].clone());
-    let picked = select(
-        &options,
-        50,
-        5,
-        &limits(&slots, 600_000),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let picked = select(&options, 50, 5, &limits(&slots, 600_000), &HashSet::new());
     assert_eq!(picked.available, 0);
     let (slots, options) = plan_options(false);
-    let tight = select(
-        &options,
-        10,
-        5,
-        &limits(&slots, 2_999),
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let tight = select(&options, 10, 5, &limits(&slots, 2_999), &HashSet::new());
     assert!(tight.combos.is_empty());
 }
 
@@ -723,14 +638,7 @@ fn repeated_points_fall_back_inside_a_slot_and_are_allowed_as_often_as_the_refer
     assert_eq!(repeat_allowance(&twice)["moisturizing"], 2);
     let (_, options) = plan_options(false);
     let doubled = vec![options[0].clone(), options[0].clone()];
-    let allowed = select(
-        &doubled,
-        50,
-        5,
-        &limits(&twice, 600_000),
-        &HashSet::new(),
-        &reference_hash(&twice),
-    );
+    let allowed = select(&doubled, 50, 5, &limits(&twice, 600_000), &HashSet::new());
     assert!(
         allowed.available > 0,
         "the reference itself repeats the points"
@@ -742,14 +650,7 @@ fn combinations_over_the_source_ceiling_are_never_selected() {
     let (slots, options) = plan_options(true);
     let mut tight = limits(&slots, 600_000);
     tight.max_sources = 1;
-    let one_source = select(
-        &options,
-        50,
-        5,
-        &tight,
-        &HashSet::new(),
-        &reference_hash(&slots),
-    );
+    let one_source = select(&options, 50, 5, &tight, &HashSet::new());
     assert!(
         one_source.combos.is_empty(),
         "every fill mixes the mixed_voiceover and promotion sources"

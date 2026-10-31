@@ -1,8 +1,8 @@
 .batchToolbar {
   margin-bottom: 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px 12px;
   display: flex;
   flex-wrap: wrap;
@@ -12,7 +12,7 @@
 }
 
 .batchInfo {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
 }
 
@@ -24,20 +24,20 @@
 }
 
 .batchFailureInfo {
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
   font-size: var(--font-size-base);
   border-radius: 999px;
-  border: 1px solid var(--status-warning-border);
-  background: var(--status-warning-bg);
+  border: 1px solid var(--lobe-color-warning-border);
+  background: var(--lobe-color-warning-bg);
   padding: 3px 9px;
 }
 
 .batchSummaryInfo {
-  color: var(--status-info-strong);
+  color: var(--aios-status-info);
   font-size: var(--font-size-base);
   border-radius: 999px;
-  border: 1px solid var(--status-info-border);
-  background: var(--status-info-bg);
+  border: 1px solid var(--lobe-color-info-border);
+  background: var(--lobe-color-info-bg);
   padding: 3px 9px;
 }
 
@@ -57,15 +57,15 @@
 
 .batchQuickSelectorPanel {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 4px 8px;
 }
 
 .batchQuickSelectorPanel > summary {
   list-style: none;
   cursor: pointer;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 600;
 }
@@ -76,8 +76,8 @@
 
 .batchQuickSelectorPanel[open] {
   width: 100%;
-  background: var(--bg-hover);
-  border-color: var(--border-color-hover);
+  background: var(--lobe-color-fill-tertiary);
+  border-color: var(--aios-border-hover);
 }
 
 .batchQuickSelectorPanel[open] > summary {

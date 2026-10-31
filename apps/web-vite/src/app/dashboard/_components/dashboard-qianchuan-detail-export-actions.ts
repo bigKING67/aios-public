@@ -1,4 +1,4 @@
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import { useCallback, useState } from 'react';
 
 import { buildDashboardQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
@@ -31,7 +31,7 @@ type DashboardQianchuanDetailExportActionsArgs = {
   liveRoomScreenRows: DashboardQianchuanLiveRoomScreenRow[];
   liveVideoRows: DashboardQianchuanLiveVideoRow[];
   materialTypeMixRows: DashboardQianchuanMaterialTypeMixRow[];
-  messageApi?: MessageInstance;
+  messageApi?: ToastAPI;
   responseData: DashboardQianchuanApiResponse | null;
 };
 

@@ -30,4 +30,10 @@ describe("versioned recruiting review", () => {
       "hold",
     );
   });
+  it("shows the separate AI answer only when it exists in a V3 submission", () => {
+    expect(answerSections(3, "").map((section) => section.key)).not.toContain("aiUsage");
+    expect(answerSections(3, "  ").map((section) => section.key)).not.toContain("aiUsage");
+    expect(answerSections(3, "AI 写初稿，我检查切点").map((section) => section.key)).toContain("aiUsage");
+    expect(answerSections(2, "").map((section) => section.key)).toContain("aiUsage");
+  });
 });

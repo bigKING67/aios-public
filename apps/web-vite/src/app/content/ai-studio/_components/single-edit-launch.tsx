@@ -1,5 +1,6 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Popconfirm, Tooltip } from 'antd';
+import { Info } from 'lucide-react';
+import { Alert, Checkbox, Tooltip, confirmModal } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import { Link as RouterLink } from 'react-router-dom';
 import { remixModeLabel, type StudioRemixEditCheckResponse, type StudioRemixEditMatch } from '../_lib/remix-api';
 import { REMIX_EDIT_DUPLICATE_CODE } from '../_lib/remix-edit';
@@ -25,7 +26,7 @@ function MatchList({ matches, showOverlap }: { matches: readonly StudioRemixEdit
       {matches.map((match) => (
         <li key={`${match.batchId}-${match.ordinal}`}>
           <RouterLink className={styles.tableLink} to={buildRemixBatchPath(match.batchId)}>
-            {match.mode === 'edit' ? '单条剪辑' : `${remixModeLabel(match.mode)} · 第 ${match.ordinal} 条`} · {match.batchId.slice(0, 8)}
+            {match.mode === 'edit' ? '单条剪辑' : `${remixModeLabel(match.mode)} · 第 ${match.ordinal} 条`}
           </RouterLink>
           <span>
             {showOverlap ? `重叠 ${Math.round(match.overlap * 100)}% · ` : ''}
@@ -72,9 +73,8 @@ export function EditLaunchCard(props: EditLaunchCardProps) {
       <div className={workbenchStyles.launchHead}>
         <h2 id="edit-launch-title">生成成片</h2>
         <span className={workbenchStyles.launchMeta}>
-          框架标签 v{props.presetVersion}
-          <Tooltip title={EDIT_RULES} trigger={['hover', 'focus']}>
-            <InfoCircleOutlined className={workbenchStyles.infoIcon} tabIndex={0} aria-label="单条剪辑规则" />
+          <Tooltip title={`${EDIT_RULES} 当前框架标签为 v${props.presetVersion}。`}>
+            <Info size={14} strokeWidth={1.8} className={workbenchStyles.infoIcon} tabIndex={0} aria-label="单条剪辑规则" />
           </Tooltip>
         </span>
       </div>
@@ -90,7 +90,7 @@ export function EditLaunchCard(props: EditLaunchCardProps) {
         <div>
           <dt>总时长</dt>
           <dd className={overLimit ? editStyles.overLimit : undefined}>
-            {(props.totalMs / 1000).toFixed(1)} / {props.maxSeconds} 秒
+            {formatSegmentDuration(0, props.totalMs)} / {formatSegmentDuration(0, props.maxSeconds * 1000).replace(/\.0$/, '')}
           </dd>
         </div>
       </dl>
@@ -103,7 +103,7 @@ export function EditLaunchCard(props: EditLaunchCardProps) {
           description={
             <div className={editStyles.matchBody}>
               <MatchList matches={exact} showOverlap={false} />
-              <Checkbox checked={props.allowDuplicate} onChange={(event) => props.onAllowDuplicate(event.target.checked)}>
+              <Checkbox checked={props.allowDuplicate} onChange={(checked) => props.onAllowDuplicate(checked)}>
                 仍然生成
               </Checkbox>
             </div>
@@ -124,18 +124,22 @@ export function EditLaunchCard(props: EditLaunchCardProps) {
         />
       ) : null}
       <div className={workbenchStyles.launchFoot}>
-        <Popconfirm
-          title="确认生成这条成片？"
-          description="成片进入渲染队列，通常 1–3 分钟完成。提交后不会自动重试，可在「成片」查看进度。"
-          okText="开始生成"
-          cancelText="取消"
-          onConfirm={props.onCreate}
+        <AiActionButton
+          block
           disabled={!canSubmit}
+          loading={props.creating}
+          onClick={() =>
+            confirmModal({
+              title: '确认生成这条成片？',
+              content: '成片进入渲染队列，通常 1–3 分钟完成。提交后不会自动重试，可在「成片」查看进度。',
+              okText: '开始生成',
+              cancelText: '取消',
+              onOk: props.onCreate,
+            })
+          }
         >
-          <Button type={canSubmit ? 'primary' : 'default'} block disabled={!canSubmit} loading={props.creating}>
-            生成这条成片
-          </Button>
-        </Popconfirm>
+          生成这条成片
+        </AiActionButton>
         <p className={workbenchStyles.estimate}>
           {status ?? `1080×1920 · 30fps · 最长 ${props.maxSeconds} 秒，统一响度 -14 LUFS；非 9:16 原片会有黑边。`}
         </p>

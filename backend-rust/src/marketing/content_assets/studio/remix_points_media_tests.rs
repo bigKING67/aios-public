@@ -80,7 +80,33 @@ async fn selling_point_local_media_acceptance() {
         seed(&pool, sample, *id, &owner, &product).await;
     }
     let mut results = Vec::new();
-    for (sample, id) in samples.iter().zip(&ids) {
+    // `framework` compares 类型 1 previews per reference: its own structure
+    // (slots bounded to ±20 % of the reference spans) against the same label
+    // sequence written by hand (unbounded). Preview only; nothing is created.
+    let framework = std::env::var("CONTENT_REMIX_MEDIA_MODE").as_deref() == Ok("framework");
+    if framework {
+        for (sample, id) in samples.iter().zip(&ids) {
+            let mut request = RemixBatchPreviewRequest {
+                mode: None,
+                preset_key: "framework".into(),
+                preset_version: 1,
+                labels: None,
+                source_asset_id: Some(*id),
+                product_name: product.clone(),
+                count: 10,
+            };
+            let bounded = remix::preview(&pool, &settings(), &actor, SCOPED, &request)
+                .await
+                .unwrap();
+            request.labels = Some(bounded.labels.clone());
+            request.source_asset_id = None;
+            let unbounded = remix::preview(&pool, &settings(), &actor, SCOPED, &request)
+                .await
+                .unwrap();
+            results.push(json!({"film":sample.film, "bounded":bounded, "unbounded":unbounded}));
+        }
+    }
+    for (sample, id) in samples.iter().zip(&ids).filter(|_| !framework) {
         let request = RemixBatchPreviewRequest {
             mode: Some("sellingPoint".into()),
             preset_key: "framework".into(),

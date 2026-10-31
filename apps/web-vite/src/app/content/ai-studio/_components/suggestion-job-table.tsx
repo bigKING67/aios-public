@@ -1,8 +1,8 @@
-import { Button, Skeleton, Tooltip } from 'antd';
+import { Button, SkeletonText, Tooltip } from '@lobehub/ui';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Badge } from '@/components/atoms/badge';
-import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
+import { AiTaskStatus } from '@/components/molecules/ai-task-status';
+import { isHiddenPresetLabel, type StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { findPreset } from '../_lib/segment-display';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import {
@@ -24,7 +24,7 @@ function JobResult({ job }: { job: StudioSegmentSuggestionJob }) {
   if (job.status === 'failed' || job.status === 'cancelled') {
     const failure = suggestionFailureText(job);
     return failure.detail ? (
-      <Tooltip title={failure.detail} trigger={['hover', 'focus']}>
+      <Tooltip title={failure.detail}>
         <span tabIndex={0} className={suggestStyles.jobError}>{failure.text}</span>
       </Tooltip>
     ) : (
@@ -56,17 +56,19 @@ interface SuggestionJobTableProps {
  */
 function JobLabels({ job, presets }: { job: StudioSegmentSuggestionJob; presets: readonly StudioSegmentPreset[] }) {
   const preset = findPreset(presets, job.presetKey, job.presetVersion);
-  const summary = describeSuggestionLabels(job.labelKeys, preset);
+  // Older runs still list hidden labels (KOC); judge them against the labels offered today.
+  const labelKeys = job.labelKeys.filter((key) => !isHiddenPresetLabel(key));
+  const summary = describeSuggestionLabels(labelKeys, preset);
   if (summary.short.startsWith('全部') || summary.short === '--') return null;
-  const excluded = preset?.labels.filter((label) => !job.labelKeys.includes(label.key)).map((label) => label.name) ?? [];
-  if (preset && excluded.length > 0 && excluded.length <= 2 && job.labelKeys.every((key) => preset.labels.some((label) => label.key === key))) {
+  const excluded = preset?.labels.filter((label) => !labelKeys.includes(label.key)).map((label) => label.name) ?? [];
+  if (preset && excluded.length > 0 && excluded.length <= 2 && labelKeys.every((key) => preset.labels.some((label) => label.key === key))) {
     return <small className={styles.readOnlyHint}>不含 {excluded.join('、')}</small>;
   }
   return summary.short === summary.full ? (
     <small className={styles.readOnlyHint}>仅 {summary.short}</small>
   ) : (
     // Focusable so keyboard users can open the tooltip; screen readers get the full list.
-    <Tooltip title={summary.full} trigger={['hover', 'focus']}>
+    <Tooltip title={summary.full}>
       <small tabIndex={0} className={`${styles.readOnlyHint} ${suggestStyles.labelSummary}`}>
         <span aria-hidden="true">仅 {summary.short}</span>
         <span className="sr-only">{summary.full}</span>
@@ -76,7 +78,8 @@ function JobLabels({ job, presets }: { job: StudioSegmentSuggestionJob; presets:
 }
 
 /**
- * One row per original (its newest job) as a compact list for the side column;
+ * One row per original (its newest job), full width under the workbench: 原片, result, time,
+ * status and the review link on one line;
  * older runs of the same original fold into history so a re-run failure does
  * not read as the current state.
  */
@@ -85,39 +88,45 @@ export function SuggestionJobTable({ jobs, presets, loading, highlightIds }: Sug
   const { latest, history } = splitLatestSuggestionJobs(jobs);
   const rows = showHistory ? [...latest, ...history] : latest;
 
-  if (loading) return <Skeleton active paragraph={{ rows: 3 }} title={false} />;
-  if (jobs.length === 0) return <p className={styles.fieldHelp}>还没有发起过 AI 分析。</p>;
+  if (loading) return <SkeletonText rows={3} />;
+  if (jobs.length === 0) return <p className={styles.fieldHelp}>还没有发起过 AI 切段。</p>;
 
   return (
     <div className={suggestStyles.stack}>
-      <ul className={workbenchStyles.recentList} aria-label="分析任务">
+      <ul className={workbenchStyles.runRows} aria-label="分析任务">
         {rows.map((job) => {
           const view = suggestionJobStatusView(job.status);
           const old = showHistory && history.includes(job);
           return (
             <li
               key={job.jobId}
-              className={[highlightIds?.includes(job.jobId) ? workbenchStyles.recentNew : '', old ? suggestStyles.historyRow : ''].filter(Boolean).join(' ')}
+              className={[
+                workbenchStyles.runRow,
+                highlightIds?.includes(job.jobId) ? workbenchStyles.runRowNew : '',
+                old ? workbenchStyles.runRowPast : '',
+              ].filter(Boolean).join(' ')}
             >
-              <div className={workbenchStyles.recentHead}>
-                <span className={workbenchStyles.recentTitle} title={job.assetTitle}>{job.assetTitle}</span>
-                <Badge status={view.tone}>{view.label}</Badge>
-              </div>
-              <div className={workbenchStyles.recentMeta}>
+              <span className={workbenchStyles.runTitle} title={job.assetTitle}>{job.assetTitle}</span>
+              <span className={workbenchStyles.runDetail}>
                 <JobResult job={job} />
                 <JobLabels job={job} presets={presets} />
-              </div>
-              <div className={workbenchStyles.recentFoot}>
-                <span className={suggestStyles.tabular}>
-                  {formatShortTimestamp(job.createdAt)}
-                  {suggestionPromptLabel(job.promptVersion) ? ` · 提示词 ${suggestionPromptLabel(job.promptVersion)}` : ''}
-                </span>
+              </span>
+              <span
+                className={workbenchStyles.runTime}
+                title={suggestionPromptLabel(job.promptVersion) ? `AI 提示词 ${suggestionPromptLabel(job.promptVersion)}` : undefined}
+              >
+                {formatShortTimestamp(job.createdAt)}
+              </span>
+              <span className={workbenchStyles.runStatus}>
+                <AiTaskStatus compact state={view.state} stateLabel={view.label} />
+              </span>
+              <span className={workbenchStyles.runAction}>
                 {job.status === 'succeeded' ? (
-                  <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(job.assetId, undefined, job.presetKey)}>
+                  <RouterLink className={styles.tableLink} to={buildSegmentAnnotationPath(job.assetId, undefined, job.presetKey, 'analysis')}>
                     审核建议片段
                   </RouterLink>
                 ) : null}
-              </div>
+              </span>
             </li>
           );
         })}

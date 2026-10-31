@@ -6,7 +6,7 @@
  * - 布局交互由 Layout 组件处理
  */
 
-import { Card, Empty } from 'antd';
+import { Block, Empty } from '@lobehub/ui';
 import { Layout } from '@/components/organisms/layout';
 import { ProtectedRoute } from '@/components/protected-route';
 import { REPORT_EXPORT_PERMISSIONS } from '@/lib/report-permissions';
@@ -15,9 +15,9 @@ export default function ExportsPage() {
   return (
     <ProtectedRoute requiredPermission={REPORT_EXPORT_PERMISSIONS} permissionMode="any">
       <Layout>
-        <Card>
+        <Block variant="outlined" className="p-6">
           <Empty description="导出功能开发中..." />
-        </Card>
+        </Block>
       </Layout>
     </ProtectedRoute>
   );

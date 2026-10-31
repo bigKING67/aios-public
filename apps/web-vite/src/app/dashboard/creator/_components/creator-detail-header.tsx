@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Select, type SelectProps } from 'antd';
+import { Button, type SelectOption } from '@lobehub/ui';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import {
   CreatorDetailExportActions,
   type CreatorDetailExportMenuItem,
@@ -10,8 +11,8 @@ import styles from './creator-live-dashboard.module.css';
 export type { CreatorDetailExportMenuItem } from './creator-detail-export-actions';
 
 type DetailFilterValue = string | undefined;
-type DetailFilterOptions = SelectProps<string>['options'];
-type DetailFilterOption = NonNullable<DetailFilterOptions>[number];
+type DetailFilterOptions = SelectOption<string>[] | undefined;
+type DetailFilterOption = SelectOption<string>;
 
 interface DetailFilterSelectProps {
   placeholder: string;
@@ -103,17 +104,15 @@ function DetailFilterSelect({
   onChange,
 }: DetailFilterSelectProps) {
   return (
-    <Select
+    <LabeledSelect<string>
+      label={placeholder}
       allowClear
-      showSearch={{
-        filterOption: filterDetailFilterOption,
-        optionFilterProp: 'label',
-      }}
+      showSearch
+      filterOption={filterDetailFilterOption}
       placeholder={placeholder}
       style={{ minWidth }}
       value={value}
       options={options}
-      notFoundContent="无匹配结果"
       onChange={(nextValue) => onChange(nextValue || undefined)}
     />
   );

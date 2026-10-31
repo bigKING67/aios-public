@@ -10,6 +10,7 @@ from unittest.mock import patch
 import psycopg2
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from content_production.run_bridge import reconcile
+from content_production import remix_qc
 
 DB = os.getenv("CONTENT_PRODUCTION_TEST_DATABASE_URL")
 
@@ -60,8 +61,10 @@ class RemixOutputTests(unittest.TestCase):
         self.run, self.project, self.job, self.batch = (str(uuid.uuid4()) for _ in range(4))
         self.key = f"production/{self.project}/{self.job}/video.mp4"
         self.execute("INSERT INTO ads.content_production_projects (project_id,owner_user_id,title,revision) VALUES (%s,'remix-owner','fixture',1)", (self.project,))
+        self.snapshot = {"aspect": "portrait", "clips": clips,
+                         "assets": [{"assetId": self.source, "sha256": self.source_sha}]}
         self.execute("INSERT INTO ads.content_production_revisions (project_id,revision,snapshot) VALUES (%s,1,%s)",
-                     (self.project, json.dumps({"aspect": "portrait", "clips": clips})))
+                     (self.project, json.dumps(self.snapshot)))
         self.execute("""INSERT INTO ads.content_production_runs (run_id,owner_user_id,idempotency_key,request,source_snapshot,
             plan_revision,project_id,project_revision) VALUES (%s,'remix-owner',%s,'{}','{}',1,%s,1)""",
                      (self.run, self.run, self.project))
@@ -90,6 +93,10 @@ class RemixOutputTests(unittest.TestCase):
                    "host_execution_version": 1, "host_plan_revision": 1,
                    "host_inspection": {"schema": "aios.media-inspection.v1", "status": "passed", "width": 720,
                                        "height": 1280, "fps": 30, "sha256": self.output_sha, "durationSeconds": 9.0}}
+        if status == "completed":
+            receipt["host_remix_qc"] = {"schema": remix_qc.SCHEMA, "status": "passed",
+                "outputSha256": self.output_sha, "snapshotSha256": remix_qc.snapshot_hash(self.snapshot),
+                "checks": {key: {"status": "passed"} for key in ("timing", "freeze", "pictures", "sources")}}
         self.execute("UPDATE ads.content_production_jobs SET status=%s,output_object_key=%s,receipt=%s::JSONB WHERE job_id=%s",
                      (status, self.key if status == "completed" else None, json.dumps(receipt), self.job))
 
@@ -223,6 +230,51 @@ class RemixOutputTests(unittest.TestCase):
         self.assertEqual(self.execute("""SELECT output_asset_id::TEXT,ordinal,segment_id::TEXT FROM ads.content_asset_lineage
             WHERE run_id=%s ORDER BY ordinal""", (self.run,)),
                          [(existing, i + 1, s["segmentId"]) for i, s in enumerate(self.segments)])
+
+    def cloud_source(self):
+        self.execute("""UPDATE ads.marketing_content_assets SET bucket='cloud_video',source_type='cloud_video',
+            raw_object_key='cloud-video://42' WHERE asset_id=%s""", (self.source,))
+
+    def output_storage(self, **overrides):
+        value = {"provider": "tos", "bucket": "actual-output-bucket", "objectKey": self.key, **overrides}
+        self.execute("""UPDATE ads.content_production_jobs SET receipt=receipt || %s::JSONB WHERE job_id=%s""",
+                     (json.dumps({"host_output_storage": value}), self.job))
+
+    def test_cloud_original_output_uses_uploaded_bucket_and_keeps_lineage(self):
+        self.cloud_source()
+        self.complete()
+        self.output_storage()
+        reconcile(self.conn)
+        self.assertEqual(self.run_state(), ("succeeded", None))
+        [output] = self.outputs()
+        self.assertEqual(output[-1], "actual-output-bucket")
+        self.assertEqual(self.execute("SELECT bucket FROM ads.marketing_content_asset_objects WHERE asset_id=%s",
+                                      (output[0],)), [("actual-output-bucket",)])
+        self.assertEqual(self.execute("SELECT COUNT(*) FROM ads.content_asset_lineage WHERE run_id=%s", (self.run,)), [(2,)])
+
+    def test_cloud_output_without_upload_location_is_not_published(self):
+        self.cloud_source()
+        self.complete()
+        reconcile(self.conn)
+        self.assertEqual(self.run_state()[1], "remix_lineage_mismatch")
+        self.assertEqual(self.outputs(), [])
+
+    def test_wrong_upload_key_is_not_published(self):
+        self.complete()
+        self.output_storage(objectKey="production/wrong/video.mp4")
+        reconcile(self.conn)
+        self.assertEqual(self.run_state()[1], "remix_lineage_mismatch")
+        self.assertEqual(self.outputs(), [])
+
+    def test_duplicate_cloud_original_bytes_are_not_linked_as_an_output(self):
+        self.cloud_source()
+        self.output_sha = self.source_sha
+        self.complete()
+        self.output_storage()
+        reconcile(self.conn)
+        self.assertEqual(self.run_state()[1], "remix_output_failed")
+        self.assertEqual(self.execute("SELECT output_asset_id FROM ads.content_remix_batch_runs WHERE run_id=%s",
+                                      (self.run,)), [(None,)])
 
 
 if __name__ == "__main__":

@@ -172,3 +172,9 @@ MODALITIES = ('speech', 'onscreen_text', 'visual', 'audio', 'metadata')
 
 def describe(mapping):
     return '；'.join(f'{key}={name}' for key, name in mapping.items())
+
+
+def display_labels():
+    """Every dictionary by category, so a card or a snapshot carries the labels of its own version."""
+    return {name.lower(): dict(value) for name, value in globals().items()
+            if name.isupper() and isinstance(value, dict) and all(isinstance(v, str) for v in value.values())}

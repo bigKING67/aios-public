@@ -62,5 +62,16 @@ services:
       CONTENT_AI_STUDIO_SEGMENT_SUGGEST_ENABLED: ${CONTENT_AI_STUDIO_SEGMENT_SUGGEST_ENABLED:-false}
       CONTENT_AI_STUDIO_SEGMENT_SUGGEST_LIVE: ${CONTENT_AI_STUDIO_SEGMENT_SUGGEST_LIVE:-0}
 
+  # 竞品单条拆解（卡 A）. Paid model calls: off unless COMPETITOR_ANALYSIS_ENABLED=true.
+  aios-content-competitor:
+    <<: *worker
+    profiles: [content-competitor]
+    command: [python, -m, content_production.competitor_analysis.worker]
+    environment:
+      <<: *worker-environment
+      COMPETITOR_ANALYSIS_ENABLED: ${COMPETITOR_ANALYSIS_ENABLED:-false}
+      # Originals reach the 300 MB import limit; /tmp is only 256 MB.
+      TMPDIR: /work
+
 volumes:
   content-render-work:

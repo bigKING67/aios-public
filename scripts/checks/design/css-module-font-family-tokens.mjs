@@ -21,6 +21,9 @@ const ALLOWED_FONT_FAMILY_VALUES = new Set([
   'var(--font-family-base)',
   'var(--font-family-display)',
   'var(--font-family-mono)',
+  // Visual language v2 roles (apps/web-vite/src/styles/aios-theme.css).
+  'var(--aios-font-ui)',
+  'var(--aios-font-data)',
   'inherit',
 ]);
 const { fail, reportOk } = createCheckGuard('font-family-token-audit', { errorPrefix: '' });
@@ -132,7 +135,7 @@ function main() {
   if (violations.length > 0) {
     console.error('[font-family-token-audit] CSS Modules font-family token violations found.');
     console.error(
-      '[font-family-token-audit] Use var(--font-family-base), var(--font-family-display), var(--font-family-mono), or inherit.\n',
+      '[font-family-token-audit] Use var(--font-family-base), var(--font-family-display), var(--font-family-mono), the v2 var(--aios-font-ui) / var(--aios-font-data), or inherit.\n',
     );
 
     for (const violation of violations) {

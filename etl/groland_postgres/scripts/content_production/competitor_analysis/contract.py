@@ -316,7 +316,12 @@ def _validate(card, context):
         check_refs(path, claim['stated_refs'] + claim['shown_refs'], evidence, '证据')
         if claim['support'] != 'not_shown' and not claim['shown_refs']:
             add('error', path, f'support={claim["support"]} 却没有画面证据')
-        if claim['support'] == 'not_shown' and claim['evidence_form'] != 'verbal_only':
+        # A user's spoken account/review is a testimony, not a demonstrated efficacy test.
+        # Keep its stated evidence required and never promote it to visual support.
+        stated_testimony = (claim['evidence_form'] == 'user_testimony' and bool(claim['stated_refs'])
+                            and all(ref in evidence and evidence[ref]['modality'] in ('speech', 'onscreen_text')
+                                    for ref in claim['stated_refs']))
+        if claim['support'] == 'not_shown' and claim['evidence_form'] != 'verbal_only' and not stated_testimony:
             add('warning', path, f'未展示却标了证据形态 {claim["evidence_form"]}')
         for ref in claim['shown_refs']:
             if ref in evidence and evidence[ref]['modality'] not in ('visual', 'onscreen_text'):

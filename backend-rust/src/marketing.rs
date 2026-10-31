@@ -23,6 +23,8 @@ mod types;
 mod validation;
 
 pub(crate) use cache::CreatorLibraryFilterOptionsCache;
+#[cfg(test)]
+pub(crate) use content_assets::http_fixture_settings;
 pub(crate) use content_assets::AnalysisCacheHydrationBatchResult;
 
 pub(crate) fn ensure_content_asset_manage_permission(
@@ -88,8 +90,16 @@ pub fn router() -> Router<Arc<AppState>> {
         .nest("/industry-news", industry_news::router())
 }
 
+pub fn content_assets_only_router() -> Router<Arc<AppState>> {
+    Router::new().nest("/content-assets", content_assets::router())
+}
+
 pub(crate) fn spawn_content_asset_stale_upload_cleanup(state: Arc<AppState>) {
     content_assets::spawn_stale_upload_cleanup(state);
+}
+
+pub(crate) fn spawn_competitor_auto_analysis(state: Arc<AppState>) {
+    content_assets::spawn_competitor_auto_analysis(state);
 }
 
 pub(crate) use content_assets::spawn_content_planner;

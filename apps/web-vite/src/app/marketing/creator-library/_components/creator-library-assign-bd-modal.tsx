@@ -1,4 +1,8 @@
-import { Form, Modal, Select } from 'antd';
+import { Modal } from '@lobehub/ui';
+import { useEffect } from 'react';
+import { FormField } from '@/components/molecules/form-field';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { bindSelectField, type ControlledFormRules, useControlledForm } from '@/hooks/use-controlled-form';
 import type {
   CreatorLibraryFilterOptions,
   CreatorLibraryItem,
@@ -13,6 +17,10 @@ import {
 interface AssignValues {
   ownerUserId?: string;
 }
+
+const ASSIGN_RULES: ControlledFormRules<AssignValues> = {
+  ownerUserId: [{ required: true, message: '请选择归属BD' }],
+};
 
 interface BdUserOption {
   label: string;
@@ -38,9 +46,36 @@ export function CreatorLibraryAssignBdModal({
   onSubmit,
   onCancel,
 }: CreatorLibraryAssignBdModalProps) {
-  const [form] = Form.useForm<AssignValues>();
   const bdUserOptions = buildBdUserOptions(filterOptions, item);
   const hasAssignableOptions = bdUserOptions.length > 0;
+  const form = useControlledForm<AssignValues>({
+    initialValues: { ownerUserId: item?.ownerUserId || undefined },
+    rules: ASSIGN_RULES,
+    onFinish: (values) => {
+      if (!item) {
+        return;
+      }
+      const selectedOption = bdUserOptions.find((option) => option.value === values.ownerUserId);
+      if (!selectedOption) {
+        return;
+      }
+      onSubmit(
+        withCreatorUpdateVersion(
+          {
+            ...formValuesToPayload(itemToFormValues(item)),
+            owner_name: selectedOption.displayName,
+            owner_user_id: selectedOption.value,
+          },
+          item
+        )
+      );
+    },
+  });
+
+  // Each opening starts from the creator's current owner.
+  useEffect(() => {
+    if (open) form.resetFields();
+  }, [form, item, open]);
 
   return (
     <Modal
@@ -51,50 +86,16 @@ export function CreatorLibraryAssignBdModal({
       onCancel={onCancel}
       destroyOnHidden
     >
-      <Form<AssignValues>
-        form={form}
-        layout="vertical"
-        initialValues={{
-          ownerUserId: item?.ownerUserId || undefined,
-        }}
-        onFinish={(values) => {
-          if (!item) {
-            return;
-          }
-          const selectedOption = bdUserOptions.find(
-            (option) => option.value === values.ownerUserId
-          );
-          if (!selectedOption) {
-            return;
-          }
-          onSubmit(
-            withCreatorUpdateVersion(
-              {
-                ...formValuesToPayload(itemToFormValues(item)),
-                owner_name: selectedOption.displayName,
-                owner_user_id: selectedOption.value,
-              },
-              item
-            )
-          );
-        }}
-      >
-        <Form.Item
-          name="ownerUserId"
-          label="归属BD"
-          rules={[{ required: true, message: '请选择归属BD' }]}
-        >
-          <Select
-            showSearch
-            allowClear
-            disabled={!hasAssignableOptions}
-            placeholder={hasAssignableOptions ? '选择负责BD' : '请先初始化BD账号'}
-            optionFilterProp="searchText"
-            filterOption={filterSelectOption}
-            options={bdUserOptions}
-          />
-        </Form.Item>
-      </Form>
+      <FormField form={form} name="ownerUserId" label="归属BD" required>
+        <LabeledSelect
+          {...bindSelectField(form, 'ownerUserId')}
+          showSearch
+          allowClear
+          disabled={!hasAssignableOptions}
+          placeholder={hasAssignableOptions ? '选择负责BD' : '请先初始化BD账号'}
+          options={bdUserOptions}
+        />
+      </FormField>
     </Modal>
   );
 }
@@ -123,13 +124,4 @@ function buildBdUserOptions(
     });
   }
   return options;
-}
-
-function filterSelectOption(
-  inputValue: string,
-  option?: { value?: string | number | null; searchText?: string }
-) {
-  const keyword = inputValue.toLowerCase();
-  const searchText = String(option?.searchText ?? option?.value ?? '').toLowerCase();
-  return searchText.includes(keyword);
 }

@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   line-height: var(--line-height-tight);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   border-bottom: 1px dashed var(--dashboard-goods-header-underline);
   padding-bottom: 1px;
   cursor: help;
@@ -16,7 +16,7 @@
 }
 
 .scoreValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xl);
   font-weight: 630;
   line-height: var(--line-height-compact);
@@ -28,7 +28,7 @@
   align-items: center;
   gap: 6px;
   font-size: var(--font-size-xs);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .confidencePill {
@@ -41,21 +41,21 @@
 }
 
 .confidenceHigh {
-  color: var(--status-success-strong);
-  background: var(--status-success-bg);
-  border-color: var(--status-success-border);
+  color: var(--aios-status-success-strong);
+  background: var(--lobe-color-success-bg);
+  border-color: var(--lobe-color-success-border);
 }
 
 .confidenceMedium {
-  color: var(--status-warning-strong);
-  background: var(--status-warning-bg);
-  border-color: var(--status-warning-border);
+  color: var(--aios-status-warning-strong);
+  background: var(--lobe-color-warning-bg);
+  border-color: var(--lobe-color-warning-border);
 }
 
 .confidenceLow {
-  color: var(--status-danger-strong);
-  background: var(--status-danger-bg);
-  border-color: var(--status-danger-border);
+  color: var(--aios-status-danger-strong);
+  background: var(--lobe-color-error-bg);
+  border-color: var(--lobe-color-error-border);
 }
 
 @media (max-width: 768px) {

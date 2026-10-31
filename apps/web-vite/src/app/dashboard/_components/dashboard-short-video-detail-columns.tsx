@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import dayjs from 'dayjs';
 import {
   formatTableInteger,
@@ -41,7 +41,7 @@ export function buildDashboardShortVideoDetailColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardShortVideoDetailTableClassNames;
-}): ColumnsType<DashboardShortVideoDetailRow> {
+}): TableColumnsType<DashboardShortVideoDetailRow> {
   const headerCellProps = () => buildShortVideoHeaderCellProps(classNames);
   const bodyCellProps = () => buildShortVideoBodyCellProps(classNames);
   const textHeaderCellProps = () => buildShortVideoTextHeaderCellProps(classNames);

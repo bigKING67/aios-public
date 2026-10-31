@@ -1,15 +1,15 @@
 .goodsMatrixSummaryTone {
-  border-color: var(--goods-matrix-summary-border, var(--border-color));
-  background: var(--goods-matrix-summary-bg, var(--bg-hover));
-  color: var(--goods-matrix-summary-text, var(--text-secondary));
+  border-color: var(--goods-matrix-summary-border, var(--lobe-color-border));
+  background: var(--goods-matrix-summary-bg, var(--lobe-color-fill-tertiary));
+  color: var(--goods-matrix-summary-text, var(--lobe-color-text-secondary));
 }
 
 .goodsMatrixSummaryDotTone {
-  background: var(--goods-matrix-summary-dot, var(--text-tertiary));
+  background: var(--goods-matrix-summary-dot, var(--lobe-color-text-tertiary));
 }
 
 .platformLegendDotTone {
-  background: var(--platform-legend-dot-color, var(--text-tertiary));
+  background: var(--platform-legend-dot-color, var(--lobe-color-text-tertiary));
 }
 
 .liveFunnelBarTone {

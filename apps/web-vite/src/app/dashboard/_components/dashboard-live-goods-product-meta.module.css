@@ -24,7 +24,7 @@
 
 .productMetaMuted .productMetaItem {
   border-color: var(--dashboard-live-meta-muted-border);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   color: var(--dashboard-live-meta-muted-text);
 }
 

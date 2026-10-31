@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card } from 'antd';
+import { Block } from '@lobehub/ui';
 import {
   useGenerateSummaryMutation,
   useUpdateSummaryMutation,
@@ -87,10 +87,9 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
 
   return (
     <>
-      <Card
-        className={`weekly-summary-card ${styles.cardRoot}`}
-        title={summaryLabel}
-        extra={
+      <Block variant="outlined" className={`weekly-summary-card ${styles.cardRoot}`}>
+        <div className={styles.cardHeader}>
+          <div className={styles.cardTitle}>{summaryLabel}</div>
           <WeeklySummaryCardActionBar
             statusTagLabel={statusTagLabel}
             statusTagColor={statusTagColor}
@@ -109,22 +108,23 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
             onOpenEdit={openEditModal}
             onGenerateSummary={handleGenerateSummary}
           />
-        }
-      >
-        <WeeklySummaryCardContent
-          data={data}
-          isLoading={isLoading}
-          isError={isError}
-          errorMessage={errorMessage}
-          status={status}
-          summaryLabel={summaryLabel}
-          canGenerateSummary={canGenerateSummary}
-          isBusy={isBusy}
-          isGeneratingMutation={isGeneratingMutation}
-          onRefetch={handleRefetchSummary}
-          onGenerateSummary={handleGenerateSummary}
-        />
-      </Card>
+        </div>
+        <div className={styles.cardBody}>
+          <WeeklySummaryCardContent
+            data={data}
+            isLoading={isLoading}
+            isError={isError}
+            errorMessage={errorMessage}
+            status={status}
+            summaryLabel={summaryLabel}
+            canGenerateSummary={canGenerateSummary}
+            isBusy={isBusy}
+            isGeneratingMutation={isGeneratingMutation}
+            onRefetch={handleRefetchSummary}
+            onGenerateSummary={handleGenerateSummary}
+          />
+        </div>
+      </Block>
 
       <WeeklySummaryConfigModal {...configModalProps} />
 

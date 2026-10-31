@@ -69,7 +69,7 @@ pub(in crate::marketing::content_assets) async fn bind_source(
     permission: SourcePermission,
 ) -> AppResult<RemixSource> {
     Ok(RemixSource {
-        bound: assets::bind_source(pool, bucket, user, asset_id, permission).await?,
+        bound: assets::bind_remix_source(pool, bucket, user, asset_id, permission).await?,
     })
 }
 

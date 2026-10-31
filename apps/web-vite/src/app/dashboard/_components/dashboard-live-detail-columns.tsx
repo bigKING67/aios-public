@@ -1,5 +1,4 @@
-import { Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Tag, type TableColumnsType } from '@lobehub/ui';
 import dayjs from 'dayjs';
 import {
   formatCompactWanCurrency,
@@ -63,7 +62,7 @@ export function buildDashboardLiveDetailColumns({
   isMobile: boolean;
   classNames: DashboardLiveDetailTableClassNames;
   onOpenMetrics: (row: DashboardLiveDetailRow) => void;
-}): ColumnsType<DashboardLiveDetailRow> {
+}): TableColumnsType<DashboardLiveDetailRow> {
   const headerCellProps = () => buildLiveDetailHeaderCellProps(classNames);
   const bodyCellProps = () => buildLiveDetailBodyCellProps(classNames);
   const fixedRightHeaderCellProps = () => buildLiveDetailFixedRightHeaderCellProps(classNames);

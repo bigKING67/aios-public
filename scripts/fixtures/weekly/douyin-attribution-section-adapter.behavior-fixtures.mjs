@@ -319,6 +319,7 @@ function assertSectionContainerIsRenderOnly(repoRoot) {
   for (const identifierName of [
     'buildDouyinAttributionSectionProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinCardProductRow',
     'DouyinCardSourceRow',

@@ -1,6 +1,6 @@
 'use client';
 
-import { Tooltip } from 'antd';
+import { Tooltip } from '@lobehub/ui';
 import type { DataOpsNotificationChannel, DataOpsNotificationEvent } from '@/config/dataops-hub';
 import { DataOpsNotificationLinkIndex } from './dataops-notification-link-index';
 import { getNotificationEventTypeLabel } from './dataops-hub-formatters';
@@ -50,13 +50,13 @@ export function DataOpsNotificationExpandedRow({
             </div>
             <div className={pipelineStyles.pipelineKvItem}>
               <span className={pipelineStyles.pipelineKvLabel}>Flow</span>
-              <Tooltip title={record.flowName}>
+              <Tooltip title={record.flowName || undefined}>
                 <span className={pipelineStyles.pipelineKvValue}>{record.flowName}</span>
               </Tooltip>
             </div>
             <div className={pipelineStyles.pipelineKvItem}>
               <span className={pipelineStyles.pipelineKvLabel}>目标表</span>
-              <Tooltip title={record.targetTable}>
+              <Tooltip title={record.targetTable || undefined}>
                 <span className={pipelineStyles.pipelineKvValue}>{record.targetTable || '-'}</span>
               </Tooltip>
             </div>

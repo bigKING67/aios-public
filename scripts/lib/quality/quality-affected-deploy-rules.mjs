@@ -11,9 +11,18 @@ import {
 } from './quality-affected-path-rules.mjs';
 
 export function deployAffectedRule(file) {
+  if (file === 'scripts/build/prepare-docker-dependencies.mjs') {
+    return {
+      gates: [...DEPLOY_SCRIPT_CONFIG_GATES, 'verify:frontend:docker-dependency-cache-behavior'],
+      reason: `${file}: frontend Docker dependency preparation`,
+    };
+  }
   if (isDeployConfigFile(file)) {
     return {
-      gates: DEPLOY_CONFIG_GATES,
+      gates: [
+        ...DEPLOY_CONFIG_GATES,
+        ...(file === 'Dockerfile.vite' ? ['verify:frontend:docker-dependency-cache-behavior'] : []),
+      ],
       reason: `${file}: deploy/container config`,
     };
   }

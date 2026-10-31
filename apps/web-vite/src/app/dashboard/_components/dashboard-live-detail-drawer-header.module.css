@@ -32,7 +32,7 @@
   border-radius: 999px;
   border: 1px solid var(--dashboard-detail-drawer-border);
   background: var(--dashboard-detail-drawer-bg);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 430;
   line-height: var(--line-height-tight);

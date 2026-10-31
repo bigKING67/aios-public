@@ -7,6 +7,14 @@ export function assertFrontendBuildAffectedMapping({
   assertTrue,
   registry,
 }) {
+  for (const file of [
+    'Dockerfile.vite',
+    'scripts/build/prepare-docker-dependencies.mjs',
+    'scripts/checks/frontend/docker-dependency-cache.behavior.mjs',
+  ]) {
+    const selected = selectAffectedGates(registry, [file]);
+    assertTrue(selected.names.includes('verify:frontend:docker-dependency-cache-behavior'), `${file} must retain Docker cache regression coverage`);
+  }
   const frontendCheck = selectAffectedGates(registry, ['scripts/checks/frontend/bundle-budget.mjs']);
   assertTrue(frontendCheck.names.includes('verify:frontend:bundle-budget'), 'frontend check command should select its paired gate');
   assertTrue(frontendCheck.names.includes('verify:frontend:delivery-gate-registry'), 'frontend check command should select delivery registry guard');

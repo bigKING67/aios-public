@@ -2,6 +2,6 @@
   overflow: hidden;
   border-radius: 15px;
   border: 1px solid var(--dashboard-live-card-border);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   box-shadow: none;
 }

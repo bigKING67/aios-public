@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   calcChangePercent,
   formatSignedPercent,
@@ -12,7 +12,7 @@ export {
 export { buildDouyinLiveColumns } from './platform-tab-douyin-live-columns';
 export { buildDouyinShortvideoColumns } from './platform-tab-douyin-shortvideo-columns';
 
-export function buildDouyinMetricDetailColumns(): ColumnsType<DouyinMetricDetailRow> {
+export function buildDouyinMetricDetailColumns(): TableColumnsType<DouyinMetricDetailRow> {
   return [
     {
       title: '指标',

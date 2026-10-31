@@ -19,7 +19,7 @@ export function getAuditLogResultState(record: AuditLog) {
   const isSuccess = statusText.toLowerCase().includes('success') || record.success === true;
 
   return {
-    color: isSuccess ? 'green' : 'red',
+    color: isSuccess ? 'success' : 'error',
     label: isSuccess ? '成功' : '失败',
   };
 }

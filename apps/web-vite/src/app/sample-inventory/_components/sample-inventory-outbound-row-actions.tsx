@@ -1,14 +1,5 @@
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  ExperimentOutlined,
-  FormOutlined,
-  RedoOutlined,
-  RollbackOutlined,
-} from "@ant-design/icons";
-import { Button, Popconfirm, Space } from "antd";
+import { CircleCheck, CircleX, FlaskConical, Pencil, Redo2, SquarePen, Trash2, Undo2 } from 'lucide-react';
+import { Button, confirmModal, Flexbox } from '@lobehub/ui';
 
 import type {
   SampleInventoryOutboundStatus,
@@ -31,16 +22,16 @@ export function SampleInventoryOutboundRowActions({
   onArchive,
 }: SampleInventoryOutboundRowActionsProps) {
   return (
-    <Space size="small" wrap={false}>
+    <Flexbox horizontal gap={8}>
       {item.status === "pending" && (
         <>
-          <Button type="link" size="small" icon={<EditOutlined aria-hidden="true" />} onClick={() => onEdit(item)}>
+          <Button type="link" size="small" icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={() => onEdit(item)}>
             编辑
           </Button>
           <Button
             type="link"
             size="small"
-            icon={<CheckCircleOutlined aria-hidden="true" />}
+            icon={<CircleCheck size={14} strokeWidth={1.8} aria-hidden="true" />}
             title={`审批通过后立即扣减库存 ${item.quantity}，手工预留不变`}
             onClick={() => onTransition(item, "approved")}
           >
@@ -50,20 +41,27 @@ export function SampleInventoryOutboundRowActions({
             type="link"
             danger
             size="small"
-            icon={<CloseCircleOutlined aria-hidden="true" />}
+            icon={<CircleX size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onTransition(item, "rejected")}
           >
             驳回
           </Button>
-          <Popconfirm
-            title="删除该待审批记录？"
-            description="待审批记录尚未影响库存。"
-            onConfirm={() => onArchive(item)}
+          <Button
+            type="link"
+            danger
+            size="small"
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+            onClick={() =>
+              confirmModal({
+                title: '删除该待审批记录？',
+                content: '待审批记录尚未影响库存。',
+                okButtonProps: { danger: true },
+                onOk: () => onArchive(item),
+              })
+            }
           >
-            <Button type="link" danger size="small" icon={<DeleteOutlined aria-hidden="true" />}>
-              删除
-            </Button>
-          </Popconfirm>
+            删除
+          </Button>
         </>
       )}
       {item.status === "approved" && (
@@ -71,7 +69,7 @@ export function SampleInventoryOutboundRowActions({
           <Button
             type="link"
             size="small"
-            icon={<FormOutlined aria-hidden="true" />}
+            icon={<SquarePen size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onEditTracking(item)}
           >
             编辑单号
@@ -79,7 +77,7 @@ export function SampleInventoryOutboundRowActions({
           <Button
             type="link"
             size="small"
-            icon={<ExperimentOutlined aria-hidden="true" />}
+            icon={<FlaskConical size={14} strokeWidth={1.8} aria-hidden="true" />}
             title="确认取样只更新流程状态，库存不再变化"
             onClick={() => onTransition(item, "sampled")}
           >
@@ -88,21 +86,28 @@ export function SampleInventoryOutboundRowActions({
           <Button
             type="link"
             size="small"
-            icon={<RollbackOutlined aria-hidden="true" />}
+            icon={<Undo2 size={14} strokeWidth={1.8} aria-hidden="true" />}
             title={`撤回待审批后恢复库存 ${item.quantity}，手工预留不变`}
             onClick={() => onTransition(item, "pending")}
           >
             撤回
           </Button>
-          <Popconfirm
-            title="删除该已审批记录并恢复库存？"
-            description={`将回补库存 ${item.quantity}，手工预留不变。`}
-            onConfirm={() => onArchive(item)}
+          <Button
+            type="link"
+            danger
+            size="small"
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+            onClick={() =>
+              confirmModal({
+                title: '删除该已审批记录并恢复库存？',
+                content: `将回补库存 ${item.quantity}，手工预留不变。`,
+                okButtonProps: { danger: true },
+                onOk: () => onArchive(item),
+              })
+            }
           >
-            <Button type="link" danger size="small" icon={<DeleteOutlined aria-hidden="true" />}>
-              删除
-            </Button>
-          </Popconfirm>
+            删除
+          </Button>
         </>
       )}
       {item.status === "sampled" && (
@@ -110,21 +115,28 @@ export function SampleInventoryOutboundRowActions({
           <Button
             type="link"
             size="small"
-            icon={<RollbackOutlined aria-hidden="true" />}
+            icon={<Undo2 size={14} strokeWidth={1.8} aria-hidden="true" />}
             title="仅回退流程状态，库存保持不变"
             onClick={() => onTransition(item, "approved")}
           >
             退回已审批
           </Button>
-          <Popconfirm
-            title="删除该已取样记录并恢复库存？"
-            description={`将回补库存 ${item.quantity}，手工预留不变。`}
-            onConfirm={() => onArchive(item)}
+          <Button
+            type="link"
+            danger
+            size="small"
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+            onClick={() =>
+              confirmModal({
+                title: '删除该已取样记录并恢复库存？',
+                content: `将回补库存 ${item.quantity}，手工预留不变。`,
+                okButtonProps: { danger: true },
+                onOk: () => onArchive(item),
+              })
+            }
           >
-            <Button type="link" danger size="small" icon={<DeleteOutlined aria-hidden="true" />}>
-              删除
-            </Button>
-          </Popconfirm>
+            删除
+          </Button>
         </>
       )}
       {item.status === "rejected" && (
@@ -132,18 +144,28 @@ export function SampleInventoryOutboundRowActions({
           <Button
             type="link"
             size="small"
-            icon={<RedoOutlined aria-hidden="true" />}
+            icon={<Redo2 size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onTransition(item, "pending")}
           >
             重新提交
           </Button>
-          <Popconfirm title="删除该已驳回记录？" onConfirm={() => onArchive(item)}>
-            <Button type="link" danger size="small" icon={<DeleteOutlined aria-hidden="true" />}>
-              删除
-            </Button>
-          </Popconfirm>
+          <Button
+            type="link"
+            danger
+            size="small"
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+            onClick={() =>
+              confirmModal({
+                title: '删除该已驳回记录？',
+                okButtonProps: { danger: true },
+                onOk: () => onArchive(item),
+              })
+            }
+          >
+            删除
+          </Button>
         </>
       )}
-    </Space>
+    </Flexbox>
   );
 }

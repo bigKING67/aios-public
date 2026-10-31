@@ -19,7 +19,11 @@ from .asr_client import (
   transcript_excerpt,
   word_count,
 )
+from .funasr_local import FunasrLocalClient
 from .seed_asr import SeedAsrClient, prepare_seed_input, reserve_submission
+
+# Providers that read the original's audio: the transcript is bound to that exact source version.
+SOURCE_BOUND_PROVIDERS = {"seed_asr", "funasr_local"}
 from .repository import connect_pg
 from .tos_storage import TosStorageClient, TosStorageConfig, build_object_key
 from .worker_runtime import classify_processing_error as _classify_processing_error
@@ -27,7 +31,7 @@ from .worker_runtime import decimal_or_none as _decimal_or_none
 from .worker_runtime import env_int as _env_int
 from .worker_runtime import job_metadata as _job_metadata
 from .worker_runtime import json_safe as _json_safe
-from .worker_runtime import load_env_file
+from .worker_runtime import claim_after_seconds, load_env_file
 from .worker_runtime import update_processing_job_stage as _update_processing_job_stage
 from .worker_video_input import InputRole, prepare_video_model_input
 
@@ -82,6 +86,8 @@ def transcript_client_for_job(job):
       api_key=os.getenv("AIOS_CAPTION_API_KEY", ""), model=os.getenv("AIOS_CAPTION_MODEL", ""), protocol="responses", output_mode=mode)
   if _job_metadata(job).get("caption_required") is True or os.getenv("CONTENT_ASSET_TRANSCRIPT_PROVIDER", "ark_video") == "seed_asr":
     return SeedAsrClient(os.getenv("DOUBAO_ASR_API_KEY", ""))
+  if os.getenv("CONTENT_ASSET_TRANSCRIPT_PROVIDER", "ark_video") == "funasr_local":
+    return FunasrLocalClient()
   return ArkVideoTranscriptClient(TranscriptConfig.from_env())
 
 
@@ -101,7 +107,7 @@ def process_content_asset_transcript_jobs(limit: int = 10, temp_root: Optional[P
     work_root = Path(tmp_dir)
     for _ in range(max(1, limit)):
       with connect_pg() as conn:
-        job = _claim_next_transcript_job(conn)
+        job = _claim_next_transcript_job(conn, claim_after_seconds())
       if job is None:
         stats["empty"] += 1
         break
@@ -211,7 +217,10 @@ def _insert_transcript_jobs(
   return count
 
 
-def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional[dict[str, Any]]:
+def _claim_next_transcript_job(
+  conn: psycopg2.extensions.connection, claim_after: Optional[int] = None,
+) -> Optional[dict[str, Any]]:
+  """`claim_after` (seconds): only jobs queued at least that long (fallback instance)."""
   with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
     cur.execute(
       """
@@ -225,6 +234,7 @@ def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional
           AND asset.is_deleted = FALSE
           AND asset.external_only = FALSE
           AND (asset.raw_object_key IS NOT NULL OR asset.preview_object_key IS NOT NULL)
+          AND (%s::INTEGER IS NULL OR job.queued_at < NOW() - make_interval(secs => %s::INTEGER))
         ORDER BY job.queued_at ASC, job.created_at ASC
         LIMIT 1
         FOR UPDATE SKIP LOCKED
@@ -281,7 +291,8 @@ def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional
         asset.notes
       FROM claimed
       JOIN ads.marketing_content_assets asset ON asset.asset_id = claimed.asset_id
-      """
+      """,
+      (claim_after, claim_after),
     )
     row = cur.fetchone()
   conn.commit()
@@ -291,7 +302,7 @@ def _claim_next_transcript_job(conn: psycopg2.extensions.connection) -> Optional
 def _process_transcript_job(
   *,
   storage: TosStorageClient,
-  client: ArkVideoTranscriptClient | SeedAsrClient,
+  client: ArkVideoTranscriptClient | SeedAsrClient | FunasrLocalClient,
   job: dict[str, Any],
   work_dir: Path,
   signed_url_ttl: int,
@@ -302,7 +313,18 @@ def _process_transcript_job(
   input_object_key, input_role = _resolve_transcript_input(job, transcript_source)
   update_stage = _stage_updater(job)
   update_stage("preparing_input", "准备脚本输入", 14, {"inputRole": input_role})
-  if isinstance(client, SeedAsrClient):
+  if isinstance(client, FunasrLocalClient):
+    if input_role != "raw":
+      raise RuntimeError("本地语音识别必须使用原片")
+    audio, duration_ms, _source_hash = prepare_seed_input(storage, job, work_dir)
+    update_stage("calling_model", "本地语音识别", 58, {"model": client.config.model})
+    try:
+      result = client.transcribe(audio, duration_ms)
+    finally:
+      audio.unlink(missing_ok=True)
+    video_input = {"model_input_role": "raw", "model_input_object_key": input_object_key,
+                   "strategy": "funasr_local_original_audio", "source_size_bytes": job.get("file_size_bytes")}
+  elif isinstance(client, SeedAsrClient):
     if input_role != "raw":
       raise RuntimeError("逐字 ASR 必须使用原片")
     audio, duration_ms, _source_hash = prepare_seed_input(storage, job, work_dir)
@@ -381,7 +403,7 @@ def _process_transcript_job(
     "captionPlan": result.raw_response.get("captionPlan"),
     "captionError": result.raw_response.get("captionError"),
     "wordTiming": result.raw_response.get("wordTiming"),
-    "sourceSha256": job.get("raw_sha256") if result.provider == "seed_asr" else None,
+    "sourceSha256": job.get("raw_sha256") if result.provider in SOURCE_BOUND_PROVIDERS else None,
     "confidence": result.confidence,
     "usage": result.usage,
     "responseId": result.response_id,
@@ -442,7 +464,7 @@ def _complete_transcript_job(
     "caption_plan": result.raw_response.get("captionPlan"),
     "caption_error": result.raw_response.get("captionError"),
     "word_timing": result.raw_response.get("wordTiming"),
-    "source_sha256": job.get("raw_sha256") if result.provider == "seed_asr" else None,
+    "source_sha256": job.get("raw_sha256") if result.provider in SOURCE_BOUND_PROVIDERS else None,
     "provider": result.provider,
     "model": result.model,
     "response_id": result.response_id,
@@ -459,7 +481,7 @@ def _complete_transcript_job(
     "processing_stage_updated_at": datetime.now(timezone.utc).isoformat(),
   }
   with conn.cursor() as cur:
-    if result.provider == "seed_asr":
+    if result.provider in SOURCE_BOUND_PROVIDERS:
       cur.execute("SELECT raw_object_key, raw_sha256 FROM ads.marketing_content_assets WHERE asset_id = %s FOR UPDATE", (asset_id,))
       current = cur.fetchone()
       if not current or tuple(current) != (input_object_key, job.get("raw_sha256")):

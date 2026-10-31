@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { MessageInstance } from "antd/es/message/interface";
+import type { ToastAPI } from "@lobehub/ui";
 
 import type {
   ArchiveSampleInventorySampleRequest,
@@ -72,7 +72,7 @@ import {
 } from "../_lib/sample-inventory-types";
 
 type UseSampleInventoryActionsOptions = {
-  messageApi: MessageInstance;
+  messageApi: SampleInventoryMessageApi;
   setReadOnly: (readOnly: boolean) => void;
 };
 
@@ -97,6 +97,9 @@ function sampleMatchesQuery(item: SampleInventorySample, query?: SampleInventory
   if (query.dateTo && updatedAt > Date.parse(query.dateTo)) return false;
   return true;
 }
+
+/** The toast calls the sample inventory makes; the page passes lobe `toast`, tests a recorder. */
+export type SampleInventoryMessageApi = Pick<ToastAPI, "success" | "error" | "warning" | "info">;
 
 export function useSampleInventoryActions({ messageApi, setReadOnly }: UseSampleInventoryActionsOptions) {
   const queryClient = useQueryClient();

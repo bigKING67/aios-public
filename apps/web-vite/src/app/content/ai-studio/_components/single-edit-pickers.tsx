@@ -1,5 +1,5 @@
-import { FileImageOutlined, PlayCircleFilled, VideoCameraOutlined } from '@ant-design/icons';
-import { Alert, Button, Drawer, Modal, Select, Skeleton } from 'antd';
+import { CirclePlay, ImageIcon, VideoIcon } from 'lucide-react';
+import { Alert, Button, Drawer, Modal, SkeletonText } from '@lobehub/ui';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/atoms/badge';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -10,6 +10,7 @@ import { referenceAssetOptions, remixBatchStructureText, shortAssetTitle, type R
 import { labelName, presetDisplayName } from '../_lib/segment-display';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
 import { formatShortTimestamp } from '../_lib/studio-time';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { RemixReferencePicker } from './remix-reference-picker';
 import { SegmentRangePlayer } from './remix-candidates';
 import { useRemixBatch, useRemixBatches } from './use-remix-batches';
@@ -58,7 +59,7 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
   if (batchId) {
     const items = (detail.data?.items ?? []).filter((item) => item.outcome === 'succeeded');
     body = detail.isPending ? (
-      <Skeleton active paragraph={{ rows: 3 }} title={false} />
+      <SkeletonText rows={3} />
     ) : detail.isError ? (
       <Alert type="error" showIcon title="成片读取失败" description={errorText(detail.error)} />
     ) : items.length === 0 ? (
@@ -69,7 +70,7 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
           <li key={item.ordinal}>
             <button type="button" className={editStyles.pickCard} onClick={() => pick(item)}>
               <span className={editStyles.pickCover}>
-                {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : <VideoCameraOutlined aria-hidden />}
+                {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : <VideoIcon size={14} strokeWidth={1.8} aria-hidden />}
               </span>
               <span className={editStyles.pickBody}>
                 <span className={editStyles.pickTitle}>第 {item.ordinal} 条</span>
@@ -84,7 +85,7 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
     );
   } else {
     body = batches.isPending ? (
-      <Skeleton active paragraph={{ rows: 4 }} title={false} />
+      <SkeletonText rows={4} />
     ) : batches.isError ? (
       <Alert type="error" showIcon title="成片读取失败" description={errorText(batches.error)} />
     ) : withOutputs.length === 0 ? (
@@ -95,7 +96,7 @@ export function OutputStartModal({ open, preset, presets, onPick, onClose }: Out
           <li key={batch.batchId}>
             <button type="button" className={editStyles.pickCard} onClick={() => setBatchId(batch.batchId)}>
               <span className={editStyles.pickCover}>
-                {batch.coverUrls[0] ? <img src={batch.coverUrls[0]} alt="" loading="lazy" /> : <VideoCameraOutlined aria-hidden />}
+                {batch.coverUrls[0] ? <img src={batch.coverUrls[0]} alt="" loading="lazy" /> : <VideoIcon size={14} strokeWidth={1.8} aria-hidden />}
               </span>
               <span className={editStyles.pickBody}>
                 <span className={editStyles.pickTitle}>
@@ -185,8 +186,7 @@ export function SegmentLibraryDrawer(props: SegmentLibraryDrawerProps) {
       open={props.open}
       title={props.replacing ? '替换片段' : '从片段库添加'}
       placement="right"
-      size={compact ? '100%' : 560}
-      destroyOnHidden
+      width={compact ? '100%' : 560}
       onClose={props.onClose}
     >
       {props.open ? <SegmentLibrary {...props} /> : null}
@@ -199,7 +199,7 @@ function SegmentLibrary({ preset, segments, loading, error, truncated, productNa
   const [limit, setLimit] = useState(LIBRARY_PAGE);
   const [playing, setPlaying] = useState<EditSegment | null>(null);
 
-  if (loading) return <Skeleton active paragraph={{ rows: 6 }} title={false} />;
+  if (loading) return <SkeletonText rows={6} />;
   if (error) return <Alert type="error" showIcon title="片段读取失败，请刷新后重试。" />;
 
   const sameProduct = productName ? segments.filter((segment) => segment.productName?.trim() === productName) : segments;
@@ -209,8 +209,8 @@ function SegmentLibrary({ preset, segments, loading, error, truncated, productNa
   return (
     <div className={editStyles.library}>
       <div className={editStyles.libraryFilters}>
-        <Select
-          aria-label="按框架筛选"
+        <LabeledSelect
+          label="按框架筛选"
           allowClear
           placeholder="全部框架"
           value={labelKey ?? undefined}
@@ -238,8 +238,8 @@ function SegmentLibrary({ preset, segments, loading, error, truncated, productNa
                   onClick={() => setPlaying(segment)}
                   aria-label={`播放 ${segment.assetTitle} ${range}`}
                 >
-                  {segment.coverUrl ? <img src={segment.coverUrl} alt="" loading="lazy" /> : <FileImageOutlined aria-hidden />}
-                  <PlayCircleFilled className={editStyles.libraryPlay} aria-hidden />
+                  {segment.coverUrl ? <img src={segment.coverUrl} alt="" loading="lazy" /> : <ImageIcon size={14} strokeWidth={1.8} aria-hidden />}
+                  <CirclePlay size={14} strokeWidth={1.8} className={editStyles.libraryPlay} aria-hidden />
                 </button>
                 <span className={editStyles.pickBody}>
                   <span className={editStyles.pickTitle}>{labelName(preset, segment.labelKey)}</span>

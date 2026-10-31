@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, App, Button, Spin } from 'antd';
+import { Alert, Button, confirmModal, Spin } from '@lobehub/ui';
 import { fetchProductionCapabilities, productionKeys } from '../_lib/content-production-api';
 import { ContentEditingDetail } from './content-editing-detail';
 import { ContentProductionWorkbench } from './content-production-workbench';
@@ -18,7 +18,6 @@ interface ContentEditingWorkspaceProps {
  * Runs API itself is unchanged.
  */
 export function ContentEditingWorkspace({ renderHeader }: ContentEditingWorkspaceProps = {}) {
-  const { modal } = App.useApp();
   const capabilities = useQuery({ queryKey: productionKeys.capabilities, queryFn: fetchProductionCapabilities });
   const enabled = capabilities.data?.enabled === true && capabilities.data.persistentPlansEnabled === true;
   const canWrite = capabilities.data?.canWrite === true;
@@ -31,15 +30,15 @@ export function ContentEditingWorkspace({ renderHeader }: ContentEditingWorkspac
   }, [editing]);
   const navigate = (action: () => void) => {
     const proceed = () => { setEditing(false); action(); };
-    if (editing) modal.confirm({ title: '放弃尚未保存的方案修改？', okText: '放弃并继续', cancelText: '继续编辑', onOk: proceed });
+    if (editing) confirmModal({ title: '放弃尚未保存的方案修改？', okText: '放弃并继续', cancelText: '继续编辑', onOk: proceed });
     else proceed();
   };
   const projectAction = <Button onClick={() => navigate(() => setEditor({}))}>工程精修</Button>;
   if (editor) return <ContentProductionWorkbench initialProjectId={editor.projectId} onBack={() => setEditor(null)} />;
-  if (capabilities.isPending) return <Spin aria-label="加载 AI 剪辑" />;
-  if (capabilities.isError) return <Alert type="error" title="无法加载 AI 剪辑" description={capabilities.error.message} action={<Button onClick={() => void capabilities.refetch()}>重试</Button>} />;
+  if (capabilities.isPending) return <Spin aria-label="加载 AI 合成" />;
+  if (capabilities.isError) return <Alert type="error" title="无法加载 AI 合成" description={capabilities.error.message} action={<Button onClick={() => void capabilities.refetch()}>重试</Button>} />;
   return <div className={styles.workspace}>
-    {renderHeader ? renderHeader(projectAction) : <header className={styles.heading}><div><h1>AI 剪辑</h1><p className={styles.helper}>从已有素材到成片，方案与制作进度都在这里。</p></div>{projectAction}</header>}
+    {renderHeader ? renderHeader(projectAction) : <header className={styles.heading}><div><h1>AI 合成</h1><p className={styles.helper}>从已有素材到成片，方案与制作进度都在这里。</p></div>{projectAction}</header>}
     {!enabled ? <Alert type="info" title="剪辑任务尚未启用" description="启用后可查看任务进度。已有工程可从「工程精修」继续编辑。" /> : <>
       {!canWrite && <Alert type="info" title="当前账号仅可查看任务，修改需要内容编辑权限。" />}
       {state.failure && <Alert type="error" showIcon title="操作未完成" description={state.failure} />}

@@ -22,13 +22,18 @@ export function segmentOriginLabel(origin: string): string {
 }
 
 /**
- * "框架 · v1". Seed names may already end with their version ("框架 v1"), so a
- * trailing version token matching the preset version is not repeated.
+ * The preset's name without its version: the version is an internal detail, so it only shows
+ * ("框架 · v2") when `siblings` lists another version of the same preset. Seed names may already
+ * end with their version ("框架 v1"); that trailing token is dropped rather than repeated.
  */
-export function presetDisplayName(preset: Pick<StudioSegmentPreset, 'name' | 'version'>): string {
+export function presetDisplayName(
+  preset: Pick<StudioSegmentPreset, 'presetKey' | 'name' | 'version'>,
+  siblings: readonly Pick<StudioSegmentPreset, 'presetKey' | 'version'>[] = [],
+): string {
   const suffix = new RegExp(`\\s+v${preset.version}$`, 'i');
   const base = preset.name.trim().replace(suffix, '').trim() || preset.name.trim();
-  return `${base} · v${preset.version}`;
+  const ambiguous = siblings.some((item) => item.presetKey === preset.presetKey && item.version !== preset.version);
+  return ambiguous ? `${base} · v${preset.version}` : base;
 }
 
 /** Stale rows and rows whose source hash moved are read-only everywhere. */
@@ -91,12 +96,11 @@ export function segmentLabelName(preset: StudioSegmentPreset | undefined, segmen
 }
 
 /**
- * Chart series tokens in label order, chosen so any five consecutive labels
- * are mutually distinguishable. Series 3 is omitted because it is nearly the
- * same cobalt as series 1 (CIEDE2000 ≈ 3); the closest remaining pair
- * (series 1 / 5) is ≈ 11.
+ * Chart series tokens in label order: blue, teal, amber, rose. Series 1 (violet) is left out because
+ * violet means AI on this surface, and series 6 is the muted gray that reads as "other / disabled";
+ * any four consecutive labels stay distinguishable (DESIGN.md › chart series v2).
  */
-export const LABEL_TONE_SERIES = [1, 6, 2, 5, 4] as const;
+export const LABEL_TONE_SERIES = [4, 2, 3, 5] as const;
 export type LabelToneSeries = (typeof LABEL_TONE_SERIES)[number] | 'muted';
 
 /** Stable chart-series tone per label position; unknown labels are muted. Label text always accompanies the color. */

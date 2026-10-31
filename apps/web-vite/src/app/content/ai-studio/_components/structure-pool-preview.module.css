@@ -1,0 +1,117 @@
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-4);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.headingCopy {
+  display: grid;
+  gap: var(--spacing-1);
+}
+
+.headingCopy h2,
+.headingCopy p {
+  margin: 0;
+}
+
+.headingCopy p,
+.meta,
+.empty {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-4);
+  align-items: baseline;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.summary strong {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-2) var(--spacing-3);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th {
+  color: var(--lobe-color-text-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
+.table td {
+  color: var(--lobe-color-text-secondary);
+}
+
+.table th:first-child,
+.table td:first-child {
+  width: 42%;
+  padding-left: 0;
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+}
+
+.structure {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.reason,
+.lowerBound {
+  display: block;
+  margin-top: 2px;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+}
+
+.empty {
+  margin: 0;
+  padding-block: var(--spacing-3);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .heading {
+    align-items: center;
+  }
+}

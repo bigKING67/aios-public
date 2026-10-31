@@ -1,8 +1,8 @@
 'use client';
 
-import { Button, Empty, Select, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Empty, Table, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsAuditEvent } from '@/config/dataops-hub';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import {
   getAuditResultFilterLabel,
   getAuditTimeRangeFilterLabel,
@@ -22,7 +22,7 @@ interface DataOpsAuditDetailProps {
   isAuditFailedOnly: boolean;
   isAudit24hFailed: boolean;
   isAudit7dFailed: boolean;
-  columns: ColumnsType<DataOpsAuditEvent>;
+  columns: TableColumnsType<DataOpsAuditEvent>;
   isCompactViewport: boolean;
   onResultFilterChange: (value: AuditResultFilter) => void;
   onTimeRangeFilterChange: (value: AuditTimeRangeFilter) => void;
@@ -63,34 +63,37 @@ export function DataOpsAuditDetail({
     <>
       <div className={auditStyles.auditToolbar}>
         <div className={auditStyles.auditFilterGroup}>
-          <Select<AuditResultFilter>
+          <LabeledSelect<AuditResultFilter>
+            label="审计结果"
             size="small"
             value={auditResultFilter}
-            onChange={onResultFilterChange}
+            onChange={(value) => value && onResultFilterChange(value)}
             options={[
               { label: '全部结果', value: 'all' },
               { label: '成功', value: '成功' },
               { label: '失败', value: '失败' },
             ]}
-            className={auditStyles.auditFilterSelect}
+            wrapperClassName={auditStyles.auditFilterSelect}
           />
-          <Select<AuditTimeRangeFilter>
+          <LabeledSelect<AuditTimeRangeFilter>
+            label="审计时间范围"
             size="small"
             value={auditTimeRangeFilter}
-            onChange={onTimeRangeFilterChange}
+            onChange={(value) => value && onTimeRangeFilterChange(value)}
             options={[
               { label: '全部时间', value: 'all' },
               { label: '近 24 小时', value: '24h' },
               { label: '近 7 天', value: '7d' },
             ]}
-            className={auditStyles.auditFilterSelect}
+            wrapperClassName={auditStyles.auditFilterSelect}
           />
-          <Select<string>
+          <LabeledSelect<string>
+            label="审计操作"
             size="small"
             value={auditActionFilter}
-            onChange={onActionFilterChange}
+            onChange={(value) => value !== undefined && onActionFilterChange(value)}
             options={auditActionOptions}
-            className={auditStyles.auditActionSelect}
+            wrapperClassName={auditStyles.auditActionSelect}
           />
           <Button size="small" onClick={onResetFilters}>
             重置筛选

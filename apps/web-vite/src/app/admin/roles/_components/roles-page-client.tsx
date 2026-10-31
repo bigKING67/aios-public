@@ -1,20 +1,9 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import {
-  Alert,
-  Button,
-  Card,
-  Form,
-  Space,
-  Spin,
-  Table,
-  message,
-} from 'antd';
-import {
-  PlusOutlined,
-  ReloadOutlined,
-} from '@ant-design/icons';
+import { Alert, Button, Table, toast } from '@lobehub/ui';
+import { PageHeader, Surface } from '@lobehub/ui/dashboard';
+import { Plus, RotateCw } from 'lucide-react';
 import { Layout } from '@/components/organisms/layout';
 import { ProtectedRoute } from '@/components/protected-route';
 import { useIsMobile } from '@/hooks/use-media-query';
@@ -22,6 +11,7 @@ import { useBackendCapabilities } from '@/hooks/use-backend-capabilities';
 import { ADMIN_READ_PERMISSIONS } from '@/lib/permissions';
 import { isReservedElevatedRoleCode, isSuperAdminByRoleOrIdentity, normalizeRole } from '@/lib/role-access';
 import { useAuthStore } from '@/stores/auth.store';
+import styles from '../../_components/admin-page.module.css';
 import { RoleFormModal } from './role-form-modal';
 import { useRolesPageActions } from './roles-page-actions';
 import { useRolesPageListState } from './roles-page-list-state';
@@ -36,7 +26,8 @@ export function RolesPageClient() {
   const currentUser = useAuthStore((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<Role | null>(null);
-  const [form] = Form.useForm<RoleFormValues>();
+  // A new key per open remounts the form dialog, which starts its fields from `editingRole`.
+  const [formSession, setFormSession] = useState(0);
   const canManageElevatedRoles = useMemo(
     () =>
       isSuperAdminByRoleOrIdentity(currentUser?.roles || [], {
@@ -67,7 +58,6 @@ export function RolesPageClient() {
     deleteRoleMutation,
     bootstrapDefaultRolesMutation,
   } = useRolesPageActions({
-    form,
     editingRole,
     setIsModalOpen,
     setEditingRole,
@@ -75,55 +65,44 @@ export function RolesPageClient() {
 
   const handleCreate = useCallback(() => {
     setEditingRole(null);
-    form.setFieldsValue({
-      name: '',
-      code: '',
-      description: '',
-      is_active: true,
-    });
+    setFormSession((session) => session + 1);
     setIsModalOpen(true);
-  }, [form]);
+  }, []);
 
   const handleEdit = useCallback(
     (role: Role) => {
       if (!canManageElevatedRoles && isReservedElevatedRoleCode(role.code)) {
-        message.warning('仅超级管理员可编辑 admin/super_admin 角色。');
+        toast.warning('仅超级管理员可编辑 admin/super_admin 角色。');
         return;
       }
 
       setEditingRole(role);
-      form.setFieldsValue({
-        name: role.name,
-        code: role.code,
-        description: role.description,
-        is_active: role.is_active ?? true,
-      });
+      setFormSession((session) => session + 1);
       setIsModalOpen(true);
     },
-    [canManageElevatedRoles, form]
+    [canManageElevatedRoles]
   );
 
   const handleCancel = useCallback(() => {
     setIsModalOpen(false);
     setEditingRole(null);
-    form.resetFields();
-  }, [form]);
+  }, []);
 
   const handleSubmit = useCallback(
     (values: RoleFormValues) => {
       const normalizedCode = normalizeRole(values.code);
       if (!normalizedCode) {
-        message.error('请输入角色编码');
+        toast.error('请输入角色编码');
         return;
       }
 
       if (!canManageElevatedRoles && isReservedElevatedRoleCode(normalizedCode)) {
-        message.error('仅超级管理员可创建或修改 admin/super_admin 角色。');
+        toast.error('仅超级管理员可创建或修改 admin/super_admin 角色。');
         return;
       }
 
       if (!canManageElevatedRoles && editingRole && isReservedElevatedRoleCode(editingRole.code)) {
-        message.error('仅超级管理员可编辑 admin/super_admin 角色。');
+        toast.error('仅超级管理员可编辑 admin/super_admin 角色。');
         return;
       }
 
@@ -144,7 +123,7 @@ export function RolesPageClient() {
   const handleDeleteRole = useCallback(
     (role: Role) => {
       if (!canManageElevatedRoles && isReservedElevatedRoleCode(role.code)) {
-        message.warning('仅超级管理员可删除 admin/super_admin 角色。');
+        toast.warning('仅超级管理员可删除 admin/super_admin 角色。');
         return;
       }
 
@@ -163,34 +142,25 @@ export function RolesPageClient() {
     [canManageElevatedRoles, handleDeleteRole, handleEdit]
   );
 
+  const ready = !isCapabilitiesLoading && supportsRolesApi;
+
   return (
     <ProtectedRoute
       requiredPermission={ADMIN_READ_PERMISSIONS}
       permissionMode="any"
     >
       <Layout>
-        {!isCapabilitiesLoading && !supportsRolesApi ? (
-          <Card title="角色管理">
-            <Alert
-              type="info"
-              showIcon
-              title="当前后端未启用角色管理接口"
-              description={`检测到后端：${backendCapabilities?.backendName || 'unknown'}。当前环境的角色管理接口不可用，角色管理页已自动降级为提示态。`}
-            />
-          </Card>
-        ) : null}
-        {isCapabilitiesLoading ? (
-          <Card title="角色管理">
-            <Spin />
-          </Card>
-        ) : null}
-        {!isCapabilitiesLoading && supportsRolesApi ? (
-          <>
-            <Card
-              title="角色管理"
-              extra={
-                <Space wrap>
-                  <Button icon={<ReloadOutlined />} loading={isFetching} onClick={() => refetch()}>
+        <section className={styles.page} aria-labelledby="admin-roles-title" aria-busy={isCapabilitiesLoading || isLoading}>
+          <PageHeader
+            title={<span id="admin-roles-title">角色管理</span>}
+            action={
+              ready ? (
+                <div className={styles.toolbar}>
+                  <Button
+                    icon={<RotateCw size={16} strokeWidth={1.8} aria-hidden="true" />}
+                    loading={isFetching}
+                    onClick={() => refetch()}
+                  >
                     刷新
                   </Button>
                   <Button
@@ -199,14 +169,26 @@ export function RolesPageClient() {
                   >
                     补齐默认角色
                   </Button>
-                  <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
+                  <Button type="primary" icon={<Plus size={16} strokeWidth={1.8} aria-hidden="true" />} onClick={handleCreate}>
                     新建角色
                   </Button>
-                </Space>
-              }
-            >
+                </div>
+              ) : undefined
+            }
+          />
+          {isCapabilitiesLoading ? <Surface loading /> : null}
+          {!isCapabilitiesLoading && !supportsRolesApi ? (
+            <Alert
+              type="info"
+              showIcon
+              title="当前后端未启用角色管理接口"
+              description={`检测到后端：${backendCapabilities?.backendName || 'unknown'}。当前环境的角色管理接口不可用，角色管理页已自动降级为提示态。`}
+            />
+          ) : null}
+          {ready ? (
+            <>
               {isLoading ? (
-                <Spin />
+                <Surface loading />
               ) : isMobile ? (
                 <RolesMobileList
                   roles={mobilePagedRoles}
@@ -219,31 +201,33 @@ export function RolesPageClient() {
                   onDelete={handleDeleteRole}
                 />
               ) : (
-                <Table
-                  rowKey="id"
-                  columns={columns}
-                  dataSource={roleItems}
-                  pagination={{
-                    pageSize: 20,
-                    total: roleTotal,
-                    showTotal: (total) => `共 ${total} 条`,
-                  }}
-                  scroll={{ x: 1200 }}
-                />
+                <Surface bleed>
+                  <Table<Role>
+                    rowKey="id"
+                    columns={columns}
+                    dataSource={roleItems}
+                    pagination={{
+                      pageSize: 20,
+                      total: roleTotal,
+                      showTotal: (total) => `共 ${total} 条`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                  />
+                </Surface>
               )}
-            </Card>
 
-            <RoleFormModal
-              role={editingRole}
-              open={isModalOpen}
-              form={form}
-              canManageElevatedRoles={canManageElevatedRoles}
-              isSaving={createRoleMutation.isPending || updateRoleMutation.isPending}
-              onCancel={handleCancel}
-              onSubmit={handleSubmit}
-            />
-          </>
-        ) : null}
+              <RoleFormModal
+                key={formSession}
+                role={editingRole}
+                open={isModalOpen}
+                canManageElevatedRoles={canManageElevatedRoles}
+                isSaving={createRoleMutation.isPending || updateRoleMutation.isPending}
+                onCancel={handleCancel}
+                onSubmit={handleSubmit}
+              />
+            </>
+          ) : null}
+        </section>
       </Layout>
     </ProtectedRoute>
   );

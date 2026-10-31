@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import {
@@ -24,7 +24,7 @@ export function useDashboardOverviewDetailViewState({
   share,
   overviewDetailTableClassNames,
 }: DashboardOverviewDetailViewStateArgs) {
-  const detailColumns = useMemo<ColumnsType<DashboardOverviewDetailRow>>(
+  const detailColumns = useMemo<TableColumnsType<DashboardOverviewDetailRow>>(
     () =>
       buildDashboardOverviewDetailColumns({
         isMobile,

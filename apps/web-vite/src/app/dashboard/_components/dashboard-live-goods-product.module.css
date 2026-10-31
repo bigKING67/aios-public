@@ -1,7 +1,7 @@
 .productList {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .productCard {
@@ -10,7 +10,7 @@
   gap: 14px;
   align-items: center;
   padding: 12px 14px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   border-bottom: 1px solid var(--dashboard-live-goods-divider);
 }
 

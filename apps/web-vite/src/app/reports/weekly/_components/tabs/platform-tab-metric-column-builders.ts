@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   formatCurrencyFixed,
   formatInteger,
@@ -8,7 +8,7 @@ import {
 } from './platform-tab-formatters';
 import { createWeeklyMetricCellProps } from './platform-tab-column-cell-props';
 
-type WeeklyMetricColumn<Row extends object> = ColumnsType<Row>[number];
+type WeeklyMetricColumn<Row extends object> = TableColumnsType<Row>[number];
 type WeeklyMetricField<Row extends object> = Extract<keyof Row, string> | string;
 type WeeklyMetricFormatter<Row extends object, Key extends WeeklyMetricField<Row>> = (
   value: Row[Key & keyof Row],

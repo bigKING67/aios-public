@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
 
@@ -119,7 +119,7 @@ export function useDashboardGoodsDerivedViewState({
     });
   }, [goodsMatrixRows, goodsMatrixShareMedianPct]);
 
-  const goodsColumns = useMemo<ColumnsType<DashboardGoodsTableItem>>(
+  const goodsColumns = useMemo<TableColumnsType<DashboardGoodsTableItem>>(
     () =>
       buildDashboardGoodsColumns({
         isMobile,

@@ -9,8 +9,8 @@ export type RoutePolicyKind =
   | 'sample_inventory'
   | 'marketing_workspace'
   | 'creator_library'
-  | 'content_assets'
-  | 'content_assets_write';
+  | 'team_output'
+  | 'super_admin';
 
 export type ProtectedRoutePolicyEntry = {
   path: string;
@@ -61,7 +61,10 @@ export const ROUTE_PATHS = {
   contentAiStudioAnalysis: '/content/ai-studio/analysis',
   contentAiStudioEditing: '/content/ai-studio/editing',
   contentAiStudioEditingRun: '/content/ai-studio/editing/:runId',
+  contentAiStudioCompetitor: '/content/ai-studio/competitor',
   contentAiStudioTrends: '/content/ai-studio/trends',
+  contentAiStudioTeamOutput: '/content/ai-studio/team-output',
+  contentAiStudioPatterns: '/content/ai-studio/patterns',
   docs: '/docs',
   docsGuide: '/docs/guide',
   docsAnalysisFrameworks: '/docs/analysis-frameworks',
@@ -97,8 +100,8 @@ export const PROTECTED_ROUTE_POLICY_ENTRIES = [
   },
   {
     path: ROUTE_PATHS.dashboardIndustryMaterialInspiration,
-    kind: 'content_assets_write',
-    layoutMenuPath: ROUTE_PATHS.dashboardIndustryMaterialInspiration,
+    // Off the 看板 menu (2026-10-27): a standalone page kept for the super admin's direct links.
+    kind: 'super_admin',
   },
   {
     path: ROUTE_PATHS.dashboardCreatorLive,
@@ -156,17 +159,18 @@ export const PROTECTED_ROUTE_POLICY_ENTRIES = [
   },
   {
     path: ROUTE_PATHS.marketingContentAssets,
-    kind: 'content_assets',
+    // 素材库 and 直播中台 are open to the super admin only for now; AI 创作中心 is the shared module.
+    kind: 'super_admin',
     layoutMenuPath: ROUTE_PATHS.marketingContentAssets,
   },
   {
     path: ROUTE_PATHS.contentLiveCenter,
-    kind: 'authenticated',
+    kind: 'super_admin',
     layoutMenuPath: ROUTE_PATHS.contentLiveCenter,
   },
   {
     path: ROUTE_PATHS.contentLiveCenterAnalysis,
-    kind: 'authenticated',
+    kind: 'super_admin',
     layoutMenuPath: ROUTE_PATHS.contentLiveCenter,
   },
   {
@@ -210,13 +214,24 @@ export const PROTECTED_ROUTE_POLICY_ENTRIES = [
     layoutMenuPath: ROUTE_PATHS.contentAiStudio,
   },
   {
+    path: ROUTE_PATHS.contentAiStudioCompetitor,
+    kind: 'authenticated',
+    layoutMenuPath: ROUTE_PATHS.contentAiStudio,
+  },
+  {
     path: ROUTE_PATHS.contentAiStudioTrends,
     kind: 'authenticated',
     layoutMenuPath: ROUTE_PATHS.contentAiStudio,
   },
   {
+    // 团队产出: only managers holding the permission (or super admins) see people's output.
+    path: ROUTE_PATHS.contentAiStudioTeamOutput,
+    kind: 'team_output',
+    layoutMenuPath: ROUTE_PATHS.contentAiStudio,
+  },
+  {
     path: ROUTE_PATHS.marketingContentAssetDetail,
-    kind: 'content_assets',
+    kind: 'super_admin',
     layoutMenuPath: ROUTE_PATHS.marketingContentAssets,
   },
   {
@@ -270,7 +285,7 @@ export const PROTECTED_ROUTE_POLICY_ALIAS_ENTRIES = [
     kind: 'admin',
   },
   {
-    path: ROUTE_PATHS.content,
+    path: ROUTE_PATHS.contentAiStudioPatterns,
     kind: 'authenticated',
   },
 ] as const satisfies readonly RoutePolicyAliasEntry[];

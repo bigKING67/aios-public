@@ -1,6 +1,5 @@
-import { DownloadOutlined, LoginOutlined } from '@ant-design/icons';
-import { Button, Table } from 'antd';
-import type { TableProps } from 'antd';
+import { Button, Table, type TableProps } from '@lobehub/ui';
+import { Download, LogIn } from 'lucide-react';
 
 import { getQueryPlatformLabel, type QueryPlatform } from './dashboard-config';
 import { formatTableRate } from './dashboard-formatters';
@@ -127,7 +126,7 @@ export function DashboardOverviewDetailSection({
         <div className={actionsStyles.detailActions}>
           <Button
             type="primary"
-            icon={<DownloadOutlined />}
+            icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
             loading={isExporting}
             disabled={disableExport}
             block={isMobile}
@@ -141,7 +140,7 @@ export function DashboardOverviewDetailSection({
               <Button
                 type="link"
                 size="small"
-                icon={<LoginOutlined />}
+                icon={<LogIn size={14} strokeWidth={1.8} aria-hidden="true" />}
                 className={exportHintStyles.loginEntryButton}
                 onClick={onNavigateLogin}
               >

@@ -37,7 +37,7 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
   );
   assert.match(
     detailColumnsRendererStylesSource,
-    /--status-danger/u,
+    /--aios-status-danger/u,
     'multiple material id warning should use AIOS danger tokens instead of raw red colors'
   );
   assert.doesNotMatch(
@@ -131,10 +131,17 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
     'detail table should not keep the old dual-purpose GSV/refund renderer'
   );
 
-  const manualAttrColumnsSource = await readFile(
-    path.join(repoRoot, 'apps/web-vite/src/app/dashboard/creator/_components/creator-short-video-manual-attrs-columns.tsx'),
-    'utf8'
-  );
+  // The manual-attribute columns delegate their tag Select and tag rendering to sibling files.
+  const manualAttrColumnsSource = (
+    await Promise.all(
+      ['columns', 'select', 'tag-render'].map((part) =>
+        readFile(
+          path.join(repoRoot, `apps/web-vite/src/app/dashboard/creator/_components/creator-short-video-manual-attrs-${part}.tsx`),
+          'utf8'
+        )
+      )
+    )
+  ).join('\n');
   assert.match(
     manualAttrColumnsSource,
     /nativeEvent\.isComposing/u,
@@ -155,16 +162,8 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
     /placeholder="选已有 MCN，或直接输入新机构"/u,
     'MCN editor should tell users they can select an existing MCN or type a new one'
   );
-  assert.match(
-    manualAttrColumnsSource,
-    /没有匹配项，输入后按 Enter 作为新标签/u,
-    'creator type empty-search copy should explain Enter creates a new tag'
-  );
-  assert.match(
-    manualAttrColumnsSource,
-    /没有匹配项，输入后按 Enter 作为新 MCN/u,
-    'MCN empty-search copy should explain Enter creates a new MCN'
-  );
+  // lobe Select has no empty-search content slot, so the placeholders above carry the
+  // "type a new value" instruction that the antd notFoundContent used to repeat.
 
   const manualAttrsSource = await readFile(
     path.join(repoRoot, 'apps/web-vite/src/app/dashboard/creator/_components/creator-short-video-manual-attrs.tsx'),
@@ -197,27 +196,27 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
   );
   assert.match(
     manualAttrStylesSource,
-    /\.manualAttrNumberInput:global\(\.ant-input-number-focused\)/u,
+    /\.manualAttrNumberInput:focus-within\s*\{/u,
     'manual number inputs should own a single visible focus treatment instead of nested small boxes'
   );
   assert.match(
     manualAttrStylesSource,
-    /\.manualAttrNumberInput\s+:global\(\.ant-input-number-input\)\s*\{[\s\S]*text-align:\s*right/u,
+    /\.manualAttrNumberInput\s+:global\(\.lobe-input-number__input\)\s*\{[\s\S]*text-align:\s*right/u,
     'manual number input values should remain right-aligned while only placeholders center'
   );
   assert.match(
     manualAttrStylesSource,
-    /\.manualAttrNumberInput\s+:global\(\.ant-input-number-input:placeholder-shown\)[\s\S]*text-align:\s*center/u,
+    /\.manualAttrNumberInput\s+:global\(\.lobe-input-number__input:placeholder-shown\)[\s\S]*text-align:\s*center/u,
     'manual number input placeholders should align with the other manual-field placeholders'
   );
   assert.match(
     manualAttrStylesSource,
-    /\.manualAttrNoteInput:placeholder-shown[\s\S]*text-align:\s*center/u,
+    /\.manualAttrNoteInput\s+:global\(input:placeholder-shown\)[\s\S]*text-align:\s*center/u,
     'manual note input placeholders should align with number and select placeholders'
   );
   assert.match(
     manualAttrStylesSource,
-    /\.manualAttrTagSelect\s+:global\(\.ant-select-selection-placeholder\)\s*\{[\s\S]*text-align:\s*center/u,
+    /\.manualAttrSelectTrigger\s+:global\(\.lobe-select__value\)\s*\{[\s\S]*justify-content:\s*center/u,
     'manual Select placeholders should align with number and note placeholders'
   );
   assert.match(
@@ -243,12 +242,12 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
   assert.doesNotMatch(
     liveDashboardStylesSource,
     /\.detailTable\s*\{[^}]*overflow:\s*hidden/u,
-    'detail table wrapper must not hide Ant Table horizontal scrolling'
+    'detail table wrapper must not hide the table horizontal scrolling'
   );
   assert.doesNotMatch(
     liveDashboardStylesSource,
-    /\.detailTable\s*:global\(\.ant-table-container\)[^{]*\{[^}]*overflow:\s*hidden/u,
-    'Ant Table container must not be forced to overflow hidden'
+    /\.detailTable\s*:global\(\.lobe-table-container\)[^{]*\{[^}]*overflow:\s*hidden/u,
+    'the table container must not be forced to overflow hidden'
   );
 
   const liveDashboardMetricStylesSource = await readFile(
@@ -534,7 +533,7 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
   );
   assert.match(
     detailExportActionsSource,
-    /trigger=\{\['hover',\s*'click'\]\}/u,
+    /trigger="both"/u,
     'creator detail export menu should open on hover and click'
   );
   assert.match(
@@ -564,7 +563,8 @@ export async function assertCreatorShortVideoRenderingBehavior({ repoRoot }) {
   );
   assert.match(
     detailHeaderSource,
-    /optionFilterProp(?:=|:\s*)['"]label['"]/u,
+    // LabeledSelect searches an option's label (or searchText), never its value.
+    /<LabeledSelect\b/u,
     'detail filter select should search labels instead of internal values such as Douyin ids'
   );
   assert.match(

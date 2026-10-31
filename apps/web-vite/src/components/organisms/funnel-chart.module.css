@@ -142,15 +142,15 @@
 }
 
 .trendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .trendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .trendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .connector {
@@ -172,7 +172,7 @@
   border-radius: 999px;
   background: var(--domain-funnel-track-bg);
   border: 1px solid var(--domain-funnel-connector-color);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
   text-align: center;
@@ -180,11 +180,11 @@
 
 .connectorLabel {
   font-weight: 620;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 .connectorPrev {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .connectorWoW {
@@ -192,11 +192,11 @@
 }
 
 .connectorNeutralTone {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .emptyState {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
 }
@@ -281,4 +281,12 @@
     padding: 1px 7px;
     gap: 5px;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] :global(:root) {
+  --components-organisms-funnel-chart-material-slate-ink-a550: rgba(215, 211, 218, 0.55);
+  --components-organisms-funnel-chart-material-white-a680: rgba(13, 13, 13, 0.68);
+  --components-organisms-funnel-chart-material-slate-ink-a480: rgba(215, 211, 218, 0.48);
+  --components-organisms-funnel-chart-material-white-a500: rgba(13, 13, 13, 0.5);
 }

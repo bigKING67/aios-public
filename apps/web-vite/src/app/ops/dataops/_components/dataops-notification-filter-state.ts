@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type {
   DataOpsNotificationChannel,
@@ -22,6 +21,7 @@ import {
   filterNotificationEvents,
   filterRetryableNotificationEvents,
 } from './dataops-notification-retry-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 type NotificationChannelMap = Map<string, DataOpsNotificationChannel>;
 
@@ -31,7 +31,7 @@ export function useDataOpsNotificationFilterState(options: {
   copyText: (text: string, label: string) => Promise<void>;
   exportCsv: (options: DataOpsCsvExportActionOptions) => Promise<void>;
   keywordInput: string;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   normalizedKeyword: string;
   normalizedNotifyReasonHashFilter: string;
   normalizedNotifyRetryGroupIdFilter: string;

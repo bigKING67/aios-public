@@ -31,18 +31,6 @@ const TAILWIND_NON_COLOR_TOKEN_ALIAS_BEHAVIOR_FIXTURE_FILES = new Set([
   'scripts/lib/design/tailwind-non-color-token-aliases-behavior-fixtures.mjs',
 ]);
 
-const ANTD_THEME_TOKEN_SYNC_HELPER_FILES = new Set([
-  'scripts/lib/design/antd-theme-token-sync-core.mjs',
-]);
-
-const ANTD_THEME_TOKEN_SYNC_BEHAVIOR_FIXTURE_FILES = new Set([
-  'scripts/fixtures/design/antd-theme-token-sync.behavior-fixtures.mjs',
-]);
-
-const ANTD_TABLE_SELECTOR_BEHAVIOR_FIXTURE_FILES = new Set([
-  'scripts/fixtures/design/antd-table-selectors.behavior-fixtures.mjs',
-]);
-
 const ECHARTS_CSS_TOKEN_SYNC_HELPER_FILES = new Set([
   'scripts/lib/design/echarts-css-token-sync-core.mjs',
 ]);
@@ -57,10 +45,6 @@ const ECHARTS_THEME_TOKEN_SYNC_HELPER_FILES = new Set([
 
 const ECHARTS_THEME_TOKEN_SYNC_BEHAVIOR_FIXTURE_FILES = new Set([
   'scripts/lib/design/echarts-theme-token-sync-behavior-fixtures.mjs',
-]);
-
-const ANTD_TABLE_SELECTOR_HELPER_FILES = new Set([
-  'scripts/lib/design/antd-table-selectors-core.mjs',
 ]);
 
 const DESIGN_BEHAVIOR_REGISTRY_BEHAVIOR_FIXTURE_FILES = new Set([
@@ -123,16 +107,6 @@ export const DESIGN_TOKEN_PLATFORM_AFFECTED_RULES = Object.freeze([
     reason: 'Tailwind non-color token alias behavior fixture change',
   },
   {
-    files: ANTD_THEME_TOKEN_SYNC_HELPER_FILES,
-    gates: ciScriptGates('verify:design:antd-theme-token-sync', 'verify:design:antd-theme-token-sync-behavior', 'verify:design:behavior-gate-registry'),
-    reason: 'Ant Design theme token sync helper change',
-  },
-  {
-    files: ANTD_THEME_TOKEN_SYNC_BEHAVIOR_FIXTURE_FILES,
-    gates: ciScriptGates('verify:design:antd-theme-token-sync-behavior', 'verify:design:behavior-gate-registry'),
-    reason: 'Ant Design theme token sync behavior fixture change',
-  },
-  {
     files: ECHARTS_CSS_TOKEN_SYNC_HELPER_FILES,
     gates: ciScriptGates('verify:design:echarts-css-token-sync', 'verify:design:echarts-css-token-sync-behavior', 'verify:design:behavior-gate-registry'),
     reason: 'ECharts CSS token sync helper change',
@@ -151,16 +125,6 @@ export const DESIGN_TOKEN_PLATFORM_AFFECTED_RULES = Object.freeze([
     files: ECHARTS_THEME_TOKEN_SYNC_BEHAVIOR_FIXTURE_FILES,
     gates: ciScriptGates('verify:design:echarts-theme-token-sync-behavior', 'verify:design:behavior-gate-registry'),
     reason: 'ECharts theme token sync behavior fixture change',
-  },
-  {
-    files: ANTD_TABLE_SELECTOR_HELPER_FILES,
-    gates: ciScriptGates('verify:design:antd-table-selectors', 'verify:design:antd-table-selectors-behavior', 'verify:design:behavior-gate-registry'),
-    reason: 'Ant Design table selector helper change',
-  },
-  {
-    files: ANTD_TABLE_SELECTOR_BEHAVIOR_FIXTURE_FILES,
-    gates: ciScriptGates('verify:design:antd-table-selectors-behavior', 'verify:design:behavior-gate-registry'),
-    reason: 'Ant Design table selector behavior fixture change',
   },
 ]);
 

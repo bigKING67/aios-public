@@ -1,0 +1,246 @@
+/*
+ * 片段时间轴 (segment-timeline.tsx): ruler, lanes, label-toned blocks, cut points and the playhead.
+ * Split from segment-annotation.module.css, which keeps the page, form and list styles.
+ */
+
+.timelineScroll {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.timeline {
+  display: grid;
+  gap: var(--spacing-2);
+  min-width: 560px;
+}
+
+.timelineNow {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.timelineRuler,
+.cutRow {
+  position: relative;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  list-style: none;
+}
+
+.rulerTick,
+.rulerEnd,
+.cutPoint {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+/* Each mark starts at its time; the end mark ends at the right edge. */
+.rulerTick {
+  padding-left: 3px;
+  border-left: 1px solid var(--lobe-color-border);
+}
+
+.rulerEnd {
+  right: 0;
+  padding-right: 3px;
+  border-right: 1px solid var(--lobe-color-border);
+}
+
+.timelineRulerSeekable {
+  cursor: pointer;
+}
+
+.rulerHover {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  padding: 0 var(--spacing-1);
+  border-radius: var(--border-radius-sm);
+  color: var(--lobe-color-bg-container);
+  background: var(--lobe-color-text);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.rulerHoverStart {
+  transform: none;
+}
+
+.rulerHoverEnd {
+  transform: translateX(-100%);
+}
+
+.hoverLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 1px;
+  background: var(--lobe-color-text-tertiary);
+  pointer-events: none;
+}
+
+.gridLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--lobe-color-border-secondary);
+  pointer-events: none;
+}
+
+.cutPoint {
+  padding-top: 4px;
+  color: var(--lobe-color-text-secondary);
+  transform: translateX(-50%);
+}
+
+.cutPoint::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  background: var(--lobe-color-text-tertiary);
+  content: '';
+}
+
+.cutPointStart {
+  transform: none;
+}
+
+.cutPointStart::before {
+  left: 0;
+}
+
+.cutPointEnd {
+  transform: translateX(-100%);
+}
+
+.cutPointEnd::before {
+  right: 0;
+  left: auto;
+}
+
+.cutPointQuiet span {
+  visibility: hidden;
+}
+
+.timelineLane {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.timelineLaneTitle {
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.timelineTrack {
+  position: relative;
+  height: 40px;
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: var(--lobe-color-fill-tertiary);
+  overflow: hidden;
+}
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  background: var(--lobe-color-text);
+  pointer-events: none;
+}
+
+.timelineBlock {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  min-width: 6px;
+  padding: 0 var(--spacing-1);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  color: var(--lobe-color-text-light-solid);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.timelineBlock span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Label order maps to series 4, 2, 3, 5 (see LABEL_TONE_SERIES); teal and amber are too light for
+   white 12px text, so their labels read in ink. */
+.tone2 { color: var(--lobe-color-text); background: var(--aios-chart-2); }
+.tone3 { color: var(--lobe-color-text); background: var(--aios-chart-3); }
+.tone4 { background: var(--aios-chart-4); }
+.tone5 { background: var(--aios-chart-5); }
+.toneMuted { background: var(--aios-chart-muted); }
+
+.timelineBlockPending {
+  opacity: 0.6;
+  border-style: dashed;
+  border-color: var(--lobe-color-text);
+}
+
+.timelineBlockStale {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.timelineBlockActive {
+  z-index: 1;
+  opacity: 1;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
+}
+
+.timelineBlockConflict {
+  z-index: 1;
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--aios-status-danger);
+}
+
+/* Joined to the previous selling-point segment: square inner edge plus a link glyph. */
+.timelineBlockJoined {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.timelineBlockJoined svg {
+  display: inline-block;
+  margin-right: 2px;
+}
+
+.timelineContextBlock {
+  display: flex;
+  align-items: center;
+  border-color: var(--lobe-color-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
+  cursor: default;
+}
+
+.timelineBlock:focus-visible {
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
+}

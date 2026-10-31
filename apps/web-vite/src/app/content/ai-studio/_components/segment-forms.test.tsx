@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { StudioContentSegment, StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { SegmentCreateForm } from './segment-create-form';
@@ -31,9 +32,11 @@ describe('segment create form', () => {
     ] }} assetProductName="小紫瓶" durationMs={60_000} busy={false} readCurrentMs={null} onSubmit={onSubmit} />);
     fireEvent.change(screen.getByLabelText('入点'), { target: { value: '0:01.0' } });
     fireEvent.change(screen.getByLabelText('出点'), { target: { value: '0:05.0' } });
+    // Base UI options and checkboxes react to full pointer sequences, so pick them with userEvent.
+    const user = userEvent.setup();
     fireEvent.mouseDown(screen.getByLabelText('标签'));
-    fireEvent.click(await screen.findByText('滋润保湿'));
-    fireEvent.click(await screen.findByText('养肤护肤'));
+    await user.click(await screen.findByRole('option', { name: '滋润保湿' }));
+    await user.click(await screen.findByRole('option', { name: '养肤护肤' }));
     fireEvent.click(screen.getByRole('button', { name: '新建片段' }));
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(onSubmit.mock.calls[0][0]).toMatchObject({ startMs: 1000, endMs: 5000,
@@ -57,7 +60,7 @@ describe('segment create form', () => {
     fireEvent.mouseDown(screen.getByLabelText('标签'));
     fireEvent.click(await screen.findByText('街采'));
     expect(screen.getByText('路人采访，问答形式')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('checkbox', { name: /存为草稿/ }));
+    await userEvent.click(screen.getByRole('checkbox', { name: /存为草稿/ }));
     fireEvent.click(screen.getByRole('button', { name: '新建片段' }));
     await waitFor(() => expect(onSubmit).toHaveBeenCalledWith({ startMs: 12_300, endMs: 20_000, labelKey: 'street', productName: undefined, draft: true }));
     await waitFor(() => expect(screen.getByLabelText('入点')).toHaveValue('0:20.0'));

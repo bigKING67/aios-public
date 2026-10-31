@@ -87,7 +87,7 @@ def point(window, sample):
         "sampleSpanMs": STEP * 1000 // FPS}
 
 
-def compare(samples, spans, tick, deadline):
+def compare(samples, spans, tick, deadline, max_distance=MAX_DISTANCE, min_texture=MIN_TEXTURE):
     pictures = samples.astype(np.float32) / 255
     # Exclude flat color/black samples; RGB channel differences alone are not texture.
     texture = pictures.std(axis=(1, 2)).mean(axis=1)
@@ -96,7 +96,7 @@ def compare(samples, spans, tick, deadline):
     for span in spans:
         indices = np.flatnonzero((positions >= span["startFrame"] + 2)
                                 & (positions + STEP < span["endFrame"] - 2))
-        eligible.append(indices[(texture[indices] >= MIN_TEXTURE) & (texture[indices + 1] >= MIN_TEXTURE)])
+        eligible.append(indices[(texture[indices] >= min_texture) & (texture[indices + 1] >= min_texture)])
     findings, pairs = [], 0
     for i, left in enumerate(spans):
         for j in range(i + 1, len(spans)):
@@ -113,7 +113,7 @@ def compare(samples, spans, tick, deadline):
                     np.abs(pictures[targets + 1] - pictures[source + 1]).mean(axis=(1, 2, 3)))
                 match = int(np.argmin(distances))
                 distance = float(distances[match])
-                if distance <= MAX_DISTANCE and (best is None or distance < best[0]):
+                if distance <= max_distance and (best is None or distance < best[0]):
                     best = (distance, int(source), int(targets[match]))
             if best is not None:
                 pairs += 1
@@ -123,10 +123,11 @@ def compare(samples, spans, tick, deadline):
     return findings, pairs
 
 
-def review(snapshot, video: Path, receipt, work: Path, tick, lock_fd=None):
+def review(snapshot, video: Path, receipt, work: Path, tick, lock_fd=None,
+           max_distance=MAX_DISTANCE, min_texture=MIN_TEXTURE):
     report = {"schema": SCHEMA, "status": "incomplete", "deliveryApproved": False,
         "method": "rgb-composition-two-samples-v1", "samplingFps": FPS // STEP,
-        "maxDistance": MAX_DISTANCE, "minTexture": MIN_TEXTURE,
+        "maxDistance": max_distance, "minTexture": min_texture,
         "maxDurationSeconds": MAX_FRAMES // FPS, "timeoutSeconds": TIMEOUT,
         "findings": [], "pairCount": 0, "sampleCount": 0,
         "limitations": ["sampled_picture_only", "speech_unchecked", "identity_unchecked", "human_review_required"]}
@@ -150,7 +151,7 @@ def review(snapshot, video: Path, receipt, work: Path, tick, lock_fd=None):
         samples = extract(video, work, total, tick, deadline, lock_fd)
         report["sampleCount"] = len(samples)
         stage = "comparison"
-        findings, pairs = compare(samples, spans, tick, deadline)
+        findings, pairs = compare(samples, spans, tick, deadline, max_distance, min_texture)
         report.update(status="review_required" if pairs else "no_findings", findings=findings, pairCount=pairs)
     except (Cancelled, WorkspaceLimit):
         raise

@@ -42,6 +42,7 @@ function main() {
   for (const identifierName of [
     'buildDouyinCardSourceFunnelLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinMetricDetailRow',
     'QuantAttributionRow',

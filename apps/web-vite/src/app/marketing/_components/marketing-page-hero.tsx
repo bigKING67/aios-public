@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import styles from '../marketing.module.css';
 
@@ -27,7 +27,7 @@ export function MarketingPageHero({
       <div className={styles.pageHead}>
         {backLink ? (
           <Link to={backLink.to} className={styles.backLink}>
-            <ArrowLeftOutlined />
+            <ArrowLeft size={14} strokeWidth={1.8} />
             {backLink.label}
           </Link>
         ) : null}

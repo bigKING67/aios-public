@@ -1,7 +1,6 @@
 'use client';
 
-import { Alert, Button, Modal } from 'antd';
-import type { FormInstance } from 'antd';
+import { Alert, Button, Modal } from '@lobehub/ui';
 import type { DataOpsTriggerParameterSpec } from '@/config/dataops-trigger-params';
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import { DataOpsBatchTriggerParameterModalBody } from './dataops-batch-trigger-parameter-modal-body';
@@ -9,20 +8,21 @@ import type { DataOpsBatchTriggerExecutionPreviewItem } from './dataops-batch-tr
 import { DataOpsCommandPreviewModalBody } from './dataops-command-preview-modal-body';
 import { DataOpsTriggerParameterModalBody } from './dataops-trigger-parameter-modal-body';
 import type { DataOpsLinuxCommandPreview } from './dataops-trigger-helpers';
+import type { DataOpsTriggerForm } from './dataops-trigger-parameter-form';
 
 interface DataOpsTriggerCommandModalsProps {
   triggerPipeline: DataOpsRuntimePipeline | undefined;
-  triggerForm: FormInstance;
+  triggerForm: DataOpsTriggerForm;
   triggerSpecs: DataOpsTriggerParameterSpec[];
   triggerSubmitting: boolean;
   batchTriggerPipelineIds: string[] | null;
-  batchTriggerForm: FormInstance;
+  batchTriggerForm: DataOpsTriggerForm;
   batchTriggerPipelines: DataOpsRuntimePipeline[];
   batchTriggerSpecs: DataOpsTriggerParameterSpec[];
   batchTriggerExecutionPreview: DataOpsBatchTriggerExecutionPreviewItem[];
   batchTriggerSubmitting: boolean;
   commandPipeline: DataOpsRuntimePipeline | undefined;
-  commandForm: FormInstance;
+  commandForm: DataOpsTriggerForm;
   commandSpecs: DataOpsTriggerParameterSpec[];
   commandPreview: DataOpsLinuxCommandPreview;
   isCompactViewport: boolean;
@@ -67,6 +67,7 @@ export function DataOpsTriggerCommandModals({
           void onSubmitTrigger();
         }}
         okText="确认触发"
+        cancelText="取消"
         confirmLoading={triggerSubmitting}
         destroyOnHidden
       >
@@ -85,6 +86,7 @@ export function DataOpsTriggerCommandModals({
           void onSubmitBatchTrigger();
         }}
         okText="确认触发"
+        cancelText="取消"
         confirmLoading={batchTriggerSubmitting}
         destroyOnHidden
       >

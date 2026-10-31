@@ -16,7 +16,7 @@
 }
 
 .sessionTime {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 430;
@@ -25,7 +25,7 @@
 .sessionAnchor {
   max-width: 210px;
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 430;
   text-overflow: ellipsis;

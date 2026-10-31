@@ -1,0 +1,13 @@
+.scenePath {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sceneLevel {
+  min-width: 0;
+}
+
+.sceneLevel :global(.lobe-select) {
+  width: 100%;
+}

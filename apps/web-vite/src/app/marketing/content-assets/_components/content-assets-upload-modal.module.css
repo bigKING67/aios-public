@@ -1,15 +1,3 @@
-.uploadModal :global(.ant-modal-header) {
-  margin-bottom: 14px;
-}
-
-.uploadModal :global(.ant-modal-body) {
-  padding-top: 2px;
-}
-
-.uploadModal :global(.ant-modal-footer) {
-  margin-top: 20px;
-}
-
 .modalTitle {
   display: flex;
   flex-direction: column;
@@ -18,7 +6,7 @@
 }
 
 .modalTitle span {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   font-weight: 660;
   line-height: var(--line-height-tight);
@@ -28,7 +16,7 @@
 .modalTitle p {
   max-width: 66ch;
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 400;
   line-height: var(--line-height-normal);
@@ -47,9 +35,9 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .uploadFilePreview div {
@@ -61,7 +49,7 @@
 
 .uploadFilePreview strong {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -70,14 +58,14 @@
 
 .uploadFilePreview span,
 .uploadError {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .uploadError {
   margin: 0;
-  color: var(--status-danger-strong);
+  color: var(--aios-status-danger-strong);
 }
 
 .sourceUploadContext {
@@ -85,20 +73,20 @@
   flex-direction: column;
   gap: 4px;
   padding: 10px 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .sourceUploadContext strong {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .sourceUploadContext span {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 560;
   line-height: var(--line-height-snug);
@@ -110,9 +98,9 @@
   display: grid;
   gap: 9px;
   padding: 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 16px;
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .uploadProgressHeader {
@@ -124,14 +112,14 @@
 }
 
 .uploadProgressHeader strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-snug);
 }
 
 .uploadProgressHeader span {
-  color: var(--text-tertiary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text-tertiary);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -142,21 +130,21 @@
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .uploadProgressBar::-webkit-progress-bar {
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .uploadProgressBar::-webkit-progress-value {
   border-radius: 999px;
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
 }
 
 .uploadProgressBar::-moz-progress-bar {
   border-radius: 999px;
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
 }
 
 .uploadProgressHint {
@@ -169,10 +157,10 @@
   position: relative;
   min-width: 0;
   padding: 9px 10px 9px 26px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 12px;
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: 560;
   line-height: var(--line-height-snug);
@@ -185,15 +173,15 @@
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
   content: '';
   transform: translateY(-50%);
 }
 
 .uploadProgressHint span[data-active="true"] {
-  border-color: var(--brand-border);
-  color: var(--brand-text);
-  background: var(--bg-card);
+  border-color: var(--aios-ai-border);
+  color: var(--aios-ai-text);
+  background: var(--lobe-color-bg-container);
 }
 
 .uploadPipelineNote {
@@ -202,17 +190,17 @@
   gap: 8px;
   align-items: start;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-subtle);
-  color: var(--text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
-.uploadPipelineNote :global(.anticon) {
+.uploadPipelineNote svg {
   margin-top: 2px;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
 }
 
 .uploadForm {
@@ -227,7 +215,7 @@
   flex-direction: column;
   gap: 12px;
   padding-top: 18px;
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .sectionHeader {
@@ -238,7 +226,7 @@
 
 .sectionHeader h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 640;
   line-height: var(--line-height-tight);
@@ -247,7 +235,7 @@
 .sectionHeader p {
   max-width: 70ch;
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -262,10 +250,16 @@
   grid-column: 1 / -1;
 }
 
-.uploadForm :global(.ant-form-item-extra) {
-  color: var(--text-tertiary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
+.inputWithAction {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.inputWithAction > :first-child {
+  flex: 1;
+  min-width: 0;
 }
 
 .linkPreviewPanel {
@@ -286,14 +280,14 @@
   display: grid;
   gap: 7px;
   padding: 10px 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: 14px;
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 .linkPreviewCandidate[data-selected='true'] {
-  border-color: var(--brand-primary);
-  background: color-mix(in srgb, var(--brand-secondary) 74%, var(--bg-card));
+  border-color: var(--lobe-color-primary);
+  background: color-mix(in srgb, var(--aios-ai-soft) 74%, var(--lobe-color-bg-container));
 }
 
 .linkPreviewHeader {
@@ -305,22 +299,22 @@
 }
 
 .linkPreviewHeader span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-sm);
   font-weight: 640;
   line-height: var(--line-height-snug);
 }
 
 .linkPreviewHeader code {
-  color: var(--text-primary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .linkPreviewHeader em,
 .linkPreviewCandidate small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-style: normal;
   line-height: var(--line-height-snug);
@@ -329,7 +323,7 @@
 .linkPreviewCandidate p {
   overflow: hidden;
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -338,37 +332,6 @@
 
 .linkPreviewCandidate button {
   justify-self: start;
-}
-
-.uploadForm :global(.ant-select-multiple .ant-select-selection-item) {
-  border-color: var(--brand-border);
-  border-radius: 999px;
-  background: var(--brand-secondary);
-  color: var(--brand-text);
-  font-size: var(--font-size-sm);
-}
-
-.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search),
-.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-content-item-suffix) {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  flex: 0 0 0 !important;
-  margin-inline-start: 0 !important;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-selection-search-input),
-.uploadForm :global(.ant-select:not(.ant-select-show-search) .ant-select-input),
-.uploadForm :global(.ant-cascader-picker .ant-select-selection-search-input) {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  padding: 0 !important;
-  color: transparent;
-  caret-color: transparent;
-  opacity: 0;
 }
 
 @media (max-width: 720px) {

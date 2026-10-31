@@ -61,8 +61,9 @@ describe('segment suggestion API client', () => {
     expect(isSuggestionJobActive({ status: 'queued' })).toBe(true);
     expect(isSuggestionJobActive({ status: 'running' })).toBe(true);
     expect(isSuggestionJobActive({ status: 'failed' })).toBe(false);
-    expect(suggestionJobStatusView('failed')).toEqual({ label: '失败', tone: 'danger' });
-    expect(suggestionJobStatusView('unknown')).toEqual({ label: 'unknown', tone: 'neutral' });
+    expect(suggestionJobStatusView('failed')).toEqual({ label: '失败', state: 'failed' });
+    expect(suggestionJobStatusView('running')).toEqual({ label: '分析中', state: 'thinking' });
+    expect(suggestionJobStatusView('unknown')).toEqual({ label: 'unknown', state: 'queued' });
   });
 });
 

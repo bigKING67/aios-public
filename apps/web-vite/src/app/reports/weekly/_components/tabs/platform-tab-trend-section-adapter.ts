@@ -6,9 +6,9 @@ import type {
 } from './platform-tab-trend-section-contracts';
 
 export const PLATFORM_TREND_CHART_COLORS = [
-  'var(--chart-series-3)',
+  'var(--aios-chart-3)',
   'var(--chart-color-prev-week)',
-  'var(--chart-series-4)',
+  'var(--aios-chart-4)',
 ] as const;
 
 function buildPlatformTrendLineChartProps({

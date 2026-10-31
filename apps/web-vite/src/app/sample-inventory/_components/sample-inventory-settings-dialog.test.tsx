@@ -43,11 +43,11 @@ describe("SettingsModal", () => {
     );
 
     expect(screen.getByRole("dialog")).toHaveAccessibleName("样品库存设置");
-    expect(screen.getByRole("spinbutton", { name: "主品低库存阈值" })).toHaveValue("3");
+    expect(screen.getByLabelText("主品低库存阈值")).toHaveValue("3");
     expect(screen.queryByText("自动刷新间隔（秒）")).not.toBeInTheDocument();
     expect(screen.queryByText(/关闭自动刷新/)).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByRole("spinbutton", { name: "主品低库存阈值" }), {
+    fireEvent.change(screen.getByLabelText("主品低库存阈值"), {
       target: { value: "5" },
     });
     fireEvent.click(screen.getByRole("button", { name: "保存设置" }));

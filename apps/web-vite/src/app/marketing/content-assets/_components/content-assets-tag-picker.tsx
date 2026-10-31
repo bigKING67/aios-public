@@ -1,5 +1,5 @@
-import { useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
-import { App, Select } from 'antd';
+import { useMemo } from 'react';
+import { confirmModal } from '@lobehub/ui';
 import {
   findExistingContentAssetTag,
   mergeContentAssetTagOptions,
@@ -8,9 +8,11 @@ import {
   normalizeContentAssetTagText,
   splitContentAssetTagText,
 } from '../_lib/content-assets-tags';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './content-assets-tag-picker.module.css';
 
 interface ContentAssetsTagPickerProps {
+  id?: string;
   value?: string[];
   options?: string[];
   allowCreate?: boolean;
@@ -22,7 +24,15 @@ interface ContentAssetsTagPickerProps {
   onChange?: (value: string[]) => void;
 }
 
+/** Typed text may hold several tags (「控油、遮瑕」); each resolves to an existing tag when one matches. */
+function resolveTypedTags(rawText: string, options: string[]): string[] {
+  const inputTags = splitContentAssetTagText(rawText);
+  const normalizedTags = inputTags.length > 0 ? inputTags : [normalizeContentAssetTagText(rawText)].filter(Boolean);
+  return normalizedTags.map((tag) => findExistingContentAssetTag(tag, options) || tag);
+}
+
 export function ContentAssetsTagPicker({
+  id,
   allowCreate = true,
   ariaLabel,
   className,
@@ -33,8 +43,6 @@ export function ContentAssetsTagPicker({
   maxCount = 20,
   onChange,
 }: ContentAssetsTagPickerProps) {
-  const { modal } = App.useApp();
-  const [searchValue, setSearchValue] = useState('');
   const selectedTags = useMemo(() => normalizeContentAssetTagList(value || [], maxCount), [maxCount, value]);
   const mergedOptions = useMemo(
     () => mergeContentAssetTagOptions(options, selectedTags).map((tag) => ({
@@ -49,107 +57,46 @@ export function ContentAssetsTagPicker({
     onChange?.(normalizeContentAssetTagList(nextTags, maxCount));
   };
 
-  const addTagsFromText = (rawText: string) => {
-    const inputTags = splitContentAssetTagText(rawText);
-    const normalizedTags = inputTags.length > 0 ? inputTags : [normalizeContentAssetTagText(rawText)].filter(Boolean);
-    if (normalizedTags.length === 0) {
-      return;
-    }
+  // Picking or removing listed tags applies at once; typed text that would create a tag asks first.
+  const handleChange = (nextValue: string[]) => {
     const currentKeys = new Set(selectedTags.map(normalizeContentAssetTagKey));
-    const nextTags = normalizedTags
-      .map((tag) => findExistingContentAssetTag(tag, options) || tag)
+    const nextKeys = new Set(nextValue.map(normalizeContentAssetTagKey));
+    const kept = selectedTags.filter((tag) => nextKeys.has(normalizeContentAssetTagKey(tag)));
+    const added = nextValue
+      .filter((tag) => !currentKeys.has(normalizeContentAssetTagKey(tag)))
+      .flatMap((tag) => resolveTypedTags(tag, options))
       .filter((tag) => !currentKeys.has(normalizeContentAssetTagKey(tag)));
-
-    emitChange([...selectedTags, ...nextTags]);
-    setSearchValue('');
-  };
-
-  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') {
-      return;
-    }
-    const rawTag = searchValue.trim();
-    if (!rawTag) {
+    const newTags = added.filter((tag) => !findExistingContentAssetTag(tag, options));
+    if (newTags.length === 0) {
+      emitChange([...kept, ...added]);
       return;
     }
     if (!allowCreate) {
+      emitChange([...kept, ...added.filter((tag) => !newTags.includes(tag))]);
       return;
     }
-    event.preventDefault();
-    event.stopPropagation();
-
-    const existingTag = findExistingContentAssetTag(rawTag, options);
-    if (existingTag) {
-      addTagsFromText(existingTag);
-      return;
-    }
-
-    const parsedTags = splitContentAssetTagText(rawTag);
-    const newTags = parsedTags.filter((tag) => !findExistingContentAssetTag(tag, options));
-    if (parsedTags.length > 1 && newTags.length === 0) {
-      addTagsFromText(rawTag);
-      return;
-    }
-
-    const createLabel = newTags.length > 0 ? newTags.join('、') : normalizeContentAssetTagText(rawTag);
-    modal.confirm({
+    confirmModal({
       title: '确认创建新标签',
-      content: `确认创建「${createLabel || rawTag}」为新的素材标签？`,
+      content: `确认创建「${newTags.join('、')}」为新的素材标签？`,
       okText: '创建并选择',
       cancelText: '取消',
-      onOk: () => addTagsFromText(rawTag),
+      onOk: () => emitChange([...kept, ...added]),
     });
   };
 
   return (
-    <Select
+    <LabeledSelect
+      id={id}
+      label={ariaLabel ?? (id ? undefined : placeholder)}
+      wrapperClassName={[styles.tagPicker, className].filter(Boolean).join(' ')}
       allowClear
-      aria-label={ariaLabel}
       showSearch
       disabled={disabled}
-      mode="multiple"
-      maxTagCount="responsive"
+      mode={allowCreate ? 'tags' : 'multiple'}
       placeholder={placeholder}
-      className={[styles.tagPicker, className].filter(Boolean).join(' ')}
-      classNames={{ popup: { root: styles.tagDropdown } }}
-      optionFilterProp="searchText"
-      filterOption={filterTagOption}
       options={mergedOptions}
       value={selectedTags}
-      searchValue={searchValue}
-      optionRender={(option) => renderTagOption(option.value, option.label, selectedTags)}
-      notFoundContent={searchValue.trim() && allowCreate ? '按 Enter 创建新标签' : '暂无可选标签'}
-      onSearch={setSearchValue}
-      onInputKeyDown={handleInputKeyDown}
-      onChange={(nextValue) => {
-        emitChange(nextValue);
-        setSearchValue('');
-      }}
+      onChange={handleChange}
     />
   );
-}
-
-function renderTagOption(value: unknown, label: ReactNode, selectedTags: string[]) {
-  const optionValue = String(value ?? '');
-  const checked = selectedTags.some(
-    (tag) => normalizeContentAssetTagKey(tag) === normalizeContentAssetTagKey(optionValue)
-  );
-  return (
-    <span className={styles.checkboxOption}>
-      <span
-        className={`${styles.checkboxBox} ${checked ? styles.checkboxBoxChecked : ''}`}
-        aria-hidden
-      />
-      <span className={styles.checkboxLabel}>{label}</span>
-    </span>
-  );
-}
-
-function filterTagOption(
-  inputValue: string,
-  option?: { value?: string | number | null; searchText?: string }
-) {
-  const keyword = inputValue.toLocaleLowerCase('zh-CN');
-  const searchText = String(option?.searchText ?? option?.value ?? '').toLocaleLowerCase('zh-CN');
-  return searchText.includes(keyword);
 }

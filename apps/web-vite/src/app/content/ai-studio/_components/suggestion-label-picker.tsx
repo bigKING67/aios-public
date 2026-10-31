@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Info } from 'lucide-react';
+import { Tooltip } from '@lobehub/ui';
 import type { StudioSegmentPresetLabel } from '../_lib/ai-studio-api';
 import suggestStyles from './segment-suggest.module.css';
 import workbenchStyles from './studio-workbench.module.css';
@@ -30,15 +30,15 @@ export function SuggestionLabelPicker({ labels, value, onChange, disabled, noun 
     <fieldset className={suggestStyles.labelPicker}>
       <legend className={suggestStyles.labelLegend}>
         候选{noun}
-        <Tooltip title={`模型只会在选中的${noun}中打标签。本批原片中确定不会出现的${noun}可以取消，减少误判。`} trigger={['hover', 'focus']}>
-          <InfoCircleOutlined className={workbenchStyles.infoIcon} tabIndex={0} aria-label={`候选${noun}说明`} />
+        <Tooltip title={`模型只会在选中的${noun}中打标签。本批原片中确定不会出现的${noun}可以取消，减少误判。`}>
+          <Info size={14} strokeWidth={1.8} className={workbenchStyles.infoIcon} tabIndex={0} role="img" aria-label={`候选${noun}说明`} />
         </Tooltip>
       </legend>
       <div className={suggestStyles.labelChips}>
         {labels.map((label) => {
           const checked = value.includes(label.key);
           return (
-            <Tooltip key={label.key} title={label.definition || '无补充定义，按名称判断。'} trigger={['hover']}>
+            <Tooltip key={label.key} title={label.definition || '无补充定义，按名称判断。'}>
               <label className={`${suggestStyles.labelChip} ${checked ? suggestStyles.labelChipOn : ''} ${disabled ? suggestStyles.labelChipDisabled : ''}`}>
                 <input
                   type="checkbox"

@@ -1,7 +1,7 @@
 .fusionSnapshot {
   min-width: 0;
   padding-left: var(--spacing-5);
-  border-left: 1px solid var(--divider-color);
+  border-left: 1px solid var(--lobe-color-border-secondary);
 }
 
 .fusionHeader {
@@ -18,7 +18,7 @@
 
 .fusionHeader > div:first-child > span {
   display: block;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-label);
@@ -28,7 +28,7 @@
 .fusionHeader h3 {
   max-width: 240px;
   margin: var(--spacing-1) 0 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -49,7 +49,7 @@
 }
 
 .scoreValue strong {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-data-lg);
   font-weight: var(--font-weight-data);
@@ -59,7 +59,7 @@
 
 .scoreValue span,
 .primaryScore > span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
@@ -74,9 +74,9 @@
 .scoreMeaning {
   margin: var(--spacing-3) 0 0;
   padding: var(--spacing-2) 0 var(--spacing-2) var(--spacing-3);
-  border-left: 2px solid var(--brand-border);
-  background: color-mix(in srgb, var(--brand-secondary) 28%, transparent);
-  color: var(--text-secondary);
+  border-left: 2px solid var(--lobe-color-border);
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 28%, transparent);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -86,8 +86,8 @@
   min-width: 0;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: var(--spacing-4);
-  border-top: 1px solid var(--divider-color);
-  border-bottom: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .supportMetrics > div {
@@ -97,12 +97,12 @@
 
 .supportMetrics > div + div {
   padding-left: var(--spacing-3);
-  border-left: 1px solid var(--divider-color);
+  border-left: 1px solid var(--lobe-color-border-secondary);
 }
 
 .supportMetrics strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-data);
@@ -113,7 +113,7 @@
 .supportMetrics span {
   display: block;
   margin-top: var(--spacing-1);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
@@ -125,7 +125,7 @@
 
 .methodDetails summary {
   width: fit-content;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   cursor: pointer;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -134,13 +134,13 @@
 
 .methodDetails summary:focus-visible {
   border-radius: var(--border-radius-sm);
-  outline: 2px solid var(--brand-active);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
 .methodDetails p {
   margin: var(--spacing-2) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
 }
@@ -152,17 +152,17 @@
   gap: var(--spacing-1);
   margin-top: var(--spacing-4);
   padding-top: var(--spacing-3);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .fusionEmpty strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
 }
 
 .fusionEmpty span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
 }
@@ -171,7 +171,7 @@
   .fusionSnapshot {
     padding-top: var(--spacing-5);
     padding-left: 0;
-    border-top: 1px solid var(--divider-color);
+    border-top: 1px solid var(--lobe-color-border-secondary);
     border-left: 0;
   }
 }
@@ -195,7 +195,7 @@
 
   .supportMetrics > div + div {
     padding-left: 0;
-    border-top: 1px solid var(--divider-color);
+    border-top: 1px solid var(--lobe-color-border-secondary);
     border-left: 0;
   }
 }

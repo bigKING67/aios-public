@@ -18,7 +18,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from . import contract
+from ..stage_timings import StageTimings
+from . import contract, quality_feedback
 from . import taxonomy as tx
 
 MODEL = 'doubao-seed-2-1-lite-260915'
@@ -68,8 +69,9 @@ def cost(usage):
     return {'online_yuan': round(online, 5), 'batch_yuan': round(online / 2, 5), 'audio_tokens_reported': bool(details)}
 
 
-def analyze(film, source, work, settings, client):
-    duration, audio = probe(source)
+def analyze(film, source, work, settings, client, *, timings=None, previous=None):
+    timings = timings or StageTimings()
+    duration, audio = timings.call('card_probe', probe, source)
     context = {'video_id': film, 'duration_sec': round(duration, 2), 'audio': audio, 'hook_clip': settings['hook_clip'],
                'brand': None}
     transcript_only = settings.get('transcripts') and audio == 'available'
@@ -79,53 +81,60 @@ def analyze(film, source, work, settings, client):
                        hook_audio=bool(settings.get('hook_audio')))
     suffix = '.noaudio' if transcript_only else ''
     audio_args = NO_AUDIO if transcript_only else AUDIO
-    proxy = ffmpeg(source, PROXY_VIDEO + audio_args, work / f'{film}{suffix}.proxy.mp4')
+    proxy = timings.call('card_proxy', ffmpeg, source, PROXY_VIDEO + audio_args, work / f'{film}{suffix}.proxy.mp4')
     content = [{'type': 'input_video', 'video_url': 'data:video/mp4;base64,' + base64.b64encode(proxy.read_bytes()).decode(),
                 'fps': settings['fps']}]
     if settings['hook_clip']:
         hook_audio = settings.get('hook_audio') or not transcript_only
-        clip = ffmpeg(source, HOOK_VIDEO + (AUDIO if hook_audio else NO_AUDIO),
-                      work / f"{film}{'' if hook_audio else suffix}.hook.mp4")
+        clip = timings.call('card_hook', ffmpeg, source, HOOK_VIDEO + (AUDIO if hook_audio else NO_AUDIO),
+                            work / f"{film}{'' if hook_audio else suffix}.hook.mp4")
         content.append({'type': 'input_video', 'fps': settings['hook_fps'],
                         'video_url': 'data:video/mp4;base64,' + base64.b64encode(clip.read_bytes()).decode()})
-    prompt = contract.build_prompt(context)
+    source_sha = sha256(source)
+    feedback, feedback_manifest = quality_feedback.build(previous, source_sha, context, MODEL)
+    prompt = contract.build_prompt(context) + feedback
     content.append({'type': 'input_text', 'text': prompt})
     request = {'model': MODEL, 'input': [{'role': 'user', 'content': content}], 'max_output_tokens': settings['max_output'],
                'thinking': {'type': settings['thinking']}, 'temperature': 0.1, 'store': False,
                **({'service_tier': settings['service_tier']} if settings.get('service_tier') else {}),
                'text': {'format': {'type': 'json_schema', 'name': 'competitor_card_a', 'strict': True,
                                    'schema': contract.response_schema()}}}
-    manifest = {'source_sha256': sha256(source), 'proxy_sha256': sha256(proxy),
+    manifest = {'source_sha256': source_sha, 'proxy_sha256': sha256(proxy),
                 'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest()}
+    if feedback_manifest:
+        manifest['qualityFeedback'] = feedback_manifest
     started = time.time()
     record = {'film': film, 'context': context, 'input_manifest': manifest, 'settings': settings,
               'prompt_version': contract.PROMPT_VERSION, 'taxonomy_version': tx.TAXONOMY_VERSION, 'model': MODEL}
     from marketing_content_assets.ark_responses import extract_output_text
     import requests
     attempts = []
-    while True:
-        attempt_started = time.time()
-        try:
-            response = client._post(request)
-            break
-        except Exception as error:  # keep only the type, HTTP status and platform code; text may echo request data
-            import re
-            message = str(error)
-            status = re.search(r'HTTP (\d{3})', message)
-            code = re.search(r'"code"\s*:\s*"([A-Za-z.]+)"', message)
-            attempts.append({'type': type(error).__name__, 'http': status and status.group(1), 'code': code and code.group(1)})
-            connect_failure = isinstance(error, (requests.exceptions.SSLError, requests.exceptions.ConnectionError))
-            # Rejected before processing (rate limit / overload) or a fast TLS failure: not billed, retry with backoff.
-            retryable = (connect_failure and time.time() - attempt_started <= 10) or (status and status.group(1) in ('429', '503'))
-            if not retryable or len(attempts) >= 4:
-                record.update(status='provider_error', error=attempts, seconds=round(time.time() - started, 1))
-                return record
-            time.sleep(5 * 2 ** (len(attempts) - 1))
+    with timings.measure('card_cloud_total'):
+        while True:
+            attempt_started = time.time()
+            try:
+                response = timings.call('card_cloud_request', client._post, request)
+                break
+            except Exception as error:  # keep only the type, HTTP status and platform code; text may echo request data
+                import re
+                message = str(error)
+                status = re.search(r'HTTP (\d{3})', message)
+                code = re.search(r'"code"\s*:\s*"([A-Za-z.]+)"', message)
+                attempts.append({'type': type(error).__name__, 'http': status and status.group(1), 'code': code and code.group(1)})
+                connect_failure = isinstance(error, (requests.exceptions.SSLError, requests.exceptions.ConnectionError))
+                # Rejected before processing (rate limit / overload) or a fast TLS failure: not billed, retry with backoff.
+                retryable = (connect_failure and time.time() - attempt_started <= 10) or (status and status.group(1) in ('429', '503'))
+                if not retryable or len(attempts) >= 4:
+                    record.update(status='provider_error', error=attempts, seconds=round(time.time() - started, 1))
+                    return record
+                timings.call('card_cloud_backoff', time.sleep, 5 * 2 ** (len(attempts) - 1))
     record['connect_retries'] = attempts
     usage = response.get('usage') if isinstance(response.get('usage'), dict) else {}
     record.update(response_id=str(response.get('id') or ''), usage=usage, cost=cost(usage),
                   service_tier=response.get('service_tier'),
                   seconds=round(time.time() - started, 1), provider_status=response.get('status'))
+    if feedback_manifest:
+        record['usage'] = {**usage, 'qualityFeedback': feedback_manifest}
     try:
         payload = json.loads(extract_output_text(response))
         card = contract.from_provider(payload)

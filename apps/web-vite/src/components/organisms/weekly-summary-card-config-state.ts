@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { App } from 'antd';
+import { confirmModal, toast } from '@lobehub/ui';
 import {
   hasWeeklySummaryAIConfigOverride,
   resetWeeklySummaryAIConfig,
@@ -32,7 +32,6 @@ export function useWeeklySummaryCardConfigState({
   summaryScope,
   confirmLoading,
 }: UseWeeklySummaryCardConfigStateArgs) {
-  const { notification, modal } = App.useApp();
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [configDraft, setConfigDraft] = useState<SummaryAIConfigDraft>(() =>
     createAIDraftFromConfig(summaryScope)
@@ -86,7 +85,7 @@ export function useWeeklySummaryCardConfigState({
       }
     }
 
-    modal.confirm({
+    confirmModal({
       title: '确认保存 AI 配置？',
       content: '保存后，后续生成总结会使用这套配置与背景信息。',
       okText: '确认保存',
@@ -103,7 +102,7 @@ export function useWeeklySummaryCardConfigState({
         setIsConfigModalOpen(false);
         setHasConfigOverride(true);
         setConfigErrorText(null);
-        notification.success({
+        toast.success({
           title: 'AI 配置已保存',
           description: '后续点击“生成本周总结”将使用最新配置。',
         });
@@ -133,7 +132,7 @@ export function useWeeklySummaryCardConfigState({
       factsJsonText: JSON.stringify(nextFacts, null, 2),
     }));
     setConfigErrorText(null);
-    notification.success({
+    toast.success({
       title: '已写入 JSON',
       description: '可视化填写内容已转换并写入背景信息 JSON。',
     });
@@ -147,14 +146,14 @@ export function useWeeklySummaryCardConfigState({
     }
     setFactsBuilderDraft(createFactsBuilderFromFactsObject(parsed));
     setConfigErrorText(null);
-    notification.success({
+    toast.success({
       title: '已回填表单',
       description: '已从背景信息 JSON 同步到可视化填写区。',
     });
   };
 
   const handleResetConfigToDefault = () => {
-    modal.confirm({
+    confirmModal({
       title: '恢复推荐配置？',
       content: '会清空当前 scope 的本地覆盖配置，并恢复为代码内推荐默认值。',
       okText: '恢复默认',
@@ -181,7 +180,7 @@ export function useWeeklySummaryCardConfigState({
         setFactsBuilderDraft(createFactsBuilderFromJsonText(factsJsonText));
         setHasConfigOverride(false);
         setConfigErrorText(null);
-        notification.success({
+        toast.success({
           title: '已恢复推荐配置',
           description: '本地覆盖配置已清除，当前显示为默认配置。',
         });

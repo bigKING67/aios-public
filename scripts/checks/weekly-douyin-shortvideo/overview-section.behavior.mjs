@@ -42,6 +42,7 @@ function main() {
     'buildDouyinShortvideoOverviewLeafProps',
     'DouyinSectionData',
     'ColumnsType',
+    'TableColumnsType',
     'resolveResponsiveTableSize',
     'resolveResponsiveTableScroll',
   ]) {

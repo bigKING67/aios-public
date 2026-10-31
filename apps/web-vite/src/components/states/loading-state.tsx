@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Spin } from 'antd';
+import { Spin } from '@lobehub/ui';
 
 /**
  * LoadingState - 加载状态组件

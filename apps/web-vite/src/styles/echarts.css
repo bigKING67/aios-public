@@ -26,33 +26,33 @@
 
   /* ECharts CSS fallback source values: keep raw colors only in this block. */
   --echarts-fallback-text-inverse: #FFFFFF;
-  --echarts-fallback-chart-series-1: #445DF6;
-  --echarts-fallback-chart-series-2: #75B1F8;
-  --echarts-fallback-chart-series-3: #3264F6;
-  --echarts-fallback-chart-series-4: #4F8CB5;
-  --echarts-fallback-chart-series-5: #536F86;
-  --echarts-fallback-chart-series-6: #A4772A;
-  --echarts-fallback-chart-series-muted: #8A8F8A;
-  --echarts-fallback-chart-series-highlight: #3264F6;
-  --echarts-fallback-divider: #F0F0F0;
-  --echarts-fallback-tooltip-bg: rgba(26, 26, 26, 0.88);
-  --echarts-fallback-tooltip-shadow: rgba(26, 26, 26, 0.08);
+  --echarts-fallback-chart-series-1: #6E56CF;
+  --echarts-fallback-chart-series-2: #0E9C8E;
+  --echarts-fallback-chart-series-3: #C76E12;
+  --echarts-fallback-chart-series-4: #2F6FE0;
+  --echarts-fallback-chart-series-5: #C2417A;
+  --echarts-fallback-chart-series-6: #A8A8A8;
+  --echarts-fallback-chart-series-muted: #A8A8A8;
+  --echarts-fallback-chart-series-highlight: #6E56CF;
+  --echarts-fallback-divider: #EEEEEE;
+  --echarts-fallback-tooltip-bg: rgba(31, 31, 31, 0.88);
+  --echarts-fallback-tooltip-shadow: rgba(31, 31, 31, 0.08);
   --echarts-fallback-platform-tmall: #EC5E2A;
   --echarts-fallback-platform-douyin: #000000;
   --echarts-fallback-platform-xiaohongshu: #FF2442;
   --echarts-fallback-platform-kuaishou: #FF3C21;
   --echarts-fallback-platform-jd: #DA291C;
   --echarts-fallback-platform-wechat: #07C160;
-  --echarts-fallback-platform-unknown: #8A8F8A;
+  --echarts-fallback-platform-unknown: #8A8A8A;
 
   /* 图表文字颜色：使用设计系统 Token */
-  --echarts-text-color: var(--text-primary);
-  --echarts-text-color-secondary: var(--text-secondary);
-  --echarts-text-color-tertiary: var(--text-tertiary);
+  --echarts-text-color: var(--lobe-color-text);
+  --echarts-text-color-secondary: var(--lobe-color-text-secondary);
+  --echarts-text-color-tertiary: var(--lobe-color-text-tertiary);
   --echarts-text-color-inverse: var(--text-inverse, var(--echarts-fallback-text-inverse));
 
   /* 图表网格线：使用设计系统边界色 */
-  --echarts-border-color: var(--border-color);
+  --echarts-border-color: var(--lobe-color-border);
   --echarts-divider-color: var(--divider-color, var(--echarts-fallback-divider));
 
   /* 普通图表序列色：只用于无平台/趋势/状态/domain 语义的 bar/line 图 */
@@ -143,21 +143,21 @@
   width: 32px;
   height: 32px;
   border-radius: var(--border-radius-base, 4px);
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background-color: var(--lobe-color-bg-container);
+  border: 1px solid var(--lobe-color-border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   transition: all 0.2s ease;
 }
 
 .echarts-toolbar-button:hover {
-  background-color: var(--brand-primary);
-  color: var(--brand-on-primary);
-  border-color: var(--brand-primary);
+  background-color: var(--lobe-color-primary);
+  color: var(--lobe-color-bg-container);
+  border-color: var(--lobe-color-primary);
 }
 
 /* ===== 响应式 ECharts 图表容器 ===== */
@@ -230,8 +230,8 @@
 .echarts-loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--brand-primary);
+  border: 3px solid var(--lobe-color-border);
+  border-top-color: var(--lobe-color-primary);
   border-radius: 50%;
   animation: echarts-spin 0.8s linear infinite;
 }
@@ -301,9 +301,9 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  background-color: var(--bg-hover);
+  background-color: var(--lobe-color-fill-tertiary);
   border-radius: var(--border-radius-base);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 /* ECharts 错误状态 */
@@ -313,9 +313,9 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  background-color: var(--bg-hover);
+  background-color: var(--lobe-color-fill-tertiary);
   border-radius: var(--border-radius-base);
-  color: var(--status-danger);
+  color: var(--aios-status-danger);
 }
 
 /* ECharts 空数据状态 */
@@ -325,9 +325,9 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  background-color: var(--bg-hover);
+  background-color: var(--lobe-color-fill-tertiary);
   border-radius: var(--border-radius-base);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .aios-echarts-tooltip-host {

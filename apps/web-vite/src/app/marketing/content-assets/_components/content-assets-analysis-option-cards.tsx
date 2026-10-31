@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import { CONTENT_ASSET_ANALYSIS_OPTIONS } from '../_lib/content-assets-analysis-options';
 import {
   CONTENT_ASSET_LONG_VIDEO_AI_HELPER,
@@ -106,6 +107,7 @@ export function AnalysisOptionGrid({
         const isSelectedPending =
           pendingSelectedProfile === option.profile && !isActiveOrSubmitting && !isCurrentResult;
         const isEmphasized = isActiveOrSubmitting || isCurrentResult || isSelectedPending;
+        const ActionButton = isEmphasized ? AiActionButton : Button;
         const buttonDisabled =
           !canRun ||
           isLongFormForAi ||
@@ -151,9 +153,9 @@ export function AnalysisOptionGrid({
               })}
             </p>
             {job ? <AnalysisJobProgress job={job} /> : null}
-            <Button
+            {/* Every card can start AI analysis; only the emphasized card wears the AI fill (one per screen). */}
+            <ActionButton
               className={optionStyles.analysisOptionAction}
-              type={isEmphasized ? 'primary' : 'default'}
               size="middle"
               block
               loading={isSubmitting}
@@ -170,7 +172,7 @@ export function AnalysisOptionGrid({
               }}
             >
               {actionText}
-            </Button>
+            </ActionButton>
           </article>
         );
       })}

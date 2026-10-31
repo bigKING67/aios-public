@@ -1,5 +1,5 @@
-import { AimOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Input, Select } from 'antd';
+import { Crosshair } from 'lucide-react';
+import { Button, Checkbox, Input, Select } from '@lobehub/ui';
 import { useEffect, useId, useState } from 'react';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import { isSellingPointPreset, presetDisplayName } from '../_lib/segment-display';
@@ -84,7 +84,6 @@ export function SegmentCreateForm({ preset, assetProductName, durationMs, busy, 
           value={value}
           placeholder="如 0:12.5"
           title="分:秒.十分之一秒"
-          status={errors[field] ? 'error' : undefined}
           aria-invalid={Boolean(errors[field])}
           aria-describedby={errors[field] ? `${id}-${field}-error` : undefined}
           inputMode="decimal"
@@ -92,7 +91,7 @@ export function SegmentCreateForm({ preset, assetProductName, durationMs, busy, 
         />
         <Button
           className={styles.touchButton}
-          icon={<AimOutlined />}
+          icon={<Crosshair size={14} strokeWidth={1.8} />}
           disabled={!readCurrentMs}
           onClick={() => readCurrentMs && setValue(formatSegmentTime(readCurrentMs()))}
         >
@@ -121,8 +120,7 @@ export function SegmentCreateForm({ preset, assetProductName, durationMs, busy, 
             id={`${id}-label`}
             mode={sellingPoint ? 'multiple' : undefined}
             value={sellingPoint ? labelKeys : labelKey || undefined}
-            placeholder={`选择${presetDisplayName(preset)} 标签`}
-            status={errors.label ? 'error' : undefined}
+            placeholder={`选择${presetDisplayName(preset)}标签`}
             options={preset.labels.map((label) => ({ value: label.key, label: label.name }))}
             onChange={(next: string | string[]) => setLabelKeys(Array.isArray(next) ? next : [next])}
           />
@@ -144,7 +142,7 @@ export function SegmentCreateForm({ preset, assetProductName, durationMs, busy, 
         {sellingPoint ? <ContinuesPreviousField checked={continuesPrevious} onChange={setContinuesPrevious} /> : null}
       </div>
       <div className={styles.formFooter}>
-        <Checkbox checked={draft} onChange={(event) => setDraft(event.target.checked)}>
+        <Checkbox checked={draft} onChange={(checked) => setDraft(checked)}>
           存为草稿（待确认，不进入片段池）
         </Checkbox>
         <Button type="primary" htmlType="submit" className={styles.touchButton} loading={busy}>
@@ -162,7 +160,7 @@ export function SegmentCreateForm({ preset, assetProductName, durationMs, busy, 
 export function ContinuesPreviousField({ checked, onChange }: { checked: boolean; onChange: (next: boolean) => void }) {
   return (
     <div className={styles.field}>
-      <Checkbox checked={checked} onChange={(event) => onChange(event.target.checked)}>
+      <Checkbox checked={checked} onChange={(checked) => onChange(checked)}>
         和上一个卖点片段连着
       </Checkbox>
       <p className={styles.fieldHelp}>同一镜头连续拍下、一句话跨两个卖点时勾选；卖点混剪会把连着的片段整块使用，不在中间切开。</p>

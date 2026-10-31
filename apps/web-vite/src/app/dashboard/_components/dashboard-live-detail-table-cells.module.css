@@ -43,7 +43,7 @@
   height: 24px;
   border-radius: 999px;
   border: 1px solid var(--dashboard-detail-action-border);
-  background: var(--bg-hover);
+  background: var(--lobe-color-fill-tertiary);
   color: var(--dashboard-detail-text) !important;
   font-size: var(--font-size-sm);
   font-weight: 500;
@@ -54,5 +54,5 @@
 .liveDetailInspectButton:hover {
   border-color: var(--dashboard-detail-action-hover-border);
   background: var(--dashboard-detail-action-hover-bg);
-  color: var(--brand-dark) !important;
+  color: var(--lobe-color-primary-hover) !important;
 }

@@ -1,8 +1,8 @@
 .traceReasonHashPanel {
   margin: 0 0 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
 }
 
@@ -21,13 +21,13 @@
 }
 
 .traceReasonHashHead strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }
 
 .traceReasonHashHead span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
 }
 
@@ -40,30 +40,30 @@
 .traceReasonHashItem {
   width: 100%;
   text-align: left;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   cursor: pointer;
   appearance: none;
   border-radius: 8px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   padding: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .traceReasonHashItem:hover {
-  border-color: var(--status-info-border);
+  border-color: var(--lobe-color-info-border);
   box-shadow: var(--shadow-base);
 }
 
 .traceReasonHashItemActive {
-  border-color: var(--brand-primary);
+  border-color: var(--lobe-color-primary);
   box-shadow: var(--shadow-base);
-  background: var(--status-info-bg);
+  background: var(--lobe-color-info-bg);
 }
 
 .traceReasonHashItem:focus-visible {
   outline: none;
-  border-color: var(--brand-dark);
-  box-shadow: 0 0 0 3px var(--brand-focus-ring);
+  border-color: var(--lobe-color-primary-hover);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
 }
 
 .traceReasonHashItem:active {
@@ -79,7 +79,7 @@
 
 .traceReasonHashMetric {
   margin: 6px 0 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -87,7 +87,7 @@
 .traceReasonHashHint {
   margin-top: 4px;
   display: block;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
 }
@@ -96,11 +96,11 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--status-info-strong);
+  color: var(--aios-status-info);
   font-size: var(--font-size-sm);
   border-radius: 999px;
-  border: 1px solid var(--status-info-border);
-  background: var(--status-info-bg);
+  border: 1px solid var(--lobe-color-info-border);
+  background: var(--lobe-color-info-bg);
   padding: 2px 8px;
 }
 

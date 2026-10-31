@@ -108,8 +108,16 @@ const PROTECTED_ROUTE_SOURCE_OWNERS = {
     page: 'apps/web-vite/src/app/content/ai-studio/editing/[runId]/page.tsx',
     importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
   },
+  [ROUTE_PATHS.contentAiStudioCompetitor]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/competitor/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
   [ROUTE_PATHS.contentAiStudioTrends]: {
     page: 'apps/web-vite/src/app/content/ai-studio/trends/page.tsx',
+    importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
+  },
+  [ROUTE_PATHS.contentAiStudioTeamOutput]: {
+    page: 'apps/web-vite/src/app/content/ai-studio/team-output/page.tsx',
     importedProtectedComponent: 'apps/web-vite/src/app/content/ai-studio/_components/ai-studio-shell.tsx',
   },
   [ROUTE_PATHS.marketingContentAssetDetail]: {

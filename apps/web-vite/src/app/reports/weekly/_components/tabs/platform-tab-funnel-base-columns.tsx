@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { TrendClassNameResolver } from './platform-tab-column-contracts';
 import {
   createWeeklyFrozenHeaderCellProps,
@@ -11,7 +11,7 @@ import type { FunnelChannelRow } from './platform-tab-types';
 
 export function buildFunnelBaseColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<FunnelChannelRow> {
+): TableColumnsType<FunnelChannelRow> {
   return [
     {
       title: '商品ID',

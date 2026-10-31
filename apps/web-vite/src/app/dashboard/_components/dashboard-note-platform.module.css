@@ -9,9 +9,9 @@
   display: inline-flex !important;
   align-items: center;
   gap: 6px;
-  border-color: var(--status-neutral-border) !important;
-  background: var(--status-neutral-bg) !important;
-  color: var(--status-neutral-strong) !important;
+  border-color: var(--lobe-color-border) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
+  color: var(--lobe-color-text-secondary) !important;
   font-weight: 560;
 }
 

@@ -92,6 +92,7 @@ export const VERIFY_CI_RUN_GATES = Object.freeze([
   gate('verify:migrations:aios-identity-forward-cutover-behavior', '[verify:ci] AIOS identity maintenance cutover behavior'),
   gate('verify:migrations:aios-taobao-goods-schema-contract-forward-cutover-behavior', '[verify:ci] Taobao goods runtime schema contract forward cutover behavior'),
   gate('verify:migrations:aios', '[verify:ci] migration filesystem governance'),
+  gate('verify:migrations:bql', '[verify:ci] bql_aios migration descriptor and database binding'),
   gate('verify:migrations:aios-owner-reviewed-overlay-behavior', '[verify:ci] migration owner-reviewed offline overlay behavior'),
   gate('verify:marketing:content-assets-qianchuan-production-cutover-behavior', '[verify:ci] qianchuan production cutover readiness behavior'),
   gate('verify:marketing:content-assets-qianchuan-production-migrations-behavior', '[verify:ci] qianchuan production migration reconciliation behavior'),

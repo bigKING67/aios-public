@@ -123,8 +123,8 @@ fn point(row: &sqlx::postgres::PgRow) -> PointSegment {
 }
 
 const REFERENCE_SQL: &str = "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.source_content_hash, s.continues_previous, s.additional_label_keys FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.asset_id = $1 AND s.preset_key = $2 AND s.preset_version = $3 AND s.status = 'confirmed' AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($4::TEXT IS NULL OR $4 = ANY(a.tags)) ORDER BY s.start_ms, s.segment_id";
-const FRAMES_SQL: &str = "SELECT segment_id, asset_id, start_ms, end_ms, label_key, source_content_hash, continues_previous FROM (SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.source_content_hash, s.continues_previous, ROW_NUMBER() OVER (PARTITION BY s.label_key ORDER BY s.asset_id, s.start_ms, s.segment_id) AS rank FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.preset_key = $1 AND s.preset_version = $2 AND s.label_key = ANY($3) AND s.product_name = $4 AND s.status = 'confirmed' AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($6::TEXT IS NULL OR $6 = ANY(a.tags))) ranked WHERE rank <= $5 ORDER BY label_key, asset_id, start_ms, segment_id";
-const POINTS_SQL: &str = "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.source_content_hash, s.continues_previous, s.additional_label_keys FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.asset_id = ANY($1) AND s.preset_key = $2 AND s.preset_version = $3 AND s.product_name = $4 AND s.status = 'confirmed' AND a.is_deleted = FALSE AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) ORDER BY s.asset_id, s.start_ms, s.segment_id";
+const FRAMES_SQL: &str = "SELECT segment_id, asset_id, start_ms, end_ms, label_key, source_content_hash, continues_previous FROM (SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.source_content_hash, s.continues_previous, ROW_NUMBER() OVER (PARTITION BY s.label_key ORDER BY s.asset_id, s.start_ms, s.segment_id) AS rank FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.preset_key = $1 AND s.preset_version = $2 AND s.label_key = ANY($3) AND s.product_name = $4 AND s.status = 'confirmed' AND a.is_deleted = FALSE AND ($7::BOOLEAN OR a.bucket <> 'cloud_video') AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) AND ($6::TEXT IS NULL OR $6 = ANY(a.tags))) ranked WHERE rank <= $5 ORDER BY label_key, asset_id, start_ms, segment_id";
+const POINTS_SQL: &str = "SELECT s.segment_id, s.asset_id, s.start_ms, s.end_ms, s.label_key, s.source_content_hash, s.continues_previous, s.additional_label_keys FROM ads.content_segments s JOIN ads.marketing_content_assets a ON a.asset_id = s.asset_id WHERE s.asset_id = ANY($1) AND s.preset_key = $2 AND s.preset_version = $3 AND s.product_name = $4 AND s.status = 'confirmed' AND a.is_deleted = FALSE AND ($5::BOOLEAN OR a.bucket <> 'cloud_video') AND s.source_content_hash = LOWER(TRIM(a.raw_sha256)) ORDER BY s.asset_id, s.start_ms, s.segment_id";
 
 pub(super) async fn load(
     db: &mut PgConnection,
@@ -132,6 +132,7 @@ pub(super) async fn load(
     product_name: &str,
     reference_asset: Uuid,
     enterprise_tag: Option<&str>,
+    cloud_enabled: bool,
 ) -> StudioResult<PointInputs> {
     // Fails with a clear 400 when migration 035 is missing or the preset retired.
     active_preset_labels(db, POINT_PRESET_KEY, POINT_PRESET_VERSION).await?;
@@ -170,6 +171,7 @@ pub(super) async fn load(
         .bind(product_name)
         .bind(MAX_FRAMES_PER_LABEL)
         .bind(enterprise_tag)
+        .bind(cloud_enabled)
         .fetch_all(&mut *db)
         .await
         .map_err(db_error)?
@@ -187,6 +189,7 @@ pub(super) async fn load(
         .bind(POINT_PRESET_KEY)
         .bind(POINT_PRESET_VERSION)
         .bind(product_name)
+        .bind(cloud_enabled)
         .fetch_all(&mut *db)
         .await
         .map_err(db_error)?
@@ -250,13 +253,12 @@ pub(super) fn plan(
             points::slot_options(slot, &frames, &blocks, true, seed ^ (index as u64 + 1))
         })
         .collect();
-    let reference = points::reference_hash(&slots);
     let limits = points::Limits {
         max_total_ms,
         max_sources: FRAMEWORK_REMIX_MAX_SOURCES,
         allowance: points::repeat_allowance(&slots),
     };
-    let selection = points::select(&options, count, seed, &limits, used, &reference);
+    let selection = points::select(&options, count, seed, &limits, used);
     let known: HashMap<Uuid, (i32, i32, String, bool, Vec<String>)> = candidate_points
         .iter()
         .map(|p| {
@@ -437,6 +439,18 @@ pub(super) fn framework_runs(
 /// Frozen clip record of a batch run; 类型 2 adds the slot fill details.
 pub(super) fn stored_segment(clip: &PlannedClip, mode: RemixMode) -> serde_json::Value {
     let mut value = json!({"segmentId": clip.parts[0].segment_id, "assetId": clip.asset_id, "startMs": clip.start_ms, "endMs": clip.end_ms, "labelKey": clip.label_key, "sourceContentHash": clip.source_content_hash});
+    // Delivery rechecks both rendered parts and their confirmed framework guards.
+    value["sourceChecks"] = json!(clip
+        .parts
+        .iter()
+        .chain(&clip.guards)
+        .map(|part| json!({
+            "segmentId": part.segment_id, "startMs": part.start_ms, "endMs": part.end_ms,
+            "labelKey": part.label_key, "additionalLabelKeys": part.additional_label_keys,
+            "presetKey": part.preset_key, "presetVersion": part.preset_version,
+            "continuesPrevious": part.continues_previous
+        }))
+        .collect::<Vec<_>>());
     if mode == RemixMode::SellingPoint {
         value["slot"] = json!(clip.slot);
         value["tier"] = json!(clip.tier);
@@ -488,6 +502,7 @@ pub(super) async fn build(
         &n.product_name,
         asset_id,
         access.enterprise_tag(),
+        settings.content_ai_studio_cloud_remix_enabled,
     )
     .await?;
     if !legacy_endorsement_frames(&inputs.reference_frames, &inputs.reference_points).is_empty() {
@@ -544,18 +559,29 @@ pub(super) async fn build(
         )
     };
     let planned = plan(&inputs, preset, check, n.count, seed, max_ms, used);
-    let slots = planned
+    let slots: Vec<SlotPlan> = planned
         .slots
         .iter()
         .zip(&planned.options)
         .map(|(slot, options)| SlotPlan {
+            spend_counts: None,
             candidates: options.len(),
             selling_points: Some(slot.target.clone()),
             fallback: Some(slot.fallback),
         })
         .collect();
+    let missing_labels = labels
+        .iter()
+        .zip(&slots)
+        .filter(|(_, slot)| slot.candidates == 0)
+        .map(|(label, _)| label.clone())
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .collect();
     let selection = &planned.selection;
     Ok(Plan {
+        admission: HashMap::new(),
+        admission_excluded: 0,
         mode: n.mode,
         labels,
         preset_labels,
@@ -567,6 +593,8 @@ pub(super) async fn build(
         exact: selection.exact,
         previously_used: selection.previously_used,
         reference_excluded: selection.reference_excluded,
+        slot_tolerance: true,
+        missing_labels,
         runs: planned.runs,
         seed,
     })
@@ -626,6 +654,8 @@ pub(super) async fn changed_point_evidence(
         .bind(POINT_PRESET_KEY)
         .bind(POINT_PRESET_VERSION)
         .bind(product)
+        // Planning already gated cloud candidates; recheck all frozen sources.
+        .bind(true)
         .fetch_all(&mut *db)
         .await
         .map_err(db_error)?

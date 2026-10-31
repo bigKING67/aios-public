@@ -1,6 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
+import { Empty, Table } from '@lobehub/ui';
 import type { DataOpsNotificationEvent } from '@/config/dataops-hub';
 import type { DataOpsNotificationDetailProps } from './dataops-notification-detail-types';
 import { DataOpsNotificationFailureSummaryPanel } from './dataops-notification-failure-summary-panel';

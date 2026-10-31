@@ -1,7 +1,6 @@
 'use client';
 
-import { Alert, Form } from 'antd';
-import type { FormInstance } from 'antd';
+import { Alert } from '@lobehub/ui';
 import type { DataOpsTriggerParameterSpec } from '@/config/dataops-trigger-params';
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import {
@@ -9,10 +8,11 @@ import {
   type DataOpsBatchTriggerExecutionPreviewItem,
 } from './dataops-batch-trigger-execution-preview';
 import { DataOpsTriggerParameterFormItems } from './dataops-trigger-parameter-form-items';
+import type { DataOpsTriggerForm } from './dataops-trigger-parameter-form';
 import styles from './dataops-hub.module.css';
 
 interface DataOpsBatchTriggerParameterModalBodyProps {
-  form: FormInstance;
+  form: DataOpsTriggerForm;
   pipelines: DataOpsRuntimePipeline[];
   specs: DataOpsTriggerParameterSpec[];
   executionPreview: DataOpsBatchTriggerExecutionPreviewItem[];
@@ -45,13 +45,13 @@ export function DataOpsBatchTriggerParameterModalBody({
         className={styles.batchTriggerSummaryAlert}
       />
       {specs.length ? (
-        <Form form={form} layout="vertical" preserve={false}>
-          <DataOpsTriggerParameterFormItems specs={specs} itemKeyPrefix="batch-" />
+        <div>
+          <DataOpsTriggerParameterFormItems form={form} specs={specs} itemKeyPrefix="batch-" />
 
           <div className={styles.parameterHelpList}>
             <p>仅展示所选任务“公共参数”。提交后会按同一参数值依次触发每个任务。</p>
           </div>
-        </Form>
+        </div>
       ) : (
         <Alert
           type="warning"

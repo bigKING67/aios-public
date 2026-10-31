@@ -383,6 +383,15 @@ pub(crate) fn fixture_settings(database_url: String) -> Settings {
         content_ai_studio_segment_suggest_enabled: false,
         content_ai_studio_segment_suggest_max_assets: 5,
         content_ai_studio_remix_enabled: false,
+        content_ai_studio_delivery_enabled: false,
+        content_ai_studio_cloud_remix_enabled: false,
+        daily_remix: crate::config::DailyRemixSettings {
+            enabled: false,
+            service_token: None,
+            budget_micros: None,
+        },
+        content_ai_studio_admission_min_spend: 5000.0,
+        content_ai_studio_structure_pool_days: 30,
         content_ai_studio_remix_max_seconds: 600,
         content_ai_studio_remix_max_per_batch: 10,
         content_ai_studio_remix_max_active: 20,
@@ -395,6 +404,7 @@ pub(crate) fn fixture_settings(database_url: String) -> Settings {
         tos_endpoint: String::new(),
         tos_region: String::new(),
         tos_bucket: "fixture".to_string(),
+        tos_derived_bucket: String::new(),
     }
 }
 

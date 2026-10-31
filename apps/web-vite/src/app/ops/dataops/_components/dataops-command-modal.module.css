@@ -5,8 +5,8 @@
 
 .commandCard {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
 }
 
@@ -20,7 +20,7 @@
 
 .commandCardHead h4 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }
@@ -28,9 +28,9 @@
 .commandCode {
   margin: 0;
   border-radius: 8px;
-  border: 1px solid var(--border-color-hover);
-  background: var(--bg-card);
-  color: var(--text-primary);
+  border: 1px solid var(--aios-border-hover);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
@@ -39,6 +39,7 @@
   word-break: break-all;
 }
 
-.commandForm :global(.ant-form-item) {
+/* Tighter rows than the shared form field (antd used 8px here). */
+.commandForm > div {
   margin-bottom: 8px;
 }

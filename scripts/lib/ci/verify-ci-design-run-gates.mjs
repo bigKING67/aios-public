@@ -37,14 +37,6 @@ const DESIGN_NON_BEHAVIOR_GATES = Object.freeze([
     label: '[verify:ci] design token generator boundary',
   },
   {
-    name: 'verify:design:antd-table-selectors',
-    label: '[verify:ci] AntD table deep selector audit',
-  },
-  {
-    name: 'verify:design:antd-theme-token-sync',
-    label: '[verify:ci] AntD theme token sync',
-  },
-  {
     name: 'verify:design:echarts-theme-token-sync',
     label: '[verify:ci] ECharts theme token sync',
   },
@@ -97,10 +89,6 @@ export const DESIGN_TOKEN_HELPER_RUN_GATES = Object.freeze([
 ]);
 
 export const DESIGN_ADAPTER_RUN_GATES = Object.freeze([
-  designGate('verify:design:antd-table-selectors'),
-  designBehaviorGate('verify:design:antd-table-selectors-behavior'),
-  designGate('verify:design:antd-theme-token-sync'),
-  designBehaviorGate('verify:design:antd-theme-token-sync-behavior'),
   designGate('verify:design:echarts-theme-token-sync'),
   designBehaviorGate('verify:design:echarts-theme-token-sync-behavior'),
   designGate('verify:design:echarts-css-token-sync'),

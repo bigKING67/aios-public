@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import patch
 import psycopg2
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
-from content_production import segment_shot_hints, segment_transcript
+from content_production import segment_shot_hints, segment_transcript, selling_point_screen
 from content_production.segment_suggestion_provider import MockSegmentProvider
 from content_production.segment_suggestion_queue import claim, fail, heartbeat
 from content_production.segment_suggestion_worker import LocalSource, WorkerUnavailable, process_one
@@ -331,6 +331,54 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
                     self.assertEqual(settings['transcript']['utterances'], [[123, 2456, '原片口播不干']])
                     self.assertEqual(summary['transcript']['origin'], 'library')
 
+    def cached_transcript(self, text='原片口播不干'):
+        self.execute("""INSERT INTO ads.marketing_content_asset_transcripts
+            (transcript_id,asset_id,source_object_key,transcript_object_key,provider,model,
+             transcript_text,script_text,srt_text,segments,metadata)
+            VALUES (%s,%s,'fixtures/whole.mp4','fixture.json','seed_asr','fixture','','','',%s,%s)""",
+            (str(uuid.uuid4()), self.asset, json.dumps([{'start_ms': 123, 'end_ms': 2456, 'text': text}]),
+             json.dumps({'source_sha256': self.sha})))
+
+    def test_selling_point_text_input_sends_speech_and_screen_text_without_video(self):
+        self.segment(0, 6000, 'human', 'confirmed')
+        self.cached_transcript()
+        payload = {'segments': [{'framework_index': 0, 'start_sec': .123, 'end_sec': 2.456,
+            'label_keys': ['moisturizing'], 'continues_previous': False, 'quote': '原片口播不干', 'reason': '保湿'}]}
+        job_id, provider = self.job(preset='selling_point'), MockSegmentProvider(payload)
+        screen = (['[0.5–2.0 秒] 演员某某同款'], {'engine': 'fixture', 'shots': 2, 'lines': 1})
+        with patch.object(selling_point_screen, 'screen_lines', return_value=screen) as read:
+            self.assertEqual(self.run_worker(provider, {'CONTENT_AI_STUDIO_SELLING_POINT_INPUT': 'text'}),
+                             {'jobId': job_id, 'status': 'succeeded'})
+        read.assert_called_once()
+        self.assertIsNone(provider.calls[0]['proxy'])
+        for phrase in ('本次没有视频画面', '[0.123–2.456 秒] 原片口播不干', '[0.5–2.0 秒] 演员某某同款'):
+            self.assertIn(phrase, provider.calls[0]['prompt'])
+        settings, summary = self.execute('SELECT request_settings,result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0]
+        self.assertEqual(settings['promptVersion'], 'selling-point-text-v1')
+        self.assertEqual(settings['sellingPointInput'], {'mode': 'text', 'screen': screen[1], 'speechUnits': 1})
+        self.assertEqual(summary['sellingPointInput']['mode'], 'text')
+        self.assertEqual(self.execute("""SELECT count(*) FROM ads.content_segments WHERE asset_id=%s
+            AND preset_key='selling_point' AND status='suggested'""", (self.asset,))[0][0], 1)
+
+    def test_selling_point_text_input_falls_back_to_video_without_transcript_or_gpu(self):
+        self.segment(0, 6000, 'human', 'confirmed')
+        payload = {'segments': []}
+        env = {'CONTENT_AI_STUDIO_SELLING_POINT_INPUT': 'text'}
+        job_id, provider = self.job(preset='selling_point'), MockSegmentProvider(payload)
+        self.assertEqual(self.run_worker(provider, env)['status'], 'succeeded')
+        self.assertIsNotNone(provider.calls[0]['proxy'])
+        settings = self.execute('SELECT request_settings FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0][0]
+        self.assertEqual(settings['sellingPointInput'], {'mode': 'video', 'fallback': 'no_cached_transcript'})
+        self.assertEqual(settings['promptVersion'], 'selling-point-v7')
+        self.cached_transcript()
+        job_id, provider = self.job(preset='selling_point'), MockSegmentProvider(payload)
+        with patch.object(selling_point_screen, 'screen_lines',
+                          side_effect=selling_point_screen.ScreenTextUnavailable('ImportError')):
+            self.assertEqual(self.run_worker(provider, env)['status'], 'succeeded')
+        self.assertIsNotNone(provider.calls[0]['proxy'])
+        settings = self.execute('SELECT request_settings FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0][0]
+        self.assertEqual(settings['sellingPointInput'], {'mode': 'video', 'fallback': 'screen_text_unavailable:ImportError'})
+
     def test_selling_point_job_without_confirmed_framework_fails_before_any_model_call(self):
         self.segment(0, 6000, 'ai', 'suggested')
         job_id = self.job(preset='selling_point')
@@ -371,7 +419,7 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
                                     (job_id,))[0]
         self.assertEqual((status, code), ('failed', 'voiceover_required'))
 
-    def test_selling_point_job_does_not_publish_a_partially_filtered_continuous_chain(self):
+    def test_selling_point_job_drops_a_partially_filtered_continuous_chain_and_keeps_the_rest(self):
         frame = self.segment(0, 6000, 'human', 'confirmed')
         job_id = self.job(preset='selling_point')
         payload = {'segments': [
@@ -382,13 +430,13 @@ class SegmentSuggestionWorkerTests(unittest.TestCase):
             {'framework_index': 0, 'start_sec': 3.5, 'end_sec': 5.5, 'label_key': 'skincare',
              'continues_previous': True, 'quote': '同时养肤', 'reason': '不能从上一段切开'}]}
         provider = MockSegmentProvider(payload)
-        self.assertEqual(self.run_worker(provider)['status'], 'failed')
+        self.assertEqual(self.run_worker(provider)['status'], 'succeeded')
         self.assertEqual(len(provider.calls), 1)
-        status, code = self.execute('SELECT status,error_code FROM ads.content_segment_suggestion_jobs WHERE job_id=%s',
-                                    (job_id,))[0]
-        self.assertEqual((status, code), ('failed', 'invalid_response'))
-        self.assertEqual(self.execute("SELECT COUNT(*) FROM ads.content_segments WHERE asset_id=%s AND preset_key='selling_point'",
-                                      (self.asset,))[0][0], 0)
+        summary = self.execute('SELECT result_summary FROM ads.content_segment_suggestion_jobs WHERE job_id=%s', (job_id,))[0][0]
+        self.assertEqual(summary['dropped']['broken_chain'], 1)
+        # The independent span survives; the orphaned successor never joins it.
+        self.assertEqual([tuple(row) for row in self.execute("""SELECT start_ms,label_key FROM ads.content_segments
+            WHERE asset_id=%s AND preset_key='selling_point' ORDER BY start_ms""", (self.asset,))], [(0, 'moisturizing')])
         self.assertEqual(self.execute('SELECT status FROM ads.content_segments WHERE segment_id=%s', (frame,))[0][0], 'confirmed')
 
     def test_label_subset_limits_the_call_and_drops_other_labels(self):

@@ -6,7 +6,7 @@ import { SegmentSuggestWorkspace } from './segment-suggest-workspace';
 import pageStyles from '../ai-studio.module.css';
 
 /**
- * AI 分析 page body. When the suggestion capability is off it renders an
+ * AI 切段 page body. When the suggestion capability is off it renders an
  * honest notice and mounts no trigger, so no model job can be requested.
  */
 export function SegmentSuggestPanel({ capabilities }: { capabilities: StudioCapabilitiesResponse }) {
@@ -15,7 +15,7 @@ export function SegmentSuggestPanel({ capabilities }: { capabilities: StudioCapa
     <section className={pageStyles.panel} aria-labelledby="ai-studio-page-title">
       <header className={pageStyles.pageHeader}>
         <div>
-          <h1 id="ai-studio-page-title">AI 分析</h1>
+          <h1 id="ai-studio-page-title">AI 切段</h1>
           <p>选原片，AI 结合画面和声音把原片切成片段并打上框架标签；人工确认后进入框架片段或卖点片段，供混剪使用。</p>
         </div>
         {enabled ? null : <Badge status="neutral">尚未启用</Badge>}
@@ -24,9 +24,9 @@ export function SegmentSuggestPanel({ capabilities }: { capabilities: StudioCapa
         <SegmentSuggestWorkspace capabilities={capabilities} />
       ) : (
         <article className={pageStyles.card}>
-          <h2>AI 分析未启用</h2>
+          <h2>AI 切段未启用</h2>
           <p>
-            当前环境没有开启 AI 分析，本页不会发起任何模型调用。开启后只对你显式勾选的原片运行，不会自动分析全库；在此之前可以在框架片段、卖点片段页人工标注。
+            当前环境没有开启 AI 切段，本页不会发起任何模型调用。开启后只对你显式勾选的原片运行，不会自动分析全库；在此之前可以在框架片段、卖点片段页人工标注。
           </p>
           <div className={pageStyles.nextAction}>
             <RouterLink className={pageStyles.actionLink} to={ROUTE_PATHS.contentAiStudioAssets}>

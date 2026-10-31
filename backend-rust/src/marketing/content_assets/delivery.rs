@@ -150,6 +150,7 @@ pub(super) fn build_playback_url(
         },
         content_type,
         file_size_bytes,
+        alternate_urls: Vec::new(),
     })
 }
 
@@ -190,7 +191,7 @@ fn presign_tos_get(settings: &Settings, object_key: &str, ttl_seconds: u64) -> A
             "未配置 TOS_ACCESS_KEY_ID/TOS_SECRET_ACCESS_KEY，无法生成 signed URL",
         ));
     }
-    let host = virtual_host(&settings.tos_endpoint, &settings.tos_bucket);
+    let host = virtual_host(&settings.tos_endpoint, bucket_for_key(settings, object_key));
     let now = Utc::now();
     let amz_date = now.format("%Y%m%dT%H%M%SZ").to_string();
     let date_stamp = now.format("%Y%m%d").to_string();
@@ -243,7 +244,7 @@ fn presign_tos_put(
             "未配置 TOS_ACCESS_KEY_ID/TOS_SECRET_ACCESS_KEY，无法生成上传 signed URL",
         ));
     }
-    let host = virtual_host(&settings.tos_endpoint, &settings.tos_bucket);
+    let host = virtual_host(&settings.tos_endpoint, bucket_for_key(settings, object_key));
     let now = Utc::now();
     let amz_date = now.format("%Y%m%dT%H%M%SZ").to_string();
     let date_stamp = now.format("%Y%m%d").to_string();
@@ -282,6 +283,43 @@ fn presign_tos_put(
     Ok(format!(
         "https://{host}{canonical_uri}?{canonical_query}&X-Amz-Signature={signature}"
     ))
+}
+
+/// Rebuildable or temporary objects (previews, covers, proxies, analysis and transcript JSON,
+/// segment covers, competitor evidence and staged originals). Keep equal to
+/// `DERIVED_KEY_PREFIXES` in `marketing_content_assets/tos_storage.py`.
+const DERIVED_KEY_PREFIXES: [&str; 8] = [
+    "preview/",
+    "cover/",
+    "proxy/",
+    "analysis/",
+    "transcript/",
+    "segment-cover/",
+    "competitor/evidence/",
+    "competitor/raw/",
+];
+
+/// Bucket holding `object_key`: `tos_derived_bucket` for derived prefixes when configured.
+/// The CDN provider fronts a single bucket and is not routed.
+fn bucket_for_key<'a>(settings: &'a Settings, object_key: &str) -> &'a str {
+    route_bucket(
+        &settings.tos_bucket,
+        &settings.tos_derived_bucket,
+        object_key,
+    )
+}
+
+fn route_bucket<'a>(bucket: &'a str, derived_bucket: &'a str, object_key: &str) -> &'a str {
+    let derived = derived_bucket.trim();
+    if !derived.is_empty()
+        && DERIVED_KEY_PREFIXES
+            .iter()
+            .any(|prefix| object_key.starts_with(prefix))
+    {
+        derived
+    } else {
+        bucket
+    }
 }
 
 fn virtual_host(endpoint: &str, bucket: &str) -> String {
@@ -346,4 +384,34 @@ fn signing_key(secret_key: &str, date_stamp: &str, region: &str) -> Vec<u8> {
         key = mac.finalize().into_bytes().to_vec();
     }
     key
+}
+
+#[cfg(test)]
+mod tests {
+    use super::route_bucket;
+
+    #[test]
+    fn derived_prefixes_route_only_when_a_derived_bucket_is_set() {
+        for key in [
+            "preview/2026/10/a/x.mp4",
+            "cover/2026/10/a/x.webp",
+            "proxy/x.mp4",
+            "analysis/x.json",
+            "transcript/x.json",
+            "segment-cover/2026/10/s.webp",
+            "competitor/evidence/a/clip.mp4",
+            "competitor/raw/7400.mp4",
+        ] {
+            assert_eq!(route_bucket("media", "derived", key), "derived", "{key}");
+            assert_eq!(route_bucket("media", "", key), "media", "{key}");
+            assert_eq!(route_bucket("media", "  ", key), "media", "{key}");
+        }
+        for key in [
+            "raw/2026/10/a/x.mp4",
+            "production/p/j/video.mp4",
+            "competitor/other.mp4",
+        ] {
+            assert_eq!(route_bucket("media", "derived", key), "media", "{key}");
+        }
+    }
 }

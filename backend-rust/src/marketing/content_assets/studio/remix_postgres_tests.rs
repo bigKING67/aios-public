@@ -5,8 +5,9 @@ use super::error::{ConflictCode, StudioError};
 use super::postgres_tests::{pool, user, SCOPED};
 use super::remix;
 use super::remix_cancel;
+use super::remix_list;
 use super::remix_read;
-use super::remix_types::{CreateRemixBatchRequest, RemixBatchPreviewRequest};
+use super::remix_types::{CreateRemixBatchRequest, RemixBatchListQuery, RemixBatchPreviewRequest};
 use crate::{config::Settings, error::AppError};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -44,6 +45,7 @@ pub(super) async fn asset(
     sqlx::query("INSERT INTO ads.marketing_content_assets (asset_id, title, asset_status, bucket, raw_object_key, raw_sha256, duration_seconds, product_name, owner_user_id, authorization_status) VALUES ($1, 'remix fixture', 'ready', 'fixture', $2, $3, 60, $4, $5, $6)")
         .bind(id).bind(format!("raw/{id}.mp4")).bind(&sha).bind(product).bind(owner).bind(authorization)
         .execute(pool).await.unwrap();
+    super::admission_postgres_tests::qualify(pool, id, &sha).await;
     (id, sha)
 }
 
@@ -66,7 +68,7 @@ pub(super) async fn segment(
 /// B[10,15s) (+stale A); another product on A is never a candidate.
 pub(super) async fn fixture(pool: &PgPool) -> Fixture {
     let owner = format!("remix-{}", Uuid::new_v4());
-    let product = format!("精华-{}", Uuid::new_v4().simple());
+    let product = format!("粉底液-{}", Uuid::new_v4().simple());
     let (a, sha_a) = asset(pool, &owner, &product, "authorized").await;
     let (b, sha_b) = asset(pool, &owner, &product, "unknown").await;
     let (r, sha_r) = asset(pool, &owner, &product, "restricted").await;
@@ -272,11 +274,18 @@ async fn create_freezes_unique_runs_is_idempotent_and_never_repeats_combinations
     );
     // Owner-only reads.
     assert_eq!(
-        remix_read::list(&pool, &settings, &f.owner, Some(&f.owner), None)
-            .await
-            .unwrap()
-            .items
-            .len(),
+        remix_list::list(
+            &pool,
+            &settings,
+            &f.owner,
+            Some(&f.owner),
+            None,
+            &RemixBatchListQuery::default()
+        )
+        .await
+        .unwrap()
+        .items
+        .len(),
         2
     );
     assert!(matches!(
@@ -565,17 +574,30 @@ async fn list_names_the_first_failure_and_skips_outputs_without_covers() {
         .bind(failed).execute(&pool).await.unwrap();
     sqlx::query("UPDATE ads.content_production_runs SET status = 'succeeded', stage = 'delivery' WHERE run_id = $1")
         .bind(done).execute(&pool).await.unwrap();
+    // A succeeded Run not linked to a library asset yet is not a deleted output.
+    let unlinked = remix_read::detail(&pool, &settings(), &f.owner, Some(&f.owner), batch_id)
+        .await
+        .unwrap();
+    assert_eq!(unlinked.batch.available_count, 1);
+    assert!(!unlinked.items[1].output_deleted);
     // A delivered output asset without a cover yet contributes no thumbnail.
-    let (output, _) = asset(&pool, &f.owner, "精华", "authorized").await;
+    let (output, _) = asset(&pool, &f.owner, "粉底液", "authorized").await;
     sqlx::query("UPDATE ads.content_remix_batch_runs SET output_asset_id = $1 WHERE run_id = $2")
         .bind(output)
         .bind(done)
         .execute(&pool)
         .await
         .unwrap();
-    let listed = remix_read::list(&pool, &settings(), &f.owner, Some(&f.owner), None)
-        .await
-        .unwrap();
+    let listed = remix_list::list(
+        &pool,
+        &settings(),
+        &f.owner,
+        Some(&f.owner),
+        None,
+        &RemixBatchListQuery::default(),
+    )
+    .await
+    .unwrap();
     let batch = listed
         .items
         .iter()
@@ -584,11 +606,43 @@ async fn list_names_the_first_failure_and_skips_outputs_without_covers() {
     assert_eq!(batch.status, "partially_failed");
     assert_eq!(batch.failure_reason.as_deref(), Some("render_failed"));
     assert!(batch.cover_urls.is_empty());
+    assert_eq!(batch.available_count, 1);
     let read = remix_read::detail(&pool, &settings(), &f.owner, Some(&f.owner), batch_id)
         .await
         .unwrap();
     assert_eq!(read.items[1].output_asset_id, Some(output));
+    assert!(!read.items[1].output_deleted);
     assert_eq!(read.items[1].output_cover_url, None);
+    // Deleting the output from the library leaves the Run succeeded but nothing to play.
+    sqlx::query("UPDATE ads.marketing_content_assets SET is_deleted = TRUE WHERE asset_id = $1")
+        .bind(output)
+        .execute(&pool)
+        .await
+        .unwrap();
+    let read = remix_read::detail(&pool, &settings(), &f.owner, Some(&f.owner), batch_id)
+        .await
+        .unwrap();
+    assert_eq!(read.batch.succeeded_count, 1);
+    assert_eq!(read.batch.available_count, 0);
+    assert!(read.items[1].output_deleted);
+    // 总览 reports the settled batch with the same rule.
+    sqlx::query(
+        "UPDATE ads.content_remix_batches SET status = 'partially_failed' WHERE batch_id = $1",
+    )
+    .bind(batch_id)
+    .execute(&pool)
+    .await
+    .unwrap();
+    let overview = super::overview::overview(
+        &pool,
+        super::overview_types::StudioOverviewQuery::default(),
+        Some(&f.owner),
+        None,
+    )
+    .await
+    .unwrap();
+    let activity = overview.recent.iter().find(|a| a.id == batch_id).unwrap();
+    assert_eq!(activity.status, "outputs_deleted");
 }
 
 #[tokio::test]
@@ -596,13 +650,13 @@ async fn list_names_the_first_failure_and_skips_outputs_without_covers() {
 async fn a_reference_original_is_never_reproduced() {
     let pool = pool().await;
     let owner_id = format!("remix-ref-{}", Uuid::new_v4());
-    let product = format!("精华-{}", Uuid::new_v4().simple());
+    let product = format!("粉底液-{}", Uuid::new_v4().simple());
     let (a, sha_a) = asset(&pool, &owner_id, &product, "authorized").await;
     let (b, sha_b) = asset(&pool, &owner_id, &product, "authorized").await;
     let own_voice = segment(&pool, (a, &sha_a), "mixed_voiceover", (0, 5000), &product).await;
     let own_demo = segment(&pool, (a, &sha_a), "live_demo", (10_000, 14_000), &product).await;
     segment(&pool, (b, &sha_b), "mixed_voiceover", (0, 6000), &product).await;
-    segment(&pool, (b, &sha_b), "live_demo", (10_000, 15_000), &product).await;
+    segment(&pool, (b, &sha_b), "live_demo", (10_000, 14_500), &product).await;
     let owner = user(&owner_id);
     let request = RemixBatchPreviewRequest {
         mode: None,
@@ -644,6 +698,54 @@ async fn a_reference_original_is_never_reproduced() {
         let ids: Vec<Uuid> = item.segments.iter().map(|s| s.segment_id).collect();
         assert_ne!(ids, vec![own_voice, own_demo]);
     }
+}
+
+#[tokio::test]
+#[ignore = "requires a disposable CONTENT_PRODUCTION_TEST_DATABASE_URL with migrations 021–032"]
+async fn a_reference_original_bounds_each_slot_to_its_span() {
+    let pool = pool().await;
+    let owner_id = format!("remix-span-{}", Uuid::new_v4());
+    let product = format!("粉底液-{}", Uuid::new_v4().simple());
+    let mut assets = Vec::new();
+    for end in [10_000, 11_500, 12_001, 7_999] {
+        let (asset_id, sha) = asset(&pool, &owner_id, &product, "authorized").await;
+        segment(
+            &pool,
+            (asset_id, &sha),
+            "mixed_voiceover",
+            (0, end),
+            &product,
+        )
+        .await;
+        assets.push(asset_id);
+    }
+    let owner = user(&owner_id);
+    let mut request = RemixBatchPreviewRequest {
+        mode: None,
+        preset_key: "framework".into(),
+        preset_version: 1,
+        labels: None,
+        source_asset_id: Some(assets[0]),
+        product_name: product,
+        count: 4,
+    };
+    let preview = remix::preview(&pool, &settings(), &owner, SCOPED, &request)
+        .await
+        .unwrap();
+    // 10 s reference: 11.5 s fits ±20 %, 12.001 s and 7.999 s do not.
+    assert_eq!(preview.slots[0].candidate_count, 2);
+    assert_eq!(preview.available_combinations, 1);
+    assert!(preview
+        .shortfall_reason
+        .unwrap()
+        .contains("槽位时长超出 ±20%"));
+    // A hand-written label sequence has no reference spans.
+    request.labels = Some(vec!["mixed_voiceover".into()]);
+    request.source_asset_id = None;
+    let preview = remix::preview(&pool, &settings(), &owner, SCOPED, &request)
+        .await
+        .unwrap();
+    assert_eq!(preview.slots[0].candidate_count, 4);
 }
 
 #[tokio::test]

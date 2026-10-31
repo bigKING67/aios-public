@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
 import {
@@ -62,7 +62,7 @@ export function useDashboardLiveViewState({
     [isMobile]
   );
 
-  const liveDetailColumns = useMemo<ColumnsType<DashboardLiveDetailRow>>(
+  const liveDetailColumns = useMemo<TableColumnsType<DashboardLiveDetailRow>>(
     () =>
       buildDashboardLiveDetailColumns({
         isMobile,

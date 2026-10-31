@@ -1,8 +1,11 @@
 'use client';
 
-import { Button, Card, Pagination, Popconfirm, Space, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Tag } from '@lobehub/ui';
+import { Pencil, Trash2 } from 'lucide-react';
+import { AdminMobilePagination } from '../../_components/admin-mobile-pagination';
 import { formatAdminDateTime } from '../../_components/admin-date-formatters';
+import { confirmDelete } from '../../_components/confirm-delete';
+import styles from '../../_components/admin-page.module.css';
 import { getDisplayEmail } from './user-email-helpers';
 import type { User } from '../_lib/users-types';
 
@@ -28,67 +31,47 @@ export function UsersMobileList({
   onDelete,
 }: UsersMobileListProps) {
   return (
-    <div className="space-y-3">
+    <div className={styles.mobileList}>
       {users.map((item) => (
-        <Card key={String(item.id)} size="small" className="w-full">
-          <div className="space-y-2">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="m-0 truncate text-sm font-semibold text-text-primary">{item.username}</p>
-                <p className="m-0 truncate text-xs text-text-tertiary">{getDisplayEmail(item.email)}</p>
-              </div>
-              <Tag color={item.is_active ? 'green' : 'red'}>
-                {item.is_active ? '活跃' : '禁用'}
-              </Tag>
+        <article key={String(item.id)} className={styles.mobileCard}>
+          <div className={styles.cardHead}>
+            <div className={styles.cardHeadText}>
+              <p className={styles.cardTitle}>{item.username}</p>
+              <p className={styles.metaMuted}>{getDisplayEmail(item.email)}</p>
             </div>
-            <p className="m-0 text-xs text-text-secondary">全名：{item.full_name || '-'}</p>
-            <p className="m-0 text-xs text-text-tertiary">
-              创建时间：{formatAdminDateTime(item.created_at)}
-            </p>
-            <Space wrap>
-              <Button
-                size="small"
-                icon={<EditOutlined />}
-                onClick={() => onEdit(item)}
-              >
-                编辑
-              </Button>
-              <Button
-                size="small"
-                onClick={() => onOpenRoleModal(item)}
-              >
-                角色
-              </Button>
-              <Popconfirm
-                title="删除用户"
-                description={`确定要删除用户 ${item.username} 吗？`}
-                onConfirm={() => onDelete(item)}
-                okText="删除"
-                cancelText="取消"
-              >
-                <Button
-                  size="small"
-                  danger
-                  icon={<DeleteOutlined />}
-                >
-                  删除
-                </Button>
-              </Popconfirm>
-            </Space>
+            <Tag color={item.is_active ? 'success' : 'error'}>{item.is_active ? '活跃' : '禁用'}</Tag>
           </div>
-        </Card>
+          <p className={styles.meta}>全名：{item.full_name || '-'}</p>
+          <p className={styles.metaMuted}>创建时间：{formatAdminDateTime(item.created_at)}</p>
+          <div className={styles.toolbar}>
+            <Button
+              size="small"
+              icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
+              onClick={() => onEdit(item)}
+            >
+              编辑
+            </Button>
+            <Button size="small" onClick={() => onOpenRoleModal(item)}>
+              角色
+            </Button>
+            <Button
+              size="small"
+              danger
+              icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+              onClick={() =>
+                confirmDelete({
+                  title: '删除用户',
+                  content: `确定要删除用户 ${item.username} 吗？`,
+                  onConfirm: () => onDelete(item),
+                })
+              }
+            >
+              删除
+            </Button>
+          </div>
+        </article>
       ))}
-      <Pagination
-        size="small"
-        current={current}
-        pageSize={pageSize}
-        total={total}
-        showSizeChanger
-        showTotal={(totalCount) => `共 ${totalCount} 条`}
-        onChange={onChange}
-        onShowSizeChange={onChange}
-        hideOnSinglePage
-      />
+      <AdminMobilePagination current={current} pageSize={pageSize} total={total} onChange={onChange} />
     </div>
   );
 }

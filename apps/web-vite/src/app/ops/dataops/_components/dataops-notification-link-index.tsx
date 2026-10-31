@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import { formatTokenPreview } from './dataops-hub-formatters';
 import notificationTableStyles from './dataops-notification-table.module.css';
 import pipelineStyles from './dataops-pipeline-table.module.css';

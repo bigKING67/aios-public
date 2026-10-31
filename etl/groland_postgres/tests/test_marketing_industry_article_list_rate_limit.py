@@ -509,7 +509,9 @@ class MarketingIndustryArticleListRateLimitTest(unittest.TestCase):
     self.assertFalse(
       entries["ads-21-marketing-industry-articles-inc"]["schedule"]["active"]
     )
-    self.assertTrue(
+    # Industry news is a groland module; it went offline with the 百雀羚 bql_aios
+    # cutover (10-22-bql-ai-studio-db-rebuild), so the cache sweep no longer runs.
+    self.assertFalse(
       entries["ads-21-marketing-industry-articles-cache-sweep"]["schedule"]["active"]
     )
     self.assertFalse(

@@ -76,13 +76,50 @@ fn enterprise_products() -> &'static [String] {
     PRODUCTS.get_or_init(crate::config::studio_products_from_env)
 }
 
-pub(super) fn normalize_product_name(value: Option<String>) -> Option<String> {
-    normalize_product_name_in(value, enterprise_products())
+/// The groland built-in products only exist for the `full` module profile; the
+/// `ai_studio` deployment (百雀羚) uses the enterprise catalog alone.
+fn includes_builtin_products() -> bool {
+    crate::config::ModuleProfile::current().serves_groland_modules()
 }
 
-/// Built-in products (with their aliases) plus the enterprise catalog, verbatim.
-fn normalize_product_name_in(value: Option<String>, catalog: &[String]) -> Option<String> {
+pub(super) fn normalize_product_name(value: Option<String>) -> Option<String> {
+    normalize_product_name_in(value, enterprise_products(), includes_builtin_products())
+}
+
+/// Product filter options: the built-in list under `full`, the enterprise catalog
+/// under `ai_studio`.
+pub(super) fn product_options() -> Vec<String> {
+    product_options_for(enterprise_products(), includes_builtin_products())
+}
+
+fn product_options_for(catalog: &[String], include_builtin: bool) -> Vec<String> {
+    if include_builtin {
+        return BUILTIN_PRODUCTS
+            .iter()
+            .map(|product| product.to_string())
+            .collect();
+    }
+    catalog.to_vec()
+}
+
+const BUILTIN_PRODUCTS: [&str; 5] = [
+    PRODUCT_REVIVAL_SERUM,
+    PRODUCT_PLATINUM_SERUM_60ML,
+    PRODUCT_HAIRLINE_SERUM_20ML,
+    PRODUCT_SHAMPOO_OILY,
+    PRODUCT_SHAMPOO_DRY,
+];
+
+/// Built-in products (with their aliases, when included) plus the enterprise catalog, verbatim.
+fn normalize_product_name_in(
+    value: Option<String>,
+    catalog: &[String],
+    include_builtin: bool,
+) -> Option<String> {
     let value = normalize_optional_text(value, 120)?;
+    if !include_builtin {
+        return catalog.iter().find(|product| **product == value).cloned();
+    }
     match value.as_str() {
         PRODUCT_REVIVAL_SERUM | PRODUCT_REVIVAL_SERUM_LEGACY_TYPO | "小绿瓶" => {
             Some(PRODUCT_REVIVAL_SERUM.to_string())
@@ -273,9 +310,10 @@ fn validate_common_scene_group(
 mod tests {
     use super::{
         normalize_content_scene_fields, normalize_product_name, normalize_product_name_in,
-        normalize_video_type, PRODUCT_HAIRLINE_SERUM_20ML, PRODUCT_PLATINUM_SERUM_60ML,
-        PRODUCT_REVIVAL_SERUM, PRODUCT_SHAMPOO_DRY, PRODUCT_SHAMPOO_OILY, VIDEO_TYPE_KOC_SEEDING,
-        VIDEO_TYPE_KOC_SHOPPABLE, VIDEO_TYPE_KOL_SEEDING, VIDEO_TYPE_STORE_LIVE,
+        normalize_video_type, product_options_for, PRODUCT_HAIRLINE_SERUM_20ML,
+        PRODUCT_PLATINUM_SERUM_60ML, PRODUCT_REVIVAL_SERUM, PRODUCT_SHAMPOO_DRY,
+        PRODUCT_SHAMPOO_OILY, VIDEO_TYPE_KOC_SEEDING, VIDEO_TYPE_KOC_SHOPPABLE,
+        VIDEO_TYPE_KOL_SEEDING, VIDEO_TYPE_STORE_LIVE,
     };
 
     #[test]
@@ -328,11 +366,37 @@ mod tests {
         assert!(normalize_product_name(Some("旧产品".to_string())).is_none());
         let catalog = vec!["【测试】百雀羚样片".to_string()];
         assert_eq!(
-            normalize_product_name_in(Some(" 【测试】百雀羚样片 ".to_string()), &catalog)
+            normalize_product_name_in(Some(" 【测试】百雀羚样片 ".to_string()), &catalog, true)
                 .as_deref(),
             Some("【测试】百雀羚样片")
         );
-        assert!(normalize_product_name_in(Some("别的产品".to_string()), &catalog).is_none());
+        assert!(normalize_product_name_in(Some("别的产品".to_string()), &catalog, true).is_none());
+    }
+
+    #[test]
+    fn ai_studio_profile_uses_the_enterprise_catalog_only() {
+        let catalog = vec!["百雀羚蜜粉".to_string(), "【测试】百雀羚样片".to_string()];
+        assert_eq!(
+            normalize_product_name_in(Some("百雀羚蜜粉".to_string()), &catalog, false).as_deref(),
+            Some("百雀羚蜜粉")
+        );
+        for groland in ["小绿瓶", "洗发水（油头）", PRODUCT_REVIVAL_SERUM] {
+            assert!(
+                normalize_product_name_in(Some(groland.to_string()), &catalog, false).is_none(),
+                "{groland}"
+            );
+        }
+        assert_eq!(product_options_for(&catalog, false), catalog);
+        assert_eq!(
+            product_options_for(&catalog, true),
+            vec![
+                PRODUCT_REVIVAL_SERUM,
+                PRODUCT_PLATINUM_SERUM_60ML,
+                PRODUCT_HAIRLINE_SERUM_20ML,
+                PRODUCT_SHAMPOO_OILY,
+                PRODUCT_SHAMPOO_DRY,
+            ]
+        );
     }
 
     #[test]

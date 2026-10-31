@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   formatCurrencyFixed,
   formatInteger,
@@ -26,7 +26,7 @@ function formatDriverValue(factorKey: string, value: number): string {
   return formatRatioPercent(value, 2);
 }
 
-export function buildQuantDriverColumns(): ColumnsType<QuantAttributionRow> {
+export function buildQuantDriverColumns(): TableColumnsType<QuantAttributionRow> {
   return [
     {
       title: '驱动因子',

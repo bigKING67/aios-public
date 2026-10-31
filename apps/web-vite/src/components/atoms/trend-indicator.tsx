@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 export type TrendDirection = 'up' | 'down' | 'neutral';
 
@@ -21,9 +21,9 @@ export interface TrendIndicatorProps {
 }
 
 const directionConfig = {
-  up: { color: 'var(--trend-up)', icon: ArrowUpOutlined, prefix: '+' },
-  down: { color: 'var(--trend-down)', icon: ArrowDownOutlined, prefix: '-' },
-  neutral: { color: 'var(--trend-neutral)', icon: null, prefix: '' },
+  up: { color: 'var(--aios-trend-up)', icon: ArrowUp, prefix: '+' },
+  down: { color: 'var(--aios-trend-down)', icon: ArrowDown, prefix: '-' },
+  neutral: { color: 'var(--lobe-color-text-tertiary)', icon: null, prefix: '' },
 };
 
 const sizeStyles = {
@@ -62,7 +62,7 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-1 whitespace-nowrap ${className}`} style={{ color }}>
-      {showIcon && Icon && <Icon className={`${sizeStyles[size]}`} />}
+      {showIcon && Icon && <Icon size="1em" strokeWidth={2} aria-hidden="true" className={`${sizeStyles[size]}`} />}
       <span className={`font-medium whitespace-nowrap ${sizeStyles[size]}`}>{formattedValue}</span>
     </div>
   );

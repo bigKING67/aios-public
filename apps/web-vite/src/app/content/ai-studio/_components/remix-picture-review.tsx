@@ -1,4 +1,4 @@
-import { Alert, Button } from 'antd';
+import { Alert, Button } from '@lobehub/ui';
 import type { StudioRemixBatchItem } from '../_lib/remix-api';
 import { formatSegmentTime } from '../_lib/segment-time';
 import styles from './segment-annotation.module.css';
@@ -8,6 +8,7 @@ export function RemixPictureReview({ item, onPlay }: {
   onPlay: (startMs: number) => void;
 }) {
   if (item.outcome !== 'succeeded') return null;
+  const playable = Boolean(item.outputAssetId) && !item.outputDeleted;
   const review = item.pictureReview;
   if (review?.status === 'review_required' && review.pairs.length > 0) {
     return <Alert type="warning" showIcon title={`发现 ${review.pairCount} 组相近画面，建议复核`} description={
@@ -16,11 +17,11 @@ export function RemixPictureReview({ item, onPlay }: {
         <details>
           <summary>查看成片中的相近位置</summary>
           {review.pairs.map((pair, index) => <p key={index} className={styles.rowActions}>
-            <Button size="small" disabled={!item.outputAssetId} onClick={() => onPlay(pair.leftMs)}>
+            <Button size="small" disabled={!playable} onClick={() => onPlay(pair.leftMs)}>
               第 {pair.leftClip} 段 · {formatSegmentTime(pair.leftMs)}
             </Button>
             <span>与</span>
-            <Button size="small" disabled={!item.outputAssetId} onClick={() => onPlay(pair.rightMs)}>
+            <Button size="small" disabled={!playable} onClick={() => onPlay(pair.rightMs)}>
               第 {pair.rightClip} 段 · {formatSegmentTime(pair.rightMs)}
             </Button>
           </p>)}
@@ -31,5 +32,8 @@ export function RemixPictureReview({ item, onPlay }: {
   }
   if (review?.status === 'no_findings') return <p className={styles.fieldHelp}>画面抽检未发现跨原片相近片段，仍需结合口播复核。</p>;
   if (review?.status === 'not_applicable') return <p className={styles.fieldHelp}>成片仅用一条原片，未进行跨原片画面检查。</p>;
+  if (!review && item.qc?.status === 'passed') {
+    return <p className={styles.fieldHelp}>自动质检的画面抽样已通过，仍需人工完整观看成片。</p>;
+  }
   return <p className={styles.fieldHelp}>{review ? '画面检查未完成，请人工复核成片。' : '该成片尚未进行跨原片画面检查。'}</p>;
 }

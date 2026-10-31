@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Tabs } from 'antd';
 import { useFilter } from '@/hooks/use-filter';
 import { useInitialWeekPeriod } from '@/hooks/use-initial-week-period';
 import { useIsMobile } from '@/hooks/use-media-query';
@@ -11,6 +10,8 @@ import { ErrorState } from '@/components/states/error-state';
 import { resolveAllowedDashboardTabs, resolveDashboardTabKey } from '@/lib/role-access';
 import { useAuthStore } from '@/stores/auth.store';
 import { CompactHeader } from './compact-header';
+import { getWeeklyReportPanelId, getWeeklyReportTabId } from './weekly-report-tab-ids';
+import { WeeklyReportTabPanels } from './weekly-report-tab-panels';
 import {
   WEEK_PERIOD_DEBOUNCE_MS,
   debounce,
@@ -228,9 +229,11 @@ export function WeeklyReportClient({
                           return (
                             <button
                               key={tab.key}
+                              id={getWeeklyReportTabId(tab.key)}
                               type="button"
                               role="tab"
                               aria-selected={isActive}
+                              aria-controls={getWeeklyReportPanelId(tab.key)}
                               className={`weekly-header-tab-btn ${styles.headerTabButton}${
                                 isActive ? ` is-active ${styles.headerTabButtonActive}` : ''
                               }`}
@@ -281,12 +284,10 @@ export function WeeklyReportClient({
             ) : null}
 
             <div className={`mx-auto w-full ${WEEKLY_PAGE_MAX_WIDTH_CLASS}`}>
-              <Tabs
+              <WeeklyReportTabPanels
                 activeKey={resolvedActiveTab}
-                onChange={setActiveTab}
                 items={tabs}
-                className="light-tabs weekly-content-tabs"
-                tabBarStyle={{ display: 'none' }}
+                className="weekly-content-tabs"
               />
             </div>
           </div>

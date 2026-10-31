@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Tabs } from 'antd';
+import { Tabs } from '@lobehub/ui';
 import { useMonthlyReport } from '@/hooks/use-monthly-report';
 import { useFilter } from '@/hooks/use-filter';
 import { ReportSkeleton } from '@/components/organisms/report-skeleton';

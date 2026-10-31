@@ -6,8 +6,8 @@
 
 .panel {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 12px;
 }
 
@@ -17,14 +17,14 @@
 
 .panelHead h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 660;
 }
 
 .panelHead p {
   margin: 3px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -54,15 +54,15 @@
 
 .notifyAdvancedPanel {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 6px 10px;
 }
 
 .notifyAdvancedPanel > summary {
   list-style: none;
   cursor: pointer;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 600;
 }
@@ -73,8 +73,8 @@
 
 .notifyAdvancedPanel[open] {
   width: 100%;
-  background: var(--bg-hover);
-  border-color: var(--border-color-hover);
+  background: var(--lobe-color-fill-tertiary);
+  border-color: var(--aios-border-hover);
 }
 
 .notifyAdvancedPanel[open] > summary {
@@ -84,8 +84,8 @@
 .notifyToolbox {
   margin-bottom: 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
   display: grid;
   gap: 8px;
@@ -94,8 +94,8 @@
 .webhookSummaryRail {
   margin-bottom: 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 8px 10px;
   display: flex;
   flex-wrap: wrap;
@@ -104,7 +104,7 @@
 }
 
 .webhookSummaryHint {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -124,7 +124,7 @@
 }
 
 .notifyRetryMeta {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -136,8 +136,8 @@
 
 .notifyFailureFold {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 0 10px 8px;
   margin-bottom: 10px;
 }
@@ -163,13 +163,13 @@
 }
 
 .notifyFailureFoldTitle strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }
 
 .notifyFailureFoldTitle span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
 }
 

@@ -1,5 +1,5 @@
 import type { WaterfallChartProps } from '@/components/organisms/waterfall-chart';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { AttributionTableProps } from './platform-tab-attribution-table-props';
 import type { AttributionWaterfallChartProps } from './platform-tab-attribution-waterfall-props';
 import type { ChannelAttributionRow, GoodsTableRow } from './platform-tab-types';
@@ -35,7 +35,7 @@ export interface TmallChannelAttributionSectionProps
 export interface BuildTmallGoodsAttributionLeafPropsInput {
   isMobile: boolean;
   goodsTableRows: GoodsTableRow[];
-  goodsColumns: ColumnsType<GoodsTableRow>;
+  goodsColumns: TableColumnsType<GoodsTableRow>;
   goodsWaterfallSteps: WaterfallSteps;
   attributionAsOfDate: string | undefined;
   attributionTotalPrevGmv: number;
@@ -47,7 +47,7 @@ export interface BuildTmallGoodsAttributionLeafPropsInput {
 export interface BuildTmallChannelAttributionLeafPropsInput {
   isMobile: boolean;
   channelTableRows: ChannelAttributionRow[];
-  channelColumns: ColumnsType<ChannelAttributionRow>;
+  channelColumns: TableColumnsType<ChannelAttributionRow>;
   channelWaterfallSteps: WaterfallSteps;
   channelAttributionAsOfDate: string | undefined;
   channelAttributionTotalPrevPayAmount: number;

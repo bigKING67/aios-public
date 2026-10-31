@@ -7,7 +7,7 @@
 }
 
 .nameText {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 400;
   line-height: var(--line-height-normal);
@@ -17,7 +17,7 @@
 }
 
 .idText {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 500;

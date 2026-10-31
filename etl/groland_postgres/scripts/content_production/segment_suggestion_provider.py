@@ -23,10 +23,11 @@ PROXY_SETTINGS = {'shortSide': 360, 'fps': 15, 'videoCodec': 'h264', 'crf': 30,
 class SuggestionError(RuntimeError):
     """Terminal failure with a machine-readable code; the message stays generic."""
 
-    def __init__(self, code, message, usage=None):
+    def __init__(self, code, message, usage=None, *, diagnostics=None):
         super().__init__(message)
         self.code = code
         self.usage = usage
+        self.diagnostics = diagnostics
 
 
 def live_calls_allowed():
@@ -153,6 +154,15 @@ class MockSegmentProvider:
                     segment.update(framework_index=0, continues_previous=False, quote='本地模拟引用')
         return ProviderResult(payload=payload, usage={'mock': True}, response_id='')
 
+    def complete(self, prompt, schema):
+        """Text-only call; the mock answers like `suggest` over a nominal 10 s."""
+        self.calls.append({'proxy': None, 'prompt': prompt, 'schema': schema})
+        if self.error:
+            raise self.error
+        result = self.suggest(None, prompt, schema, 10000)
+        self.calls.pop()
+        return result
+
 
 class ArkSegmentProvider:
     """Billable Ark Responses call with json_schema strict; never retried."""
@@ -183,6 +193,10 @@ class ArkSegmentProvider:
             {'type': 'input_video', 'video_url': f'data:video/mp4;base64,{data}', 'fps': self.fps},
             {'type': 'input_text', 'text': prompt}], schema, self.thinking, reasoning_effort=reasoning_effort)
 
+    def complete(self, prompt, schema):
+        """Text-only call with the same model, thinking and temperature as `suggest` (selling-point text input)."""
+        return self._request([{'type': 'input_text', 'text': prompt}], schema, self.thinking)
+
     def review(self, prompt, schema, *, proxy=None, boards=(), audio=None, audio_samples=(), thinking='disabled', fps=.2, reasoning_effort=None):
         """Bounded visual/audio audit on the same Lite model; no model fallback."""
         if self.model != 'doubao-seed-2-1-lite-260915':
@@ -208,6 +222,7 @@ class ArkSegmentProvider:
 
     def _request(self, content, schema, thinking, *, temperature=.1, reasoning_effort=None):
         from marketing_content_assets.ark_responses import extract_output_text
+        from .provider_response_diagnostics import describe
         request = {
             'model': self.model,
             'input': [{'role': 'user', 'content': content}],
@@ -226,11 +241,15 @@ class ArkSegmentProvider:
             raise SuggestionError('provider_error', f'模型调用失败（{provider_error_kind(error)}）；调用可能已计费，请检查后手动重新发起') from error
         usage = response.get('usage') if isinstance(response.get('usage'), dict) else {}
         if response.get('status') not in (None, 'completed'):
-            raise SuggestionError('provider_incomplete', '模型未完成输出', usage)
+            raise SuggestionError('provider_incomplete', '模型未完成输出', usage,
+                                  diagnostics=describe(response, None))
+        output_text = None
         try:
-            payload = json.loads(extract_output_text(response))
+            output_text = extract_output_text(response)
+            payload = json.loads(output_text)
         except Exception as error:
-            raise SuggestionError('invalid_response', '模型返回无法解析', usage) from error
+            raise SuggestionError('invalid_response', '模型返回无法解析', usage,
+                                  diagnostics=describe(response, output_text, error)) from error
         return ProviderResult(payload=payload, usage=usage, response_id=str(response.get('id') or '')[:200])
 
     def decide(self, questions, *, proxy, fps=2, context=None):

@@ -1,13 +1,8 @@
+import { Database, FileSearch, Play, Upload } from 'lucide-react';
 import {
   type CSSProperties,
   type KeyboardEvent,
 } from 'react';
-import {
-  CaretRightFilled,
-  DatabaseOutlined,
-  FileSearchOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
 import type { ContentAssetItem, ContentAssetProcessingJob } from '../_lib/content-assets-types';
 import {
   resolveContentAssetDisplayTitle,
@@ -63,6 +58,7 @@ export function ContentAssetGridCard({
   const statusLabel = resolveCardStatusLabel(asset);
   const canSourceUpload = Boolean(onSourceUploadOpen) && asset.externalOnly && asset.canEdit;
   const pills = resolvePills ? resolvePills(asset) : resolveIntelligencePills(asset, processingJobs);
+  const meta = resolveCardMeta(asset);
 
   return (
     <article
@@ -98,23 +94,22 @@ export function ContentAssetGridCard({
         <div className={cardStyles.cardTitleRow}>
           <h3 title={resolveContentAssetTitleHint(asset)}>{displayTitle}</h3>
         </div>
-        <p className={cardStyles.cardMeta}>{resolveCardMeta(asset)}</p>
-        {cardTags.length > 0 ? (
-          <div className={cardStyles.tagRow}>
+        {meta ? <p className={cardStyles.cardMeta}>{meta}</p> : null}
+        {/* Tags and readiness share one row so the scrim carries at most three lines of text. */}
+        {cardTags.length + pills.length > 0 ? (
+          <div className={cardStyles.chipRow}>
             {cardTags.map((tag) => (
               <span className={tag.source === 'ai' ? cardStyles.aiTag : ''} key={`${tag.source}:${tag.label}`}>
                 {tag.source === 'ai' ? 'AI ' : ''}{tag.label}
               </span>
             ))}
+            {pills.map((pill) => (
+              <span className={readinessPillClassName(pill.state)} key={`pill:${pill.label}`}>
+                {pill.label}
+              </span>
+            ))}
           </div>
         ) : null}
-        <div className={cardStyles.readinessRow}>
-          {pills.map((pill) => (
-            <span className={readinessPillClassName(pill.state)} key={pill.label}>
-              {pill.label}
-            </span>
-          ))}
-        </div>
         {canSourceUpload ? (
           <button
             className={cardStyles.sourceUploadButton}
@@ -125,7 +120,7 @@ export function ContentAssetGridCard({
             }}
             onKeyDown={(event) => event.stopPropagation()}
           >
-            <UploadOutlined />
+            <Upload size={14} strokeWidth={1.8} aria-hidden="true" />
             补传源文件
           </button>
         ) : null}
@@ -162,7 +157,7 @@ function AssetCoverVisual({
   return (
     <div className={cardStyles.coverVisual}>
       <span className={cardStyles.coverPlay}>
-        {asset.coverObjectKey ? <CaretRightFilled /> : <DatabaseOutlined />}
+        {asset.coverObjectKey ? <Play size="1em" strokeWidth={1.8} aria-hidden="true" fill="currentColor" /> : <Database size="1em" strokeWidth={1.8} aria-hidden="true" />}
       </span>
       <div className={cardStyles.coverTimeline} aria-hidden="true">
         <i />
@@ -171,7 +166,7 @@ function AssetCoverVisual({
         <i />
       </div>
       <span className={cardStyles.coverStatePill}>
-        {asset.coverObjectKey ? <FileSearchOutlined /> : null}
+        {asset.coverObjectKey ? <FileSearch size={14} strokeWidth={1.8} aria-hidden="true" /> : null}
         {asset.coverObjectKey ? ' ' : ''}
         {resolveCoverStateLabel(asset)}
       </span>
@@ -192,12 +187,12 @@ function resolveCardStatusLabel(asset: ContentAssetItem): string | null {
   return contentAssetStatusLabel(asset.assetStatus);
 }
 
-function resolveCardMeta(asset: ContentAssetItem): string {
+/** Platform, product and creator; nothing when none is known (no placeholder over the cover). */
+function resolveCardMeta(asset: ContentAssetItem): string | null {
   const values = [contentAssetPlatformNamesLabel(asset.platformNames, asset.platform), resolveContentAssetProductText(asset), asset.creatorName]
     .filter((value) => value && value !== '--');
   if (values.length > 0) return values.join(' · ');
-  if (asset.sourceSheetName) return asset.sourceSheetName;
-  return '待补充业务信息';
+  return null;
 }
 
 function readinessPillClassName(state: IntelligencePillState): string {

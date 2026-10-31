@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Form } from 'antd';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { installDelayedUiTestTimers } from './delayed-ui-test-timers';
@@ -10,6 +10,7 @@ import { getDataOpsTriggerParameterSpecs } from '@/config/dataops-trigger-params
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import { executeDataOpsBatchOperation } from '@/app/ops/dataops/_components/dataops-batch-operation-executor';
 import { DataOpsTriggerParameterModalBody } from '@/app/ops/dataops/_components/dataops-trigger-parameter-modal-body';
+import { useDataOpsTriggerForm } from '@/app/ops/dataops/_components/dataops-trigger-parameter-form';
 import {
   buildTriggerParametersPayload,
   getDefaultTriggerParameters,
@@ -36,7 +37,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 
 function TriggerFormHarness({ mode }: { mode: 'preview' | 'production' }) {
-  const [form] = Form.useForm();
+  const form = useDataOpsTriggerForm(DAILY_BRIEF_SPECS);
   const [validation, setValidation] = useState('idle');
 
   useEffect(() => {
@@ -111,6 +112,7 @@ describe('daily business brief DataOps trigger', () => {
   });
 
   it('renders the production warning and requires the separate confirmation switch', async () => {
+    const user = userEvent.setup();
     render(<TriggerFormHarness mode="production" />);
 
     expect(await screen.findByText('正式投递会发送到运营群')).toBeInTheDocument();
@@ -119,13 +121,13 @@ describe('daily business brief DataOps trigger', () => {
       screen.getByPlaceholderText('留空为上海时区昨日，或输入 2026-08-24')
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '校验' }));
+    await user.click(screen.getByRole('button', { name: '校验' }));
 
     expect(await screen.findByText('正式投递前必须开启确认开关')).toBeInTheDocument();
     await waitFor(() => expect(screen.getByText('invalid')).toBeInTheDocument());
 
-    fireEvent.click(screen.getByRole('switch', { name: '确认正式投递' }));
-    fireEvent.click(screen.getByRole('button', { name: '校验' }));
+    await user.click(screen.getByRole('switch', { name: '确认正式投递' }));
+    await user.click(screen.getByRole('button', { name: '校验' }));
     await waitFor(() => expect(screen.getByText('valid')).toBeInTheDocument());
   });
 

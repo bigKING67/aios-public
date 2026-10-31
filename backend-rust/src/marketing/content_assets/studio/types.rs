@@ -108,6 +108,8 @@ pub(super) struct ContentSegment {
     /// Frame from inside this segment (`evidence.coverKey`, filled by the AI 切段
     /// worker); `null` until generated, when cards fall back to the original's cover.
     pub(super) cover_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) source_spend: Option<SourceSpend>,
 }
 
 #[derive(Debug, Serialize)]
@@ -130,6 +132,7 @@ pub(super) struct SegmentAssetCover {
 #[derive(Debug, Default, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct ContentSegmentListQuery {
+    pub(super) spend_class: Option<String>,
     pub(super) asset_id: Option<Uuid>,
     pub(super) preset_key: Option<String>,
     pub(super) label_key: Option<String>,
@@ -140,6 +143,18 @@ pub(super) struct ContentSegmentListQuery {
     pub(super) without_product: Option<bool>,
     pub(super) cursor: Option<Uuid>,
     pub(super) limit: Option<i64>,
+}
+
+/// Original spend observed over one 30-day window. Partial data never qualifies.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct SourceSpend {
+    pub(super) spend30d: Option<f64>,
+    pub(super) class: String,
+    pub(super) as_of: Option<String>,
+    pub(super) complete: bool,
+    pub(super) synced_days: i32,
+    pub(super) window_days: i32,
 }
 
 /// Human-created segment. Defaults to `confirmed`; `draft=true` keeps it as

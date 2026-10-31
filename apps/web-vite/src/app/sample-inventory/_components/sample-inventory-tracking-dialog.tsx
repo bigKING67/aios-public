@@ -1,5 +1,8 @@
 import { useEffect } from "react";
-import { Form, Input, Modal } from "antd";
+import { Input, Modal } from "@lobehub/ui";
+
+import { FormField } from "@/components/molecules/form-field";
+import { bindTextField, type ControlledFormRules, useControlledForm } from "@/hooks/use-controlled-form";
 
 import type { SampleInventoryOutboundView } from "../_lib/sample-inventory-types";
 
@@ -14,18 +17,27 @@ type TrackingFormValues = {
   trackingNumber: string;
 };
 
+const TRACKING_RULES: ControlledFormRules<TrackingFormValues> = {
+  trackingNumber: [
+    { required: true, whitespace: true, message: "请输入快递单号" },
+    { validator: (value) => String(value).length <= 200, message: "快递单号不能超过 200 个字符" },
+  ],
+};
+
 export function SampleInventoryTrackingDialog({
   item,
   loading,
   onCancel,
   onSubmit,
 }: SampleInventoryTrackingDialogProps) {
-  const [form] = Form.useForm<TrackingFormValues>();
+  const form = useControlledForm<TrackingFormValues>({
+    initialValues: { trackingNumber: item?.trackingNumber ?? "" },
+    rules: TRACKING_RULES,
+    onFinish: (values) => onSubmit(values.trackingNumber.trim()),
+  });
 
   useEffect(() => {
-    if (item !== undefined) {
-      form.setFieldsValue({ trackingNumber: item?.trackingNumber ?? "" });
-    }
+    if (item !== undefined) form.resetFields();
   }, [form, item]);
 
   return (
@@ -39,23 +51,17 @@ export function SampleInventoryTrackingDialog({
       onCancel={onCancel}
       onOk={() => form.submit()}
     >
-      <Form<TrackingFormValues>
-        form={form}
-        layout="vertical"
-        preserve={false}
-        onFinish={(values) => onSubmit(values.trackingNumber.trim())}
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          form.submit();
+        }}
       >
-        <Form.Item
-          label="快递单号"
-          name="trackingNumber"
-          rules={[
-            { required: true, whitespace: true, message: "请输入快递单号" },
-            { max: 200, message: "快递单号不能超过 200 个字符" },
-          ]}
-        >
-          <Input autoFocus maxLength={200} placeholder="请输入新的快递单号" />
-        </Form.Item>
-      </Form>
+        <FormField form={form} name="trackingNumber" label="快递单号" required>
+          <Input {...bindTextField(form, "trackingNumber")} autoFocus maxLength={200} placeholder="请输入新的快递单号" />
+        </FormField>
+      </form>
     </Modal>
   );
 }

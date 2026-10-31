@@ -33,6 +33,8 @@ pub(super) struct ContentAssetQuery {
     pub(super) segment_preset: Option<String>,
     /// AI 创作中心 remix outputs (`source_type = 'ai_studio_output'`): exclude | only.
     pub(super) studio_outputs: Option<String>,
+    /// AI 创作中心 test originals (tagged `测试样片`): exclude | only.
+    pub(super) test_samples: Option<String>,
     pub(super) page: Option<i64>,
     pub(super) page_size: Option<i64>,
     pub(super) sort: Option<String>,
@@ -57,6 +59,7 @@ pub(super) struct NormalizedContentAssetQuery {
     pub(super) segment_status: Option<String>,
     pub(super) segment_preset: Option<String>,
     pub(super) studio_outputs: Option<String>,
+    pub(super) test_samples: Option<String>,
     pub(super) page: i64,
     pub(super) page_size: i64,
     pub(super) sort: ContentAssetSort,

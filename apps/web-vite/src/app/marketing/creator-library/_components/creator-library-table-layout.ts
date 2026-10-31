@@ -1,4 +1,4 @@
-import type { TablePaginationConfig } from 'antd/es/table';
+import type { TablePaginationConfig } from '@lobehub/ui';
 import tableStyles from '../creator-library-table.module.css';
 import type {
   CreatorLibraryCellAlign,

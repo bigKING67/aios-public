@@ -53,6 +53,7 @@ pub(super) fn normalize_query(query: ContentAssetQuery) -> AppResult<NormalizedC
         segment_status: normalize_segment_status_filter(query.segment_status)?,
         segment_preset: normalize_segment_preset_filter(query.segment_preset)?,
         studio_outputs: normalize_studio_outputs_filter(query.studio_outputs)?,
+        test_samples: normalize_test_samples_filter(query.test_samples)?,
         page: query.page.unwrap_or(1).clamp(1, 10_000),
         page_size: query
             .page_size
@@ -104,6 +105,13 @@ fn normalize_segment_preset_filter(value: Option<String>) -> AppResult<Option<St
         return Err(AppError::bad_request("片段预设筛选不合法"));
     }
     Ok(Some(value))
+}
+
+fn normalize_test_samples_filter(value: Option<String>) -> AppResult<Option<String>> {
+    let Some(value) = normalize_optional_text(value, 16) else {
+        return Ok(None);
+    };
+    normalize_enum(Some(value), &["exclude", "only"], "测试样片筛选不合法").map(Some)
 }
 
 fn normalize_studio_outputs_filter(value: Option<String>) -> AppResult<Option<String>> {

@@ -1,0 +1,217 @@
+/*
+ * 竞品爆款 statistics on lobe-ui (爆款分析 and its scope filters). This module owns
+ * the filter row, the share bars and the free-text chips, all on --lobe-* tokens so light and
+ * dark follow lobe's data-theme. Bars are one series (primary); text never wears it.
+ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.category {
+  width: 200px;
+  max-width: 100%;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+}
+
+.tabular {
+  color: var(--lobe-color-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-medium);
+}
+
+.caption {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barButton {
+  display: grid;
+  grid-template-columns: minmax(96px, 9rem) minmax(0, 1fr) 7.5rem;
+  gap: var(--spacing-3);
+  align-items: center;
+  width: 100%;
+  min-height: 32px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--lobe-color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.barStatic {
+  cursor: default;
+}
+
+.barsWide .barButton {
+  grid-template-columns: minmax(0, 1.4fr) minmax(64px, 1fr) 7.5rem;
+}
+
+.barsRich .barButton {
+  grid-template-columns: minmax(0, 2.6fr) minmax(56px, 1fr) 7rem;
+}
+
+/* On a phone a structure takes its own line, with its bar and figure under it. */
+@media (max-width: 640px) {
+  .barsRich .barButton {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--spacing-1);
+  }
+
+  .barsRich .barNameWrap {
+    grid-column: 1 / -1;
+  }
+}
+
+.chipButton {
+  min-height: 28px;
+  padding: 2px var(--spacing-2);
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--lobe-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.barButton:not(.barStatic):hover,
+.chipButton:hover,
+.barButton[aria-expanded='true'],
+.chipButton[aria-expanded='true'] {
+  background: var(--lobe-color-fill-tertiary);
+}
+
+.barButton:focus-visible,
+.chipButton:focus-visible {
+  outline: 2px solid var(--aios-ai-9);
+  outline-offset: 1px;
+}
+
+.barName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barNameWrap {
+  min-width: 0;
+  line-height: var(--line-height-normal);
+}
+
+.track {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--lobe-color-fill-secondary);
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  /* share bars are ordinary single-series data: chart series 1 */
+  background: var(--aios-chart-1);
+}
+
+/* Our side of a 竞品 / 我方 comparison: chart series 2, named by its column heading. */
+.fillOurs {
+  background: var(--aios-chart-2);
+}
+
+.share {
+  color: var(--lobe-color-text-secondary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0 0 var(--spacing-2);
+  padding: 0 var(--spacing-2) 0 calc(9rem + var(--spacing-5));
+  list-style: none;
+  font-size: var(--font-size-sm);
+}
+
+.examplesFlush {
+  padding-left: var(--spacing-2);
+}
+
+.examples a {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.examples a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--border-radius-md);
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+}
+
+.chips .tabular {
+  margin-left: var(--spacing-1);
+  color: var(--lobe-color-text-tertiary);
+}
+
+.subhead {
+  margin: var(--spacing-2) 0 0;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 980px) {
+  .barButton {
+    grid-template-columns: minmax(72px, 6rem) minmax(0, 1fr) 6.5rem;
+  }
+
+  .barsWide .barButton {
+    grid-template-columns: minmax(0, 1.4fr) minmax(48px, 1fr) 6.5rem;
+  }
+
+  .examples {
+    padding-left: var(--spacing-2);
+  }
+}

@@ -3,10 +3,10 @@
   --creator-library-material-white-a920: rgba(255, 255, 255, 0.92);
   --creator-library-material-white-a760: rgba(255, 255, 255, 0.76);
   --creator-library-material-white-a000: rgba(255, 255, 255, 0);
-  --creator-library-material-brand-a160: rgba(47, 110, 234, 0.16);
-  --creator-library-material-brand-a120: rgba(47, 110, 234, 0.12);
-  --creator-library-material-brand-a080: rgba(47, 110, 234, 0.08);
-  --creator-library-material-brand-a040: rgba(47, 110, 234, 0.04);
+  --creator-library-material-brand-a160: rgba(110, 86, 207, 0.16);
+  --creator-library-material-brand-a120: rgba(110, 86, 207, 0.12);
+  --creator-library-material-brand-a080: rgba(110, 86, 207, 0.08);
+  --creator-library-material-brand-a040: rgba(110, 86, 207, 0.04);
   --creator-library-material-ink-a080: rgba(26, 26, 26, 0.08);
   --creator-library-material-ink-a050: rgba(26, 26, 26, 0.05);
   --creator-library-material-ink-a030: rgba(26, 26, 26, 0.03);
@@ -29,12 +29,12 @@
   display: grid;
   gap: 24px;
   padding: 28px 30px 30px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
   background:
     radial-gradient(circle at 86% 16%, var(--creator-library-material-brand-a160), transparent 38%),
-    linear-gradient(135deg, var(--creator-library-material-white-a980) 0%, var(--bg-subtle) 56%, var(--brand-secondary) 100%);
-  box-shadow: var(--shadow-sm);
+    linear-gradient(135deg, var(--creator-library-material-white-a980) 0%, var(--lobe-color-fill-tertiary) 56%, var(--lobe-color-fill-tertiary) 100%);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .overviewPanel::before {
@@ -69,7 +69,7 @@
 
 .heroCopy h1 {
   margin: 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: clamp(var(--font-size-3xl), 3vw, var(--font-size-marketing-lg));
   font-weight: var(--font-weight-display);
   line-height: var(--line-height-compact);
@@ -79,7 +79,7 @@
 .heroCopy p:last-child {
   margin: 0;
   max-width: 680px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -95,7 +95,7 @@
   border: 1px solid var(--creator-library-material-ink-a050);
   border-radius: var(--border-radius-full);
   background: var(--creator-library-material-white-a760);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -109,24 +109,24 @@
 
 .backLink:hover,
 .backLink:focus-visible {
-  border-color: var(--brand-border);
+  border-color: var(--aios-ai-border);
   background: var(--creator-library-material-white-a920);
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   transform: translateY(-1px);
 }
 
 .backLink:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 3px;
   border-radius: var(--border-radius-full);
 }
 
 .tableWorkspace {
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .loadingSurface {
@@ -157,4 +157,25 @@
   .heroCopy h1 {
     font-size: var(--font-size-3xl);
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] :global(:root) {
+  --creator-library-material-white-a980: rgba(13, 13, 13, 0.98);
+  --creator-library-material-white-a920: rgba(13, 13, 13, 0.92);
+  --creator-library-material-white-a760: rgba(13, 13, 13, 0.76);
+  --creator-library-material-white-a000: rgba(13, 13, 13, 0);
+  --creator-library-material-brand-a160: rgba(139, 116, 240, 0.16);
+  --creator-library-material-brand-a120: rgba(139, 116, 240, 0.12);
+  --creator-library-material-brand-a080: rgba(139, 116, 240, 0.08);
+  --creator-library-material-brand-a040: rgba(139, 116, 240, 0.04);
+  --creator-library-material-ink-a080: rgba(212, 209, 216, 0.08);
+  --creator-library-material-ink-a050: rgba(212, 209, 216, 0.05);
+  --creator-library-material-ink-a030: rgba(212, 209, 216, 0.03);
+  --creator-library-material-success-a100: rgba(73, 164, 101, 0.1);
+  --creator-library-material-warning-a110: rgba(200, 147, 58, 0.11);
+  --creator-library-material-danger-a090: rgba(213, 101, 95, 0.09);
+  --creator-library-material-blocked-red: #E15C51;
+  --creator-library-material-neutral-a720: rgba(32, 31, 35, 0.72);
+  --creator-library-material-neutral-a520: rgba(32, 31, 35, 0.52);
 }

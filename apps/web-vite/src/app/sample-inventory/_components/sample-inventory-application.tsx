@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { App } from "antd";
+import { toast } from "@lobehub/ui";
 
 import { useSampleInventoryActions } from "../_hooks/use-sample-inventory-actions";
 import { useSampleInventoryBackupController } from "../_hooks/use-sample-inventory-backup-controller";
@@ -16,7 +16,7 @@ import { SampleInventoryTrackingDialog } from "./sample-inventory-tracking-dialo
 import { SampleInventoryWorkspace } from "./sample-inventory-workspace";
 
 export function SampleInventoryApplication() {
-  const { message: messageApi } = App.useApp();
+  const messageApi = toast;
   const { state, setTab, updateState } = useSampleInventoryUrlState();
   const queries = useSampleInventoryQueries(state);
   const [readOnly, setReadOnly] = useState(false);

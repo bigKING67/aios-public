@@ -1,4 +1,4 @@
-import type { TableProps } from 'antd';
+import type { TableProps } from '@lobehub/ui';
 
 export type TablePaginationConfig = TableProps<object>['pagination'];
 export type TableScrollConfig = NonNullable<TableProps<object>['scroll']>;

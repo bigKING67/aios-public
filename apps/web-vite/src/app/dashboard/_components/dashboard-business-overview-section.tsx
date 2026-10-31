@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Segmented, Tooltip } from 'antd';
+import { Button, Segmented, Tooltip } from '@lobehub/ui';
+import { Info } from 'lucide-react';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { SPOTLIGHT_TREND_COLOR, type QueryPlatform } from './dashboard-config';
@@ -124,7 +124,7 @@ export function DashboardBusinessOverviewSection({
                       aria-label={`${item.heading}口径说明`}
                       role="img"
                     >
-                      <InfoCircleOutlined />
+                      <Info size={14} strokeWidth={1.8} aria-hidden="true" />
                     </span>
                   </Tooltip>
                 ) : null}
@@ -194,16 +194,17 @@ export function DashboardBusinessOverviewSection({
           onPointClick={onTrendPointClick}
           onNoteLinkClick={onOpenDailyNoteDrawer}
           headerExtra={showCustomTrendGranularity ? (
-            <Segmented<DashboardCustomTrendGranularity>
-              size="small"
-              aria-label="区间趋势展示粒度"
-              value={customTrendGranularity}
-              options={[
-                { label: '日', value: 'day' },
-                { label: '月', value: 'month' },
-              ]}
-              onChange={onCustomTrendGranularityChange}
-            />
+            <div role="group" aria-label="区间趋势展示粒度">
+              <Segmented<DashboardCustomTrendGranularity>
+                size="small"
+                value={customTrendGranularity}
+                options={[
+                  { label: '日', value: 'day' },
+                  { label: '月', value: 'month' },
+                ]}
+                onChange={onCustomTrendGranularityChange}
+              />
+            </div>
           ) : isDayMode ? (
             <div className={chartStyles.notesActions}>
               <Button

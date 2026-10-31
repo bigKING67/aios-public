@@ -1,9 +1,4 @@
 export const ALLOWLIST_CONFIG_GATE_GROUPS = Object.freeze({
-  'scripts/config/allowlists/antd-table-selector-allowlist.json': Object.freeze([
-    'verify:design:antd-table-selectors-behavior',
-    'verify:design:antd-table-selectors',
-    'verify:design:behavior-gate-registry',
-  ]),
   'scripts/config/allowlists/app-inline-visual-style-allowlist.json': Object.freeze([
     'verify:app:inline-styles-behavior',
     'verify:app:inline-styles',

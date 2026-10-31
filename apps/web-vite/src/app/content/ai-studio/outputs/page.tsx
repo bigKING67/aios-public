@@ -9,7 +9,7 @@ export default function AiStudioOutputsPage() {
     <AiStudioShell>
       <AiStudioCapabilityGate
         title="成片"
-        purpose="框架混剪的批次和单条成片。成功的成片会回存为素材库资产，并记录由哪些片段组成。"
+        purpose="框架混剪的批次和单条成片。成功的成片会记录由哪些片段组成。"
       >
         {(capabilities) => <RemixOutputsView capabilities={capabilities} />}
       </AiStudioCapabilityGate>

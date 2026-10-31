@@ -1,5 +1,7 @@
-import { Button, Popconfirm, Select } from 'antd';
+import { Button, confirmModal } from '@lobehub/ui';
 import type { StudioContentSegment } from '../_lib/ai-studio-api';
+import { isLongOptionList } from '../_lib/studio-products';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import libraryStyles from './segment-library.module.css';
 import type { BulkAction } from './use-segment-bulk-actions';
 
@@ -49,25 +51,30 @@ export function SegmentLibraryBulkBar({
       <Button type="primary" disabled={busy || confirmable.length === 0} onClick={() => onRun({ kind: 'confirm', items: confirmable })}>
         确认{confirmable.length > 0 ? ` ${confirmable.length} 条待确认` : ''}
       </Button>
-      <Popconfirm
-        title={`驳回 ${selected.length} 个片段？`}
-        description="驳回后不会进入混剪，可在「全部状态」里找回并恢复。"
-        okText="驳回"
-        okButtonProps={{ danger: true }}
-        cancelText="取消"
+      <Button
+        danger
         disabled={busy || selected.length === 0}
-        onConfirm={() => onRun({ kind: 'reject', items: selected })}
+        onClick={() =>
+          confirmModal({
+            title: `驳回 ${selected.length} 个片段？`,
+            content: '驳回后不会进入混剪，可在「全部状态」里找回并恢复。',
+            okText: '驳回',
+            cancelText: '取消',
+            okButtonProps: { danger: true },
+            onOk: () => onRun({ kind: 'reject', items: selected }),
+          })
+        }
       >
-        <Button danger disabled={busy || selected.length === 0}>驳回</Button>
-      </Popconfirm>
-      <Select
-        className={libraryStyles.productSelect}
-        showSearch
+        驳回
+      </Button>
+      <LabeledSelect
+        wrapperClassName={libraryStyles.productSelect}
+        showSearch={isLongOptionList(productOptions)}
         placeholder="选择产品"
-        aria-label="批量设置产品"
+        label="批量设置产品"
         value={bulkProduct}
         options={productOptions}
-        onChange={(value: string) => onBulkProductChange(value)}
+        onChange={(value) => value !== undefined && onBulkProductChange(value)}
       />
       <Button
         disabled={busy || !bulkProduct || selected.length === 0}

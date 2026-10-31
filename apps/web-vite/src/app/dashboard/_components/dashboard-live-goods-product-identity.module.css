@@ -14,15 +14,15 @@
   justify-content: center;
   border-radius: 999px;
   background: var(--dashboard-live-rank-bg);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-weight: 560;
 }
 
 .productRankMuted {
-  background: var(--bg-hover);
-  color: var(--text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-weight: 560;
 }
 
@@ -36,7 +36,7 @@
 .productName {
   display: -webkit-box;
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 560;
   line-height: var(--line-height-normal);

@@ -25,7 +25,8 @@ from .derived_assets import validate_derived_assets
 from .treatment_visual_worker import review_job as review_treated_render
 from .remix_normalization import Settings as RemixSettings, finalize as finalize_remix_output, measure_clips, measure_rendered_clips
 from . import remix_mediakit
-from .remix_similarity import review as review_remix_pictures
+from . import remix_cloud_sources
+from . import remix_qc, remix_qc_sources
 from .mediakit_client import MediaKitError
 
 FRAMEWORK_REMIX = "framework_remix"
@@ -84,6 +85,9 @@ def process_one(module: Path, work_root: Path) -> dict:
         job = claim(conn)
         if not job:
             run_bridge.reconcile(conn)
+            if os.getenv("CONTENT_AI_STUDIO_CLEANUP_ENABLED") == "true":
+                from .remix_retention import idle_cleanup
+                idle_cleanup(conn, storage)
             return {"status": "idle"}
         link = run_bridge.linkage(conn, job)
         stage, last_beat = "准备原片", 0.0
@@ -97,8 +101,9 @@ def process_one(module: Path, work_root: Path) -> dict:
             require_binding(job["snapshot"], required=link is not None)
             derived = validate_derived_assets(job["snapshot"], str(job["project_id"]))
             canvas(job["snapshot"])
-            verify_sources(conn, job["snapshot"], storage.config.bucket)
             cloud = remix_mediakit.applies(job, link)
+            remix_cloud_sources.require_cloud_render(job["snapshot"], cloud)
+            verify_sources(conn, job["snapshot"], storage.config.bucket)
             with workspace.job() as work:
                 media = {}
                 # The cloud path reads presigned sources directly; nothing is downloaded here.
@@ -122,7 +127,8 @@ def process_one(module: Path, work_root: Path) -> dict:
                     stage = "云端合成预览" if job["preview"] else "云端合成成片"
                     video, receipt = remix_mediakit.render(job, storage, work, job["preview"], tick,
                                                            workspace.lock_fd,
-                                                           resume=remix_mediakit.previous_attempt(conn, job))
+                                                           resume=remix_mediakit.previous_attempt(conn, job),
+                                                           cloud_urls=remix_cloud_sources.resolve_urls(conn, job["snapshot"]))
                     if remix:
                         stage = "测量片段响度"
                         remix_settings = RemixSettings.from_env()
@@ -141,11 +147,35 @@ def process_one(module: Path, work_root: Path) -> dict:
                     workspace.check(force=True)
                 if job["snapshot"].get("editDocument") is None and (link or profile_name(job["snapshot"]) != "legacy_v1"):
                     stage = "检查成片"
-                    receipt["host_inspection"] = inspect_output(video, job["snapshot"], job["preview"], receipt, tick, workspace.lock_fd)
-                if remix and link.get("remix_mode") == "sellingPoint":
-                    stage = "复核跨原片相近画面"
-                    receipt["host_remix_picture_review"] = review_remix_pictures(
-                        job["snapshot"], video, receipt, work, tick, workspace.lock_fd)
+                    try:
+                        receipt["host_inspection"] = inspect_output(video, job["snapshot"], job["preview"], receipt, tick, workspace.lock_fd)
+                    except (Cancelled, WorkspaceLimit):
+                        raise
+                    except Exception as error:
+                        if not remix:
+                            raise
+                        receipt["host_remix_qc"] = {"schema": remix_qc.SCHEMA, "status": "incomplete",
+                            "snapshotSha256": remix_qc.snapshot_hash(job["snapshot"]), "checks": {},
+                            "errorStage": "technical_inspection", "errorType": type(error).__name__}
+                        raise remix_qc.Rejected("混剪技术检查未通过：请检查时长、格式、来源回执与可解码性") from None
+                if remix:
+                    stage = "自动质检混剪成片"
+                    # Resolve external originals only if a freeze needs comparison.
+                    source_urls = {}
+                    assets = {a["assetId"]: a for a in job["snapshot"]["assets"]}
+                    def qc_source(asset_id):
+                        if asset_id in media:
+                            return media[asset_id]
+                        if asset_id not in source_urls:
+                            source_urls.update(remix_cloud_sources.resolve_urls(conn, job["snapshot"]))
+                        if asset_id not in source_urls:
+                            source_urls[asset_id] = storage.presign_get_url(assets[asset_id]["objectKey"])
+                        return source_urls[asset_id]
+                    receipt["host_remix_qc"] = remix_qc.review(
+                        job["snapshot"], video, receipt, work, tick, qc_source,
+                        lambda: remix_qc_sources.review(conn, link["run_id"], job["snapshot"]), workspace.lock_fd)
+                    if remix_qc.delivery_reason(job["snapshot"], receipt):
+                        raise remix_qc.Rejected("混剪自动质检未通过：原因已保存在质检回执")
                 if link and not job["preview"]:
                     stage = "检查最终采用片段"
                     selected_review = review_selected_sources(job["snapshot"], media, video, receipt, work, tick, workspace.lock_fd)
@@ -200,6 +230,7 @@ def process_one(module: Path, work_root: Path) -> dict:
                 verify_sources(conn, job["snapshot"], storage.config.bucket)
                 key = f"production/{job['project_id']}/{job['job_id']}/video.mp4"
                 upload_with_heartbeat(storage, key, video, tick)
+                receipt["host_output_storage"] = {"provider": "tos", "bucket": storage.config.bucket, "objectKey": key}
                 receipt["host_revision"] = job["revision"]
                 receipt["host_project_id"] = str(job["project_id"])
                 verify_sources(conn, job["snapshot"], storage.config.bucket)
@@ -213,7 +244,7 @@ def process_one(module: Path, work_root: Path) -> dict:
         except Exception as error:
             conn.rollback()
             # Do not persist exception repr: HTTP/DB exceptions may contain signed URLs/credentials.
-            message = str(error) if isinstance(error, (WorkspaceLimit, RenderBindingMismatch)) else (
+            message = str(error) if isinstance(error, (WorkspaceLimit, RenderBindingMismatch, remix_qc.Rejected)) else (
                 ((str(error) if str(error).startswith("云端合成") else "云端合成失败：" + str(error)[:160])
                  if isinstance(error, (MediaKitError, TimeoutError))
                  else "云端合成失败：请检查 MediaKit 配置、源素材链接与任务状态")
@@ -224,8 +255,8 @@ def process_one(module: Path, work_root: Path) -> dict:
                 else "制作失败：请检查源素材、模块版本及 worker 运行环境"))
             attempt = getattr(error, "mediakit_attempt", None)
             # Keep the cloud task of a failed synthesis so a retry can reuse it instead of paying again.
-            accepted = finish(conn, job, "failed", error=message,
-                              receipt={"mediakit_attempt": attempt} if attempt else None)
+            failure_receipt = receipt if isinstance(error, remix_qc.Rejected) else ({"mediakit_attempt": attempt} if attempt else None)
+            accepted = finish(conn, job, "failed", error=message, receipt=failure_receipt)
             return {"jobId": str(job["job_id"]), "status": "failed" if accepted else "not_published", "errorType": type(error).__name__}
         finally:
             conn.rollback()

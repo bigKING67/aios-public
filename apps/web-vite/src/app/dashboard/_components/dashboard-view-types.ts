@@ -77,6 +77,8 @@ export interface LiveFunnelStep {
   value: number;
   widthPercent: number;
   color: string;
+  /** Text on the stage fill (ink or white), fixed in both themes like the fill. */
+  textColor: string;
   conversionRate?: string;
   conversionLabel?: string;
 }

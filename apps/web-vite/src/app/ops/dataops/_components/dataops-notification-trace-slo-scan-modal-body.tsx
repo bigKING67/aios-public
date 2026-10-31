@@ -1,7 +1,6 @@
 'use client';
 
-import { Alert, Empty } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Alert, Empty, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import type { DataOpsNotificationTraceSloScanResponse } from '@/types/dataops';
 import type {
@@ -28,7 +27,7 @@ interface DataOpsNotificationTraceSloScanModalBodyProps {
   defaultAlertChannel: DataOpsNotificationChannel | null | undefined;
   hasOperatePermission: boolean;
   globalActionBusy: boolean;
-  columns: ColumnsType<NotificationTraceSloScanRankedItem>;
+  columns: TableColumnsType<NotificationTraceSloScanRankedItem>;
   isCompactViewport: boolean;
   onDryRunChange: (value: boolean) => void;
   onLookbackHoursChange: (value: number) => void;

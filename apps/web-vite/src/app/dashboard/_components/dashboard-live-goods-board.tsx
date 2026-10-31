@@ -1,6 +1,6 @@
+import { Button, Pagination } from '@lobehub/ui';
+import { Download, LogIn } from 'lucide-react';
 import type { Key, ReactNode } from 'react';
-import { DownloadOutlined, LoginOutlined } from '@ant-design/icons';
-import { Button, Pagination } from 'antd';
 
 import { DashboardLiveGoodsSessionCard } from './dashboard-live-goods-session-card';
 import detailActionsStyles from './dashboard-detail-section-actions.module.css';
@@ -65,7 +65,7 @@ export function DashboardLiveGoodsBoard({
         <div className={detailActionsStyles.detailActions}>
           <Button
             type="primary"
-            icon={<DownloadOutlined />}
+            icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
             loading={isExporting}
             disabled={disableExport}
             block={isMobile}
@@ -79,7 +79,7 @@ export function DashboardLiveGoodsBoard({
               <Button
                 type="link"
                 size="small"
-                icon={<LoginOutlined />}
+                icon={<LogIn size={14} strokeWidth={1.8} aria-hidden="true" />}
                 className={exportHintStyles.loginEntryButton}
                 onClick={onNavigateLogin}
               >

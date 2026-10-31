@@ -1,6 +1,6 @@
 import { useEffect, type MutableRefObject } from 'react';
 import type { NavigateFunction } from 'react-router-dom';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { MAX_DASHBOARD_QUERY_DAYS } from './dashboard-config';
 import type { DashboardDimension, DateMode, PlatformTabKey } from './dashboard-config';
@@ -10,7 +10,7 @@ type DashboardInitialCustomRangeLimitWarningEffectArgs = {
   dateMode: DateMode;
   customRangeExceededLimit: boolean;
   hasShownInitialCustomRangeLimitHintRef: MutableRefObject<boolean>;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
 };
 
 export function useDashboardInitialCustomRangeLimitWarningEffect({

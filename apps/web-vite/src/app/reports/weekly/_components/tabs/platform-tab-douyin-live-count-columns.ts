@@ -1,8 +1,8 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { DouyinLiveSessionRow } from './platform-tab-types';
 import { createIntegerMetricColumn } from './platform-tab-metric-column-builders';
 
-export function buildDouyinLiveCountColumns(): ColumnsType<DouyinLiveSessionRow> {
+export function buildDouyinLiveCountColumns(): TableColumnsType<DouyinLiveSessionRow> {
   return [
     createIntegerMetricColumn<DouyinLiveSessionRow>('直播间成交订单', 'currLiveOrderCount', 120),
     createIntegerMetricColumn<DouyinLiveSessionRow>('直播间曝光人数', 'currLiveExposureUserCount', 130),

@@ -559,10 +559,11 @@ export function assertAffectedExplainSnapshotFixtures(assertions) {
         'verify:deploy:config-behavior',
         'verify:deploy:dashboard-latency-systemd-behavior',
         'verify:deploy:vps-git-state:smoke',
+        'verify:frontend:docker-dependency-cache-behavior',
       ],
-      groups: { deploy: 4 },
+      groups: { deploy: 4, frontend: 1 },
       topReasons: [
-        { count: 4, reason: 'deploy/container config' },
+        { count: 5, reason: 'deploy/container config' },
       ],
     },
     {

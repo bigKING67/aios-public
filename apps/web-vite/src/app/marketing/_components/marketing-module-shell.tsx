@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import { Empty } from '@lobehub/ui';
 import { Layout } from '@/components/organisms/layout';
 import { ProtectedRoute } from '@/components/protected-route';
 import { REPORT_EXPORT_PERMISSIONS } from '@/lib/report-permissions';

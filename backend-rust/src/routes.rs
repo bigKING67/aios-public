@@ -9,10 +9,12 @@ use axum::{
     Extension, Json, Router,
 };
 use serde_json::json;
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
+use tower_http::cors::CorsLayer;
 
 use crate::{
-    audit_logs, auth, content_live_center, dashboard, dataops,
+    audit_logs, auth,
+    config::ModuleProfile,
+    content_live_center, dashboard, dataops,
     health::{health, ready, root},
     marketing, permissions, recruiting, reports, roles, sample_inventory,
     state::AppState,
@@ -35,17 +37,35 @@ fn build_api_router(state: Arc<AppState>) -> Router<Arc<AppState>> {
         .nest("/reports", reports::router())
 }
 
+/// `ai_studio` profile: accounts, `/marketing/content-assets` and public candidate intake; every other
+/// route group reads groland-only tables and is not mounted (404).
+fn build_ai_studio_api_router() -> Router<Arc<AppState>> {
+    Router::new()
+        .nest("/auth", auth::router())
+        .nest("/marketing", marketing::content_assets_only_router())
+        .nest("/permissions", permissions::router())
+        .nest("/recruiting", recruiting::public_router())
+        .nest("/roles", roles::router())
+        .nest("/users", users::router())
+}
+
 #[cfg(test)]
 pub(crate) fn build_app(state: Arc<AppState>, cors: CorsLayer) -> Router {
-    build_app_with_runtime_mode(state, cors, false)
+    build_app_with_runtime_mode(state, cors, false, ModuleProfile::Full)
 }
 
 pub(crate) fn build_app_with_runtime_mode(
     state: Arc<AppState>,
     cors: CorsLayer,
     runtime_read_only: bool,
+    module_profile: ModuleProfile,
 ) -> Router {
-    let api = build_api_router(Arc::clone(&state));
+    let api = if module_profile.serves_groland_modules() {
+        build_api_router(Arc::clone(&state))
+    } else {
+        build_ai_studio_api_router()
+    };
+    let observation_pool = state.pool.clone();
     Router::new()
         .route("/", get(root))
         .route("/health", get(health))
@@ -58,7 +78,10 @@ pub(crate) fn build_app_with_runtime_mode(
             runtime_read_only,
             enforce_runtime_read_only,
         ))
-        .layer(TraceLayer::new_for_http())
+        .layer(middleware::from_fn_with_state(
+            observation_pool,
+            crate::http_observability::observe,
+        ))
         .layer(cors)
 }
 

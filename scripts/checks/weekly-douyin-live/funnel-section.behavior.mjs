@@ -41,6 +41,7 @@ function main() {
   for (const identifierName of [
     'buildDouyinLiveFunnelAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinMetricDetailRow',
     'QuantAttributionRow',

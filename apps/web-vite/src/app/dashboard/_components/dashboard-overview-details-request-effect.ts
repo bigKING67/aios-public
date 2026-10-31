@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { TAB_TO_QUERY_PLATFORM, type PlatformTabKey } from './dashboard-config';
 import { buildDashboardQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
@@ -10,7 +10,7 @@ import type { DashboardOverviewDetailRow } from './dashboard-types';
 type DashboardOverviewDetailsRequestEffectArgs = {
   isEnabled: boolean;
   activeTab: PlatformTabKey;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   currentRange: DashboardDateRangeLike;
   setDetailNowcastAsOfDate: Dispatch<SetStateAction<string | null>>;
   setDetailRows: Dispatch<SetStateAction<DashboardOverviewDetailRow[]>>;

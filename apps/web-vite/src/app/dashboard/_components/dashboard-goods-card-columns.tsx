@@ -1,5 +1,4 @@
-import { Button } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, type TableColumnsType } from '@lobehub/ui';
 import { GOODS_CARD_TABLE_COLUMN_DEFINITIONS } from './dashboard-metric-definitions';
 import type { NumericInput } from './dashboard-formatters';
 import { compareNullableNumbers, compareText } from './dashboard-sorters';
@@ -76,13 +75,13 @@ export function buildDashboardGoodsCardColumns({
   isMobile: boolean;
   classNames: DashboardGoodsCardTableClassNames;
   onOpenTraffic: (row: DashboardGoodsCardRow) => void;
-}): ColumnsType<DashboardGoodsCardRow> {
+}): TableColumnsType<DashboardGoodsCardRow> {
   const headerCellProps = () => buildGoodsCardHeaderCellProps(classNames);
   const identityHeaderCellProps = () => buildGoodsCardIdentityHeaderCellProps(classNames);
   const actionHeaderCellProps = () => buildGoodsCardActionHeaderCellProps(classNames);
   const bodyCellProps = () => buildGoodsCardBodyCellProps(classNames);
 
-  const productInfoColumn: ColumnsType<DashboardGoodsCardRow>[number] = {
+  const productInfoColumn: TableColumnsType<DashboardGoodsCardRow>[number] = {
     title: '商品信息',
     key: 'goods_card_product',
     width: isMobile ? 300 : 380,
@@ -103,7 +102,7 @@ export function buildDashboardGoodsCardColumns({
     },
   };
 
-  const fieldColumns: ColumnsType<DashboardGoodsCardRow> = GOODS_CARD_TABLE_COLUMN_DEFINITIONS.map(
+  const fieldColumns: TableColumnsType<DashboardGoodsCardRow> = GOODS_CARD_TABLE_COLUMN_DEFINITIONS.map(
     (definition, index) => ({
       title: definition.title,
       dataIndex: definition.key,
@@ -126,7 +125,7 @@ export function buildDashboardGoodsCardColumns({
     })
   );
 
-  const actionColumn: ColumnsType<DashboardGoodsCardRow>[number] = {
+  const actionColumn: TableColumnsType<DashboardGoodsCardRow>[number] = {
     title: '操作',
     key: 'action',
     width: 132,

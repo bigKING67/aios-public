@@ -7,10 +7,6 @@ export const LEGACY_ROOT_CHECK_REFERENCE_ALLOWED_PATHS = Object.freeze([
 ]);
 
 export const MIGRATED_LEGACY_CHECK_PATHS = Object.freeze([
-  'scripts/check-antd-table-selectors-behavior.mjs',
-  'scripts/check-antd-table-selectors.mjs',
-  'scripts/check-antd-theme-token-sync-behavior.mjs',
-  'scripts/check-antd-theme-token-sync.mjs',
   'scripts/check-backend-rust-module-size.mjs',
   'scripts/check-app-route-paths-behavior.mjs',
   'scripts/check-auth-navigation-policy-behavior.mjs',

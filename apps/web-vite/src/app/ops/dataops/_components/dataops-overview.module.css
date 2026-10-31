@@ -1,13 +1,14 @@
 .opsHeader {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(520px, 0.9fr);
+  /* The controls take their own width (search, status, two buttons); the title column shrinks. */
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: end;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 8px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   padding: 16px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .opsTitleBlock {
@@ -20,7 +21,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 650;
   letter-spacing: var(--letter-spacing-normal);
@@ -29,7 +30,7 @@
 
 .opsTitleBlock h1 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-2xl);
   line-height: var(--line-height-compact);
   letter-spacing: var(--letter-spacing-normal);
@@ -38,7 +39,7 @@
 
 .opsTitleBlock p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -48,31 +49,31 @@
   align-items: center;
   min-height: 22px;
   border-radius: 999px;
-  border: 1px solid var(--status-neutral-border);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 3px 9px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-none);
   font-weight: 650;
 }
 
 .opsHealthPillOk {
-  color: var(--status-success-strong);
-  border-color: var(--status-success-border);
-  background: var(--status-success-bg);
+  color: var(--aios-status-success-strong);
+  border-color: var(--lobe-color-success-border);
+  background: var(--lobe-color-success-bg);
 }
 
 .opsHealthPillWarning {
-  color: var(--status-warning-strong);
-  border-color: var(--status-warning-border);
-  background: var(--status-warning-bg);
+  color: var(--aios-status-warning-strong);
+  border-color: var(--lobe-color-warning-border);
+  background: var(--lobe-color-warning-bg);
 }
 
 .opsHealthPillError {
-  color: var(--status-danger-strong);
-  border-color: var(--status-danger-border);
-  background: var(--status-danger-bg);
+  color: var(--aios-status-danger-strong);
+  border-color: var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
 }
 
 .opsControlPanel {
@@ -90,11 +91,11 @@
 }
 
 .opsSignalCard {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 8px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   padding: 14px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
   display: grid;
   align-content: start;
   gap: 8px;
@@ -102,12 +103,12 @@
 }
 
 .opsSignalCardOk {
-  border-color: var(--status-success-border);
+  border-color: var(--lobe-color-success-border);
 }
 
 .opsSignalCardRisk {
-  border-color: var(--status-danger-border);
-  background: var(--status-danger-bg);
+  border-color: var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
 }
 
 .opsSignalHead {
@@ -115,14 +116,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 650;
 }
 
 .opsSignalCard strong {
   display: block;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-display);
   line-height: var(--line-height-none);
   letter-spacing: var(--letter-spacing-normal);
@@ -131,7 +132,7 @@
 
 .opsSignalCard p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -145,15 +146,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 8px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   padding: 8px;
 }
 
 .workspaceMeta {
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   white-space: nowrap;
@@ -161,19 +162,18 @@
   text-overflow: ellipsis;
 }
 
-.keywordInput :global(.ant-input-affix-wrapper),
-.statusSelect :global(.ant-select-selector) {
-  border-radius: 6px;
-}
-
 .statusSelect {
   width: 150px;
 }
 
+.statusSelect :global(.lobe-select) {
+  width: 100%;
+}
+
 .noticeDock {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 10px;
 }
 
@@ -190,8 +190,8 @@
 
 .noticeSection {
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
 }
 
@@ -203,21 +203,21 @@
 }
 
 .noticeSectionHead strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
 }
 
 .noticeSectionHead span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
 .noticeMutedText {
   margin: 0;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   padding: 8px 10px;
@@ -226,9 +226,9 @@
 .noticeEmphasisText {
   margin: 0;
   border-radius: 8px;
-  border: 1px solid var(--status-danger-border);
-  background: var(--status-danger-bg);
-  color: var(--status-danger-strong);
+  border: 1px solid var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
+  color: var(--aios-status-danger-strong);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   font-weight: 600;
@@ -242,8 +242,8 @@
   gap: 6px;
   padding: 4px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   overflow-x: auto;
 }
 
@@ -254,7 +254,7 @@
 .tabButton {
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 600;
   line-height: var(--line-height-none);
@@ -266,8 +266,8 @@
 }
 
 .tabButton:hover {
-  color: var(--status-info-strong);
-  background: var(--status-info-bg);
+  color: var(--aios-status-info);
+  background: var(--lobe-color-info-bg);
 }
 
 .tabButton:active {
@@ -275,8 +275,8 @@
 }
 
 .tabButtonActive {
-  color: var(--brand-text);
-  background: var(--bg-card);
+  color: var(--aios-ai-text);
+  background: var(--lobe-color-bg-container);
   box-shadow: var(--shadow-base);
 }
 
@@ -287,7 +287,7 @@
   border-radius: 999px;
   overflow: hidden;
   display: flex;
-  background: var(--border-color);
+  background: var(--lobe-color-border);
 }
 
 .metricMainStackSegment {
@@ -296,19 +296,19 @@
 }
 
 .metricMainStackHealthy {
-  background: var(--status-success);
+  background: var(--aios-status-success);
 }
 
 .metricMainStackWarning {
-  background: var(--status-warning);
+  background: var(--aios-status-warning);
 }
 
 .metricMainStackError {
-  background: var(--status-danger);
+  background: var(--aios-status-danger);
 }
 
 .metricMainStackPaused {
-  background: var(--status-neutral);
+  background: var(--lobe-color-text-tertiary);
 }
 
 @media (max-width: 1200px) {

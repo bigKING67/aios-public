@@ -77,6 +77,7 @@ function assertLiveLeafAdapterOwnsNoContracts() {
 
   for (const identifierName of [
     'ColumnsType',
+    'TableColumnsType',
     'DouyinLiveSectionData',
     'DouyinLiveSessionAttributionOverviewSectionProps',
     'DouyinLiveFunnelOverviewSectionProps',

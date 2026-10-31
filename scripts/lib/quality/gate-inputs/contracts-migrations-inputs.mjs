@@ -26,6 +26,7 @@ const CONTRACT_GATE_INPUTS = Object.freeze([
 const MIGRATION_GATE_INPUTS = Object.freeze([
   'sql/migrations/**',
   'etl/groland_postgres/sql/migrations/**',
+  'sql/bql/**',
   'scripts/config/migrations/**',
   'scripts/migrations/**',
   'scripts/lib/migrations/**',
@@ -38,6 +39,7 @@ export function contractsMigrationsGateInputPatterns(name, context = {}) {
     return [...CONTRACT_GATE_INPUTS, ...scriptInputs, ...checkGuardHelperInputs, ...shared];
   }
   if (name === 'verify:migrations:aios'
+    || name === 'verify:migrations:bql'
     || name === 'verify:migrations:aios-identity-forward-cutover-behavior'
     || name === 'verify:migrations:aios-behavior'
     || name === 'verify:migrations:aios-ledger-bootstrap-behavior'

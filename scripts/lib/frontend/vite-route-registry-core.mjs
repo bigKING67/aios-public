@@ -13,8 +13,10 @@ import {
 export const VITE_ROUTE_REGISTRY_GUARD_NAME = 'vite-route-registry';
 export const ROUTES_FILE = 'apps/web-vite/src/routes.tsx';
 
+// Also matches a build-time branch, `const Page = FLAG ? lazy(() => import('…')) : Fallback`,
+// which keeps the page registered while a module profile drops its chunk.
 const LAZY_IMPORT_PATTERN =
-  /const\s+([A-Za-z_$][\w$]*)\s*=\s*lazy\(\s*\(\)\s*=>\s*import\(\s*['"]([^'"]+)['"]\s*\)\s*,?\s*\)/g;
+  /const\s+([A-Za-z_$][\w$]*)\s*=\s*(?:[A-Za-z_$][\w$.]*\s*\?\s*)?lazy\(\s*\(\)\s*=>\s*import\(\s*['"]([^'"]+)['"]\s*\)\s*,?\s*\)/g;
 
 export function normalizeAppSpecifier(specifier) {
   if (specifier === '@/app' || specifier.startsWith('@/app/')) {

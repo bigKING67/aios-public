@@ -7,7 +7,7 @@
   padding: var(--spacing-6);
   overflow-x: clip;
   font-family: var(--font-family-base);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 .header {
@@ -25,7 +25,7 @@
 .eyebrow {
   display: block;
   margin-bottom: var(--spacing-2);
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -44,7 +44,7 @@
 .subtitle {
   max-width: 720px;
   margin: var(--spacing-2) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -63,10 +63,10 @@
   grid-template-columns: repeat(6, minmax(0, 1fr));
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-md);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .metricItem {
@@ -74,7 +74,7 @@
   min-width: 0;
   gap: var(--spacing-1);
   padding: var(--spacing-3) var(--spacing-4);
-  border-right: 1px solid var(--divider-color);
+  border-right: 1px solid var(--lobe-color-border-secondary);
 }
 
 .metricItem:last-child {
@@ -83,7 +83,7 @@
 
 .metricLabel {
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   text-overflow: ellipsis;
@@ -104,10 +104,10 @@
   min-width: 0;
   padding: var(--spacing-4);
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-md);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .toolbar {
@@ -140,10 +140,10 @@
   gap: var(--spacing-3);
   margin-bottom: var(--spacing-3);
   padding: var(--spacing-2) var(--spacing-3);
-  border: 1px solid var(--status-info-border);
+  border: 1px solid var(--lobe-color-info-border);
   border-radius: var(--border-radius-base);
-  background: var(--status-info-bg);
-  color: var(--status-info-strong);
+  background: var(--lobe-color-info-bg);
+  color: var(--aios-status-info);
   font-size: var(--font-size-sm);
 }
 
@@ -152,8 +152,8 @@
 }
 
 .tableViewport {
-  --sample-inventory-table-material-border: #e2e8f0;
-  --sample-inventory-table-material-header-surface: #f8fafc;
+  --sample-inventory-table-material-border: #F3F3F3;
+  --sample-inventory-table-material-header-surface: #F8FAFC;
   --sample-inventory-table-material-header-text: #475569;
   --sample-inventory-table-material-resize-hover: rgb(148 163 184 / 45%);
 
@@ -166,7 +166,7 @@
   border-radius: 6px;
 }
 
-.tableViewport :global(.ant-table) {
+.tableViewport :global(.lobe-table) {
   font-size: var(--font-size-sm);
 }
 
@@ -257,7 +257,7 @@
 .codeText,
 .timeStack,
 .mutedText {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .numericCell {
@@ -265,7 +265,7 @@
 }
 
 .reservedQuantity {
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -283,7 +283,7 @@
   white-space: nowrap;
 }
 
-.addressCell :global(.ant-btn) {
+.addressCell :global(.lobe-button) {
   flex: 0 0 auto;
 }
 
@@ -303,13 +303,13 @@
 
 .reservationSummary {
   margin: calc(-1 * var(--spacing-1)) 0 var(--spacing-4);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
 }
 
 .reservationSummaryActive {
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
 }
 
 .modalAlert {
@@ -329,6 +329,23 @@
   gap: var(--spacing-2);
 }
 
+.batchSampleField {
+  display: grid;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.batchSampleLabel {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.batchSampleError {
+  color: var(--aios-status-danger);
+  font-size: var(--font-size-xs);
+}
+
 .batchSampleOptions {
   display: grid;
   max-height: 300px;
@@ -336,9 +353,9 @@
   gap: var(--spacing-2);
   overflow-y: auto;
   padding: var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-base);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .batchSampleOption {
@@ -348,17 +365,17 @@
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2);
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: var(--border-radius-base);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
-.batchSampleOption :global(.ant-checkbox-wrapper) {
+.batchSampleOption :global(.lobe-checkbox) {
   min-width: 0;
   align-items: flex-start;
 }
 
-.batchSampleOption :global(.ant-input-number) {
+.batchSampleOption :global(.lobe-input-number) {
   width: 92px;
 }
 
@@ -376,7 +393,7 @@
 }
 
 .batchSampleIdentity span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
 }
@@ -394,9 +411,9 @@
 
 .emptyState {
   padding: var(--spacing-10) var(--spacing-4);
-  border: 1px dashed var(--border-color);
+  border: 1px dashed var(--lobe-color-border);
   border-radius: var(--border-radius-base);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .errorPanel {
@@ -413,7 +430,7 @@
   }
 
   .metricItem:nth-child(-n + 3) {
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--lobe-color-border-secondary);
   }
 }
 
@@ -455,7 +472,7 @@
     grid-template-columns: minmax(0, 1fr) 84px;
   }
 
-  .batchSampleOption :global(.ant-input-number) {
+  .batchSampleOption :global(.lobe-input-number) {
     width: 84px;
   }
 }
@@ -470,7 +487,7 @@
   }
 
   .metricItem:nth-child(3) {
-    border-right: 1px solid var(--divider-color);
+    border-right: 1px solid var(--lobe-color-border-secondary);
   }
 
   .metricItem:nth-child(even) {
@@ -478,10 +495,17 @@
   }
 
   .metricItem:nth-child(-n + 4) {
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--lobe-color-border-secondary);
   }
 
   .formGrid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] .tableViewport {
+  --sample-inventory-table-material-border: #222125;
+  --sample-inventory-table-material-header-surface: #1E1D21;
+  --sample-inventory-table-material-header-text: #A7A4AB;
 }

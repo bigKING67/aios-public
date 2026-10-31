@@ -1,6 +1,4 @@
-import {
-  FileImageOutlined,
-} from '@ant-design/icons';
+import { FileImage } from 'lucide-react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { formatBytes } from '../_lib/content-assets-formatters';
@@ -31,7 +29,7 @@ export function ContentAssetsModuleNav({
           aria-label="返回首页"
           title="返回首页"
         >
-          <FileImageOutlined />
+          <FileImage size={14} strokeWidth={1.8} aria-hidden="true" />
         </RouterLink>
         <div className={styles.brandText}>
           <strong>素材库</strong>

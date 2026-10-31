@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import { formatInteger } from '../_lib/live-center-formatters';
 import type { LiveCenterAnalysisTimeAnchor } from '../_lib/live-center-view-helpers';
 import resultStyles from '../live-center-analysis-result.module.css';

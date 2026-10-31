@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   TRAFFIC_METRIC_DEFINITIONS,
 } from './dashboard-metric-definitions';
@@ -26,14 +26,14 @@ export function buildDashboardTrafficColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardTrafficTableClassNames;
-}): ColumnsType<DashboardTrafficTreeNode> {
+}): TableColumnsType<DashboardTrafficTreeNode> {
   const firstHeaderCellProps = () =>
     buildTrafficHeaderCellProps(classNames, classNames.trafficFirstHeaderCell);
   const metricHeaderCellProps = () =>
     buildTrafficHeaderCellProps(classNames, classNames.trafficMetricHeaderCell);
   const bodyCellProps = () => buildTrafficBodyCellProps(classNames);
 
-  const sourceColumn: ColumnsType<DashboardTrafficTreeNode>[number] = {
+  const sourceColumn: TableColumnsType<DashboardTrafficTreeNode>[number] = {
     title: '流量来源',
     key: 'sourceName',
     width: isMobile ? 194 : 236,
@@ -50,7 +50,7 @@ export function buildDashboardTrafficColumns({
     render: (_value, row) => renderTrafficSourceCell({ row, classNames }),
   };
 
-  const metricColumns: ColumnsType<DashboardTrafficTreeNode> = TRAFFIC_METRIC_DEFINITIONS.map((item) => ({
+  const metricColumns: TableColumnsType<DashboardTrafficTreeNode> = TRAFFIC_METRIC_DEFINITIONS.map((item) => ({
     title: item.title,
     key: item.key,
     width: isMobile ? 148 : 172,

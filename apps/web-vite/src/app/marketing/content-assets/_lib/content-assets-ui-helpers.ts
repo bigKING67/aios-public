@@ -5,6 +5,7 @@ import type {
   ContentAssetSummary,
   ContentAssetTodoFilter,
 } from './content-assets-types';
+import { frontendEnv } from '@/lib/frontend-env';
 
 export const CONTENT_ASSET_KOL_SEEDING_VIDEO_TYPE_VALUE = 'kol_seeding_video';
 export const CONTENT_ASSET_KOC_SEEDING_VIDEO_TYPE_VALUE = 'koc_seeding_video';
@@ -264,7 +265,17 @@ export function toSelectOption(value: string) {
   return { label: value, value };
 }
 
-export function resolveContentAssetProductOptions(_values?: string[] | null) {
+// Under the ai_studio module profile (百雀羚) the backend filter options carry the
+// enterprise catalog (CONTENT_AI_STUDIO_PRODUCTS); the built-in list is groland's.
+function usesEnterpriseProductCatalog(): boolean {
+  return frontendEnv.moduleProfile === 'ai_studio';
+}
+
+export function resolveContentAssetProductOptions(values?: string[] | null) {
+  if (usesEnterpriseProductCatalog()) {
+    const catalog = [...new Set((values || []).map((value) => value.trim()).filter(Boolean))];
+    return catalog.map((value) => ({ label: value, value, searchText: value }));
+  }
   return CONTENT_ASSET_PRODUCT_OPTIONS.map((value) => ({
     label: value,
     value,
@@ -275,6 +286,8 @@ export function resolveContentAssetProductOptions(_values?: string[] | null) {
 export function normalizeContentAssetProductName(value: string | null | undefined): string | null {
   const trimmed = normalizeOptionalText(value);
   if (!trimmed) return null;
+  // The backend checks enterprise catalog membership; there are no aliases to fold.
+  if (usesEnterpriseProductCatalog()) return trimmed;
   const canonical = PRODUCT_ALIASES[trimmed] || trimmed;
   return CONTENT_ASSET_PRODUCT_OPTIONS.includes(canonical as typeof CONTENT_ASSET_PRODUCT_OPTIONS[number])
     ? canonical
@@ -334,7 +347,10 @@ export function resolveContentAssetProductSceneFamily(
   if (productNames.length === 0) return null;
   const families = new Set<ContentAssetProductSceneFamily>();
   for (const productName of productNames) {
-    families.add(PRODUCT_SCENE_FAMILY_BY_PRODUCT[productName]);
+    // Enterprise catalog products (ai_studio) have no groland scene family.
+    const family = PRODUCT_SCENE_FAMILY_BY_PRODUCT[productName as keyof typeof PRODUCT_SCENE_FAMILY_BY_PRODUCT];
+    if (!family) return null;
+    families.add(family);
   }
   return families.size === 1 ? [...families][0] : null;
 }
@@ -487,14 +503,14 @@ function normalizeOptionalText(value?: string | null): string | null {
 
 function normalizeContentAssetProductNameList(
   values?: string | readonly (string | null | undefined)[] | null
-): Array<typeof CONTENT_ASSET_PRODUCT_OPTIONS[number]> {
+): string[] {
   const rawValues = Array.isArray(values) ? values : [values];
-  const normalized: Array<typeof CONTENT_ASSET_PRODUCT_OPTIONS[number]> = [];
+  const normalized: string[] = [];
   for (const value of rawValues) {
     const productName = normalizeContentAssetProductName(value);
     if (!productName) continue;
-    if (normalized.includes(productName as typeof CONTENT_ASSET_PRODUCT_OPTIONS[number])) continue;
-    normalized.push(productName as typeof CONTENT_ASSET_PRODUCT_OPTIONS[number]);
+    if (normalized.includes(productName)) continue;
+    normalized.push(productName);
   }
   return normalized;
 }

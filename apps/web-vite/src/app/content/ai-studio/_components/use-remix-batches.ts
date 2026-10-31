@@ -1,20 +1,26 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { aiStudioQueryKeys, fetchAllStudioSegments } from '../_lib/ai-studio-api';
 import {
   cancelRemixBatch,
   checkRemixEdit,
+  clearRemixOutputReview,
   createRemixBatch,
   createRemixEdit,
   fetchRemixBatch,
+  fetchRemixBatchPage,
   fetchRemixBatches,
   fetchRemixProducts,
   isRemixBatchActive,
   previewRemixBatch,
   remixQueryKeys,
+  retryRemixDelivery,
+  reviewRemixOutput,
+  type RemixBatchPageFilter,
   type StudioRemixBatch,
   type StudioRemixBatchPreviewRequest,
   type StudioRemixEditCheckRequest,
+  type StudioRemixOutputReviewRequest,
 } from '../_lib/remix-api';
 
 export const REMIX_POLL_INTERVAL_MS = 10_000;
@@ -144,6 +150,44 @@ export function useCancelRemixBatch(batchId: string) {
   });
 }
 
+/**
+ * Approves, rejects or clears one output's review. The returned detail replaces the cached batch;
+ * the list pages and 最近批次 re-read their review counts.
+ */
+export function useRemixOutputReview(batchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    retry: false,
+    mutationFn: ({ ordinal, request }: { ordinal: number; request: StudioRemixOutputReviewRequest | null }) =>
+      request ? reviewRemixOutput(batchId, ordinal, request) : clearRemixOutputReview(batchId, ordinal),
+    onSuccess: (detail) => {
+      queryClient.setQueryData(remixQueryKeys.batch(batchId), detail);
+      void queryClient.invalidateQueries({ queryKey: remixQueryKeys.batches(), exact: true });
+      void queryClient.invalidateQueries({ queryKey: [...remixQueryKeys.batches(), 'pages'] });
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: remixQueryKeys.batch(batchId) });
+    },
+  });
+}
+
+/** Requeues a failed cloud-video delivery and replaces the shared batch detail with the server result. */
+export function useRetryRemixDelivery(batchId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    retry: false,
+    mutationFn: (ordinal: number) => retryRemixDelivery(batchId, ordinal),
+    onSuccess: (detail) => {
+      queryClient.setQueryData(remixQueryKeys.batch(batchId), detail);
+      void queryClient.invalidateQueries({ queryKey: remixQueryKeys.batches(), exact: true });
+      void queryClient.invalidateQueries({ queryKey: [...remixQueryKeys.batches(), 'pages'] });
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: remixQueryKeys.batch(batchId) });
+    },
+  });
+}
+
 /** Newest creation time among running batches; a new batch restarts the polling window. */
 function newestActiveStart(batches: readonly StudioRemixBatch[]): number {
   return batches
@@ -192,6 +236,40 @@ export function useRemixBatches(enabled: boolean) {
     return query.refetch();
   };
   return { query, refresh, pollPaused };
+}
+
+/**
+ * One numbered page of the 成片 list. While a batch on the page renders, the page refreshes;
+ * `counts` cover every batch in scope, so the tab counts and page count never depend on the page.
+ */
+export function useRemixBatchPage(filter: RemixBatchPageFilter, page: number, enabled: boolean) {
+  const [pollSince, setPollSince] = useState(() => Date.now());
+  const query = useQuery({
+    queryKey: remixQueryKeys.batchPage(filter, page),
+    queryFn: ({ signal }) => fetchRemixBatchPage(filter, page, { signal }),
+    enabled,
+    // Switching tab or page keeps the chips and rows in place until the next page arrives.
+    placeholderData: keepPreviousData,
+    refetchInterval: (current) => {
+      const batches = current.state.data?.items ?? [];
+      return nextRemixPollInterval(
+        batches.some((batch) => isRemixBatchActive(batch)),
+        Math.max(pollSince, newestActiveStart(batches)),
+        Date.now(),
+      );
+    },
+    refetchIntervalInBackground: false,
+  });
+  const batches = query.data?.items ?? [];
+  const pollPaused = usePollPaused(
+    batches.some((batch) => isRemixBatchActive(batch)),
+    Math.max(pollSince, newestActiveStart(batches)),
+  );
+  const refresh = () => {
+    setPollSince(Date.now());
+    return query.refetch();
+  };
+  return { query, batches, counts: query.data?.counts ?? null, refresh, pollPaused };
 }
 
 export function useRemixBatch(batchId: string | null) {

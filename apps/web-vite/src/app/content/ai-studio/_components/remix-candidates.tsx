@@ -1,6 +1,6 @@
-import { FileImageOutlined, PlayCircleFilled } from '@ant-design/icons';
+import { Alert, Modal, Skeleton, SkeletonText } from '@lobehub/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Modal, Skeleton } from 'antd';
+import { CirclePlay, ImageIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { createContentAssetPlaybackUrl } from '@/app/marketing/content-assets/_lib/content-assets-api';
@@ -15,6 +15,8 @@ import { useRangePlayback } from './use-range-playback';
 import { useRemixConfirmedSegments } from './use-remix-batches';
 import styles from './segment-annotation.module.css';
 import remixStyles from './remix.module.css';
+import { usePlayableUrl } from '../_lib/reachable-url';
+import { SourceSpendLabel } from './source-spend-label';
 
 function rangeText(segment: RemixCandidateSegment): string {
   return `${formatDuration(segment.startMs / 1000)}–${formatDuration(segment.endMs / 1000)}`;
@@ -44,14 +46,15 @@ export function SegmentRangePlayer({ source }: { source: RangePlayerSource }) {
   });
   const [renewed, setRenewed] = useState(false);
   const [broken, setBroken] = useState(false);
-  if (url.isPending) return <Skeleton.Node active className={styles.playerSkeleton} />;
+  const src = usePlayableUrl(url.data);
+  if (url.isPending || (url.data && !src)) return <Skeleton className={styles.playerSkeleton} />;
   if (url.isError) return <Alert type="error" showIcon title="播放地址生成失败" description={resolveContentAssetRequestError(url.error)} />;
   if (broken) return <Alert type="error" showIcon title="视频无法播放" description="播放地址已失效或原片不可读，请关闭后重新打开。" />;
   return (
     <video
       ref={videoRef}
       className={remixStyles.candidateVideo}
-      src={url.data.url}
+      src={src ?? undefined}
       poster={source.coverUrl || undefined}
       controls
       playsInline
@@ -85,7 +88,7 @@ export function RemixCandidates({ preset, preview }: RemixCandidatesProps) {
   const segments = useRemixConfirmedSegments(preset, true);
   const [playing, setPlaying] = useState<RemixCandidateSegment | null>(null);
 
-  if (segments.isPending) return <Skeleton active paragraph={{ rows: 3 }} title={false} />;
+  if (segments.isPending) return <SkeletonText rows={3} />;
   if (segments.isError) return <Alert type="error" showIcon title="候选片段读取失败，请刷新后重试。" />;
 
   const groups = groupRemixCandidates(preview.slots, segments.data.items, preview.productName, preset.version);
@@ -94,16 +97,23 @@ export function RemixCandidates({ preset, preview }: RemixCandidatesProps) {
     <div className={remixStyles.stack}>
       {groups.map((group) => {
         const name = labelName(preset, group.labelKey);
-        const unusable = group.segments.length - group.expectedCount;
+        const shared = group.slotCounts.every((count) => count === group.slotCounts[0]);
+        const unusable = group.segments.length - Math.max(...group.slotCounts);
         return (
           <section key={group.labelKey} className={remixStyles.candidateGroup} aria-label={`候选片段：${name}`}>
             <div className={remixStyles.candidateHead}>
               <span className={remixStyles.slotName}>{name}</span>
               <span className={remixStyles.slotCount}>
-                第 {group.ordinals.join('、')} 位{group.ordinals.length > 1 ? '共用' : ''} · {group.expectedCount} 段
+                {shared
+                  ? `第 ${group.ordinals.join('、')} 位${group.ordinals.length > 1 ? '共用' : ''} · ${group.slotCounts[0]} 段`
+                  : group.ordinals.map((ordinal, index) => `第 ${ordinal} 位 ${group.slotCounts[index]} 段`).join('、')}
               </span>
               {unusable > 0 ? (
-                <span className={remixStyles.candidateNote}>其中 {unusable} 段因原片授权受限、无编辑权限或超出候选上限，不会被选用</span>
+                <span className={remixStyles.candidateNote}>
+                  {preview.sourceAssetId
+                    ? `部分片段因时长不在参考段 ±20% 内、原片授权受限、无编辑权限或超出候选上限，不会被${shared ? '' : '对应位'}选用`
+                    : `其中 ${unusable} 段因原片授权受限、无编辑权限或超出候选上限，不会被选用`}
+                </span>
               ) : null}
             </div>
             {group.segments.length === 0 ? (
@@ -125,13 +135,18 @@ export function RemixCandidates({ preset, preview }: RemixCandidatesProps) {
                       onClick={() => setPlaying(segment)}
                     >
                       <span className={remixStyles.candidateCover}>
-                        {segment.coverUrl ? <img src={segment.coverUrl} alt="" loading="lazy" /> : <FileImageOutlined aria-hidden />}
-                        <PlayCircleFilled className={remixStyles.candidatePlay} aria-hidden />
+                        {segment.coverUrl ? (
+                          <img src={segment.coverUrl} alt="" loading="lazy" />
+                        ) : (
+                          <ImageIcon size={18} strokeWidth={1.6} aria-hidden="true" />
+                        )}
+                        <CirclePlay className={remixStyles.candidatePlay} size={28} strokeWidth={1.4} aria-hidden="true" />
                         <span className={remixStyles.candidateDuration}>
                           {formatDuration((segment.endMs - segment.startMs) / 1000)}
                         </span>
                       </span>
                       <span className={remixStyles.candidateTitle}>{shortAssetTitle(segment.assetTitle)}</span>
+                      <SourceSpendLabel compact spend={segment.sourceSpend} />
                     </button>
                   </li>
                 ))}

@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import type { SampleInventorySample } from '@/lib/generated-api-contract';
@@ -62,13 +63,15 @@ describe('SampleInventoryBatchInboundDialog', () => {
       />,
     );
 
-    const earlierQuantity = screen.getByRole('spinbutton', { name: '更早样品入库数量' });
-    const laterQuantity = screen.getByRole('spinbutton', { name: '测试样品入库数量' });
+    const earlierQuantity = screen.getByLabelText('更早样品入库数量');
+    const laterQuantity = screen.getByLabelText('测试样品入库数量');
     expect(earlierQuantity).toBeDisabled();
     expect(laterQuantity).toBeDisabled();
 
-    fireEvent.click(screen.getByRole('checkbox', { name: /更早样品/ }));
-    fireEvent.click(screen.getByRole('checkbox', { name: /测试样品/ }));
+    // Base UI checkboxes toggle on a real pointer sequence.
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('checkbox', { name: /更早样品/ }));
+    await user.click(screen.getByRole('checkbox', { name: /测试样品/ }));
     fireEvent.change(earlierQuantity, { target: { value: '5' } });
     fireEvent.change(laterQuantity, { target: { value: '3' } });
     fireEvent.change(screen.getByPlaceholderText('姓名'), {

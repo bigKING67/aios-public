@@ -1,5 +1,15 @@
 import { useMemo } from "react";
-import { Button, Form, Input, InputNumber, Select } from "antd";
+import { Button, Input, InputNumber } from "@lobehub/ui";
+
+import { FormField } from "@/components/molecules/form-field";
+import { LabeledSelect } from "@/components/molecules/labeled-select";
+import {
+  bindNumberField,
+  bindSelectField,
+  bindTextField,
+  type ControlledFormRules,
+  useControlledForm,
+} from "@/hooks/use-controlled-form";
 
 import type {
   CreateSampleInventoryInboundItem,
@@ -14,6 +24,11 @@ type InboundRegistrationValues = {
   operatorName?: string;
   trackingNumber?: string;
   remark?: string;
+};
+
+const INBOUND_REGISTRATION_RULES: ControlledFormRules<Partial<InboundRegistrationValues>> = {
+  sampleId: [{ required: true, message: "请选择样品" }],
+  quantity: [{ required: true, message: "请输入入库数量" }],
 };
 
 type SampleInventoryInboundRegistrationProps = {
@@ -35,14 +50,18 @@ export function SampleInventoryInboundRegistration({
   onOpenInboundImport,
   onExport,
 }: SampleInventoryInboundRegistrationProps) {
-  const [form] = Form.useForm<InboundRegistrationValues>();
-  const selectedSampleId = Form.useWatch("sampleId", form);
+  const form = useControlledForm<Partial<InboundRegistrationValues>>({
+    initialValues: { quantity: 1 },
+    rules: INBOUND_REGISTRATION_RULES,
+    onFinish: (values) => void submit(values as InboundRegistrationValues),
+  });
+  const selectedSampleId = form.values.sampleId;
   const selectedSample = useMemo(
     () => samples.find((sample) => sample.id === selectedSampleId),
     [samples, selectedSampleId],
   );
 
-  const submit = async (values: InboundRegistrationValues) => {
+  async function submit(values: InboundRegistrationValues) {
     try {
       await onSubmit({
         sampleId: values.sampleId,
@@ -54,48 +73,48 @@ export function SampleInventoryInboundRegistration({
         remark: normalizeSampleInventoryOptionalText(values.remark),
         occurredAt: undefined,
       });
-      form.resetFields(["quantity", "trackingNumber", "remark"]);
-      form.setFieldValue("quantity", 1);
+      // Keep the sample and operator for the next entry.
+      form.setFieldsValue({ quantity: 1, trackingNumber: undefined, remark: undefined });
     } catch {
       // The mutation owns user-visible error feedback and keeps the form intact.
     }
-  };
+  }
 
   return (
     <>
       <section className={styles.formArea} aria-label="入库登记">
-        <Form<InboundRegistrationValues>
-          form={form}
+        <form
           className={styles.inboundInlineForm}
-          layout="vertical"
-          requiredMark={false}
-          initialValues={{ quantity: 1 }}
-          onFinish={(values) => void submit(values)}
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            form.submit();
+          }}
         >
-          <Form.Item label="选择样品 *" name="sampleId" rules={[{ required: true }]}>
-            <Select
+          <FormField form={form} name="sampleId" label="选择样品" required>
+            <LabeledSelect
+              {...bindSelectField(form, "sampleId")}
               showSearch
               placeholder="— 请选择 —"
-              optionFilterProp="label"
               options={samples.map((sample) => ({
                 value: sample.id,
                 label: `${sample.sampleName}（${sample.sampleCode}）`,
               }))}
             />
-          </Form.Item>
-          <Form.Item label="入库数量 *" name="quantity" rules={[{ required: true }]}>
-            <InputNumber min={1} precision={0} />
-          </Form.Item>
-          <Form.Item label="操作人" name="operatorName">
-            <Input placeholder="姓名" maxLength={120} />
-          </Form.Item>
-          <Form.Item label="快递单号" name="trackingNumber">
-            <Input placeholder="快递单号" maxLength={200} />
-          </Form.Item>
-          <Form.Item className={styles.inboundRemarkField} label="备注" name="remark">
-            <Input placeholder="入库备注" maxLength={2000} />
-          </Form.Item>
-          <Form.Item className={`${styles.submitField} ${styles.inboundSubmitField}`} label=" ">
+          </FormField>
+          <FormField form={form} name="quantity" label="入库数量" required>
+            <InputNumber {...bindNumberField(form, "quantity")} min={1} precision={0} />
+          </FormField>
+          <FormField form={form} name="operatorName" label="操作人">
+            <Input {...bindTextField(form, "operatorName")} placeholder="姓名" maxLength={120} />
+          </FormField>
+          <FormField form={form} name="trackingNumber" label="快递单号">
+            <Input {...bindTextField(form, "trackingNumber")} placeholder="快递单号" maxLength={200} />
+          </FormField>
+          <FormField form={form} name="remark" label="备注" className={styles.inboundRemarkField}>
+            <Input {...bindTextField(form, "remark")} placeholder="入库备注" maxLength={2000} />
+          </FormField>
+          <div className={`${styles.submitField} ${styles.inboundSubmitField}`}>
             <div className={styles.inboundActions}>
               <Button
                 type="primary"
@@ -115,8 +134,8 @@ export function SampleInventoryInboundRegistration({
                 📊 导出Excel
               </Button>
             </div>
-          </Form.Item>
-        </Form>
+          </div>
+        </form>
       </section>
       <div className={styles.selectedInfo} aria-live="polite">
         {selectedSample

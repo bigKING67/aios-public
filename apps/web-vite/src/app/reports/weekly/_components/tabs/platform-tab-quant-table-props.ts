@@ -1,5 +1,5 @@
 import type { Key } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   resolveResponsiveTablePagination,
   resolveResponsiveTableScroll,
@@ -11,7 +11,7 @@ import type { WeeklyDataTableProps } from './weekly-primitives';
 interface BuildQuantTablePropsInput {
   isMobile: boolean;
   rows: QuantAttributionRow[];
-  columns: ColumnsType<QuantAttributionRow>;
+  columns: TableColumnsType<QuantAttributionRow>;
   rowKey: (record: QuantAttributionRow) => Key;
 }
 

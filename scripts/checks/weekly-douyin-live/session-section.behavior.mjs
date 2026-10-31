@@ -41,6 +41,7 @@ function main() {
   for (const identifierName of [
     'buildDouyinLiveSessionAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinLiveSessionRow',
     'resolveResponsiveTableSize',

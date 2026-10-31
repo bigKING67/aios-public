@@ -1,151 +1,86 @@
 'use client';
 
-import { Form, Input, InputNumber, Select, Switch } from 'antd';
-import type { Rule } from 'antd/es/form';
+import { Input, InputNumber, Switch } from '@lobehub/ui';
 import type { DataOpsTriggerParameterSpec } from '@/config/dataops-trigger-params';
+import { FormField } from '@/components/molecules/form-field';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { bindTextField } from '@/hooks/use-controlled-form';
+import type { DataOpsTriggerForm } from './dataops-trigger-parameter-form';
 
 interface DataOpsTriggerParameterFormItemsProps {
+  form: DataOpsTriggerForm;
   specs: DataOpsTriggerParameterSpec[];
   itemKeyPrefix?: string;
 }
 
-function buildTriggerParameterRules(spec: DataOpsTriggerParameterSpec): Rule[] | undefined {
-  const rules: Rule[] = [];
-  if (spec.required) {
-    rules.push({ required: true, message: `请输入${spec.label}` });
-  }
-  if (spec.key === 'month_period') {
-    rules.push({
-      validator: (_rule: unknown, value: unknown) => {
-        const normalized = typeof value === 'string' ? value.trim() : '';
-        if (!normalized) {
-          return Promise.resolve();
-        }
-
-        if (/^\d{4}-(0[1-9]|1[0-2])$/.test(normalized)) {
-          return Promise.resolve();
-        }
-
-        return Promise.reject(new Error('格式示例：2026-02'));
-      },
-    });
-  }
-
-  return rules.length ? rules : undefined;
-}
-
-function buildBooleanParameterRules(
-  spec: DataOpsTriggerParameterSpec,
-  deliveryMode: unknown
-): Rule[] | undefined {
-  const rules: Rule[] = [];
-  if (spec.required) {
-    rules.push({
-      validator: (_rule: unknown, value: unknown) => (
-        value === undefined
-          ? Promise.reject(new Error(`请选择${spec.label}`))
-          : Promise.resolve()
-      ),
-    });
-  }
-
-  if (spec.key === 'production_confirmed' && deliveryMode === 'production') {
-    rules.push({
-      validator: (_rule: unknown, value: unknown) => (
-        value === true
-          ? Promise.resolve()
-          : Promise.reject(new Error('正式投递前必须开启确认开关'))
-      ),
-    });
-  }
-
-  return rules.length ? rules : undefined;
-}
-
-function buildStringParameterRules(spec: DataOpsTriggerParameterSpec): Rule[] | undefined {
-  const rules = buildTriggerParameterRules(spec) || [];
-  if (spec.options?.length) {
-    const allowedValues = new Set(spec.options.map((option) => option.value));
-    rules.push({
-      validator: (_rule: unknown, value: unknown) => (
-        value === undefined || value === null || value === '' || allowedValues.has(String(value))
-          ? Promise.resolve()
-          : Promise.reject(new Error(`请选择有效的${spec.label}`))
-      ),
-    });
-  }
-  return rules.length ? rules : undefined;
-}
-
 export function DataOpsTriggerParameterFormItems({
+  form,
   specs,
   itemKeyPrefix = '',
 }: DataOpsTriggerParameterFormItemsProps) {
-  const deliveryMode = Form.useWatch('delivery_mode');
-
   return (
     <>
       {specs.map((spec) => {
         const itemKey = `${itemKeyPrefix}${spec.key}`;
+        const fieldId = form.fieldId(spec.key);
+        const error = form.errors[spec.key];
+        const invalidProps = {
+          'aria-invalid': error ? true : undefined,
+          'aria-describedby': error ? `${fieldId}-error` : undefined,
+        } as const;
+        const required = Boolean(spec.required);
+
         if (spec.type === 'number') {
+          const value = form.values[spec.key];
           return (
-            <Form.Item
-              key={itemKey}
-              name={spec.key}
-              label={spec.label}
-              rules={buildTriggerParameterRules(spec)}
-            >
+            <FormField key={itemKey} form={form} name={spec.key} label={spec.label} required={required}>
               <InputNumber
+                id={fieldId}
+                {...invalidProps}
+                value={typeof value === 'number' ? value : null}
+                onChange={(next) => form.change(spec.key, next as number)}
                 min={spec.min}
                 max={spec.max}
                 precision={spec.integer === false ? undefined : 0}
                 step={spec.integer === false ? 0.1 : 1}
                 placeholder={spec.placeholder}
-                style={{ width: '100%' }}
               />
-            </Form.Item>
+            </FormField>
           );
         }
 
         if (spec.type === 'boolean') {
           return (
-            <Form.Item
-              key={itemKey}
-              name={spec.key}
-              label={spec.label}
-              valuePropName="checked"
-              rules={buildBooleanParameterRules(spec, deliveryMode)}
-            >
-              <Switch />
-            </Form.Item>
+            <FormField key={itemKey} form={form} name={spec.key} label={spec.label} required={required}>
+              <Switch
+                id={fieldId}
+                {...invalidProps}
+                checked={form.values[spec.key] === true}
+                onChange={(checked) => form.change(spec.key, checked)}
+              />
+            </FormField>
           );
         }
 
         if (spec.options?.length) {
+          const value = form.values[spec.key];
           return (
-            <Form.Item
-              key={itemKey}
-              name={spec.key}
-              label={spec.label}
-              rules={buildStringParameterRules(spec)}
-            >
-              <Select
+            <FormField key={itemKey} form={form} name={spec.key} label={spec.label} required={required}>
+              <LabeledSelect<string>
+                id={fieldId}
+                value={value === undefined ? undefined : String(value)}
+                onChange={(next) => form.change(spec.key, next as string)}
                 options={spec.options}
                 placeholder={spec.placeholder || `请选择${spec.label}`}
               />
-            </Form.Item>
+            </FormField>
           );
         }
 
         return (
-          <Form.Item
-            key={itemKey}
-            name={spec.key}
-            label={spec.label}
-            rules={buildStringParameterRules(spec)}
-          >
-            <Input placeholder={spec.placeholder} />
-          </Form.Item>
+          <FormField key={itemKey} form={form} name={spec.key} label={spec.label} required={required}>
+            <Input {...bindTextField(form, spec.key)} placeholder={spec.placeholder} />
+          </FormField>
         );
       })}
     </>

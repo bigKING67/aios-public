@@ -7034,6 +7034,1042 @@
         "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
       }
     },
+    "/v2/marketing/content-assets/studio/competitor/analyses/{analysis_id}": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/analyses/{analysis_id}",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_analyses_analysis_id",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorAnalysis"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/overview": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/overview",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_overview",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z_]{1,40}$"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "last7",
+                "last30",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorOverviewResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/patterns": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/patterns",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_patterns",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z_]{1,40}$"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "last7",
+                "last30",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorPatternsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/reports": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/competitor/reports",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_competitor_reports",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetitorReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorReport"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/reports/latest": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/reports/latest",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_reports_latest",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z_]{1,40}$"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "last7",
+                "last30",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "openings",
+                "breakdown"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorReportLatestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/videos": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/videos",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_videos",
+        "parameters": [
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "compass",
+                "manual"
+              ]
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorVideoListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/competitor/videos",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_competitor_videos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetitorVideoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorVideo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_competitor_videos_aweme_id",
+        "parameters": [
+          {
+            "name": "aweme_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorVideo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "patch": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "PATCH /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}",
+        "operationId": "content_ai_studio_patch_marketing_content_assets_studio_competitor_videos_aweme_id",
+        "parameters": [
+          {
+            "name": "aweme_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCompetitorVideoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorVideo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/competitor/videos/{aweme_id}/analyses",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_competitor_videos_aweme_id_analyses",
+        "parameters": [
+          {
+            "name": "aweme_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitorAnalysis"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/daily-remix:pause": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/daily-remix:pause",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_daily_remix_pause",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyRemixPauseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyRemixPlanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/daily-remix:run": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/daily-remix:run",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_daily_remix_run",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyRemixRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyRemixPlanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dailyRemixServiceToken": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/daily-remix/plans": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/daily-remix/plans",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_daily_remix_plans",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyRemixPlanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
     "/v2/marketing/content-assets/studio/overview": {
       "get": {
         "tags": [
@@ -7053,6 +8089,46 @@
                 "last30",
                 "month"
               ]
+            }
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
             }
           }
         ],
@@ -7158,6 +8234,84 @@
         ],
         "summary": "GET /v2/marketing/content-assets/studio/remix-batches",
         "operationId": "content_ai_studio_get_marketing_content_assets_studio_remix_batches",
+        "parameters": [
+          {
+            "name": "quality",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "failed"
+              ]
+            }
+          },
+          {
+            "name": "review",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "rejected"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "framework",
+                "sellingPoint",
+                "edit"
+              ]
+            }
+          },
+          {
+            "name": "outputs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "with",
+                "without"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 256
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
@@ -7451,6 +8605,207 @@
           }
         ],
         "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry": {
+      "post": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "POST /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/delivery:retry",
+        "operationId": "content_ai_studio_post_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_delivery_retry",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordinal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemixBatchDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review": {
+      "put": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "PUT /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review",
+        "operationId": "content_ai_studio_put_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordinal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      },
+      "delete": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "DELETE /v2/marketing/content-assets/studio/remix-batches/{batch_id}/items/{ordinal}/review",
+        "operationId": "content_ai_studio_delete_marketing_content_assets_studio_remix_batches_batch_id_items_ordinal_review",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordinal",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
         "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
       }
     },
@@ -7939,6 +9294,19 @@
         "operationId": "content_ai_studio_get_marketing_content_assets_studio_segments",
         "parameters": [
           {
+            "name": "spendClass",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "qualified",
+                "low",
+                "unknown"
+              ]
+            }
+          },
+          {
             "name": "assetId",
             "in": "query",
             "required": false,
@@ -8266,6 +9634,386 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ContentSegmentConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/structure-pool": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/structure-pool",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_structure_pool",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StructurePoolResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/team-output": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/team-output",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_team_output",
+        "parameters": [
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "dimension",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "editor",
+                "director"
+              ]
+            }
+          },
+          {
+            "name": "oneLevelTypeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamOutputResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "typed",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/team-output/export": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/team-output/export",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_team_output_export",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
+        "x-aios-contract-maturity": "route-inventory",
+        "x-aios-rust-source": "backend-rust/src/marketing/content_assets/studio/mod.rs"
+      }
+    },
+    "/v2/marketing/content-assets/studio/team-output/videos": {
+      "get": {
+        "tags": [
+          "content-ai-studio"
+        ],
+        "summary": "GET /v2/marketing/content-assets/studio/team-output/videos",
+        "operationId": "content_ai_studio_get_marketing_content_assets_studio_team_output_videos",
+        "parameters": [
+          {
+            "name": "unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "dimension",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "editor",
+                "director"
+              ]
+            }
+          },
+          {
+            "name": "oneLevelTypeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "personKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "new",
+                "previous"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamOutputVideosResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -20292,6 +22040,16 @@
                 "type": "null"
               }
             ]
+          },
+          "sourceSpend": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceSpend"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -20319,6 +22077,52 @@
           "createdAt",
           "updatedAt",
           "coverUrl"
+        ]
+      },
+      "SourceSpend": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "spend30d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "class": {
+            "type": "string"
+          },
+          "asOf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "syncedDays": {
+            "type": "integer"
+          },
+          "windowDays": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "spend30d",
+          "class",
+          "asOf",
+          "complete",
+          "syncedDays",
+          "windowDays"
         ]
       },
       "SegmentAssetCover": {
@@ -20959,6 +22763,421 @@
           "productCounts"
         ]
       },
+      "TeamOutputMetrics": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "uploads": {
+            "type": "integer"
+          },
+          "spend": {
+            "type": "number"
+          },
+          "gmv": {
+            "type": "number"
+          },
+          "gmvSpend": {
+            "type": "number"
+          },
+          "roi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "newSpend": {
+            "type": "number"
+          },
+          "newGmv": {
+            "type": "number"
+          },
+          "newRoi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "spentVideos": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "uploads",
+          "spend",
+          "gmv",
+          "gmvSpend",
+          "roi",
+          "newSpend",
+          "newGmv",
+          "newRoi",
+          "spentVideos"
+        ]
+      },
+      "TeamOutputPerson": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "type": "string"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/TeamOutputMetrics"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "roleName",
+          "kind",
+          "metrics"
+        ]
+      },
+      "TeamOutputGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/TeamOutputMetrics"
+          },
+          "people": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamOutputPerson"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "metrics",
+          "people"
+        ]
+      },
+      "TeamOutputTeam": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/TeamOutputMetrics"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamOutputGroup"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "kind",
+          "metrics",
+          "groups"
+        ]
+      },
+      "TeamOutputQuality": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "uploadsWithoutDirector": {
+            "type": "integer"
+          },
+          "uploadsWithSeveralDirectors": {
+            "type": "integer"
+          },
+          "uploadsWithoutAuthor": {
+            "type": "integer"
+          },
+          "unmappedDirectorLabels": {
+            "type": "integer"
+          },
+          "spendWithoutGmv": {
+            "type": "number"
+          },
+          "otherPlatformSpend": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "uploadsWithoutDirector",
+          "uploadsWithSeveralDirectors",
+          "uploadsWithoutAuthor",
+          "unmappedDirectorLabels",
+          "spendWithoutGmv",
+          "otherPlatformSpend"
+        ]
+      },
+      "TeamOutputSync": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "type": "integer"
+          },
+          "spendDaysComplete": {
+            "type": "integer"
+          },
+          "uploadDaysComplete": {
+            "type": "integer"
+          },
+          "incompleteDays": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "latestCompleteDay": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "days",
+          "spendDaysComplete",
+          "uploadDaysComplete",
+          "incompleteDays",
+          "latestCompleteDay"
+        ]
+      },
+      "TeamOutputCategory": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "TeamOutputResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "period": {
+            "$ref": "#/components/schemas/StudioOverviewPeriod"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/TeamOutputMetrics"
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamOutputTeam"
+            }
+          },
+          "quality": {
+            "$ref": "#/components/schemas/TeamOutputQuality"
+          },
+          "sync": {
+            "$ref": "#/components/schemas/TeamOutputSync"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamOutputCategory"
+            }
+          }
+        },
+        "required": [
+          "period",
+          "dimension",
+          "totals",
+          "teams",
+          "quality",
+          "sync",
+          "categories"
+        ]
+      },
+      "TeamOutputVideo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "videoId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "authorName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "directorNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "oneLevelTypeName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "videoStateName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "uploadedAt": {
+            "type": "string"
+          },
+          "isNew": {
+            "type": "boolean"
+          },
+          "spend": {
+            "type": "number"
+          },
+          "gmv": {
+            "type": "number"
+          },
+          "roi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "otherPlatformSpend": {
+            "type": "number"
+          },
+          "totalStatCost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "totalStatCostAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "videoId",
+          "name",
+          "authorName",
+          "directorNames",
+          "oneLevelTypeName",
+          "videoStateName",
+          "uploadedAt",
+          "isNew",
+          "spend",
+          "gmv",
+          "roi",
+          "otherPlatformSpend",
+          "totalStatCost",
+          "totalStatCostAt"
+        ]
+      },
+      "TeamOutputVideosResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamOutputVideo"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "newTotal": {
+            "type": "integer"
+          },
+          "previousTotal": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "newTotal",
+          "previousTotal",
+          "page",
+          "pageSize"
+        ]
+      },
       "StudioOverviewResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -21002,12 +23221,27 @@
           },
           "to": {
             "type": "string"
+          },
+          "today": {
+            "type": "string"
+          },
+          "latestActivityDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
           "key",
           "from",
-          "to"
+          "to",
+          "today",
+          "latestActivityDate"
         ]
       },
       "StudioOverviewCosts": {
@@ -21249,6 +23483,310 @@
           "createdAt"
         ]
       },
+      "StructurePoolResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "asOf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "windowFrom": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "windowTo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "pending": {
+            "type": "boolean"
+          },
+          "requestedCount": {
+            "type": "integer"
+          },
+          "plannedCount": {
+            "type": "integer"
+          },
+          "shortfall": {
+            "type": "integer"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StructurePoolRow"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "asOf",
+          "windowFrom",
+          "windowTo",
+          "productName",
+          "status",
+          "pending",
+          "requestedCount",
+          "plannedCount",
+          "shortfall",
+          "rows"
+        ]
+      },
+      "StructurePoolRow": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labelNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "type": "string"
+          },
+          "share": {
+            "type": "number"
+          },
+          "plannedCount": {
+            "type": "integer"
+          },
+          "availableCombinations": {
+            "type": "integer"
+          },
+          "availableIsLowerBound": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "labels",
+          "labelNames",
+          "source",
+          "share",
+          "plannedCount",
+          "availableCombinations",
+          "availableIsLowerBound",
+          "reason"
+        ]
+      },
+      "DailyRemixPlanResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "requestedCount": {
+            "type": "integer"
+          },
+          "plannedCount": {
+            "type": "integer"
+          },
+          "succeededCount": {
+            "type": "integer"
+          },
+          "failedCount": {
+            "type": "integer"
+          },
+          "activeCount": {
+            "type": "integer"
+          },
+          "shortfall": {
+            "type": "integer"
+          },
+          "dispatchComplete": {
+            "type": "boolean"
+          },
+          "stopReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "budgetYuan": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "estimatedCostYuan": {
+            "type": "number"
+          },
+          "structurePool": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StructurePoolResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "batches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyRemixBatch"
+            }
+          },
+          "structures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyRemixStructureResult"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "status",
+          "requestedCount",
+          "plannedCount",
+          "succeededCount",
+          "failedCount",
+          "activeCount",
+          "shortfall",
+          "dispatchComplete",
+          "stopReason",
+          "budgetYuan",
+          "estimatedCostYuan",
+          "structurePool",
+          "batches",
+          "structures"
+        ]
+      },
+      "DailyRemixBatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "batchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "structureIndex": {
+            "type": "integer"
+          },
+          "plannedCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "batchId",
+          "structureIndex",
+          "plannedCount"
+        ]
+      },
+      "DailyRemixStructureResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "structureIndex": {
+            "type": "integer"
+          },
+          "targetCount": {
+            "type": "integer"
+          },
+          "plannedCount": {
+            "type": "integer"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "structureIndex",
+          "targetCount",
+          "plannedCount",
+          "reason"
+        ]
+      },
+      "DailyRemixRunRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ]
+      },
+      "DailyRemixPauseRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "paused": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "date",
+          "paused"
+        ]
+      },
       "RemixBatchPreviewRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -21373,6 +23911,16 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "spendCounts": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpendCounts"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "ordinal": {
             "type": "integer"
           },
@@ -21414,10 +23962,50 @@
           "fallback"
         ]
       },
+      "SpendCounts": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "qualified": {
+            "type": "integer"
+          },
+          "low": {
+            "type": "integer"
+          },
+          "unknown": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "qualified",
+          "low",
+          "unknown"
+        ]
+      },
       "RemixBatchPreviewResponse": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "admissionExcluded": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "admissionExcludedIsLowerBound": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "mode": {
             "type": "string"
           },
@@ -21514,6 +24102,26 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "spendClass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "spend30d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "segmentId": {
             "type": "string",
             "format": "uuid"
@@ -21610,6 +24218,16 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "qc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemixQc"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "ordinal": {
             "type": "integer"
           },
@@ -21670,6 +24288,9 @@
               }
             ]
           },
+          "outputDeleted": {
+            "type": "boolean"
+          },
           "outputCoverUrl": {
             "anyOf": [
               {
@@ -21698,6 +24319,36 @@
                 "type": "null"
               }
             ]
+          },
+          "review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemixOutputReview"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "delivery": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemixDelivery"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "retention": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemixRetention"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -21711,9 +24362,372 @@
           "jobStatus",
           "jobError",
           "outputAssetId",
+          "outputDeleted",
           "outputCoverUrl",
           "durationMs",
-          "segments"
+          "segments",
+          "review"
+        ]
+      },
+      "RemixQc": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "freezeCount": {
+            "type": "integer"
+          },
+          "timestampGapCount": {
+            "type": "integer"
+          },
+          "duplicatePairCount": {
+            "type": "integer"
+          },
+          "maxAvOffsetMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceStatus": {
+            "type": "string"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemixQcReport"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "reasons",
+          "freezeCount",
+          "timestampGapCount",
+          "duplicatePairCount",
+          "maxAvOffsetMs",
+          "sourceStatus"
+        ]
+      },
+      "RemixDelivery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "cloudVideoId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "videoName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attempts": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "canRetry": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "cloudVideoId",
+          "videoName",
+          "errorCode",
+          "attempts",
+          "updatedAt",
+          "enabled",
+          "canRetry"
+        ]
+      },
+      "RemixRetention": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "cleanupAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cleanedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "canRestore": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reason",
+          "status",
+          "cleanupAt",
+          "cleanedAt",
+          "canRestore"
+        ]
+      },
+      "RemixQcReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timingStatus": {
+            "type": "string"
+          },
+          "freezeStatus": {
+            "type": "string"
+          },
+          "pictureStatus": {
+            "type": "string"
+          },
+          "frameCount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "audioStartOffsetMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "audioEndOffsetMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "freezeThresholdMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "avOffsetThresholdMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ptsGapThresholdMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "freezeNoiseDb": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pictureMaxDistance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pictureMinTexture": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "checkedSegments": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorStage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "freezeEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixQcFreezeEvent"
+            }
+          },
+          "freezeEventCount": {
+            "type": "integer"
+          },
+          "timestampGaps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemixQcTimestampGap"
+            }
+          }
+        },
+        "required": [
+          "timingStatus",
+          "freezeStatus",
+          "pictureStatus",
+          "frameCount",
+          "audioStartOffsetMs",
+          "audioEndOffsetMs",
+          "freezeThresholdMs",
+          "avOffsetThresholdMs",
+          "ptsGapThresholdMs",
+          "freezeNoiseDb",
+          "pictureMaxDistance",
+          "pictureMinTexture",
+          "checkedSegments",
+          "errorStage",
+          "freezeEvents",
+          "freezeEventCount",
+          "timestampGaps"
+        ]
+      },
+      "RemixQcFreezeEvent": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "startMs": {
+            "type": "number"
+          },
+          "endMs": {
+            "type": "number"
+          },
+          "sourceExempt": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "startMs",
+          "endMs",
+          "sourceExempt"
+        ]
+      },
+      "RemixQcTimestampGap": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "frame": {
+            "type": "integer"
+          },
+          "deltaMs": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "frame",
+          "deltaMs"
         ]
       },
       "RemixPictureReview": {
@@ -21763,10 +24777,90 @@
           "rightMs"
         ]
       },
+      "RemixOutputReview": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "type": "string"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewerUserId": {
+            "type": "string"
+          },
+          "reviewerName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "reasons",
+          "note",
+          "reviewerUserId",
+          "reviewerName",
+          "reviewedAt"
+        ]
+      },
+      "RemixOutputReviewRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "type": "string"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
       "RemixBatch": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "qcFailedCount": {
+            "type": "integer"
+          },
           "batchId": {
             "type": "string",
             "format": "uuid"
@@ -21850,6 +24944,18 @@
           "cancelledCount": {
             "type": "integer"
           },
+          "availableCount": {
+            "type": "integer"
+          },
+          "reviewableCount": {
+            "type": "integer"
+          },
+          "approvedCount": {
+            "type": "integer"
+          },
+          "rejectedCount": {
+            "type": "integer"
+          },
           "coverUrls": {
             "type": "array",
             "items": {
@@ -21874,6 +24980,7 @@
           }
         },
         "required": [
+          "qcFailedCount",
           "batchId",
           "mode",
           "ownerUserId",
@@ -21893,6 +25000,10 @@
           "failedCount",
           "runningCount",
           "cancelledCount",
+          "availableCount",
+          "reviewableCount",
+          "approvedCount",
+          "rejectedCount",
           "coverUrls",
           "failureReason",
           "createdAt",
@@ -21927,10 +25038,77 @@
             "items": {
               "$ref": "#/components/schemas/RemixBatch"
             }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "counts": {
+            "$ref": "#/components/schemas/RemixBatchCounts"
           }
         },
         "required": [
-          "items"
+          "items",
+          "nextCursor",
+          "counts"
+        ]
+      },
+      "RemixBatchCounts": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rejected": {
+            "$ref": "#/components/schemas/RemixBatchModeCounts"
+          },
+          "qcFailed": {
+            "$ref": "#/components/schemas/RemixBatchModeCounts"
+          },
+          "withOutputs": {
+            "$ref": "#/components/schemas/RemixBatchModeCounts"
+          },
+          "withoutOutputs": {
+            "$ref": "#/components/schemas/RemixBatchModeCounts"
+          },
+          "pendingReview": {
+            "$ref": "#/components/schemas/RemixBatchModeCounts"
+          }
+        },
+        "required": [
+          "rejected",
+          "qcFailed",
+          "withOutputs",
+          "withoutOutputs",
+          "pendingReview"
+        ]
+      },
+      "RemixBatchModeCounts": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "all": {
+            "type": "integer"
+          },
+          "framework": {
+            "type": "integer"
+          },
+          "sellingPoint": {
+            "type": "integer"
+          },
+          "edit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "all",
+          "framework",
+          "sellingPoint",
+          "edit"
         ]
       },
       "RemixProduct": {
@@ -22130,6 +25308,1028 @@
           "durationMs",
           "exact",
           "similar"
+        ]
+      },
+      "CreateCompetitorVideoRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "shareUrl": {
+            "type": "string"
+          },
+          "brandName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productCategory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "shareUrl"
+        ]
+      },
+      "UpdateCompetitorVideoRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brandName": {
+            "type": "string"
+          },
+          "productCategory": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brandName",
+          "productCategory",
+          "notes"
+        ]
+      },
+      "CompetitorAnalysisSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string"
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "costYuan": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "analysisId",
+          "status",
+          "complete",
+          "costYuan",
+          "createdAt",
+          "finishedAt"
+        ]
+      },
+      "CompetitorVideo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "awemeId": {
+            "type": "string"
+          },
+          "shareUrl": {
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "authorName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "brandName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "productCategory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "durationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "availability": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manualAddedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestRankingDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rankingDays": {
+            "type": "integer"
+          },
+          "bestRank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relevantDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "addOutcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "firstSeenAt": {
+            "type": "string"
+          },
+          "lastResolvedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestAnalysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompetitorAnalysisSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "coverUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "awemeId",
+          "shareUrl",
+          "title",
+          "authorName",
+          "brandName",
+          "productCategory",
+          "durationSeconds",
+          "availability",
+          "source",
+          "sources",
+          "manualAddedAt",
+          "latestRankingDate",
+          "rankingDays",
+          "bestRank",
+          "relevantDate",
+          "addOutcome",
+          "notes",
+          "firstSeenAt",
+          "lastResolvedAt",
+          "latestAnalysis",
+          "coverUrl"
+        ]
+      },
+      "CompetitorVideoListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompetitorVideo"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StudioOverviewPeriod"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestSyncAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestRankingDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "pageSize",
+          "period",
+          "latestSyncAt",
+          "latestRankingDate"
+        ]
+      },
+      "CompetitorAnalysis": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "awemeId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "modelId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "promptVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "taxonomyVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "card": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hostErrors": {},
+          "evidenceObjects": {},
+          "costYuan": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "analysisId",
+          "awemeId",
+          "status",
+          "modelId",
+          "promptVersion",
+          "taxonomyVersion",
+          "card",
+          "hostErrors",
+          "evidenceObjects",
+          "costYuan",
+          "errorCode",
+          "errorMessage",
+          "createdAt",
+          "startedAt",
+          "finishedAt"
+        ]
+      },
+      "CompetitorPatternCategory": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "films": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "key",
+          "films"
+        ]
+      },
+      "CompetitorPatternSnapshot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cohort": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "statsVersion": {
+            "type": "string"
+          },
+          "taxonomyVersion": {
+            "type": "string"
+          },
+          "normalizationVersion": {
+            "type": "string"
+          },
+          "inputSnapshot": {
+            "type": "string"
+          },
+          "films": {
+            "type": "integer"
+          },
+          "families": {
+            "type": "integer"
+          },
+          "computedAt": {
+            "type": "string"
+          },
+          "payload": {}
+        },
+        "required": [
+          "cohort",
+          "period",
+          "statsVersion",
+          "taxonomyVersion",
+          "normalizationVersion",
+          "inputSnapshot",
+          "films",
+          "families",
+          "computedAt",
+          "payload"
+        ]
+      },
+      "OwnSellingPointCoverage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "labelKey": {
+            "type": "string"
+          },
+          "labelName": {
+            "type": "string"
+          },
+          "segments": {
+            "type": "integer"
+          },
+          "assets": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "labelKey",
+          "labelName",
+          "segments",
+          "assets"
+        ]
+      },
+      "OwnStructureRow": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assets": {
+            "type": "integer"
+          },
+          "spend": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "labels",
+          "assets",
+          "spend"
+        ]
+      },
+      "OwnStructureLane": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "type": "integer"
+          },
+          "spend": {
+            "type": "number"
+          },
+          "labels": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OwnStructureRow"
+            }
+          }
+        },
+        "required": [
+          "assets",
+          "spend",
+          "labels",
+          "rows"
+        ]
+      },
+      "OwnSpendDays": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "synced": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "days",
+          "synced"
+        ]
+      },
+      "OwnStructures": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "framework": {
+            "$ref": "#/components/schemas/OwnStructureLane"
+          },
+          "sellingPoint": {
+            "$ref": "#/components/schemas/OwnStructureLane"
+          },
+          "spendDays": {
+            "$ref": "#/components/schemas/OwnSpendDays"
+          }
+        },
+        "required": [
+          "framework",
+          "sellingPoint",
+          "spendDays"
+        ]
+      },
+      "CompetitorPatternsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "window": {
+            "$ref": "#/components/schemas/StudioOverviewPeriod"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompetitorPatternCategory"
+            }
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompetitorPatternSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pending": {
+            "type": "boolean"
+          },
+          "ownSellingPoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OwnSellingPointCoverage"
+            }
+          },
+          "ownStructures": {
+            "$ref": "#/components/schemas/OwnStructures"
+          }
+        },
+        "required": [
+          "category",
+          "period",
+          "window",
+          "categories",
+          "snapshot",
+          "pending",
+          "ownSellingPoints",
+          "ownStructures"
+        ]
+      },
+      "CompetitorOverviewCounts": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "analyzed": {
+            "type": "integer"
+          },
+          "brands": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "analyzed",
+          "brands"
+        ]
+      },
+      "CompetitorOverviewResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "window": {
+            "$ref": "#/components/schemas/StudioOverviewPeriod"
+          },
+          "current": {
+            "$ref": "#/components/schemas/CompetitorOverviewCounts"
+          },
+          "previous": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompetitorOverviewCounts"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "analyzing": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "category",
+          "period",
+          "window",
+          "current",
+          "previous",
+          "analyzing"
+        ]
+      },
+      "CreateCompetitorReportRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "retry": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CompetitorReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "category": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "inputSnapshot": {
+            "type": "string"
+          },
+          "promptVersion": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "modelId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inputs": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "report": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "issues": {},
+          "costYuan": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reportId",
+          "category",
+          "period",
+          "inputSnapshot",
+          "promptVersion",
+          "status",
+          "modelId",
+          "inputs",
+          "report",
+          "issues",
+          "costYuan",
+          "errorCode",
+          "errorMessage",
+          "createdAt",
+          "finishedAt"
+        ]
+      },
+      "CompetitorReportLatestResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompetitorReport"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "currentInputSnapshot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "films": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minFilms": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "category",
+          "period",
+          "report",
+          "currentInputSnapshot",
+          "films",
+          "minFilms"
         ]
       },
       "IndustryMaterialInspirationResponse": {
@@ -24547,6 +28747,11 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "aios_access_token"
+      },
+      "dailyRemixServiceToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Dedicated daily-remix service token; does not accept user JWTs or cookies."
       }
     }
   },
@@ -24602,9 +28807,9 @@
   ],
   "x-aios-contract": {
     "generatedFrom": "rust-router-and-serde-source",
-    "operationCount": 234,
+    "operationCount": 254,
     "routeSourceCount": 16,
-    "typedOperationCount": 112,
+    "typedOperationCount": 129,
     "v1RemovalAuthorized": false
   }
 }

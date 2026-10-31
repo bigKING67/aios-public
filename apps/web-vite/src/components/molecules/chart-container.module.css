@@ -1,24 +1,18 @@
 .card {
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-base);
-  background: var(--bg-card);
-  box-shadow: none;
-  transition:
-    border-color var(--transition-base),
-    box-shadow var(--transition-base);
+  overflow: hidden;
 }
 
-.card:hover {
-  border-color: var(--border-color-hover);
-  box-shadow: var(--shadow-base);
+.header {
+  padding: var(--spacing-3) var(--spacing-4) 0;
 }
 
 .title {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
 }
 
 .body {
   min-height: var(--chart-container-min-height);
+  padding: var(--spacing-4);
 }

@@ -1,16 +1,16 @@
 :global(:root) {
-  --creator-material-status-node-bg-start: #ffffff;
-  --creator-material-status-node-bg-end: #f7faff;
+  --creator-material-status-node-bg-start: #FFFFFF;
+  --creator-material-status-node-bg-end: #F8F8F8;
   --creator-material-status-active-inset: rgba(255, 255, 255, 0.72);
   --creator-material-status-badge-bg: rgba(255, 255, 255, 0.82);
   --creator-material-status-badge-edge: rgba(255, 255, 255, 0.9);
   --creator-material-status-badge-active-edge: rgba(255, 255, 255, 0.92);
   --creator-material-status-badge-active-shadow: rgba(15, 23, 42, 0.6);
-  --creator-material-status-table-head-start: #f8fafd;
-  --creator-material-status-table-head-end: #eff4f8;
-  --creator-material-status-table-head-divider: #d7e1ec;
-  --creator-material-status-table-row-alt-bg: rgba(247, 250, 253, 0.82);
-  --creator-material-status-table-row-hover-bg: #f1f6fd;
+  --creator-material-status-table-head-start: #F8FAFD;
+  --creator-material-status-table-head-end: #F8F8F8;
+  --creator-material-status-table-head-divider: #F3F3F3;
+  --creator-material-status-table-row-alt-bg: rgba(248, 248, 248, 0.82);
+  --creator-material-status-table-row-hover-bg: #F8F8F8;
   --creator-material-status-empty-bg: rgba(248, 250, 252, 0.82);
 }
 
@@ -47,7 +47,7 @@
   top: 50%;
   right: -14px;
   transform: translateY(-50%);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-lg);
   font-weight: 650;
   line-height: var(--line-height-none);
@@ -59,7 +59,7 @@
   --status-tone-border: transparent;
   --status-tone-text: var(--domain-cooperation-unclassified-text);
   border-radius: 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: linear-gradient(
     150deg,
     var(--creator-material-status-node-bg-start) 0%,
@@ -123,16 +123,16 @@
 }
 
 .statusFlowNode:hover {
-  border-color: var(--border-color-hover);
+  border-color: var(--aios-border-hover);
   box-shadow: var(--creator-shadow-interactive);
   transform: translateY(-1px);
 }
 
 .statusFlowNode:focus-visible {
   outline: none;
-  border-color: var(--brand-primary);
+  border-color: var(--lobe-color-primary);
   box-shadow:
-    0 0 0 2px var(--brand-focus-ring),
+    0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent),
     var(--creator-shadow-interactive);
 }
 
@@ -164,7 +164,7 @@
 }
 
 .statusFlowNodeTop span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 560;
   line-height: var(--line-height-tight);
@@ -188,7 +188,7 @@
 }
 
 .statusFlowNode strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 700;
   line-height: var(--line-height-compact);
@@ -207,9 +207,9 @@
   margin-top: 12px;
   max-height: 396px;
   overflow: auto;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   box-shadow: var(--creator-shadow-surface);
 }
 
@@ -226,8 +226,8 @@
   padding: 12px 14px;
   text-align: left;
   line-height: var(--line-height-normal);
-  border-bottom: 1px solid var(--divider-color);
-  color: var(--text-secondary);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
 }
 
 .statusTable th {
@@ -239,7 +239,7 @@
     var(--creator-material-status-table-head-start) 0%,
     var(--creator-material-status-table-head-end) 100%
   );
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 640;
   letter-spacing: var(--letter-spacing-label);
@@ -255,7 +255,7 @@
 }
 
 .statusTable td:first-child {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: 500;
 }
 
@@ -267,7 +267,7 @@
   min-width: 280px;
   max-width: 380px;
   white-space: normal;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   line-height: var(--line-height-normal);
 }
 
@@ -315,9 +315,9 @@
 .statusInfoEmpty {
   min-height: 112px;
   border-radius: 10px;
-  border: 1px dashed var(--border-color-hover);
+  border: 1px dashed var(--aios-border-hover);
   background: var(--creator-material-status-empty-bg);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   display: grid;
   place-items: center;
@@ -326,7 +326,7 @@
 .statusEmpty {
   min-height: 180px;
   border-radius: 16px;
-  border: 1px dashed var(--border-color-hover);
+  border: 1px dashed var(--aios-border-hover);
   background: var(--creator-material-status-empty-bg);
   display: grid;
   place-items: center;
@@ -372,4 +372,21 @@
   .statusTableWrap {
     max-height: 340px;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] :global(:root) {
+  --creator-material-status-node-bg-start: #0D0D0D;
+  --creator-material-status-node-bg-end: #1E1D21;
+  --creator-material-status-active-inset: rgba(13, 13, 13, 0.72);
+  --creator-material-status-badge-bg: rgba(13, 13, 13, 0.82);
+  --creator-material-status-badge-edge: rgba(13, 13, 13, 0.9);
+  --creator-material-status-badge-active-edge: rgba(13, 13, 13, 0.92);
+  --creator-material-status-badge-active-shadow: rgba(0, 0, 0, 0.6);
+  --creator-material-status-table-head-start: #1E1D20;
+  --creator-material-status-table-head-end: #1E1D21;
+  --creator-material-status-table-head-divider: #222125;
+  --creator-material-status-table-row-alt-bg: rgba(30, 29, 33, 0.82);
+  --creator-material-status-table-row-hover-bg: #1E1D21;
+  --creator-material-status-empty-bg: rgba(30, 29, 33, 0.82);
 }

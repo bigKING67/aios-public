@@ -3,28 +3,28 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-3);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   margin-bottom: calc(var(--spacing-1) + 1px);
 }
 
 .rowValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .trendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .trendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .trendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .grid {
@@ -40,12 +40,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
 }
 
 .gridValue {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 600;
   font-variant-numeric: tabular-nums;

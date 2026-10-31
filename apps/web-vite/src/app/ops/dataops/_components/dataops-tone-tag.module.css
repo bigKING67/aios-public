@@ -1,0 +1,40 @@
+/* Status chips of the DataOps tables: status text colour on the lobe status surface. */
+
+.toneTag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 1px 7px;
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--lobe-border-radius-sm);
+  background: var(--lobe-color-fill-quaternary);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+}
+
+.toneTag[data-tone='success'] {
+  border-color: var(--lobe-color-success-border);
+  background: var(--lobe-color-success-bg);
+  color: var(--aios-status-success);
+}
+
+.toneTag[data-tone='warning'] {
+  border-color: var(--lobe-color-warning-border);
+  background: var(--lobe-color-warning-bg);
+  color: var(--aios-status-warning);
+}
+
+.toneTag[data-tone='danger'] {
+  border-color: var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
+  color: var(--aios-status-danger);
+}
+
+.toneTag[data-tone='info'] {
+  border-color: var(--lobe-color-info-border);
+  background: var(--lobe-color-info-bg);
+  color: var(--aios-status-info);
+}

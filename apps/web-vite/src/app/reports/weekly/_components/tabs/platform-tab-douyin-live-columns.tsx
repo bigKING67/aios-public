@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   formatDouyinDurationMinutes,
   renderDouyinAccountName,
@@ -12,7 +12,7 @@ import { buildDouyinLiveCountColumns } from './platform-tab-douyin-live-count-co
 
 export function buildDouyinLiveColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<DouyinLiveSessionRow> {
+): TableColumnsType<DouyinLiveSessionRow> {
   return [
     {
       title: '直播开始时间',

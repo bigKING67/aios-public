@@ -1,4 +1,4 @@
-import datePickerZhCN from 'antd/es/date-picker/locale/zh_CN';
+import { datePickerLocaleZhCN, type PickerLocale } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import zhCnDayjsLocale from 'dayjs/locale/zh-cn';
@@ -20,10 +20,10 @@ dayjs.locale(
   true
 );
 
-export const CREATOR_WEEK_PICKER_LOCALE = {
-  ...datePickerZhCN,
+export const CREATOR_WEEK_PICKER_LOCALE: PickerLocale = {
+  ...datePickerLocaleZhCN,
   lang: {
-    ...datePickerZhCN.lang,
+    ...datePickerLocaleZhCN.lang,
     locale: BUSINESS_WEEK_LOCALE,
     shortWeekDays: CREATOR_WEEKDAY_LABELS_SUN_FIRST,
   },

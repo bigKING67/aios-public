@@ -1,21 +1,21 @@
 'use client';
 
-import { Button, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Table, Tooltip, type TableColumnsType } from '@lobehub/ui';
 import type {
   DataOpsNotificationChannel,
   DataOpsNotificationEvent,
 } from '@/config/dataops-hub';
 import { DataOpsNotificationLinkIndex } from './dataops-notification-link-index';
 import {
-  LEVEL_TAG_COLOR,
-  STATUS_TAG_COLOR,
+  LEVEL_TAG_TONE,
+  STATUS_TAG_TONE,
   formatDateTime,
   getNotificationEventTypeLabel,
-  getNotificationEventTypeTagColor,
+  getNotificationEventTypeTagTone,
   getNotificationStatusLabel,
   truncateText,
 } from './dataops-hub-formatters';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import notificationTableStyles from './dataops-notification-table.module.css';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
@@ -74,8 +74,8 @@ export function buildDataOpsNotificationColumns({
   globalActionBusy,
   hasOperatePermission,
   onOpenNotificationEventRetryModal,
-}: DataOpsNotificationColumnsOptions): ColumnsType<DataOpsNotificationEvent> {
-  const expandColumn: ColumnsType<DataOpsNotificationEvent>[number] = Table.EXPAND_COLUMN;
+}: DataOpsNotificationColumnsOptions): TableColumnsType<DataOpsNotificationEvent> {
+  const expandColumn: TableColumnsType<DataOpsNotificationEvent>[number] = Table.EXPAND_COLUMN;
   const headerCellProps = buildNotificationHeaderCellProps;
   const bodyCellProps = buildNotificationBodyCellProps;
 
@@ -89,15 +89,15 @@ export function buildDataOpsNotificationColumns({
       onCell: bodyCellProps,
       render: (_value, record) => (
         <div className={notificationTableStyles.notificationTitleCell}>
-          <Tooltip title={record.title}>
+          <Tooltip title={record.title || undefined}>
             <p className={notificationTableStyles.notificationTitleText}>{record.title}</p>
           </Tooltip>
           <div className={notificationTableStyles.notificationMetaRow}>
-            <Tag color={LEVEL_TAG_COLOR[record.level]}>{record.level.toUpperCase()}</Tag>
-            <Tag color={getNotificationEventTypeTagColor(record.eventType)}>
+            <DataOpsToneTag tone={LEVEL_TAG_TONE[record.level]}>{record.level.toUpperCase()}</DataOpsToneTag>
+            <DataOpsToneTag tone={getNotificationEventTypeTagTone(record.eventType)}>
               {getNotificationEventTypeLabel(record.eventType)}
-            </Tag>
-            <Tooltip title={record.targetTable}>
+            </DataOpsToneTag>
+            <Tooltip title={record.targetTable || undefined}>
               <span className={notificationTableStyles.notificationTargetText}>
                 目标表：{record.targetTable}
               </span>
@@ -115,7 +115,7 @@ export function buildDataOpsNotificationColumns({
       onHeaderCell: headerCellProps,
       onCell: bodyCellProps,
       render: (value: DataOpsNotificationEvent['status']) => (
-        <Tag color={STATUS_TAG_COLOR[value]}>{value}</Tag>
+        <DataOpsToneTag tone={STATUS_TAG_TONE[value]}>{value}</DataOpsToneTag>
       ),
     },
     {
@@ -166,7 +166,7 @@ export function buildDataOpsNotificationMobileColumns({
   onCopy,
   onOpenNotificationEventRetryModal,
   onOpenRetryGroupTrace,
-}: DataOpsNotificationMobileColumnsOptions): ColumnsType<DataOpsNotificationEvent> {
+}: DataOpsNotificationMobileColumnsOptions): TableColumnsType<DataOpsNotificationEvent> {
   const headerCellProps = buildNotificationHeaderCellProps;
   const bodyCellProps = buildNotificationBodyCellProps;
 
@@ -196,16 +196,16 @@ export function buildDataOpsNotificationMobileColumns({
                 </p>
               </div>
               <div className="flex flex-wrap justify-end gap-1">
-                <Tag color={LEVEL_TAG_COLOR[record.level]}>{record.level.toUpperCase()}</Tag>
-                <Tag color={STATUS_TAG_COLOR[record.status]}>
+                <DataOpsToneTag tone={LEVEL_TAG_TONE[record.level]}>{record.level.toUpperCase()}</DataOpsToneTag>
+                <DataOpsToneTag tone={STATUS_TAG_TONE[record.status]}>
                   {getNotificationStatusLabel(record.status)}
-                </Tag>
+                </DataOpsToneTag>
               </div>
             </div>
             <div className="flex flex-wrap gap-1">
-              <Tag color={getNotificationEventTypeTagColor(record.eventType)}>
+              <DataOpsToneTag tone={getNotificationEventTypeTagTone(record.eventType)}>
                 {getNotificationEventTypeLabel(record.eventType)}
-              </Tag>
+              </DataOpsToneTag>
             </div>
             <div className={pipelineStyles.pipelineTextCell}>
               <p>

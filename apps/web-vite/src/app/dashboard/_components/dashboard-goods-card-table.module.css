@@ -8,7 +8,7 @@
 }
 
 .productName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: inherit;
   font-weight: 400;
   line-height: var(--line-height-relaxed);
@@ -18,12 +18,12 @@
 }
 
 .trafficButton {
-  color: var(--brand-dark) !important;
+  color: var(--lobe-color-primary-hover) !important;
   font-size: var(--font-size-xs);
   font-weight: 560;
   padding: 0 !important;
 }
 
 .trafficButton:hover {
-  color: var(--brand-text) !important;
+  color: var(--lobe-color-text) !important;
 }

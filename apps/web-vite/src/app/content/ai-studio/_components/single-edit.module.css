@@ -26,18 +26,18 @@
   width: 100%;
   height: 100%;
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
   color: inherit;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   text-align: left;
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .start:hover:not(:disabled) {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--lobe-color-text-quaternary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .start:focus-visible,
@@ -45,36 +45,36 @@
 .addClip:focus-visible,
 .pickCard:focus-visible,
 .libraryCover:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
 .start:disabled {
   cursor: not-allowed;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .startTitle {
   display: flex;
   gap: var(--spacing-2);
   align-items: center;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .start:disabled .startTitle {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .startDetail {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .planned {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
 }
@@ -111,13 +111,14 @@
 }
 
 .clip:hover {
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
+/* Selection is an ink outline, not violet: violet marks AI work only. */
 .clipSelected,
 .clipSelected:hover {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .clipCover {
@@ -126,10 +127,10 @@
   place-items: center;
   overflow: hidden;
   aspect-ratio: 9 / 16;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-md);
-  color: var(--text-tertiary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .clipCover img {
@@ -139,8 +140,8 @@
 }
 
 .clipUnavailable .clipCover {
-  border-color: var(--status-warning);
-  color: var(--status-warning);
+  border-color: var(--aios-status-warning);
+  color: var(--aios-status-warning);
 }
 
 .clipIndex,
@@ -151,7 +152,7 @@
   position: absolute;
   padding: 0 var(--spacing-1);
   border-radius: var(--border-radius-sm);
-  color: var(--bg-card);
+  color: var(--lobe-color-bg-container);
   background: var(--edit-material-ink-a780);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -181,33 +182,33 @@
 }
 
 .clipName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
 
 .clipMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
 .clipUnavailable .clipName,
 .clipUnavailable .clipMeta {
-  color: var(--status-warning);
+  color: var(--aios-status-warning);
 }
 
 .addClip {
   align-items: center;
   justify-content: center;
   aspect-ratio: 9 / 16;
-  border: 1px dashed var(--border-color);
-  color: var(--text-secondary);
+  border: 1px dashed var(--lobe-color-border);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
 .addClip:hover:not(:disabled) {
-  border-color: var(--brand-border);
-  color: var(--brand-primary);
+  border-color: var(--lobe-color-text-quaternary);
+  color: var(--lobe-color-text);
 }
 
 .addClip:disabled {
@@ -222,9 +223,9 @@
   flex-direction: column;
   gap: var(--spacing-3);
   padding: var(--spacing-4);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .editorHead {
@@ -232,13 +233,13 @@
   flex-wrap: wrap;
   gap: var(--spacing-2);
   align-items: baseline;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
 }
 
 .editorSource {
   overflow: hidden;
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -250,19 +251,62 @@
   gap: var(--spacing-1);
 }
 
+.rangeSlider {
+  width: 100%;
+  touch-action: none;
+}
+
+.rangeControl {
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+.rangeTrack {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--lobe-color-fill-secondary);
+}
+
+.rangeIndicator {
+  border-radius: 2px;
+  background: var(--lobe-color-primary);
+}
+
+.rangeThumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--lobe-color-primary);
+  border-radius: 50%;
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
+}
+
+.rangeThumb:has(:focus-visible) {
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
+}
+
+.rangeSlider[data-disabled] .rangeIndicator,
+.rangeSlider[data-disabled] .rangeThumb {
+  opacity: 0.45;
+}
+
 .trimText {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-1);
   align-items: center;
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
 }
 
 .trimBounds {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .editorActions {
@@ -288,16 +332,16 @@
 }
 
 .stats dt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
 .stats dd {
   overflow: hidden;
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -308,7 +352,7 @@
 }
 
 .overLimit {
-  color: var(--status-danger);
+  color: var(--aios-status-danger);
 }
 
 .matchBody {
@@ -333,7 +377,7 @@
 }
 
 .matches span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
@@ -367,17 +411,17 @@
   align-items: center;
   width: 100%;
   padding: var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
   color: inherit;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   text-align: left;
   cursor: pointer;
 }
 
 .pickCard:hover {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--lobe-color-text-quaternary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .pickCover,
@@ -390,8 +434,8 @@
   width: 48px;
   aspect-ratio: 9 / 16;
   border-radius: var(--border-radius-md);
-  color: var(--text-tertiary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .pickCover img,
@@ -413,21 +457,21 @@
   display: flex;
   gap: var(--spacing-2);
   align-items: center;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .pickChain {
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .pickMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
 }
@@ -445,12 +489,12 @@
   align-items: center;
 }
 
-.libraryFilters :global(.ant-select) {
+.libraryFilters > * {
   min-width: 160px;
 }
 
 .libraryScope {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
@@ -459,7 +503,7 @@
   gap: var(--spacing-3);
   align-items: center;
   padding: var(--spacing-2) 0;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .libraryCover {
@@ -470,7 +514,7 @@
 
 .libraryPlay {
   position: absolute;
-  color: var(--bg-card);
+  color: var(--lobe-color-bg-container);
   font-size: var(--font-size-lg);
   opacity: 0.85;
 }

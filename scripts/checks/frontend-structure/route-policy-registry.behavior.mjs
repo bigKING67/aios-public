@@ -67,7 +67,7 @@ expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.dashboardCreatorLive}?from=nav`
   path: ROUTE_PATHS.dashboardCreatorLive,
 });
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.dashboardIndustryMaterialInspiration), {
-  kind: 'content_assets_write',
+  kind: 'super_admin',
   path: ROUTE_PATHS.dashboardIndustryMaterialInspiration,
 });
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.admin), {
@@ -87,15 +87,15 @@ expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.marketingIndustryNews}/detail`)
   path: ROUTE_PATHS.marketingIndustryNews,
 });
 expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.marketingContentAssets}/asset-fixture-001`), {
-  kind: 'content_assets',
+  kind: 'super_admin',
   path: `${ROUTE_PATHS.marketingContentAssets}/:assetId`,
 });
 expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.marketingContentAssets}/:assetId`), {
-  kind: 'content_assets',
+  kind: 'super_admin',
   path: `${ROUTE_PATHS.marketingContentAssets}/:assetId`,
 });
 expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.marketingContentAssets}/asset-fixture-001/events`), {
-  kind: 'content_assets',
+  kind: 'super_admin',
   path: `${ROUTE_PATHS.marketingContentAssets}/:assetId`,
 });
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.contentAiStudio), {
@@ -115,7 +115,7 @@ expectPolicy(findRoutePolicyEntry(`${ROUTE_PATHS.contentAiStudioEditing}/run-fix
   path: `${ROUTE_PATHS.contentAiStudioEditing}/:runId`,
 });
 expectPolicy(findRoutePolicyEntry(ROUTE_PATHS.contentLiveCenter), {
-  kind: 'authenticated',
+  kind: 'super_admin',
   path: ROUTE_PATHS.contentLiveCenter,
 });
 

@@ -12,7 +12,7 @@
 
 import { ReactNode, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin } from '@lobehub/ui';
 import { useAuth } from '@/hooks/use-auth';
 import { usePermission } from '@/hooks/use-permission';
 import { canAccessPath, resolveSafeEntryPath } from '@/lib/auth-navigation';
@@ -116,7 +116,7 @@ export function ProtectedRoute({
   if (isLoading || !hasHydrated || !hasSessionChecked) {
     return (
       <div className={styles.centerState}>
-        <Spin size="large" description="加载中..." />
+        <Spin size="large" tip="加载中..." />
       </div>
     );
   }
@@ -125,7 +125,7 @@ export function ProtectedRoute({
   if (!isAuthenticated) {
     return (
       <div className={styles.centerState}>
-        <Spin size="large" description="重定向到登录页..." />
+        <Spin size="large" tip="重定向到登录页..." />
       </div>
     );
   }
@@ -139,7 +139,7 @@ export function ProtectedRoute({
     if (pathname !== safeFallbackPath) {
       return (
         <div className={styles.centerState}>
-          <Spin size="large" description="权限不足，正在跳转到可访问页面..." />
+          <Spin size="large" tip="权限不足，正在跳转到可访问页面..." />
         </div>
       );
     }

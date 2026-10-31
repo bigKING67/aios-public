@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { completeContentAssetUpload, createContentAssetUpload } from '@/app/marketing/content-assets/_lib/content-assets-api';
 import { uploadFileToTos } from '@/app/marketing/content-assets/_lib/content-assets-upload';
+import { LobeProvider } from '@/components/lobe-provider';
 import { StudioUploadModal } from './studio-upload-modal';
 
 vi.mock('@/app/marketing/content-assets/_lib/content-assets-api', () => ({
@@ -20,7 +21,9 @@ function renderModal(products: string[]) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   render(
     <QueryClientProvider client={client}>
-      <StudioUploadModal open onClose={() => undefined} enterpriseTag="企业:百雀羚" products={products} />
+      <LobeProvider>
+        <StudioUploadModal open onClose={() => undefined} enterpriseTag="企业:百雀羚" products={products} />
+      </LobeProvider>
     </QueryClientProvider>,
   );
 }

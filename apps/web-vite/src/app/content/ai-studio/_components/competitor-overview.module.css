@@ -1,0 +1,164 @@
+/*
+ * 竞品爆款 · 爆款分析: AI 总结, then 框架结构排行 — one lane (框架 / 卖点) at a time, each structure on
+ * one row with the competitor share on the left and ours on the right. A structure's labels carry their
+ * timeline tone as a marker only.
+ */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.structure {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px var(--spacing-1);
+  align-items: center;
+}
+
+.step {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.stepDot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.joiner {
+  color: var(--lobe-color-text-quaternary);
+}
+
+.more {
+  align-self: flex-start;
+}
+
+.laneRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-4);
+  align-items: center;
+}
+
+.inlineLink {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.inlineLink:hover {
+  color: var(--lobe-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Name | 竞品 | 我方: the two sides share one bar grammar so a row compares at a glance. */
+.compareHead,
+.compareRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-6);
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+}
+
+.compareHead {
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.compareList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compareRow {
+  width: 100%;
+  min-height: 36px;
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--lobe-color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.compareStatic {
+  cursor: default;
+}
+
+.compareRow:not(.compareStatic):hover,
+.compareRow[aria-expanded='true'] {
+  background: var(--lobe-color-fill-tertiary);
+}
+
+.compareRow:focus-visible,
+.inlineLink:focus-visible {
+  outline: 2px solid var(--aios-ai-9);
+  outline-offset: 1px;
+}
+
+.compareName {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-2);
+  align-items: center;
+  min-width: 0;
+  line-height: var(--line-height-normal);
+}
+
+.compareSide {
+  display: grid;
+  grid-template-columns: minmax(40px, 1fr) 6.5rem;
+  gap: var(--spacing-3);
+  align-items: center;
+  min-width: 0;
+}
+
+/* The column heading names each side on desktop; a phone row names them inline. */
+.sideLabel {
+  display: none;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+/* A gap reads in amber text, never a box (DESIGN.md › 待补). */
+.gap {
+  color: var(--aios-status-warning-strong);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .compareHead {
+    display: none;
+  }
+
+  .compareRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-1);
+    padding-block: var(--spacing-2);
+  }
+
+  .compareSide {
+    grid-template-columns: 2.5em minmax(40px, 1fr) 6.5rem;
+  }
+
+  .sideLabel {
+    display: inline;
+  }
+}

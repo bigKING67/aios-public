@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   CreatorCooperationStatusBadge,
   type CreatorCooperationStatusRecord,
@@ -71,7 +71,7 @@ export function buildCreatorDetailBaseColumns<TRecord extends CreatorDetailBaseC
   normalizePlatform,
   resolveStageKey,
   formatDisplay,
-}: BuildCreatorDetailBaseColumnsParams): ColumnsType<TRecord> {
+}: BuildCreatorDetailBaseColumnsParams): TableColumnsType<TRecord> {
   return [
     {
       title: '合作状态',
@@ -173,7 +173,7 @@ export function buildCreatorDetailBaseColumns<TRecord extends CreatorDetailBaseC
 
 export function buildCreatorDetailColumns<
   TRecord extends CreatorDetailBaseColumnRecord & CreatorDetailMetricColumnRecord,
->({ base, metrics }: BuildCreatorDetailColumnsParams<TRecord>): ColumnsType<TRecord> {
+>({ base, metrics }: BuildCreatorDetailColumnsParams<TRecord>): TableColumnsType<TRecord> {
   return [...buildCreatorDetailBaseColumns<TRecord>(base), ...buildCreatorDetailMetricColumns<TRecord>(metrics)];
 }
 
@@ -186,7 +186,7 @@ export function buildCreatorDetailMetricColumns<TRecord extends CreatorDetailMet
   watchCount,
   userPayAmount,
   refundAmount,
-}: BuildCreatorDetailMetricColumnsParams<TRecord>): ColumnsType<TRecord> {
+}: BuildCreatorDetailMetricColumnsParams<TRecord>): TableColumnsType<TRecord> {
   return [
     {
       title: `${contentLabel}GMV`,

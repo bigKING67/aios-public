@@ -1,0 +1,48 @@
+/* Form rows of the content-asset modals (controlled state on lobe-ui controls). */
+
+.field {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.field :global(.lobe-select),
+.field :global(.lobe-input),
+.field :global(.lobe-input-number),
+.field :global(.lobe-text-area) {
+  width: 100%;
+}
+
+/* Grid items default to their content width; an <input> sized for 20 characters would push the
+ * control past a narrow column, so controls may shrink to the field. */
+.field > *,
+.field input {
+  min-width: 0;
+}
+
+.label {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.label[data-required='true']::before {
+  margin-right: 4px;
+  color: var(--aios-status-danger);
+  content: '*';
+}
+
+.extra {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.error {
+  color: var(--aios-status-danger);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}

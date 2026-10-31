@@ -9,6 +9,13 @@
       "notAllowed": "Page-local materials, one-off chart colors, or component-specific raw colors."
     },
     {
+      "path": "apps/web-vite/src/styles/aios-theme.css",
+      "owner": "visual-language-v2-token-source",
+      "reason": "AIOS visual language v2 layer on lobe-ui 6: AI violet scale and roles, AI sweep, media stage, status text, trend and chart v2 values for light and dark, plus the legacy-token bridge for .aios-lobe surfaces.",
+      "allowed": "DESIGN.md Visual Language v2 token values in light (html:root) and dark (html:root[data-theme='dark']) blocks.",
+      "notAllowed": "Page-local materials, lobe primitive overrides beyond fonts and focus ring, or component-specific raw colors."
+    },
+    {
       "path": "apps/web-vite/src/lib/design-tokens.ts",
       "owner": "static-token-mirror",
       "reason": "Generated/static TypeScript mirror of DESIGN_TOKENS.json for token consumers.",
@@ -44,11 +51,11 @@
       "notAllowed": "Page-local CSS colors or one-off component styling."
     },
     {
-      "path": "apps/web-vite/src/theme/ant-theme.ts",
-      "owner": "antd-theme-adapter",
-      "reason": "Ant Design theme adapter that maps design tokens into Ant token slots.",
-      "allowed": "Token-derived Ant Design mappings and explicitly isolated dark-theme adapter values.",
-      "notAllowed": "Page-specific Ant component styling or local color experiments."
+      "path": "apps/web-vite/src/lib/echarts-appearance.ts",
+      "owner": "echarts-dark-adapter",
+      "reason": "ECharts draws on canvas and cannot follow CSS variables, so dark mode swaps the light chart token colors for their dark values.",
+      "allowed": "Light-to-dark pairs of chart token colors: text, lines, soft surfaces, chart series, trends, and surface-only white, tooltip and shadow values.",
+      "notAllowed": "New chart colors or page-specific categories; add those to the token, platform or domain sources first."
     },
     {
       "path": "apps/web-vite/src/app/dashboard/creator/_components/creator-chart-colors.ts",

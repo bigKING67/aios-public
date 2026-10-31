@@ -4,9 +4,9 @@
   gap: 6px;
   padding: 12px 14px;
   border-radius: 14px;
-  border: 1px solid var(--status-danger-border);
-  background: var(--status-danger-bg);
-  color: var(--status-danger-strong);
+  border: 1px solid var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
+  color: var(--aios-status-danger-strong);
   box-shadow: var(--dashboard-danger-notice-shadow);
 }
 

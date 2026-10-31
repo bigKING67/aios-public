@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   resolveText,
   type IndustryMaterialTableRow,
@@ -13,7 +13,7 @@ import {
   VideoCell,
 } from './industry-material-table-cells';
 
-export const TABLE_COLUMNS: ColumnsType<IndustryMaterialTableRow> = [
+export const TABLE_COLUMNS: TableColumnsType<IndustryMaterialTableRow> = [
   {
     title: '排名',
     key: 'rank',

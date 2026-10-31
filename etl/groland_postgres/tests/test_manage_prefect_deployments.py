@@ -18,6 +18,7 @@ from manage_prefect_deployments import (  # noqa: E402
   _deployment_environment,
   active_entries,
   deploy_active,
+  enforce_inactive_schedules,
   fetch_filter_pages,
   fetch_live_deployments,
   load_manifest,
@@ -42,6 +43,7 @@ class FakePrefectClient:
         schedule_count = entry["schedule"][f"{mode}_count"]
         for _ in range(schedule_count):
           schedules.append({
+            "id": f"schedule-{len(self.deployments) + 1}-{len(schedules) + 1}",
             "active": entry["schedule"]["active"],
             "schedule": {
               "cron": entry["schedule"]["default"],
@@ -63,6 +65,7 @@ class FakePrefectClient:
         parameters = {}
         work_pool = manifest["defaults"]["work_pool"]
       self.deployments.append({
+        "id": f"deployment-{len(self.deployments) + 1}",
         "flow_id": flow_id,
         "name": entry["deployment_name"],
         "paused": paused,
@@ -72,9 +75,15 @@ class FakePrefectClient:
         "global_concurrency_limit": global_limit,
       })
     self.flows = [{"id": value, "name": key} for key, value in flow_ids.items()]
+    self.patches: list[tuple[str, dict | None]] = []
 
   def request(self, method: str, path: str, body: dict | None = None):
-    del method, body
+    if method == "PATCH":
+      self.patches.append((path, body))
+      _, _, deployment_id, _, schedule_id = path.split("/")
+      deployment = next(item for item in self.deployments if item["id"] == deployment_id)
+      next(item for item in deployment["schedules"] if item["id"] == schedule_id).update(body or {})
+      return None
     if path == "/flows/filter":
       return copy.deepcopy(self.flows)
     if path == "/deployments/filter":
@@ -114,15 +123,33 @@ class PrefectDeploymentManifestTest(unittest.TestCase):
     with self.assertRaisesRegex(ManifestError, "schedule active-state drift"):
       verify_live(self.manifest, client, mode="clean")
 
+  def test_enforce_pauses_live_schedules_the_manifest_marks_inactive(self) -> None:
+    client = FakePrefectClient(self.manifest, mode="clean")
+    sweep = next(e for e in client.deployments if e["name"] == "ads-21-marketing-industry-articles-cache-sweep")
+    sweep["schedules"][0]["active"] = True  # left running by a legacy adapter or a skipped dormant entry
+    content = next(e for e in client.deployments if e["name"] == "marketing-content-asset-processing-jobs")
+
+    paused = enforce_inactive_schedules(self.manifest, client, group=None)
+
+    self.assertEqual(paused, ["sync-marketing-industry-articles-flow/ads-21-marketing-industry-articles-cache-sweep"])
+    self.assertFalse(sweep["schedules"][0]["active"])
+    self.assertTrue(content["schedules"][0]["active"])
+    verify_live(self.manifest, client, mode="clean")
+
+  def test_enforce_is_a_no_op_when_live_matches_the_manifest(self) -> None:
+    client = FakePrefectClient(self.manifest, mode="clean")
+    self.assertEqual(enforce_inactive_schedules(self.manifest, client, group=None), [])
+    self.assertEqual(client.patches, [])
+
   def test_reviewed_inventory_and_scripts_are_complete(self) -> None:
     entries = active_entries(self.manifest)
 
-    self.assertEqual(len(entries), 30)
+    self.assertEqual(len(entries), 31)
     self.assertEqual(
       sum(entry["state"] == "retired" for entry in self.manifest["deployments"]),
       27,
     )
-    self.assertEqual(len({entry["deploy_script"] for entry in entries}), 28)
+    self.assertEqual(len({entry["deploy_script"] for entry in entries}), 29)
 
     compatibility_wrapper = (
       DEFAULT_MANIFEST.parent / "scripts" / "deploy_prefect_dataops_hub_all.sh"
@@ -397,8 +424,8 @@ class PrefectDeploymentManifestTest(unittest.TestCase):
       mode="clean",
     )
 
-    self.assertEqual(legacy, {"active_verified": 30, "retired_present": 27, "live_total": 57})
-    self.assertEqual(clean, {"active_verified": 30, "retired_present": 0, "live_total": 30})
+    self.assertEqual(legacy, {"active_verified": 31, "retired_present": 27, "live_total": 58})
+    self.assertEqual(clean, {"active_verified": 31, "retired_present": 0, "live_total": 31})
 
   def test_rejects_unknown_live_deployment(self) -> None:
     client = FakePrefectClient(self.manifest, mode="clean")

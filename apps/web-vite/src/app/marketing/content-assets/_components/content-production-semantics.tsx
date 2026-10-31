@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, Button, Checkbox, Empty, Input, Select, Tag } from 'antd';
+import { Alert, Button, Checkbox, Empty, Tag } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import { cancelProductionSemanticJob, enqueueProductionSemanticJob, fetchProductionSemanticJobs, searchProductionSemanticClips, type ProductionClip } from '../_lib/content-production-api';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { ProductionSearchField } from './content-production-search-field';
 import styles from './content-production.module.css';
+
+const MAX_SHOTS = 12;
 
 const active = ['queued', 'running', 'cancel_requested'];
 const labels: Record<string, string> = { queued: '排队中', running: '分析中', cancel_requested: '正在取消', cancelled: '已取消', completed: '已完成', failed: '分析失败' };
@@ -28,10 +33,10 @@ export function ContentProductionSemantics({ catalogId, clips, disabled, onAdd }
   return <section className={styles.workbench} aria-label="镜头语义分析">
     <div className={styles.heading}><h2>按画面找镜头</h2><Tag>基于代表帧</Tag></div>
     <p className={styles.helper}>从当前目录选择最多 12 个镜头进行分析。模型描述仅覆盖单张代表帧，完整动作、声音和效果仍需播放原片核对。</p>
-    <Select mode="multiple" maxCount={12} maxTagCount="responsive" aria-label="选择语义分析镜头" placeholder="选择需要分析的镜头（最多 12 个）" disabled={disabled || busy} value={selected} onChange={(ids) => { setSelected(ids); setConfirmed(false); }} options={clips.map((c, i) => ({ value: c.id, label: `候选 ${i + 1} · ${(c.startMs / 1000).toFixed(2)}–${(c.endMs / 1000).toFixed(2)} 秒` }))} />
-    <Checkbox checked={confirmed} disabled={disabled || busy || !selected.length} onChange={(e) => setConfirmed(e.target.checked)}>确认所选素材可用于本次分析；同意将代表帧发送给已配置的模型，调用可能产生费用。</Checkbox>
+    <LabeledSelect mode="multiple" label="选择语义分析镜头" placeholder="选择需要分析的镜头（最多 12 个）" disabled={disabled || busy} value={selected} onChange={(ids) => { setSelected(ids.slice(0, MAX_SHOTS)); setConfirmed(false); }} options={clips.map((c, i) => ({ value: c.id, disabled: selected.length >= MAX_SHOTS && !selected.includes(c.id), label: `候选 ${i + 1} · ${(c.startMs / 1000).toFixed(2)}–${(c.endMs / 1000).toFixed(2)} 秒` }))} />
+    <Checkbox checked={confirmed} disabled={disabled || busy || !selected.length} onChange={setConfirmed}>确认所选素材可用于本次分析；同意将代表帧发送给已配置的模型，调用可能产生费用。</Checkbox>
     <div className={styles.actions}>
-      <Button type="primary" loading={busy} disabled={disabled || busy || !confirmed || !selected.length} onClick={() => void perform(async () => { await enqueueProductionSemanticJob(catalogId, selected, confirmed); setConfirmed(false); })}>分析所选镜头</Button>
+      <AiActionButton loading={busy} disabled={disabled || busy || !confirmed || !selected.length} onClick={() => void perform(async () => { await enqueueProductionSemanticJob(catalogId, selected, confirmed); setConfirmed(false); })}>分析所选镜头</AiActionButton>
       <Button disabled={busy || jobs.isFetching} onClick={() => void jobs.refetch()}>刷新语义任务</Button>
     </div>
     {(error || jobs.isError) && <Alert type="error" showIcon title="语义任务暂不可用" description={error || jobs.error?.message} />}
@@ -40,9 +45,9 @@ export function ContentProductionSemantics({ catalogId, clips, disabled, onAdd }
       {job.errorMessage && <p>{job.errorMessage}</p>}
       {active.includes(job.status) && <Button disabled={disabled || busy || job.status === 'cancel_requested'} onClick={() => void perform(() => cancelProductionSemanticJob(job.jobId))}>取消语义分析</Button>}
     </article>)}</div>
-    <Input.Search aria-label="检索镜头画面" placeholder="搜索当前目录已分析镜头，例如：白色瓶子" maxLength={120} value={input} loading={hits.isFetching} onChange={(e) => { setInput(e.target.value); setTerm(''); setPlaying(''); }} onSearch={(q) => { setTerm(q.trim()); setPlaying(''); if (q.trim() && q.trim() === term) void hits.refetch(); }} />
+    <ProductionSearchField label="检索镜头画面" placeholder="搜索当前目录已分析镜头，例如：白色瓶子" maxLength={120} value={input} loading={hits.isFetching} onChange={(value) => { setInput(value); setTerm(''); setPlaying(''); }} onSearch={(q) => { setTerm(q.trim()); setPlaying(''); if (q.trim() && q.trim() === term) void hits.refetch(); }} />
     {hits.isError && <Alert type="error" showIcon title="镜头搜索失败" description={hits.error.message} />}
-    {term && !hits.isPending && !hits.isError && !hits.data?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="没有匹配的已分析镜头，可调整关键词或先分析更多镜头" />}
+    {term && !hits.isPending && !hits.isError && !hits.data?.length && <Empty description="没有匹配的已分析镜头，可调整关键词或先分析更多镜头" />}
     {playing && <video className={styles.video} controls autoPlay src={playing} aria-label="语义镜头播放" />}
     <div className={styles.results}>{term && !hits.isError && hits.data?.map((hit) => <article key={hit.shotId} className={styles.hit}>
       <strong>{(hit.startMs / 1000).toFixed(3)}–{(hit.endMs / 1000).toFixed(3)} 秒</strong>

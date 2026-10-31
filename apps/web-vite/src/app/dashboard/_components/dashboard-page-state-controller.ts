@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react';
-import { message } from 'antd';
+import { toast } from '@lobehub/ui';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useIsMobile } from '@/hooks/use-media-query';
@@ -48,7 +48,7 @@ export function useDashboardPageStateController({ initialFilters }: DashboardPag
   const pathname = useLocation().pathname;
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
-  const [messageApi, messageContextHolder] = message.useMessage();
+  const messageApi = toast;
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const hasSessionChecked = useAuthStore(selectHasSessionChecked);
   const user = useAuthStore((state) => state.user);
@@ -191,7 +191,6 @@ export function useDashboardPageStateController({ initialFilters }: DashboardPag
     },
     messageState: {
       messageApi,
-      messageContextHolder,
     },
     auth: {
       isAuthenticated,

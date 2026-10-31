@@ -6,7 +6,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 }
 
 function withFixedLeftLastClass(className: string | undefined) {
-  if (!className?.includes('ant-table-cell-fix-left-last')) {
+  if (!className?.includes('lobe-table-cell-fix-start-shadow')) {
     return className;
   }
 

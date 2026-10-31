@@ -51,6 +51,29 @@ pub(super) async fn bind_source(
     asset_id: uuid::Uuid,
     permission: SourcePermission,
 ) -> AppResult<BoundAsset> {
+    bind_source_inner(pool, bucket, user, asset_id, permission, false).await
+}
+
+/// Studio alone can bind a verified cloud original. Candidate admission remains
+/// gated separately until the real MediaKit trial has passed.
+pub(super) async fn bind_remix_source(
+    pool: &sqlx::PgPool,
+    bucket: &str,
+    user: &CurrentUser,
+    asset_id: uuid::Uuid,
+    permission: SourcePermission,
+) -> AppResult<BoundAsset> {
+    bind_source_inner(pool, bucket, user, asset_id, permission, true).await
+}
+
+async fn bind_source_inner(
+    pool: &sqlx::PgPool,
+    bucket: &str,
+    user: &CurrentUser,
+    asset_id: uuid::Uuid,
+    permission: SourcePermission,
+    allow_cloud: bool,
+) -> AppResult<BoundAsset> {
     let asset = match permission {
         SourcePermission::Enforce => {
             ensure_content_asset_edit_permission(pool, user, asset_id).await?
@@ -60,7 +83,15 @@ pub(super) async fn bind_source(
             .ok_or(AppError::NotFound)?,
     };
     check_rights(&asset)?;
-    if asset.external_only || asset.asset_status != "ready" || asset.bucket != bucket {
+    let cloud = asset.bucket == "cloud_video" || asset.source_type == "cloud_video";
+    if asset.external_only
+        || asset.asset_status != "ready"
+        || (cloud
+            && (!allow_cloud
+                || asset.bucket != "cloud_video"
+                || asset.source_type != "cloud_video"))
+        || (!cloud && asset.bucket != bucket)
+    {
         return Err(AppError::bad_request("素材必须是当前资产桶内已就绪的原片"));
     }
     let key = asset
@@ -75,6 +106,11 @@ pub(super) async fn bind_source(
         .duration_seconds
         .filter(|v| v.is_finite() && *v > 0.0 && *v <= 1800.0)
         .ok_or_else(|| AppError::bad_request("素材时长缺失或超过 30 分钟"))?;
+    if cloud {
+        super::remix_cloud_sources::validate(pool, asset_id, &key, &sha).await?;
+    } else if key.starts_with("cloud-video:") {
+        return Err(AppError::bad_request("云原片来源与存储标识不一致"));
+    }
     Ok(BoundAsset {
         asset_id,
         object_key: key,

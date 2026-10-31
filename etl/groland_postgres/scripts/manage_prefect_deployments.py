@@ -217,7 +217,8 @@ def validate_manifest(manifest: dict[str, Any], *, path: Path = DEFAULT_MANIFEST
       if value is not None and _parse_non_negative_int(value, f"{flow_name}/{deployment_name}.watchdog.{field}") == 0:
         raise ManifestError(f"{flow_name}/{deployment_name}.watchdog.{field} must be positive or null")
 
-  if active_count != 30 or retired_count != 27:
+  # P3 adds the reviewed, schedule-disabled daily-remix deployment.
+  if active_count != 31 or retired_count != 27:
     raise ManifestError(
       f"reviewed deployment inventory drifted: active={active_count}, retired={retired_count}"
     )
@@ -298,6 +299,39 @@ def deploy_active(manifest: dict[str, Any], *, group: str | None, dry_run: bool)
       env=environment,
       check=True,
     )
+
+
+def enforce_inactive_schedules(
+  manifest: dict[str, Any],
+  client: "PrefectApiClient",
+  *,
+  group: str | None,
+) -> list[str]:
+  """Make live schedules match manifest `schedule.active: false`.
+
+  Dormant entries are skipped by deploy_active and legacy CLI adapters re-create
+  active schedules, so neither path can turn an already-running schedule off.
+  The manifest owns active-state; this pauses what deploy left running.
+  """
+  observed = {
+    (item["flow_name"], item["name"]): item
+    for item in fetch_live_deployments(client)
+  }
+  paused = []
+  for entry in active_entries(manifest, group):
+    _, _, active = _expected_schedule(entry, manifest)
+    item = observed.get((entry["flow_name"], entry["deployment_name"]))
+    if active or item is None:
+      continue
+    for schedule in item.get("schedules") or []:
+      if schedule.get("active"):
+        client.request(
+          "PATCH",
+          f"/deployments/{item['id']}/schedules/{schedule['id']}",
+          {"active": False},
+        )
+        paused.append(f"{entry['flow_name']}/{entry['deployment_name']}")
+  return paused
 
 
 class PrefectApiClient:
@@ -492,6 +526,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
   deploy_parser.add_argument("target", choices=("active", "group"))
   deploy_parser.add_argument("group", nargs="?")
   deploy_parser.add_argument("--dry-run", action="store_true")
+  deploy_parser.add_argument(
+    "--api-url",
+    default=os.getenv("PREFECT_API_URL") or os.getenv("DATAOPS_PREFECT_API_URL"),
+  )
   verify_parser = subparsers.add_parser("verify-live")
   verify_parser.add_argument("--mode", choices=("legacy", "clean"), required=True)
   verify_parser.add_argument(
@@ -514,11 +552,13 @@ def main(argv: list[str] | None = None) -> int:
         raise ManifestError("deploy group requires a group name")
       if args.target == "active" and args.group:
         raise ManifestError("deploy active does not accept a group name")
-      deploy_active(
-        manifest,
-        group=args.group if args.target == "group" else None,
-        dry_run=args.dry_run,
-      )
+      group = args.group if args.target == "group" else None
+      deploy_active(manifest, group=group, dry_run=args.dry_run)
+      if not args.dry_run:
+        if not args.api_url:
+          raise ManifestError("deploy requires --api-url or PREFECT_API_URL to enforce inactive schedules")
+        for rendered in enforce_inactive_schedules(manifest, PrefectApiClient(args.api_url), group=group):
+          print(f"pause schedule: {rendered}")
     elif args.command == "verify-live":
       if not args.api_url:
         raise ManifestError("verify-live requires --api-url or PREFECT_API_URL")

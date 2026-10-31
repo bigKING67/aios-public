@@ -7,8 +7,8 @@
 .periodBadge {
   padding: var(--spacing-3);
   border-radius: var(--border-radius-base);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -19,7 +19,7 @@
 
 .sectionTitle {
   margin: 0 0 var(--spacing-4);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -33,14 +33,14 @@
 
 .divider {
   height: 1px;
-  background: var(--divider-color);
+  background: var(--lobe-color-border-secondary);
 }
 
 .panel {
   padding: var(--spacing-6);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-base);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .summaryStack {
@@ -51,7 +51,7 @@
 
 .summaryParagraph {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
 }
@@ -63,11 +63,11 @@
 }
 
 .highlightTitle {
-  color: var(--status-success-strong);
+  color: var(--aios-status-success-strong);
 }
 
 .riskTitle {
-  color: var(--status-danger-strong);
+  color: var(--aios-status-danger-strong);
 }
 
 .summaryList {
@@ -79,7 +79,7 @@
 }
 
 .summaryListItem {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
 }

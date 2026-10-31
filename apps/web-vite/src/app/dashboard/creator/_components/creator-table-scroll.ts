@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 
 interface ScrollColumnNode {
   width?: unknown;
@@ -37,7 +37,7 @@ function walkColumnWidths(columns: ScrollColumnNode[], fallbackColumnWidth: numb
 }
 
 export function resolveTableScrollX<T>(
-  columns: ColumnsType<T>,
+  columns: TableColumnsType<T>,
   fallbackColumnWidth = 140,
   minScrollX = 960,
   gutter = 48
@@ -47,7 +47,7 @@ export function resolveTableScrollX<T>(
 }
 
 export function useResolvedTableScrollX<T>(
-  columns: ColumnsType<T>,
+  columns: TableColumnsType<T>,
   fallbackColumnWidth = 140,
   minScrollX = 960,
   gutter = 48

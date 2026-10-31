@@ -23,7 +23,7 @@
 
 .summaryValue {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-lg);
   font-weight: 560;

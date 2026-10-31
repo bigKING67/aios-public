@@ -16,7 +16,7 @@
   justify-content: space-between;
   gap: var(--spacing-3);
   padding-bottom: var(--spacing-3);
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .sectionHeader > div {
@@ -26,7 +26,7 @@
 .sectionHeader h3 {
   min-width: 0;
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -34,7 +34,7 @@
 
 .sectionHeader > span {
   flex: 0 0 auto;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
@@ -52,7 +52,7 @@
 }
 
 .evidenceRow + .evidenceRow {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .evidenceOverview {
@@ -77,7 +77,7 @@
 }
 
 .scoreBadge strong {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-data-md);
   font-weight: var(--font-weight-data);
@@ -87,7 +87,7 @@
 
 .scoreBadge span {
   margin-top: var(--spacing-1);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-none);
 }
@@ -105,7 +105,7 @@
 
 .titleLine > span {
   flex: 0 0 auto;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-data);
@@ -118,7 +118,7 @@
   align-items: center;
   gap: var(--spacing-1);
   overflow: hidden;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -130,14 +130,14 @@
 }
 
 .titleLine a:hover {
-  color: var(--brand-active);
+  color: var(--aios-ai-12);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .titleLine a:focus-visible {
   border-radius: var(--border-radius-sm);
-  outline: 2px solid var(--brand-active);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
@@ -162,7 +162,7 @@
 .diagnosisHeadline {
   display: block;
   margin-top: var(--spacing-1);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -198,18 +198,18 @@
   max-width: 100%;
   align-items: center;
   padding: 0 var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  background: var(--bg-card);
-  color: var(--text-secondary);
+  background: var(--lobe-color-bg-container);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
 
 .statusTags span:first-child {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -225,7 +225,7 @@
 .evidenceMetrics > div {
   min-width: 0;
   padding: 0 var(--spacing-2);
-  border-left: 1px solid var(--divider-color);
+  border-left: 1px solid var(--lobe-color-border-secondary);
 }
 
 .evidenceMetrics > div:first-child {
@@ -234,7 +234,7 @@
 }
 
 .evidenceMetrics dt {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
@@ -242,7 +242,7 @@
 
 .evidenceMetrics dd {
   margin: var(--spacing-1) 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-data);
@@ -253,7 +253,7 @@
 .evidenceSummary,
 .diagnosisText,
 .actionRow p {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -267,7 +267,7 @@
 .diagnosisDetails {
   min-width: 0;
   margin-top: var(--spacing-2);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .diagnosisDetails > summary {
@@ -276,7 +276,7 @@
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-3) 0 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   cursor: pointer;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -315,7 +315,7 @@
 
 .diagnosisDetails > summary:focus-visible {
   border-radius: var(--border-radius-sm);
-  outline: 2px solid var(--brand-active);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
@@ -325,7 +325,7 @@
 }
 
 .diagnosisScoreMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -333,7 +333,7 @@
 
 .diagnosisScoreMeta span + span {
   padding-left: var(--spacing-2);
-  border-left: 1px solid var(--divider-color);
+  border-left: 1px solid var(--lobe-color-border-secondary);
 }
 
 .fullMetricGroup {
@@ -344,7 +344,7 @@
 .fullMetricGroup > span,
 .signalColumns > div > span {
   display: block;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -383,13 +383,13 @@
   gap: var(--spacing-2);
   margin-top: var(--spacing-3);
   padding: var(--spacing-2) 0 var(--spacing-2) var(--spacing-3);
-  border-left: 2px solid var(--brand-border);
-  background: color-mix(in srgb, var(--brand-secondary) 34%, transparent);
+  border-left: 2px solid var(--lobe-color-border);
+  background: color-mix(in srgb, var(--lobe-color-fill-tertiary) 34%, transparent);
 }
 
 .nextStep strong {
   flex: 0 0 auto;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-relaxed);
@@ -397,15 +397,15 @@
 
 .nextStep span {
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
 }
 
 .actionDisclosure {
   min-width: 0;
-  border-top: 1px solid var(--divider-color);
-  border-bottom: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .actionDisclosure > summary {
@@ -415,7 +415,7 @@
   justify-content: space-between;
   gap: var(--spacing-3);
   padding: var(--spacing-3) 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   cursor: pointer;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -439,7 +439,7 @@
 
 .actionDisclosure > summary:focus-visible {
   border-radius: var(--border-radius-sm);
-  outline: 2px solid var(--brand-active);
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
@@ -450,7 +450,7 @@
 .actionDisclosure > summary em {
   flex: 1 1 auto;
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-style: normal;
   font-weight: var(--font-weight-regular);
@@ -473,12 +473,12 @@
 }
 
 .actionRow:nth-child(n + 3) {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .actionRow > span {
   display: block;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -488,7 +488,7 @@
 .actionRow strong {
   display: block;
   margin-top: var(--spacing-1);
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -502,14 +502,14 @@
 .gapBox {
   margin-top: 0;
   padding: var(--spacing-3);
-  border: 1px solid var(--status-warning-border);
+  border: 1px solid var(--lobe-color-warning-border);
   border-radius: var(--border-radius-lg);
-  background: var(--status-warning-bg);
+  background: var(--lobe-color-warning-bg);
 }
 
 .gapBox strong {
   display: block;
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
 }
@@ -517,14 +517,14 @@
 .gapBox ul {
   margin: var(--spacing-2) 0 0;
   padding-left: var(--spacing-4);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
 }
 
 .emptyText {
   margin: var(--spacing-4) 0 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
@@ -593,7 +593,7 @@
   }
 
   .actionRow:nth-child(n + 2) {
-    border-top: 1px solid var(--divider-color);
+    border-top: 1px solid var(--lobe-color-border-secondary);
   }
 
   .nextStep {

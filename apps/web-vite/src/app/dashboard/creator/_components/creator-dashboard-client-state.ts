@@ -1,6 +1,6 @@
 'use client';
 
-import { message } from 'antd';
+import { toast } from '@lobehub/ui';
 import { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-media-query';
 import { selectIsAuthenticated, useAuthStore } from '@/stores/auth.store';
@@ -34,7 +34,7 @@ export function useCreatorDashboardClientState<TOverview, TDetails>({
   errorFallbackMessage,
 }: CreatorDashboardClientDataConfig) {
   const isMobile = useIsMobile();
-  const [messageApi, messageContextHolder] = message.useMessage();
+  const messageApi = toast;
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const [availableDateBounds, setAvailableDateBounds] = useState(EMPTY_CREATOR_DATE_BOUNDS);
   const dateControls = useCreatorDashboardDateControls(availableDateBounds);
@@ -69,7 +69,6 @@ export function useCreatorDashboardClientState<TOverview, TDetails>({
   return {
     isMobile,
     messageApi,
-    messageContextHolder,
     isAuthenticated,
     dateControls,
     detailFilters,

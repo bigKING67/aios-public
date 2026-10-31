@@ -1,5 +1,5 @@
 /**
- * ECharts v6 AIOS 品牌蓝主题配置
+ * ECharts v6 AIOS 主题配置（视觉语言 v2 色板）
  * 与 AIOS DESIGN.md 图表契约对齐
  *
  * 特性：

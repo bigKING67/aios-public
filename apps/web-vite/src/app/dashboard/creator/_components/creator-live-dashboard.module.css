@@ -3,11 +3,11 @@
   --creator-material-interactive-shadow-color: rgba(15, 23, 42, 0.56);
   --creator-material-chart-empty-bg: rgba(248, 250, 252, 0.84);
   --creator-material-tooltip-bg-start: rgba(255, 255, 255, 0.98);
-  --creator-material-tooltip-bg-end: rgba(247, 250, 255, 0.98);
+  --creator-material-tooltip-bg-end: rgba(248, 248, 248, 0.98);
   --creator-material-tooltip-shadow: rgba(15, 23, 42, 0.48);
-  --creator-material-tooltip-brand-shadow: rgba(47, 110, 234, 0.3);
-  --creator-material-tooltip-metric-bg-start: #f8fbff;
-  --creator-material-tooltip-metric-bg-end: #f1f7ff;
+  --creator-material-tooltip-brand-shadow: rgba(110, 86, 207, 0.3);
+  --creator-material-tooltip-metric-bg-start: #F8F8F8;
+  --creator-material-tooltip-metric-bg-end: #F8F8F8;
   --creator-material-tooltip-section-bg: rgba(255, 255, 255, 0.88);
 }
 
@@ -20,9 +20,9 @@
 
 .errorBanner {
   border-radius: 14px;
-  border: 1px solid var(--status-danger-border);
-  background: var(--status-danger-bg);
-  color: var(--status-danger-strong);
+  border: 1px solid var(--lobe-color-error-border);
+  background: var(--lobe-color-error-bg);
+  color: var(--aios-status-danger-strong);
   padding: 10px 12px;
   font-size: var(--font-size-base);
   font-weight: 560;
@@ -64,7 +64,7 @@
 .chartEmptyState {
   min-height: 100%;
   border-radius: 16px;
-  border: 1px dashed var(--border-color-hover);
+  border: 1px dashed var(--aios-border-hover);
   background: var(--creator-material-chart-empty-bg);
   display: grid;
   place-items: center;
@@ -73,8 +73,8 @@
 .chartSkeleton {
   min-height: 100%;
   border-radius: 16px;
-  border: 1px solid var(--border-color);
-  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-subtle) 100%);
+  border: 1px solid var(--lobe-color-border);
+  background: linear-gradient(180deg, var(--lobe-color-bg-container) 0%, var(--lobe-color-fill-tertiary) 100%);
   padding: 14px 16px;
 }
 
@@ -83,7 +83,7 @@
   min-width: min(340px, calc(100vw - 28px));
   max-width: calc(100vw - 28px);
   border-radius: 16px;
-  border: 1px solid var(--border-color-hover);
+  border: 1px solid var(--aios-border-hover);
   background: linear-gradient(
     162deg,
     var(--creator-material-tooltip-bg-start) 0%,
@@ -96,7 +96,7 @@
 }
 
 .trendTooltipDate {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 660;
   line-height: var(--line-height-snug);
@@ -112,7 +112,7 @@
 
 .trendTooltipMetricItem {
   border-radius: 11px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: linear-gradient(
     160deg,
     var(--creator-material-tooltip-metric-bg-start) 0%,
@@ -124,7 +124,7 @@
 }
 
 .trendTooltipMetricItem span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 560;
   line-height: var(--line-height-tight);
@@ -132,7 +132,7 @@
 }
 
 .trendTooltipMetricItem strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 700;
   line-height: var(--line-height-tight);
@@ -141,14 +141,14 @@
 .trendTooltipSection {
   margin-top: 9px;
   border-radius: 11px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--creator-material-tooltip-section-bg);
   padding: 8px 10px 9px;
 }
 
 .trendTooltipSectionTitle {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 640;
   line-height: var(--line-height-tight);
@@ -167,7 +167,7 @@
 .trendTooltipContributorRow {
   display: grid;
   gap: 2px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: 560;
   line-height: var(--line-height-normal);
@@ -177,24 +177,24 @@
 }
 
 .trendTooltipContributorName {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: 640;
 }
 
 .trendTooltipContributorMetrics {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
 }
 
 .trendTooltipMore {
   margin-top: 6px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
 }
 
 .trendTooltipEmpty {
   margin-top: 9px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
@@ -202,8 +202,8 @@
 .trendTooltipFooter {
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px dashed var(--border-color-hover);
-  color: var(--text-secondary);
+  border-top: 1px dashed var(--aios-border-hover);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
   font-weight: 560;
@@ -248,7 +248,7 @@
 
 .detailMeta h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 680;
   line-height: var(--line-height-normal);
@@ -259,7 +259,7 @@
   margin: 4px 0 0;
   max-width: 100%;
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   text-overflow: ellipsis;
@@ -275,12 +275,12 @@
   height: auto;
   font-size: var(--font-size-sm);
   font-weight: 560;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
 }
 
 .levelSelectionClear:hover,
 .levelSelectionClear:focus-visible {
-  color: var(--brand-dark);
+  color: var(--lobe-color-primary-hover);
 }
 
 .detailFilters {
@@ -316,7 +316,7 @@
   grid-template-columns: repeat(4, minmax(132px, 156px));
 }
 
-.detailFilterControls :global(.ant-select) {
+.detailFilterControls :global(.lobe-select) {
   width: 100%;
 }
 
@@ -329,7 +329,7 @@
 
 .detailFilterCount {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   font-variant-numeric: tabular-nums;
@@ -355,13 +355,13 @@
   min-width: max-content;
 }
 
-.detailHeadInlineActions .detailActions :global(.ant-btn) {
+.detailHeadInlineActions .detailActions :global(.lobe-button) {
   white-space: nowrap;
 }
 
 .detailHeaderCell {
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--component-table-detail-header-font-size);
   font-weight: var(--component-table-detail-header-font-weight);
   line-height: var(--component-table-detail-header-line-height);
@@ -373,11 +373,11 @@
   font-size: var(--component-table-detail-body-font-size);
   font-weight: var(--component-table-detail-body-font-weight);
   line-height: var(--component-table-detail-body-line-height);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   vertical-align: middle;
 }
 
-.detailTable :global(thead .ant-table-cell) {
+.detailTable :global(thead .lobe-table-cell) {
   text-align: center !important;
 }
 
@@ -386,13 +386,13 @@
   max-width: 100%;
 }
 
-.detailTable :global(.ant-table),
-.detailTable :global(.ant-table-container) {
+.detailTable :global(.lobe-table),
+.detailTable :global(.lobe-table-container) {
   max-width: 100%;
 }
 
-.detailTable :global(.ant-table-content),
-.detailTable :global(.ant-table-body) {
+.detailTable :global(.lobe-table-content),
+.detailTable :global(.lobe-table-body) {
   max-width: 100%;
 }
 
@@ -402,7 +402,7 @@
 
 .detailPaginationNote {
   margin: 12px 16px 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 400;
   line-height: var(--line-height-normal);
@@ -423,12 +423,9 @@
   }
 }
 
-.detailTable :global(tbody .ant-table-cell:not(.ant-table-cell-align-right)) {
+/* Columns with an explicit `align` keep it: lobe writes the alignment as an inline style. */
+.detailTable :global(tbody .lobe-table-cell) {
   text-align: center;
-}
-
-.detailTable :global(tbody .ant-table-cell.ant-table-cell-align-right) {
-  text-align: right;
 }
 
 .detailFixedLeftLastCell::after,
@@ -436,11 +433,11 @@
   display: none;
 }
 
-.levelDetailTable :global(.ant-table-container) {
+.levelDetailTable :global(.lobe-table-container) {
   border-radius: 14px;
 }
 
-.levelDetailTable :global(.ant-table-body) {
+.levelDetailTable :global(.lobe-table-body) {
   scrollbar-gutter: stable both-edges;
 }
 
@@ -471,7 +468,7 @@
 
 .exportHint {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
@@ -580,4 +577,18 @@
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+/* Dark appearance: material colors re-derived for the dark surface (lobe gray dark, AI violet dark). */
+:root[data-theme='dark'] :global(:root) {
+  --creator-material-surface-shadow-color: rgba(0, 0, 0, 0.42);
+  --creator-material-interactive-shadow-color: rgba(0, 0, 0, 0.56);
+  --creator-material-chart-empty-bg: rgba(30, 29, 33, 0.84);
+  --creator-material-tooltip-bg-start: rgba(13, 13, 13, 0.98);
+  --creator-material-tooltip-bg-end: rgba(30, 29, 33, 0.98);
+  --creator-material-tooltip-shadow: rgba(0, 0, 0, 0.48);
+  --creator-material-tooltip-brand-shadow: rgba(0, 0, 0, 0.3);
+  --creator-material-tooltip-metric-bg-start: #1E1D21;
+  --creator-material-tooltip-metric-bg-end: #1E1D21;
+  --creator-material-tooltip-section-bg: rgba(13, 13, 13, 0.88);
 }

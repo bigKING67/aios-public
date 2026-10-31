@@ -1,5 +1,6 @@
 import type { DataOpsNotificationEvent, DataOpsStatus } from '@/config/dataops-hub';
 import type { DataOpsNotificationTraceSloRiskLevel } from '@/types/dataops';
+import type { DataOpsTagTone } from './dataops-hub-constants';
 import { normalizeToken } from './dataops-hub-text-utils';
 import type {
   NotificationStatusFilter,
@@ -68,23 +69,20 @@ export function getNotificationEventTypeLabel(eventType: string): string {
   return NOTIFICATION_EVENT_TYPE_LABEL[eventType] || eventType;
 }
 
-export function getNotificationEventTypeTagColor(eventType: string): string {
-  if (eventType === 'channel_webhook_manual') {
-    return 'processing';
-  }
-  if (eventType === 'channel_webhook_test') {
-    return 'blue';
+export function getNotificationEventTypeTagTone(eventType: string): DataOpsTagTone {
+  if (eventType === 'channel_webhook_manual' || eventType === 'channel_webhook_test') {
+    return 'info';
   }
   if (eventType === 'pipeline_failed') {
-    return 'red';
+    return 'danger';
   }
   if (eventType === 'pipeline_succeeded') {
-    return 'green';
+    return 'success';
   }
   if (eventType === 'snapshot_mismatch') {
-    return 'gold';
+    return 'warning';
   }
-  return 'default';
+  return 'neutral';
 }
 
 export function getNotificationStatusLabel(
@@ -146,19 +144,19 @@ export function getNotificationTraceSloRiskLevelLabel(
   return '正常';
 }
 
-export function getNotificationTraceSloRiskLevelColor(
+export function getNotificationTraceSloRiskLevelTone(
   level: DataOpsNotificationTraceSloRiskLevel
-): string {
+): DataOpsTagTone {
   if (level === 'critical') {
-    return 'red';
+    return 'danger';
   }
   if (level === 'warning') {
-    return 'gold';
+    return 'warning';
   }
   if (level === 'watch') {
-    return 'processing';
+    return 'info';
   }
-  return 'green';
+  return 'success';
 }
 
 function getNotificationChannelProfile(channelId: string): NotificationChannelProfile {

@@ -2,44 +2,44 @@
   height: 100%;
 }
 
-.goodsDataTable :global(.ant-table) {
+.goodsDataTable :global(.lobe-table) {
   background: transparent;
   font-size: var(--font-size-sm);
 }
 
-.goodsDataTable :global(.ant-table-container) {
+.goodsDataTable :global(.lobe-table-container) {
   border-inline: none !important;
   border-top: none !important;
 }
 
-.goodsDataTable :global(.ant-table-header),
-.goodsDataTable :global(.ant-table-body) {
+.goodsDataTable :global(.lobe-table-header),
+.goodsDataTable :global(.lobe-table-body) {
   scrollbar-gutter: stable both-edges;
 }
 
-.goodsDataTable :global(.ant-table-body::-webkit-scrollbar) {
+.goodsDataTable :global(.lobe-table-body::-webkit-scrollbar) {
   width: 10px;
   height: 10px;
 }
 
-.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-track) {
-  background: var(--border-color);
+.goodsDataTable :global(.lobe-table-body::-webkit-scrollbar-track) {
+  background: var(--lobe-color-border);
   border-radius: 999px;
 }
 
-.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-thumb) {
-  background: var(--text-tertiary);
+.goodsDataTable :global(.lobe-table-body::-webkit-scrollbar-thumb) {
+  background: var(--lobe-color-text-tertiary);
   border-radius: 999px;
 }
 
-.goodsDataTable :global(.ant-table-body::-webkit-scrollbar-thumb:hover) {
-  background: var(--text-secondary);
+.goodsDataTable :global(.lobe-table-body::-webkit-scrollbar-thumb:hover) {
+  background: var(--lobe-color-text-secondary);
 }
 
 .weeklyTableHeaderCell {
-  background: var(--bg-hover) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  color: var(--text-secondary) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  color: var(--lobe-color-text-secondary) !important;
   font-weight: 620 !important;
   text-align: left;
   padding: 13px 14px !important;
@@ -52,9 +52,9 @@
 }
 
 .weeklyTableBodyCell {
-  background: var(--bg-card) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  color: var(--text-primary);
+  background: var(--lobe-color-bg-container) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  color: var(--lobe-color-text);
   padding: 20px 14px !important;
   line-height: var(--line-height-relaxed);
   vertical-align: middle;
@@ -65,24 +65,24 @@
 }
 
 .weeklyTableBodyRow:hover > .weeklyTableBodyCell {
-  background: var(--bg-hover) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
 }
 
 .weeklyTableBodyRow:hover > .weeklyTableBodyFixedLeftCell,
 .weeklyTableBodyRow:hover > .weeklyTableBodyFixedLeftLastCell {
-  background: var(--brand-secondary) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
 }
 
 .weeklyTableHeaderFixedLeftCell,
 .weeklyTableHeaderFixedLeftLastCell {
   z-index: 40 !important;
-  background: var(--bg-hover) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
 }
 
 .weeklyTableBodyFixedLeftCell,
 .weeklyTableBodyFixedLeftLastCell {
   z-index: 30 !important;
-  background: var(--bg-card) !important;
+  background: var(--lobe-color-bg-container) !important;
 }
 
 .weeklyTableHeaderFixedLeftLastCell::before,
@@ -93,11 +93,11 @@
   box-shadow: none !important;
 }
 
-.goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row) {
+.goodsDataTable :global(.lobe-table-tbody > tr.lobe-table-measure-row) {
   height: 0 !important;
 }
 
-.goodsDataTable :global(.ant-table-tbody > tr.ant-table-measure-row > td) {
+.goodsDataTable :global(.lobe-table-tbody > tr.lobe-table-measure-row > td) {
   padding: 0 !important;
   border: 0 !important;
   height: 0 !important;
@@ -121,7 +121,7 @@
 
 .goodsIdCell {
   font-family: var(--font-family-mono);
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: clip !important;
@@ -154,7 +154,7 @@
 
 .goodsMetricValue {
   font-weight: 620;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-snug);
 }
@@ -165,7 +165,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
 }
@@ -196,13 +196,13 @@
 }
 
 @media (max-width: 860px) {
-  .goodsDataTable :global(.ant-table-body) {
+  .goodsDataTable :global(.lobe-table-body) {
     max-height: 280px !important;
   }
 }
 
 @media (max-width: 560px) {
-  .goodsDataTable :global(.ant-table) {
+  .goodsDataTable :global(.lobe-table) {
     font-size: var(--font-size-xs);
   }
 }

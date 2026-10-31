@@ -1,5 +1,5 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { NOTE_TEXT_MAX_LENGTH } from './dashboard-config';
 import type { NoteMetricKey, QueryPlatform } from './dashboard-config';
@@ -17,7 +17,7 @@ import {
 type DashboardNoteMutationHandlersArgs = {
   activeQueryPlatform: QueryPlatform;
   canWriteDailyNote: boolean;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   noteDraftDate: string;
   selectedNoteDate: string | null;
   noteMetricKey: NoteMetricKey;

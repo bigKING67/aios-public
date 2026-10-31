@@ -1,6 +1,6 @@
 'use client';
 
-import { Empty, Table } from 'antd';
+import { Empty, Table } from '@lobehub/ui';
 import type { DataOpsRuntimePipeline } from '@/types/dataops';
 import { DataOpsBatchOperationToolbar } from './dataops-batch-operation-toolbar';
 import type { DataOpsOrchestrationDetailProps } from './dataops-orchestration-detail-types';

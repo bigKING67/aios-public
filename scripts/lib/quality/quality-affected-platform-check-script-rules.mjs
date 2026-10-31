@@ -56,6 +56,12 @@ const DASHBOARD_BEHAVIOR_GATES_BY_FILE = Object.freeze({
   'scripts/checks/dashboard/date-range-bounds.behavior.mjs': [
     'verify:dashboard:date-range-bounds-behavior',
   ],
+  'scripts/checks/dashboard/qianchuan-scoped-layout.behavior.mjs': [
+    'verify:dashboard:qianchuan-scoped-layout',
+  ],
+  'scripts/checks/dashboard/industry-material-inspiration-contract.mjs': [
+    'verify:dashboard:industry-material-inspiration-contract',
+  ],
   'scripts/checks/dashboard/creator-short-video.behavior.mjs': [
     'verify:dashboard:creator-short-video-behavior',
   ],

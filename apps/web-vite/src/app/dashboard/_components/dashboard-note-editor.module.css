@@ -10,13 +10,13 @@
   margin-top: -2px;
   margin-bottom: 2px;
   padding-right: 4px;
-  color: var(--text-disabled);
+  color: var(--lobe-color-text-disabled);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-none);
 }
 
 .editor {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--lobe-color-border);
   padding-top: 10px;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
 
 .editor h4 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }

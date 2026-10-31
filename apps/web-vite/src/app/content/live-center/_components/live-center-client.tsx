@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { App, Button } from 'antd';
-import { HomeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, toast } from '@lobehub/ui';
+import { House, RotateCw } from 'lucide-react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/organisms/layout';
@@ -58,7 +58,6 @@ import type { LiveCenterPlaybackState } from './live-center-shared';
 configureLiveCenterDayjsLocale();
 
 export function LiveCenterClient() {
-  const { message } = App.useApp();
   const queryClient = useQueryClient();
   const initialDateState = useMemo(() => getInitialLiveCenterDateState(), []);
   const [keywordInput, setKeywordInput] = useState('');
@@ -196,9 +195,9 @@ export function LiveCenterClient() {
     uploadRunning,
   } = useLiveCenterRecordingUploadQueue({
     invalidateSessionData,
-    notifyError: message.error,
-    notifySuccess: message.success,
-    notifyWarning: message.warning,
+    notifyError: toast.error,
+    notifySuccess: toast.success,
+    notifyWarning: toast.warning,
   });
 
   useEffect(() => {
@@ -222,7 +221,7 @@ export function LiveCenterClient() {
     mutationFn: (segment: LiveCenterRecordingSegment & { recordingId: string }) =>
       createLiveCenterPlaybackUrl(segment.recordingId, segment.segmentId),
     onError: (error) => {
-      message.error(resolveClientErrorMessage(error, '播放地址获取失败，请稍后重试。'));
+      toast.error(resolveClientErrorMessage(error, '播放地址获取失败，请稍后重试。'));
       setPlayback(null);
     },
     onSuccess: (response, segment) => {
@@ -241,13 +240,13 @@ export function LiveCenterClient() {
     mutationFn: (segment: LiveCenterRecordingSegment & { recordingId: string; sessionId: string }) =>
       cleanupLiveCenterRecordingSegment(segment.recordingId, segment.segmentId),
     onError: (error) => {
-      message.error(resolveClientErrorMessage(error, '录屏分段清理失败，请稍后重试。'));
+      toast.error(resolveClientErrorMessage(error, '录屏分段清理失败，请稍后重试。'));
     },
     onSuccess: async (_response, segment) => {
       if (playback?.segmentId === segment.segmentId) {
         setPlayback(null);
       }
-      message.success('已清理未完成的录屏分段');
+      toast.success('已清理未完成的录屏分段');
       await invalidateSessionData(segment.sessionId);
     },
   });
@@ -256,10 +255,10 @@ export function LiveCenterClient() {
     mutationFn: (sessionId: string) =>
       createLiveCenterAnalysisJob(sessionId, analysisModel.trim() ? { model: analysisModel.trim() } : {}),
     onError: (error) => {
-      message.error(resolveClientErrorMessage(error, 'AI 分析任务创建失败，请稍后重试。'));
+      toast.error(resolveClientErrorMessage(error, 'AI 分析任务创建失败，请稍后重试。'));
     },
     onSuccess: async (_response, sessionId) => {
-      message.success('AI 分析任务已创建');
+      toast.success('AI 分析任务已创建');
       await invalidateSessionData(sessionId);
     },
   });
@@ -325,11 +324,11 @@ export function LiveCenterClient() {
 
   const handleUploadFiles = (files: File[]) => {
     if (!selectedSessionId) {
-      message.warning('请先选择一场直播。');
+      toast.warning('请先选择一场直播。');
       return;
     }
     if (files.length === 0) {
-      message.warning('请选择至少 1 个录屏文件。');
+      toast.warning('请选择至少 1 个录屏文件。');
       return;
     }
     const segmentIndexes = resolveUploadSegmentIndexes(
@@ -343,14 +342,14 @@ export function LiveCenterClient() {
       sessionId: selectedSessionId,
     });
     if (!started) {
-      message.warning('当前录屏队列仍在上传，请完成后再添加下一批。');
+      toast.warning('当前录屏队列仍在上传，请完成后再添加下一批。');
     }
   };
 
   const handlePlaySegment = (segment: LiveCenterRecordingSegment) => {
     const recordingId = detailQuery.data?.recording?.recordingId;
     if (!recordingId) {
-      message.warning('当前场次还没有可播放的录屏集合。');
+      toast.warning('当前场次还没有可播放的录屏集合。');
       return;
     }
     setPlayback(null);
@@ -362,16 +361,16 @@ export function LiveCenterClient() {
 
   const handleCleanupSegment = (segment: LiveCenterRecordingSegment) => {
     if (cleanupSegmentMutation.isPending) {
-      message.info('正在清理上一段录屏，请完成后再操作。');
+      toast.info('正在清理上一段录屏，请完成后再操作。');
       return;
     }
     const recordingId = detailQuery.data?.recording?.recordingId;
     if (!recordingId || !selectedSessionId) {
-      message.warning('当前场次还没有可清理的录屏集合。');
+      toast.warning('当前场次还没有可清理的录屏集合。');
       return;
     }
     if (segment.uploadStatus?.trim().toLowerCase() === 'uploaded') {
-      message.warning('已上传完成的录屏暂不支持直接清理。');
+      toast.warning('已上传完成的录屏暂不支持直接清理。');
       return;
     }
     cleanupSegmentMutation.mutate({
@@ -383,18 +382,18 @@ export function LiveCenterClient() {
 
   const handleCreateAnalysis = () => {
     if (!selectedSessionId) {
-      message.warning('请先选择一场直播。');
+      toast.warning('请先选择一场直播。');
       return;
     }
     if (
       hasActiveAnalysis(detailQuery.data?.analyses ?? []) ||
       isActiveAnalysisStatus(selectedSession?.analysisStatus)
     ) {
-      message.info('当前场次已有分析任务运行中，完成或失败后可再次触发。');
+      toast.info('当前场次已有分析任务运行中，完成或失败后可再次触发。');
       return;
     }
     if (detailQuery.data?.recording && !hasUploadedRecordingSegment(detailQuery.data.recording.segments)) {
-      message.warning('请先完成至少 1 段录屏上传，或清理残留后重新上传。');
+      toast.warning('请先完成至少 1 段录屏上传，或清理残留后重新上传。');
       return;
     }
     analysisMutation.mutate(selectedSessionId);
@@ -417,7 +416,7 @@ export function LiveCenterClient() {
                     title="返回首页"
                     to={ROUTE_PATHS.home}
                   >
-                    <HomeOutlined className={shellStyles.homeEntryIcon} />
+                    <House size={14} strokeWidth={1.8} className={shellStyles.homeEntryIcon} aria-hidden="true" />
                   </Link>
                   <h1>直播中台</h1>
                 </div>
@@ -452,12 +451,12 @@ export function LiveCenterClient() {
                 <Button
                   aria-label="刷新直播场次"
                   className={shellStyles.refreshButton}
-                  icon={<ReloadOutlined />}
+                  icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />}
                   loading={sessionsQuery.isFetching}
                   onClick={() => sessionsQuery.refetch()}
                   title="刷新直播场次"
                 >
-                  刷新
+                  <span className={shellStyles.refreshLabel}>刷新</span>
                 </Button>
               </div>
             </header>

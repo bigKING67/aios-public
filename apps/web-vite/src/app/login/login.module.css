@@ -1,72 +1,34 @@
-/**
- * 登录页面样式
+/*
+ * 登录页：lobe-ui dashboard AuthLayout (plain ground, one card) with the ink ✦ brand mark,
+ * the controlled sign-in form and the footnote, all on --lobe-* / --aios-* tokens.
  */
 
-.loginContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  min-height: 100dvh;
-  background: linear-gradient(135deg, var(--bg-global), var(--brand-secondary));
-  padding: var(--spacing-3);
-  width: 100%;
+.logo {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--lobe-border-radius);
+  color: var(--lobe-color-bg-container);
+  background: var(--lobe-color-primary);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-none);
 }
 
-.loginCard {
-  width: 100%;
-  max-width: min(400px, calc(100vw - var(--spacing-6)));
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-base);
-}
-
-.loginCard :global(.ant-card-body) {
-  padding: var(--spacing-8);
-}
-
-.loginHeader {
+.form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-3);
-  text-align: center;
+  gap: var(--spacing-4);
 }
 
-.loginTitle {
-  margin: var(--spacing-0);
-  color: var(--text-primary);
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-display);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
+.prefixIcon {
+  color: var(--lobe-color-text-tertiary);
 }
 
-.loginSubtitle,
-.loginFootnote {
-  margin: var(--spacing-0);
-  color: var(--text-secondary);
-  font-size: var(--font-size-base);
+.footnote {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
-}
-
-.loginFootnote {
-  color: var(--text-tertiary);
   text-align: center;
-}
-
-.loginForm :global(.ant-form-item:last-child) {
-  margin-bottom: var(--spacing-0);
-}
-
-.loginForm :global(.ant-btn) {
-  white-space: nowrap;
-}
-
-@media (max-width: 576px) {
-  .loginCard :global(.ant-card-body) {
-    padding: var(--spacing-5) var(--spacing-4);
-  }
 }

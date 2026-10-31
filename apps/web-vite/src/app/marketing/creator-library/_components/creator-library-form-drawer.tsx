@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useState, type KeyboardEvent } from 'react';
-import { App, Drawer, Form, Input, Select, Switch } from 'antd';
-import sharedStyles from '../creator-library-shared.module.css';
+import { useEffect, useMemo } from 'react';
+import { Button, confirmModal, Drawer, Input, Switch, TextArea } from '@lobehub/ui';
+import { FormField } from '@/components/molecules/form-field';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import {
+  bindSelectField,
+  bindTextField,
+  type ControlledFormRules,
+  useControlledForm,
+} from '@/hooks/use-controlled-form';
 import styles from './creator-library-form-drawer.module.css';
 import {
   formValuesToPayload,
@@ -33,8 +40,6 @@ import {
   buildCreatorAnchorLevelSelectOptions,
   buildPlatformSelectOptions,
   buildPlainOptions,
-  filterSelectOption,
-  renderAnchorTagOption,
 } from './creator-library-form-drawer-options';
 
 interface CreatorLibraryFormDrawerProps {
@@ -46,6 +51,12 @@ interface CreatorLibraryFormDrawerProps {
   onClose: () => void;
 }
 
+const FORM_RULES: ControlledFormRules<CreatorLibraryFormValues> = {
+  platform: [{ required: true, message: '请选择平台' }],
+  influencerName: [{ required: true, message: '请输入达人昵称' }],
+  influencerId: [{ required: true, message: '请输入达人ID' }],
+};
+
 export function CreatorLibraryFormDrawer({
   open,
   saving,
@@ -54,12 +65,7 @@ export function CreatorLibraryFormDrawer({
   onSubmit,
   onClose,
 }: CreatorLibraryFormDrawerProps) {
-  const { modal } = App.useApp();
-  const [form] = Form.useForm<CreatorLibraryFormValues>();
-  const [tagSearchValue, setTagSearchValue] = useState('');
   const isEditing = !!item;
-  const selectedTagValues = (Form.useWatch('tags', form) ?? []) as string[];
-  const shouldHideEmptyTagCaret = !tagSearchValue.trim();
   const anchorTagOptions = useMemo(
     () => buildPlainOptions(filterOptions.anchorTags),
     [filterOptions.anchorTags]
@@ -69,16 +75,27 @@ export function CreatorLibraryFormDrawer({
     [filterOptions, item]
   );
   const hasAssignableBdOptions = bdUserOptions.length > 0;
+  // Hidden fields (抖音号, 电话, MCN, 类目, 销售额, 主播描述) ride along in the values untouched.
+  const form = useControlledForm<CreatorLibraryFormValues>({
+    initialValues: item ? itemToFormValues(item) : DEFAULT_NEW_CREATOR_VALUES,
+    rules: FORM_RULES,
+    onFinish: (values) => {
+      const nextOwnerUserId = normalizeOptionalFormText(values.ownerUserId);
+      const payload = formValuesToPayload({
+        ...values,
+        ownerName: nextOwnerUserId ? normalizeOptionalFormText(values.ownerName) : undefined,
+        ownerUserId: nextOwnerUserId,
+      });
+      onSubmit(item ? withCreatorUpdateVersion(payload, item) : payload);
+    },
+  });
 
   useEffect(() => {
-    if (!open) {
-      return;
-    }
-    setTagSearchValue('');
-    form.setFieldsValue(item ? itemToFormValues(item) : DEFAULT_NEW_CREATOR_VALUES);
+    if (open) form.resetFields();
   }, [form, item, open]);
 
   const handleCooperableChange = (checked: boolean) => {
+    form.change('isCooperable', checked);
     if (!checked) {
       form.setFieldValue('cooperationStatus', NOT_COOPERABLE_STATUS_VALUE);
       return;
@@ -89,11 +106,14 @@ export function CreatorLibraryFormDrawer({
   };
 
   const handleCooperationStatusChange = (value?: string) => {
-    if (value === NOT_COOPERABLE_STATUS_VALUE) {
-      form.setFieldValue('isCooperable', false);
-      return;
-    }
-    form.setFieldValue('isCooperable', true);
+    form.change('cooperationStatus', value);
+    form.setFieldValue('isCooperable', value !== NOT_COOPERABLE_STATUS_VALUE);
+  };
+
+  const handleOwnerChange = (value?: string) => {
+    const selected = bdUserOptions.find((option) => option.value === value);
+    form.setFieldValue('ownerName', value ? selected?.displayName : undefined);
+    form.change('ownerUserId', normalizeOptionalFormText(value));
   };
 
   const addTagValue = (value: string) => {
@@ -101,201 +121,133 @@ export function CreatorLibraryFormDrawer({
     if (!normalized) {
       return;
     }
-
     const currentTags = normalizeFormTagValues(form.getFieldValue('tags'));
-    const currentKeys = new Set(currentTags.map(normalizeCreatorTagKey));
-    if (currentKeys.has(normalizeCreatorTagKey(normalized))) {
-      setTagSearchValue('');
+    if (currentTags.some((tag) => normalizeCreatorTagKey(tag) === normalizeCreatorTagKey(normalized))) {
       return;
     }
-
-    form.setFieldValue('tags', [...currentTags, normalized]);
-    setTagSearchValue('');
+    form.change('tags', [...currentTags, normalized]);
   };
 
-  const handleTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') {
-      return;
+  // Removing keeps the rest; a picked or typed tag is normalized, and a tag the library does not
+  // know yet is created only after confirmation.
+  const handleTagsChange = (values: string[]) => {
+    const currentTags = normalizeFormTagValues(form.getFieldValue('tags'));
+    const currentKeys = new Set(currentTags.map(normalizeCreatorTagKey));
+    form.change(
+      'tags',
+      values.filter((value) => currentKeys.has(normalizeCreatorTagKey(value)))
+    );
+    for (const rawTag of values.filter((value) => !currentKeys.has(normalizeCreatorTagKey(value)))) {
+      const existingTag = findExistingTag(rawTag, filterOptions.anchorTags);
+      if (existingTag) {
+        addTagValue(existingTag);
+        continue;
+      }
+      confirmModal({
+        title: '确认创建新标签',
+        content: `确认创建「${normalizeCreatorTagText(rawTag) || rawTag}」为新的主播标签？`,
+        okText: '创建并选择',
+        cancelText: '取消',
+        onOk: () => addTagValue(rawTag),
+      });
     }
-
-    const rawTag = tagSearchValue.trim();
-    if (!rawTag) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const existingTag = findExistingTag(rawTag, filterOptions.anchorTags);
-    if (existingTag) {
-      addTagValue(existingTag);
-      return;
-    }
-
-    modal.confirm({
-      title: '确认创建新标签',
-      content: `确认创建「${normalizeCreatorTagText(rawTag) || rawTag}」为新的主播标签？`,
-      okText: '创建并选择',
-      cancelText: '取消',
-      onOk: () => addTagValue(rawTag),
-    });
   };
 
   return (
     <Drawer
       title={isEditing ? '编辑达人资料' : '新增达人'}
-      size={560}
+      width={560}
       open={open}
       onClose={onClose}
-      destroyOnHidden
-      extra={null}
       footer={
         <div className={styles.drawerFooter}>
-          <button type="button" className={styles.ghostButton} onClick={onClose}>
-            取消
-          </button>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            disabled={saving}
-            onClick={() => form.submit()}
-          >
-            {saving ? '保存中...' : '保存'}
-          </button>
+          <Button onClick={onClose}>取消</Button>
+          <Button type="primary" loading={saving} onClick={() => form.submit()}>
+            保存
+          </Button>
         </div>
       }
     >
-      <Form<CreatorLibraryFormValues>
-        form={form}
-        layout="vertical"
-        initialValues={item ? itemToFormValues(item) : DEFAULT_NEW_CREATOR_VALUES}
-        onFinish={(values) => {
-          const nextOwnerUserId = normalizeOptionalFormText(values.ownerUserId);
-          const payload = formValuesToPayload({
-            ...values,
-            ownerName: nextOwnerUserId ? normalizeOptionalFormText(values.ownerName) : undefined,
-            ownerUserId: nextOwnerUserId,
-          });
-          onSubmit(item ? withCreatorUpdateVersion(payload, item) : payload);
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          form.submit();
         }}
       >
         <div className={styles.drawerGrid}>
-          <Form.Item name="platform" label="平台" rules={[{ required: true, message: '请选择平台' }]}>
-            <Select
+          <FormField form={form} name="platform" label="平台" required>
+            <LabeledSelect
+              {...bindSelectField(form, 'platform')}
               allowClear
               placeholder="请选择平台"
               options={buildPlatformSelectOptions(filterOptions.platforms, true)}
             />
-          </Form.Item>
-          <Form.Item
-            name="influencerName"
-            label="达人昵称"
-            rules={[{ required: true, message: '请输入达人昵称' }]}
-          >
-            <Input placeholder="达人昵称" />
-          </Form.Item>
-          <Form.Item
-            name="influencerId"
-            label="达人ID"
-            rules={[{ required: true, message: '请输入达人ID' }]}
-          >
-            <Input placeholder="平台内达人ID" />
-          </Form.Item>
-          <Form.Item name="douyinHandle" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="phone" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="mcn" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="category" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="anchorLevel" label="达人等级">
-            <Select
+          </FormField>
+          <FormField form={form} name="influencerName" label="达人昵称" required>
+            <Input {...bindTextField(form, 'influencerName')} placeholder="达人昵称" />
+          </FormField>
+          <FormField form={form} name="influencerId" label="达人ID" required>
+            <Input {...bindTextField(form, 'influencerId')} placeholder="平台内达人ID" />
+          </FormField>
+          <FormField form={form} name="anchorLevel" label="达人等级">
+            <LabeledSelect
+              {...bindSelectField(form, 'anchorLevel')}
               allowClear
               placeholder="选择达人等级"
               options={buildCreatorAnchorLevelSelectOptions(filterOptions.anchorLevels)}
             />
-          </Form.Item>
-          <Form.Item name="mainPlatformFans" label="粉丝数">
-            <Input placeholder="例如：35.6万" />
-          </Form.Item>
-          <Form.Item name="sales30d" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="sales90d" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="cooperationStatus" label="合作状态">
-            <Select
+          </FormField>
+          <FormField form={form} name="mainPlatformFans" label="粉丝数">
+            <Input {...bindTextField(form, 'mainPlatformFans')} placeholder="例如：35.6万" />
+          </FormField>
+          <FormField form={form} name="cooperationStatus" label="合作状态">
+            <LabeledSelect
+              {...bindSelectField(form, 'cooperationStatus')}
               allowClear
               placeholder="建联中 / 寄样洽谈 / 已合作"
               options={buildCooperationStatusSelectOptions(filterOptions.cooperationStatuses)}
               onChange={handleCooperationStatusChange}
             />
-          </Form.Item>
-          <Form.Item name="ownerUserId" label="归属BD">
-            <Select
+          </FormField>
+          <FormField form={form} name="ownerUserId" label="归属BD">
+            <LabeledSelect
+              {...bindSelectField(form, 'ownerUserId')}
               allowClear
               showSearch
               placeholder={hasAssignableBdOptions ? '选择负责BD' : '请先初始化BD账号'}
               disabled={!hasAssignableBdOptions}
-              optionFilterProp="searchText"
-              filterOption={filterSelectOption}
               options={bdUserOptions}
-              onChange={(value, option) => {
-                const selected = Array.isArray(option) ? undefined : option;
-                form.setFieldValue('ownerName', value ? selected?.displayName : undefined);
-                form.setFieldValue('ownerUserId', normalizeOptionalFormText(value));
-              }}
+              onChange={handleOwnerChange}
             />
-          </Form.Item>
-          <Form.Item name="ownerName" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="isCooperable" label="是否可合作" valuePropName="checked">
+          </FormField>
+          <FormField form={form} name="isCooperable" label="是否可合作">
             <Switch
+              id={form.fieldId('isCooperable')}
+              checked={Boolean(form.values.isCooperable)}
               checkedChildren="可合作"
               unCheckedChildren="不可合作"
               onChange={handleCooperableChange}
             />
-          </Form.Item>
+          </FormField>
         </div>
 
-        <Form.Item name="tags" label="主播标签">
-          <Select
+        <FormField form={form} name="tags" label="主播标签" extra="输入新标签后按 Enter 添加">
+          <LabeledSelect
+            id={form.fieldId('tags')}
             allowClear
             showSearch
-            mode="multiple"
-            maxTagCount="responsive"
-            placeholder="Enter输入新标签"
-            className={`${styles.anchorTagSelect} ${
-              shouldHideEmptyTagCaret ? styles.anchorTagSelectPristine : ''
-            }`}
-            optionFilterProp="searchText"
-            filterOption={filterSelectOption}
+            mode="tags"
+            placeholder="选择或输入主播标签"
             options={anchorTagOptions}
-            searchValue={tagSearchValue}
-            popupClassName={sharedStyles.anchorTagDropdown}
-            optionRender={(option) =>
-              renderAnchorTagOption(option.value, option.label, selectedTagValues)
-            }
-            notFoundContent={tagSearchValue.trim() ? 'Enter输入新标签' : '暂无可选标签'}
-            onSearch={setTagSearchValue}
-            onInputKeyDown={handleTagInputKeyDown}
-            onChange={() => setTagSearchValue('')}
+            value={form.values.tags ?? []}
+            onChange={handleTagsChange}
           />
-        </Form.Item>
-        <Form.Item name="anchorDesc" hidden>
-          <Input />
-        </Form.Item>
-        <Form.Item name="cooperationDesc" label="合作描述">
-          <Input.TextArea rows={4} placeholder="报价、合作限制、内容方向、历史复盘等" />
-        </Form.Item>
-      </Form>
+        </FormField>
+        <FormField form={form} name="cooperationDesc" label="合作描述">
+          <TextArea {...bindTextField(form, 'cooperationDesc')} rows={4} placeholder="报价、合作限制、内容方向、历史复盘等" />
+        </FormField>
+      </form>
     </Drawer>
   );
 }

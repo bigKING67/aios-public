@@ -6,7 +6,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 }
 
 function resolveNotificationCellClassName(className: string | undefined) {
-  return className?.includes('ant-table-row-expand-icon-cell')
+  return className?.includes('lobe-table-row-expand-icon-cell')
     ? mergeClassNames(className, notificationTableStyles.notificationExpandCell)
     : className;
 }

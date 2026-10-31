@@ -2,9 +2,9 @@
   display: grid;
   gap: 8px;
   padding: 10px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 12px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .mappingProvenanceHeader {
@@ -16,7 +16,7 @@
 }
 
 .mappingProvenanceHeader strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: 640;
   line-height: var(--line-height-snug);
@@ -24,7 +24,7 @@
 
 .mappingProvenancePanel p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -42,11 +42,11 @@
   min-height: 22px;
   align-items: center;
   padding: 0 7px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 999px;
-  color: var(--text-secondary);
-  background: var(--bg-card);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   overflow-wrap: anywhere;
@@ -63,15 +63,15 @@
   gap: 4px;
   min-width: 0;
   padding: 8px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 10px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .mappingProvenanceGrid span,
 .mappingProvenanceGrid small {
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -80,8 +80,8 @@
 
 .mappingProvenanceGrid strong {
   overflow: hidden;
-  color: var(--text-primary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;

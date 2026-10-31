@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider } from 'antd';
+import { LobeProvider } from '@/components/lobe-provider';
 import { ContentEditingResult } from '@/app/marketing/content-assets/_components/content-editing-result';
 import { adoptEditingCaptionCandidate, type EditingRun } from '@/app/marketing/content-assets/_lib/content-editing-api';
 import '@/styles/globals.css';
@@ -22,4 +22,4 @@ function Fixture() {
     }} />}
   </main>;
 }
-createRoot(document.getElementById('root')!).render(<ConfigProvider><QueryClientProvider client={new QueryClient()}><Fixture /></QueryClientProvider></ConfigProvider>);
+createRoot(document.getElementById('root')!).render(<LobeProvider><QueryClientProvider client={new QueryClient()}><Fixture /></QueryClientProvider></LobeProvider>);

@@ -9,7 +9,7 @@
   height: var(--progress-bar-height);
   overflow: hidden;
   border-radius: 999px;
-  background-color: var(--status-neutral-bg);
+  background-color: var(--lobe-color-fill-tertiary);
 }
 
 .fill {
@@ -21,7 +21,7 @@
 }
 
 .label {
-  color: var(--status-neutral);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   white-space: nowrap;
 }

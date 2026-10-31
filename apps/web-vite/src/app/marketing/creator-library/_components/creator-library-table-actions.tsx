@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space, Tooltip } from 'antd';
+import { Button, confirmModal, Tooltip } from '@lobehub/ui';
 import tableStyles from '../creator-library-table.module.css';
 import type { CreatorLibraryItem } from '../_lib/creator-library-types';
 import type { CreatorLibraryTableActions } from './creator-library-table-types';
@@ -8,7 +8,7 @@ export function renderCreatorActions(
   { onView, onEdit, onFollow, onAssign, onDelete }: CreatorLibraryTableActions
 ) {
   return (
-    <Space size={4} wrap={false} className={tableStyles.actionCell}>
+    <div className={tableStyles.actionCell}>
       <Button size="small" type="link" onClick={() => onView(record)}>
         详情
       </Button>
@@ -38,21 +38,26 @@ export function renderCreatorActions(
         </Button>
       </Tooltip>
       <Tooltip title={resolveDeleteDisabledText(record)}>
-        <Popconfirm
-          title="删除达人"
-          description="删除后该达人将从当前达人库列表中移除。"
-          okText="删除"
-          cancelText="取消"
-          okButtonProps={{ danger: true }}
+        <Button
+          size="small"
+          type="link"
+          danger
           disabled={!record.canDelete}
-          onConfirm={() => onDelete(record)}
+          onClick={() =>
+            confirmModal({
+              title: '删除达人',
+              content: '删除后该达人将从当前达人库列表中移除。',
+              okText: '删除',
+              cancelText: '取消',
+              okButtonProps: { danger: true },
+              onOk: () => onDelete(record),
+            })
+          }
         >
-          <Button size="small" type="link" danger disabled={!record.canDelete}>
-            删除
-          </Button>
-        </Popconfirm>
+          删除
+        </Button>
       </Tooltip>
-    </Space>
+    </div>
   );
 }
 

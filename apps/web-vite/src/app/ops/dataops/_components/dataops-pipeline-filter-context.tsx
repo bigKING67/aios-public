@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@lobehub/ui';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
 interface DataOpsPipelineFilterContextProps {

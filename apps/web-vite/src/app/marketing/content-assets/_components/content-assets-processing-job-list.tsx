@@ -1,4 +1,4 @@
-import { Button, Empty, Popconfirm, Tag } from 'antd';
+import { Button, confirmModal, Empty, Tag } from '@lobehub/ui';
 import type { ContentAssetProcessingJob } from '../_lib/content-assets-types';
 import { formatDateTime } from '../_lib/content-assets-formatters';
 import {
@@ -40,7 +40,7 @@ export function ProcessingJobList({
   if (items.length === 0) {
     return (
       <div className={workspaceStyles.jobEmpty}>
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={loading ? '正在加载处理任务' : emptyDescription} />
+        <Empty description={loading ? '正在加载处理任务' : emptyDescription} />
       </div>
     );
   }
@@ -146,17 +146,23 @@ function ProcessingJobRow({
           </Button>
         ) : null}
         {canResetStale ? (
-          <Popconfirm
-            title="标记为超时失败？"
-            description="仅用于 worker 长时间无进度更新的任务。标记失败后可再重试。"
-            okText="标记超时"
-            cancelText="取消"
-            onConfirm={() => onResetStaleJob(job.jobId)}
+          <Button
+            size="small"
+            danger
+            loading={actionLoading}
+            onClick={() =>
+              confirmModal({
+                title: '标记为超时失败？',
+                content: '仅用于 worker 长时间无进度更新的任务。标记失败后可再重试。',
+                okText: '标记超时',
+                cancelText: '取消',
+                okButtonProps: { danger: true },
+                onOk: () => onResetStaleJob(job.jobId),
+              })
+            }
           >
-            <Button size="small" danger loading={actionLoading}>
-              标记超时
-            </Button>
-          </Popconfirm>
+            标记超时
+          </Button>
         ) : null}
         <button className={jobStyles.jobOpenButton} type="button" onClick={onOpenAssets}>
           到素材库查看

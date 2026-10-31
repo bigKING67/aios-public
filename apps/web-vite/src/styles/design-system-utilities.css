@@ -40,7 +40,7 @@
 
 /** 阴影工具 */
 .shadow-sm {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .shadow-base {
@@ -56,28 +56,28 @@
 }
 
 .text-trend-up {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
 }
 
 .text-trend-down {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
 }
 
 .text-trend-neutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
 }
 
 /** 背景色工具 */
 .bg-global {
-  background-color: var(--bg-global);
+  background-color: var(--lobe-color-bg-layout);
 }
 
 .bg-card {
-  background-color: var(--bg-card);
+  background-color: var(--lobe-color-bg-container);
 }
 
 .bg-hover {
-  background-color: var(--bg-hover);
+  background-color: var(--lobe-color-fill-tertiary);
 }
 
 /** 间距工具 */

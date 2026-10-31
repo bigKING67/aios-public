@@ -763,58 +763,6 @@ export function assertFrontendStructureAndDesignAffectedMapping({
     'Tailwind non-color alias behavior fixture should not select production gate',
   );
 
-  const antdThemeTokenSyncHelper = selectAffectedGates(registry, ['scripts/lib/design/antd-theme-token-sync-core.mjs']);
-  assertTrue(
-    antdThemeTokenSyncHelper.names.includes('verify:design:antd-theme-token-sync'),
-    'Ant Design theme token sync helper should select production AntD theme gate',
-  );
-  assertTrue(
-    antdThemeTokenSyncHelper.names.includes('verify:design:antd-theme-token-sync-behavior'),
-    'Ant Design theme token sync helper should select behavior AntD theme gate',
-  );
-  assertTrue(
-    antdThemeTokenSyncHelper.names.includes('verify:design:behavior-gate-registry'),
-    'Ant Design theme token sync helper should select design registry guard',
-  );
-
-  const antdTableSelectorHelper = selectAffectedGates(registry, ['scripts/lib/design/antd-table-selectors-core.mjs']);
-  assertTrue(
-    antdTableSelectorHelper.names.includes('verify:design:antd-table-selectors'),
-    'Ant Design table selector helper should select production AntD table selector gate',
-  );
-  assertTrue(
-    antdTableSelectorHelper.names.includes('verify:design:antd-table-selectors-behavior'),
-    'Ant Design table selector helper should select behavior AntD table selector gate',
-  );
-  assertTrue(
-    antdTableSelectorHelper.names.includes('verify:design:behavior-gate-registry'),
-    'Ant Design table selector helper should select design registry guard',
-  );
-
-  const antdTableSelectorBehaviorFixture = selectAffectedGates(registry, ['scripts/fixtures/design/antd-table-selectors.behavior-fixtures.mjs']);
-  assertTrue(
-    antdTableSelectorBehaviorFixture.names.includes('verify:design:antd-table-selectors-behavior'),
-    'Ant Design table selector behavior fixture should select behavior AntD table selector gate',
-  );
-  assertTrue(
-    antdTableSelectorBehaviorFixture.names.includes('verify:design:behavior-gate-registry'),
-    'Ant Design table selector behavior fixture should select design registry guard',
-  );
-  assertTrue(
-    antdTableSelectorBehaviorFixture.names.includes('lint:scripts'),
-    'Ant Design table selector behavior fixture should keep script lint coverage',
-  );
-
-  const antdThemeTokenSyncBehaviorFixture = selectAffectedGates(registry, ['scripts/fixtures/design/antd-theme-token-sync.behavior-fixtures.mjs']);
-  assertTrue(
-    antdThemeTokenSyncBehaviorFixture.names.includes('verify:design:antd-theme-token-sync-behavior'),
-    'Ant Design theme token sync behavior fixture should select behavior AntD theme gate',
-  );
-  assertTrue(
-    antdThemeTokenSyncBehaviorFixture.names.includes('verify:design:behavior-gate-registry'),
-    'Ant Design theme token sync behavior fixture should select design registry guard',
-  );
-
   const echartsCssTokenSyncHelper = selectAffectedGates(registry, ['scripts/lib/design/echarts-css-token-sync-core.mjs']);
   assertTrue(
     echartsCssTokenSyncHelper.names.includes('verify:design:echarts-css-token-sync'),

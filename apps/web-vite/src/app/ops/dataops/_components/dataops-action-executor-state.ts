@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsActionRequest, DataOpsActionResponse } from '@/types/dataops';
 import { getActionErrorMessage } from './dataops-action-helpers';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
 
 export function useDataOpsActionExecutorState(options: {
-  message: MessageInstance;
+  message: DataOpsMessageApi;
   mutateAction: (payload: DataOpsActionRequest) => Promise<DataOpsActionResponse>;
   refetchRuntime: () => Promise<unknown>;
 }) {

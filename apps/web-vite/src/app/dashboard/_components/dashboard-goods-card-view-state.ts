@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ECHARTS_CHART_TOKENS } from '@/styles/echarts-theme';
 import { buildDashboardGoodsCardTrendOption } from './dashboard-goods-card-trend-option';
@@ -89,7 +89,7 @@ export function useDashboardGoodsCardViewState({
     [goodsCardTrendRows]
   );
 
-  const goodsCardColumns = useMemo<ColumnsType<DashboardGoodsCardRow>>(
+  const goodsCardColumns = useMemo<TableColumnsType<DashboardGoodsCardRow>>(
     () =>
       buildDashboardGoodsCardColumns({
         isMobile,
@@ -99,7 +99,7 @@ export function useDashboardGoodsCardViewState({
     [isMobile, goodsCardTableClassNames, onOpenGoodsCardTraffic]
   );
 
-  const goodsCardTrafficColumns = useMemo<ColumnsType<DashboardGoodsCardTrafficTreeNode>>(
+  const goodsCardTrafficColumns = useMemo<TableColumnsType<DashboardGoodsCardTrafficTreeNode>>(
     () =>
       buildDashboardGoodsCardTrafficColumns({
         isMobile,

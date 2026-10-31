@@ -5,7 +5,7 @@ import type {
 
 export const OVERVIEW_BY_WEEK_TREND_BAR_COLORS = {
   primary: 'var(--chart-color-this-week)',
-  secondary: 'var(--chart-series-2)',
+  secondary: 'var(--aios-chart-2)',
 } as const;
 
 export function buildOverviewByWeekTrendSectionProps({

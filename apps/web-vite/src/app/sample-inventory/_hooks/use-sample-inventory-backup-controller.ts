@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import type { MessageInstance } from "antd/es/message/interface";
+import type { SampleInventoryMessageApi } from "./use-sample-inventory-actions";
 
 import { resolveClientErrorMessage, resolveClientErrorStatus } from "@/lib/client-error";
 import type { SampleInventoryBackupFile, SampleInventoryBackupPlanResponse } from "@/lib/generated-api-contract";
@@ -32,7 +32,7 @@ function downloadBackupFile(backup: SampleInventoryBackupFile): void {
 type UseSampleInventoryBackupControllerOptions = {
   actions: ReturnType<typeof useSampleInventoryActions>;
   guardWrite: () => boolean;
-  messageApi: MessageInstance;
+  messageApi: SampleInventoryMessageApi;
   onReadOnlyDetected: () => void;
 };
 

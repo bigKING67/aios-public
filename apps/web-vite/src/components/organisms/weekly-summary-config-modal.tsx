@@ -1,7 +1,8 @@
 'use client';
 
-import type { Dispatch, SetStateAction } from 'react';
-import { Alert, Button, Input, Modal, Select, Space } from 'antd';
+import { useId, type Dispatch, type SetStateAction } from 'react';
+import { Alert, Button, Input, Modal, TextArea } from '@lobehub/ui';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import type { SummaryProvider } from '@/config/weekly-summary-ai';
 import type {
   FactsBuilderDraft,
@@ -40,6 +41,13 @@ export function WeeklySummaryConfigModal({
   onApplyFactsBuilderToJson,
   onSyncFactsBuilderFromJson,
 }: WeeklySummaryConfigModalProps) {
+  const fieldIdPrefix = useId();
+  const providerId = `${fieldIdPrefix}-provider`;
+  const modelId = `${fieldIdPrefix}-model`;
+  const frameworkId = `${fieldIdPrefix}-framework`;
+  const promptId = `${fieldIdPrefix}-prompt`;
+  const factsJsonId = `${fieldIdPrefix}-facts-json`;
+
   return (
     <Modal
       title="AI 总结配置"
@@ -66,19 +74,26 @@ export function WeeklySummaryConfigModal({
         ) : null}
         <div className={styles.configFieldBlock}>
           <div className={styles.configFieldLabelRow}>
-            <div className={styles.configFieldTitle}>模型供应商</div>
+            <label htmlFor={providerId} className={styles.configFieldTitle}>
+              模型供应商
+            </label>
             <div className={styles.configFieldRequired}>
               <span className={styles.configFieldRequiredAsterisk}>*</span>必填
             </div>
           </div>
-          <Select
+          <LabeledSelect<SummaryProvider>
+            id={providerId}
+            wrapperClassName={styles.fullWidthControl}
             value={configDraft.provider}
             options={[
               { value: 'deepseek', label: 'DeepSeek（推荐）' },
               { value: 'kimi', label: 'Kimi' },
             ]}
             onChange={(value) => {
-              const provider = value as SummaryProvider;
+              if (!value) {
+                return;
+              }
+              const provider = value;
               setConfigDraft((prev) => ({
                 ...prev,
                 provider,
@@ -90,7 +105,6 @@ export function WeeklySummaryConfigModal({
                       : 'kimi-k2.5',
               }));
             }}
-            className={styles.fullWidthControl}
           />
           <div className={styles.configFieldHint}>
             用法：选择调用哪家模型服务。通常推荐 `DeepSeek`，如遇稳定性问题可切换 `Kimi`。
@@ -98,12 +112,15 @@ export function WeeklySummaryConfigModal({
         </div>
         <div className={styles.configFieldBlock}>
           <div className={styles.configFieldLabelRow}>
-            <div className={styles.configFieldTitle}>模型名称</div>
+            <label htmlFor={modelId} className={styles.configFieldTitle}>
+              模型名称
+            </label>
             <div className={styles.configFieldRequired}>
               <span className={styles.configFieldRequiredAsterisk}>*</span>必填
             </div>
           </div>
           <Input
+            id={modelId}
             value={configDraft.model}
             onChange={(event) =>
               setConfigDraft((prev) => ({ ...prev, model: event.target.value }))
@@ -116,12 +133,15 @@ export function WeeklySummaryConfigModal({
         </div>
         <div className={styles.configFieldBlock}>
           <div className={styles.configFieldLabelRow}>
-            <div className={styles.configFieldTitle}>业务分析框架</div>
+            <label htmlFor={frameworkId} className={styles.configFieldTitle}>
+              业务分析框架
+            </label>
             <div className={styles.configFieldRequired}>
               <span className={styles.configFieldRequiredAsterisk}>*</span>必填
             </div>
           </div>
-          <Input.TextArea
+          <TextArea
+            id={frameworkId}
             value={configDraft.businessFramework}
             onChange={(event) =>
               setConfigDraft((prev) => ({ ...prev, businessFramework: event.target.value }))
@@ -135,10 +155,13 @@ export function WeeklySummaryConfigModal({
         </div>
         <div className={styles.configFieldBlock}>
           <div className={styles.configFieldLabelRow}>
-            <div className={styles.configFieldTitle}>补充提示词</div>
+            <label htmlFor={promptId} className={styles.configFieldTitle}>
+              补充提示词
+            </label>
             <div className={styles.configFieldOptional}>选填</div>
           </div>
-          <Input.TextArea
+          <TextArea
+            id={promptId}
             value={configDraft.customPrompt}
             onChange={(event) =>
               setConfigDraft((prev) => ({ ...prev, customPrompt: event.target.value }))
@@ -156,7 +179,7 @@ export function WeeklySummaryConfigModal({
             <div className={styles.configFieldOptional}>选填</div>
           </div>
           <div className={styles.configBuilderGrid}>
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.campaignsText}
               onChange={(event) =>
@@ -164,7 +187,7 @@ export function WeeklySummaryConfigModal({
               }
               placeholder={'活动信息（每行一条）\n示例：38节预热（3/1~3/8）'}
             />
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.promotionsText}
               onChange={(event) =>
@@ -172,7 +195,7 @@ export function WeeklySummaryConfigModal({
               }
               placeholder={'优惠与满减（每行一条）\n示例：跨店满300减40'}
             />
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.budgetChangesText}
               onChange={(event) =>
@@ -183,7 +206,7 @@ export function WeeklySummaryConfigModal({
               }
               placeholder={'预算/投放变化（每行一条）\n示例：关键词推广预算+20%'}
             />
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.inventoryNotesText}
               onChange={(event) =>
@@ -194,7 +217,7 @@ export function WeeklySummaryConfigModal({
               }
               placeholder={'库存与履约（每行一条）\n示例：明星SKU库存紧张，预计3天补货'}
             />
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.marketSignalsText}
               onChange={(event) =>
@@ -205,7 +228,7 @@ export function WeeklySummaryConfigModal({
               }
               placeholder={'舆情/竞品动态（每行一条）\n示例：竞品A本周上线买赠活动'}
             />
-            <Input.TextArea
+            <TextArea
               rows={2}
               value={factsBuilderDraft.otherNotesText}
               onChange={(event) =>
@@ -214,24 +237,27 @@ export function WeeklySummaryConfigModal({
               placeholder={'其他补充（每行一条）\n示例：平台流量分发策略本周有波动'}
             />
           </div>
-          <Space className={styles.configBuilderActions} size={8}>
+          <div className={styles.configBuilderActions}>
             <Button size="small" onClick={onApplyFactsBuilderToJson}>
               一键写入 JSON
             </Button>
             <Button size="small" onClick={onSyncFactsBuilderFromJson}>
               从 JSON 回填
             </Button>
-          </Space>
+          </div>
           <div className={styles.configFieldHint}>
             用法：先在这里填业务事实，再点“一键写入 JSON”，系统会自动转成结构化 JSON。
           </div>
         </div>
         <div className={styles.configFieldBlock}>
           <div className={styles.configFieldLabelRow}>
-            <div className={styles.configFieldTitle}>背景信息（JSON）</div>
+            <label htmlFor={factsJsonId} className={styles.configFieldTitle}>
+              背景信息（JSON）
+            </label>
             <div className={styles.configFieldOptional}>选填</div>
           </div>
-          <Input.TextArea
+          <TextArea
+            id={factsJsonId}
             value={configDraft.factsJsonText}
             onChange={(event) =>
               setConfigDraft((prev) => ({ ...prev, factsJsonText: event.target.value }))

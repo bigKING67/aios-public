@@ -1,32 +1,55 @@
-import { ArrowLeftOutlined, ExportOutlined, PlayCircleFilled } from '@ant-design/icons';
-import { Alert, Button, Popconfirm, Skeleton } from 'antd';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Alert, Button, confirmModal, DropdownMenu, SkeletonText, type DropdownItem } from '@lobehub/ui';
+import { ArrowLeft, CirclePlay, Ellipsis } from 'lucide-react';
+import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
-import { ROUTE_PATHS } from '@/lib/route-policy-registry';
+import { AiTaskStatus } from '@/components/molecules/ai-task-status';
 import type { StudioSegmentPreset } from '../_lib/ai-studio-api';
 import {
   hasCancellableRemixItems,
+  isRemixBatchActive,
   remixBatchOwnerLabel,
-  remixBatchStatusView,
+  remixBatchProgress,
+  remixBatchDeletedCount,
+  remixBatchReviewState,
+  remixBatchReviewSummary,
+  remixBatchView,
+  remixItemReviewState,
   remixItemStatusView,
   remixModeLabel,
   remixTierLabel,
+  remixWaitingReasonLabel,
   type StudioRemixBatchDetail,
   type StudioRemixBatchItem,
 } from '../_lib/remix-api';
 import { shortAssetTitle } from '../_lib/remix-form';
-import { buildContentAssetDetailPath, buildEditFromOutputPath, buildEditingRunPath } from '../_lib/remix-routes';
+import {
+  filterRemixItemsByReviewArchive,
+  isRejectedRemixItem,
+  isRemixItemPlaybackAvailable,
+  remixRetentionText,
+} from '../_lib/remix-review';
+import {
+  buildEditFromOutputPath,
+  buildEditingRunPath,
+  buildOutputsListPath,
+  buildRemixOutputPath,
+  OUTPUTS_REJECTED,
+  OUTPUTS_REVIEW_PARAM,
+  outputsListParams,
+} from '../_lib/remix-routes';
 import { findPreset, labelName, SELLING_POINT_PRESET_KEY, sellingPointNames } from '../_lib/segment-display';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { formatSegmentDuration, formatSegmentTime } from '../_lib/segment-time';
 import { formatShortTimestamp } from '../_lib/studio-time';
-import { RemixOutputPlayer } from './remix-output-player';
-import { RemixPictureReview } from './remix-picture-review';
+import { frozenAdmissionSummary } from '../_lib/source-spend';
+import { RemixItemStatus, ReviewStatus } from './remix-status';
+import { RemixQcSummary } from './remix-qc-summary';
+import { RemixDeliveryStatus } from './remix-delivery';
 import pageStyles from '../ai-studio.module.css';
 import styles from './segment-annotation.module.css';
 import outputStyles from './remix-outputs.module.css';
 import remixStyles from './remix.module.css';
+import { RefreshButton } from './refresh-button';
 
 interface RemixBatchDetailViewProps {
   detail: StudioRemixBatchDetail | undefined;
@@ -45,16 +68,16 @@ interface RemixBatchDetailViewProps {
 }
 
 function ItemStatus({ item }: { item: StudioRemixBatchItem }) {
-  const view = remixItemStatusView(item);
   return (
     <span className={remixStyles.stack}>
-      <Badge status={view.tone}>{view.label}</Badge>
+      <RemixItemStatus item={item} />
       {item.outcome === 'failed' && item.jobError ? <span className={styles.fieldError}>{item.jobError}</span> : null}
     </span>
   );
 }
 
-function Lineage({
+/** Where each segment of an output came from: label, source original (opens its annotation) and interval. */
+export function Lineage({
   item,
   preset,
   presets,
@@ -76,20 +99,8 @@ function Lineage({
           >
             {shortAssetTitle(segment.assetTitle || '原片')}
           </RouterLink>
-          <span className={outputStyles.lineageWhen}>
-            <span className={outputStyles.lineageTime}>
-              {formatSegmentTime(segment.startMs)}–{formatSegmentTime(segment.endMs)}
-            </span>
-            <RouterLink
-              className={styles.tableLink}
-              to={buildContentAssetDetailPath(segment.assetId)}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`在素材库查看原片 ${segment.assetTitle || segment.assetId}`}
-              title="新标签页打开素材库原片"
-            >
-              <ExportOutlined aria-hidden />
-            </RouterLink>
+          <span className={outputStyles.lineageTime}>
+            {formatSegmentTime(segment.startMs)}–{formatSegmentTime(segment.endMs)}
           </span>
           {remixTierLabel(segment.tier, segment.fallback) ? (
             <span className={outputStyles.lineagePlan}>
@@ -114,61 +125,91 @@ interface OutputCardProps {
   editable: boolean;
   /** Runs task pages are owner-only; another user's Runs would open as not found. */
   showRunLinks: boolean;
-  onPlay: (startMs?: number) => void;
+  /** The output's review page. */
+  reviewPath: string;
 }
 
-function OutputCard({ batchId, item, preset, presets, editable, showRunLinks, onPlay }: OutputCardProps) {
+/**
+ * One primary action per card — 去审核 while the output waits for a person, 查看 once reviewed, both
+ * opening the review page (player, timeline, review); the rest — single editing from this output and the owner's
+ * task page — sit behind ⋯ so the card keeps one control style.
+ */
+function OutputCard({ batchId, item, preset, presets, editable, showRunLinks, reviewPath }: OutputCardProps) {
+  const navigate = useNavigate();
   const view = remixItemStatusView(item);
-  const playable = Boolean(item.outputAssetId);
+  const playable = isRemixItemPlaybackAvailable(item);
+  const rejected = isRejectedRemixItem(item);
+  const pending = remixItemReviewState(item) === 'pending';
+  const coverText = rejected ? '已驳回' : item.outputDeleted ? '成片已删除' : view.label;
+  const admission = frozenAdmissionSummary(item.segments);
+  const retentionText = remixRetentionText(item);
+  const more: DropdownItem[] = [];
+  // The lineage still loads in single editing even after the output itself was deleted.
+  if (editable) {
+    more.push({ key: 'edit', label: '以此为起点编辑', onClick: () => navigate(buildEditFromOutputPath(batchId, item.ordinal)) });
+  }
+  if (showRunLinks) {
+    more.push({ key: 'run', label: '任务详情', onClick: () => navigate(buildEditingRunPath(item.runId)) });
+  }
   return (
     <article className={outputStyles.output} aria-label={`第 ${item.ordinal} 条成片`}>
-      <button
-        type="button"
-        className={outputStyles.outputCover}
-        disabled={!playable}
-        onClick={() => onPlay()}
-        aria-label={playable ? `播放第 ${item.ordinal} 条成片` : `第 ${item.ordinal} 条：${view.label}`}
-      >
-        {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : playable ? null : <span>{view.label}</span>}
-        {playable ? <PlayCircleFilled className={outputStyles.play} aria-hidden /> : null}
-        <span className={outputStyles.duration}>{formatSegmentDuration(0, item.durationMs)}</span>
-      </button>
+      {playable ? (
+        <RouterLink className={outputStyles.outputCover} to={reviewPath} aria-label={`打开第 ${item.ordinal} 条成片`}>
+          {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : null}
+          <CirclePlay className={outputStyles.play} size={40} strokeWidth={1.4} aria-hidden="true" />
+          <span className={outputStyles.duration}>{formatSegmentDuration(0, item.durationMs)}</span>
+        </RouterLink>
+      ) : (
+        <span className={outputStyles.outputCover} aria-label={`第 ${item.ordinal} 条：${coverText}`}>
+          {item.outputCoverUrl ? <img src={item.outputCoverUrl} alt="" loading="lazy" /> : <span>{coverText}</span>}
+          <span className={outputStyles.duration}>{formatSegmentDuration(0, item.durationMs)}</span>
+        </span>
+      )}
       <div className={outputStyles.head}>
         <strong>第 {item.ordinal} 条</strong>
         <ItemStatus item={item} />
       </div>
-      {!editable ? <RemixPictureReview item={item} onPlay={onPlay} /> : null}
+      {admission ? <p className={outputStyles.admissionSummary}>{admission.label}</p> : null}
+      <RemixQcSummary qc={item.qc} compact />
+      <RemixDeliveryStatus delivery={item.delivery} compact />
       <Lineage item={item} preset={preset} presets={presets} />
       <div className={outputStyles.actions}>
-        {playable ? (
+        {rejected ? (
           <>
-            <Button size="small" onClick={() => onPlay()}>
-              播放 / 下载
-            </Button>
-            {editable ? (
-              <RouterLink className={styles.tableLink} to={buildEditFromOutputPath(batchId, item.ordinal)} title="在单条剪辑里载入这条成片的片段和入出点">
-                以此为起点编辑
-              </RouterLink>
-            ) : null}
-            <RouterLink
-              className={styles.tableLink}
-              to={buildContentAssetDetailPath(item.outputAssetId!)}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="新标签页打开素材库中的这条成片"
-            >
-              在素材库查看
+            <RouterLink className={styles.tableLink} to={reviewPath}>
+              查看驳回记录
             </RouterLink>
+            {retentionText ? <span className={styles.readOnlyHint}>{retentionText}</span> : null}
           </>
+        ) : playable ? (
+          <RouterLink className={pending ? styles.secondaryLink : styles.tableLink} to={reviewPath}>
+            {pending ? '去审核' : '查看'}
+          </RouterLink>
+        ) : item.qc ? (
+          <>
+            <RouterLink className={styles.tableLink} to={reviewPath}>
+              查看质检报告
+            </RouterLink>
+            {item.outputDeleted ? <span className={styles.readOnlyHint}>这条成片已删除，无法再播放或下载</span> : null}
+          </>
+        ) : item.outputDeleted ? (
+          <span className={styles.readOnlyHint}>这条成片已删除，无法再播放或下载</span>
         ) : item.outcome === 'succeeded' ? (
           <span className={styles.readOnlyHint}>
-            {showRunLinks ? '未关联素材库资产，可在任务详情查看成片' : '未关联素材库资产，需发起人在任务详情查看'}
+            {showRunLinks ? '没有可播放的成片文件，可在任务详情查看成片' : '没有可播放的成片文件，需发起人在任务详情查看'}
           </span>
-        ) : null}
-        {showRunLinks ? (
-          <RouterLink className={styles.tableLink} to={buildEditingRunPath(item.runId)}>
-            任务详情
-          </RouterLink>
+        ) : (
+          <span />
+        )}
+        {more.length > 0 ? (
+          <DropdownMenu items={more} placement="bottomRight">
+            <Button
+              type="text"
+              size="small"
+              icon={<Ellipsis size={16} strokeWidth={1.8} aria-hidden="true" />}
+              aria-label={`第 ${item.ordinal} 条的更多操作`}
+            />
+          </DropdownMenu>
         ) : null}
       </div>
     </article>
@@ -188,11 +229,12 @@ export function RemixBatchDetailView({
   onCancel,
   pollPaused = false,
 }: RemixBatchDetailViewProps) {
-  const [playing, setPlaying] = useState<StudioRemixBatchItem | null>(null);
-  const [startMs, setStartMs] = useState(0);
+  const [params] = useSearchParams();
+  const list = outputsListParams(params);
+  const rejectedArchive = params.get(OUTPUTS_REVIEW_PARAM) === OUTPUTS_REJECTED;
   const back = (
-    <RouterLink className={styles.backLink} to={ROUTE_PATHS.contentAiStudioOutputs}>
-      <ArrowLeftOutlined aria-hidden /> 全部批次
+    <RouterLink className={styles.backLink} to={buildOutputsListPath(list)}>
+      <ArrowLeft size={14} strokeWidth={1.8} aria-hidden="true" /> 全部批次
     </RouterLink>
   );
   if (error) {
@@ -203,10 +245,13 @@ export function RemixBatchDetailView({
       </div>
     );
   }
-  if (!detail) return loading ? <Skeleton active paragraph={{ rows: 6 }} /> : null;
+  if (!detail) return loading ? <SkeletonText rows={6} /> : null;
   const { batch, items } = detail;
+  const visibleItems = filterRemixItemsByReviewArchive(items, rejectedArchive);
   const preset = findPreset(presets, batch.presetKey, batch.presetVersion);
-  const status = remixBatchStatusView(batch.status);
+  const status = remixBatchView(batch);
+  const review = remixBatchReviewState(batch);
+  const failure = batch.failedCount > 0 ? remixWaitingReasonLabel(batch.failureReason) : null;
   const cancellable = hasCancellableRemixItems(items);
   // Runs task pages are owner-only; another user's Runs would open as not found.
   const showRunLinks = batch.ownedByCurrentUser;
@@ -215,6 +260,7 @@ export function RemixBatchDetailView({
     batch.runningCount > 0 ? `渲染中 ${batch.runningCount}` : null,
     batch.failedCount > 0 ? `失败 ${batch.failedCount}` : null,
     batch.cancelledCount > 0 ? `已取消 ${batch.cancelledCount}` : null,
+    remixBatchDeletedCount(batch) > 0 ? `已删除 ${remixBatchDeletedCount(batch)} 条` : null,
     batch.plannedCount < batch.requestedCount ? `请求 ${batch.requestedCount} 条` : null,
     openAccess ? `发起人：${remixBatchOwnerLabel(batch)}` : null,
     formatShortTimestamp(batch.createdAt),
@@ -229,32 +275,50 @@ export function RemixBatchDetailView({
             {batch.productName} · {batch.labels.map((key) => labelName(preset, key)).join(' → ')}
           </h2>
           <span className={styles.rowActions}>
-            {batch.mode !== 'framework' ? <Badge status="neutral">{remixModeLabel(batch.mode)}</Badge> : null}
-            <Badge status={status.tone}>{status.label}</Badge>
+            <Badge status="neutral">{remixModeLabel(batch.mode)}</Badge>
             {cancellable ? (
-              <Popconfirm
-                title="取消这个批次里未完成的成片？"
-                description="排队中的条目会直接取消；已在渲染的条目需要等渲染进程停止，可能无法立即结束。已完成的成片不受影响，取消后不会自动重试。"
-                okText="取消未完成"
-                cancelText="返回"
-                okButtonProps={{ danger: true }}
-                onConfirm={onCancel}
+              <Button
+                danger
+                loading={cancelling}
+                onClick={() =>
+                  confirmModal({
+                    title: '取消这个批次里未完成的成片？',
+                    content:
+                      '排队中的条目会直接取消；已在渲染的条目需要等渲染进程停止，可能无法立即结束。已完成的成片不受影响，取消后不会自动重试。',
+                    okText: '取消未完成',
+                    cancelText: '返回',
+                    okButtonProps: { danger: true },
+                    onOk: onCancel,
+                  })
+                }
               >
-                <Button danger loading={cancelling}>
-                  取消未完成
-                </Button>
-              </Popconfirm>
+                取消未完成
+              </Button>
             ) : null}
-            <Button onClick={onRefresh} loading={refreshing}>
-              刷新
-            </Button>
+            <RefreshButton onRefresh={onRefresh} loading={refreshing} />
           </span>
         </div>
-        <p className={outputStyles.summary}>{summary}</p>
+        {review ? (
+          <div className={outputStyles.reviewHead}>
+            <ReviewStatus state={review} />
+            <span className={outputStyles.reviewMeta}>{[...remixBatchReviewSummary(batch), summary].join(' · ')}</span>
+            {failure ? <span className={outputStyles.reviewMeta}>失败原因：{failure}</span> : null}
+          </div>
+        ) : (
+          <AiTaskStatus
+            framed={false}
+            state={status.state}
+            stateLabel={status.label}
+            label={summary}
+            progress={isRemixBatchActive(batch) ? remixBatchProgress(batch) : undefined}
+            detail={failure ? `失败原因：${failure}` : undefined}
+          />
+        )}
         {batch.shortfallReason ? <Alert type="warning" showIcon title={`只生成了 ${batch.plannedCount} 条：${batch.shortfallReason}`} /> : null}
         {cancelError ? <Alert type="error" showIcon title="取消未完成成片失败" description={cancelError} /> : null}
-        <ul className={`${outputStyles.grid} ${batch.mode === 'sellingPoint' ? '' : outputStyles.outputGrid}`} aria-label="成片">
-          {items.map((item) => (
+        {visibleItems.length > 0 ? (
+          <ul className={`${outputStyles.grid} ${batch.mode === 'sellingPoint' ? '' : outputStyles.outputGrid}`} aria-label={rejectedArchive ? '已驳回成片' : '成片'}>
+          {visibleItems.map((item) => (
             <li key={item.runId}>
               <OutputCard
                 batchId={batch.batchId}
@@ -263,26 +327,25 @@ export function RemixBatchDetailView({
                 presets={presets}
                 editable={batch.mode !== 'sellingPoint'}
                 showRunLinks={showRunLinks}
-                onPlay={(position = 0) => { setStartMs(position); setPlaying(item); }}
+                reviewPath={buildRemixOutputPath(batch.batchId, item.ordinal, list)}
               />
             </li>
           ))}
-        </ul>
+          </ul>
+        ) : (
+          <p className={styles.fieldHelp}>
+            {rejectedArchive ? '这个批次没有已驳回记录。' : '这个批次的成片均已驳回，请从「已驳回」入口查看记录。'}
+          </p>
+        )}
         <p className={styles.fieldHelp}>
-          成功的成片已回存素材库（来源为 AI 创作中心）。
-          {showRunLinks ? '失败的条目可在任务详情中查看原因并恢复渲染。' : '任务详情只对发起人开放，失败条目需由发起人查看原因并恢复渲染。'}
+          {rejectedArchive ? '已驳回记录会保留审核原因与来源；仅在 7 天撤回期内可以恢复为待审核。' : '成功的成片需逐条打开审核，人工通过后才算可用。'}
+          {!rejectedArchive && (showRunLinks ? '失败的条目可在任务详情中查看原因并恢复渲染。' : '任务详情只对发起人开放，失败条目需由发起人查看原因并恢复渲染。')}
           进行中时每 10 秒自动刷新。
         </p>
         <p className={styles.fieldHelp} role="status" aria-live="polite">
           {pollPaused ? '已持续刷新 30 分钟仍在出片，自动刷新已暂停，点「刷新」继续查看进度。' : ''}
         </p>
       </article>
-      <RemixOutputPlayer
-        assetId={playing?.outputAssetId ?? null}
-        title={playing ? `第 ${playing.ordinal} 条成片` : ''}
-        startMs={startMs}
-        onClose={() => setPlaying(null)}
-      />
     </div>
   );
 }

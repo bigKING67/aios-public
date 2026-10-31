@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import type { DateRange } from './creator-date-range';
 import { useCreatorCsvExport } from './creator-csv-export';
@@ -14,7 +14,7 @@ type UseCreatorLiveCsvExportParams = {
   rows: readonly CreatorLiveDetailRow[];
   isAuthenticated: boolean;
   currentRange: DateRange;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
 };
 
 export function useCreatorLiveCsvExport({

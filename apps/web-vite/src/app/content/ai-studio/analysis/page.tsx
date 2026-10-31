@@ -8,7 +8,7 @@ export default function AiStudioAnalysisPage() {
   return (
     <AiStudioShell>
       <AiStudioCapabilityGate
-        title="AI 分析"
+        title="AI 切段"
         purpose="选原片，AI 结合画面和声音把原片切成片段并打上框架标签；人工确认后进入框架片段或卖点片段，供混剪使用。"
       >
         {(capabilities) => <SegmentSuggestPanel capabilities={capabilities} />}

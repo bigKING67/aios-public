@@ -1,4 +1,4 @@
-import datePickerZhCN from 'antd/es/date-picker/locale/zh_CN';
+import { datePickerLocaleZhCN, type PickerLocaleInput } from '@lobehub/ui';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import zhCnDayjsLocale from 'dayjs/locale/zh-cn';
@@ -9,10 +9,10 @@ import type { LiveCenterDateBoundsResponse } from './live-center-types';
 export const LIVE_CENTER_WEEK_LOCALE = 'zh-cn-live-center-week';
 export const LIVE_CENTER_WEEKDAY_LABELS_SUN_FIRST = ['日', '一', '二', '三', '四', '五', '六'];
 
-export const LIVE_CENTER_DATE_PICKER_LOCALE = {
-  ...datePickerZhCN,
+export const LIVE_CENTER_DATE_PICKER_LOCALE: PickerLocaleInput = {
+  ...datePickerLocaleZhCN,
   lang: {
-    ...datePickerZhCN.lang,
+    ...datePickerLocaleZhCN.lang,
     locale: LIVE_CENTER_WEEK_LOCALE,
     shortWeekDays: LIVE_CENTER_WEEKDAY_LABELS_SUN_FIRST,
   },

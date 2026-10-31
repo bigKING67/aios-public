@@ -1,7 +1,7 @@
 import type { Dispatch, Key, SetStateAction } from 'react';
 import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import type { MessageInstance } from 'antd/es/message/interface';
+import { toast } from '@lobehub/ui';
 import { resolveClientErrorMessage, resolveClientErrorStatus } from '@/lib/client-error';
 import {
   createCreator,
@@ -14,7 +14,6 @@ import type {
 } from '../_lib/creator-library-types';
 
 interface UseCreatorLibraryRecordActionsParams {
-  messageApi: MessageInstance;
   editingItem: CreatorLibraryItem | null;
   refreshLibrary: () => void;
   refreshCreatorFilterOptions: () => void;
@@ -36,7 +35,6 @@ interface DeleteCreatorVariables {
 }
 
 export function useCreatorLibraryRecordActions({
-  messageApi,
   editingItem,
   refreshLibrary,
   refreshCreatorFilterOptions,
@@ -49,19 +47,19 @@ export function useCreatorLibraryRecordActions({
   const createMutation = useMutation({
     mutationFn: createCreator,
     onSuccess: () => {
-      messageApi.success('达人已新增');
+      toast.success('达人已新增');
       setFormOpen(false);
       setEditingItem(null);
       refreshLibrary();
       refreshCreatorFilterOptions();
     },
-    onError: (err) => messageApi.error(resolveClientErrorMessage(err, '新增达人失败')),
+    onError: (err) => toast.error(resolveClientErrorMessage(err, '新增达人失败')),
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: UpdateCreatorVariables) => updateCreator(id, payload),
     onSuccess: () => {
-      messageApi.success('达人资料已更新');
+      toast.success('达人资料已更新');
       setFormOpen(false);
       setEditingItem(null);
       setFollowItem(null);
@@ -76,7 +74,7 @@ export function useCreatorLibraryRecordActions({
         setAssignItem(null);
         refreshLibrary();
       }
-      messageApi.error(resolveClientErrorMessage(err, '更新达人失败'));
+      toast.error(resolveClientErrorMessage(err, '更新达人失败'));
     },
   });
 
@@ -84,7 +82,7 @@ export function useCreatorLibraryRecordActions({
     mutationFn: ({ id, expectedUpdatedAt }: DeleteCreatorVariables) =>
       deleteCreator(id, expectedUpdatedAt),
     onSuccess: () => {
-      messageApi.success('达人已删除');
+      toast.success('达人已删除');
       setSelectedRowKeys([]);
       refreshLibrary();
       refreshCreatorFilterOptions();
@@ -93,7 +91,7 @@ export function useCreatorLibraryRecordActions({
       if (resolveClientErrorStatus(err) === 409) {
         refreshLibrary();
       }
-      messageApi.error(resolveClientErrorMessage(err, '删除达人失败'));
+      toast.error(resolveClientErrorMessage(err, '删除达人失败'));
     },
   });
 

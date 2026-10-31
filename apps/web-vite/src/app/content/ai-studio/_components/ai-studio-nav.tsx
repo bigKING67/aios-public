@@ -1,65 +1,74 @@
-import { useEffect, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import consoleStyles from '@/app/marketing/content-assets/_components/content-assets-console.module.css';
-import { AI_STUDIO_NAV_GROUPS } from './ai-studio-nav-config';
-import styles from '../ai-studio.module.css';
+import { ConsoleNav, type ConsoleNavProps } from '@lobehub/ui/dashboard';
+import { useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { canAccessPath } from '@/lib/auth-navigation';
+import { ROUTE_PATHS } from '@/lib/route-policy-registry';
+import { isTeamOutputOnlyByRole } from '@/lib/role-access';
+import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
+import { AI_STUDIO_NAV_GROUPS, type AiStudioNavItem, studioLocation } from './ai-studio-nav-config';
 
-/** Route-driven rail navigation; reuses the content-asset console rail styles. */
-export function AiStudioRailNav() {
+type ConsoleNavLinkProps = Parameters<NonNullable<ConsoleNavProps['renderLink']>>[0];
+
+/** Router links for lobe-ui's console navigation; external links keep a plain anchor. */
+function renderConsoleLink({ href, children, external, ...rest }: ConsoleNavLinkProps) {
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" {...rest}>
+        {children}
+      </a>
+    );
+  }
   return (
-    <nav className={consoleStyles.moduleNav} aria-label="AI 创作中心导航">
-      {AI_STUDIO_NAV_GROUPS.map((group) => (
-        <section className={consoleStyles.moduleNavGroup} key={group.title}>
-          <p>{group.title}</p>
-          {group.items.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.end}
-              aria-label={item.label}
-              title={item.label}
-              className={({ isActive }) =>
-                `${consoleStyles.moduleNavItem} ${styles.railNavLink} ${isActive ? consoleStyles.moduleNavItemActive : ''}`
-              }
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </section>
-      ))}
-    </nav>
+    <Link to={href} {...rest}>
+      {children}
+    </Link>
   );
 }
 
+function toConsoleItem(item: AiStudioNavItem) {
+  return { href: item.path, label: item.label, icon: item.icon, end: item.end };
+}
+
 /**
- * Horizontal navigation for narrow viewports where the console rail is hidden.
- * The strip scrolls sideways, so the active page is centred on every route change.
+ * Route-driven studio navigation (lobe-ui ConsoleNav). The untitled group becomes the leading
+ * items; titled groups stay groups. A page without its own entry (AI 切段) reports its parent's
+ * path so the parent stays active.
  */
-export function AiStudioCompactNav() {
-  const navRef = useRef<HTMLElement>(null);
-  const { pathname } = useLocation();
-  useEffect(() => {
-    const nav = navRef.current;
-    const active = nav?.querySelector<HTMLElement>('[aria-current="page"]');
-    if (!nav || !active || nav.scrollWidth <= nav.clientWidth) return;
-    // Horizontal only: scrollIntoView would also move the page vertically.
-    nav.scrollLeft = active.offsetLeft - (nav.clientWidth - active.offsetWidth) / 2;
-  }, [pathname]);
+export function AiStudioNav() {
+  const { pathname, search } = useLocation();
+  const activePath = studioLocation(pathname, search).item?.path ?? pathname;
+  const permissions = useAuthStore((state) => state.permissions);
+  const user = useAuthStore((state) => state.user);
+  const roles = useAuthStore(selectUserRoles);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { items, groups } = useMemo(() => {
+    // Restricted entries (团队产出) follow their route policy; a group left empty disappears. An account
+    // limited to 团队产出 (HR) sees that entry alone.
+    const identity = { username: user?.username, email: user?.email, fullName: user?.full_name };
+    const teamOutputOnly = isTeamOutputOnlyByRole(roles, identity);
+    const visible = (item: AiStudioNavItem) =>
+      teamOutputOnly
+        ? item.path === ROUTE_PATHS.contentAiStudioTeamOutput
+        : !item.restricted || canAccessPath(item.path, permissions, roles, identity, isAuthenticated);
+    const [shared, ...titled] = AI_STUDIO_NAV_GROUPS;
+    return {
+      items: shared.items.filter(visible).map(toConsoleItem),
+      groups: titled
+        .map((group) => ({
+          key: group.key,
+          label: group.title ?? group.key,
+          items: group.items.filter(visible).map(toConsoleItem),
+        }))
+        .filter((group) => group.items.length > 0),
+    };
+  }, [permissions, roles, user, isAuthenticated]);
   return (
-    <nav ref={navRef} className={styles.compactNav} aria-label="AI 创作中心导航">
-      {AI_STUDIO_NAV_GROUPS.flatMap((group) => group.items).map((item) => (
-        <NavLink
-          key={item.path}
-          to={item.path}
-          end={item.end}
-          aria-label={item.label}
-          className={({ isActive }) => `${styles.compactNavItem} ${isActive ? styles.compactNavItemActive : ''}`}
-        >
-          {item.icon}
-          <span>{item.label}</span>
-        </NavLink>
-      ))}
-    </nav>
+    <ConsoleNav
+      label="AI 创作中心导航"
+      pathname={activePath}
+      items={items}
+      groups={groups}
+      renderLink={renderConsoleLink}
+    />
   );
 }

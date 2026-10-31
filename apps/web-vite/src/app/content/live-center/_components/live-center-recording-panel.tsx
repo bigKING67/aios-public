@@ -1,13 +1,8 @@
 import type { ChangeEvent, ReactNode } from 'react';
 import { useMemo, useRef } from 'react';
-import { Button, Popconfirm, Table } from 'antd';
-import type { ButtonProps, TableProps } from 'antd';
-import {
-  CloudUploadOutlined,
-  DeleteOutlined,
-  PlayCircleOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
+import { Button, confirmModal, Table } from '@lobehub/ui';
+import type { ButtonProps, TableColumnsType } from '@lobehub/ui';
+import { CirclePlay, CloudUpload, Trash2, VideoIcon } from 'lucide-react';
 import { Badge } from '@/components/atoms/badge';
 import {
   formatDateTime,
@@ -80,7 +75,7 @@ export function RecordingPanel({
 }) {
   const segments = recording?.segments ?? [];
   const hasPlayableSegments = segments.some(isLiveCenterRecordingSegmentPlayable);
-  const segmentColumns = useMemo<TableProps<LiveCenterRecordingSegment>['columns']>(
+  const segmentColumns = useMemo<TableColumnsType<LiveCenterRecordingSegment>>(
     () => [
       {
         ...segmentTableColumnCellProps,
@@ -164,14 +159,14 @@ export function RecordingPanel({
       {uploadProgress ? <RecordingUploadProgressPanel progress={uploadProgress} /> : null}
       {!hasSegments && !playback && !uploadProgress ? (
         <div className={styles.detailEmptyState}>
-          <VideoCameraOutlined />
+          <VideoIcon size={14} strokeWidth={1.8} aria-hidden="true" />
           <div className={styles.detailEmptyCopy}>
             <h2>等待录屏证据</h2>
             <p>可一次选择多段录屏，系统会按文件名时间顺序排队上传；片段不需要覆盖完整直播。</p>
           </div>
           <RecordingUploadButton
             disabled={uploadRunning}
-            icon={<CloudUploadOutlined />}
+            icon={<CloudUpload size={14} strokeWidth={1.8} aria-hidden="true" />}
             loading={uploadRunning}
             onSelectFile={onUploadFile}
             type="primary"
@@ -196,7 +191,7 @@ export function RecordingPanel({
               </>
             ) : (
               <div className={recordingStyles.playerEmpty}>
-                <VideoCameraOutlined />
+                <VideoIcon size={14} strokeWidth={1.8} aria-hidden="true" />
                 <p>{hasPlayableSegments ? '选择已上传分段后播放。' : '当前分段尚未上传完成，请先清理残留或重新上传。'}</p>
               </div>
             )}
@@ -284,7 +279,7 @@ function RecordingSegmentAction({
     return (
       <Button
         size="small"
-        icon={<PlayCircleOutlined />}
+        icon={<CirclePlay size={14} strokeWidth={1.8} aria-hidden="true" />}
         loading={playbackLoadingSegmentId === segment.segmentId}
         onClick={(event) => {
           event.stopPropagation();
@@ -297,28 +292,26 @@ function RecordingSegmentAction({
   }
 
   return (
-    <Popconfirm
-      title="清理未完成的录屏分段？"
-      description="会尝试终止 TOS 分片上传并物理删除已产生的 TOS 对象，然后从当前场次隐藏该分段。"
-      okText="清理"
-      cancelText="取消"
-      okButtonProps={{ danger: true, loading: cleanupLoadingSegmentId === segment.segmentId }}
-      onConfirm={(event) => {
-        event?.stopPropagation();
-        onCleanupSegment(segment);
+    <Button
+      danger
+      disabled={cleanupDisabled}
+      size="small"
+      icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
+      loading={cleanupLoadingSegmentId === segment.segmentId}
+      onClick={(event) => {
+        event.stopPropagation();
+        confirmModal({
+          title: '清理未完成的录屏分段？',
+          content: '会尝试终止 TOS 分片上传并物理删除已产生的 TOS 对象，然后从当前场次隐藏该分段。',
+          okText: '清理',
+          cancelText: '取消',
+          okButtonProps: { danger: true },
+          onOk: () => onCleanupSegment(segment),
+        });
       }}
     >
-      <Button
-        danger
-        disabled={cleanupDisabled}
-        size="small"
-        icon={<DeleteOutlined />}
-        loading={cleanupLoadingSegmentId === segment.segmentId}
-        onClick={(event) => event.stopPropagation()}
-      >
-        清理
-      </Button>
-    </Popconfirm>
+      清理
+    </Button>
   );
 }
 

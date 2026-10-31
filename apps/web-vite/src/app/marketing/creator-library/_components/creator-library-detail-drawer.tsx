@@ -1,4 +1,4 @@
-import { Drawer } from 'antd';
+import { Drawer } from '@lobehub/ui';
 import sharedStyles from '../creator-library-shared.module.css';
 import styles from './creator-library-detail-drawer.module.css';
 import {
@@ -32,7 +32,7 @@ export function CreatorLibraryDetailDrawer({
   return (
     <Drawer
       title={item ? `达人详情：${item.influencerName}` : '达人详情'}
-      size={620}
+      width={620}
       open={open}
       onClose={onClose}
     >

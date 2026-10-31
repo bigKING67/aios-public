@@ -190,6 +190,7 @@ function assertDiagnosisSectionsIsRenderOnly() {
   for (const identifierName of [
     'buildTmallFunnelDiagnosisSectionListProps',
     'ColumnsType',
+    'TableColumnsType',
     'FunnelChannelRow',
     'FunnelChannelSection',
     'QuantAttributionRow',

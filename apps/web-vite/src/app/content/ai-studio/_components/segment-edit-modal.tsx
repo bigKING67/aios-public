@@ -1,4 +1,4 @@
-import { Input, Modal, Select } from 'antd';
+import { Input, Modal, Select } from '@lobehub/ui';
 import { useEffect, useId, useState } from 'react';
 import type { StudioContentSegment, StudioSegmentPreset, StudioUpdateContentSegmentRequest } from '../_lib/ai-studio-api';
 import { isSellingPointPreset } from '../_lib/segment-display';
@@ -88,7 +88,6 @@ export function SegmentEditModal({ segment, preset, durationMs, busy, onCancel, 
             <Input
               id={`${id}-${item.field}`}
               value={item.value}
-              status={errors[item.field] ? 'error' : undefined}
               aria-invalid={Boolean(errors[item.field])}
               aria-describedby={errors[item.field] ? `${id}-${item.field}-error` : undefined}
               inputMode="decimal"

@@ -1,8 +1,8 @@
 'use client';
 
+import { CirclePlay, Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Alert, Button, Skeleton } from 'antd';
-import { DownloadOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { Alert, Button, Skeleton } from '@lobehub/ui';
 import { createContentAssetPlaybackUrl } from '../_lib/content-assets-api';
 import type { ContentAssetItem, PlaybackUrlResponse } from '../_lib/content-assets-types';
 import { formatBytes, formatDuration } from '../_lib/content-assets-formatters';
@@ -81,7 +81,7 @@ export function ContentAssetsVideoPlayer({ asset, variant = 'default' }: Content
   if (asset.externalOnly) {
     return (
       <div className={styles.playerEmpty}>
-        <PlayCircleOutlined />
+        <CirclePlay size={14} strokeWidth={1.8} aria-hidden="true" />
         <p>该素材来自外部链接，尚未补传到 TOS，暂不能在中台直接播放。</p>
         {asset.sourceUrl ? (
           <Button href={asset.sourceUrl} target="_blank" rel="noreferrer">
@@ -95,7 +95,7 @@ export function ContentAssetsVideoPlayer({ asset, variant = 'default' }: Content
   return (
     <div className={shellClassName}>
       {isLoading ? (
-        <Skeleton.Node active className={skeletonClassName} />
+        <Skeleton animated className={skeletonClassName} />
       ) : null}
       {!isLoading && playback ? (
         <video
@@ -110,11 +110,11 @@ export function ContentAssetsVideoPlayer({ asset, variant = 'default' }: Content
       ) : null}
       {!isLoading && !playback && !error ? (
         <div className={styles.playerEmpty}>
-          <PlayCircleOutlined />
+          <CirclePlay size={14} strokeWidth={1.8} aria-hidden="true" />
           <p>缺少可播放对象，等待上传或处理队列补齐后即可播放。</p>
         </div>
       ) : null}
-      {error ? <Alert type="error" showIcon message="播放地址生成失败" description={error} /> : null}
+      {error ? <Alert type="error" showIcon title="播放地址生成失败" description={error} /> : null}
       <div className={styles.playerMetaRow}>
         {isHero ? (
           <dl className={styles.playerMetaList} aria-label="媒体基础指标">
@@ -135,7 +135,7 @@ export function ContentAssetsVideoPlayer({ asset, variant = 'default' }: Content
         <Button
           type={isHero ? 'primary' : 'default'}
           className={styles.playerDownloadButton}
-          icon={<DownloadOutlined />}
+          icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
           loading={isDownloading}
           disabled={!asset.rawObjectKey}
           onClick={downloadRaw}

@@ -9,13 +9,13 @@
 /* ============ 页面全局背景 ============ */
 
 body.light-theme {
-  background-color: var(--bg-global);
-  color: var(--text-primary);
+  background-color: var(--lobe-color-bg-layout);
+  color: var(--lobe-color-text);
 }
 
 .report-page-light {
-  background-color: var(--bg-global);
-  color: var(--text-primary);
+  background-color: var(--lobe-color-bg-layout);
+  color: var(--lobe-color-text);
   min-height: 100vh;
   min-height: 100dvh;
   /* 吸顶布局参数：顶部主导航 64px + 周报头部约 73px */
@@ -23,14 +23,12 @@ body.light-theme {
   --weekly-header-sticky-height: 73px;
 }
 
-.weekly-report-client,
-.weekly-report-client .ant-tabs,
-.weekly-report-client .ant-tabs-content-holder {
+.weekly-report-client {
   overflow: visible;
 }
 
 .weekly-affix-surface {
-  background-color: var(--bg-global);
+  background-color: var(--lobe-color-bg-layout);
 }
 
 .weekly-affix-header-shell {

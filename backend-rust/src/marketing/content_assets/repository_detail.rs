@@ -6,6 +6,7 @@ use crate::error::{AppError, AppResult};
 
 use super::{
     performance_snapshot::query_performance_snapshot,
+    relation_guard::{relation_exists, DOUYIN_SHORTVIDEO_DETAIL},
     repository::query_asset_by_id,
     row_mapping::{
         ad_material_from_row, event_from_row, object_from_row, platform_video_from_row,
@@ -252,6 +253,9 @@ async fn query_short_video_profile_hint(
     pool: &PgPool,
     asset_id: Uuid,
 ) -> AppResult<Option<ContentAssetShortVideoProfileHint>> {
+    if !relation_exists(pool, DOUYIN_SHORTVIDEO_DETAIL).await? {
+        return Ok(None);
+    }
     let row = sqlx::query(
         r#"
         WITH identity_keys AS (

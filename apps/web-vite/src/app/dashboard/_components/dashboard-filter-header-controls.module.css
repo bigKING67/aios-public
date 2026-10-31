@@ -10,7 +10,7 @@
   min-width: 238px;
 }
 
-.pickerShell :global(.ant-picker) {
+.pickerShell :global(.lobe-picker) {
   height: 38px;
   width: 100%;
 }
@@ -18,7 +18,7 @@
 .dateBoundsStatus {
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
-  color: var(--status-warning-strong);
+  color: var(--aios-status-warning-strong);
 }
 
 .dateModeSegmented {
@@ -33,29 +33,29 @@
   padding: 0 !important;
 }
 
-.dateModeSegmented :global(.ant-segmented-group) {
+.dateModeSegmented {
   gap: var(--spacing-2);
 }
 
-.dateModeSegmented :global(.ant-segmented-item) {
+.dateModeSegmented :global(.lobe-segmented__item) {
   min-width: var(--dashboard-selection-compact-min-width);
   border-radius: var(--border-radius-full) !important;
   background: transparent !important;
   box-shadow: none !important;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-base);
   font-weight: 600;
   text-align: center;
 }
 
-.dateModeSegmented :global(.ant-segmented-thumb) {
+.dateModeSegmented :global(.lobe-segmented__indicator) {
   border-radius: var(--border-radius-full) !important;
-  background-color: var(--brand-primary) !important;
+  background-color: var(--lobe-color-primary) !important;
   background-image: none !important;
   box-shadow: var(--dashboard-brand-tab-shadow) !important;
 }
 
-.dateModeSegmented :global(.ant-segmented-item-label) {
+.dateModeSegmented :global(.lobe-segmented__item-label) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -66,49 +66,53 @@
   line-height: var(--line-height-none);
 }
 
-.dateModeSegmented :global(.ant-segmented-item:hover),
-.dateModeSegmented :global(.ant-segmented-item-active) {
-  background-color: var(--brand-secondary) !important;
+.dateModeSegmented :global(.lobe-segmented__item:hover),
+.dateModeSegmented :global(.lobe-segmented__item:active) {
+  background-color: var(--lobe-color-fill-tertiary) !important;
   background-image: none !important;
-  color: var(--brand-dark) !important;
+  color: var(--lobe-color-text) !important;
 }
 
-.dateModeSegmented :global(.ant-segmented-item-selected) {
-  background-color: var(--brand-primary) !important;
+.dateModeSegmented :global(.lobe-segmented__item[data-pressed]) {
+  background-color: var(--lobe-color-primary) !important;
   background-image: none !important;
   box-shadow: var(--dashboard-brand-tab-shadow) !important;
-  color: var(--brand-on-primary) !important;
+  color: var(--lobe-color-bg-container) !important;
 }
 
-.dateModeSegmented :global(.ant-segmented-item-selected:hover),
-.dateModeSegmented :global(.ant-segmented-item-selected.ant-segmented-item-active) {
-  background-color: var(--brand-dark) !important;
+.dateModeSegmented :global(.lobe-segmented__item[data-pressed]:hover),
+.dateModeSegmented :global(.lobe-segmented__item[data-pressed]:active) {
+  background-color: var(--lobe-color-primary-hover) !important;
   background-image: none !important;
-  color: var(--brand-on-primary) !important;
+  color: var(--lobe-color-bg-container) !important;
 }
 
-.dateModeSegmented :global(.ant-segmented-item-selected .ant-segmented-item-label) {
-  color: var(--brand-on-primary) !important;
+.dateModeSegmented :global(.lobe-segmented__item[data-pressed] .lobe-segmented__item-label) {
+  color: var(--lobe-color-bg-container) !important;
 }
 
-.pickerShell :global(.ant-picker) {
+.pickerShell :global(.lobe-picker) {
   border-width: 1px !important;
   border-style: solid !important;
-  border-color: var(--border-color) !important;
+  border-color: var(--lobe-color-border) !important;
   border-radius: var(--border-radius-lg) !important;
-  background-color: color-mix(in srgb, var(--bg-card) 88%, transparent) !important;
+  background-color: color-mix(in srgb, var(--lobe-color-bg-container) 88%, transparent) !important;
   background-image: none !important;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-card) 72%, transparent),
-    var(--shadow-sm) !important;
+    inset 0 1px 0 color-mix(in srgb, var(--lobe-color-bg-container) 72%, transparent),
+    var(--lobe-box-shadow-tertiary) !important;
 }
 
-.pickerShell :global(.ant-picker:hover),
-.pickerShell :global(.ant-picker-focused) {
-  border-color: color-mix(in srgb, var(--brand-primary) 36%, var(--border-color)) !important;
-  background-color: var(--bg-card) !important;
+.pickerShell :global(.lobe-picker:hover),
+.pickerShell :global(.lobe-picker:focus-within) {
+  border-color: var(--aios-border-hover) !important;
+  background-color: var(--lobe-color-bg-container) !important;
   background-image: none !important;
-  box-shadow: 0 0 0 2px var(--brand-secondary) !important;
+}
+
+.pickerShell :global(.lobe-picker:focus-within) {
+  border-color: var(--lobe-focus-ring-color) !important;
+  box-shadow: 0 0 0 2px var(--aios-ai-soft) !important;
 }
 
 @media (max-width: 1380px) {

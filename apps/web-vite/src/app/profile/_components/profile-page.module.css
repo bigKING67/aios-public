@@ -1,0 +1,88 @@
+/*
+ * 个人信息 page on lobe-ui: PageHeader + Surface cards; this module owns the account facts list,
+ * the password form actions and the permission code list, all on --lobe-* tokens.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.fact {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+
+.fact dt {
+  flex: none;
+  width: 6rem;
+  color: var(--lobe-color-text-secondary);
+}
+
+.fact dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--lobe-color-text);
+  overflow-wrap: anywhere;
+}
+
+.fact .muted {
+  color: var(--lobe-color-text-secondary);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  max-width: 480px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.permissions {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--lobe-border-radius-lg);
+  list-style: none;
+}
+
+.permissions li {
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+.permissions li + li {
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.permissions code {
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--lobe-border-radius-sm);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
+  font-size: var(--font-size-sm);
+}

@@ -1,6 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Form } from 'antd';
-import type { MessageInstance } from 'antd/es/message/interface';
 
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import type { DataOpsActionRequest } from '@/types/dataops';
@@ -18,12 +16,14 @@ import type {
   BatchHistoryTimeRangeFilter,
   BatchOperationAction,
 } from './dataops-hub-formatters';
+import type { DataOpsMessageApi } from './dataops-feedback-types';
+import { useDataOpsAlertSendForm } from './dataops-alert-send-form';
 
 export function useDataOpsBatchHistoryModalState(options: {
   availableAlertChannels: DataOpsNotificationChannel[];
   executeAction: (payload: DataOpsActionRequest, actionKey: string) => Promise<boolean>;
   hasOperatePermission: boolean;
-  message: MessageInstance;
+  message: DataOpsMessageApi;
 }) {
   const { availableAlertChannels, executeAction, hasOperatePermission, message } = options;
   const [batchHistoryModalOpen, setBatchHistoryModalOpen] = useState(false);
@@ -39,7 +39,7 @@ export function useDataOpsBatchHistoryModalState(options: {
   const [batchHistoryTimeRangeFilter, setBatchHistoryTimeRangeFilter] =
     useState<BatchHistoryTimeRangeFilter>('all');
   const [batchHistoryKeyword, setBatchHistoryKeyword] = useState('');
-  const [batchHistoryAlertForm] = Form.useForm<BatchHistoryAlertSendFormValues>();
+  const batchHistoryAlertForm = useDataOpsAlertSendForm();
 
   const batchHistoryAlertModalCopy = useMemo(
     () => getAlertSendModalCopy(batchHistoryAlertModalSource),

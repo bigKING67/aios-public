@@ -2,8 +2,8 @@
 
 import type { Key } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, App, Spin } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Alert, confirmModal, Spin } from '@lobehub/ui';
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@/components/organisms/layout';
@@ -47,7 +47,6 @@ import { CreatorLibraryTable } from './creator-library-table';
 import { CreatorLibraryToolbar } from './creator-library-toolbar';
 
 export function CreatorLibraryClient() {
-  const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
   const canCreateOrImport = usePermission(CREATOR_LIBRARY_WRITE_PERMISSIONS, 'any');
   const [filters, setFilters] = useState<CreatorLibraryFilters>({});
@@ -133,7 +132,6 @@ export function CreatorLibraryClient() {
     handleUpdateExisting,
     updateMutation,
   } = useCreatorLibraryRecordActions({
-    messageApi: message,
     editingItem,
     refreshLibrary,
     refreshCreatorFilterOptions,
@@ -148,7 +146,6 @@ export function CreatorLibraryClient() {
     deleteFollowLogMutation,
     updateFollowLogMutation,
   } = useCreatorLibraryFollowLogActions({
-    messageApi: message,
     followItem,
     refreshLibrary,
     refreshActiveCreatorFollowLogs,
@@ -156,7 +153,6 @@ export function CreatorLibraryClient() {
   });
 
   const { exportMutation, importMutation, templateMutation } = useCreatorLibraryFileActions({
-    messageApi: message,
     queryParams,
     onImportClose: () => setImportOpen(false),
     onImportSuccess: (importedCount) => {
@@ -183,7 +179,7 @@ export function CreatorLibraryClient() {
     }
 
     setMissingPromptKeyword(null);
-    modal.confirm({
+    confirmModal({
       title: '达人库未有该达人',
       content: '是否新增达人入库信息？',
       okText: '新增达人',
@@ -199,7 +195,6 @@ export function CreatorLibraryClient() {
     isFetching,
     isLoading,
     missingPromptKeyword,
-    modal,
     queryParams.keyword,
   ]);
 
@@ -231,7 +226,7 @@ export function CreatorLibraryClient() {
                 </p>
               </div>
               <Link to="/marketing" className={styles.backLink}>
-                <ArrowLeftOutlined />
+                <ArrowLeft size={14} strokeWidth={1.8} aria-hidden="true" />
                 返回营销总览
               </Link>
             </section>

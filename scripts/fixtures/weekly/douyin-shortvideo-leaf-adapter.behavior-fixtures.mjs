@@ -67,6 +67,7 @@ function assertShortvideoLeafAdapterOwnsNoContracts() {
 
   const forbiddenIdentifiers = [
     'ColumnsType',
+    'TableColumnsType',
     'DouyinSectionData',
     'DouyinShortvideoAttributionOverviewSectionProps',
     'WeeklyDataTableProps',

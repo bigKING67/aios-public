@@ -144,3 +144,52 @@ class TosUploadTests(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+
+
+class DerivedBucketRoutingTests(unittest.TestCase):
+  ROUTED = TosStorageConfig("ak", "sk", "https://s3.example.com", "garage", "media", derived_bucket="derived")
+
+  def test_unset_derived_bucket_keeps_every_key_in_the_main_bucket(self):
+    for key in ("raw/2026/10/a/x.mp4", "preview/2026/10/a/x.mp4", "competitor/raw/1.mp4"):
+      self.assertEqual(CONFIG.bucket_for(key), "bucket")
+
+  def test_derived_prefixes_route_to_the_derived_bucket(self):
+    derived = ("preview/x.mp4", "cover/x.webp", "proxy/x.mp4", "analysis/x.json", "transcript/x.json",
+               "segment-cover/x.webp", "competitor/evidence/a/clip.mp4", "competitor/raw/7400.mp4")
+    for key in derived:
+      self.assertEqual(self.ROUTED.bucket_for(key), "derived", key)
+    for key in ("raw/2026/10/a/x.mp4", "production/p/j/video.mp4", "previews.txt", "competitor/other.mp4"):
+      self.assertEqual(self.ROUTED.bucket_for(key), "media", key)
+
+  def test_requests_and_presigned_urls_use_the_routed_host(self):
+    hosts = []
+
+    class Session:
+      trust_env, verify = True, True
+
+      def put(self, url, data=None, headers=None, timeout=None):
+        hosts.append(urlsplit(url).netloc)
+        return FakeResponse(200)
+
+      def delete(self, url, headers=None, timeout=None):
+        hosts.append(urlsplit(url).netloc)
+        return FakeResponse(204)
+
+    client = TosStorageClient(self.ROUTED, UploadTuning(deadline_seconds=60))
+    client.session = Session()
+    with tempfile.TemporaryDirectory() as tmp:
+      path = Path(tmp) / "c.webp"
+      path.write_bytes(b"x")
+      client.upload_file("segment-cover/2026/10/s.webp", path, "image/webp")
+      client.upload_file("raw/2026/10/a/x.mp4", path, "video/mp4")
+    client.delete_object("competitor/raw/7400.mp4")
+    self.assertEqual(hosts, ["derived.s3.example.com", "media.s3.example.com", "derived.s3.example.com"])
+    self.assertTrue(client.presign_get_url("cover/x.webp").startswith("https://derived.s3.example.com/cover/x.webp?"))
+    self.assertTrue(client.presign_get_url("raw/x.mp4").startswith("https://media.s3.example.com/raw/x.mp4?"))
+
+  def test_env_reads_the_optional_derived_bucket(self):
+    env = {"TOS_ACCESS_KEY_ID": "ak", "TOS_SECRET_ACCESS_KEY": "sk", "TOS_BUCKET": "media"}
+    with patch.dict("os.environ", env, clear=True):
+      self.assertEqual(TosStorageConfig.from_env().derived_bucket, "")
+    with patch.dict("os.environ", {**env, "TOS_DERIVED_BUCKET": " derived "}, clear=True):
+      self.assertEqual(TosStorageConfig.from_env().derived_bucket, "derived")

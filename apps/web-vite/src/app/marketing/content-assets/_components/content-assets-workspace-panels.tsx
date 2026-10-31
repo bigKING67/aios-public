@@ -1,10 +1,5 @@
-import { Button } from 'antd';
-import {
-  AppstoreOutlined,
-  CheckCircleOutlined,
-  CloudUploadOutlined,
-  FileSearchOutlined,
-} from '@ant-design/icons';
+import { CircleCheck, CloudUpload, FileSearch, LayoutGrid } from 'lucide-react';
+import { Button } from '@lobehub/ui';
 import type {
   ContentAssetProcessingJobListResponse,
   ContentAssetAiJobBackfillPayload,
@@ -124,10 +119,10 @@ export function ContentAssetsWorkspacePanel({
               首页只展示真实待办：源视频入库、预览封面、AI分析、脚本、平台视频 ID、广告素材 ID 和授权信息覆盖。
             </p>
             <div className={styles.heroActions}>
-              <Button type="primary" icon={<CloudUploadOutlined />} disabled={!canWrite} onClick={onUploadOpen}>
+              <Button type="primary" icon={<CloudUpload size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onUploadOpen}>
                 上传视频素材
               </Button>
-              <Button icon={<AppstoreOutlined />} onClick={onOpenAssets}>
+              <Button icon={<LayoutGrid size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onOpenAssets}>
                 进入素材库
               </Button>
             </div>
@@ -162,7 +157,7 @@ export function ContentAssetsWorkspacePanel({
         <section className={styles.homeGrid}>
           <article className={styles.flowCard}>
             <div className={styles.sectionTitle}>
-              <CheckCircleOutlined />
+              <CircleCheck size={14} strokeWidth={1.8} aria-hidden="true" />
               <div>
                 <strong>状态必须拆开看</strong>
                 <p>已分析不等于已有脚本；已入库也不等于可直接投放。</p>
@@ -180,7 +175,7 @@ export function ContentAssetsWorkspacePanel({
 
           <article className={styles.actionCard}>
             <div className={styles.sectionTitle}>
-              <FileSearchOutlined />
+              <FileSearch size={14} strokeWidth={1.8} aria-hidden="true" />
               <div>
                 <strong>今天先做什么</strong>
                 <p>高频操作入口，不再依赖飞书作为日常上传入口。</p>
@@ -288,7 +283,7 @@ export function ContentAssetsWorkspacePanel({
       <section className={styles.moduleReadiness} aria-label={`${config.title} 接入状态`}>
         <div className={styles.moduleReadinessMain}>
           <div className={styles.sectionTitle}>
-            <FileSearchOutlined />
+            <FileSearch size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>当前真实入口</strong>
               <p>{readiness.currentEntry}</p>
@@ -306,17 +301,17 @@ export function ContentAssetsWorkspacePanel({
         </div>
         <aside className={styles.moduleReadinessSide}>
           <div className={styles.sectionTitle}>
-            <CheckCircleOutlined />
+            <CircleCheck size={14} strokeWidth={1.8} aria-hidden="true" />
             <div>
               <strong>避免假完整页面</strong>
               <p>{readiness.pendingScope}</p>
             </div>
           </div>
           <div className={styles.readinessActions}>
-            <Button type="primary" icon={<AppstoreOutlined />} onClick={onOpenAssets}>
+            <Button type="primary" icon={<LayoutGrid size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onOpenAssets}>
               进入素材库
             </Button>
-            <Button icon={<CloudUploadOutlined />} disabled={!canWrite} onClick={onUploadOpen}>
+            <Button icon={<CloudUpload size={14} strokeWidth={1.8} aria-hidden="true" />} disabled={!canWrite} onClick={onUploadOpen}>
               上传素材
             </Button>
           </div>

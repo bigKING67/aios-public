@@ -1,6 +1,3 @@
-import type { MessageInstance } from 'antd/es/message/interface';
-import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
-
 import { request } from '@/lib/request';
 import type {
   DataOpsActionRequest,
@@ -26,14 +23,15 @@ import {
   type BatchOperationFailureContext,
   type BatchOperationOptions,
 } from './dataops-batch-helpers';
+import type { DataOpsMessageApi, DataOpsModalApi } from './dataops-feedback-types';
 
 interface ExecuteDataOpsBatchOperationParams {
   action: BatchOperationAction;
   label: string;
   operationOptions: BatchOperationOptions;
   hasOperatePermission: boolean;
-  message: MessageInstance;
-  modal: Pick<ModalStaticFunctions, 'confirm'>;
+  message: DataOpsMessageApi;
+  modal: DataOpsModalApi;
   persistBatchExecutionHistory: (summary: BatchExecutionSummary) => Promise<void>;
   pipelineMap: ReadonlyMap<string, DataOpsRuntimePipeline>;
   refetchRuntime: () => Promise<unknown>;

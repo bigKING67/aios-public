@@ -1,5 +1,5 @@
 .detailHeaderNoWrap,
-.detailHeaderNoWrap :global(.ant-table-column-title) {
+.detailHeaderNoWrap :global(.lobe-table-column-title) {
   white-space: nowrap;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .stackedTextMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
@@ -34,10 +34,10 @@
   min-width: 0;
   min-height: var(--component-control-line-height-sm);
   padding: 0 var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-full);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 580;
   line-height: var(--line-height-snug);
@@ -84,9 +84,9 @@
 
 .assetChipMore,
 .assetChipMuted {
-  color: var(--status-neutral-strong);
-  background: var(--status-neutral-bg);
-  border-color: var(--status-neutral-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  border-color: var(--lobe-color-border);
 }
 
 .assetChipLink {
@@ -99,7 +99,7 @@
 }
 
 .assetChipLink:hover {
-  color: var(--brand-primary);
+  color: var(--lobe-color-primary);
 }
 
 .materialIdWarningCell {
@@ -126,10 +126,10 @@
   height: 14px;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--status-danger-border);
+  border: 1px solid var(--lobe-color-error-border);
   border-radius: var(--border-radius-full);
-  color: var(--status-danger);
-  background: var(--status-danger-bg);
+  color: var(--aios-status-danger);
+  background: var(--lobe-color-error-bg);
   font-size: var(--font-size-xs);
   font-weight: 700;
   line-height: var(--line-height-none);

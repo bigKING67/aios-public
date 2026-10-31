@@ -25,11 +25,11 @@
   padding: 2px 10px;
   color: var(
     --creator-platform-chip-text,
-    color-mix(in srgb, var(--creator-platform-color) 92%, var(--text-primary))
+    color-mix(in srgb, var(--creator-platform-color) 92%, var(--lobe-color-text))
   );
   background: var(
     --creator-platform-chip-bg,
-    color-mix(in srgb, var(--creator-platform-color) 16%, var(--bg-card))
+    color-mix(in srgb, var(--creator-platform-color) 16%, var(--lobe-color-bg-container))
   );
   border-color: transparent;
 }
@@ -41,8 +41,8 @@
   min-height: 22px;
   padding: 3px 11px;
   border: 1px solid transparent;
-  color: var(--creator-level-text, var(--text-secondary));
-  background: var(--creator-level-bg, var(--bg-subtle));
+  color: var(--creator-level-text, var(--lobe-color-text-secondary));
+  background: var(--creator-level-bg, var(--lobe-color-fill-tertiary));
   box-shadow: inset 0 1px 0 var(--creator-library-material-white-a760);
   vertical-align: middle;
 }
@@ -62,8 +62,8 @@
 
 .platformToneDouyin {
   --creator-platform-color: var(--platform-douyin);
-  --creator-platform-chip-text: var(--text-inverse);
-  --creator-platform-chip-bg: var(--text-primary);
+  --creator-platform-chip-text: var(--lobe-color-text-light-solid);
+  --creator-platform-chip-bg: var(--lobe-color-text);
 }
 
 .platformToneXiaohongshu {
@@ -83,13 +83,13 @@
 }
 
 .platformToneMulti {
-  --creator-platform-color: var(--brand-primary);
+  --creator-platform-color: var(--lobe-color-primary);
 }
 
 .platformToneUnknown {
   --creator-platform-color: var(--platform-unknown);
-  --creator-platform-chip-text: var(--text-secondary);
-  --creator-platform-chip-bg: var(--bg-subtle);
+  --creator-platform-chip-text: var(--lobe-color-text-secondary);
+  --creator-platform-chip-bg: var(--lobe-color-fill-tertiary);
 }
 
 .levelToneS {
@@ -118,8 +118,8 @@
 }
 
 .levelToneUnknown {
-  --creator-level-text: var(--text-tertiary);
-  --creator-level-bg: var(--bg-disabled);
+  --creator-level-text: var(--lobe-color-text-tertiary);
+  --creator-level-bg: var(--lobe-color-bg-container-disabled);
 }
 
 .cooperationToneUnclassified {
@@ -153,56 +153,11 @@
 }
 
 .cooperationToneBlacklist {
-  --creator-cooperation-text: var(--text-inverse);
-  --creator-cooperation-bg: var(--text-primary);
+  --creator-cooperation-text: var(--lobe-color-text-light-solid);
+  --creator-cooperation-bg: var(--lobe-color-text);
 }
 
 .cooperationToneNotCooperable {
-  --creator-cooperation-text: var(--text-inverse);
+  --creator-cooperation-text: var(--lobe-color-text-light-solid);
   --creator-cooperation-bg: var(--creator-library-material-blocked-red);
-}
-
-.anchorTagDropdown :global(.ant-select-item-option-state) {
-  display: none;
-}
-
-.checkboxOption {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.checkboxOptionBox {
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--border-color-hover);
-  border-radius: var(--border-radius-sm);
-  background: var(--bg-card);
-}
-
-.checkboxOptionBoxChecked {
-  border-color: var(--brand-primary);
-  background: var(--brand-primary);
-}
-
-.checkboxOptionBoxChecked::after {
-  content: '';
-  width: 7px;
-  height: 4px;
-  border: solid var(--text-inverse);
-  border-width: 0 0 1.5px 1.5px;
-  transform: rotate(-45deg) translate(1px, -1px);
-}
-
-.checkboxOptionLabel {
-  overflow: hidden;
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

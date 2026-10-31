@@ -26,8 +26,6 @@ export const VERIFY_CI_TERMINAL_RUN_GATE_NAMES = Object.freeze([
 ]);
 
 export const VERIFY_CI_ADAPTER_GATE_NAMES = Object.freeze([
-  'verify:design:antd-theme-token-sync',
-  'verify:design:antd-theme-token-sync-behavior',
   'verify:design:echarts-theme-token-sync',
   'verify:design:echarts-theme-token-sync-behavior',
   'verify:design:echarts-css-token-sync',
@@ -43,8 +41,6 @@ export const VERIFY_CI_PAIR_INVARIANTS = Object.freeze([
   ['verify:design:tailwind-utilities-behavior', 'verify:design:tailwind-utilities'],
   ['verify:design:docs-behavior', 'verify:design:docs'],
   ['verify:design:token-values-sync', 'verify:design:token-values-sync-behavior'],
-  ['verify:design:antd-table-selectors', 'verify:design:antd-table-selectors-behavior'],
-  ['verify:design:antd-theme-token-sync', 'verify:design:antd-theme-token-sync-behavior'],
   ['verify:design:echarts-theme-token-sync', 'verify:design:echarts-theme-token-sync-behavior'],
   ['verify:design:echarts-css-token-sync', 'verify:design:echarts-css-token-sync-behavior'],
   ['verify:design:runtime-tokens-behavior', 'verify:design:runtime-tokens'],

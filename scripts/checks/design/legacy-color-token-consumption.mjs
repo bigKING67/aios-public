@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Legacy status color token consumption audit.
+ * Legacy color token consumption audit.
  *
  * `--color-success|danger|warning|info` remain as low-level compatibility
- * definitions only. Runtime components/pages should consume DESIGN.md semantic
- * aliases such as `--status-*` or `--trend-*` instead.
+ * definitions only. The shared v1 color names (`--bg-*`, `--text-*`,
+ * `--brand-primary`, `--border-color*`, `--divider-color`, `--status-*`,
+ * `--trend-*`, `--chart-series-*`) are the token layer behind Tailwind
+ * utilities and the ECharts CSS variables; pages and components write the
+ * lobe (`--lobe-*`) and AIOS v2 (`--aios-*`) names directly (DESIGN.md).
  */
 
 import {
@@ -19,8 +22,19 @@ import {
 
 const LEGACY_STATUS_TOKEN_PATTERN = /--color-(success|danger|warning|info)\b/g;
 
+const SHARED_COLOR_NAME_PATTERN =
+  /var\(--(bg-(?:global|card|hover|subtle|disabled|input)|text-(?:primary|secondary|tertiary|disabled|inverse)|brand-[a-z-]+|border-color(?:-hover)?|divider-color|status-(?:success|warning|danger|info|neutral)(?:-(?:strong|bg|border))?|trend-(?:up|down|neutral)|chart-series-[a-z0-9]+)(?=[,)\s])/g;
+
 const ALLOWED_DEFINITION_FILES = new Set([
   'apps/web-vite/src/styles/design-tokens.css',
+]);
+
+// The token layer that defines or maps the shared names.
+const SHARED_NAME_TOKEN_LAYER_FILES = new Set([
+  'apps/web-vite/src/styles/design-tokens.css',
+  'apps/web-vite/src/styles/aios-theme.css',
+  'apps/web-vite/src/styles/echarts.css',
+  'apps/web-vite/src/test/tailwind-css-pipeline.test.ts',
 ]);
 const { fail, reportOk } = createCheckGuard('legacy-color-token-consumption', { errorPrefix: '' });
 
@@ -80,18 +94,22 @@ function auditFile(repoRoot, file) {
   const lines = readRepoFileLines(repoRoot, file, { lineEndingPattern: '\n' });
   const commentState = { inBlockComment: false };
   const violations = [];
+  const patterns = SHARED_NAME_TOKEN_LAYER_FILES.has(normalizeRepoPath(file))
+    ? [LEGACY_STATUS_TOKEN_PATTERN]
+    : [LEGACY_STATUS_TOKEN_PATTERN, SHARED_COLOR_NAME_PATTERN];
 
   lines.forEach((line, index) => {
     const cleanedLine = stripComments(line, commentState);
-    LEGACY_STATUS_TOKEN_PATTERN.lastIndex = 0;
 
-    for (const match of cleanedLine.matchAll(LEGACY_STATUS_TOKEN_PATTERN)) {
-      violations.push({
-        file,
-        lineNumber: index + 1,
-        token: match[0],
-        line: line.trim(),
-      });
+    for (const pattern of patterns) {
+      for (const match of cleanedLine.matchAll(pattern)) {
+        violations.push({
+          file,
+          lineNumber: index + 1,
+          token: match[0],
+          line: line.trim(),
+        });
+      }
     }
   });
 
@@ -106,8 +124,8 @@ function main() {
   const violations = files.flatMap((file) => auditFile(repoRoot, file));
 
   if (violations.length > 0) {
-    console.error('[legacy-color-token-consumption] Legacy --color-* status token usage found outside token definition files.');
-    console.error('[legacy-color-token-consumption] Use --status-*, --trend-*, or domain-specific aliases instead.\n');
+    console.error('[legacy-color-token-consumption] Legacy color token usage found outside the token layer.');
+    console.error('[legacy-color-token-consumption] Use --lobe-* and --aios-* names (e.g. --lobe-color-text, --aios-status-success, --aios-chart-1) or domain aliases.\n');
 
     for (const violation of violations) {
       console.error(`${violation.file}:${violation.lineNumber}: ${violation.token}`);
@@ -117,7 +135,7 @@ function main() {
     process.exit(1);
   }
 
-  reportOk(`scanned ${files.length} source files; no legacy status color token usage outside token definitions found.`);
+  reportOk(`scanned ${files.length} source files; no legacy color token usage outside the token layer found.`);
 }
 
 main();

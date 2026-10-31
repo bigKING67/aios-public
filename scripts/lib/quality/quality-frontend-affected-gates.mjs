@@ -1,5 +1,6 @@
 export const FRONTEND_CHECK_GATE_BY_FILE = Object.freeze({
   'scripts/checks/frontend/build-fingerprint.behavior.mjs': 'verify:frontend:build-fingerprint-behavior',
+  'scripts/checks/frontend/docker-dependency-cache.behavior.mjs': 'verify:frontend:docker-dependency-cache-behavior',
   'scripts/checks/frontend/bundle-budget.behavior.mjs': 'verify:frontend:bundle-budget-behavior',
   'scripts/checks/frontend/bundle-budget.mjs': 'verify:frontend:bundle-budget',
   'scripts/checks/frontend/coverage-ratchet.behavior.mjs': 'verify:frontend:coverage-ratchet-behavior',
@@ -32,10 +33,6 @@ export const FRONTEND_CHECK_GATES_BY_HELPER_FILE = Object.freeze({
 });
 
 export const DESIGN_CHECK_GATE_BY_FILE = Object.freeze({
-  'scripts/checks/design/antd-table-selectors.behavior.mjs': 'verify:design:antd-table-selectors-behavior',
-  'scripts/checks/design/antd-table-selectors.mjs': 'verify:design:antd-table-selectors',
-  'scripts/checks/design/antd-theme-token-sync.behavior.mjs': 'verify:design:antd-theme-token-sync-behavior',
-  'scripts/checks/design/antd-theme-token-sync.mjs': 'verify:design:antd-theme-token-sync',
   'scripts/checks/design/echarts-css-fallback-colors.mjs': 'verify:design:raw-colors',
   'scripts/checks/design/echarts-css-token-sync.behavior.mjs': 'verify:design:echarts-css-token-sync-behavior',
   'scripts/checks/design/echarts-css-token-sync.mjs': 'verify:design:echarts-css-token-sync',
@@ -208,7 +205,6 @@ export const THEME_TOKEN_SOURCE_GATES = Object.freeze([
   'verify:design:tokens',
   'verify:design:runtime-tokens',
   'verify:design:token-values-sync',
-  'verify:design:antd-theme-token-sync',
   'verify:design:echarts-theme-token-sync',
   'verify:design:echarts-css-token-sync',
 ]);
@@ -220,7 +216,6 @@ export const DESIGN_AUTHORITY_TOKEN_GATES = Object.freeze([
   'verify:design:token-values-sync',
   'verify:design:tailwind',
   'verify:design:tailwind-non-color-aliases',
-  'verify:design:antd-theme-token-sync',
   'verify:design:echarts-theme-token-sync',
   'verify:design:echarts-css-token-sync',
   'verify:frontend:design-evolution',

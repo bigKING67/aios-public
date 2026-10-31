@@ -2,7 +2,7 @@
 //! library `segment_status` filter. Run through
 //! `backend-rust/scripts/test-content-production-postgres.sh`.
 use super::super::repository::query_assets;
-use super::super::types::ContentAssetQuery;
+use super::super::types::{ContentAssetItem, ContentAssetQuery};
 use super::super::validation::normalize_query;
 use super::asset_summaries;
 use super::postgres_tests::{asset, create, pool, user, OWNER, SCOPED};
@@ -232,9 +232,10 @@ async fn segment_pool_counts_usable_confirmed_segments_and_outputs_filter() {
         .await
         .unwrap();
 
-    let pool_response = asset_summaries::segment_pool(&pool, SegmentPoolQuery::default(), None)
-        .await
-        .unwrap();
+    let pool_response =
+        asset_summaries::segment_pool(&pool, SegmentPoolQuery::default(), None, false)
+            .await
+            .unwrap();
     assert_eq!(
         (
             pool_response.preset_key.as_str(),
@@ -260,6 +261,7 @@ async fn segment_pool_counts_usable_confirmed_segments_and_outputs_filter() {
             ..Default::default()
         },
         None,
+        5000.0,
     )
     .await
     .unwrap();
@@ -277,7 +279,8 @@ async fn segment_pool_counts_usable_confirmed_segments_and_outputs_filter() {
             preset_key: Some("framework".into()),
             preset_version: Some(0),
         },
-        None
+        None,
+        false
     )
     .await
     .is_err());
@@ -305,4 +308,37 @@ async fn segment_pool_counts_usable_confirmed_segments_and_outputs_filter() {
     let excluded = query_assets(&pool, &outputs("exclude")).await.unwrap();
     assert_eq!(excluded.len(), 3);
     assert!(excluded.iter().all(|item| item.asset_id != output));
+
+    // 原片 hides the test originals by default; the toggle lists them alone.
+    sqlx::query("UPDATE ads.marketing_content_assets SET tags = tags || ARRAY['测试样片'] WHERE asset_id = $1")
+        .bind(live)
+        .execute(&pool)
+        .await
+        .unwrap();
+    let samples = |mode: &str| {
+        normalize_query(ContentAssetQuery {
+            keyword: Some(tag.clone()),
+            test_samples: Some(mode.into()),
+            ..ContentAssetQuery::default()
+        })
+        .unwrap()
+    };
+    let ids = |items: Vec<ContentAssetItem>| {
+        items
+            .into_iter()
+            .map(|item| item.asset_id)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(
+        ids(query_assets(&pool, &samples("only")).await.unwrap()),
+        vec![live]
+    );
+    let without = ids(query_assets(&pool, &samples("exclude")).await.unwrap());
+    assert_eq!(without.len(), 3);
+    assert!(!without.contains(&live));
+    assert!(normalize_query(ContentAssetQuery {
+        test_samples: Some("show".into()),
+        ..ContentAssetQuery::default()
+    })
+    .is_err());
 }

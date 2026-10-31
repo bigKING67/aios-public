@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Form, message, Modal } from 'antd';
+import { Alert, confirmModal, Modal, toast } from '@lobehub/ui';
 import type {
   ContentAssetAdMaterial,
   ContentAssetAdMaterialCreatePayload,
@@ -18,9 +18,20 @@ import {
   type IdentityFormValues,
   PlatformVideoFields,
 } from './content-assets-identity-modal-fields';
+import { type ControlledFormRules, useControlledForm } from '@/hooks/use-controlled-form';
 import styles from '../content-assets.module.css';
 
 export type ContentAssetIdentityModalMode = 'platform-video' | 'ad-material';
+
+/** Required-field rules, with the messages the antd form used. */
+const PLATFORM_VIDEO_RULES = {
+  platform: [{ required: true, message: '请输入平台' }],
+} satisfies ControlledFormRules<IdentityFormValues>;
+
+const AD_MATERIAL_RULES = {
+  adPlatform: [{ required: true, message: '请输入广告平台' }],
+  externalMaterialId: [{ required: true, message: '请输入千川素材ID' }],
+} satisfies ControlledFormRules<IdentityFormValues>;
 
 interface ContentAssetIdentityModalProps {
   open: boolean;
@@ -70,7 +81,6 @@ export function ContentAssetIdentityModal({
   onSubmitPlatformVideo,
   onSubmitAdMaterial,
 }: ContentAssetIdentityModalProps) {
-  const [form] = Form.useForm<IdentityFormValues>();
   const [resolvingDouyinVideoId, setResolvingDouyinVideoId] = useState(false);
   const asset = detail?.asset;
   const isEditingPlatformVideo = mode === 'platform-video' && !!platformVideo;
@@ -79,16 +89,6 @@ export function ContentAssetIdentityModal({
     mode === 'platform-video'
       ? `${isEditingPlatformVideo ? '编辑' : '新增'}平台身份${asset ? `：${resolveContentAssetDisplayTitle(asset)}` : ''}`
       : `${isEditingAdMaterial ? '编辑' : '新增'}广告素材实例${asset ? `：${resolveContentAssetDisplayTitle(asset)}` : ''}`;
-  const identityFormKey = [
-    mode,
-    asset?.assetId || 'no-asset',
-    platformVideo?.platformVideoId || 'new-platform-video',
-    platformVideo?.externalVideoId || '',
-    platformVideo?.externalItemId || '',
-    adMaterial?.adMaterialId || 'new-ad-material',
-    adMaterial?.externalMaterialId || '',
-    adMaterial?.externalVideoId || '',
-  ].join(':');
   const identityInitialValues = useMemo(
     () => ({
       ...EMPTY_IDENTITY_FORM_VALUES,
@@ -106,6 +106,11 @@ export function ContentAssetIdentityModal({
     ),
     [adMaterial, detail, identityInitialValues, mode, platformVideo]
   );
+  const form = useControlledForm<IdentityFormValues>({
+    initialValues: identityInitialValues,
+    rules: mode === 'platform-video' ? PLATFORM_VIDEO_RULES : AD_MATERIAL_RULES,
+    onFinish: (values) => void handleFinish(values),
+  });
 
   useEffect(() => {
     if (!open) {
@@ -132,7 +137,7 @@ export function ContentAssetIdentityModal({
         className={styles.modalHint}
         type="info"
         showIcon
-        message={mode === 'platform-video' ? '维护视频 ID / 笔记 ID' : '维护广告素材 ID'}
+        title={mode === 'platform-video' ? '维护视频 ID / 笔记 ID' : '维护广告素材 ID'}
         description={
           mode === 'platform-video'
             ? '视频 ID 是平台物理内容身份，后续自然流量或内容表现日报会优先按这里匹配。'
@@ -144,26 +149,18 @@ export function ContentAssetIdentityModal({
           className={styles.modalHint}
           type="warning"
           showIcon
-          message={qianchuanMaterialHintReview.message}
+          title={qianchuanMaterialHintReview.message}
         />
       ) : null}
-      <Form<IdentityFormValues>
-        key={identityFormKey}
-        form={form}
-        initialValues={identityInitialValues}
-        layout="vertical"
-        preserve={false}
-        onFinish={(values) => void handleFinish(values)}
-      >
-        {mode === 'platform-video' ? (
-          <PlatformVideoFields
-            resolvingDouyinVideoId={resolvingDouyinVideoId}
-            onResolveDouyinVideoId={() => void resolveDouyinVideoIdForValues(form.getFieldsValue(), true)}
-          />
-        ) : (
-          <AdMaterialFields detail={detail} />
-        )}
-      </Form>
+      {mode === 'platform-video' ? (
+        <PlatformVideoFields
+          form={form}
+          resolvingDouyinVideoId={resolvingDouyinVideoId}
+          onResolveDouyinVideoId={() => void resolveDouyinVideoIdForValues(form.getFieldsValue(), true)}
+        />
+      ) : (
+        <AdMaterialFields form={form} detail={detail} />
+      )}
     </Modal>
   );
 
@@ -190,7 +187,7 @@ export function ContentAssetIdentityModal({
       return true;
     }
     return new Promise((resolve) => {
-      Modal.confirm({
+      confirmModal({
         title: '确认千川素材 ID',
         content: `系统根据短视频明细推断千川素材 ID：${qianchuanMaterialHintReview.materialId}。请确认业务已核对该素材 ID 与当前视频/素材一致。`,
         okText: '已核对，继续保存',
@@ -239,13 +236,13 @@ export function ContentAssetIdentityModal({
       ]);
       form.setFieldsValue(nextValues);
       if (showSuccess) {
-        message.success('已提取抖音视频 ID');
+        toast.success('已提取抖音视频 ID');
       }
       return nextValues;
     } catch (error) {
       const errorMessage = resolveDouyinVideoIdErrorMessage(error);
       form.setFields([{ name: 'externalUrl', errors: [errorMessage] }]);
-      message.error(errorMessage);
+      toast.error(errorMessage);
       return null;
     } finally {
       setResolvingDouyinVideoId(false);

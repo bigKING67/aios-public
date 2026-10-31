@@ -42,11 +42,6 @@
       "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-inspector-ai-sections.tsx",
       "maxLines": 1273,
       "reason": "Temporary frozen content-asset AI inspector debt after qianchuan performance snapshot, daily trend, and v2.1 fusion diagnosis sections were added; split performance snapshot, trend panel, and fusion evidence sections before lowering this cap and do not grow this file further."
-    },
-    {
-      "path": "apps/web-vite/src/app/marketing/content-assets/_components/content-assets-profile-modal.tsx",
-      "maxLines": 439,
-      "reason": "Temporary frozen content-asset profile modal debt surfaced by the pushed content-asset identity diff; split profile form sections into focused subcomponents before lowering this cap and do not grow this file further."
     }
   ]
 }

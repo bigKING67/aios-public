@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Empty } from 'antd';
+import { Alert, Button, Empty } from '@lobehub/ui';
 import { editingKeys, fetchEditingResult, type EditingRun, type CaptionCandidate } from '../_lib/content-editing-api';
 import { ContentEditingCaptionCandidate } from './content-editing-caption-candidate';
 import { ContentEditingSelectedReview } from './content-editing-selected-review';
@@ -18,7 +18,7 @@ export function ContentEditingResult({ run, disabled = true, onAdopt }: { run: E
       {playbackFailed && <Alert type="warning" title="视频未能播放" description="链接可能已过期，请刷新成片后重试。" />}
       <div className={styles.actions}><a href={result.data.playbackUrl} target="_blank" rel="noreferrer">打开视频 / 下载</a><span className={styles.helper}>{result.data.inspection?.width} × {result.data.inspection?.height} · {result.data.inspection?.fps} fps · {result.data.inspection?.durationSeconds.toFixed(1)} 秒</span></div>
       <p className={styles.helper}>文件与解码技术检查通过。画面、声音和内容质量尚未自动验收。</p>
-    </> : result.data?.captionCandidate && !result.isError ? null : result.isFetching ? <p role="status">正在读取制作结果…</p> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={run.status === 'succeeded' ? '成片当前不可读取，请刷新检查。' : '完成制作与检查后，成片会显示在这里。'} />}
+    </> : result.data?.captionCandidate && !result.isError ? null : result.isFetching ? <p role="status">正在读取制作结果…</p> : <Empty description={run.status === 'succeeded' ? '成片当前不可读取，请刷新检查。' : '完成制作与检查后，成片会显示在这里。'} />}
     {!result.isError && result.data && (run.request.maxAutoRepairs ?? 0) > 0 && <ContentEditingAutomaticRepair summary={result.data?.automaticRepair} run={run} />}
     {!result.isError && result.data?.selectedReview && <ContentEditingSelectedReview summary={result.data.selectedReview.summary} run={run} />}
     {!result.isError && result.data?.captionCandidate && <ContentEditingCaptionCandidate

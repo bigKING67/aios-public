@@ -81,10 +81,12 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 
+const FULL_PROFILE_BUILD = true;
+const NotServed = () => null;
 const HomePage = lazy(() => import('@/app/page'));
-const DashboardPage = lazy(
+const DashboardPage = FULL_PROFILE_BUILD ? lazy(
   () => import('@/app/dashboard/page'),
-);
+) : NotServed;
 
 export function AppRoutes() {
   return (
@@ -220,5 +222,5 @@ export const ROUTE_PATHS = {
   },
   );
 
-  return 'pass, multiline lazy import, missing page, missing import, wrong path, missing target, and missing routes file checks passed.';
+  return 'pass, multiline and profile-branched lazy imports, missing page, missing import, wrong path, missing target, and missing routes file checks passed.';
 }

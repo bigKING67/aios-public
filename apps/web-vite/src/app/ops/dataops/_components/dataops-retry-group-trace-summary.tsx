@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert } from 'antd';
+import { Alert } from '@lobehub/ui';
 import type { DataOpsNotificationTraceSloStatus, DataOpsNotificationTraceSummary } from '@/types/dataops';
 import { formatDateTime } from './dataops-hub-formatters';
 import batchStyles from './dataops-batch-controls.module.css';

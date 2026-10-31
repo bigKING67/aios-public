@@ -1,9 +1,9 @@
 'use client';
 
-import { Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import { DataOpsStatusTag } from './dataops-status-tag';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import {
   formatDateTime,
   getNotificationChannelRoleLabel,
@@ -41,12 +41,12 @@ function renderChannelIdentity(channel: DataOpsNotificationChannel, channelName 
 
 function renderFailureCountTag(value: number) {
   if (value >= 3) {
-    return <Tag color="red">{value}</Tag>;
+    return <DataOpsToneTag tone="danger">{value}</DataOpsToneTag>;
   }
   if (value > 0) {
-    return <Tag color="gold">{value}</Tag>;
+    return <DataOpsToneTag tone="warning">{value}</DataOpsToneTag>;
   }
-  return <Tag color="green">0</Tag>;
+  return <DataOpsToneTag tone="success">0</DataOpsToneTag>;
 }
 
 export function buildDataOpsChannelColumns({
@@ -56,7 +56,7 @@ export function buildDataOpsChannelColumns({
   hasOperatePermission,
   onChannelWebhookTest,
   onOpenChannelManualNotifyModal,
-}: DataOpsChannelColumnsOptions): ColumnsType<DataOpsNotificationChannel> {
+}: DataOpsChannelColumnsOptions): TableColumnsType<DataOpsNotificationChannel> {
   return [
     {
       title: '通道',
@@ -139,7 +139,7 @@ export function buildDataOpsChannelMobileColumns({
   hasOperatePermission,
   onChannelWebhookTest,
   onOpenChannelManualNotifyModal,
-}: DataOpsChannelColumnsOptions): ColumnsType<DataOpsNotificationChannel> {
+}: DataOpsChannelColumnsOptions): TableColumnsType<DataOpsNotificationChannel> {
   return [
     {
       title: '通知通道',

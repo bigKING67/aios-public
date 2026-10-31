@@ -1,5 +1,5 @@
-import { Button } from 'antd';
-import { ArrowRightOutlined, RobotOutlined } from '@ant-design/icons';
+import { Button } from '@lobehub/ui';
+import { ArrowRight, Bot } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
 import {
@@ -81,7 +81,7 @@ export function RecordingAnalysisBar({
       <div className={styles.analysisItemHeader}>
         <div>
           <div className={styles.analysisTitleLine}>
-            <RobotOutlined />
+            <Bot size={14} strokeWidth={1.8} aria-hidden="true" />
             <strong>AI 分析</strong>
             <Badge status={resolveStatusBadge(statusForBadge)}>{statusLabel}</Badge>
             {activeCount > 0 ? (
@@ -102,7 +102,7 @@ export function RecordingAnalysisBar({
               to={resultPath}
             >
               <span>查看 AI 分析结果</span>
-              <ArrowRightOutlined />
+              <ArrowRight size={14} strokeWidth={1.8} aria-hidden="true" />
             </Link>
           ) : (
             <>
@@ -117,7 +117,7 @@ export function RecordingAnalysisBar({
               />
               <Button
                 type="primary"
-                icon={<RobotOutlined />}
+                icon={<Bot size={14} strokeWidth={1.8} aria-hidden="true" />}
                 loading={mutationLoading}
                 disabled={mutationLoading || hasActiveJob || cannotCreateAnalysis}
                 onClick={onCreateAnalysis}

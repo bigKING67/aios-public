@@ -1,21 +1,22 @@
 import type { StudioSegmentPreset } from './ai-studio-api';
-import type { RemixFormMode, StudioRemixBatch, StudioRemixBatchPreviewRequest } from './remix-api';
+import type { RemixFormMode, StudioRemixBatch, StudioRemixBatchItem, StudioRemixBatchPreviewRequest } from './remix-api';
 import { findPreset, labelName } from './segment-display';
+import type { SourceSpendSnapshot } from './source-spend';
 
 export const MAX_REMIX_SLOTS = 30;
 
-/** AI 剪辑 page purpose in framework-remix mode (also shown while capabilities load). */
-export const REMIX_PURPOSE = '框架混剪：选产品和结构，从已确认片段批量组合出片；成片回存素材库并记录来源片段。';
+/** AI 合成 page purpose in framework-remix mode (also shown while capabilities load). */
+export const REMIX_PURPOSE = '框架混剪：选产品和结构，从已确认片段批量组合出片；成片记录来源片段。';
 
-/** AI 剪辑 page purpose in 卖点混剪 mode. */
+/** AI 合成 page purpose in 卖点混剪 mode. */
 export const SELLING_POINT_REMIX_PURPOSE =
-  '卖点混剪：沿用参考原片的框架结构，每个框架段按卖点用其他原片的卖点片段替换；成片回存素材库并记录每段的拼法。';
+  '卖点混剪：沿用参考原片的框架结构，每个框架段按卖点用其他原片的卖点片段替换；成片记录每段的拼法。';
 
 export function remixPurpose(mode: RemixFormMode): string {
   return mode === 'sellingPoint' ? SELLING_POINT_REMIX_PURPOSE : REMIX_PURPOSE;
 }
 
-/** AI 剪辑 header over one production Run's detail (成片 → 任务详情). */
+/** AI 合成 header over one production Run's detail (成片 → 任务详情). */
 export const RUN_DETAIL_PURPOSE = '查看这条成片的方案、制作进度和失败原因，可重新制作或进入工程精修。';
 
 export type RemixStructure =
@@ -109,8 +110,12 @@ export interface RemixCandidateGroup {
   labelKey: string;
   /** 1-based slot positions that draw from this pool. */
   ordinals: number[];
-  /** The server's usable count for the pool (after access and per-label limits). */
-  expectedCount: number;
+  /**
+   * The server's usable count per slot, parallel to `ordinals` (after access
+   * and per-label limits; with a reference original also within ±20 % of
+   * that slot's span, so repeated labels may differ).
+   */
+  slotCounts: number[];
   segments: RemixCandidateSegment[];
 }
 
@@ -122,13 +127,15 @@ export interface RemixCandidateSegment {
   startMs: number;
   endMs: number;
   coverUrl: string | null;
+  sourceSpend?: SourceSpendSnapshot | null;
 }
 
 /**
  * Confirmed segments a remix may draw from, one group per label in slot order.
  * Mirrors the server's filter (same preset version, exact product, current
- * source); the server additionally drops originals the viewer may not use, so
- * `expectedCount` can be lower than `segments.length`.
+ * source); the server additionally drops originals the viewer may not use and,
+ * with a reference original, lengths outside ±20 % of the slot, so
+ * `slotCounts` can be lower than `segments.length`.
  */
 export function groupRemixCandidates(
   slots: readonly { ordinal: number; labelKey: string; candidateCount: number }[],
@@ -138,8 +145,9 @@ export function groupRemixCandidates(
 ): RemixCandidateGroup[] {
   const groups = new Map<string, RemixCandidateGroup>();
   for (const slot of slots) {
-    const group = groups.get(slot.labelKey) ?? { labelKey: slot.labelKey, ordinals: [], expectedCount: slot.candidateCount, segments: [] };
+    const group = groups.get(slot.labelKey) ?? { labelKey: slot.labelKey, ordinals: [], slotCounts: [], segments: [] };
     group.ordinals.push(slot.ordinal);
+    group.slotCounts.push(slot.candidateCount);
     groups.set(slot.labelKey, group);
   }
   for (const segment of segments) {
@@ -153,6 +161,7 @@ export function groupRemixCandidates(
       startMs: segment.startMs,
       endMs: segment.endMs,
       coverUrl: segment.coverUrl,
+      sourceSpend: segment.sourceSpend,
     });
   }
   for (const group of groups.values()) {
@@ -164,4 +173,37 @@ export function groupRemixCandidates(
 /** Compact caption: drop a shared leading tag like 「【测试】」 so the original's own name shows. */
 export function shortAssetTitle(title: string): string {
   return title.replace(/^【[^】]*】\s*/, '') || title;
+}
+
+/** One source segment placed on the output's own clock. */
+export interface OutputBlock {
+  index: number;
+  segmentId: string;
+  labelKey: string;
+  assetTitle: string;
+  startMs: number;
+  endMs: number;
+}
+
+/**
+ * Segments play back to back, so each one starts where the previous ended. `durationMs` is the
+ * output's real length once the video reports it; the blocks scale to it, so a few frames of
+ * render padding never push the last block past the end.
+ */
+export function outputBlocks(item: Pick<StudioRemixBatchItem, 'segments' | 'durationMs'>, durationMs: number): OutputBlock[] {
+  const scale = item.durationMs > 0 && durationMs > 0 ? durationMs / item.durationMs : 1;
+  let cursor = 0;
+  return item.segments.map((segment, index) => {
+    const length = Math.max(0, segment.endMs - segment.startMs) * scale;
+    const block = {
+      index: index + 1,
+      segmentId: segment.segmentId,
+      labelKey: segment.labelKey,
+      assetTitle: segment.assetTitle,
+      startMs: Math.round(cursor),
+      endMs: Math.round(cursor + length),
+    };
+    cursor += length;
+    return block;
+  });
 }

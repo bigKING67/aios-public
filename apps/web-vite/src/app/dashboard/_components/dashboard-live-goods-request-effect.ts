@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { buildDashboardQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
 import {
@@ -15,7 +15,7 @@ import type {
 
 type DashboardLiveGoodsRequestEffectArgs = {
   isEnabled: boolean;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   currentRange: DashboardDateRangeLike;
   liveScope: LiveScope;
   setLiveGoodsData: Dispatch<SetStateAction<DashboardLiveGoodsApiResponse | null>>;

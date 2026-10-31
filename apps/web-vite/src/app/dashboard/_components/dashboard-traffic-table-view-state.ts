@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 
 import {
   buildDashboardTrafficColumns,
@@ -20,7 +20,7 @@ export function useDashboardTrafficTableViewState({
   isMobile,
   trafficTableClassNames,
 }: DashboardTrafficTableViewStateArgs) {
-  const trafficColumns = useMemo<ColumnsType<DashboardTrafficTreeNode>>(
+  const trafficColumns = useMemo<TableColumnsType<DashboardTrafficTreeNode>>(
     () =>
       buildDashboardTrafficColumns({
         isMobile,
@@ -29,7 +29,7 @@ export function useDashboardTrafficTableViewState({
     [isMobile, trafficTableClassNames]
   );
 
-  const trafficGoodsColumns = useMemo<ColumnsType<DashboardTrafficGoodsTreeNode>>(
+  const trafficGoodsColumns = useMemo<TableColumnsType<DashboardTrafficGoodsTreeNode>>(
     () =>
       buildDashboardTrafficGoodsColumns({
         isMobile,

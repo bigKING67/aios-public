@@ -17,7 +17,7 @@
 
 .sessionKpiValue {
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 430;
@@ -26,13 +26,13 @@
 }
 
 .sessionKpiPrimary .sessionKpiValue {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-weight: 430;
 }
 
 .sessionKpiMuted,
 .sessionKpiMuted .sessionKpiValue {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 @media (max-width: 1024px) {

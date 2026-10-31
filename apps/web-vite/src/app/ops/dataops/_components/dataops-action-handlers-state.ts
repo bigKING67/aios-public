@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
-import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 
 import type {
   DataOpsNotificationChannel,
@@ -26,6 +24,7 @@ import {
 import { copyDataOpsNotifyShareUrl } from './dataops-notify-share-helpers';
 import type { DataOpsNotifyFilterState } from './dataops-query-helpers';
 import type { NotificationRetryReport } from './dataops-notification-retry-helpers';
+import type { DataOpsMessageApi, DataOpsModalApi } from './dataops-feedback-types';
 
 type ExecuteDataOpsAction = (
   payload: DataOpsActionRequest,
@@ -46,8 +45,8 @@ export function useDataOpsActionHandlersState(options: {
   executeAction: ExecuteDataOpsAction;
   exportCsv: ExportDataOpsCsv;
   hasOperatePermission: boolean;
-  message: MessageInstance;
-  modal: Pick<ModalStaticFunctions, 'confirm'>;
+  message: DataOpsMessageApi;
+  modal: DataOpsModalApi;
   notificationChannelMap: Map<string, DataOpsNotificationChannel>;
   notificationFailureAlertTemplateText: string;
   notificationMarkdownText: string;

@@ -8,7 +8,7 @@
   margin: 0 auto;
   padding: var(--spacing-3);
   overflow: hidden;
-  background: var(--bg-global);
+  background: var(--lobe-color-bg-layout);
 }
 
 .liveConsoleShell {
@@ -17,9 +17,9 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-global);
+  background: var(--lobe-color-bg-layout);
   box-shadow: var(--shadow-base);
 }
 
@@ -29,8 +29,8 @@
   gap: var(--spacing-2);
   align-items: center;
   padding: var(--spacing-2) var(--spacing-3);
-  border-bottom: 1px solid var(--divider-color);
-  background: var(--bg-card);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  background: var(--lobe-color-bg-container);
 }
 
 .liveConsoleTitle {
@@ -52,10 +52,10 @@
   place-items: center;
   width: var(--spacing-8);
   height: var(--spacing-8);
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: var(--border-radius-lg);
-  color: var(--brand-text);
-  background: var(--bg-subtle);
+  color: var(--aios-ai-text);
+  background: var(--lobe-color-fill-tertiary);
   text-decoration: none;
   transition:
     border-color var(--transition-fast),
@@ -66,10 +66,10 @@
 }
 
 .homeEntryLink:hover {
-  border-color: var(--brand-border);
-  color: var(--brand-text-strong);
-  background: var(--brand-secondary);
-  box-shadow: inset 0 0 0 1px var(--bg-card);
+  border-color: var(--aios-ai-border);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
+  box-shadow: inset 0 0 0 1px var(--lobe-color-bg-container);
   transform: translateY(-1px);
 }
 
@@ -78,7 +78,7 @@
 }
 
 .homeEntryLink:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
@@ -88,7 +88,7 @@
 
 .liveConsoleTitle h1 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-display);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-display);
@@ -132,7 +132,7 @@
   justify-content: flex-end;
 }
 
-.topbarFilterActions.topbarFilterActions :global(.ant-btn) {
+.topbarFilterActions.topbarFilterActions :global(.lobe-button) {
   white-space: nowrap;
 }
 
@@ -177,10 +177,10 @@
   height: 100%;
   padding: var(--spacing-3);
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  background: var(--lobe-color-bg-container);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .sessionQueueListRail {
@@ -191,17 +191,13 @@
 .paginationRail.paginationRail {
   justify-content: center;
   padding-top: var(--spacing-2);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
-.paginationRail :global(.ant-pagination) {
+.paginationRail > * {
   width: 100%;
   justify-content: center;
   row-gap: var(--spacing-2);
-}
-
-.paginationRail :global(.ant-pagination-total-text) {
-  display: none;
 }
 
 @media (max-width: 1380px) {
@@ -299,7 +295,7 @@
     padding-inline: 0;
   }
 
-  .refreshButton.refreshButton :global(.ant-btn-icon + span) {
+  .refreshLabel {
     display: none;
   }
 
@@ -316,11 +312,12 @@
     justify-content: flex-end;
   }
 
-  .topbarFilterActions.topbarFilterActions :global(.ant-btn) {
+  .topbarFilterActions.topbarFilterActions :global(.lobe-button) {
     padding-inline: var(--spacing-2);
   }
 
-  .topbarFilterActions.topbarFilterActions :global(.ant-btn-primary .ant-btn-icon + span) {
+  /* The primary search button keeps only its icon; aria-label still names it. */
+  .topbarFilterActions.topbarFilterActions :global(.lobe-button[data-type='primary'] > span:not(.lobe-button-icon)) {
     display: none;
   }
 

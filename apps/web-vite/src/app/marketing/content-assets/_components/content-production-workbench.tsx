@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Alert, App, Button, Checkbox, Empty, Select, Spin, Tag } from 'antd';
+import { Alert, Button, Checkbox, confirmModal, Empty, Spin, Tag, toast } from '@lobehub/ui';
 import { cancelProductionRender, enqueueProductionRender, fetchProductionCapabilities, fetchProductionProject, fetchProductionProjects, productionKeys, saveProductionProject, type ProductionDraft, type ProductionProject } from '../_lib/content-production-api';
 import { emptyProductionDraft } from '../_lib/content-production-edit';
 import { ContentProductionCatalogs } from './content-production-catalogs';
 import { ContentProductionSearch } from './content-production-search';
 import { ContentProductionTimeline } from './content-production-timeline';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './content-production.module.css';
 
 const activeStatuses = ['queued', 'running', 'cancel_requested'];
@@ -14,7 +15,6 @@ const statusLabels: Record<string, string> = { queued: '排队中', running: '�
 const editable = (snapshot: ProductionDraft): ProductionDraft => ({ title: snapshot.title, aspect: snapshot.aspect, clips: snapshot.clips, rightsConfirmed: snapshot.rightsConfirmed });
 
 export function ContentProductionWorkbench({ initialProjectId, onBack }: { initialProjectId?: string; onBack?: () => void } = {}) {
-  const { message, modal } = App.useApp();
   const queryClient = useQueryClient();
   const [project, setProject] = useState<ProductionProject | null>(null);
   const [draft, setDraft] = useState<ProductionDraft>(emptyProductionDraft);
@@ -57,7 +57,7 @@ export function ContentProductionWorkbench({ initialProjectId, onBack }: { initi
       setProject(result.project); setDraft(editable(result.project.snapshot)); setDirty(false);
       queryClient.setQueryData(productionKeys.detail(id), result);
     });
-    if (dirty) modal.confirm({ title: '放弃尚未保存的修改？', content: '已保存的工程版本会保留。', okText: '放弃并继续', cancelText: '继续编辑', onOk: open });
+    if (dirty) confirmModal({ title: '放弃尚未保存的修改？', content: '已保存的工程版本会保留。', okText: '放弃并继续', cancelText: '继续编辑', onOk: open });
     else void open();
   };
   const save = () => perform(async () => {
@@ -65,22 +65,22 @@ export function ContentProductionWorkbench({ initialProjectId, onBack }: { initi
     setProject(saved); setDraft(editable(saved.snapshot!)); setDirty(false);
     await queryClient.invalidateQueries({ queryKey: productionKeys.projects });
     await queryClient.invalidateQueries({ queryKey: productionKeys.detail(saved.projectId) });
-    void message.success(`已保存版本 ${saved.revision}`);
+    toast.success(`已保存版本 ${saved.revision}`);
   });
   const render = (preview: boolean) => perform(async () => {
     if (!project || dirty) throw new Error('请先保存当前修改');
     await enqueueProductionRender(project.projectId, project.revision, preview);
     await queryClient.invalidateQueries({ queryKey: productionKeys.detail(project.projectId) });
-    void message.success('已加入制作队列');
+    toast.success('已加入制作队列');
   });
   if (capabilities.isPending) return <Spin aria-label="加载工程精修" />;
   if (capabilities.isError) return <Alert type="error" showIcon title="无法加载工程" description={capabilities.error.message} action={<Button onClick={() => void capabilities.refetch()}>重试</Button>} />;
-  if (!enabled) return <Empty description="工程精修尚未启用。">{onBack && <Button onClick={onBack}>返回 AI 剪辑</Button>}</Empty>;
+  if (!enabled) return <Empty description="工程精修尚未启用。" action={onBack && <Button onClick={onBack}>返回 AI 合成</Button>} />;
   return <div className={styles.workbench}>
-    {onBack && <div><Button disabled={busy} onClick={() => { if (dirty) modal.confirm({ title: '放弃尚未保存的工程修改？', okText: '放弃并返回', cancelText: '继续编辑', onOk: onBack }); else onBack(); }}>返回 AI 剪辑</Button></div>}
+    {onBack && <div><Button disabled={busy} onClick={() => { if (dirty) confirmModal({ title: '放弃尚未保存的工程修改？', okText: '放弃并返回', cancelText: '继续编辑', onOk: onBack }); else onBack(); }}>返回 AI 合成</Button></div>}
     <header className={styles.heading}><div><h1>工程精修</h1><p className={styles.helper}>从已有素材选取片段，保存工程，再制作预览或成片。</p></div><Tag>{dirty ? '有未保存修改' : project ? `版本 ${project.revision}` : '新工程'}</Tag></header>
     <div className={styles.actions}>
-      <Select aria-label="打开已保存工程" className={styles.projectSelect} placeholder="打开已保存工程" loading={projects.isFetching} value={project?.projectId} disabled={busy} onChange={(id) => openProject(id)} options={projects.data?.map((item) => ({ value: item.projectId, label: `${item.title} · v${item.revision}` }))} />
+      <LabeledSelect label="打开已保存工程" wrapperClassName={styles.projectSelect} placeholder="打开已保存工程" loading={projects.isFetching} value={project?.projectId} disabled={busy} onChange={(id) => openProject(id ?? null)} options={projects.data?.map((item) => ({ value: item.projectId, label: `${item.title} · v${item.revision}` }))} />
       <Button disabled={busy} onClick={() => openProject(null)}>新建工程</Button>
       <Button disabled={busy || !project} onClick={() => openProject(project!.projectId)}>重新载入</Button>
       <Button type="primary" loading={busy} disabled={!canWrite || !draft.clips.length || !draft.rightsConfirmed || !dirty} onClick={() => void save()}>保存工程</Button>
@@ -93,7 +93,7 @@ export function ContentProductionWorkbench({ initialProjectId, onBack }: { initi
       <div className={styles.workbench}>
         <ContentProductionTimeline draft={draft} disabled={!canWrite || busy} onChange={edit} />
         <section className={styles.panel} aria-label="素材使用确认">
-          <Checkbox checked={draft.rightsConfirmed} disabled={!canWrite || busy} onChange={(event) => edit({ ...draft, rightsConfirmed: event.target.checked })}>我已确认所选素材可用于本次制作；素材档案中的明确限制仍然生效。</Checkbox>
+          <Checkbox checked={draft.rightsConfirmed} disabled={!canWrite || busy} onChange={(checked) => edit({ ...draft, rightsConfirmed: checked })}>我已确认所选素材可用于本次制作；素材档案中的明确限制仍然生效。</Checkbox>
         </section>
       </div>
     </div>

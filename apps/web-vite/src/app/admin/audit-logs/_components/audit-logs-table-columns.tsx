@@ -1,5 +1,4 @@
-import { Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Tag, type TableColumnsType } from '@lobehub/ui';
 import type { AuditLog } from './audit-logs-types';
 import {
   formatAuditLogCreatedAt,
@@ -8,7 +7,7 @@ import {
   getAuditLogResultState,
 } from './audit-logs-view-model';
 
-export function buildAuditLogsTableColumns(): ColumnsType<AuditLog> {
+export function buildAuditLogsTableColumns(): TableColumnsType<AuditLog> {
   return [
     {
       title: '时间',
@@ -29,7 +28,7 @@ export function buildAuditLogsTableColumns(): ColumnsType<AuditLog> {
       dataIndex: 'action',
       key: 'action',
       width: 140,
-      render: (value?: string) => <Tag color="blue">{value || '-'}</Tag>,
+      render: (value?: string) => <Tag>{value || '-'}</Tag>,
     },
     {
       title: '资源',

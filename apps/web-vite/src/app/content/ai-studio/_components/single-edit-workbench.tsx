@@ -1,4 +1,5 @@
-import { Alert, Button, Popconfirm, Select, Skeleton } from 'antd';
+import { Alert, Button, DropdownMenu, SkeletonText, confirmModal } from '@lobehub/ui';
+import { ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/atoms/badge';
@@ -26,6 +27,7 @@ import {
 import { buildRemixBatchPath, EDIT_FROM_BATCH_PARAM, EDIT_FROM_ORDINAL_PARAM } from '../_lib/remix-routes';
 import { readStudioConflict } from '../_lib/segment-errors';
 import { pickDefaultPreset, presetDisplayName, remixablePresets } from '../_lib/segment-display';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { EditingModeTabs } from './editing-mode-tabs';
 import { RemixRecentBatches } from './remix-recent-batches';
 import { EditLaunchCard } from './single-edit-launch';
@@ -48,23 +50,23 @@ function browserStorage(): Storage | null {
 }
 
 /**
- * AI 剪辑 in single mode: pick a starting point, edit one output on the 剪辑台
+ * AI 合成 in single mode: pick a starting point, edit one output on the 剪辑台
  * and generate it after the duplicate check. Off when the remix capability is.
  */
 export function SingleEditPanel({ capabilities }: { capabilities: StudioCapabilitiesResponse }) {
   const enabled = capabilities.remixEnabled;
   return (
     <section className={pageStyles.panel} aria-labelledby="ai-studio-page-title">
-      <header className={pageStyles.pageHeader}>
-        <div>
-          <h1 id="ai-studio-page-title">AI 剪辑</h1>
-          <p>{SINGLE_EDIT_PURPOSE}</p>
-        </div>
-        <div className={remixStyles.headerEnd}>
+      <div className={remixStyles.pageTop}>
+        <header className={pageStyles.pageHeader}>
+          <div>
+            <h1 id="ai-studio-page-title">AI 合成</h1>
+            <p>{SINGLE_EDIT_PURPOSE}</p>
+          </div>
           {enabled ? null : <Badge status="neutral">尚未启用</Badge>}
-          <EditingModeTabs mode="single" />
-        </div>
-      </header>
+        </header>
+        <EditingModeTabs mode="single" />
+      </div>
       {enabled ? (
         <SingleEditPresets capabilities={capabilities} />
       ) : (
@@ -89,19 +91,19 @@ function SingleEditPresets({ capabilities }: { capabilities: StudioCapabilitiesR
   const presets = presetsQuery.data ?? [];
   const choices = remixablePresets(presets);
   const preset = choices.find((item) => `${item.presetKey}:${item.version}` === presetId) ?? pickDefaultPreset(choices);
-  if (presetsQuery.isPending) return <Skeleton active paragraph={{ rows: 6 }} />;
+  if (presetsQuery.isPending) return <SkeletonText rows={6} />;
   if (presetsQuery.isError || !preset) {
     return <Alert type="error" showIcon title="分类预设读取失败" description="请刷新后重试。" />;
   }
   const id = `${preset.presetKey}:${preset.version}`;
   const presetSelect =
     choices.length > 1 ? (
-      <Select
-        aria-label="分类预设"
-        className={styles.presetSelect}
+      <LabeledSelect
+        label="分类预设"
+        wrapperClassName={styles.presetSelect}
         value={id}
-        options={choices.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item) }))}
-        onChange={setPresetId}
+        options={choices.map((item) => ({ value: `${item.presetKey}:${item.version}`, label: presetDisplayName(item, choices) }))}
+        onChange={(value) => setPresetId(value ?? null)}
       />
     ) : null;
   // A preset or account switch starts a fresh board (each keeps its own draft).
@@ -223,133 +225,152 @@ function SingleEditBoard({ capabilities, preset, presets, presetSelect }: Single
     );
   };
 
-  const replaceStart = (kind: 'output' | 'original', label: string) => (
-    <Popconfirm
-      title="换一个起点？"
-      description={`会替换剪辑台上当前的 ${clips.length} 段。`}
-      okText="替换"
-      cancelText="取消"
-      onConfirm={() => setPicker({ kind })}
-      disabled={clips.length === 0}
-    >
-      <Button size="small" disabled={!canWrite} onClick={clips.length === 0 ? () => setPicker({ kind }) : undefined}>
-        {label}
-      </Button>
-    </Popconfirm>
-  );
+  // Only offered once the board has clips, so picking a new start always replaces them.
+  const replaceStart = (kind: 'output' | 'original') =>
+    confirmModal({
+      title: '换一个起点？',
+      content: `会替换剪辑台上当前的 ${clips.length} 段。`,
+      okText: '替换',
+      cancelText: '取消',
+      onOk: () => setPicker({ kind }),
+    });
 
   return (
-    <div className={workbenchStyles.layout}>
-      <article className={pageStyles.card} aria-labelledby="edit-board-title">
-        <div className={styles.cardHeading}>
-          <h2 id="edit-board-title">剪辑台</h2>
-          <span className={editStyles.boardActions}>
-            {presetSelect}
-            {clips.length > 0 ? (
-              <>
-                {replaceStart('output', '从成片开始')}
-                {replaceStart('original', '从原片开始')}
-                <Popconfirm title="清空剪辑台？" okText="清空" cancelText="取消" onConfirm={() => setClips([], null)}>
-                  <Button size="small" disabled={!canWrite}>
+    <div className={workbenchStyles.page}>
+      <div className={`${workbenchStyles.layout} ${workbenchStyles.layoutFit}`}>
+        <article className={pageStyles.card} aria-labelledby="edit-board-title">
+          <div className={styles.cardHeading}>
+            <h2 id="edit-board-title">剪辑台</h2>
+            <span className={editStyles.boardActions}>
+              {presetSelect}
+              {clips.length > 0 ? (
+                <>
+                  {/* One secondary control for both starts; 清空 is a quiet text action. */}
+                  <DropdownMenu
+                    disabled={!canWrite}
+                    placement="bottomRight"
+                    items={[
+                      { key: 'output', label: '从成片开始', onClick: () => replaceStart('output') },
+                      { key: 'original', label: '从原片开始', onClick: () => replaceStart('original') },
+                    ]}
+                  >
+                    <Button size="small" disabled={!canWrite}>
+                      换起点
+                      <ChevronDown size={14} strokeWidth={1.8} aria-hidden="true" />
+                    </Button>
+                  </DropdownMenu>
+                  <Button
+                    type="text"
+                    size="small"
+                    disabled={!canWrite}
+                    onClick={() =>
+                      confirmModal({
+                        title: '清空剪辑台？',
+                        okText: '清空',
+                        cancelText: '取消',
+                        onOk: () => setClips([], null),
+                      })
+                    }
+                  >
                     清空
                   </Button>
-                </Popconfirm>
-              </>
-            ) : null}
-          </span>
-        </div>
-        {!canWrite ? <Alert type="info" showIcon title="当前账号没有素材编辑权限，只能查看。" /> : null}
-        {segmentsQuery.isError ? <Alert type="error" showIcon title="片段读取失败，请刷新后重试。" /> : null}
-        {fromBatch && fromDetail.isPending ? <Skeleton active paragraph={{ rows: 2 }} title={false} /> : null}
-        {fromError ? (
-          <Alert type="warning" showIcon title="没有载入成片" description={fromError} closable={{ onClose: () => setFromError(null) }} />
-        ) : null}
-        {clips.length === 0 ? (
-          <EditStartChooser disabled={!canWrite} onStart={(kind) => setPicker({ kind })} />
-        ) : (
-          <>
-            <EditTimeline
-              preset={preset}
-              clips={clips}
-              segments={segmentsReady ? segmentMap : new Map()}
-              selectedKey={selectedKey}
-              highlightIds={staleIds}
-              disabled={!canWrite}
-              onSelect={setSelectedKey}
-              onAdd={() => setPicker({ kind: 'library' })}
-            />
-            {selected ? (
-              <ClipEditor
-                key={selected.key}
+                </>
+              ) : null}
+            </span>
+          </div>
+          {!canWrite ? <Alert type="info" showIcon title="当前账号没有素材编辑权限，只能查看。" /> : null}
+          {segmentsQuery.isError ? <Alert type="error" showIcon title="片段读取失败，请刷新后重试。" /> : null}
+          {fromBatch && fromDetail.isPending ? <SkeletonText rows={2} /> : null}
+          {fromError ? (
+            <Alert type="warning" showIcon title="没有载入成片" description={fromError} closable={{ onClose: () => setFromError(null) }} />
+          ) : null}
+          {clips.length === 0 ? (
+            <EditStartChooser disabled={!canWrite} onStart={(kind) => setPicker({ kind })} />
+          ) : (
+            <>
+              <EditTimeline
                 preset={preset}
-                clip={selected}
-                index={selectedIndex}
-                count={clips.length}
-                segment={segmentsReady ? segmentMap.get(selected.segmentId) : undefined}
+                clips={clips}
+                segments={segmentsReady ? segmentMap : new Map()}
+                selectedKey={selectedKey}
+                highlightIds={staleIds}
                 disabled={!canWrite}
-                onChange={(clip) => setClips(clips.map((item) => (item.key === clip.key ? clip : item)))}
-                onMove={(delta) => setClips(moveClip(clips, selectedIndex, delta))}
-                onReplace={() => setPicker({ kind: 'replace', key: selected.key })}
-                onRemove={() => {
-                  const next = clips.filter((clip) => clip.key !== selected.key);
-                  setClips(next, next[Math.min(selectedIndex, next.length - 1)]?.key ?? null);
-                }}
+                onSelect={setSelectedKey}
+                onAdd={() => setPicker({ kind: 'library' })}
               />
-            ) : (
-              <p className={styles.fieldHelp}>点选一段可以修剪入出点、预览、调整位置、替换或删除。</p>
-            )}
-          </>
-        )}
-      </article>
+              {selected ? (
+                <ClipEditor
+                  key={selected.key}
+                  preset={preset}
+                  clip={selected}
+                  index={selectedIndex}
+                  count={clips.length}
+                  segment={segmentsReady ? segmentMap.get(selected.segmentId) : undefined}
+                  disabled={!canWrite}
+                  onChange={(clip) => setClips(clips.map((item) => (item.key === clip.key ? clip : item)))}
+                  onMove={(delta) => setClips(moveClip(clips, selectedIndex, delta))}
+                  onReplace={() => setPicker({ kind: 'replace', key: selected.key })}
+                  onRemove={() => {
+                    const next = clips.filter((clip) => clip.key !== selected.key);
+                    setClips(next, next[Math.min(selectedIndex, next.length - 1)]?.key ?? null);
+                  }}
+                />
+              ) : (
+                <p className={styles.fieldHelp}>点选一段可以修剪入出点、预览、调整位置、替换或删除。</p>
+              )}
+            </>
+          )}
+        </article>
 
-      <aside className={workbenchStyles.side}>
-        <EditLaunchCard
-          presetVersion={preset.version}
-          productName={productName}
-          clipCount={clips.length}
-          totalMs={editTotalMs(clips)}
-          maxSeconds={capabilities.remixMaxSeconds}
-          canWrite={canWrite}
-          blocker={blocker}
-          check={{ data: settled ? check.data : undefined, pending: !settled || check.isFetching, error: check.error }}
-          allowDuplicate={allowDuplicate}
-          onAllowDuplicate={setAllowDuplicate}
-          creating={create.isPending}
-          createError={create.error}
-          onCreate={submit}
+        <aside className={workbenchStyles.side}>
+          <EditLaunchCard
+            presetVersion={preset.version}
+            productName={productName}
+            clipCount={clips.length}
+            totalMs={editTotalMs(clips)}
+            maxSeconds={capabilities.remixMaxSeconds}
+            canWrite={canWrite}
+            blocker={blocker}
+            check={{ data: settled ? check.data : undefined, pending: !settled || check.isFetching, error: check.error }}
+            allowDuplicate={allowDuplicate}
+            onAllowDuplicate={setAllowDuplicate}
+            creating={create.isPending}
+            createError={create.error}
+            onCreate={submit}
+          />
+        </aside>
+
+        <OutputStartModal
+          open={picker?.kind === 'output'}
+          preset={preset}
+          presets={presets}
+          onPick={(item) => startFrom(clipsFromOutput(item.segments))}
+          onClose={() => setPicker(null)}
         />
-        <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode="edit" />
-      </aside>
-
-      <OutputStartModal
-        open={picker?.kind === 'output'}
-        preset={preset}
-        presets={presets}
-        onPick={(item) => startFrom(clipsFromOutput(item.segments))}
-        onClose={() => setPicker(null)}
-      />
-      <OriginalStartModal
-        open={picker?.kind === 'original'}
-        preset={preset}
-        segments={usable}
-        loading={segmentsQuery.isPending}
-        error={segmentsQuery.isError}
-        truncated={segmentsQuery.data?.truncated ?? false}
-        onPick={(option) => startFrom(clipsFromOriginal(usable, option.assetId))}
-        onClose={() => setPicker(null)}
-      />
-      <SegmentLibraryDrawer
-        open={picker?.kind === 'library' || picker?.kind === 'replace'}
-        preset={preset}
-        segments={usable}
-        loading={segmentsQuery.isPending}
-        error={segmentsQuery.isError}
-        truncated={segmentsQuery.data?.truncated ?? false}
-        productName={productName}
-        replacing={replacing ? { labelKey: segmentMap.get(replacing.segmentId)?.labelKey ?? null } : null}
-        onPick={pickSegment}
-        onClose={() => setPicker(null)}
-      />
+        <OriginalStartModal
+          open={picker?.kind === 'original'}
+          preset={preset}
+          segments={usable}
+          loading={segmentsQuery.isPending}
+          error={segmentsQuery.isError}
+          truncated={segmentsQuery.data?.truncated ?? false}
+          onPick={(option) => startFrom(clipsFromOriginal(usable, option.assetId))}
+          onClose={() => setPicker(null)}
+        />
+        <SegmentLibraryDrawer
+          open={picker?.kind === 'library' || picker?.kind === 'replace'}
+          preset={preset}
+          segments={usable}
+          loading={segmentsQuery.isPending}
+          error={segmentsQuery.isError}
+          truncated={segmentsQuery.data?.truncated ?? false}
+          productName={productName}
+          replacing={replacing ? { labelKey: segmentMap.get(replacing.segmentId)?.labelKey ?? null } : null}
+          onPick={pickSegment}
+          onClose={() => setPicker(null)}
+        />
+      </div>
+      <RemixRecentBatches presets={presets} openAccess={capabilities.openAccess} mode="edit" />
     </div>
   );
 }

@@ -14,7 +14,7 @@
 .scorecardSharedNote p,
 .actionBacklogBody p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -30,7 +30,7 @@
 
 .scriptReviewHeader strong,
 .scorecardHeader strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -46,7 +46,7 @@
 }
 
 .momentReviewList > li + li .momentReviewCard {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .momentTimeRail {
@@ -55,11 +55,11 @@
   align-content: start;
   min-width: 0;
   padding-right: var(--spacing-3);
-  border-right: 1px solid var(--divider-color);
+  border-right: 1px solid var(--lobe-color-border-secondary);
 }
 
 .momentTimeRail strong {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
@@ -70,7 +70,7 @@
 
 .momentTimeRail span,
 .scriptReviewHeader span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -108,9 +108,9 @@
   display: grid;
   gap: var(--spacing-1);
   padding: var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .reviewFactCompact {
@@ -120,13 +120,13 @@
 }
 
 .reviewFactEmphasis {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
 }
 
 .reviewFact span,
 .recommendedAction span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -135,10 +135,10 @@
 .scriptQuote {
   margin: 0;
   padding: var(--spacing-3) var(--spacing-4);
-  border-left: 3px solid var(--brand-primary);
+  border-left: 3px solid var(--lobe-color-primary);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-subtle);
-  color: var(--text-primary);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -156,9 +156,9 @@
   display: grid;
   gap: var(--spacing-1);
   padding: var(--spacing-3);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: var(--border-radius-lg);
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 .recommendedActionCompact {
@@ -176,7 +176,7 @@
 .reviewSectionNotice,
 .actionBacklogPinnedNote {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;
@@ -184,7 +184,7 @@
 
 .reviewSectionNotice {
   padding: 0 0 var(--spacing-3);
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .scriptReviewCard {
@@ -195,7 +195,7 @@
 }
 
 .scriptReviewCard + .scriptReviewCard {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .scriptReviewHeader,
@@ -233,13 +233,13 @@
   gap: var(--spacing-2);
   min-width: 0;
   padding: var(--spacing-3);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: var(--border-radius-lg);
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 .scorecardSharedNote span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -254,17 +254,17 @@
 }
 
 .scorecardRow + .scorecardRow {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .scorecardHeader {
   align-content: start;
   padding-right: var(--spacing-3);
-  border-right: 1px solid var(--divider-color);
+  border-right: 1px solid var(--lobe-color-border-secondary);
 }
 
 .scorecardHeader span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
@@ -287,7 +287,7 @@
 }
 
 .actionBacklogList > li + li .actionBacklogRow {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .actionBacklogPriority {
@@ -303,10 +303,10 @@
   min-height: 28px;
   place-items: center;
   padding: 0 var(--spacing-2);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: var(--border-radius-full);
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  background: var(--aios-ai-soft);
+  color: var(--aios-ai-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -332,14 +332,14 @@
     padding-right: 0;
     padding-bottom: var(--spacing-3);
     border-right: 0;
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--lobe-color-border-secondary);
   }
 
   .scorecardHeader {
     padding-right: 0;
     padding-bottom: var(--spacing-3);
     border-right: 0;
-    border-bottom: 1px solid var(--divider-color);
+    border-bottom: 1px solid var(--lobe-color-border-secondary);
   }
 }
 

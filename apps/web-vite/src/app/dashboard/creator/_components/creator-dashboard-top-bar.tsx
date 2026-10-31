@@ -1,8 +1,8 @@
 'use client';
 
 import { Link } from 'react-router-dom';
-import { HomeOutlined } from '@ant-design/icons';
-import { Segmented } from 'antd';
+import { Segmented } from '@lobehub/ui';
+import { House } from 'lucide-react';
 import styles from './creator-dashboard.module.css';
 import { DATE_MODE_OPTIONS, type DateMode } from './creator-date-range';
 import { CREATOR_DASHBOARD_TABS, type CreatorDashboardTabKey } from './creator-tabs';
@@ -30,7 +30,7 @@ export function CreatorDashboardTopBar({
           aria-label="返回首页"
           title="返回首页"
         >
-          <HomeOutlined className={styles.homeEntryIcon} />
+          <House className={styles.homeEntryIcon} size="1em" strokeWidth={1.8} aria-hidden="true" />
         </Link>
         <div className={styles.brand}>Groland Shopping Influencer</div>
       </div>
@@ -50,12 +50,14 @@ export function CreatorDashboardTopBar({
       </nav>
 
       <div className={styles.filters}>
-        <Segmented<DateMode>
-          name={segmentedName}
-          value={datePickerProps.dateMode}
-          onChange={onDateModeChange}
-          options={DATE_MODE_OPTIONS.map((item) => ({ label: item.label, value: item.key }))}
-        />
+        <div role="group" aria-label="时间维度">
+          <Segmented<DateMode>
+            name={segmentedName}
+            value={datePickerProps.dateMode}
+            onChange={onDateModeChange}
+            options={DATE_MODE_OPTIONS.map((item) => ({ label: item.label, value: item.key }))}
+          />
+        </div>
         <div className={styles.pickerShell} aria-label="时间选择">
           <CreatorDateModePicker {...datePickerProps} />
         </div>

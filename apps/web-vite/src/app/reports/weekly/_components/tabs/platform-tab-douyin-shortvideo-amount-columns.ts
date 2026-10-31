@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   renderDouyinMetricTrend,
   type TrendClassNameResolver,
@@ -9,7 +9,7 @@ import { createCurrencyFixedMetricColumn } from './platform-tab-metric-column-bu
 
 export function buildDouyinShortvideoAmountColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<DouyinShortvideoRow> {
+): TableColumnsType<DouyinShortvideoRow> {
   return [
     {
       title: '用户支付金额',

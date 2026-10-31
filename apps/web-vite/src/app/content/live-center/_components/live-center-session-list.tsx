@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from 'react';
 import type { Dayjs } from 'dayjs';
-import { Alert, Button, DatePicker, Empty, Input, Pagination, Segmented } from 'antd';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { Alert, Button, DayjsDatePicker, DayjsDateRangePicker, Empty, Input, Pagination, Segmented } from '@lobehub/ui';
+import { RotateCw, Search } from 'lucide-react';
 import { resolveClientErrorMessage } from '@/lib/client-error';
 import {
   LIVE_CENTER_DATE_MODE_OPTIONS,
@@ -16,8 +16,6 @@ import type { LiveCenterSession } from '../_lib/live-center-types';
 import filterStyles from '../live-center-filters.module.css';
 import styles from '../live-center.module.css';
 import { LiveCenterSessionListItem } from './live-center-session-list-item';
-
-const { RangePicker } = DatePicker;
 
 type LiveCenterDatePickerPeriodUnit = 'week' | 'month' | 'year';
 
@@ -128,7 +126,7 @@ export function LiveCenterSessionFilters({
           allowClear
           aria-label="搜索直播场次"
           className={filterStyles.searchInput}
-          prefix={<SearchOutlined />}
+          prefix={<Search size={14} strokeWidth={1.8} aria-hidden="true" />}
           placeholder="搜索主播、店铺或场次"
           value={keywordInput}
           onChange={(event) => onKeywordInputChange(event.target.value)}
@@ -145,7 +143,7 @@ export function LiveCenterSessionFilters({
           />
           <div className={filterStyles.dateRangePickerShell}>
             {dateMode === 'day' ? (
-              <DatePicker
+              <DayjsDatePicker
                 allowClear={false}
                 aria-label="筛选直播日期"
                 className={filterStyles.dateRangePicker}
@@ -153,7 +151,6 @@ export function LiveCenterSessionFilters({
                 disabledDate={disabledDayDate}
                 format="YYYY/MM/DD"
                 locale={LIVE_CENTER_DATE_PICKER_LOCALE}
-                popupClassName={filterStyles.liveCenterDatePickerPopup}
                 value={dayValue}
                 onChange={(value) => {
                   if (value) {
@@ -163,7 +160,7 @@ export function LiveCenterSessionFilters({
               />
             ) : null}
             {dateMode === 'week' ? (
-              <DatePicker
+              <DayjsDatePicker
                 allowClear={false}
                 aria-label="筛选直播周"
                 className={filterStyles.dateRangePicker}
@@ -172,7 +169,6 @@ export function LiveCenterSessionFilters({
                 format="YYYY年WW周"
                 locale={LIVE_CENTER_DATE_PICKER_LOCALE}
                 picker="week"
-                popupClassName={filterStyles.liveCenterDatePickerPopup}
                 value={weekValue}
                 onChange={(value) => {
                   if (value) {
@@ -182,7 +178,7 @@ export function LiveCenterSessionFilters({
               />
             ) : null}
             {dateMode === 'month' ? (
-              <DatePicker
+              <DayjsDatePicker
                 allowClear={false}
                 aria-label="筛选直播月份"
                 className={filterStyles.dateRangePicker}
@@ -191,7 +187,6 @@ export function LiveCenterSessionFilters({
                 format="YYYY/MM"
                 locale={LIVE_CENTER_DATE_PICKER_LOCALE}
                 picker="month"
-                popupClassName={filterStyles.liveCenterDatePickerPopup}
                 value={monthValue}
                 onChange={(value) => {
                   if (value) {
@@ -201,7 +196,7 @@ export function LiveCenterSessionFilters({
               />
             ) : null}
             {dateMode === 'year' ? (
-              <DatePicker
+              <DayjsDatePicker
                 allowClear={false}
                 aria-label="筛选直播年份"
                 className={filterStyles.dateRangePicker}
@@ -210,7 +205,6 @@ export function LiveCenterSessionFilters({
                 format="YYYY"
                 locale={LIVE_CENTER_DATE_PICKER_LOCALE}
                 picker="year"
-                popupClassName={filterStyles.liveCenterDatePickerPopup}
                 value={yearValue}
                 onChange={(value) => {
                   if (value) {
@@ -220,7 +214,7 @@ export function LiveCenterSessionFilters({
               />
             ) : null}
             {dateMode === 'custom' ? (
-              <RangePicker
+              <DayjsDateRangePicker
                 allowClear={false}
                 aria-label="自定义筛选直播日期范围"
                 className={filterStyles.dateRangePicker}
@@ -229,7 +223,6 @@ export function LiveCenterSessionFilters({
                 format="YYYY/MM/DD"
                 locale={LIVE_CENTER_DATE_PICKER_LOCALE}
                 placeholder={['开始日期', '结束日期']}
-                popupClassName={filterStyles.liveCenterDatePickerPopup}
                 separator="→"
                 value={customRange}
                 onChange={handleCustomRangePickerChange}
@@ -246,11 +239,11 @@ export function LiveCenterSessionFilters({
           <Button
             aria-label="搜索直播场次"
             type="primary"
-            icon={<SearchOutlined />}
+            icon={<Search size={14} strokeWidth={1.8} aria-hidden="true" />}
             title="搜索直播场次"
             onClick={onApplySearch}
           >
-            搜索
+            <span>搜索</span>
           </Button>
           <Button onClick={onResetFilters}>重置</Button>
         </div>
@@ -308,7 +301,7 @@ export function LiveCenterSessionListPanel({
           message="场次列表加载失败"
           description={resolveClientErrorMessage(sessionsError, '请稍后重试或联系管理员。')}
           action={(
-            <Button size="small" icon={<ReloadOutlined />} onClick={onRetry}>
+            <Button size="small" icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onRetry}>
               重试列表
             </Button>
           )}

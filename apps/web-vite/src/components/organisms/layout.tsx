@@ -1,134 +1,110 @@
-'use client';
-
-import React, { useEffect, useMemo, useRef } from 'react';
+import { ConsoleBrand, ConsoleNav, ConsoleShell, type ConsoleBrandProps, type ConsoleNavProps } from '@lobehub/ui/dashboard';
+import { Sparkles } from 'lucide-react';
+import { useMemo, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Layout as AntLayout, Menu } from 'antd';
-import UserMenu from '@/components/user-menu';
 import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
-import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import {
   buildLayoutMenuItems,
   collectRouteKeys,
-  type LayoutMenuItems,
+  resolveLayoutMenuPath,
+  resolveModuleNavigation,
+  type LayoutNavLink,
 } from './layout-navigation-model';
-import {
-  isDocsRoutePath,
-  resolveContentClassName,
-  resolveSelectedMenuKey,
-} from './layout-route-selection';
-import { centerSelectedMobileMenuItem } from './layout-mobile-navigation';
+import { isDocsRoutePath, isEdgeToEdgeContentRoutePath, resolveSelectedMenuKey } from './layout-route-selection';
 import styles from './layout.module.css';
 
-const { Header, Content, Footer } = AntLayout;
-
 export interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   variant?: 'default' | 'immersive';
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, variant = 'default' }) => {
-  const pathname = useLocation().pathname;
-  if (variant === 'immersive') {
+type NavLinkArgs = Parameters<NonNullable<ConsoleNavProps['renderLink']>>[0];
+type BrandLinkArgs = Parameters<NonNullable<ConsoleBrandProps['renderLink']>>[0];
+
+function renderNavLink({ href, children, external, ...rest }: NavLinkArgs) {
+  if (external) {
     return (
-      <AntLayout className={styles.shell}>
-        <Content className={`${styles.content} ${styles.contentImmersive}`}>
-          {children}
-        </Content>
-      </AntLayout>
+      <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+        {children}
+      </a>
     );
   }
+  return (
+    <Link to={href} {...rest}>
+      {children}
+    </Link>
+  );
+}
 
-  return <DefaultLayoutChrome pathname={pathname}>{children}</DefaultLayoutChrome>;
-};
+function renderBrandLink({ href, children, ...rest }: BrandLinkArgs) {
+  return (
+    <Link to={href} {...rest}>
+      {children}
+    </Link>
+  );
+}
 
-function DefaultLayoutChrome({
-  children,
-  pathname,
-}: {
-  children: React.ReactNode;
-  pathname: string;
-}) {
+function toConsoleItem(link: LayoutNavLink) {
+  return { href: link.href, label: link.label, icon: link.icon };
+}
+
+export function Layout({ children, variant = 'default' }: LayoutProps) {
+  const { pathname } = useLocation();
+  if (variant === 'immersive' || isDocsRoutePath(pathname)) {
+    // Docs and immersive workbenches bring their own local navigation.
+    return <div className={styles.immersive}>{children}</div>;
+  }
+  return <ConsoleLayout pathname={pathname}>{children}</ConsoleLayout>;
+}
+
+function ConsoleLayout({ children, pathname }: { children: ReactNode; pathname: string }) {
   const permissions = useAuthStore((state) => state.permissions);
   const user = useAuthStore((state) => state.user);
   const roles = useAuthStore(selectUserRoles);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  const menuItems = useMemo<LayoutMenuItems>(
-    () => buildLayoutMenuItems({
-      isAuthenticated,
-      pathname,
-      permissions,
-      roles,
-      user,
-    }),
-    [isAuthenticated, pathname, permissions, roles, user]
+  const menuItems = useMemo(
+    () => buildLayoutMenuItems({ isAuthenticated, pathname, permissions, roles, user }),
+    [isAuthenticated, pathname, permissions, roles, user],
+  );
+  const module = resolveModuleNavigation(menuItems, pathname);
+  const activePath = resolveSelectedMenuKey(resolveLayoutMenuPath(pathname), collectRouteKeys(menuItems));
+  const edgeToEdge = isEdgeToEdgeContentRoutePath(pathname);
+  const content = (
+    <div className={edgeToEdge ? styles.edge : styles.workspace}>
+      {children}
+      <p className={styles.footer}>AGI AIOS ©2026 · AI 驱动的业务生产力系统</p>
+    </div>
   );
 
-  const routeKeys = useMemo(() => collectRouteKeys(menuItems), [menuItems]);
-  const selectedMenuKey = resolveSelectedMenuKey(pathname, routeKeys);
-  const mobileNavScrollRef = useRef<HTMLDivElement>(null);
-  const isDocsRoute = isDocsRoutePath(pathname);
-  const contentClassName = resolveContentClassName(pathname);
-
-  useEffect(() => {
-    const scrollContainer = mobileNavScrollRef.current;
-    if (scrollContainer) centerSelectedMobileMenuItem(scrollContainer);
-  }, [selectedMenuKey]);
+  if (!module) return <main className={styles.immersive}>{content}</main>;
 
   return (
-    <AntLayout className={styles.shell}>
-      <Header
-        className={`${styles.header} px-0`}
-      >
-        <div className="mx-auto w-full max-w-[1600px] px-3 sm:px-4">
-          <div className="relative flex min-h-[72px] items-center gap-2 sm:gap-4">
-            <div className="flex min-w-0 flex-1 items-center md:min-w-[196px] md:flex-none md:shrink-0">
-              <Link to={ROUTE_PATHS.home} aria-label="返回首页" className={styles.brand}>
-                AGI AIOS
-              </Link>
-            </div>
-
-            <div className="hidden min-w-0 flex-1 items-center justify-center px-6 md:flex">
-              <Menu
-                mode="horizontal"
-                selectedKeys={[selectedMenuKey]}
-                items={menuItems}
-                className="header-nav-menu border-none bg-transparent"
-              />
-            </div>
-
-            <div className="ml-auto flex min-w-0 items-center justify-end md:min-w-[196px] md:shrink-0">
-              <UserMenu />
-            </div>
-          </div>
-
-          <div className="pb-2 md:hidden">
-            <div ref={mobileNavScrollRef} className="mobile-nav-scroll w-full overflow-x-auto">
-              <Menu
-                mode="horizontal"
-                selectedKeys={[selectedMenuKey]}
-                items={menuItems}
-                className="header-nav-menu header-nav-menu-mobile border-none bg-transparent"
-              />
-            </div>
-          </div>
-        </div>
-      </Header>
-
-      <Content
-        className={`${styles.content} ${contentClassName}`}
-      >
-        {children}
-      </Content>
-
-      {!isDocsRoute && (
-        <Footer
-          className={styles.footer}
-        >
-          AGI AIOS ©2026 · AI 驱动的业务生产力系统
-        </Footer>
-      )}
-    </AntLayout>
+    <ConsoleShell
+      className={styles.shell}
+      storageKey={`aios.console.${module.key}.sidebarCollapsed`}
+      brand={
+        <ConsoleBrand
+          href={module.links[0].href}
+          label={`${module.label}首页`}
+          title={module.label}
+          logo={
+            <span className={styles.logo} aria-hidden="true">
+              <Sparkles size={16} strokeWidth={1.8} />
+            </span>
+          }
+          renderLink={renderBrandLink}
+        />
+      }
+      navigation={<ConsoleNav label={`${module.label}导航`} pathname={activePath} items={module.links.map(toConsoleItem)} renderLink={renderNavLink} />}
+      collapseLabel="收起侧栏"
+      expandLabel="展开侧栏"
+      openNavigationLabel="打开导航"
+      closeNavigationLabel="关闭导航"
+      skipToContentLabel="跳到正文"
+    >
+      {content}
+    </ConsoleShell>
   );
 }
 

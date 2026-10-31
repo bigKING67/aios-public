@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table, type TableColumnsType } from '@lobehub/ui';
 import type { ContentAssetItem, ContentAssetProcessingJob } from '../_lib/content-assets-types';
 import {
   resolveContentAssetDisplayTitle,
@@ -92,7 +91,7 @@ export function ContentAssetsTable({
   onOpen: (asset: ContentAssetItem) => void;
   onSourceUploadOpen: (asset: ContentAssetItem) => void;
 }) {
-  const columns: ColumnsType<ContentAssetItem> = [
+  const columns: TableColumnsType<ContentAssetItem> = [
     {
       title: '素材',
       dataIndex: 'title',

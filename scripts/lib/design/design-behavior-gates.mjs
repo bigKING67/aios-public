@@ -63,18 +63,6 @@ export const DESIGN_BEHAVIOR_GATES = Object.freeze([
     label: '[verify:ci] design token value helper sync behavior',
   },
   {
-    name: 'verify:design:antd-table-selectors-behavior',
-    command: 'node scripts/checks/design/antd-table-selectors.behavior.mjs',
-    file: 'scripts/checks/design/antd-table-selectors.behavior.mjs',
-    label: '[verify:ci] AntD table deep selector audit behavior',
-  },
-  {
-    name: 'verify:design:antd-theme-token-sync-behavior',
-    command: 'node scripts/checks/design/antd-theme-token-sync.behavior.mjs',
-    file: 'scripts/checks/design/antd-theme-token-sync.behavior.mjs',
-    label: '[verify:ci] AntD theme token sync behavior',
-  },
-  {
     name: 'verify:design:echarts-theme-token-sync-behavior',
     command: 'node scripts/checks/design/echarts-theme-token-sync.behavior.mjs',
     file: 'scripts/checks/design/echarts-theme-token-sync.behavior.mjs',

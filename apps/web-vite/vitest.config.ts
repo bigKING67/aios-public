@@ -8,15 +8,12 @@ const browserSessionTests = [
 ];
 const domLogicTests = [
   'apps/web-vite/src/lib/echarts/lean-tooltip.test.ts',
-  'apps/web-vite/src/components/organisms/layout-mobile-navigation.test.ts',
 ];
 const setupFiles = ['apps/web-vite/src/test/setup.ts'];
 
 export default defineConfig({
   resolve: {
     alias: [
-      // The published ESM entry retains named exports when prebundling the icon barrel.
-      { find: /^@ant-design\/icons$/, replacement: path.resolve(projectRoot, 'node_modules/@ant-design/icons/es/index.js') },
       { find: '@', replacement: path.resolve(projectRoot, 'apps/web-vite/src') },
     ],
   },
@@ -60,7 +57,6 @@ export default defineConfig({
           environment: 'happy-dom',
           include: ['apps/web-vite/src/**/*.{test,spec}.tsx', ...domLogicTests],
           setupFiles,
-          deps: { optimizer: { client: { enabled: true, include: ['antd', '@ant-design/icons'] } } },
         },
       },
     ],

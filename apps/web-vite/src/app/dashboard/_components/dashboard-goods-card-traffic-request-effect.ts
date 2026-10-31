@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type Key, type SetStateAction } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 
 import { buildDashboardCompareQueryDateRangeParams, type DashboardDateRangeLike } from './dashboard-date-range';
 import {
@@ -17,7 +17,7 @@ import type {
 type DashboardGoodsCardTrafficRequestEffectArgs = {
   isEnabled: boolean;
   isDrawerOpen: boolean;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   currentRange: DashboardDateRangeLike;
   previousRange: DashboardDateRangeLike;
   selectedGoodsCardRow: DashboardGoodsCardRow | null;

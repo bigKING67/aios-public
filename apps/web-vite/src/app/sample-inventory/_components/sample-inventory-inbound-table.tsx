@@ -1,8 +1,8 @@
-import { DeleteOutlined } from "@ant-design/icons";
+import { Trash2 } from 'lucide-react';
 import { Badge } from "@/components/atoms/badge";
 import type { SampleInventoryInbound } from "@/lib/generated-api-contract";
-import { Button, Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { Button, Table } from '@lobehub/ui';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 
 import { formatSampleInventoryTimestamp } from "../_lib/sample-inventory-formatters";
 import {
@@ -125,7 +125,7 @@ export function SampleInventoryInboundTable({
             type="link"
             danger
             size="small"
-            icon={<DeleteOutlined aria-hidden="true" />}
+            icon={<Trash2 size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => onDelete(item)}
           >
             删除

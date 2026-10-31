@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { App } from 'antd';
+import { toast } from '@lobehub/ui';
 import reportApi from '@/lib/api';
 import type { WeeklySummaryAIScope } from '@/config/weekly-summary-ai';
 import {
@@ -143,7 +143,6 @@ export const useGenerateSummaryMutation = (
   summaryScope?: WeeklySummaryAIScope
 ) => {
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
   const summaryQueryKey = buildWeeklySummaryQueryKey(reportId, weekPeriod, summaryScope);
 
   return useMutation<GenerateSummaryResponse, APIErrorLike, GenerateSummaryVariables | undefined, MutationContext>({
@@ -176,7 +175,7 @@ export const useGenerateSummaryMutation = (
       const errorMessage =
         error.message || '触发周报总结生成失败，请重试';
 
-      notification.error({
+      toast.error({
         title: '生成失败',
         description: errorMessage,
       });
@@ -197,7 +196,7 @@ export const useGenerateSummaryMutation = (
           ? '正在调用 AI 分析本周数据，请稍候...'
           : '总结任务状态已更新。';
 
-      notification[queued ? 'success' : 'info']({
+      toast[queued ? 'success' : 'info']({
         title: queued ? '已开始生成' : '任务未入队',
         description,
       });
@@ -212,7 +211,6 @@ export const useUpdateSummaryMutation = (
   summaryScope?: WeeklySummaryAIScope
 ) => {
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
   const summaryQueryKey = buildWeeklySummaryQueryKey(reportId, weekPeriod, summaryScope);
 
   return useMutation<SummaryContentResponse, APIErrorLike, UpdateSummaryVariables>({
@@ -242,7 +240,7 @@ export const useUpdateSummaryMutation = (
         error_message: undefined,
       }));
 
-      notification.success({
+      toast.success({
         title: '保存成功',
         description: '总结内容已更新并生效。',
       });
@@ -250,7 +248,7 @@ export const useUpdateSummaryMutation = (
       void queryClient.invalidateQueries({ queryKey: summaryQueryKey });
     },
     onError: (error) => {
-      notification.error({
+      toast.error({
         title: '保存失败',
         description: error.message || '总结保存失败，请稍后重试。',
       });

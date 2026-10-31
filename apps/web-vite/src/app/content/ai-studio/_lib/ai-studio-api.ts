@@ -4,7 +4,8 @@ import {
   type StudioAssetSegmentSummary,
   type StudioAssetSegmentSummaryListResponse,
   type StudioCapabilitiesResponse,
-  type StudioOverviewPeriodKey,
+  type StudioOverviewPeriod,
+  type StudioOverviewQuery,
   type StudioOverviewResponse,
   type StudioConfirmContentSegmentsRequest,
   type StudioConfirmContentSegmentsResponse,
@@ -21,7 +22,8 @@ import {
 export type {
   StudioAssetSegmentSummary,
   StudioCapabilitiesResponse,
-  StudioOverviewPeriodKey,
+  StudioOverviewPeriod,
+  StudioOverviewQuery,
   StudioOverviewResponse,
   StudioContentSegment,
   StudioContentSegmentConflictResponse,
@@ -55,8 +57,8 @@ export const aiStudioQueryKeys = {
   segmentPool: (presetKey: string, presetVersion: number) =>
     [...STUDIO_ROOT_QUERY_KEY, 'segments', 'pool', presetKey, presetVersion] as const,
   /** Home overview; segment and batch writes invalidate the unparameterised prefix. */
-  overview: (period?: StudioOverviewPeriodKey) =>
-    period ? ([...STUDIO_ROOT_QUERY_KEY, 'overview', period] as const) : ([...STUDIO_ROOT_QUERY_KEY, 'overview'] as const),
+  overview: (query?: StudioOverviewQuery) =>
+    query ? ([...STUDIO_ROOT_QUERY_KEY, 'overview', query] as const) : ([...STUDIO_ROOT_QUERY_KEY, 'overview'] as const),
   assetSummaries: (assetIds: readonly string[], presetKey?: string) =>
     [...STUDIO_ROOT_QUERY_KEY, 'asset-summaries', presetKey ?? 'all', assetIds] as const,
 };
@@ -83,21 +85,33 @@ export async function fetchStudioCapabilities(options?: { signal?: AbortSignal }
 }
 
 /** Estimated spend, pipeline counts and recent work for the home page. */
-export async function fetchStudioOverview(period: StudioOverviewPeriodKey, options?: { signal?: AbortSignal }) {
+export async function fetchStudioOverview(query: StudioOverviewQuery, options?: { signal?: AbortSignal }) {
   return (
     await apiClient.get<StudioOverviewResponse>(AIOS_API_PATHS.contentStudioOverview, {
-      params: { period },
+      params: query,
       signal: options?.signal,
     })
   ).data;
 }
 
+/**
+ * Labels the business no longer uses. The preset rows keep them (no segment carries one), but no
+ * studio surface offers them: KOC footage is internal and cannot be told apart from 实拍内容, so
+ * neither AI 切段 nor people should pick it (decided 2026-10-25).
+ */
+const HIDDEN_PRESET_LABEL_KEYS: ReadonlySet<string> = new Set(['koc']);
+
+export function isHiddenPresetLabel(key: string): boolean {
+  return HIDDEN_PRESET_LABEL_KEYS.has(key);
+}
+
 export async function fetchStudioPresets(options?: { signal?: AbortSignal }) {
-  return (
+  const { items } = (
     await apiClient.get<StudioSegmentPresetListResponse>(AIOS_API_PATHS.contentStudioPresets, {
       signal: options?.signal,
     })
-  ).data.items;
+  ).data;
+  return items.map((preset) => ({ ...preset, labels: preset.labels.filter((label) => !isHiddenPresetLabel(label.key)) }));
 }
 
 /** Annotation counts for up to 100 library assets, in request order; `presetKey` scopes to one preset. */

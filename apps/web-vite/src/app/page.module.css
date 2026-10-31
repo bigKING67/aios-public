@@ -165,8 +165,8 @@
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -179,14 +179,14 @@
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: var(--brand-primary);
-  color: var(--brand-on-primary);
+  background: var(--lobe-color-primary);
+  color: var(--lobe-color-bg-container);
   box-shadow: none;
 }
 
 .capabilityTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 590;
   line-height: var(--line-height-normal);
@@ -262,7 +262,7 @@
 }
 
 .entryCard:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 3px;
   border-radius: 14px;
 }
@@ -282,7 +282,7 @@
 
 .entryTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
   font-weight: 590;
@@ -321,8 +321,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--brand-secondary);
-  color: var(--brand-text);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-text);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: 580;
@@ -336,15 +336,15 @@
 }
 
 .entryCardPrimary .entryAction {
-  background: var(--brand-primary);
-  color: var(--brand-on-primary);
+  background: var(--lobe-color-primary);
+  color: var(--lobe-color-bg-container);
   box-shadow: 0 5px 12px var(--page-material-brand-blue-a160);
 }
 
 .entryCard:hover .entryAction,
 .entryCard:focus-visible .entryAction {
-  background: var(--brand-primary);
-  color: var(--brand-on-primary);
+  background: var(--lobe-color-primary);
+  color: var(--lobe-color-bg-container);
   box-shadow: 0 5px 12px var(--page-material-brand-blue-a220);
   transform: translateY(-1px);
 }
@@ -352,7 +352,7 @@
 .entryCard:not(.entryCardPrimary):hover .entryAction,
 .entryCard:not(.entryCardPrimary):focus-visible .entryAction {
   background: transparent;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   box-shadow: none;
   transform: translate3d(2px, 0, 0);
 }
@@ -403,14 +403,14 @@
   align-items: center;
   justify-content: center;
   font-size: var(--font-size-base);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   flex-shrink: 0;
 }
 
 .governanceTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 590;
   line-height: var(--line-height-normal);

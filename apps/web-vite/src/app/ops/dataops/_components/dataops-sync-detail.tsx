@@ -1,19 +1,14 @@
 'use client';
 
-import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  DatabaseOutlined,
-  PlayCircleOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
-import { Button, Empty } from 'antd';
+import { Button, Empty } from '@lobehub/ui';
+import { CircleCheck, CirclePlay, Clock, Database, RefreshCw } from 'lucide-react';
 import type {
   DataOpsRuntimeFeishuSyncJob,
   DataOpsRuntimeSyncStream,
 } from '@/types/dataops';
 import { DataOpsStatusTag } from './dataops-status-tag';
 import { formatDateTime } from './dataops-hub-formatters';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import styles from './dataops-hub.module.css';
 import syncStyles from './dataops-sync-section.module.css';
 
@@ -84,9 +79,9 @@ export function DataOpsSyncDetail({
                 </div>
 
                 <div className={syncStyles.syncMeta}>
-                  <p><DatabaseOutlined /> Checkpoint：{stream.checkpointTable}</p>
-                  <p><ClockCircleOutlined /> 延迟：{stream.computedLagMinutes} 分钟</p>
-                  <p><CheckCircleOutlined /> 最近同步：{formatDateTime(stream.lastSyncAt)}</p>
+                  <p><Database {...DATAOPS_ICON_PROPS} /> Checkpoint：{stream.checkpointTable}</p>
+                  <p><Clock {...DATAOPS_ICON_PROPS} /> 延迟：{stream.computedLagMinutes} 分钟</p>
+                  <p><CircleCheck {...DATAOPS_ICON_PROPS} /> 最近同步：{formatDateTime(stream.lastSyncAt)}</p>
                 </div>
 
                 {stream.note ? (
@@ -131,19 +126,19 @@ export function DataOpsSyncDetail({
                   </div>
 
                   <div className={syncStyles.syncMeta}>
-                    <p><DatabaseOutlined /> 服务键：{job.serviceName}</p>
+                    <p><Database {...DATAOPS_ICON_PROPS} /> 服务键：{job.serviceName}</p>
                     <p>
-                      <ClockCircleOutlined /> 延迟：
+                      <Clock {...DATAOPS_ICON_PROPS} /> 延迟：
                       {typeof job.lagMinutes === 'number' ? ` ${job.lagMinutes} 分钟` : ' -'}
                     </p>
-                    <p><CheckCircleOutlined /> 最近同步：{formatDateTime(job.lastSyncedAt)}</p>
-                    <p><SyncOutlined /> 最新水位：{job.lastWatermark || '-'}</p>
+                    <p><CircleCheck {...DATAOPS_ICON_PROPS} /> 最近同步：{formatDateTime(job.lastSyncedAt)}</p>
+                    <p><RefreshCw {...DATAOPS_ICON_PROPS} /> 最新水位：{job.lastWatermark || '-'}</p>
                   </div>
 
                   <div className={syncStyles.syncActionGroup}>
                     <Button
                       size="small"
-                      icon={<PlayCircleOutlined />}
+                      icon={<CirclePlay {...DATAOPS_ICON_PROPS} />}
                       loading={isLoading}
                       disabled={shouldDisableAction}
                       onClick={() => onRunFeishuSyncJob(job)}

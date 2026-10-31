@@ -6,7 +6,7 @@
 //!   a block is never split.
 //! - Each framework segment of the reference original is a slot. A slot is
 //!   filled by 1..=`MAX_BLOCKS_PER_SLOT` blocks of other material whose
-//!   framework label matches, within ±`DURATION_TOLERANCE` of the reference
+//!   framework label matches, within ±`DURATION_TOLERANCE_PERCENT` of the reference
 //!   span, without repeating a segment or a selling point.
 //! - Tiers: `Exact` (one block, same selling points) → `Spliced` (several
 //!   blocks, same selling points) → `Varied` (same count, at least one shared,
@@ -14,11 +14,13 @@
 //!   the requested count.
 //! - A slot without blocks, or one whose single block covers ≥90 % of it,
 //!   falls back to 类型 1: any whole framework segment of the same label.
-//!   A slot whose blocks find no fill at all (its points cover only part of
-//!   it) takes whole segments as a last resort, at the `Varied` tier.
+//!   A slot without an exact or spliced block fill (its points cover only
+//!   part of it) also takes whole segments as a last resort, at the
+//!   `Varied` tier beside any varied block fills.
 //! - Combination hash = ordered segment ids of every clip (blocks expanded),
 //!   shared with 类型 1 history so a fully fallen-back combination is never
-//!   repeated either.
+//!   repeated either. A combination filling every slot from the reference's
+//!   own framework segment of that slot, as blocks or whole, is the reference.
 //! - Every complete output must contain confirmed moisturizing and skincare
 //!   evidence, including fallback clips. Their global order is unrestricted.
 //! - Selling points are split and counted only inside 混剪口播 framework
@@ -26,7 +28,7 @@
 //!   selling points annotated inside them stay stored but are ignored here, so
 //!   they neither satisfy the required points nor use the repeat budget.
 use super::remix_combos::{combination_hash, SplitMix64, ENUMERATION_LIMIT, MIN_TOTAL_MS};
-use super::selling_point_labels::{compatible_swap, group, same_sequence};
+use super::selling_point_labels::{compatible_swap, extends_points, group, same_points};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use uuid::Uuid;
 
@@ -36,8 +38,8 @@ pub(super) const MAX_BLOCKS_PER_SLOT: usize = 3;
 pub(super) const POINT_FRAMEWORK_LABEL: &str = "mixed_voiceover";
 /// Business confirmation in the source document's 2026-10-13 comments.
 const REQUIRED_POINTS: [&str; 2] = ["moisturizing", "skincare"];
-/// Slot fill may deviate this much from the reference framework span.
-pub(super) const DURATION_TOLERANCE: f64 = 0.2;
+/// Slot fill may deviate this many percent from the reference framework span.
+const DURATION_TOLERANCE_PERCENT: u64 = 20;
 /// A single block covering this share of its framework segment is a long chain.
 const LONG_CHAIN_SHARE: f64 = 0.9;
 const MAX_OPTIONS_PER_TIER: usize = 40;
@@ -103,6 +105,9 @@ impl Block {
     fn selling_points(&self) -> Vec<String> {
         self.points.iter().flat_map(PointSegment::labels).collect()
     }
+    fn segment_points(&self) -> impl Iterator<Item = Vec<String>> + '_ {
+        self.points.iter().map(PointSegment::labels)
+    }
 }
 
 pub(super) fn carries_points(frame: &FrameSegment) -> bool {
@@ -115,7 +120,7 @@ fn overlaps(frame: &FrameSegment, point: &PointSegment) -> bool {
         && point.start_ms < frame.end_ms
 }
 
-fn span(start: i32, end: i32) -> u64 {
+pub(super) fn span(start: i32, end: i32) -> u64 {
     u64::try_from(end.saturating_sub(start)).unwrap_or(0)
 }
 
@@ -242,9 +247,11 @@ pub(super) struct RefSlot {
     pub(super) duration_ms: u64,
     /// Known selling points in order, including whole-framework fallback slots.
     pub(super) target: Vec<String>,
+    /// `target` per selling-point segment, for order comparison.
+    target_segments: Vec<Vec<String>>,
     pub(super) fallback: bool,
-    /// Segment ids the reference itself uses in this slot.
-    pub(super) reference_ids: Vec<Uuid>,
+    /// The reference's own framework segment of this slot.
+    pub(super) frame_id: Uuid,
 }
 
 pub(super) fn reference_slots(
@@ -260,28 +267,21 @@ pub(super) fn reference_slots(
             let long_chain = inside
                 .iter()
                 .any(|b| b.duration_ms() as f64 >= duration as f64 * LONG_CHAIN_SHARE);
-            let target: Vec<String> = inside.iter().flat_map(Block::selling_points).collect();
+            let target_segments: Vec<Vec<String>> =
+                inside.iter().flat_map(Block::segment_points).collect();
+            let target: Vec<String> = target_segments.concat();
             // A selling point repeated inside one slot cannot be filled under the
             // no-repeat rule, so the slot falls back to whole framework segments.
-            if inside.is_empty() || long_chain || !distinct(target.iter().map(|point| group(point)))
-            {
-                return RefSlot {
-                    label_key: frame.label_key.clone(),
-                    duration_ms: duration,
-                    target,
-                    fallback: true,
-                    reference_ids: vec![frame.segment_id],
-                };
-            }
+            let fallback = inside.is_empty()
+                || long_chain
+                || !distinct(target.iter().map(|point| group(point)));
             RefSlot {
                 label_key: frame.label_key.clone(),
                 duration_ms: duration,
                 target,
-                fallback: false,
-                reference_ids: inside
-                    .iter()
-                    .flat_map(|b| b.points.iter().map(|p| p.segment_id))
-                    .collect(),
+                target_segments,
+                fallback,
+                frame_id: frame.segment_id,
             }
         })
         .collect()
@@ -308,6 +308,8 @@ pub(super) struct SlotOption {
     pub(super) clips: Vec<Clip>,
     pub(super) tier: Tier,
     pub(super) fallback: bool,
+    /// Every clip comes from the reference's own framework segment of the slot.
+    pub(super) reference: bool,
 }
 
 impl SlotOption {
@@ -358,10 +360,12 @@ fn frame_clip(frame: &FrameSegment, blocks: &[Block]) -> Clip {
     }
 }
 
-fn within_tolerance(slot: &RefSlot, duration_ms: u64) -> bool {
-    let target = slot.duration_ms as f64;
-    let actual = duration_ms as f64;
-    actual >= target * (1.0 - DURATION_TOLERANCE) && actual <= target * (1.0 + DURATION_TOLERANCE)
+/// A fill within ±`DURATION_TOLERANCE_PERCENT` of the reference span (类型 1
+/// and 2), in exact integer arithmetic so the bounds themselves pass.
+pub(super) fn within_duration_tolerance(target_ms: u64, actual_ms: u64) -> bool {
+    let actual = actual_ms.saturating_mul(100);
+    actual >= target_ms.saturating_mul(100 - DURATION_TOLERANCE_PERCENT)
+        && actual <= target_ms.saturating_mul(100 + DURATION_TOLERANCE_PERCENT)
 }
 
 fn distinct<T: Eq + std::hash::Hash>(items: impl Iterator<Item = T>) -> bool {
@@ -370,14 +374,15 @@ fn distinct<T: Eq + std::hash::Hash>(items: impl Iterator<Item = T>) -> bool {
 }
 
 fn classify(slot: &RefSlot, sequence: &[&Block], allow_variation: bool) -> Option<Tier> {
-    let points: Vec<String> = sequence.iter().flat_map(|b| b.selling_points()).collect();
+    let segments: Vec<Vec<String>> = sequence.iter().flat_map(|b| b.segment_points()).collect();
+    let points = segments.concat();
     if points.len() != slot.target.len()
         || !distinct(points.iter().map(|point| group(point)))
         || !compatible_swap(&slot.target, &points)
     {
         return None;
     }
-    if same_sequence(&points, &slot.target) {
+    if same_points(&segments, &slot.target_segments) {
         return Some(if sequence.len() == 1 {
             Tier::Exact
         } else {
@@ -394,6 +399,23 @@ fn classify(slot: &RefSlot, sequence: &[&Block], allow_variation: bool) -> Optio
 /// tier is searched on its own budget over a seeded pool order, so a crowded
 /// pool can neither crowd out single-block exact fills nor stall planning.
 pub(super) fn slot_options(
+    slot: &RefSlot,
+    frames: &[FrameSegment],
+    blocks: &[Block],
+    allow_variation: bool,
+    seed: u64,
+) -> Vec<SlotOption> {
+    let mut options = fill_options(slot, frames, blocks, allow_variation, seed);
+    for option in &mut options {
+        option.reference = option
+            .clips
+            .iter()
+            .all(|clip| clip.frame_id.unwrap_or(clip.segment_ids[0]) == slot.frame_id);
+    }
+    options
+}
+
+fn fill_options(
     slot: &RefSlot,
     frames: &[FrameSegment],
     blocks: &[Block],
@@ -431,10 +453,12 @@ pub(super) fn slot_options(
         found.truncate(MAX_OPTIONS_PER_TIER);
         options.extend(found);
     }
-    if options.is_empty() {
-        // Known points of the whole segment still meet the required, repeat
-        // and create-time checks; the unlabelled rest is not controlled.
-        return whole_frame_options(slot, frames, blocks, Tier::Varied, &mut rng);
+    if options.iter().all(|o| o.tier == Tier::Varied) {
+        // Without a same-point block fill, whole segments join the varied
+        // tier. Their known points still meet the required, repeat and
+        // create-time checks; the unlabelled rest is not controlled.
+        let whole = whole_frame_options(slot, frames, blocks, Tier::Varied, &mut rng);
+        options.extend(whole);
     }
     options
 }
@@ -450,12 +474,14 @@ fn whole_frame_options(
     let mut options: Vec<SlotOption> = frames
         .iter()
         .filter(|f| {
-            f.label_key == slot.label_key && within_tolerance(slot, span(f.start_ms, f.end_ms))
+            f.label_key == slot.label_key
+                && within_duration_tolerance(slot.duration_ms, span(f.start_ms, f.end_ms))
         })
         .map(|f| SlotOption {
             clips: vec![frame_clip(f, blocks)],
             tier,
             fallback: true,
+            reference: false,
         })
         .filter(|option| compatible_swap(&slot.target, &option.clips[0].selling_points))
         .collect();
@@ -465,8 +491,8 @@ fn whole_frame_options(
 }
 
 /// Depth-first over ordered block sequences that produce one tier. Exact and
-/// spliced fills only extend with blocks reproducing the next target points;
-/// every branch stops once its duration exceeds the tolerance ceiling.
+/// spliced fills only extend along an order of the target points; every
+/// branch stops once its duration exceeds the tolerance ceiling.
 struct Search<'a> {
     slot: &'a RefSlot,
     pool: &'a [&'a Block],
@@ -477,6 +503,17 @@ struct Search<'a> {
 }
 
 impl Search<'_> {
+    /// Exact and spliced fills only grow along an order of the target.
+    fn extends_target(&self, next: &Block) -> bool {
+        let prefix: Vec<Vec<String>> = self
+            .stack
+            .iter()
+            .flat_map(|i| self.pool[*i].segment_points())
+            .chain(next.segment_points())
+            .collect();
+        extends_points(&prefix, &self.slot.target_segments)
+    }
+
     fn exhausted(&self) -> bool {
         self.visits >= MAX_VISITS_PER_TIER || self.found.len() >= MAX_RAW_PER_TIER
     }
@@ -486,13 +523,14 @@ impl Search<'_> {
         let target = self.slot.target.len();
         if used_points == target {
             let sequence: Vec<&Block> = self.stack.iter().map(|i| self.pool[*i]).collect();
-            if within_tolerance(self.slot, duration)
+            if within_duration_tolerance(self.slot.duration_ms, duration)
                 && classify(self.slot, &sequence, true) == Some(self.tier)
             {
                 let option = SlotOption {
                     clips: sequence.iter().map(|b| block_clip(b)).collect(),
                     tier: self.tier,
                     fallback: false,
+                    reference: false,
                 };
                 if distinct(option.segment_ids()) {
                     self.found.push(option);
@@ -508,19 +546,22 @@ impl Search<'_> {
         if self.stack.len() >= depth_limit || self.exhausted() {
             return;
         }
-        let ceiling = self.slot.duration_ms as f64 * (1.0 + DURATION_TOLERANCE);
+        let ceiling = self
+            .slot
+            .duration_ms
+            .saturating_mul(100 + DURATION_TOLERANCE_PERCENT);
         for index in 0..self.pool.len() {
             let block = self.pool[index];
             let block_points = block.selling_points();
             let next_points = used_points + block_points.len();
             let next_duration = duration + block.duration_ms();
-            if self.stack.contains(&index) || next_points > target || next_duration as f64 > ceiling
+            if self.stack.contains(&index)
+                || next_points > target
+                || next_duration.saturating_mul(100) > ceiling
             {
                 continue;
             }
-            if self.tier != Tier::Varied
-                && !same_sequence(&block_points, &self.slot.target[used_points..next_points])
-            {
+            if self.tier != Tier::Varied && !self.extends_target(block) {
                 continue;
             }
             self.stack.push(index);
@@ -559,15 +600,6 @@ pub(super) struct PointSelection {
     pub(super) reference_excluded: bool,
 }
 
-/// The reference original's own composition (never selected).
-pub(super) fn reference_hash(slots: &[RefSlot]) -> String {
-    let ids: Vec<Uuid> = slots
-        .iter()
-        .flat_map(|s| s.reference_ids.iter().copied())
-        .collect();
-    combination_hash(&ids)
-}
-
 enum Verdict {
     Invalid,
     Used(String),
@@ -598,7 +630,6 @@ fn evaluate(
     picks: Vec<usize>,
     limits: &Limits,
     used: &HashSet<String>,
-    reference: &str,
 ) -> Verdict {
     let chosen: Vec<&SlotOption> = picks.iter().zip(options).map(|(p, o)| &o[*p]).collect();
     let ids: Vec<Uuid> = chosen.iter().flat_map(|o| o.segment_ids()).collect();
@@ -645,10 +676,12 @@ fn evaluate(
     if !(MIN_TOTAL_MS..=limits.max_total_ms).contains(&total) {
         return Verdict::Invalid;
     }
-    let hash = combination_hash(&ids);
-    if hash == reference {
+    // Its own blocks and its own whole segment have different IDs, so the
+    // reference is recognised by source, not by hash.
+    if chosen.iter().all(|o| o.reference) {
         return Verdict::Reference;
     }
+    let hash = combination_hash(&ids);
     if used.contains(&hash) {
         return Verdict::Used(hash);
     }
@@ -673,7 +706,6 @@ pub(super) fn select(
     seed: u64,
     limits: &Limits,
     used: &HashSet<String>,
-    reference: &str,
 ) -> PointSelection {
     let mut selection = PointSelection {
         exact: true,
@@ -708,7 +740,7 @@ pub(super) fn select(
         let mut found = Vec::new();
         let mut consider = |local: Vec<usize>, found: &mut Vec<PointCombination>| {
             let picks: Vec<usize> = local.iter().zip(&allowed).map(|(l, a)| a[*l]).collect();
-            match evaluate(options, picks, limits, used, reference) {
+            match evaluate(options, picks, limits, used) {
                 Verdict::Valid(combo) if combo.tier == ceiling && !taken.contains(&combo.hash) => {
                     taken.insert(combo.hash.clone());
                     found.push(combo);
@@ -757,3 +789,7 @@ mod tests;
 #[cfg(test)]
 #[path = "remix_selling_points_voiceover_tests.rs"]
 mod voiceover_tests;
+
+#[cfg(test)]
+#[path = "remix_selling_points_reference_tests.rs"]
+mod reference_tests;

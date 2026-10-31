@@ -1,13 +1,11 @@
-import { Button, Input, Select } from 'antd';
-import {
-  CloudUploadOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
+import { CloudUpload, Search } from 'lucide-react';
+import { Button, Input } from '@lobehub/ui';
 import { useAuthStore } from '@/stores/auth.store';
 import {
   CONTENT_ASSETS_NAV_OPTIONS,
   type ContentAssetsModuleKey,
 } from './content-assets-module-nav-config';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import styles from './content-assets-controls.module.css';
 
 export function ContentAssetsTopbar({
@@ -34,17 +32,17 @@ export function ContentAssetsTopbar({
 
   return (
     <header className={styles.topBar}>
-      <Select<ContentAssetsModuleKey>
-        className={styles.moduleSwitcher}
+      <LabeledSelect<ContentAssetsModuleKey>
+        wrapperClassName={styles.moduleSwitcher}
+        label="切换素材库模块"
         value={activeModule}
         options={CONTENT_ASSETS_NAV_OPTIONS}
-        aria-label="切换素材库模块"
-        onChange={onModuleChange}
+        onChange={(module) => module && onModuleChange(module)}
       />
       <Input
         allowClear
         className={styles.globalSearch}
-        prefix={<SearchOutlined />}
+        prefix={<Search size={14} strokeWidth={1.8} aria-hidden="true" />}
         suffix={(
           <button className={styles.searchSubmitButton} type="button" onClick={onSearch}>
             搜索
@@ -58,7 +56,7 @@ export function ContentAssetsTopbar({
       <div className={styles.topActions}>
         <Button
           type="primary"
-          icon={<CloudUploadOutlined />}
+          icon={<CloudUpload size={14} strokeWidth={1.8} aria-hidden="true" />}
           disabled={!canWrite}
           onClick={onUploadOpen}
         >

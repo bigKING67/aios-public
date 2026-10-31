@@ -1,18 +1,19 @@
+import { Search } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import { Button, Cascader, Drawer, Select } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Button, Drawer } from '@lobehub/ui';
 import {
   CONTENT_ASSET_EXTERNAL_OPTIONS,
   CONTENT_ASSET_TODO_OPTIONS,
 } from '../_lib/content-assets-filter-constants';
 import {
   CONTENT_ASSET_SCENE_OPTIONS,
-  formatContentAssetScenePath,
   isContentAssetSceneOptionsConfigured,
   toSelectOption,
 } from '../_lib/content-assets-ui-helpers';
 import type { ContentAssetFilterOptions, ContentAssetTodoFilter } from '../_lib/content-assets-types';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { ContentAssetsScenePathSelect } from './content-assets-scene-path-select';
 import { ContentAssetsTagPicker } from './content-assets-tag-picker';
 import styles from './content-assets-controls.module.css';
 
@@ -91,16 +92,15 @@ export function ContentAssetsAdvancedFilterDrawer({
   return (
     <Drawer
       title="高级筛选"
-      size="min(420px, calc(100vw - 24px))"
+      width="min(420px, calc(100vw - 24px))"
       open={open}
       onClose={onClose}
-      destroyOnHidden
       footer={
         <div className={styles.advancedDrawerFooter}>
           <Button onClick={onReset}>重置全部</Button>
           <Button
             type="primary"
-            icon={<SearchOutlined />}
+            icon={<Search size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => {
               onSearch();
               onClose();
@@ -117,15 +117,11 @@ export function ContentAssetsAdvancedFilterDrawer({
           description="用于 KOL种草视频、KOC种草、KOC挂车视频、店播视频；显示为“场景类型｜大场景 › 细分场景”。"
         >
           {sceneOptionsConfigured ? (
-            <Cascader
-              allowClear
-              changeOnSelect
-              displayRender={(labels) => formatContentAssetScenePath(labels.map((label) => String(label)))}
+            <ContentAssetsScenePathSelect
+              label="内容场景路径"
               options={CONTENT_ASSET_SCENE_OPTIONS}
-              placeholder="选择场景类型 → 大场景 → 细分场景"
-              value={scenePath.length > 0 ? scenePath : undefined}
-              onChange={(value) => {
-                const path = Array.isArray(value) ? value.map(String) : [];
+              value={scenePath}
+              onChange={(path) => {
                 onContentSceneChange(path[0]);
                 onContentSceneGroupChange(path[1]);
                 onContentSceneSubtypeChange(path[2]);
@@ -134,29 +130,26 @@ export function ContentAssetsAdvancedFilterDrawer({
           ) : (
             <div className={styles.advancedFilterStack}>
               {/* Fallback keeps historical free-form scene values searchable if the fixed tree changes. */}
-              <Select
+              <LabeledSelect
+                label="场景"
                 allowClear
-                showSearch={false}
                 placeholder="场景"
-                optionFilterProp="label"
                 value={contentScene}
                 options={contentSceneOptions}
                 onChange={onContentSceneChange}
               />
-              <Select
+              <LabeledSelect
+                label="大场景"
                 allowClear
-                showSearch={false}
                 placeholder="大场景"
-                optionFilterProp="label"
                 value={contentSceneGroup}
                 options={contentSceneGroupOptions}
                 onChange={onContentSceneGroupChange}
               />
-              <Select
+              <LabeledSelect
+                label="细分场景"
                 allowClear
-                showSearch={false}
                 placeholder="细分场景"
-                optionFilterProp="label"
                 value={contentSceneSubtype}
                 options={contentSceneSubtypeOptions}
                 onChange={onContentSceneSubtypeChange}
@@ -182,7 +175,8 @@ export function ContentAssetsAdvancedFilterDrawer({
           title="内容待办"
           description="按 AI、脚本、视频 ID、广告素材 ID 和授权覆盖缺口筛选。"
         >
-          <Select<ContentAssetTodoFilter>
+          <LabeledSelect<ContentAssetTodoFilter>
+            label="内容待办"
             allowClear
             placeholder="选择待办状态"
             value={todo}
@@ -194,7 +188,8 @@ export function ContentAssetsAdvancedFilterDrawer({
           title="生命周期阶段"
           description="按待分析、可测试、投放中、待复剪等业务流转状态筛选。"
         >
-          <Select
+          <LabeledSelect
+            label="生命周期阶段"
             allowClear
             placeholder="选择生命周期阶段"
             value={lifecycleStatus}
@@ -206,7 +201,8 @@ export function ContentAssetsAdvancedFilterDrawer({
           title="资产状态"
           description="区分已就绪、待补源、待生成、处理中、失败和归档素材。"
         >
-          <Select
+          <LabeledSelect
+            label="资产状态"
             allowClear
             placeholder="选择资产状态"
             value={assetStatus}
@@ -218,10 +214,11 @@ export function ContentAssetsAdvancedFilterDrawer({
           title="入库范围"
           description="控制只看 TOS 已入库素材，或定位仍在外链/网盘的待补源视频。"
         >
-          <Select<'all' | 'true' | 'false'>
+          <LabeledSelect<'all' | 'true' | 'false'>
+            label="入库范围"
             value={externalOnly}
             options={[...CONTENT_ASSET_EXTERNAL_OPTIONS]}
-            onChange={onExternalOnlyChange}
+            onChange={(next) => next && onExternalOnlyChange(next)}
           />
         </AdvancedFilterBlock>
       </div>

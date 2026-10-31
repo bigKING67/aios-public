@@ -34,31 +34,31 @@
   display: none;
 }
 
-.scopeSwitch :global(.ant-segmented) {
+.scopeSwitch :global(.lobe-segmented) {
   max-width: 100%;
 }
 
-.scopeSwitch :global(.ant-segmented-group) {
+.scopeSwitch :global(.lobe-segmented) {
   min-width: max-content;
 }
 
 .trendPanel {
-  border-color: var(--border-color);
+  border-color: var(--lobe-color-border);
   box-shadow: var(--dashboard-live-trend-panel-shadow);
 }
 
 .trendUp {
-  color: var(--trend-up);
+  color: var(--aios-trend-up);
   font-weight: 650;
 }
 
 .trendDown {
-  color: var(--trend-down);
+  color: var(--aios-trend-down);
   font-weight: 650;
 }
 
 .trendNeutral {
-  color: var(--trend-neutral);
+  color: var(--lobe-color-text-tertiary);
   font-weight: 620;
 }
 
@@ -91,7 +91,7 @@
 
 .sectionTitle {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 680;
   line-height: var(--line-height-tight);
@@ -99,13 +99,13 @@
 
 .sectionDescription {
   margin: 4px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
 }
 
 .sectionMeta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   white-space: nowrap;
@@ -120,104 +120,77 @@
   font-size: var(--font-size-sm);
 }
 
-.table :global(.ant-table) {
+.table :global(.lobe-table) {
   position: relative;
   z-index: 0;
   background: transparent;
 }
 
-.table :global(.ant-table-container) {
+.table :global(.lobe-table-container) {
   position: relative;
   z-index: 0;
   isolation: isolate;
   contain: paint;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 13px;
 }
 
-.table :global(.ant-table-body),
-.table :global(.ant-table-content) {
+.table :global(.lobe-table-body),
+.table :global(.lobe-table-content) {
   scrollbar-gutter: stable both-edges;
 }
 
-.table :global(.ant-table-body::-webkit-scrollbar),
-.table :global(.ant-table-content::-webkit-scrollbar) {
+.table :global(.lobe-table-body::-webkit-scrollbar),
+.table :global(.lobe-table-content::-webkit-scrollbar) {
   width: 10px;
   height: 10px;
 }
 
-.table :global(.ant-table-body::-webkit-scrollbar-track),
-.table :global(.ant-table-content::-webkit-scrollbar-track) {
-  background: var(--bg-hover);
+.table :global(.lobe-table-body::-webkit-scrollbar-track),
+.table :global(.lobe-table-content::-webkit-scrollbar-track) {
+  background: var(--lobe-color-fill-tertiary);
 }
 
-.table :global(.ant-table-body::-webkit-scrollbar-thumb),
-.table :global(.ant-table-content::-webkit-scrollbar-thumb) {
-  border: 2px solid var(--bg-hover);
+.table :global(.lobe-table-body::-webkit-scrollbar-thumb),
+.table :global(.lobe-table-content::-webkit-scrollbar-thumb) {
+  border: 2px solid var(--lobe-color-fill-tertiary);
   border-radius: var(--border-radius-full);
-  background: var(--border-color-hover);
+  background: var(--aios-border-hover);
 }
 
-.table :global(.ant-table-body::-webkit-scrollbar-thumb:hover),
-.table :global(.ant-table-content::-webkit-scrollbar-thumb:hover) {
-  background: color-mix(in srgb, var(--brand-primary) 30%, var(--border-color-hover));
+.table :global(.lobe-table-body::-webkit-scrollbar-thumb:hover),
+.table :global(.lobe-table-content::-webkit-scrollbar-thumb:hover) {
+  background: color-mix(in srgb, var(--lobe-color-primary) 30%, var(--aios-border-hover));
 }
 
-.table :global(.ant-pagination-options .ant-select-selector) {
-  border-color: var(--border-color) !important;
-  background: var(--bg-card) !important;
+.table :global(.lobe-pagination__size-changer) {
+  border-color: var(--lobe-color-border) !important;
+  background: var(--lobe-color-bg-container) !important;
   box-shadow: none !important;
 }
 
-.table :global(.ant-pagination-options .ant-select-focused .ant-select-selector),
-.table :global(.ant-pagination-options .ant-select-selector:focus),
-.table :global(.ant-pagination-options .ant-select-selector:focus-within) {
-  border-color: var(--brand-primary) !important;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring) !important;
+.table :global(.lobe-pagination__size-changer:focus-visible) {
+  border-color: var(--lobe-focus-ring-color) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--aios-ai-9) 48%, transparent) !important;
 }
 
-.table :global(.ant-pagination-options .ant-select-selection-search) {
-  pointer-events: none;
-}
-
-.table :global(.ant-pagination-options .ant-select-input),
-.table :global(.ant-pagination-options .ant-select-selection-search-input) {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  flex: 0 0 0 !important;
-  opacity: 0 !important;
-  color: transparent !important;
-  caret-color: transparent !important;
-  cursor: pointer !important;
-  outline: none !important;
-}
-
-.table :global(.ant-pagination-options .ant-select-content) {
-  gap: 0 !important;
-}
-
-.table :global(.ant-table-thead > tr > th.ant-table-cell-fix-left),
-.table :global(.ant-table-thead > tr > th.ant-table-cell-fix-left-last),
-.table :global(.ant-table-thead > tr > th.ant-table-cell-fix-start),
-.table :global(.ant-table-thead > tr > th.ant-table-cell-fix-start-shadow) {
+.table :global(.lobe-table-thead > tr > th.lobe-table-cell-fix-start),
+.table :global(.lobe-table-thead > tr > th.lobe-table-cell-fix-start-shadow) {
   z-index: 7 !important;
-  background: var(--bg-hover) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
 }
 
-.table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-left),
-.table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-left-last),
-.table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-start),
-.table :global(.ant-table-tbody > tr > td.ant-table-cell-fix-start-shadow) {
+.table :global(.lobe-table-tbody > tr > td.lobe-table-cell-fix-start),
+.table :global(.lobe-table-tbody > tr > td.lobe-table-cell-fix-start-shadow) {
   z-index: 6 !important;
-  background: var(--bg-card) !important;
+  background: var(--lobe-color-bg-container) !important;
 }
 
 .tableHeaderCell {
-  border-bottom: 1px solid var(--border-color) !important;
-  background: var(--bg-hover) !important;
-  color: var(--text-secondary) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
+  color: var(--lobe-color-text-secondary) !important;
   font-size: var(--font-size-sm) !important;
   font-weight: 560 !important;
   line-height: var(--line-height-snug);
@@ -225,18 +198,18 @@
   white-space: nowrap;
 }
 
-.tableHeaderCell :global(.ant-table-column-sorters),
-.tableHeaderCell :global(.ant-table-column-title) {
-  color: var(--text-secondary) !important;
+.tableHeaderCell :global(.lobe-table-column-sorters),
+.tableHeaderCell :global(.lobe-table-column-title) {
+  color: var(--lobe-color-text-secondary) !important;
   font-size: var(--font-size-sm) !important;
   font-weight: 560 !important;
   line-height: var(--line-height-snug);
 }
 
-.table :global(.ant-table-thead > tr > th),
-.table :global(.ant-table-thead > tr > th .ant-table-column-sorters),
-.table :global(.ant-table-thead > tr > th .ant-table-column-title) {
-  color: var(--text-secondary) !important;
+.table :global(.lobe-table-thead > tr > th),
+.table :global(.lobe-table-thead > tr > th .lobe-table-column-sorters),
+.table :global(.lobe-table-thead > tr > th .lobe-table-column-title) {
+  color: var(--lobe-color-text-secondary) !important;
   font-size: var(--font-size-sm) !important;
   font-weight: 560 !important;
   line-height: var(--line-height-snug);
@@ -247,8 +220,8 @@
 }
 
 .tableBodyCell {
-  border-bottom: 1px solid var(--border-color) !important;
-  background: var(--bg-card) !important;
+  border-bottom: 1px solid var(--lobe-color-border) !important;
+  background: var(--lobe-color-bg-container) !important;
   color: var(--dashboard-detail-text);
   font-size: var(--font-size-xs);
   font-weight: 430;
@@ -257,32 +230,32 @@
   vertical-align: middle;
 }
 
-.table :global(.ant-table-tbody > tr > td),
-.table :global(.ant-table-tbody > tr > td .ant-table-cell-content),
-.table :global(.ant-table-tbody > tr > td .ant-tag),
-.table :global(.ant-table-tbody > tr > td .ant-typography),
-.table :global(.ant-table-tbody > tr > td button),
-.table :global(.ant-table-tbody > tr > td span),
-.table :global(.ant-table-tbody > tr > td strong) {
+.table :global(.lobe-table-tbody > tr > td),
+.table :global(.lobe-table-tbody > tr > td .lobe-table-cell-content),
+.table :global(.lobe-table-tbody > tr > td .lobe-tag),
+.table :global(.lobe-table-tbody > tr > td .lobe-text),
+.table :global(.lobe-table-tbody > tr > td button),
+.table :global(.lobe-table-tbody > tr > td span),
+.table :global(.lobe-table-tbody > tr > td strong) {
   font-size: var(--font-size-xs) !important;
   font-weight: 430 !important;
 }
 
-.table :global(.ant-table-tbody > tr > td) {
+.table :global(.lobe-table-tbody > tr > td) {
   font-size: var(--font-size-xs) !important;
   font-weight: 430 !important;
 }
 
-.table :global(.ant-table-tbody > tr > td .ant-table-cell-content),
-.table :global(.ant-table-tbody > tr > td .ant-tag),
-.table :global(.ant-table-tbody > tr > td .ant-typography),
-.table :global(.ant-table-tbody > tr > td button),
-.table :global(.ant-table-tbody > tr > td span),
-.table :global(.ant-table-tbody > tr > td strong) {
+.table :global(.lobe-table-tbody > tr > td .lobe-table-cell-content),
+.table :global(.lobe-table-tbody > tr > td .lobe-tag),
+.table :global(.lobe-table-tbody > tr > td .lobe-text),
+.table :global(.lobe-table-tbody > tr > td button),
+.table :global(.lobe-table-tbody > tr > td span),
+.table :global(.lobe-table-tbody > tr > td strong) {
   font-weight: 430 !important;
 }
 
-.table :global(.ant-table-tbody > tr > td) {
+.table :global(.lobe-table-tbody > tr > td) {
   color: var(--dashboard-detail-text) !important;
   font-weight: 430 !important;
 }
@@ -296,7 +269,7 @@
   text-align: left !important;
 }
 
-.tableRow:hover > :global(.ant-table-cell) {
+.tableRow:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-live-card-hover-bg) !important;
 }
 
@@ -331,14 +304,14 @@
 }
 
 .tableVideoLink {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   cursor: pointer;
   text-decoration: none;
 }
 
 .tableVideoLink:hover,
 .tableVideoLink:focus-visible {
-  color: var(--brand-active);
+  color: var(--aios-ai-12);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -347,7 +320,7 @@
   display: block;
   max-width: 100%;
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-tight);
   text-overflow: ellipsis;

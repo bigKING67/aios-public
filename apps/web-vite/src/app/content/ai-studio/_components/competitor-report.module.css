@@ -1,0 +1,270 @@
+/*
+ * 爆款分析 · AI 总结与出片指导: 爆款共性 cards, then 黄金结构, 差异化缺口 and the 出片清单 as text
+ * lists, evidence as small count chips whose numbers come from the locked statistics (never the model).
+ * Competitor chips are filled, ours are outlined: the side is read from form, not colour.
+ */
+
+.title {
+  display: inline-flex;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.extra,
+.estimate {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+.note,
+.caption {
+  margin: 0;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.caption {
+  color: var(--lobe-color-text-tertiary);
+}
+
+
+.start {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  max-width: 68ch;
+}
+
+.startAction,
+.stale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+  align-items: center;
+}
+
+.stale {
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--lobe-color-border-secondary);
+  border-radius: var(--lobe-border-radius);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-quaternary);
+  font-size: var(--font-size-sm);
+}
+
+.subhead {
+  margin: 0 0 var(--spacing-2);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.actions,
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.action {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.actionBody,
+.insight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.insight {
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+}
+
+.insight:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.priority {
+  flex: none;
+  /* One width for 现在 / 下一步 / 以后, so every action's text starts on the same line. */
+  width: 4.5em;
+  padding: 1px 0;
+  border: 1px solid var(--lobe-color-border);
+  border-radius: var(--lobe-border-radius-sm);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.priority[data-priority='now'] {
+  border-color: var(--lobe-color-text);
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.statement {
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.implication {
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.detail,
+.films,
+.limitation {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat,
+.statOurs {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: baseline;
+  padding: 0 var(--spacing-2);
+  border-radius: var(--lobe-border-radius-sm);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+.statOurs {
+  border: 1px solid var(--lobe-color-border);
+  background: transparent;
+}
+
+.count {
+  color: var(--lobe-color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.inlineLink:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
+}
+
+.subheadNote {
+  margin-left: var(--spacing-2);
+  color: var(--lobe-color-text-tertiary);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Four unframed cards, two per row (one on a phone); the hairline above each separates them. */
+.commonGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-4) var(--spacing-10);
+}
+
+.commonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.commonTitle {
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+}
+
+.top li {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: baseline;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.topName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--lobe-color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* One fixed width, so the labels of 场景 / 人群 start on the same line. */
+.topKind {
+  display: inline-block;
+  width: 2.5em;
+  margin-right: var(--spacing-2);
+  color: var(--lobe-color-text-tertiary);
+}
+
+.frequency {
+  color: var(--lobe-color-text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .commonGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.inlineLink {
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.inlineLink:hover {
+  color: var(--lobe-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

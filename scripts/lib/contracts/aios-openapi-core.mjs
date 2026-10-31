@@ -123,7 +123,7 @@ function buildOperation(operation) {
       },
     },
     // Anonymous operations opt out of the document-wide auth requirement.
-    security: override?.anonymous ? [] : [{ bearerAuth: [] }, { cookieAuth: [] }],
+    security: override?.security ?? (override?.anonymous ? [] : [{ bearerAuth: [] }, { cookieAuth: [] }]),
     'x-aios-contract-maturity': override ? 'typed' : 'route-inventory',
     'x-aios-rust-source': operation.file,
   };
@@ -175,6 +175,7 @@ export function buildAiosOpenApi({ readFile = readUtf8 } = {}) {
       securitySchemes: {
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
         cookieAuth: { type: 'apiKey', in: 'cookie', name: 'aios_access_token' },
+        dailyRemixServiceToken: { type: 'http', scheme: 'bearer', description: 'Dedicated daily-remix service token; does not accept user JWTs or cookies.' },
       },
     },
     tags: [...new Set(operations.map((operation) => operation.tag))].sort().map((name) => ({ name })),

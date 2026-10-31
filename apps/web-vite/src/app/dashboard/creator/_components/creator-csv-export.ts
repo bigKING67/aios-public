@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import dayjs from 'dayjs';
 import type { DateRange } from './creator-date-range';
 import { exportCreatorCsv, normalizeErrorMessage } from './creator-helpers';
@@ -16,7 +16,7 @@ export interface UseCreatorCsvExportParams<Row> {
   rows: readonly Row[];
   isAuthenticated: boolean;
   currentRange: DateRange;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   getConfig: () => CreatorCsvExportConfig<Row>;
   unauthenticatedMessage?: string;
   emptyMessage?: string;

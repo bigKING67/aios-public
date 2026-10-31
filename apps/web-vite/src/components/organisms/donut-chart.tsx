@@ -76,7 +76,7 @@ export function DonutChart({
 }: DonutChartProps) {
   const computed = useMemo(() => {
     const items = data.map((item) => ({
-      color: item.color || resolvePlatformLegendColor(item.name) || 'var(--chart-series-1)',
+      color: item.color || resolvePlatformLegendColor(item.name) || 'var(--aios-chart-1)',
       name: item.name,
       prevValue: Number.isFinite(item.prevValue) ? Number(item.prevValue) : 0,
       value: Number.isFinite(item.value) ? item.value : 0,

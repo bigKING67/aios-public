@@ -1,284 +1,89 @@
-/**
- * 首页
- *
- * 说明：当前前端运行时为 Vite + React Router，页面保持无本地交互状态。
- */
-
-import type { ReactNode } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'antd';
-import {
-  ApiOutlined,
-  BranchesOutlined,
-  DesktopOutlined,
-  FileSearchOutlined,
-  FileTextOutlined,
-  ReloadOutlined,
-  SafetyOutlined,
-} from '@ant-design/icons';
-import { Layout } from '@/components/organisms/layout';
-import '../page-materials.css';
-import styles from '../page.module.css';
-import heroStyles from '../page-hero.module.css';
+import { buildLayoutMenuItems, buildLoginRedirectHref } from '@/components/organisms/layout-navigation-model';
+import { moduleDataStatus, type ModuleDataStatus } from '@/lib/module-profile';
+import { ROUTE_PATHS } from '@/lib/route-policy-registry';
+import { selectUserRoles, useAuthStore } from '@/stores/auth.store';
+import { buildHomeDirectory, UPCOMING_DOMAINS } from './home-directory';
+import styles from './home-page.module.css';
 
-interface Capability {
-  title: string;
-  description: string;
-  icon: ReactNode;
-  featured?: boolean;
+const STATUS_LABELS: Record<ModuleDataStatus, string | null> = { open: null, not_connected: '未接入数据', not_open: '未开放' };
+
+/** The company's module directory: every domain the account can open, with honest data status. */
+function ModuleDirectory() {
+  const user = useAuthStore((state) => state.user);
+  const permissions = useAuthStore((state) => state.permissions);
+  const roles = useAuthStore(selectUserRoles);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const sessionChecked = useAuthStore((state) => state.hasSessionChecked);
+  const domains = useMemo(
+    () => buildHomeDirectory(
+      buildLayoutMenuItems({ pathname: ROUTE_PATHS.home, permissions, roles, user, isAuthenticated }),
+      (path) => moduleDataStatus(path),
+    ),
+    [isAuthenticated, permissions, roles, user],
+  );
+
+  // Hold the directory until the session settles, so a signed-in user never sees the anonymous line.
+  if (!sessionChecked) return <div className={styles.directory} aria-busy="true" />;
+  if (!isAuthenticated) {
+    return (
+      <div className={styles.directory}>
+        <p className={styles.signIn}>
+          登录后查看你可以使用的模块。
+          <Link className={styles.textLink} to={buildLoginRedirectHref(ROUTE_PATHS.home)}>登录<ArrowRight size={16} aria-hidden /></Link>
+        </p>
+      </div>
+    );
+  }
+  return (
+    <div className={styles.directory}>
+      {domains.map((domain) => (
+        <section key={domain.key} className={styles.domain} aria-labelledby={`domain-${domain.key}`}>
+          <h2 id={`domain-${domain.key}`}>{domain.label}</h2>
+          <ul>
+            {domain.modules.map(({ key, href, label, summary, icon: Icon, status }) => (
+              <li key={key}>
+                <Link className={styles.module} to={href} data-open={status === 'open' || undefined}>
+                  <span className={styles.moduleIcon} aria-hidden>{Icon ? <Icon size={16} /> : null}</span>
+                  <span className={styles.moduleName}>{label}</span>
+                  <span className={styles.moduleSummary}>{summary}</span>
+                  {STATUS_LABELS[status] ? <span className={styles.moduleStatus}>{STATUS_LABELS[status]}</span> : null}
+                  <ArrowRight className={styles.moduleArrow} size={16} aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <section className={styles.domain} aria-labelledby="domain-upcoming">
+        <h2 id="domain-upcoming">即将接入</h2>
+        <p className={styles.upcoming}>{UPCOMING_DOMAINS.join(' · ')}</p>
+      </section>
+    </div>
+  );
 }
 
-interface Entry {
-  id: string;
-  title: string;
-  description: string;
-  href: string;
-  actionLabel: string;
-  priority?: 'primary' | 'secondary';
-}
-
-interface HeroFeature {
-  title: string;
-  description: string;
-  mobileShort: string;
-}
-
-const capabilityItems: Capability[] = [
-  {
-    title: '可视化经营看板',
-    description: '以图表与结构化摘要呈现经营状态，便于管理层统一判断与协同推进。',
-    icon: <DesktopOutlined />,
-    featured: true,
-  },
-  {
-    title: '多平台经营报告',
-    description: '汇总核心指标，查看同比、环比与异常。',
-    icon: <FileTextOutlined />,
-  },
-  {
-    title: '趋势追踪与预警',
-    description: '跟踪 GMV、流量与转化效率，识别增长拐点。',
-    icon: <ReloadOutlined />,
-  },
-  {
-    title: '数据运维闭环',
-    description: '统一管理 ETL 编排、数据同步和告警通知。',
-    icon: <ApiOutlined />,
-  },
-  {
-    title: '营销协同与触达',
-    description: '沉淀投放策略、转化复盘与协同执行入口。',
-    icon: <BranchesOutlined />,
-  },
-];
-
-const entryItems: Entry[] = [
-  {
-    id: 'dashboard',
-    title: '数据看板',
-    description: '查看核心指标与趋势，快速总览经营状态。',
-    href: '/dashboard',
-    actionLabel: '进入看板',
-    priority: 'primary',
-  },
-  {
-    id: 'weekly-report',
-    title: '周报中心',
-    description: '按周复盘平台波动与关键异常。',
-    href: '/reports/weekly',
-    actionLabel: '查看周报',
-  },
-  {
-    id: 'monthly-report',
-    title: '月报中心',
-    description: '沉淀月度结论与策略表现。',
-    href: '/reports/monthly',
-    actionLabel: '查看月报',
-  },
-  {
-    id: 'dataops',
-    title: '数据运维中心',
-    description: '统一管理 ETL 链路与通知配置。',
-    href: '/ops/dataops',
-    actionLabel: '进入运维',
-  },
-];
-
-const heroFeatureItems: HeroFeature[] = [
-  {
-    title: '经营数据统一入口',
-    description: '看板、周报、月报与运维统一编排，减少切换成本。',
-    mobileShort: '看板、报表与运维统一入口。',
-  },
-  {
-    title: '趋势洞察与风险预警',
-    description: '跟踪核心指标波动，快速定位异常来源。',
-    mobileShort: '指标波动可一眼定位异常。',
-  },
-  {
-    title: '标准化汇报输出',
-    description: '统一摘要结构与复盘口径，提升同步效率。',
-    mobileShort: '摘要结构统一，复盘同步更高效。',
-  },
-  {
-    title: 'AI+分析',
-    description: 'AI 辅助经营解读与异常归因，加快决策闭环。',
-    mobileShort: 'AI 辅助解读异常与经营变化。',
-  },
-];
-
+/** AIOS product home: what the company runs here, then the modules this account can open. */
 export function HomePage() {
   return (
-    <Layout>
-      <div className={styles.homeShell}>
-        <section className={heroStyles.hero}>
-          <div className={heroStyles.heroBackdrop} aria-hidden />
-          <div className={heroStyles.heroGrid} aria-hidden />
-          <div className={`${heroStyles.glowOrb} ${heroStyles.glowOrbLeft}`} aria-hidden />
-          <div className={`${heroStyles.glowOrb} ${heroStyles.glowOrbRight}`} aria-hidden />
-          <div className={`${heroStyles.ring} ${heroStyles.ringOne}`} aria-hidden />
-          <div className={`${heroStyles.ring} ${heroStyles.ringTwo}`} aria-hidden />
-
-          <div className={heroStyles.heroContent}>
-            <div className={heroStyles.heroTag}>AI-DRIVEN BUSINESS PRODUCTIVITY</div>
-            <h1 className={heroStyles.heroTitle}>AGI AIOS</h1>
-            <p className={heroStyles.heroLead}>AI 驱动的业务生产力系统</p>
-
-            <div className={heroStyles.heroActions}>
-              <Button type="primary" size="large" href="/dashboard" className={heroStyles.primaryAction}>
-                进入看板
-              </Button>
-              <Link to="/docs" className={heroStyles.secondaryAction}>
-                文档中心
-              </Link>
-            </div>
-
-            <dl className={heroStyles.metricRow} aria-label="首页能力概览">
-              <div className={heroStyles.metricItem}>
-                <dt className={heroStyles.metricLabel}>指标维度</dt>
-                <dd className={heroStyles.metricValue}>12+</dd>
-              </div>
-              <div className={heroStyles.metricItem}>
-                <dt className={heroStyles.metricLabel}>功能板块</dt>
-                <dd className={heroStyles.metricValue}>4+</dd>
-              </div>
-              <div className={heroStyles.metricItem}>
-                <dt className={heroStyles.metricLabel}>汇报标准</dt>
-                <dd className={heroStyles.metricValue}>1</dd>
-              </div>
-            </dl>
-          </div>
-
-          <aside className={heroStyles.heroPanel}>
-            <h2 className={heroStyles.panelTitle}>AIOS 主要功能</h2>
-            <div className={heroStyles.panelList}>
-              {heroFeatureItems.map((item) => (
-                <div key={item.title} className={heroStyles.panelItem}>
-                  <span className={heroStyles.panelDot} />
-                  <div>
-                    <p className={heroStyles.panelItemTitle}>{item.title}</p>
-                    <p className={heroStyles.panelItemDesc}>
-                      <span className={heroStyles.panelItemDescDesktop}>{item.description}</span>
-                      <span className={heroStyles.panelItemDescMobile}>{item.mobileShort}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
-        </section>
-
-        <section className={`${styles.sectionBlock} ${styles.sectionBlockCapability}`}>
-          <div className={styles.sectionHead}>
-            <div>
-              <h2 className={`${styles.sectionTitle} ${styles.sectionTitleCapability}`}>核心能力矩阵</h2>
-              <p className={styles.sectionDesc}>经营、报告、运维和智能分析聚合为同一套工作台能力。</p>
-            </div>
-          </div>
-          <div className={styles.capabilityGrid}>
-            {capabilityItems.map((item) => (
-              <article
-                key={item.title}
-                className={`${styles.capabilityCard} ${item.featured ? styles.capabilityCardPrimary : ''}`}
-              >
-                <div className={styles.capabilityIcon}>{item.icon}</div>
-                <h3 className={styles.capabilityTitle}>{item.title}</h3>
-                <p className={styles.capabilityDesc}>{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className={`${styles.sectionBlock} ${styles.sectionBlockEntry}`}>
-          <div className={styles.sectionHead}>
-            <div>
-              <h2 className={`${styles.sectionTitle} ${styles.sectionTitleEntry}`}>快速入口</h2>
-              <p className={styles.sectionDesc}>高频路径直接进入，减少在模块之间反复寻找。</p>
-            </div>
-          </div>
-          <div className={styles.entryGrid}>
-            {entryItems.map((item) => {
-              const titleId = `${item.id}-title`;
-              const descId = `${item.id}-desc`;
-
-              return (
-                <Link
-                  key={item.id}
-                  to={item.href}
-                  className={`${styles.entryCard} ${item.priority === 'primary' ? styles.entryCardPrimary : ''}`}
-                  aria-labelledby={titleId}
-                  aria-describedby={descId}
-                >
-                  <div className={styles.entryCardContent}>
-                    <h3 id={titleId} className={styles.entryTitle}>
-                      {item.title}
-                    </h3>
-                    <p id={descId} className={styles.entryDesc}>
-                      {item.description}
-                    </p>
-                  </div>
-                  <span className={styles.entryAction} aria-hidden="true">
-                    {item.actionLabel}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className={`${styles.sectionBlock} ${styles.sectionBlockGovernance}`}>
-          <div className={styles.sectionHead}>
-            <div>
-              <h2 className={`${styles.sectionTitle} ${styles.sectionTitleGovernance}`}>平台治理保障</h2>
-              <p className={styles.sectionDesc}>权限与审计作为底层约束，保障经营数据可信可追踪。</p>
-            </div>
-          </div>
-          <div className={styles.governanceGrid}>
-            <article className={styles.governanceItem}>
-              <div>
-                <div className={styles.governanceHeader}>
-                  <div className={styles.governanceIcon}>
-                    <SafetyOutlined />
-                  </div>
-                  <h3 className={styles.governanceTitle}>权限分层</h3>
-                </div>
-                <p className={styles.governanceDesc}>按角色控制数据可见范围，管理视图与执行视图分层呈现。</p>
-              </div>
-            </article>
-            <article className={styles.governanceItem}>
-              <div>
-                <div className={styles.governanceHeader}>
-                  <div className={styles.governanceIcon}>
-                    <FileSearchOutlined />
-                  </div>
-                  <h3 className={styles.governanceTitle}>审计追踪</h3>
-                </div>
-                <p className={styles.governanceDesc}>关键访问与操作可回溯，便于复盘数据来源与决策路径。</p>
-              </div>
-            </article>
-          </div>
-        </section>
-      </div>
-    </Layout>
+    <main className={styles.page} id="home-content">
+      <a className={styles.skip} href="#home-content">跳到正文</a>
+      <section className={styles.hero} aria-labelledby="home-title">
+        <p className={styles.eyebrow}>AGI AIOS</p>
+        {/* Phrase spans keep a narrow screen from breaking inside a word (「里运 / 转」). */}
+        <h1 id="home-title">
+          公司的每一项业务，<br />
+          <span className={styles.phrase}>在同一个 AIOS</span>{' '}<span className={styles.phrase}>里运转。</span>
+        </h1>
+        <div className={styles.heroBottom}>
+          <p className={styles.lead}>内容、经营、营销，以及之后的产品、人力与财务。<br />AI 参与执行，团队专注判断。</p>
+          <Link className={styles.textLink} to={ROUTE_PATHS.docs}>浏览文档<ArrowRight size={16} aria-hidden /></Link>
+        </div>
+      </section>
+      <ModuleDirectory />
+      <footer className={styles.footer}><span>AIOS</span><span>AI 驱动的业务生产力系统</span><span>© 2026</span></footer>
+    </main>
   );
 }

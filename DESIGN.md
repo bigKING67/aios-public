@@ -1,26 +1,128 @@
-# Design System: AIOS Console
+# Design System: AIOS
 
 > Purpose: AIOS front-end style authority for humans, Codex, and `stitch-design-taste`.
 > Scope: `apps/web-vite/src/` pages, shared components, dashboard charts, DataOps console, reports, and marketing/workspace shells.
-> Runtime source: `apps/web-vite/src/styles/design-tokens.css` is the CSS variable entrypoint; Tailwind, Ant Design, and ECharts must map back to it.
+> Visual language: **v2** ("ink is people, violet is AI", built on `@lobehub/ui` 6 + Base UI) with the **v3 layout grammar** (untinted gray neutrals, few boxes, light weights; 2026-10-24) is the only visual language; Ant Design is removed. See [Visual Language v2](#visual-language-v2), [Layout Grammar v3](#layout-grammar-v3) and [Visual System Migration](#visual-system-migration).
+> Runtime sources: v2 roles live in `apps/web-vite/src/styles/aios-theme.css` on top of lobe-ui's `--lobe-*` theme; the shared token names (`--text-*`, `--bg-*`, `--brand-*`, `--status-*`, `--chart-series-*`, …) live in `apps/web-vite/src/styles/design-tokens.css` with v2 values, mirrored from `DESIGN_TOKENS.json`, and Tailwind and ECharts map back to them.
 
 ## Brand & Product Context
 
 - Product name: AIOS (formerly DataHub); current display name: AGI AIOS.
 - Product tagline: AI 驱动的业务生产力系统.
-- Naming transition: this remains the same product and visual baseline. Preserve the retired Agent boundary and existing design language while technical identities migrate under the release plan.
-- Domain: enterprise data operations, commerce analytics, reporting, and internal data-product workflows.
-- Core users: operators, analysts, founders, and internal data/BI maintainers who read dense metrics daily.
-- Primary scenarios: dashboard monitoring, weekly/monthly reports, DataOps runtime diagnosis, creator/live/traffic analysis, and operational admin.
-- Design direction: product-branded light enterprise console with DeepSeek-like typographic discipline: restrained, neutral, spacious, data-first, and low-noise.
-- Product identity: public navigation, login and recruiting surfaces use the AGI AIOS name without the former Groland logo. Browser and home-screen icons use a compact AIOS lettermark in the existing blue/white palette; historical business reports retain their factual company and product names.
-- Brand source: pure white `#FFFFFF` plus light gray `#F5F5F5` for space, modern SaaS blue `#2F6EEA` for primary fills, accessible blue text `#2457C5` for links/small text/icons, and matte black `#1A1A1A` for text/logo/title.
-- Existing constraints: Vite + React + React Router, Ant Design v6, Tailwind CSS v4, CSS Modules, ECharts, CSS variables.
-- Tailwind v4 uses `@tailwindcss/vite` and explicit `@config` loading of `tailwind.config.ts`; its content paths remain the source scan boundary. Preserve the existing unlayered Preflight/utility cascade with AntD and CSS Modules. Theme variables use the `theme` layer; the v3 default border color is retained through the framework gray-200 variable. Do not replace the split imports with the default layered import without browser regression evidence.
+- Naming transition: this remains the same product. Preserve the retired Agent boundary while technical identities migrate under the release plan; the visual language moved from v1 to v2 (owner decision 2026-10-23; every page migrated by 2026-10-24).
+- Domain: AI content production (AI 创作中心: footage, outputs, AI editing, competitor hits) is the deployed production surface; enterprise data operations, commerce analytics, reporting, and internal data-product workflows remain in the repository as groland modules.
+- Core users: content operators and editors who direct AI work on footage every day, plus operators, analysts, founders, and internal data/BI maintainers who read dense metrics.
+- Primary scenarios: footage intake and AI analysis, AI editing and output review, competitor hit analysis, dashboard monitoring, weekly/monthly reports, DataOps runtime diagnosis, and operational admin.
+- Design direction (v2): an AI-native product console. Ink-on-neutral structure, one AI violet that marks where AI acts, media as the hero, calm density, and motion only while AI works. References: Linear for restraint and a single accent, Grok for stark monochrome, lobe-ui for component craft.
+- Product identity: public navigation, login and recruiting surfaces use the AIOS / AGI AIOS name without the former Groland logo. The global header uses the owner's AIOS Brand Final geometric wordmark (2026-10-29): transparent black in Light and white in Dark, following the app's `data-theme`, at 96px wide with its original proportions and a 44px minimum link target. Use the supplied SVGs in `public/brand/`, without a surrounding tile, added text, border or shadow. Browser and home-screen icons use the supplied notched O: SVG plus 32px PNG and multi-size ICO fallbacks, and the 180px Apple touch icon. The module-level AI 创作中心 sparkle remains its own module icon; the login mark remains separate; standalone recruiting uses the same supplied wordmark in its compact header (2026-10-30). Historical business reports retain their factual company and product names.
+- Brand source (v2): lobe ink (`--lobe-color-primary`, near-black in light and near-white in dark) on lobe's untinted gray neutrals (v3; v2 used `mauve`), plus AI violet `#6E56CF`.
+- Existing constraints: Vite + React + React Router, `@lobehub/ui` 6.9.0 (Base UI 1.9 underneath, `motion` 14, `lucide-react` icons, pinned exactly), Tailwind CSS v4, CSS Modules, ECharts, CSS variables. Ant Design is removed; do not reintroduce it.
+- Tailwind v4 uses `@tailwindcss/vite` and explicit `@config` loading of `tailwind.config.ts`; its content paths remain the source scan boundary. `globals.css` declares `@layer theme, aios-base, reset, lobe-base, lobe-popup, lobe-ui;`: Tailwind theme variables sit in `theme`, `design-system-base.css` in `aios-base`, Preflight (with the v3 default border color through the framework gray-200 variable) in `reset`, and lobe-ui's precompiled styles in its own three layers. Global theme rules (`light-theme/*`), CSS Modules, and Tailwind utilities stay unlayered and therefore beat every layered rule. `tailwind-css-pipeline.test.ts` pins this order; do not reorder layers or move utilities into a layer without browser regression evidence.
 - Supported browser minimums for this integration: Chrome 111+, Safari 16.4+, Firefox 128+ (accepted for the v4 migration). This compatibility target does not imply all three engines were tested locally.
-- Do not blindly copy DeepSeek dark mode or SVG wordmark. Absorb its font hierarchy, neutral gray rhythm, tabular numeric feel, quiet buttons/tags, and sparse data layout while keeping AIOS's white/gray/blue brand authority.
+- Do not copy a reference product's wordmark, logo, or exact palette. Absorb restraint, accent discipline, typographic hierarchy, tabular numerals, and density.
+
+## Visual Language v2
+
+Owner decision 2026-10-23. AIOS is an AI-native product: the interface answers "who is acting now". **Ink is people and structure; AI violet is AI presence.** Media is the hero, the console stays calm, and only AI work moves.
+
+### Color Roles
+
+| Role | Token | Light | Dark | Use | Never |
+| --- | --- | --- | --- | --- | --- |
+| Surfaces, text, borders | lobe `--lobe-color-bg-layout`, `-bg-container`, `-bg-elevated`, `-text`, `-text-secondary`, `-text-tertiary`, `-border`, `-border-secondary`, `-fill-*` | lobe gray (no neutral palette) | lobe gray dark: black ground, `#0D0D0D` panel | page ground, cards, dividers, body and secondary text | page-local grays |
+| Ink | `--lobe-color-primary` | `#222222` | `#EEEEEE` | human primary action (one per region), current navigation text, brand mark | starting AI work |
+| AI fill | `--aios-ai-fill` / `--aios-ai-on-fill` | `#6E56CF` / white | same | the button that starts AI work (✦ 生成, 合成, 开始分析); at most one per screen | human actions, large areas |
+| AI text | `--aios-ai-text` | `#5B45B8` | `#BAA7FF` | AI labels and AI-only surfaces (since 2026-10-25 links are ink) | body text, links |
+| AI mark | `--aios-ai-mark`, `--aios-ai-9` | `#6E56CF` | `#8B74F0` | AI-cut timeline edges, AI dots, selection indicators | status |
+| AI soft | `--aios-ai-soft`, `--aios-ai-soft-hover`, `--aios-ai-border` | `#F4F0FE` / `#D4CAFE` | `#291F43` / `#473876` | AI chips, AI suggestion cards, selected rows | human content |
+| AI sweep | `--aios-ai-sweep-from` → `--aios-ai-sweep-to` | `#6E56CF` → `#B79CFF` | `#6E56CF` → `#D2C4FF` | only while AI works: generating border, thinking text, progress | anything at rest |
+| Media stage | `--aios-stage`, `--aios-stage-text` | `#0B0C0E` | `#0B0C0E` | video and image previews, players | ordinary cards |
+| Status | `--aios-status-*` text with lobe `--lobe-color-{success,warning,error,info}-{bg,border}` | AA text values | dark values | system and workflow state, always with text or an icon | business deltas, AI presence |
+| Trend | `--aios-trend-up`, `--aios-trend-down` | `#D9363E`, `#13A05A` | `#FF6B6B`, `#4ADE80` | business deltas (red up, green down) with an explicit sign | status |
+| Chart series | `--aios-chart-1..5`, `--aios-chart-muted` | violet, teal, amber, blue, rose | dark steps | ordinary multi-series comparison in fixed order | platform, trend, status meaning |
+
+- The AI violet scale `--aios-ai-1..12` has light and dark steps in `aios-theme.css`; roles reference steps, components reference roles.
+- AI violet never marks a non-AI action and never fills a large area. A screen with two violet-filled buttons is wrong.
+- AI violet is not informational status: system info uses `--aios-status-info` (blue) with an icon.
+- The AI sweep is the only gradient on v2 surfaces and only while AI works. Banned: purple-to-blue neon gradients, rainbow palettes, glow, gradient text at rest, and pure black text (the stage is a surface, not a text color).
+- Platform legend colors and domain taxonomy palettes keep their sources (`platform-colors.ts`, `domain-taxonomy-colors.ts`); a dark v2 surface that renders them adds dark values first (Douyin black needs a light marker on dark).
+- Chart series v2 passed the categorical palette validator (lightness band, chroma floor, adjacent CVD separation ≥ 13 ΔE, normal-vision floor, 3:1 against the surface) on both light and dark.
+
+### Themes
+
+- Light is the default. lobe-ui provides the dark theme through `setLobeTheme({ appearance })`, which writes `data-theme` on `<html>`; every `--aios-*` color has a designed dark value, not an inversion.
+- Viewers choose 跟随系统 / 浅色 / 深色 under 外观 in the account menu (`lib/theme-preference.ts`, remembered per browser in `aios.appearance`; light until they choose).
+- What follows the theme: lobe and `--aios-*` variables directly; the shared names through the bridge; domain taxonomy fills, borders and text through generated dark values in `aios-theme.css` (text kept at 4.5:1); page materials through the `:root[data-theme='dark']` blocks at the end of their stylesheets; ECharts through `lib/echarts-appearance.ts`, which the chart wrappers apply on every `setOption` and on each theme switch. A new raw material color needs its dark value in the same change.
+- Media previews use the stage in both themes.
+
+### Typography
+
+- UI and headings: `--aios-font-ui` (Geist Variable for Latin and digits, then PingFang SC / HarmonyOS Sans SC / Microsoft YaHei / Noto Sans SC). Data: `--aios-font-data` (Geist Mono Variable) with tabular numerals for money, percentages, timecodes, durations, and IDs. The lobe provider loads them: Geist self-hosted, HarmonyOS Sans SC from npmmirror (see Typography System).
+- The Type Scale Contract tokens below stay authoritative; they do not depend on the component library. Headings use weight 600 with tight tracking; hierarchy comes from size, text level, and space before weight.
+
+### Shape, Depth, and Density
+
+- Radius: controls 8px (`--lobe-border-radius`), cards and popovers 12px (`--lobe-border-radius-lg`), small marks 6px (`--lobe-border-radius-sm`). No pill-shaped buttons.
+- Depth: hairline borders and surface steps; shadows (`--lobe-box-shadow*`) only on floating layers (menus, popovers, modals, drawers), which may use lobe's blurred backgrounds.
+- Density: 8px rhythm. Workspaces are compact; overview and report pages get more air; KPI groups need not be boxed.
+
+### Motion
+
+- UI transitions are short and quiet (150–250ms); popups use lobe's motion springs (`--lobe-motion-*`).
+- Persistent motion exists only while AI works: the sweep (about 2.4s linear loop), the thinking pulse (about 1.4s), and streaming text. It stops when the work stops.
+- `prefers-reduced-motion: reduce` removes all of it; the state must still read from text.
+
+### AI Grammar
+
+- AI output marker: ✦ plus an AI soft chip on anything AI produced (labels, segments, scores, copy). Disclosure shows model and time. After human confirmation it becomes a neutral 人工确认 chip.
+- AI task states, identical everywhere: 排队中 (neutral dot and queue position), 思考中 (pulsing AI dot and sweeping text that says what AI is doing), 生成中 (sweep border and a progress bar with a percentage), 已完成 (success dot and time), 失败 (danger text, the reason, and 重试), 已取消 (neutral dot; a person stopped it, so never danger). Never a bare spinner. Finer backend states keep the nearest state's color and motion under their own word (部分完成, 渲染中, 已暂停, 取消中). Tables, side lists and card heads use `AiTaskStatus compact` (dot and words, percent instead of a bar); panels and drawers use the full box.
+- AI action buttons: AI fill, the label starts with ✦ and a verb, and a disabled state says why. The fill marks the one AI start on a screen; the same start repeated per table row or card is `AiActionButton quiet` (outlined, violet ✦).
+- Human in the loop: AI suggestions offer accept, edit, and dismiss; accepting converts the marker.
+- Media timelines: AI-cut segments carry an AI mark left edge on AI soft; human segments stay neutral.
+
+### Components
+
+- Build from `@lobehub/ui` 6 first: Button, Select, Segmented, Tabs, Table / ProTable, Form, DatePicker, Upload, Modal, Drawer, DropdownMenu, Toast, Tooltip, Alert, Empty, Skeleton, Tag, and the Dashboard set (ConsoleShell, ConsoleNav, Breadcrumb, PageHeader, Surface, Section, StatCard). Use `@base-ui/react` directly only for a gap lobe-ui does not cover. Icons come from `lucide-react`.
+- Style lobe components only through `className` / `classNames` / `styles` slots, `.lobe-*` classes, `data-*` attributes, and `--lobe-*` / `--aios-*` variables. Never target StyleX hashed classes.
+- lobe Select and Segmented do not forward `aria-label` or a root `className`: use `LabeledSelect` (`components/molecules/labeled-select.tsx`, which also keeps `''` 「全部」 options visible, since Base UI treats an empty value as no selection) and wrap Segmented in a `role="group"` with `aria-label`.
+- Popconfirm becomes a button whose click calls `confirmModal` (destructive: `okButtonProps: { danger: true }`); `message` becomes `toast`; range sliders use Base UI's `Slider` directly (lobe's is single-valued).
+- CSS Modules on v2 surfaces use `--lobe-*` for UI primitives and `--aios-*` for AIOS roles. Legacy names work through the bridge, but new code does not add them.
+
+## Layout Grammar v3
+
+Owner decision 2026-10-24, after the v2 pages read as an "admin console": v2 changed components, colors and fonts but kept a box per section and a sentence per control. v3 keeps every v2 role (ink, AI violet, status, stage, motion) and changes how pages are organized. References: Linear and Vercel for restraint.
+
+- Neutrals: lobe's untinted gray, no neutral palette. Light ground `#F8F8F8`, cards `#FFFFFF`, borders `#E3E3E3` / `#EEEEEE`; dark ground `#000000`, panel `#0D0D0D`, borders `#202020` / `#1A1A1A`. No tinted grays.
+- One layer of containers. Sections are a small title, whitespace and hairlines (`--lobe-color-border-secondary`); never a bordered card inside a bordered card. A frame is allowed only for a unit that must read as one object (a stage strip, a media tile, a form); the console's content panel already is the page's frame.
+- Type ladder: console page title 20px / 600 (`--font-size-section-title`); brand name 16px / 600; section titles and nav items 14px (500 / 400); body 14px / 400; labels 13px / 500 (`--font-size-md`: sidebar group names, stat labels, chip names); meta 12px / 400 tertiary (timestamps, captions, footnotes only). A parent label is never smaller than 13px, and an icon beside text is at most 2px larger than the text (16px icons with 14px nav). Numbers use tabular numerals at weight 500 (24px for a headline figure). Bold is not a hierarchy tool: size and gray level are.
+- Contrast: tertiary text is `#707070` in light (4.66:1 on the `#F8F8F8` ground, 4.95:1 on white; lobe's `#8A8A8A` failed 4.5:1) and lobe's `#8F8F8F` in dark (6.0:1 on `#0D0D0D`).
+- Words: no permanent tutorials or footnotes on working pages. A walkthrough lives in 使用指南; a calculation basis or caveat sits behind an ⓘ tooltip; one-line helpers only where an action would otherwise be ambiguous. Merge sections that show the same thing twice.
+- Color signals: state reads as gray text plus a 6px dot. AI at work is the violet dot (pulsing only while it works); waiting on a person is the warning dot; a failure is the danger dot; everything settled stays gray. No filled color pills for state. `AiTaskStatus compact` already follows this (its failed state colors the words too).
+- Caveats that change how a number is read (an estimate, an excluded amount) stay visible as one short tertiary line; only the long basis moves behind ⓘ.
+- Lists: rows separated by hairlines, text aligned with the section title, hover as a faint neutral fill (`--lobe-color-fill-tertiary`) that may bleed 8px past the text edge.
+- Console chrome (the AI 创作中心 shell, `studio-console.module.css`, through lobe's stable `lobe-dashboard-*` classes): sidebar 220px expanded on desktop, 36px nav rows (CJK labels fill the em box, so 32px rows read cramped), groups separated by 20px of space with no rules, the current page in ink text at weight 500 on `--lobe-color-fill-tertiary` with 6px radius; siblings in secondary gray. Filter and count chips (框架 / 卖点 label strip, 成片 modes) work like Linear's view tabs: one 32px line of name then count, the chosen chip in ink on `--lobe-color-fill-secondary` with a `--lobe-color-border` hairline, the rest bare secondary-gray text, and a gap reads 待补 in amber text rather than a dashed box. The chips and their note sit on one row with the scope picker (产品) at its end; chips wrap inside their own column, and below 640px the picker takes its own line. Inverted ink fills (ink on light, white on dark) are reserved for the primary action, never for a selected filter. List toolbars keep filters at their natural widths (a 260px search with the icon inside the field and Enter to submit, 160px selects) on the left and the view switch at the row's end; the count and any note sit on one tertiary line under it. Filters never stretch into equal-width grid columns, and a filter whose values the current tenant does not use (the groland 视频类型 on 原片) is not shown. A select opens straight onto its options; it shows a search field only from 9 options up (a two-product catalog never does). Toggle chips that pick a set (AI 切段 候选框架) use the same chip grammar with a ✓ on checked ones, never violet borders. A page without its own nav entry keeps its parent lit and reads parent / page in the breadcrumb, with the parent linked (原片 / AI 切段). Controls (2026-10-25): four tiers only — the primary action (inverted ink, at most one per screen), the AI action (violet `AiActionButton`, only to start AI work), the secondary action (neutral outline, ink text) and inline text actions; links are ink at weight 500 with an underline on hover, never violet. Row actions in tables are text buttons, list refresh is one quiet icon button (`RefreshButton`) beside the section title, and a table hides its pagination when there is only one page. Times, durations, money and statistics (metric tiles, shares, counts) use the body face with tabular digits (no monospace), and every duration reads in the `m:ss.s` clock of the timeline (0:48.9, 3:46.8; a limit as 10:00). Internal identifiers — preset versions, prompt versions, model self-confidence, per-call cost — live in tooltips, not row text; a preset name shows its version only when the same list holds two versions. An empty section is one centred sentence plus at most one secondary action, without a frame. The studio home has no breadcrumb, so the rule after the sidebar toggle is hidden there too. A flow-strip number counts the whole step and names its failures inside the caption (AI 切段 「18 · 10 月分析 · 5 次失败」), never a bare failure count under the step name. The home's period control (2026-10-26) sits at the header end (when it does not fit beside the title it drops under it as one right-aligned row, left-aligned below 640px, and the date field never shrinks into an ellipsis): 日 / 月 / 年 / 自定义 in a segmented control, with the dates they cover on its left (2026/10/01 - 2026/10/26) in a borderless picker between ‹ › steps (自定义 swaps them for a range picker). It opens on 日 at yesterday in Beijing time (2026-10-28), the newest complete day, even when nothing ran on it, so the first read never drifts with activity; switching to 日 / 月 / 年 lands on the day, month or year holding yesterday (on the 1st, 月 is last month); nothing after today can be picked, and period captions name the period (10 月 26 日 / 10 月 / 2026 年 / 所选时段). Live counts (可用原片, 进行中, 待确认) and 最近任务 ignore it. Cost hints come from recorded spend (AI 切段 averages the last 30 days' priced calls), with a dated default only until three priced calls exist. Video cards (原片) carry at most three lines over the cover: title, an optional platform · product · creator line (nothing when none is known, never a 待补充 placeholder) and one row of tags plus readiness pills; a single scrim darkens only the bottom half, at 0.92 under the text so burned-in subtitles cannot read through. Unchecked checkboxes draw their box in the quaternary text tone so a selection list reads before anything is ticked. 片段标注 (2026-10-25): the vertical original sits in a fixed 320px column beside one work column (new-segment form above, timeline below); on phones the frame is height-led at 42svh and keeps the video's own width. Timeline label tones cycle blue, teal, amber and rose — never violet (AI) or gray (待确认). An annotation remembers where it was opened (`from=assets` or `from=analysis`): its breadcrumb, lit nav item and back link return there (原片 / 标注片段, 原片 / AI 切段 / 标注片段), otherwise to its segment library. AI 合成 / 成片 (2026-10-25): tabs that switch the page (框架混剪 / 卖点混剪 / 单条剪辑) sit under the title as plain labels on one hairline with a 2px ink underline under the current one, never beside the title like a filter. Progress hints are numbered steps (a gray number until done, then a green check), never hollow radio-like dots. A field holding a one- or two-digit count is sized to it (120px), not to its column. A card has one primary action; the rest (以此为起点编辑, 任务详情) sit behind a ⋯ menu at the card's end, and two ways to start the same thing share one menu button (换起点 ▾) with 清空 as a text action. A 成片 batch is a job, not a video, so the list shows one batch per row (the 最近批次 grammar): up to four output thumbnails fanned like an avatar stack, product · type over the whole structure (two lines at most), then status with progress and time with the creator in fixed columns; single outputs get media cards only on the batch page. The list shows every batch in numbered pages of 20 (the 原片 pager: 共 N 个批次 at the end, hidden on a single page); the type chips count batches that still have outputs; after a hairline divider come the states across every type — 待审核 (an output waits for a person) then 未成片 (failed, cancelled or outputs deleted) — each shown only while it has batches or is open. Chip counts and page counts come from the API over the whole scope, never from the loaded rows; tab and page live in the URL so a batch's back link returns to them. Who can see the list and what the chip numbers count is an ⓘ beside refresh, not a footer or a note in the chip row. 成片审核 (2026-10-26): AI finishing an output is not done — a person's review is. A delivered output reads 待审核 in amber, 已通过 in green and 已驳回 in red (`ReviewStatus`: dot then word, the compact task-status shape); green never marks AI completion alone, and a batch reads by its outputs (待审核 while any waits, 已通过 once one passed, 已驳回 when all were rejected) with 待审核 n · 已通过 m in its meta. Each output has a review page on the 片段标注 layout (`?batch=&output=`): the vertical video in the 320px column with 下载成片 under it; in the work column the status line, AI 相近画面 hints, a 成片时间轴 that lays the segments end to end on the output's own clock in the label tones (a block plays from its first frame), the 片段来源 rows and 人工审核. 通过 is the screen's one primary action; 驳回 opens reason chips (✓ toggle grammar, at least one) and a note, and a reviewed output shows the call, reviewer and time with 改为驳回 / 改为通过 and 撤销审核 as a text action. 上一条 / 下一条 walk the batch and a 下一条待审核 link follows a decision. A one-output batch opens straight on its review page from the list; batch cards open it from the cover and their one action (去审核 while waiting, 查看 after), replacing the old play dialog. The list has no second title, its type chips lead and refresh closes the row, and 新建批次 sits in the page header. A page's own status line (`AiTaskStatus framed={false}`) carries no box. Source lineage is one aligned row per segment (label · source · interval through a subgrid). A selected item (a 剪辑台 clip) is outlined in ink on the tertiary fill; hover borders use the quaternary text tone; focus uses the focus ring — violet stays for AI. 竞品爆款 (2026-10-25, default changed 2026-10-27): with no category in the URL 爆款分析 opens on 全部品类; the category select lists 全部品类 first, then every category with films by film count (most first), and a category in the URL narrows the view. 爆款视频 rows lead with a 9:16 thumbnail of the latest analysis's opening frame (a light placeholder until one exists), the same size as the 成片 row thumbnails. Content sits in ConsoleShell's 24px padding plus 8px at the top and 40px at the bottom; side-by-side unframed columns keep at least 40px between them. Such columns also share one heading height and one row rhythm (60px rows on the studio home) so every hairline lines up with the one beside it; a column's metadata (费用估算's scope and dates) sits at the end of its heading row, never between the heading and the first rule. The groland app shell (`components/organisms/layout.tsx`) adopts the same overrides when those modules return.
+- Reference implementation: the AI 创作中心 home (`ai-studio-home.tsx`, `studio-home.module.css`) and the console overrides in `studio-console.module.css`.
+
+## Visual System Migration
+
+- Done 2026-10-24: every page (AI 创作中心, account and admin pages, home, 素材库, dashboards, reports, DataOps, live center, marketing, sample inventory, industry news) is on lobe-ui; `antd` and `@ant-design/icons` are no longer dependencies, and their theme adapter, legacy provider, global `.ant-*` overrides and gates are gone. Execution history lives in the Trellis task `lobe-ui-visual-system`.
+- One app shell: `components/organisms/layout.tsx` and the AI 创作中心 shell both render lobe `ConsoleShell` + `ConsoleNav`, with `AccountMenu` at the sidebar foot. `LobeProvider` is app-wide (`ViteProviders`).
+- Shared token names: `DESIGN_TOKENS.json` (and its mirrors `lib/design-tokens.ts`, `design-tokens.css`, the ECharts fallbacks) holds v2 values, and the bridge in `aios-theme.css` re-points the shared color names on `html:root` to lobe and v2 roles so they follow lobe's theme (and dark mode): `--text-*`, `--bg-*`, `--border-color*`, `--divider-color`, `--status-*`, `--trend-*`, `--chart-series-*`; `--brand-primary` is ink, while `--brand-text`, `--brand-secondary`, and `--brand-border` are AI violet roles. These names stay as the token layer behind the Tailwind utilities, the ECharts CSS variables and `theme-provider`'s root reads; removing them would mean rewiring Tailwind, the ECharts mirror and their gates for no visible change, so the bridge is kept on purpose (decided 2026-10-24).
+- Forms use `useControlledForm` (`hooks/use-controlled-form.ts`) with `FormField` (`components/molecules/form-field.tsx`); selects use `LabeledSelect`; notices `toast`; confirmations `confirmModal`.
+- Pages and components write `--lobe-*` / `--aios-*` directly in CSS and inline styles; `verify:design:legacy-colors` fails on `var(--<shared name>)` outside the token layer (`design-tokens.css`, `aios-theme.css`, `echarts.css`).
+- Dark reviewed signed in on 2026-10-24 (home, AI 创作中心, 素材库, dashboards, sample inventory, DataOps, admin, sign-in, recruiting); production has no groland data, so the data-heavy groland charts and tables were seen empty. Decorative accents that became violet through the v1 `--brand-*` bridge were moved to ink and the neutrals on 2026-10-24; violet stays on AI surfaces, focus and selection; links moved to ink on 2026-10-25. Ink inverts in dark, so a large ink band (the report cover spine) uses `--aios-stage` there, and a white `itemStyle.color` in a chart (a hollow mark) becomes the dark card.
+- First-screen weight: `LobeProvider` passes motion's light `m` component and loads the animation features (`components/motion-features.ts`) and the toast/modal hosts (`components/lobe-hosts.tsx`, imported from the package entry so the hosts share one module instance with `toast()` / `confirmModal()`) after the first screen. Do not force lobe-ui, Base UI, or motion into vendor chunk groups; only the lobe stylesheet keeps its `vendor-lobe-ui` CSS chunk.
+- Bundle: the precompiled lobe-ui stylesheet has its own strict `vendorLobeUiCssGzipBytes` budget (64 KiB); a lobe-ui upgrade that crosses the strict target is reviewed with that upgrade.
 
 ## Page Archetypes
+
+### AIOS Product Home and Navigation (2026-10-27)
+
+- The AIOS home (refined 2026-10-27) is the company's module directory under the persistent global navigation, without ConsoleShell or a left sidebar: a restrained two-line company headline (公司的每一项业务，在同一个 AIOS 里运转。), a one-line scope, and a quiet 浏览文档 link — no primary entry to any one module and no module workflow illustration. Below it, one hairline band per domain (the domain name in a narrow column, its modules as full-width rows: outlined icon, name, one-line summary, status, arrow), never a card wall. The directory is built from the same permission-filtered navigation as the top bar: a menu group is a domain, standalone links gather under 更多, 文档 closes the list, system settings stay off it, and only links that carry a `summary` appear; domains with connected modules lead. A module whose data is not connected in this deployment reads 未接入数据, and one that works but is held back from the company (素材库, the previous company's library, reachable by the super admin only) reads 未开放, both in tertiary text with the name in secondary; open rows carry no status label. Future domains share one line (即将接入：产品 · 人力 · 财务) with no links. Signed out, the directory is one line asking to sign in; it waits for the session check instead of flashing that line. Keep content within a 1280px reading container; on phones a domain name sits above its rows and a row stacks its summary and status under the name, and the headline breaks only between phrases.
+- Supplied Linear/Vercel screenshots inform composition and restraint. Do not copy marks, invent customer logos or performance numbers, or reuse the previous decorative gradients/glows/rings and equal-weight card matrix.
+- The global header is present on the home and module routes (except existing login and standalone recruiting boundaries). It owns cross-system navigation, account and appearance. AI Studio retains its local sidebar and breadcrumb; other ConsoleShell pages show only the current permission-filtered module group. Standalone pages without local destinations have no sidebar. Docs uses its own document tree and article TOC without another AIOS sidebar.
+- Opening a module stays in the same tab and preserves the global navigation. Compact view offers a module menu plus account entry; it must not crowd out local navigation. Homepage and docs are independent scroll surfaces; module console height excludes the 56px global header.
+
 
 ### Retired Agent Product Boundary
 
@@ -282,8 +384,8 @@ Value semantics for static-report charts:
 
 - Scope: anonymous long-form pages such as the intern online test (`/join/ai-intern`).
 - Primary job: let an outside candidate read questions and write long answers calmly; no app navigation, no scores or internal rubric.
-- Layout: single reading column (max-width 760px) on a white tokenized surface; one assignment title, compact candidate information before the complete brief (task, materials, requirements, delivery), followed by submission and AI workflow sections separated by quiet rules, candidate fields first, labels above inputs, monospace (`--font-family-mono`) only for code blocks and code inputs; one primary submit action at the end.
-- Disclosure: keep assignment requirements and delivery instructions visible at body size; only optional rule-file inputs use native details. Group downloadable samples into one compact neutral surface with filename, muted duration/size and a separate download action; do not load video until requested. Retain all question wording. Use modest auto-growing textareas, readable body text and a compact metadata row.
+- Layout: a compact AIOS wordmark header above a single reading column (max-width 760px) on a tokenized container surface; one assignment title and three quietly separated sections: candidate information, the complete brief (task, materials, requirements, delivery) with its submission field, and AI workflow with one combined rules-and-explanation field. Candidate fields come first, labels sit above inputs, monospace (`--font-family-mono`) is only for code blocks and code inputs; one primary submit action at the end.
+- Disclosure: keep assignment requirements and delivery instructions visible at body size; only optional rule-file inputs use native details. Use quiet numbered section headings. Group downloadable samples into one compact bordered file list with filename, muted duration/size and a separate download action; do not load video until requested. Retain all question wording. Use modest auto-growing textareas, readable body text and a compact metadata row.
 - States: required-field errors inline, draft-saved status near the submit action, explicit submit error with a retry path, and a success result that replaces the form.
 - The reviewer side (`/admin/recruiting`) follows the Admin Pages archetype: table list plus a task drawer with a sticky scoring column.
 
@@ -305,16 +407,22 @@ Value semantics for static-report charts:
 
 - Primary job: manage short-video/source-material assets from upload/import through profiling, AI analysis, platform video mapping, ad-material mapping, and reusable identity enrichment.
 - Treat content-asset pages as an operational media workbench, not a consumer video feed: the main list must keep file status, usage coverage, and next action readable before decorative media treatment.
-- Asset cards may include cover imagery and inline video preview, but playback controls must stay quiet and task-oriented: single-layer play affordance, visible loading/error state, default muted playback, and an explicit mute/unmute control when media is active.
+- Asset cards may include cover imagery and inline video preview, but playback controls must stay quiet and task-oriented: single-layer play affordance (a 44px disc of `--aios-stage` at 48% with a filled `--aios-stage-text` triangle, no ring, glass or shadow, the same in both themes; 64% on hover), visible loading/error state, default muted playback, and an explicit mute/unmute control when media is active.
 - Card media interactions must not conflict with route navigation. Play, mute, download, and detail actions require distinct hit targets, visible focus states, and event boundaries so users can preview without accidentally opening the detail route.
 - Detail pages should reuse the same white/gray/blue console language as the list page, with profile, transcript, AI analysis, platform mapping, and ad-material mapping grouped by workflow state rather than campaign-style storytelling.
 - Content asset module labels, queue counts, media duration, file sizes, and platform IDs should use tabular/mono treatment where numeric scanning matters; free-text transcript and AI summaries stay in normal UI typography for readability.
 
 ### Content Hub / Live Center Pages
 
-- Primary job: organize content operations under the top-level 内容中台 navigation while keeping 素材库, AI 创作中心, and 直播中台 as focused secondary workbench entries. 素材库 owns asset management; AI 创作中心 (`/content/ai-studio/*`) owns production (analysis, segments, editing, outputs) on the same asset truth and uses route-driven sidebar navigation, reusing the 素材库 console sidebar grammar rather than inventing a second one.
+- Primary job: organize content operations under the top-level 内容中台 navigation while keeping 素材库, AI 创作中心, and 直播中台 as focused secondary workbench entries. 素材库 owns asset management; AI 创作中心 (`/content/ai-studio/*`) owns production (analysis, segments, editing, outputs, competitor hits) on the same asset truth. It is the first Visual Language v2 surface: lobe `ConsoleShell` with `ConsoleNav` (an untitled group 首页 / 原片 / 成片, then the AI 剪辑 and 竞品爆款 groups, then 团队 only for accounts that may open 团队产出), a breadcrumb; the shared account menu lives in the persistent AIOS top bar.
 - AI 创作中心 segment lists are one grammar in two routes: 框架片段 (`/content/ai-studio/segments`) and 卖点片段 (`/content/ai-studio/selling-points`) each fix the list to one preset kind and share the same segment library table, filters, bulk bar, and annotation entry. A selling-point row may add its framework-segment reference and the 连着 marker inside the existing row layout; neither route introduces its own visual pattern.
-- The content hub navigation grammar should stay one-language: the active top-level item may use the global blue pill treatment, while nested entry icons remain unframed unless the control itself is an explicit button. Do not stack an icon box inside an active navigation pill.
+- AI 创作中心 竞品 statistics (rankings on 爆款分析) use one share-bar grammar: a ranked list per dimension card with a single Chart Series 1 bar, a fixed right-aligned tabular `x/n · %` column (or the money a ranking sorts by), and the denominator plus excluded counts stated under the card title. Below the small-sample threshold the percentage is dropped and only `x/n` shows; there is no legend, no multi-color bar, and text never takes the series color. A row opens its example films inline; free-text dimensions without a dictionary render as count chips, never as bars.
+- 竞品爆款 · 爆款分析 (`/content/ai-studio/competitor`, first in the 竞品爆款 nav group before 爆款视频; the retired 爆款打法 address `/content/ai-studio/patterns` redirects here with its query) is, since 2026-10-27, the filter row, 爆款拆解 (since 2026-10-29), then 框架结构排行 and nothing else (the metric row, opening frames, the full hook / selling-point / opening-path rankings, scene / audience chips and the 爆款共性 cards are retired). 框架结构排行 (since 2026-10-27 evening) shows one lane at a time, picked by a `Segmented` 框架结构 / 卖点结构 above the list (`lane` in the URL): 框架结构 is the framework segments' labels in time order, adjacent repeats merged, joined by →; 卖点结构 is the set of selling-point labels a film states, in preset order, joined by +. Each label sits after a small square in its 片段标注 tone with neutral text, and rows wrap rather than truncate. Every row is one structure with three columns under a hairline heading (结构 / 竞品 · n 条 / 我方): the competitor share bar in Chart Series 1 on the left, its figure `x/n · % · m 个品牌`, and our side in Chart Series 2 on the right; on a phone the name takes its own line and each side is labelled inline. Since 2026-10-29 our side waits for 视频云管家 spend summed over the window (P2): until then it shows — and the lane row says 我方数据将在视频云管家接入后，按这段时间的消耗统计. Under 按视频条数 a 结构要素 block comes first, because exact sequences scatter: the same three-column rows grouped under tertiary titles 包含 / 开头 / 结尾 / 长度 (for selling points 包含 and 长度), each element named 含街采, 开头是机制, 4 段及以上 or 3 个卖点; then 完整结构 lists the exact sequences. Marks read in amber text after a name only when we have at least ten originals in the lane: 我方偏少 for an element where competitors are at least 常见 (a third of the films) and our share is under half theirs, 我方没有 for an exact structure in at least 10% of the window's films from two or more brands where ours is zero (an original with it but no spend in the window counts as zero); with fewer originals the caption says the difference is for reference only. Structures only we have close the list with 竞品 —. With no original of ours in the lane, the row of the lane switch says so and links to 框架片段 / 卖点片段. The first ten rows show with 展开全部 N 种. One `Segmented` at the heading row's end sorts the list: 按视频条数 (films, a re-posted material counted each time, with the brands behind them; x/n and no percentage below ten films, ours likewise below ten originals) or 按直播间销售额 (罗盘 live-trade bands summed over the rooms a structure's films drove traffic to in the window, each room-day once, ranked by the lower bound and shown as ¥150万–325万 or ¥150万+ for an open top band; rooms and days in the row tooltip; structures without 罗盘 sales leave this order; our side shows — since we have no sales). The sort lives in the URL (`sort=sales`); a caption under the heading states the unit, and for sales that it is the rooms' amount rather than what a film sold, plus how many films have 罗盘 data. Counts follow the snapshot scope: the latest finished analysis per film, its card category, the Beijing first-seen date. The filter row is the category select then the studio home's period control (日 / 月 / 年 / 自定义, the covered dates between ‹ ›, opening like the home on 日 at yesterday); 较上一周期 compares with the previous day, month or year, or as many days before a custom range. A window with films but no locked statistics yet reads 框架结构统计还在生成 and refreshes itself; an empty window says so at once. The 竞品拆解 drawer (2026-10-26, refined 2026-10-27) reads 推广产品 and the status line, then 拆解概要 (the summary as body text with no label, then 打消的顾虑), then 框架结构 on the 片段标注 timeline grammar: a 框架 lane and a 卖点 lane (overlapping selling points take extra rows) over the ruler, which sits under the blocks like an editor's track, and the 卖点 counts as the legend under it (tone, name, ×n); blocks in the label tones show names only, and a block under 6% of the film shows its tone alone; times live in the tooltip and once in the picked block's heading, never beside every label. A failed selling-point call keeps the framework and the transcript, says so in the 卖点 lane and offers the re-run. 原片与口播 follows: the player beside 口播转写, the whole timed transcript with each line's framework segment as a tone bar on its left edge (it is machine transcription, named as such, never 脚本). Nothing is picked at first; picking a block lights its lines on the tertiary fill, steps the rest back to secondary text, scrolls the list to them and shows a selling point's quote, and 全部 (or a second click) clears it. The sample frames close the drawer as evidence. Audit detail — validation notes, model and dictionary versions — stays out of the reading surface (the model sits in the timestamp tooltip); a partial card says once what was removed.
+- 竞品爆款 · 爆款视频 (`/content/ai-studio/trends`) uses the same `StudioPeriodControl` as 爆款分析, beside 全部来源 / 罗盘榜单 / 手动添加, opening like the home on 日 at yesterday. Compass membership follows the ranking day; manual membership follows the first manual collection day in Beijing time. ALL is their unique-film union; a removed compass-only record remains as 历史收录 by its first collection date. The list shows the server total, 20 films per page (pager hidden for one page), latest sync/ranking dates, and in-window ranking days / explicitly labelled live-room rank. URL filters/page survive opening and closing an analysis. Re-pasting a film reports 已存在 and preserves metadata and existing analysis; 编辑资料 is the explicit metadata action. An incomplete or failed analysis requires a separate retry; complete/active results are reused. The full-width list, header-level add action and link-first modal remain the layout authority; phone cards preserve the same catalog actions.
+- 爆款分析 · 爆款拆解 (2026-10-29, semantic openings v1 / reading v13) sits below the filters as three unframed blocks separated by hairlines: 开头 3 秒怎么说, 在什么场景解决什么痛点, 谁在背书. Opening rows show only a reusable natural-language formula with [变量] and a right-aligned `x/n 条 · m 个品牌` count. Group by concrete meaning and persuasion logic even when wording or style differs; broad labels or shared keywords alone are insufficient. Do not show a raw quotation, example line, mechanism tags or hook-reading subtitles under a formula. Formula jobs are independent of the optional 生成拆解 reading: a writer viewing a populated scope requests the input/prompt-version cache automatically; show pending, empty and failure states, and retry failed jobs only through an explicit action. Old or failed results never fall back to raw text as formulas. The top five formulas are shown; uncertain sources remain accessible under 尚未归类的开头. Clicking a formula opens all distinct source videos, with five per page and an explicit range/total: retain each source's opening text, 口播 / 画面文字 provenance and available time intervals. Never deduplicate these sources by opening family or cap them at the sales TOP5. The drawer is 560px on desktop and full width on phones; it keeps the cover, title, analysis/original links and sales-band caveat. Scene rows retain 场景 → 痛点 → 卖点, audience tags and a quote; endorser rows retain named people/roles, 未具名 and 其他背书. These two blocks retain the existing sales TOP5 drawer. Counts are computed by the host over the selected window, including reposted video IDs; the model never writes the counts. The optional 生成拆解 action retains the ten-film threshold and estimate, adds scene/endorser readings, 黄金结构 and at most three 下一条怎么拍 actions, reusing current semantic formulas when available. Reading failure does not hide independently generated opening formulas. Pending/failed/stale reading states and the no-performance-data caveat remain visible.
+- AIOS global navigation (2026-10-27, refined the same day) sits in a quiet 56px top bar above module sidebars, on the page background with no bottom rule: the solid AIOS mark at the left, the product groups centered on the whole bar (看板, 报告, 内容中台, 营销, 文档, then the remaining permission-aware destinations under 更多), the account at the right. Group labels are 14px like the module sidebars, never smaller than the level below them; only 更多 carries a chevron, and a group opens on hover or click into a menu sized to its labels (36px rows, every destination with its icon). The current group reads in ink at weight 500 on the tertiary fill, the hover state's neutral fill, never a colored pill. From 900px down the groups follow the brand instead of centering; under 760px they become one 切换模块 menu with 44px targets. 内容中台 lists only AI 创作中心 for every account except the configured super admin, who also sees 素材库 and 直播中台 (route kind `super_admin`, 2026-10-27); pages inside AI 创作中心 never link to 素材库 or name it (2026-10-28): the company's own originals come from the 云视频管家 API, so 原片 is the studio's library and copy says 已删除 / 没有可播放的文件 rather than 从素材库删除 / 未关联素材库资产. Module workspace cards and their sidebar brand rows start 12px under the bar; a module sidebar's mark is outlined (ink glyph on the container color with a hairline) so it never repeats the solid AIOS mark. Login has no console chrome. The studio brand leads to its own home; the AIOS mark leads to the full-width product home. The top bar stays visible on scroll; account and appearance controls live at its right edge. Console height excludes the bar so its internal scrolling still fits the viewport. The BQL profile exposes the complete navigation and static docs, while data-dependent modules explicitly state 尚未接入百雀羚数据 and do not mount legacy data clients.
+- 团队 · 团队产出 (`/content/ai-studio/team-output`, 2026-10-29) is a manager view, hidden from everyone without `marketing:team_output:read`. It follows the studio home: the title with the period control at the header end (opening on 月 holding yesterday, because output is read by month), then one toolbar row — a `Segmented` 剪辑 / 编导 (in the URL), the 品类 select (160px, 全部品类 first) and an ⓘ with the counting basis. Under it at most two tertiary lines: freshness (数据更新到 10/28, an amber dot and the days not complete when any are missing) with the source caveat 巨量千川投放，云管家原值，成交不扣退款, then the caveats that change a reading (未标注编导 n 条 · 多人编导 n 条，每人都计入 · 消耗没有成交数据 · 巨量广告、百度等其他平台消耗 ¥x 未计入). Money is named by its platform (千川消耗, 千川成交), never a bare 消耗. The totals strip uses the home's chain-strip frame with four figures (成片数, 千川消耗, 千川成交, ROI, each with its 新片 or 有消耗 caption). The table is hairline rows, team → group → person, with right-aligned tabular figures; team rows are 500 ink and fold, group rows secondary, people indented with their role in tertiary; 未关联账号 / 未归属 come last and list people directly. Column hints live in tooltips. A person's name is an ink text action that opens a 720px drawer (full width on phones) with their 成片: name and a tertiary meta line (date, 以前上传, 品类, 状态, 编导, 剪辑, ID, 其他平台 ¥x 未计入 when any), exact amounts, ROI and the cumulative 累计消耗. No ranking, score or color for good or bad.
+- 爆款视频 intake (2026-10-27) is an occasional action: the list spans the workspace and a single ink 添加视频 button opens the existing lobe Modal (560px desktop, viewport-contained on phones). The required share link leads; 品牌 / 品类 / 备注 live behind 补充信息. Only 添加并分析 uses violet; 仅添加 is neutral. The cost estimate stays beside the submission area. Closing preserves the draft, failure retains inputs, pending submission prevents duplicate requests and dismissal, and closing returns focus to the trigger unless the analysis drawer takes over. Success clears the draft only after the requested action is acknowledged.
 - Live center pages are operational review workbenches: lead with the session queue, review status, source metadata, and next action rather than a marketing-style hero or decorative media wall.
 - Live center session queues default to Groland self-broadcast scope; do not mix other anchors or 达播 sessions into the primary review queue.
 - Live-session review surfaces should group preview, script/transcript, platform IDs, evidence, and action controls by workflow state. Use compact white/gray/blue cards, tokenized borders/shadows, visible focus states, and tabular/mono treatment for counts, IDs, timestamps, and durations.
@@ -330,23 +438,23 @@ Value semantics for static-report charts:
 - Design-evolution mode is reserved for redesign, new route/page shells, brand-language upgrades, high-motion direction changes, and cross-page visual system changes.
 - In design-evolution mode, implementation may intentionally move beyond the current baseline only when the same change set updates this `DESIGN.md` and any affected token or component contract source.
 - New route pages and route-level CSS Modules under `apps/web-vite/src/app/` are treated as design-evolution candidates. Private leaf component changes under route `_components` stay in normal component scope unless the route plan explicitly enters design-evolution mode.
+- 2026-10-24: the owner approved Layout Grammar v3 (untinted gray, one container layer, lighter weights, dot signals) after reviewing the AI 创作中心 home in both themes.
+- 2026-10-23: the owner approved the evolution to Visual Language v2 (lobe-ui 6 + Base UI, ink plus AI violet, light and dark). 2026-10-24: every page is on v2 and Ant Design is removed; the v1 sections are gone and the shared token names carry v2 values.
 - The executable guard is `npm run verify:frontend:design-evolution`; the paired behavior fixture is `npm run verify:frontend:design-evolution-behavior`.
 - If the guard fails, do not bypass it by weakening route classification. Either update this authority document to describe the new visual grammar, or keep the implementation inside the current design contracts.
 
 ## Typography System
 
 - AIOS uses a three-layer font system: UI, Display, and Mono/Data. Do not introduce page-only font families without adding a documented role here.
-- UI font for Chinese UI, dense dashboards, tables, filters, buttons, forms, menus, and ordinary CJK/Latin mixed text:
-  `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif`.
-- Display font for product names, English brand lockups, homepage hero titles, and short Latin headings:
-  `"Geist", "Avenir Next", "SF Pro Display", "Segoe UI", system-ui, sans-serif`.
-- Mono/data font for KPI values, currency, percentages, IDs, timestamps, SQL, logs, run IDs, trace IDs, and code-like data:
-  `"Maple Mono", "SF Mono", "JetBrains Mono", "Roboto Mono", "Cascadia Code", Consolas, monospace`.
-- Maple Mono is preferred for data/code when self-hosted. Do not use Maple Mono or Maple Mono CN as the global UI font, and do not use Nerd Font glyphs as product UI icons.
+- UI and Display (`--font-family-base`, `--font-family-display`, `--aios-font-ui`) for Chinese UI, dense dashboards, tables, filters, forms, product names and headings:
+  `"Geist Variable", -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif`.
+- Mono/data (`--font-family-code`, `--font-family-mono`, `--aios-font-data`) for KPI values, currency, percentages, IDs, timestamps, SQL, logs, and trace IDs:
+  `"Geist Mono Variable", "SF Mono", ui-monospace, Menlo, Consolas, "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", monospace`.
+- Geist draws Latin and digits. Chinese uses PingFang SC on Apple systems; elsewhere (Windows) it uses HarmonyOS Sans SC, the CJK face lobe-ui ships, before Microsoft YaHei. Geist and Geist Mono are self-hosted through `@fontsource-variable/geist` and `@fontsource-variable/geist-mono` (OFL). HarmonyOS Sans SC is the one CDN font (owner decision 2026-10-24): `lobe-provider.tsx` passes only `@lobehub/webfont-harmony-sans-sc` from `registry.npmmirror.com` to lobe's `customFonts`, appended after the first render with `font-display: swap`, so Windows shows Microsoft YaHei until it arrives and macOS never fetches the files. lobe's other CDN fonts stay off; add no other CDN font. Do not use Nerd Font glyphs as product UI icons.
 - Runtime enforcement: CSS Modules must consume font families through `var(--font-family-base)`, `var(--font-family-display)`, `var(--font-family-mono)`, or `inherit`. Do not paste local stacks such as `"Geist Mono", ...` or `"Courier New", monospace` into page-level CSS.
 - Runtime enforcement: CSS Modules must not introduce new raw `font-size`, `line-height`, or `letter-spacing` values. Existing legacy raw declarations are frozen in `scripts/css-module-typography-allowlist.json`; new and refactored declarations should use `--font-size-*`, `--line-height-*`, and `--letter-spacing-*` tokens.
 - Letter spacing tokens: `--letter-spacing-normal` for ordinary UI text, `--letter-spacing-label` for short uppercase KPI/metadata labels, `--letter-spacing-eyebrow` for rare English eyebrow/kicker labels, `--letter-spacing-tight` for page titles, `--letter-spacing-title` for section titles, and `--letter-spacing-data` for mono/tabular KPI values.
-- Line-height tokens: `--line-height-none` for large single-line numbers, `--line-height-zero` only for structural collapse rows such as AntD measure rows, `--line-height-compact` for dense chart labels, `--line-height-snug` for badges/meta labels, `--line-height-tight` for compact headings, `--line-height-normal` for ordinary UI, `--line-height-relaxed` for paragraphs, and `--line-height-prose` for long markdown/reference-document reading.
+- Line-height tokens: `--line-height-none` for large single-line numbers, `--line-height-zero` only for structural collapse rows such as table measure rows, `--line-height-compact` for dense chart labels, `--line-height-snug` for badges/meta labels, `--line-height-tight` for compact headings, `--line-height-normal` for ordinary UI, `--line-height-relaxed` for paragraphs, and `--line-height-prose` for long markdown/reference-document reading.
 - Control geometry line-height tokens: use `--component-control-line-height-xs|sm|md|lg` only when a third-party control needs fixed pixel line-height for vertical centering inside a fixed-height Pagination, Select, icon expand control, or small action button. Do not use these tokens for prose, labels, KPI values, or ordinary text rhythm.
 - Runtime enforcement: CSS Modules must stay focused. New `*.module.css` files should stay under 800 lines; existing oversized legacy modules are frozen in `scripts/css-module-size-allowlist.json` and may not grow. Split by page section, component, or domain concern before adding more styles to those files.
 
@@ -357,7 +465,8 @@ Use this scale before inventing a page-local size. Dashboard pages should rarely
 | Role | Size | Weight | Line height | Tracking | Font | Runtime / Tailwind / component mapping | Usage |
 | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Tiny label | 11px | 520 | 1.25 | 0 | UI | `--font-size-xs`, `text-xs`, `Typography caption` | badges, axis labels, dense table hints |
-| Label/meta | 12px | 520 | 1.35 | 0 or `--letter-spacing-label` for short uppercase labels | UI | `--font-size-sm`, `text-sm` | metadata, helper text, table hints, compact filters |
+| Label | 13px | 500 | 1.4 | 0 | UI | `--font-size-md` | sidebar group names, stat and chip labels, form labels on dense consoles |
+| Meta | 12px | 520 | 1.35 | 0 or `--letter-spacing-label` for short uppercase labels | UI | `--font-size-sm`, `text-sm` | metadata, helper text, table hints, compact filters |
 | Body / table base | 14px | 400 | 1.55 | 0 | UI | `--font-size-base`, `text-base`, `Typography body1` | normal UI copy, table cells, form text |
 | Small section text | 16px | 560-640 | 1.35-1.5 | 0 to -0.01em | UI | `--font-size-lg`, `text-lg`, `Typography h3/h4` | card/module titles, panel subheads, important labels |
 | Card emphasis / data small | 18px | 620 | 1.15 | -0.01em | UI or Mono/Data | `--font-size-xl`, `text-xl`, `--font-size-data-sm`, `Typography data-sm` | small KPI values, compact score values |
@@ -399,85 +508,48 @@ keep them single-line with ellipsis in wide evidence tables.
 
 ## Color Palette
 
-- Brand Canvas `#F5F5F5`: global page background and brand light-gray whitespace.
-- Surface White `#FFFFFF`: cards, table containers, popovers, drawers, and primary content surfaces.
-- Hover Wash `#FAFAFA`: quiet hover and selected table row wash.
-- Subtle Surface `#F8F8F8`: secondary panels and non-interactive soft sections.
-- Text Primary / Matte Black `#1A1A1A`: titles, core values, logo-adjacent text; never use `#000000` for normal UI text.
-- Text Secondary `#5F6368`: body, descriptions, table secondary content.
-- Text Tertiary `#8A8F8A`: metadata, axis labels, muted hints, units, and helper text.
-- Text Disabled `#B8B8B8`: disabled UI only.
-- Text Inverse `#FFFFFF`: text on dark tooltip surfaces, saturated status/danger fills, or blue primary fills.
-- Border `#E6E6E6`: component borders and structural 1px lines.
-- Divider `#F0F0F0`: chart grid, section dividers, subtle separators.
-- Hover Border `#D6DAD6`: hover border and low-noise focus-adjacent outline.
-- Brand Blue `#2F6EEA`: primary action fill, active navigation pill, selected state fill, hero accent, and brand emphasis. It should feel modern, clear, and low-pressure.
-- Brand Blue Hover `#255FD9`: hover fill for primary interactive surfaces.
-- Brand Blue Active `#1F4FBF`: pressed state and strong active blue text.
-- Brand Blue Text `#2457C5`: links, active text on white, small icons, inline emphasis, and high-legibility blue labels.
-- Brand Bright Blue `#75B1F8`: gradient endpoint, small highlight, and decorative accent only. Do not use bright blue for normal 12-14px text.
-- Brand Blue Soft `#F2F6FF`: subtle selected backgrounds and brand/info panels.
-- Brand Blue Border `#C9D8FF`: brand soft borders.
-- Brand On Primary `#FFFFFF`: required text color on `#2F6EEA` filled surfaces.
-- Trend Up `#BF3D2F`: business growth / upward change in Chinese commerce dashboards.
-- Trend Down `#2F8C5B`: business decline / downward change in Chinese commerce dashboards.
-- Trend Neutral `#8A8F8A`: unchanged or unavailable deltas.
-- Success `#168A3A`: success state, completed status, healthy runtime.
-- Danger `#C93A32`: error, failure, destructive state.
-- Warning `#B87503`: warning and attention state with AA contrast.
-- Info `#2457C5`: informational emphasis should use the accessible brand blue text unless the chart/domain context requires a separate palette.
-- Status soft backgrounds and borders must use semantic pairs from `apps/web-vite/src/styles/design-tokens.css`: success `#EAF8EE/#BFE8CA`, warning `#FFF7E6/#F3D38D`, danger `#FFF1F0/#F2C4C0`, info `#F2F6FF/#C9D8FF`, neutral `#F5F5F5/#E6E6E6`.
-- Chart series colors are defined in the Chart Series Palette below. Do not use status colors, trend colors, or platform colors for ordinary bar/line series.
-- Platform legend colors are category/brand exceptions for platform charts only: Tmall `#EC5E2A`, Douyin `#000000`, Xiaohongshu `#FF2442` (RGB 255, 36, 66), Kuaishou `#FF3C21`, JD `#DA291C` (Pantone 485 C sRGB approximation), WeChat `#07C160`, unknown `#8A8F8A`.
-- Douyin `#000000` is allowed only as a platform brand legend/marker color. It remains banned for normal text, surfaces, borders, shadows, and non-brand UI states.
-- DeepSeek-like dark console colors are reference-only for future optional dark theme: charcoal `#111112`, sidebar `#1D1D1F`, active surface `#343436`, axis line `#3C3C3C`, chart amber `#FFDC0A`.
-- Banned color patterns: neon purple/blue gradients, pure black outside the Douyin platform legend exception, saturated rainbow palettes for normal dashboards, legacy SaaS-blue as a second primary accent, and arbitrary local hex values when an existing token fits.
+The shared token names carry these v2 values (light theme; dark values come from lobe and `aios-theme.css` through the bridge). Roles and rules are in [Visual Language v2](#visual-language-v2) › Color Roles.
 
-## Text Color System
+| Token | Value | Role |
+| --- | --- | --- |
+| `--bg-global` / `--bg-subtle` / `--bg-hover` | `#F8F8F8` | page canvas, quiet fills, hover wash (lobe gray layout) |
+| `--bg-card` | `#FFFFFF` | cards, tables, popovers, drawers |
+| `--text-primary` | `#1F1F1F` | titles, core values |
+| `--text-secondary` | `#666666` | body, labels, table text |
+| `--text-tertiary` | `#707070` | metadata, axis labels, units, hints (AA on the ground; lobe light is overridden) |
+| `--text-disabled` | `#B0B0B0` | disabled controls only |
+| `--border-color` / `--divider-color` | `#E3E3E3` / `#EEEEEE` | structural lines / grid and separators |
+| `--brand-primary` | `#222222` (ink) | human primary action fill; text on it is white |
+| `--brand-text` | `#5B45B8` | links, selected text (AI violet 11) |
+| `--brand-secondary` / `--brand-border` / `--brand-bright` | `#F4F0FE` / `#D4CAFE` / `#AA99EC` | AI violet soft fill, border, small accent |
+| `--status-success` / `-warning` / `-danger` / `-info` | `#168A3A` / `#B87503` / `#C93A32` / `#0060CC` | status text, always with a label; fills from lobe `*-bg` / `*-border` |
+| `--trend-up` / `--trend-down` | `#D9363E` / `#13A05A` | business deltas (red up, green down) |
 
-- Neutral text is the default. Most UI should use `--text-primary`, `--text-secondary`, or `--text-tertiary`; color should not compete with data.
-- Primary text `#1A1A1A`: page titles, card/module titles, core values, important table text.
-- Secondary text `#5F6368`: body copy, normal labels, descriptions, normal table text.
-- Tertiary text `#8A8F8A`: metadata, helper text, units, chart axis labels, low-priority hints.
-- Disabled text `#B8B8B8`: disabled controls only.
-- Inverse text `#FFFFFF`: dark tooltip surfaces, saturated status/danger fills, and brand-filled buttons.
-- Brand text `#2457C5`: links, active text on white, selected tabs, small icons, and focus-adjacent affordances only.
-- Status strong text: use `--status-*-strong` only for system/workflow feedback. Pair with the matching soft background and border.
-- Trend text: use `--trend-up`, `--trend-down`, and `--trend-neutral` only for business deltas.
-- Platform colors are chart/category identity only. They are not ordinary text colors.
-- Recommended visual ratio: 85% neutral text, 10% brand blue, 3% trend colors, 2% status/platform/domain accents.
-
-## Brand Blue Semantics
-
-- Brand blue is for brand/action: CTA, active nav, selected state, links, focus, and brand emphasis.
-- Primary blue fill `#2F6EEA` is for larger filled surfaces. Text on it must be `#FFFFFF`.
-- Blue text `#2457C5` is for readable brand text on white or very light backgrounds.
-- Bright blue `#75B1F8` is a small-surface accent or gradient endpoint only. It should not be used for normal 12-14px text.
-- Success green is for system success only; it is not the brand color.
-- Trend-down green is for business downward movement only; it is not success and not brand.
-- WeChat green is platform identity only.
-- If a green appears in a chart or badge, the implementation must name which green role it is using: success, trend, platform, or domain taxonomy.
+- Platform legend colors are category/brand exceptions for platform charts only: Tmall `#EC5E2A`, Douyin `#000000`, Xiaohongshu `#FF2442`, Kuaishou `#FF3C21`, JD `#DA291C`, WeChat `#07C160`, unknown `#8A8A8A`. Douyin `#000000` is allowed only as a platform marker.
+- Success green is system state, trend-down green is a business delta, WeChat green is platform identity; a green in a chart or badge names which role it is.
+- Banned: neon gradients, pure black outside the Douyin marker, rainbow palettes for ordinary dashboards, a second primary accent beside ink and AI violet, and local hex values when a token fits.
 
 ## Chart Series Palette
 
-Use chart series colors only for ordinary bar/line multi-series comparison when the series do not already have platform, trend, status, or business-domain semantics.
+Ordinary multi-series charts use the v2 series in fixed order, validated for color-vision deficiency on light and dark: `--chart-series-1..5` = violet `#6E56CF`, teal `#0E9C8E`, amber `#C76E12`, blue `#2F6FE0`, rose `#C2417A`; `--chart-series-6` and `--chart-series-muted` = `#A8A8A8` (previous period, benchmark, "other"); `--chart-series-highlight` = `#6E56CF`.
 
-| Role | Color | Usage |
-| --- | ---: | --- |
-| Series 1 | `#445DF6` | Deep blue primary metric, current period, main bar, and dominant legend marker |
-| Series 2 | `#75B1F8` | Light blue secondary metric or comparison series |
-| Series 3 | `#3264F6` | Line-chart primary stroke, point emphasis, or high-contrast blue support |
-| Series 4 | `#4F8CB5` | Cool blue-cyan support metric |
-| Series 5 | `#536F86` | Calm gray-blue auxiliary metric |
-| Series 6 | `#A4772A` | Warm value/efficiency support |
-| Muted | `#8A8F8A` | Previous period, benchmark, average, unavailable |
-| Highlight | `#3264F6` | Selected line point/bar or hover highlight only |
+- Legend text stays neutral (`--text-secondary`); only markers and swatches carry series colors.
+- Single-metric charts use Series 1. Current vs previous: current Series 1, previous Muted (dashed line or low-opacity bar).
+- A 7th series folds into "other" or small multiples; never generate a hue.
+- Platform charts use platform colors, trend/waterfall charts trend colors, status distributions status colors, business taxonomies the domain palettes below.
 
-- Legend text stays neutral (`--text-secondary`). Only legend markers/line swatches use series colors.
-- Single-metric bar charts use Series 1. Single-metric line charts may use Series 3 for the line/point if the chart affordance needs stronger cobalt. Do not assign different colors to every bar unless each bar represents a real semantic category.
-- Current vs previous period: current uses Series 1 `#445DF6`; previous uses Muted `#8A8F8A`, dashed for lines or low-opacity for bars.
-- Target or benchmark lines use muted neutral gray or matte black dashed lines, not saturated colors.
-- For platform charts use platform colors; for trend/waterfall charts use trend colors; for status distribution use status colors; for business taxonomy use the domain taxonomy palettes below.
+### Chart Rendering
+
+Pick the lightest renderer that does the job (decided 2026-10-24):
+
+| Tier | Use for | Renderer |
+| --- | --- | --- |
+| Hand-written | metrics, share and rank bars, sparklines, free-text count chips | HTML / CSS / SVG on `--lobe-*` / `--aios-*`; Base UI only for interaction (Tooltip, buttons) |
+| Standard charts | area, multi-series bar, donut without large data | `@lobehub/charts` (Recharts, same design system); add the dependency with its first real caller |
+| Heavy analysis | large data, sankey, funnel, dual axis, heatmap | ECharts, as on the dashboards and reports (canvas, adapted through `lib/echarts-appearance.ts`) |
+
+- AI 创作中心 ships no ECharts. Hand-written charts follow the theme on their own and carry a readable text equivalent.
+- Charts a model proposes go through the chart spec (`app/content/ai-studio/_lib/chart-spec.ts`): kinds `stat`, `rank`, `words`; a spec names statistics by `stat_id` (`cohort:dimension:label`) and never carries a number. The renderer reads numerator and denominator from the snapshot and drops ids it cannot find; a malformed spec is rejected whole. The hand-built 框架结构排行 reads the snapshot's `structures` directly and is not a spec kind.
 
 ## Domain Taxonomy Color System
 
@@ -511,15 +583,15 @@ Use canonical domain keys when adding constants, CSS variables, chart configs, o
 
 | Traffic role | Accent | Text | Soft bg | Border | Usage |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Summary | `#8795AA` | `#3F5067` | `#F1F5FB` | `#A6B4C7` | 汇总行、总览 badge |
-| L1 | `#445DF6` | `#243CB5` | `#F2F5FF` | `#B8C4FF` | 一级来源/渠道，最强层级 |
-| L2 | `#2F6EEA` | `#2457C5` | `#F2F6FF` | `#C9D8FF` | 二级来源/渠道，中间层级 |
-| L3 | `#75B1F8` | `#2F6EA8` | `#F4FAFF` | `#CDE6FE` | 三级来源/渠道，最轻层级 |
+| Summary | `#8A8A8A` | `#505050` | `#F3F3F3` | `#B0B0B0` | 汇总行、总览 badge |
+| L1 | `#1854BC` | `#17489F` | `#F4F7FC` | `#ADCAFB` | 一级来源/渠道，最强层级 |
+| L2 | `#2F6FE0` | `#235ABC` | `#F4F7FC` | `#C5DAFE` | 二级来源/渠道，中间层级 |
+| L3 | `#81ABF3` | `#3766B8` | `#F4F7FC` | `#DBE7FC` | 三级来源/渠道，最轻层级 |
 
 - L1/L2/L3 are business hierarchy levels, not warning/info/success states.
 - Do not remap L1 to warning, L2 to info, or L3 to success.
-- Default three-level traffic hierarchy runs deep-to-light: `#445DF6 -> #2F6EEA -> #75B1F8`.
-- If a four-level hierarchy is needed in a future table/chart, insert cobalt `#3264F6` between L1 and L2: `#445DF6 -> #3264F6 -> #2F6EEA -> #75B1F8`.
+- Default three-level traffic hierarchy runs deep-to-light on one hue (OKLCH H261, the v2 series-4 blue): `#1854BC -> #2F6FE0 -> #81ABF3`, about 0.1 OKLCH lightness apart. Summary is a gray neutral, not a fourth blue.
+- If a four-level hierarchy is needed in a future table/chart, insert `#2462CE` between L1 and L2: `#1854BC -> #2462CE -> #2F6FE0 -> #81ABF3`.
 - In traffic tables, hierarchy color may tint the first cell, badge, left accent line, or row hover. Regular cell text stays neutral.
 
 ### Goods TOPSIS Quadrant Palette
@@ -527,42 +599,44 @@ Use canonical domain keys when adding constants, CSS variables, chart configs, o
 | Quadrant | Text | Soft bg | Border | Usage |
 | --- | ---: | ---: | ---: | --- |
 | Star / 明星 | `#BF3D2F` | `#FFF1EF` | `#F2C4C0` | 高综合评分、高优先级商品象限，沿用上涨红 |
-| Stable / 稳定 | `#2457C5` | `#F2F6FF` | `#C9D8FF` | 稳定贡献、持续经营商品象限 |
-| Opportunity / 机会 | `#2F6F9F` | `#EAF3FA` | `#BFD5E5` | 有提升空间或潜力商品象限 |
+| Stable / 稳定 | `#235ABC` | `#F4F7FC` | `#C5DAFE` | 稳定贡献、持续经营商品象限 |
+| Opportunity / 机会 | `#9B4595` | `#FCF3FA` | `#E5C6E1` | 有提升空间或潜力商品象限 |
 | Long Tail / 低效尾部 | `#2F8C5B` | `#ECF8F1` | `#BFE8CA` | 低效尾部、低频、观察商品象限，沿用下跌绿 |
-| Neutral / 未分类 | `#8A8F8A` | `#FAFAFA` | `#E6E6E6` | 缺失、未知、默认分类 |
+| Neutral / 未分类 | `#8A8A8A` | `#F8F8F8` | `#E3E3E3` | 缺失、未知、默认分类 |
 
 - TOPSIS quadrant colors are ranking/category semantics. Star and Long Tail intentionally mirror trend-up red and trend-down green for commerce readability, but they remain quadrant colors rather than generic trend labels.
 - Scores and rankings use neutral or mono typography first; quadrant colors should appear as chip, dot, border, or subtle background.
+- Opportunity is plum because the v1 steel blue could not be told from Stable even with full color vision (OKLab ΔE 8). Plum clears Star and Long Tail, its 2×2 neighbours, and sits only in the CVD floor band against Stable, its diagonal; quadrant chips always carry their text label.
 - Do not extend trend colors to Stable or Opportunity. Trend colors remain reserved for deltas outside the Star / Long Tail quadrant convention above.
 
 ### Funnel Stage Palette
 
 | Funnel role | Color | Soft bg / track | Text on fill | Usage |
 | --- | ---: | ---: | ---: | --- |
-| Track | `#C9D8FF` | `#F2F6FF` | N/A | funnel background track |
-| Stage 1 / Exposure | `#7EA1F7` | `#F2F6FF` | `#FFFFFF` | exposure/top-of-funnel |
-| Stage 2 / Click or Visit | `#5D86F1` | `#EFF4FF` | `#FFFFFF` | click, visit, enter |
-| Stage 3 / Intent | `#4476ED` | `#E8F0FF` | `#FFFFFF` | cart, favorite, consult, intent |
-| Stage 4 / Conversion | `#2F6EEA` | `#F5F8FF` | `#FFFFFF` | pay/conversion endpoint |
-| Connector | `#D7DEE0` | N/A | N/A | funnel connector and guide lines |
+| Track | `#C5DAFE` | `#F4F7FC` | N/A | funnel background track |
+| Stage 1 / Exposure | `#98BBF8` | `#F4F7FC` | `#1F1F1F` | exposure/top-of-funnel |
+| Stage 2 / Click or Visit | `#6397F1` | `#EAF1FC` | `#1F1F1F` | click, visit, enter |
+| Stage 3 / Intent | `#2F6FE0` | `#EAF1FC` | `#FFFFFF` | cart, favorite, consult, intent |
+| Stage 4 / Conversion | `#1854BC` | `#F4F7FC` | `#FFFFFF` | pay/conversion endpoint |
+| Connector | `#E3E3E3` | N/A | N/A | funnel connector and guide lines |
 
-- Funnel stages are sequential flow semantics. The blue ramp belongs to funnel geometry, not info/status color.
-- Use brand blue only at the conversion endpoint or hover/selected bar, not for normal text outside the funnel graphic.
+- Funnel stages are sequential flow semantics. The blue ramp belongs to funnel geometry, not info/status color. The ordered domain palettes (traffic levels, funnel, creator levels) stay single-hue blue ramps next to v2 series 4; AI violet is not used for business hierarchies.
+- Text on a stage fill reaches 4.5:1: ink on the two light stages, white on the two deep ones.
+- Use the deep blue only at the conversion endpoint or hover/selected bar, not for normal text outside the funnel graphic.
 - Funnel side labels and percentages should stay neutral unless rendered inside a filled funnel bar.
 
 ### Creator Level Palette
 
 | Creator level | Gradient from | Gradient to | Chip bg | Text | Usage |
 | --- | ---: | ---: | ---: | ---: | --- |
-| S | `#1F4FBF` | `#445DF6` | `#D6E0FF` | `#1F4FBF` | top-tier creator level |
-| A | `#3264F6` | `#5D86F1` | `#DDE7FF` | `#243CB5` | strong creator level |
-| B | `#2F6EEA` | `#75B1F8` | `#E5EEFF` | `#2457C5` | mid creator level |
-| C | `#75B1F8` | `#CDE6FE` | `#EAF7FF` | `#2F6EA8` | developing creator level |
-| D | `#C9D8FF` | `#F2F6FF` | `#F0F5FF` | `#536F86` | entry/long-tail creator level |
+| S | `#17489F` | `#1854BC` | `#DBE7FC` | `#17489F` | top-tier creator level |
+| A | `#1854BC` | `#2F6FE0` | `#DBE7FC` | `#1854BC` | strong creator level |
+| B | `#2F6FE0` | `#6397F1` | `#EAF1FC` | `#235ABC` | mid creator level |
+| C | `#6397F1` | `#ADCAFB` | `#EAF1FC` | `#3766B8` | developing creator level |
+| D | `#ADCAFB` | `#DBE7FC` | `#F3F3F3` | `#666666` | entry/long-tail creator level |
 
 - Creator levels are rank taxonomy, not status health.
-- Creator level color must run deep-to-light by rank, following the AIOS blue hierarchy instead of mixed status colors.
+- Creator level color must run deep-to-light by rank on the same H261 blue ramp instead of mixed status colors; D (entry) drops to a gray chip with secondary text.
 - Use gradients for level distribution bars or radial marks. Use filled chip bg + text for table and form chips; visual borders should stay transparent.
 - Detail table text remains neutral; only the level chip/marker carries the level color.
 
@@ -570,8 +644,8 @@ Use canonical domain keys when adding constants, CSS variables, chart configs, o
 
 | Cooperation stage | Text | Chip bg | Usage |
 | --- | ---: | ---: | --- |
-| Unclassified / `-` | `#5F6368` | `#EFEFEF` | unknown/default |
-| Initial contact / 初期建联 | `#2457C5` | `#E4ECFF` | first contact |
+| Unclassified / `-` | `#666666` | `#F3F3F3` | unknown/default |
+| Initial contact / 初期建联 | `#235ABC` | `#DBE7FC` | first contact |
 | Sample negotiation / 试样洽谈 | `#8F5E02` | `#FFF0C7` | sample or negotiation |
 | Not considering / 暂不考虑合作 | `#A65F3E` | `#FFE4DD` | rejected/not considering |
 | Paused / 合作暂停 | `#9F3D35` | `#FFE1DE` | paused workflow |
@@ -583,37 +657,40 @@ Use canonical domain keys when adding constants, CSS variables, chart configs, o
 
 ## Runtime Token Mapping
 
-| Role | CSS variable | Tailwind / utility | Ant Design | ECharts / code |
-| --- | --- | --- | --- | --- |
-| Primary action fill | `--brand-primary` | `bg-brand-primary` | `colorPrimary` | selected/highlight fill only |
-| Brand text on light | `--brand-text` | `text-brand-text` | `colorLink` | links, selected tab text, small icons |
-| Text on brand fill | `--brand-on-primary` | `text-brand-on-primary` | primary button text | required on `#2F6EEA` filled surfaces |
-| Primary text | `--text-primary` | `text-text-primary` | text token mapping | headings, primary labels |
-| Secondary text | `--text-secondary` | `text-text-secondary` | text token mapping | axis/body labels |
-| Tertiary text | `--text-tertiary` | `text-text-tertiary` | text token mapping | helper text, metadata |
-| Border | `--border-color` | `border-border-color` | `colorBorder` | grid/axis line |
-| Divider | `--divider-color` | `border-divider-color` | divider mapping | chart split line |
-| Chart series 1 | `--chart-series-1` | N/A | N/A | ordinary primary metric series |
-| Chart series 2-6 | `--chart-series-*` | N/A | N/A | ordinary multi-series charts |
-| Chart muted | `--chart-series-muted` | N/A | N/A | previous period / benchmark |
-| Chart highlight | `--chart-series-highlight` | N/A | N/A | selected / hover point or bar only |
-| Success status | `--status-success` | `.status-badge-success`, `.status-panel-success` | `colorSuccess` | status only |
-| Warning status | `--status-warning` | `.status-badge-warning`, `.status-panel-warning` | `colorWarning` | status only |
-| Danger status | `--status-danger` | `.status-badge-danger`, `.status-panel-danger` | `colorError` | error/destructive only |
-| Info status | `--status-info` | `.status-badge-info`, `.status-panel-info` | `colorInfo` | info only |
-| Neutral status | `--status-neutral` | `.status-badge-neutral`, `.status-panel-neutral` | local mapping | empty/muted state |
-| Trend up | `--trend-up` | `text-trend-up` | N/A | business upward delta |
-| Trend down | `--trend-down` | `text-trend-down` | N/A | business downward delta |
-| Trend neutral | `--trend-neutral` | `text-trend-neutral` | N/A | unchanged/missing delta |
-| Tmall legend | `--platform-tmall` | `text-platform-tmall` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| Douyin legend | `--platform-douyin` | `text-platform-douyin` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| Xiaohongshu legend | `--platform-xiaohongshu` | `text-platform-xiaohongshu` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| Kuaishou legend | `--platform-kuaishou` | `text-platform-kuaishou` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| JD legend | `--platform-jd` | `text-platform-jd` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| WeChat legend | `--platform-wechat` | `text-platform-wechat` | N/A | `apps/web-vite/src/lib/platform-colors.ts` |
-| Unknown platform legend | `--platform-unknown` | `text-platform-unknown` | N/A | fallback platform marker via `apps/web-vite/src/lib/platform-colors.ts` |
-| Domain taxonomy | `--domain-*` | `.domain-chip-*`, CSS Modules | N/A | `apps/web-vite/src/lib/domain-taxonomy-colors.ts` |
-| Material layer | local `--*-material-*` | CSS Modules only | N/A | dashboard/creator module aliases |
+| Role | CSS variable (pages, components) | Tailwind utility (shared name) | ECharts / code |
+| --- | --- | --- | --- |
+| Primary action fill | `--lobe-color-primary` | `bg-brand-primary` | selected/highlight fill only |
+| AI text on light | `--aios-ai-text` | `text-brand-text` | AI labels, selected tab text on AI surfaces, small AI icons (not links) |
+| Text on ink fill | `--lobe-color-bg-container` | `text-brand-on-primary` | required on ink fills (inverts with the theme) |
+| Primary text | `--lobe-color-text` | `text-text-primary` | headings, primary labels |
+| Secondary text | `--lobe-color-text-secondary` | `text-text-secondary` | axis/body labels |
+| Tertiary text | `--lobe-color-text-tertiary` | `text-text-tertiary` | helper text, metadata |
+| Border | `--lobe-color-border` | `border-border-color` | grid/axis line |
+| Hover / emphasis border | `--aios-border-hover` | `border-border-color-hover` | hovered rows, inputs, dividers that need weight |
+| Divider | `--lobe-color-border-secondary` | `border-divider-color` | chart split line |
+| Chart series 1 | `--aios-chart-1` | N/A | ordinary primary metric series |
+| Chart series 2-5 | `--aios-chart-*` | N/A | ordinary multi-series charts |
+| Chart muted | `--aios-chart-muted` | N/A | previous period / benchmark |
+| Chart highlight | `--aios-ai-9` | N/A | selected / hover point or bar only |
+| Success status | `--aios-status-success` | `.status-badge-success`, `.status-panel-success` | status only |
+| Warning status | `--aios-status-warning` | `.status-badge-warning`, `.status-panel-warning` | status only |
+| Danger status | `--aios-status-danger` | `.status-badge-danger`, `.status-panel-danger` | error/destructive only |
+| Info status | `--aios-status-info` | `.status-badge-info`, `.status-panel-info` | info only |
+| Neutral status | `--lobe-color-text-tertiary` | `.status-badge-neutral`, `.status-panel-neutral` | empty/muted state |
+| Trend up | `--aios-trend-up` | `text-trend-up` | business upward delta |
+| Trend down | `--aios-trend-down` | `text-trend-down` | business downward delta |
+| Trend neutral | `--lobe-color-text-tertiary` | `text-trend-neutral` | unchanged/missing delta |
+| Tmall legend | `--platform-tmall` | `text-platform-tmall` | `apps/web-vite/src/lib/platform-colors.ts` |
+| Douyin legend | `--platform-douyin` | `text-platform-douyin` | `apps/web-vite/src/lib/platform-colors.ts` |
+| Xiaohongshu legend | `--platform-xiaohongshu` | `text-platform-xiaohongshu` | `apps/web-vite/src/lib/platform-colors.ts` |
+| Kuaishou legend | `--platform-kuaishou` | `text-platform-kuaishou` | `apps/web-vite/src/lib/platform-colors.ts` |
+| JD legend | `--platform-jd` | `text-platform-jd` | `apps/web-vite/src/lib/platform-colors.ts` |
+| WeChat legend | `--platform-wechat` | `text-platform-wechat` | `apps/web-vite/src/lib/platform-colors.ts` |
+| Unknown platform legend | `--platform-unknown` | `text-platform-unknown` | fallback platform marker via `apps/web-vite/src/lib/platform-colors.ts` |
+| Domain taxonomy | `--domain-*` | `.domain-chip-*`, CSS Modules | `apps/web-vite/src/lib/domain-taxonomy-colors.ts` |
+| Material layer | local `--*-material-*` | CSS Modules only | dashboard/creator module aliases |
+
+On v2 surfaces, UI primitives come from lobe (`--lobe-color-text*`, `--lobe-color-bg-*`, `--lobe-color-border*`, `--lobe-color-fill-*`, `--lobe-color-primary` for ink, `--lobe-border-radius*`, `--lobe-box-shadow*`) and AIOS roles from `aios-theme.css` (`--aios-ai-*`, `--aios-stage*`, `--aios-status-*`, `--aios-trend-*`, `--aios-chart-*`, `--aios-font-*`). Tailwind utilities resolve through the shared names, which the bridge points at these same roles, so both columns follow the theme.
 
 When adding a new design role, update the runtime mapping first. A color or type rule is not considered part of the design system until it has a semantic role, a token, and an implementation path.
 
@@ -671,15 +748,16 @@ Raw color values are allowed only at explicit design-system source boundaries. O
 | Raw color source file | Owner | What belongs here | What does not belong here |
 | --- | --- | --- | --- |
 | `apps/web-vite/src/styles/design-tokens.css` | Runtime token source | Canonical runtime CSS variables for global color, shadow, chart, platform, and domain taxonomy tokens. | Page-local materials, one-off chart colors, component-specific values. |
+| `apps/web-vite/src/styles/aios-theme.css` | Visual language v2 token source | AI violet scale and roles, AI sweep, media stage, status text, trend and chart v2 values in light (`html:root`) and dark (`html:root[data-theme='dark']`) blocks, plus the legacy-token bridge on `html:root`. | Page-local materials, lobe primitive overrides beyond fonts and focus ring, or component-specific raw colors. |
 | `apps/web-vite/src/lib/design-tokens.ts` | Static token mirror | Token values mirrored from `DESIGN_TOKENS.json`. | Manually invented component-local colors or values outside this document. |
 | `apps/web-vite/src/lib/platform-colors.ts` | Platform legend color source | Platform legend and marker colors for Tmall, Douyin, Xiaohongshu, Kuaishou, JD, WeChat, and fallback platform markers. | Buttons, generic UI color, status color, trend color, or layout decoration. |
 | `apps/web-vite/src/lib/domain-taxonomy-colors.ts` | Domain taxonomy color source | Traffic hierarchy, TOPSIS quadrants, funnel stages, creator levels, cooperation stages, and ordinary chart series aliases. | Generic status, platform, trend, or page-local material colors. |
 | `apps/web-vite/src/styles/echarts-theme.ts` | ECharts token adapter | Chart theme constants, token-backed fallbacks, gradients, reusable chart helper materials, and the canonical TS values consumed by `apps/web-vite/src/theme/echarts-theme.ts`. | Page-specific chart category colors, duplicate platform/domain maps, or raw literals that should live in token/platform/domain sources. |
 | `apps/web-vite/src/styles/echarts.css` | ECharts CSS adapter | ECharts CSS custom-property defaults and raw fallback values centralized only as `--echarts-fallback-*`; fallback values and exposed `--echarts-platform-*` / `--echarts-color-*` aliases must map back to documented platform, chart, text, and divider tokens. | Page-local CSS colors, one-off component styling, raw colors outside fallback declarations, or a second platform/chart palette source. |
-| `apps/web-vite/src/theme/ant-theme.ts` | Ant Design theme adapter | Design-token mappings into Ant token slots and explicitly isolated dark-theme adapter values. | Page-specific Ant component styling or local color experiments. |
+| `apps/web-vite/src/lib/echarts-appearance.ts` | ECharts dark adapter | Light-to-dark pairs of chart token colors (text, lines, soft surfaces, series, trends, and surface-only white, tooltip and shadow values); chart wrappers apply it in dark mode because canvas cannot follow CSS variables. | New chart colors or page-specific categories, which belong in the token, platform or domain sources. |
 | `apps/web-vite/src/app/dashboard/creator/_components/creator-chart-colors.ts` | Creator chart color source | Creator chart text, structural, material, tooltip, level, and platform semantics grouped by role. | Generic AIOS UI colors, ordinary page styling, or values that should live in shared token/domain/platform sources. |
 | `apps/web-vite/src/app/dashboard/_components/dashboard-token-aliases.css` | Dashboard runtime token source | Dashboard-local material primitives, translucent surfaces, shadows, and runtime aliases that must ship in production dashboard CSS. | Generic AIOS UI colors, new chart palettes, or values that should live in global design tokens, platform colors, or domain taxonomy colors. |
-| `apps/web-vite/src/app/page-materials.css` | Homepage material token source | Homepage-local material primitives used by `page.module.css` and `page-hero.module.css`, imported as plain CSS so production extraction preserves the variables. | Generic AIOS UI colors, chart palettes, or values that should live in global design tokens, platform colors, or domain taxonomy colors. |
+| `apps/web-vite/src/app/page-materials.css` | Legacy homepage material source | Retained historical homepage-local material primitives; the current home no longer imports these styles and uses shared runtime tokens in `_components/home-page.module.css`. | New homepage palettes, live metrics, console navigation or duplicated global tokens. |
 
 ## Motion Language
 
@@ -688,17 +766,20 @@ Raw color values are allowed only at explicit design-system source boundaries. O
 - Default easing: `cubic-bezier(0.4, 0, 0.2, 1)`.
 - Hover: use color, border, background, or slight shadow changes. Avoid large movement.
 - Active: tactile feedback may use `translateY(1px)` or `scale(0.98)` for buttons only.
-- Focus: visible 2px brand focus ring, never remove keyboard focus.
+- Focus: visible neutral ink focus (`--lobe-focus-ring-color`), never remove keyboard focus. Native fields use the base ring; lobe Input, Password, InputNumber and TextArea delegate focus and validation to their outer root. Exclude their stable native-child classes from the base ring so normal and invalid focus never draw an inner rectangle. AI violet indicates AI work, not generic typing. Filled (the Dark default) and borderless fields use the same single neutral outer focus recipe in `aios-theme.css`; disabled and invalid roots are excluded. Error focus retains the component error treatment.
 - Loading: skeletons that match the final layout; no generic full-screen spinner when a scoped skeleton is possible.
 - Reduced motion: disable transform-heavy transitions under `prefers-reduced-motion: reduce`; keep opacity/color changes acceptable.
+- v2 AI motion: persistent motion exists only while AI works (sweep, thinking pulse, streaming text) and stops with it; see [Visual Language v2](#visual-language-v2) Motion.
 - Banned motion patterns: custom cursors, looping decorative animations on dashboards, parallax in operational pages, animating width/height/top/left, and hover glow effects.
 
 ## Component Grammar
 
+> Base grammar; [Visual Language v2](#visual-language-v2) (Components and AI Grammar) wins where the two disagree.
+
 - Layout: max-width constrained content, grid-first composition, 8px spacing rhythm. Dashboard density can be high but must remain scannable.
 - Cards: use cards only when they group a task or dataset. Prefer subtle borders and white/near-white surfaces over heavy shadows.
 - DeepSeek-like metric rows: important KPI groups may be unboxed and separated by whitespace; not every metric needs a card.
-- Buttons: primary uses Brand Blue fill with Brand On Primary text; secondary uses white/outline; danger uses explicit danger only for destructive actions. Radius 6-12px depending on size.
+- Buttons: primary uses the ink fill (lobe `type="primary"`) with white text, and an action that starts AI uses `AiActionButton`; secondary uses white/outline; danger uses explicit danger only for destructive actions. Radius 6-12px depending on size.
 - Tags/badges: 11-12px label, medium weight, soft background, no saturated fill unless status must interrupt.
 - Status badges/panels: use `.status-badge-*` and `.status-panel-*` utilities or the `Badge` atom status prop. Do not compose status UI from raw Tailwind reds/greens/blues.
 - Forms: label above input, helper text below, inline error below field. Never use floating labels.
@@ -817,12 +898,12 @@ Components and modules are both useful, but they solve different problems. Share
 
 - Must keep consistent: font families, numeric tabular treatment, text hierarchy, trend colors, chart axis/grid colors, border radius, and button/tag density.
 - Allowed local variation: platform brand colors, chart series colors for categorical comparison, and page-specific dense table layouts.
-- Forbidden deviations: introducing a second primary accent, using an alternate legacy blue as a shadow primary, using pure black, random one-off gray scales, local trend color definitions, or page-only type scales without adding tokens.
+- Forbidden deviations: introducing an accent beyond ink and AI violet, using an alternate legacy blue as a shadow primary, using pure black, random one-off gray scales, local trend color definitions, or page-only type scales without adding tokens.
 - Conflict resolution order:
   1. Product/business meaning and data correctness.
   2. `DESIGN.md` style authority.
   3. `apps/web-vite/src/styles/design-tokens.css` runtime tokens.
-  4. Ant Design / ECharts / Tailwind implementation mappings.
+  4. lobe-ui / ECharts / Tailwind implementation mappings.
   5. Local CSS Modules.
 - If a page needs a new color or type scale, add it to the token layer first or document why a local exception is temporary.
 - If a page grows into a large domain module, split by business concern first. Do not push domain-specific state or API mapping into shared components to make the page file look smaller.
@@ -839,17 +920,18 @@ Components and modules are both useful, but they solve different problems. Share
 
 ## Implementation Rules
 
-- Runtime token source: `apps/web-vite/src/styles/design-tokens.css`.
+- Runtime token sources: `apps/web-vite/src/styles/aios-theme.css` (v2 roles on lobe-ui's `--lobe-*` theme, plus the bridge) and `apps/web-vite/src/styles/design-tokens.css` (shared names with v2 values).
+- lobe-ui runtime: `apps/web-vite/src/components/lobe-provider.tsx` imports the lobe stylesheets, the Geist fonts and `aios-theme.css`, sets no neutral palette (lobe's untinted gray; `theme-preference.ts` calls `setLobeTheme({ appearance })`), keeps lobe's CDN fonts off, and passes lobe's zh-CN resources. `ViteProviders` mounts it app-wide.
+- Every `--aios-*` color has a light and a dark value in `aios-theme.css`; adding a v2 color without its dark value is incomplete.
 - Generated/static token mirror: `DESIGN_TOKENS.json` and `apps/web-vite/src/lib/design-tokens.ts`; this full mirror is enforced by `npm run verify:design:mirror`.
 - Runtime CSS token sync is executable: run `npm run verify:design:runtime-tokens`. Non-color token families in `apps/web-vite/src/styles/design-tokens.css` (typography, spacing, radius, shadow, transition, breakpoint, and component tokens) must match `DESIGN_TOKENS.json`; do not hand-tune runtime CSS without updating the token mirror.
 - Transition tokens are split by CSS property semantics: `--transition-*` remains a full shorthand token for author CSS (`transition: all var(--transition-fast)`), while Tailwind `transitionDuration` must use duration-only `--transition-duration-*` tokens and Tailwind `transitionTimingFunction` must use easing-only `--transition-easing-*` tokens.
-- Theme adapter value helper: `apps/web-vite/src/lib/design-token-values.ts`; React theme context, Ant Design adapters, and ECharts adapters should import it instead of duplicating hex values. Value-helper sync is executable: run `npm run verify:design:token-values-sync`; `DESIGN_COLOR_VALUES`, `DESIGN_FONT_FAMILY`, and `DESIGN_SHADOW_VALUES` must stay mapped to `designTokens`, `PLATFORM_LEGEND_COLORS`, and `CHART_SERIES_COLORS` rather than local literals.
+- Theme adapter value helper: `apps/web-vite/src/lib/design-token-values.ts`; React theme context and ECharts adapters should import it instead of duplicating hex values. Value-helper sync is executable: run `npm run verify:design:token-values-sync`; `DESIGN_COLOR_VALUES`, `DESIGN_FONT_FAMILY`, and `DESIGN_SHADOW_VALUES` must stay mapped to `designTokens`, `PLATFORM_LEGEND_COLORS`, and `CHART_SERIES_COLORS` rather than local literals.
 - Raw color source allowlist: `scripts/config/allowlists/design-raw-color-allowlist.json`; this file is enforced by `scripts/checks/design/raw-colors-non-modules.mjs` and `scripts/checks/design/raw-color-allowlist-docs.mjs`, and must stay aligned with the Raw Color Governance table.
 - Token color sync coverage config: `scripts/design-token-color-sync.config.json`; this file is enforced by `scripts/checks/frontend/design-token-color-sync.mjs` and owns the status, trend, platform, chart, and domain taxonomy keys covered by `npm run verify:design:tokens`.
-- Token generator boundary enforcement is executable: run `npm run verify:design:token-generator`. `scripts/build/compile-tokens.js` is scoped to `apps/web-vite/src/lib/design-tokens.ts`; it must not generate CSS shims, Tailwind config, Ant Design theme adapters, or runtime token CSS.
+- Token generator boundary enforcement is executable: run `npm run verify:design:token-generator`. `scripts/build/compile-tokens.js` is scoped to `apps/web-vite/src/lib/design-tokens.ts`; it must not generate CSS shims, Tailwind config, theme adapters, or runtime token CSS.
 - Tailwind aliases live in `tailwind.config.ts` and are enforced by `npm run verify:design:tailwind` plus `npm run verify:design:tailwind-non-color-aliases`; Tailwind is a token consumption surface, so custom aliases must point back to runtime CSS variables instead of hardcoded legacy palette or sizing values. Do not reintroduce nested compatibility palettes such as `primary.500`, `success.500`, `warning.50`, `error.500`, or `info.DEFAULT`; add explicit semantic aliases instead.
 - Tailwind default palette utility debt, arbitrary raw-color utility usage, and legacy compatibility color aliases are enforced by `npm run verify:design:tailwind-utilities`. `scripts/tailwind-utility-color-allowlist.json` is a temporary legacy-debt ledger for default palette utilities only, not permission for new default palette usage and not an escape hatch for arbitrary raw colors or compatibility aliases; any reduced count must shrink the allowlist in the same change.
-- Ant Design token mapping lives in `apps/web-vite/src/theme/ant-theme.ts` and is enforced by `npm run verify:design:antd-theme-token-sync`; this guard owns AntD adapter consumption of `DESIGN_COLOR_VALUES`, `DESIGN_FONT_FAMILY`, and `DESIGN_SHADOW_VALUES`, while the helper internals remain owned by `npm run verify:design:token-values-sync`. Selected numeric adapter values must stay synchronized with `DESIGN_TOKENS.json`, component-level Ant tokens are part of the adapter contract, and optional dark adapter raw values must stay isolated in `ANT_DARK_THEME_ADAPTER_COLORS` without implying runtime dark mode support.
 - ECharts defaults live in `apps/web-vite/src/styles/echarts-theme.ts`, `apps/web-vite/src/theme/echarts-theme.ts`, and `apps/web-vite/src/styles/echarts.css`; keep `apps/web-vite/src/styles/echarts-theme.ts` grouped by series, text, surface, structural, material, and semantic series roles, and keep `apps/web-vite/src/styles/echarts.css` raw fallback literals only in `--echarts-fallback-*` declarations.
 - ECharts adapter sync is executable: run `npm run verify:design:echarts-theme-token-sync`. This guard owns only ECharts adapter consumption across `apps/web-vite/src/styles/echarts-theme.ts` and `apps/web-vite/src/theme/echarts-theme.ts`; canonical token equality remains owned by `npm run verify:design:tokens`, and raw literal placement remains owned by `npm run verify:design:raw-colors`.
 - ECharts CSS fallback sync is executable: run `npm run verify:design:echarts-css-token-sync`. This guard owns `apps/web-vite/src/styles/echarts.css` fallback value equality and public CSS alias chains; new ECharts fallback variables must first be backed by `DESIGN_TOKENS.json`, platform/domain source constants, or a documented material derivation.
@@ -860,8 +942,7 @@ Components and modules are both useful, but they solve different problems. Share
 - If a token value changes, keep the CSS token, JSON token, TypeScript mirror, Tailwind alias, and theme mappings aligned. `DESIGN_TOKENS.json` and `apps/web-vite/src/lib/design-tokens.ts` must remain structurally identical, including typography, spacing, radius, shadow, and component tokens.
 - Prefer semantic helpers over page-local constants. Local constants must be named by category and justified by chart/category scope.
 - Do not introduce new dependencies for visual polish unless the package already exists in `package.json` or the user explicitly approves installation.
-- Do not introduce dark mode behavior unless the task explicitly targets dark theme. Current AIOS runtime is light theme only.
-- `apps/web-vite/src/theme/ant-theme.ts` may keep explicit Ant Design dark adapter exception values only inside `ANT_DARK_THEME_ADAPTER_COLORS`; do not spread dark raw colors through light theme tokens or components.
+- Dark mode is enabled per module only after its dark review (see Themes); until then `setLobeTheme` stays light.
 
 ## Agent Implementation Protocol
 
@@ -869,7 +950,7 @@ Components and modules are both useful, but they solve different problems. Share
 - Before editing `apps/web-vite/src/app/reports/special/**`, apply the Static Special Reports contract first, then the generic Report Pages archetype. If a requested layout would make the report read like a dashboard, update the report structure or this authority document instead of adding local visual exceptions.
 - Before adding a color, font size, shadow, radius, or chart palette, check whether an existing token or component contract already covers the role.
 - Before extracting UI, decide whether the target is a reusable shared component or a domain module file. Shared components protect product-wide contracts; domain module files protect page maintainability.
-- If adding or changing a token, update every mapped implementation surface in the same change set: CSS variables, JSON mirror, TypeScript mirror, Tailwind aliases, Ant Design theme, and ECharts defaults when relevant.
+- If adding or changing a token, update every mapped implementation surface in the same change set: CSS variables, JSON mirror, TypeScript mirror, Tailwind aliases, and ECharts defaults when relevant.
 - If adding a reusable visual state, prefer a small component or utility class over page-local CSS. Page-local styling is acceptable only for layout or one-off chart/category presentation.
 - If a rule conflicts with runtime behavior, inspect the runtime implementation first, then update this document only when the intended behavior is confirmed.
 - Do not weaken this authority with vague exceptions such as "looks nicer here". Exceptions must name the affected page, reason, risk, and planned removal condition.
@@ -893,7 +974,6 @@ npm run verify:design:docs
 npm run verify:design:docs-behavior
 npm run verify:design:token-values-sync
 npm run verify:design:token-generator
-npm run verify:design:antd-theme-token-sync
 npm run verify:design:echarts-theme-token-sync
 npm run verify:design:echarts-css-token-sync
 npm run verify:components:api
@@ -924,7 +1004,10 @@ For docs-only `DESIGN.md` changes, `frontend_worker_entry.sh` and `git diff --ch
 - [ ] Color values map to semantic CSS variables unless a local category palette is justified.
 - [ ] Trend indicators use `--trend-up`, `--trend-down`, and `--trend-neutral`.
 - [ ] ECharts axes, grids, labels, ordinary series, and semantic category series follow this authority.
-- [ ] Ant Design theme maps to AIOS tokens.
+- [ ] v2 surfaces: ink for human actions; AI violet only for AI presence and AI selection; links and generic keyboard focus use ink; at most one violet-filled button per screen.
+- [ ] v2 AI work uses the five-state grammar and the AI output marker; persistent motion runs only while AI works and none under reduced motion.
+- [ ] v2 CSS consumes `--lobe-*` and `--aios-*` (no new legacy token names); lobe components are styled only through slots, `.lobe-*` classes, `data-*`, and variables.
+- [ ] Every `--aios-*` color in use has a dark value, and media previews sit on `--aios-stage`.
 - [ ] Status UI uses status utilities or the Badge atom, not raw Tailwind palette utilities.
 - [ ] Platform chart colors resolve through `apps/web-vite/src/lib/platform-colors.ts`.
 - [ ] Traffic hierarchy, Goods TOPSIS quadrants, funnel stages, creator levels, and cooperation stages use the Domain Taxonomy Color System.

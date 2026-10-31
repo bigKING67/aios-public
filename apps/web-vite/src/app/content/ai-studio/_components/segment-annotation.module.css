@@ -4,10 +4,22 @@
  * forms, and dense tables.
  */
 
+/*
+ * The source sits in a column as wide as the video itself (vertical 9:16 for most originals), and the
+ * create form plus the timeline share the rest, so neither side leaves a block of empty space.
+ */
 .workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: var(--spacing-4);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--spacing-6);
+  align-items: start;
+  min-width: 0;
+}
+
+.workColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
   min-width: 0;
 }
 
@@ -20,13 +32,17 @@
   min-width: 0;
 }
 
+/*
+ * Links read in ink (weight 500, underline on hover) and the secondary action is a neutral outline
+ * button: AI violet stays on AI surfaces only (DESIGN.md › Color, 2026-10-25).
+ */
 .backLink,
 .secondaryLink,
 .tableLink {
   display: inline-flex;
   gap: var(--spacing-1);
   align-items: center;
-  color: var(--brand-text-strong);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
@@ -34,15 +50,16 @@
 
 .backLink {
   margin-bottom: var(--spacing-2);
+  color: var(--lobe-color-text-secondary);
 }
 
 .secondaryLink {
   flex: 0 0 auto;
   min-height: 36px;
   padding: 0 var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-md);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-base);
 }
 
@@ -51,24 +68,29 @@
 }
 
 .backLink:hover,
-.secondaryLink:hover,
 .tableLink:hover {
-  color: var(--brand-dark);
+  color: var(--lobe-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.secondaryLink:hover {
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
   text-decoration: none;
 }
 
 .backLink:focus-visible,
 .secondaryLink:focus-visible,
-.tableLink:focus-visible,
-.timelineBlock:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+.tableLink:focus-visible {
+  outline: 2px solid var(--lobe-focus-ring-color);
   outline-offset: 2px;
 }
 
+/* Times use the body face with tabular digits: columns align without reading as code. */
 .presetName,
 .mono {
-  color: var(--text-secondary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
 }
@@ -76,12 +98,12 @@
 .mono {
   display: inline-flex;
   flex-direction: column;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   white-space: nowrap;
 }
 
 .mono small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
@@ -92,28 +114,29 @@
 
 /* Player */
 
+/* A fixed 320px column fits a vertical original; the note and 改用预览版 wrap under it. */
 .player {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3);
+  width: 320px;
+  max-width: 100%;
   min-width: 0;
 }
 
+/* The frame takes the video's own ratio once metadata loads (9:16 before that). */
 .video,
 .playerSkeleton {
   width: 100%;
-  max-height: 520px;
-  aspect-ratio: 9 / 16;
+  height: auto;
+  max-height: min(568px, 70vh);
+  aspect-ratio: auto 9 / 16;
   border-radius: var(--border-radius-lg);
-  background: var(--text-primary);
+  background: var(--aios-stage);
 }
 
 .video {
   object-fit: contain;
-}
-
-.playerSkeleton {
-  height: 360px;
 }
 
 .playerEmpty {
@@ -121,10 +144,10 @@
   gap: var(--spacing-2);
   justify-items: center;
   padding: var(--spacing-6) var(--spacing-4);
-  border: 1px dashed var(--border-color);
+  border: 1px dashed var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  color: var(--text-secondary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
   text-align: center;
 }
 
@@ -141,251 +164,9 @@
   gap: var(--spacing-2) var(--spacing-3);
   align-items: center;
   justify-content: space-between;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
-}
-
-/* Timeline */
-
-.timelineScroll {
-  min-width: 0;
-  overflow-x: auto;
-}
-
-.timeline {
-  display: grid;
-  gap: var(--spacing-2);
-  min-width: 560px;
-}
-
-.timelineNow {
-  color: var(--text-primary);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-  font-variant-numeric: tabular-nums;
-}
-
-.timelineRuler,
-.cutRow {
-  position: relative;
-  height: 18px;
-  margin: 0;
-  padding: 0;
-  color: var(--text-tertiary);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-  font-variant-numeric: tabular-nums;
-  list-style: none;
-}
-
-.rulerTick,
-.rulerEnd,
-.cutPoint {
-  position: absolute;
-  top: 0;
-  white-space: nowrap;
-}
-
-/* Each mark starts at its time; the end mark ends at the right edge. */
-.rulerTick {
-  padding-left: 3px;
-  border-left: 1px solid var(--border-color);
-}
-
-.rulerEnd {
-  right: 0;
-  padding-right: 3px;
-  border-right: 1px solid var(--border-color);
-}
-
-.timelineRulerSeekable {
-  cursor: pointer;
-}
-
-.rulerHover {
-  position: absolute;
-  top: 0;
-  z-index: 1;
-  padding: 0 var(--spacing-1);
-  border-radius: var(--border-radius-sm);
-  color: var(--bg-card);
-  background: var(--text-primary);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.rulerHoverStart {
-  transform: none;
-}
-
-.rulerHoverEnd {
-  transform: translateX(-100%);
-}
-
-.hoverLine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 2;
-  width: 1px;
-  background: var(--text-tertiary);
-  pointer-events: none;
-}
-
-.gridLine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--divider-color);
-  pointer-events: none;
-}
-
-.cutPoint {
-  padding-top: 4px;
-  color: var(--text-secondary);
-  transform: translateX(-50%);
-}
-
-.cutPoint::before {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 1px;
-  height: 4px;
-  background: var(--text-tertiary);
-  content: '';
-}
-
-.cutPointStart {
-  transform: none;
-}
-
-.cutPointStart::before {
-  left: 0;
-}
-
-.cutPointEnd {
-  transform: translateX(-100%);
-}
-
-.cutPointEnd::before {
-  right: 0;
-  left: auto;
-}
-
-.cutPointQuiet span {
-  visibility: hidden;
-}
-
-.timelineLane {
-  display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  gap: var(--spacing-2);
-  align-items: center;
-}
-
-.timelineLaneTitle {
-  color: var(--text-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-}
-
-.timelineTrack {
-  position: relative;
-  height: 40px;
-  border: 1px solid var(--divider-color);
-  border-radius: var(--border-radius-md);
-  background: var(--bg-subtle);
-  overflow: hidden;
-}
-
-.playhead {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 2;
-  width: 2px;
-  background: var(--text-primary);
-  pointer-events: none;
-}
-
-.timelineBlock {
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  min-width: 6px;
-  padding: 0 var(--spacing-1);
-  border: 1px solid transparent;
-  border-radius: var(--border-radius-sm);
-  color: var(--text-inverse);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-tight);
-  text-align: left;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.timelineBlock span {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Label order maps to series 1, 6, 2, 5, 4 (see LABEL_TONE_SERIES); series 3
-   is skipped because it is nearly identical to series 1. */
-.tone1 { background: var(--chart-series-1); }
-.tone2 { color: var(--text-primary); background: var(--chart-series-2); }
-.tone4 { background: var(--chart-series-4); }
-.tone5 { background: var(--chart-series-5); }
-.tone6 { background: var(--chart-series-6); }
-.toneMuted { background: var(--chart-series-muted); }
-
-.timelineBlockPending {
-  opacity: 0.6;
-  border-style: dashed;
-  border-color: var(--text-primary);
-}
-
-.timelineBlockStale {
-  opacity: 0.4;
-  text-decoration: line-through;
-}
-
-.timelineBlockActive {
-  z-index: 1;
-  opacity: 1;
-  box-shadow: 0 0 0 2px var(--brand-focus-ring);
-}
-
-.timelineBlockConflict {
-  z-index: 1;
-  opacity: 1;
-  box-shadow: 0 0 0 2px var(--status-danger);
-}
-
-/* Joined to the previous selling-point segment: square inner edge plus a link glyph. */
-.timelineBlockJoined {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.timelineBlockJoined :global(.anticon) {
-  display: inline-block;
-  margin-right: 2px;
-}
-
-.timelineContextBlock {
-  display: flex;
-  align-items: center;
-  border-color: var(--border-color);
-  color: var(--text-secondary);
-  background: var(--bg-card);
-  cursor: default;
 }
 
 .labelCell {
@@ -394,7 +175,7 @@
 }
 
 .labelCell small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
@@ -418,8 +199,14 @@
   min-width: 0;
 }
 
+/* lobe inputs carry an intrinsic min-width that would widen the field's implicit column. */
+.field > *,
+.field input {
+  min-width: 0;
+}
+
 .field label {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
@@ -427,6 +214,17 @@
 .timeInputRow {
   display: flex;
   gap: var(--spacing-2);
+  min-width: 0;
+}
+
+/* The input gives way; the 取当前时间 button keeps its label on one line inside the field. */
+.timeInputRow > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.timeInputRow > button {
+  flex: none;
 }
 
 .fieldHelp,
@@ -437,11 +235,11 @@
 }
 
 .fieldHelp {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .fieldError {
-  color: var(--status-danger);
+  color: var(--aios-status-danger);
 }
 
 .formFooter {
@@ -454,10 +252,24 @@
 
 /* Lists */
 
+/* Filters keep their natural widths instead of stretching across the card. */
 .filterBar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-2);
+  align-items: center;
+  min-width: 0;
+}
+
+.filterSelect {
+  width: 160px;
+}
+
+@media (max-width: 640px) {
+  .filterBar > * {
+    flex: 1 1 100%;
+    width: auto;
+  }
 }
 
 .listToolbar,
@@ -469,7 +281,7 @@
 }
 
 .readOnlyHint {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 
@@ -484,7 +296,7 @@
 
 .originEvidence small {
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -495,11 +307,11 @@
 }
 
 .rowActive > td {
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 .rowConflict > td {
-  background: var(--status-danger-bg);
+  background: var(--lobe-color-error-bg);
 }
 
 .loadMore {
@@ -524,29 +336,29 @@
   height: 64px;
   border-radius: var(--border-radius-sm);
   object-fit: cover;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .assetCoverEmpty {
   display: grid;
   place-items: center;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
 }
 
 .assetTitle {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 /* The pinned actions column must hide the columns scrolling under it. */
 .tableScroll .pinnedActionsCell {
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .tableScroll .rowActive > td.pinnedActionsCell {
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 @media (pointer: coarse) {
@@ -563,12 +375,21 @@
 }
 
 @media (max-width: 680px) {
-  /* A 9:16 source would otherwise fill the first screen and push the in/out
-     controls below the fold; letterbox it inside a shorter frame. */
+  /* A 9:16 source would otherwise fill the first screen and push the in/out controls below the
+     fold: the frame is height-led here, so a vertical original keeps its width instead of
+     letterboxing inside a full-width box (a landscape one still caps at the column width). */
+  .player {
+    width: 100%;
+  }
+
   .video,
   .playerSkeleton {
-    max-height: 42vh;
-    max-height: 42svh;
+    align-self: flex-start;
+    width: auto;
+    max-width: 100%;
+    height: 42vh;
+    height: 42svh;
+    max-height: none;
   }
 
   .formGrid {

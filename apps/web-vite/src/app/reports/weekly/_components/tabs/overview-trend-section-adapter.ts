@@ -5,7 +5,7 @@ import type {
 } from './overview-trend-section-contracts';
 
 export const OVERVIEW_TREND_CHART_COLORS = [
-  'var(--chart-series-3)',
+  'var(--aios-chart-3)',
   'var(--chart-color-prev-week)',
 ] as const;
 

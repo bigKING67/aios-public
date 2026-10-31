@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { act, renderHook } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { MessageInstance } from "antd/es/message/interface";
+import type { SampleInventoryMessageApi } from "./use-sample-inventory-actions";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { SampleInventoryInbound, SampleInventorySample } from "@/lib/generated-api-contract";
@@ -69,7 +69,7 @@ function renderActions(queryClient: QueryClient) {
     error: vi.fn(),
     success: vi.fn(),
     warning: vi.fn(),
-  } as unknown as MessageInstance;
+  } as unknown as SampleInventoryMessageApi;
   const wrapper = ({ children }: PropsWithChildren) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );

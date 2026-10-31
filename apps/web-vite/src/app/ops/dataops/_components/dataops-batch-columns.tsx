@@ -1,7 +1,8 @@
 'use client';
 
-import { Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Tag, type TableColumnsType } from '@lobehub/ui';
+import type { DataOpsTagTone } from './dataops-hub-constants';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import {
   formatDateTime,
   getBatchActionText,
@@ -28,10 +29,10 @@ interface DataOpsBatchColumnsOptions {
   ) => void | Promise<void>;
 }
 
-const BATCH_RESULT_STATUS_COLOR: Record<BatchExecutionResultItem['status'], string> = {
-  success: 'green',
-  failed: 'red',
-  skipped: 'default',
+const BATCH_RESULT_STATUS_TONE: Record<BatchExecutionResultItem['status'], DataOpsTagTone> = {
+  success: 'success',
+  failed: 'danger',
+  skipped: 'neutral',
 };
 
 const BATCH_RESULT_STATUS_TEXT: Record<BatchExecutionResultItem['status'], string> = {
@@ -40,7 +41,7 @@ const BATCH_RESULT_STATUS_TEXT: Record<BatchExecutionResultItem['status'], strin
   skipped: '跳过',
 };
 
-export function buildDataOpsBatchResultColumns(): ColumnsType<BatchExecutionResultItem> {
+export function buildDataOpsBatchResultColumns(): TableColumnsType<BatchExecutionResultItem> {
   return [
     {
       title: '任务',
@@ -54,7 +55,7 @@ export function buildDataOpsBatchResultColumns(): ColumnsType<BatchExecutionResu
       key: 'status',
       width: 110,
       render: (value: BatchExecutionResultItem['status']) => (
-        <Tag color={BATCH_RESULT_STATUS_COLOR[value]}>{BATCH_RESULT_STATUS_TEXT[value]}</Tag>
+        <DataOpsToneTag tone={BATCH_RESULT_STATUS_TONE[value]}>{BATCH_RESULT_STATUS_TEXT[value]}</DataOpsToneTag>
       ),
     },
     {
@@ -62,9 +63,9 @@ export function buildDataOpsBatchResultColumns(): ColumnsType<BatchExecutionResu
       key: 'retryable',
       width: 110,
       render: (_value, record) => (
-        <Tag color={record.retryable ? 'processing' : 'default'}>
+        <DataOpsToneTag tone={record.retryable ? 'info' : 'neutral'}>
           {record.retryable ? '是' : '否'}
-        </Tag>
+        </DataOpsToneTag>
       ),
     },
     {
@@ -75,7 +76,7 @@ export function buildDataOpsBatchResultColumns(): ColumnsType<BatchExecutionResu
   ];
 }
 
-export function buildDataOpsBatchResultMobileColumns(): ColumnsType<BatchExecutionResultItem> {
+export function buildDataOpsBatchResultMobileColumns(): TableColumnsType<BatchExecutionResultItem> {
   return [
     {
       title: '批量结果',
@@ -84,14 +85,14 @@ export function buildDataOpsBatchResultMobileColumns(): ColumnsType<BatchExecuti
         <div className="space-y-2 py-1">
           <div className="flex items-start justify-between gap-2">
             <p className="m-0 text-sm font-semibold text-text-primary">{record.pipelineName}</p>
-            <Tag color={BATCH_RESULT_STATUS_COLOR[record.status]}>
+            <DataOpsToneTag tone={BATCH_RESULT_STATUS_TONE[record.status]}>
               {BATCH_RESULT_STATUS_TEXT[record.status]}
-            </Tag>
+            </DataOpsToneTag>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Tag color={record.retryable ? 'processing' : 'default'}>
+            <DataOpsToneTag tone={record.retryable ? 'info' : 'neutral'}>
               {record.retryable ? '可重试' : '不可重试'}
-            </Tag>
+            </DataOpsToneTag>
           </div>
           <p className="m-0 break-words text-xs text-text-secondary">{record.message}</p>
         </div>
@@ -105,7 +106,7 @@ export function buildDataOpsBatchHistoryColumns({
   globalActionBusy,
   onViewBatchResult,
   onRetryBatchHistory,
-}: DataOpsBatchColumnsOptions): ColumnsType<BatchExecutionSummary> {
+}: DataOpsBatchColumnsOptions): TableColumnsType<BatchExecutionSummary> {
   return [
     {
       title: '时间',
@@ -202,7 +203,7 @@ export function buildDataOpsBatchHistoryMobileColumns({
   globalActionBusy,
   onViewBatchResult,
   onRetryBatchHistory,
-}: DataOpsBatchColumnsOptions): ColumnsType<BatchExecutionSummary> {
+}: DataOpsBatchColumnsOptions): TableColumnsType<BatchExecutionSummary> {
   return [
     {
       title: '批量历史',

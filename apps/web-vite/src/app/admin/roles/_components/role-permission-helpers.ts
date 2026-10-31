@@ -46,6 +46,10 @@ const CONTENT_ASSET_MANAGE_PERMISSION_CODES = [
   'marketing:content_assets:manage',
 ];
 
+const TEAM_OUTPUT_READ_PERMISSION_CODES = [
+  'marketing:team_output:read',
+];
+
 const MANAGEMENT_PERMISSION_PREFIXES = [
   'user:',
   'role:',
@@ -178,6 +182,19 @@ export function resolveTargetPermissionIds(roleCode: string, permissions: Permis
     permissions,
     CONTENT_ASSET_MANAGE_PERMISSION_CODES
   );
+  const teamOutputReadPermissionIds = pickPermissionIdsByCode(
+    permissions,
+    TEAM_OUTPUT_READ_PERMISSION_CODES
+  );
+
+  // A restricting role: it grants nothing and limits AI 创作中心 to 团队产出.
+  if (normalizedRoleCode === 'team_output_only' || normalizedRoleCode === 'team-output-only') {
+    return [];
+  }
+
+  if (normalizedRoleCode === 'team_output_viewer' || normalizedRoleCode === 'team-output-viewer') {
+    return uniqueNumberList([...contentAssetReadPermissionIds, ...teamOutputReadPermissionIds]);
+  }
 
   if (normalizedRoleCode === 'bd') {
     return uniqueNumberList([
@@ -223,7 +240,9 @@ export function resolveTargetPermissionIds(roleCode: string, permissions: Permis
           (permission) =>
             !isManagementPermission(permission) &&
             !CONTENT_ASSET_WRITE_PERMISSION_CODES.includes(permission.code) &&
-            !CONTENT_ASSET_MANAGE_PERMISSION_CODES.includes(permission.code)
+            !CONTENT_ASSET_MANAGE_PERMISSION_CODES.includes(permission.code) &&
+            // People's output is for managers only; operators never get it by default.
+            !TEAM_OUTPUT_READ_PERMISSION_CODES.includes(permission.code)
         )
         .map((permission) => permission.id)
     );

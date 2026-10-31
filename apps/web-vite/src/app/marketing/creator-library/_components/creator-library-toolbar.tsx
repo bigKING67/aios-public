@@ -1,10 +1,5 @@
-import { Button, Space } from 'antd';
-import {
-  DownloadOutlined,
-  ImportOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
+import { Button } from '@lobehub/ui';
+import { Download, Import, Plus, UploadIcon } from 'lucide-react';
 import styles from './creator-library-toolbar.module.css';
 
 interface CreatorLibraryToolbarProps {
@@ -39,24 +34,24 @@ export function CreatorLibraryToolbar({
         </span>
       </div>
 
-      <Space wrap className={styles.toolbarActions}>
-        <Button icon={<DownloadOutlined />} onClick={onDownloadTemplate}>
+      <div className={styles.toolbarActions}>
+        <Button icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onDownloadTemplate}>
           下载 XLSX 模板
         </Button>
         {canCreateOrImport ? (
-          <Button icon={<ImportOutlined />} onClick={onImport}>
+          <Button icon={<Import size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onImport}>
             批量导入
           </Button>
         ) : null}
-        <Button icon={<UploadOutlined />} loading={exporting} onClick={onExport}>
+        <Button icon={<UploadIcon size={14} strokeWidth={1.8} aria-hidden="true" />} loading={exporting} onClick={onExport}>
           导出当前筛选
         </Button>
         {canCreateOrImport ? (
-          <Button type="primary" icon={<PlusOutlined />} onClick={onCreate}>
+          <Button type="primary" icon={<Plus size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onCreate}>
             新增达人
           </Button>
         ) : null}
-      </Space>
+      </div>
     </section>
   );
 }

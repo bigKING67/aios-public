@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   CreatorCooperationStatusBadge,
   type CreatorCooperationStatusRecord,
@@ -37,7 +37,7 @@ export function buildCreatorAnchorLevelDetailColumns<
   numericCellClassName,
   resolveStageKey,
   formatDisplay,
-}: BuildCreatorAnchorLevelDetailColumnsParams): ColumnsType<TRecord> {
+}: BuildCreatorAnchorLevelDetailColumnsParams): TableColumnsType<TRecord> {
   return [
     {
       title: '达人名称',

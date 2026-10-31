@@ -4,7 +4,7 @@
   gap: 8px;
   flex-wrap: wrap;
   margin: 0 0 12px;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -20,37 +20,37 @@
   max-width: 100%;
 }
 
-.goodsCardTrafficRowSummary > :global(.ant-table-cell) {
-  background: var(--bg-card) !important;
-  border-bottom-color: var(--border-color) !important;
+.goodsCardTrafficRowSummary > :global(.lobe-table-cell) {
+  background: var(--lobe-color-bg-container) !important;
+  border-bottom-color: var(--lobe-color-border) !important;
 }
 
-.goodsCardTrafficRowL1 > :global(.ant-table-cell),
-.goodsCardTrafficRowL2 > :global(.ant-table-cell),
-.goodsCardTrafficRowL3 > :global(.ant-table-cell) {
-  background: var(--bg-card) !important;
-  border-bottom-color: var(--divider-color) !important;
+.goodsCardTrafficRowL1 > :global(.lobe-table-cell),
+.goodsCardTrafficRowL2 > :global(.lobe-table-cell),
+.goodsCardTrafficRowL3 > :global(.lobe-table-cell) {
+  background: var(--lobe-color-bg-container) !important;
+  border-bottom-color: var(--lobe-color-border-secondary) !important;
 }
 
-.goodsCardTrafficRowSummary:hover > :global(.ant-table-cell) {
+.goodsCardTrafficRowSummary:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-traffic-summary-row-hover-bg) !important;
 }
 
-.goodsCardTrafficRowL1:hover > :global(.ant-table-cell) {
+.goodsCardTrafficRowL1:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-traffic-l1-row-hover-bg) !important;
 }
 
-.goodsCardTrafficRowL2:hover > :global(.ant-table-cell) {
+.goodsCardTrafficRowL2:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-traffic-l2-row-hover-bg) !important;
 }
 
-.goodsCardTrafficRowL3:hover > :global(.ant-table-cell) {
+.goodsCardTrafficRowL3:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-traffic-l3-row-hover-bg) !important;
 }
 
 .goodsCardTrafficFirstCell {
-  --goods-card-traffic-first-cell-bg: var(--bg-card);
-  --goods-card-traffic-first-cell-accent: var(--divider-color);
+  --goods-card-traffic-first-cell-bg: var(--lobe-color-bg-container);
+  --goods-card-traffic-first-cell-accent: var(--lobe-color-border-secondary);
 
   background: var(--goods-card-traffic-first-cell-bg) !important;
   box-shadow: inset 2px 0 0 var(--goods-card-traffic-first-cell-accent);

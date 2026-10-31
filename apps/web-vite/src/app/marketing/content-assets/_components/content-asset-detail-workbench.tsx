@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Tabs } from 'antd';
+import { Button, Tabs } from '@lobehub/ui';
+import { AiActionButton } from '@/components/molecules/ai-action-button';
 import type {
   ContentAssetAdMaterial,
   ContentAssetAnalysisProfile,
@@ -242,7 +243,8 @@ export function ContentAssetDetailWorkbench({
   ];
   const tabs = (
     <Tabs
-      className={`${inspectorStyles.inspectorTabs} ${pageStyles.detailTabs} ${workbenchStyles.detailTabs}`}
+      className={`${pageStyles.detailTabs} ${workbenchStyles.detailTabs}`}
+      classNames={{ list: workbenchStyles.detailTabsList, tab: workbenchStyles.detailTabsTab, panel: workbenchStyles.detailTabsPanel }}
       size="small"
       activeKey={activeTabKey}
       onChange={setActiveTabKey}
@@ -390,14 +392,13 @@ export function ContentAssetDetailWorkbench({
               {showPrimaryJobProgress && primaryProgressJob ? (
                 <ProcessingJobProgress job={primaryProgressJob} />
               ) : primaryAction ? (
-                <Button
-                  type="primary"
+                <AiActionButton
                   loading={primaryAction.kind === 'analysis' ? analysisActionLoading : transcriptActionLoading}
                   disabled={!primaryAction.enabled}
                   onClick={primaryAction.onClick}
                 >
                   {primaryAction.buttonLabel || primaryAction.label}
-                </Button>
+                </AiActionButton>
               ) : (
                 <Button disabled={!canWrite} onClick={onEditProfile}>
                   编辑档案

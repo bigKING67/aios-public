@@ -1,4 +1,4 @@
-import { Segmented } from 'antd';
+import { Segmented } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { DashboardChart } from './dashboard-chart';
@@ -50,7 +50,7 @@ export function DashboardShortVideoContentSection({
         header={
           <div className={trafficSectionHeaderStyles.head}>
             <div className={`${trafficSectionHeaderStyles.meta} ${trafficSectionHeaderStyles.liveScopeMeta}`}>
-              <div className={trafficSectionControlStyles.liveScopeSwitch}>
+              <div className={trafficSectionControlStyles.liveScopeSwitch} role="group" aria-label="短视频范围">
                 <Segmented<ShortVideoScope>
                   name="dashboard-shortvideo-scope"
                   size="small"

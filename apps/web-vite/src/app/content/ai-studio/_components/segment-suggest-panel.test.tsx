@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchContentAssets } from '@/app/marketing/content-assets/_lib/content-assets-api';
@@ -16,6 +16,8 @@ vi.mock('../_lib/ai-studio-api', async (original) => ({
   ...await original<object>(),
   fetchStudioPresets: vi.fn(),
   fetchStudioAssetSegmentSummaries: vi.fn().mockResolvedValue([]),
+  // No recorded spend: the estimate falls back to the default per-call price.
+  fetchStudioOverview: vi.fn().mockRejectedValue(new Error('offline')),
 }));
 vi.mock('../_lib/segment-suggestion-api', async (original) => ({
   ...await original<object>(),
@@ -31,13 +33,13 @@ function capabilities(extra: Partial<StudioCapabilitiesResponse> = {}): StudioCa
 }
 
 function asset(assetId: string, title: string, rawSha256: string | null, canEdit = true) {
-  return { assetId, title, rawSha256, canEdit, externalOnly: false, assetStatus: 'ready', durationSeconds: 120, productName: '精华' };
+  return { assetId, title, rawSha256, canEdit, externalOnly: false, assetStatus: 'ready', durationSeconds: 120, productName: '粉底液' };
 }
 
 function job(jobId: string, status: string, extra: Partial<StudioSegmentSuggestionJob> = {}): StudioSegmentSuggestionJob {
   return {
     jobId, status, assetId: READY, assetTitle: '整片-001', ownerUserId: 'u1', sourceContentHash: 'a'.repeat(64), sourceCurrent: true,
-    presetKey: 'framework', presetVersion: 1, labelKeys: ['voice', 'demo', 'koc'], stage: '等待切段', attempt: 0, errorCode: null, errorMessage: null, model: null,
+    presetKey: 'framework', presetVersion: 1, labelKeys: ['voice', 'demo', 'street'], stage: '等待切段', attempt: 0, errorCode: null, errorMessage: null, model: null,
     promptVersion: null, usage: null, resultSummary: null, createdAt: '2026-09-29 10:00:00+08', startedAt: null, finishedAt: null, ...extra,
   };
 }
@@ -61,7 +63,7 @@ beforeEach(() => {
       labels: [
         { key: 'voice', name: '混剪口播', definition: '口播贯穿' },
         { key: 'demo', name: '实拍内容', definition: '同人连续演示' },
-        { key: 'koc', name: 'KOC', definition: '' },
+        { key: 'street', name: '街采', definition: '' },
       ],
     },
   ]);
@@ -75,7 +77,7 @@ afterEach(() => { cleanup(); vi.clearAllMocks(); });
 
 async function selectAsset() {
   const checkbox = await screen.findByRole('checkbox', { name: '选择原片 整片-001' });
-  expect(screen.getByRole('checkbox', { name: '选择原片 整片-002' })).toBeDisabled();
+  expect(screen.getByRole('checkbox', { name: '选择原片 整片-002' })).toHaveAttribute('aria-disabled', 'true');
   fireEvent.click(checkbox);
 }
 
@@ -85,14 +87,14 @@ async function selectAndTrigger() {
   fireEvent.click(await screen.findByRole('button', { name: /^发\s*起$/ }));
 }
 
-describe('AI 分析 segment suggestion panel', () => {
+describe('AI 切段 segment suggestion panel', () => {
   it('lets open access analyze assets the account cannot edit, but still needs the raw hash', async () => {
     vi.mocked(fetchContentAssets).mockResolvedValue({
       items: [asset(READY, '整片-001', 'a'.repeat(64), false), asset(NO_HASH, '整片-002', null, false)], total: 2, page: 1, pageSize: 10,
     } as never);
     renderPanel(capabilities({ openAccess: true }));
-    expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).toBeEnabled();
-    expect(screen.getByRole('checkbox', { name: '选择原片 整片-002' })).toBeDisabled();
+    expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).not.toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('checkbox', { name: '选择原片 整片-002' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByText('原片摘要缺失，暂不能分析')).toBeInTheDocument();
   });
 
@@ -102,7 +104,7 @@ describe('AI 分析 segment suggestion panel', () => {
     }));
     try {
       renderPanel(capabilities());
-      expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).toBeEnabled();
+      expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).not.toHaveAttribute('aria-disabled', 'true');
       expect(screen.queryByRole('columnheader', { name: '时长' })).not.toBeInTheDocument();
       expect(screen.getAllByText('2:00').length).toBeGreaterThan(0);
     } finally {
@@ -115,13 +117,13 @@ describe('AI 分析 segment suggestion panel', () => {
       items: [asset(READY, '整片-001', 'a'.repeat(64), false)], total: 1, page: 1, pageSize: 10,
     } as never);
     renderPanel(capabilities());
-    expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).toBeDisabled();
+    expect(await screen.findByRole('checkbox', { name: '选择原片 整片-001' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByText('无编辑权限或原片摘要缺失')).toBeInTheDocument();
   });
 
   it('is honest when the capability is off and never loads or triggers jobs', async () => {
     renderPanel(capabilities({ segmentSuggestEnabled: false }));
-    expect(screen.getByRole('heading', { name: 'AI 分析未启用' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'AI 切段未启用' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^开始分析/ })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: '去原片人工标注' })).toHaveAttribute('href', '/content/ai-studio/assets');
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -132,24 +134,26 @@ describe('AI 分析 segment suggestion panel', () => {
   it('triggers only the selected eligible assets with the active preset and every label by default', async () => {
     vi.mocked(createSegmentSuggestionJobs).mockResolvedValue({ items: [job('j1', 'queued')], reusedJobIds: [], labelKeyMismatchJobIds: [] });
     renderPanel(capabilities());
-    for (const name of ['混剪口播', '实拍内容', 'KOC']) {
+    for (const name of ['混剪口播', '实拍内容', '街采']) {
       expect(await screen.findByRole('checkbox', { name })).toBeChecked();
     }
     await selectAsset();
     fireEvent.click(screen.getByRole('button', { name: /^开始分析/ }));
-    expect(await screen.findByText(/本次候选框架：混剪口播、实拍内容、KOC。/)).toBeInTheDocument();
+    expect(await screen.findByText(/本次候选框架：混剪口播、实拍内容、街采。/)).toBeInTheDocument();
     fireEvent.click(await screen.findByRole('button', { name: /^发\s*起$/ }));
     await waitFor(() => expect(createSegmentSuggestionJobs).toHaveBeenCalledTimes(1));
     // The picker lists every non-output asset with its annotation state (no hidden unlabeled-only filter).
     expect(vi.mocked(fetchContentAssets).mock.calls[0][0]).toMatchObject({ segmentPreset: 'framework', studioOutputs: 'exclude' });
     expect(vi.mocked(fetchContentAssets).mock.calls[0][0].segmentStatus).toBeUndefined();
-    // With only the framework preset the launch header names the dimension and version.
-    expect(screen.getByText(/^框架标签 v1$/)).toBeInTheDocument();
-    // Rules and the pending picture analysis live behind the info icon instead of body copy.
-    fireEvent.mouseEnter(screen.getByLabelText('分析规则'));
+    // The label version is an internal detail: the launch header no longer shows it.
+    expect(screen.queryByText(/^框架标签 v1$/)).not.toBeInTheDocument();
+    // Rules, the label version and the pending picture analysis live behind the info icon.
+    // Base UI tooltips open on keyboard focus as well as hover.
+    act(() => screen.getByLabelText('分析规则').focus());
     expect(await screen.findByText(/画面分析（痛点、上妆、美展、街采、产展）将在/)).toBeInTheDocument();
+    expect(screen.getByText(/当前框架标签为 v1/)).toBeInTheDocument();
     expect(vi.mocked(createSegmentSuggestionJobs).mock.calls[0][0]).toEqual({
-      assetIds: [READY], presetKey: 'framework', presetVersion: 1, labelKeys: ['voice', 'demo', 'koc'],
+      assetIds: [READY], presetKey: 'framework', presetVersion: 1, labelKeys: ['voice', 'demo', 'street'],
     });
     expect(await screen.findByText('已提交 1 条分析任务。')).toBeInTheDocument();
   });
@@ -161,7 +165,7 @@ describe('AI 分析 segment suggestion panel', () => {
     renderPanel(capabilities());
     await selectAsset();
     const trigger = screen.getByRole('button', { name: /^开始分析/ });
-    for (const name of ['混剪口播', '实拍内容', 'KOC']) fireEvent.click(await screen.findByRole('checkbox', { name }));
+    for (const name of ['混剪口播', '实拍内容', '街采']) fireEvent.click(await screen.findByRole('checkbox', { name }));
     expect(screen.getByRole('alert')).toHaveTextContent('至少选择 1 个候选框架。');
     expect(trigger).toBeDisabled();
     fireEvent.click(screen.getByRole('checkbox', { name: '实拍内容' }));
@@ -195,14 +199,14 @@ describe('AI 分析 segment suggestion panel', () => {
     ]);
     renderPanel(capabilities({ canWrite: false }));
     expect(await screen.findByText('新增待确认 4 段，替换旧建议 1 段，丢弃无效输出 2 条')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '审核建议片段' })).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${READY}&presetKey=framework`);
-    // The prompt generation is shown per job, separate from the label-set version.
-    expect(screen.getByText(/· 提示词 v4$/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '审核建议片段' })).toHaveAttribute('href', `/content/ai-studio/segments?assetId=${READY}&presetKey=framework&from=analysis`);
+    // The prompt generation stays reachable per job as a hover detail, not row text.
+    expect(screen.getByTitle('AI 提示词 v4')).toBeInTheDocument();
     expect(screen.getByText('原片内容已变化，请重新开始分析')).toBeInTheDocument();
     expect(screen.getByText('等待模型结果')).toBeInTheDocument();
     // Candidate labels only appear for a subset run.
     expect(screen.queryByText('全部 3 类')).not.toBeInTheDocument();
-    expect(screen.getByText('不含 KOC')).toBeInTheDocument();
+    expect(screen.getByText('不含 街采')).toBeInTheDocument();
     // Failures read in plain language; the raw message stays reachable.
     expect(screen.getByText('模型没有返回结果，可重新发起（这次调用可能已计费）')).toHaveAttribute('tabindex', '0');
     expect(screen.queryByText(/worker 已中断/)).not.toBeInTheDocument();

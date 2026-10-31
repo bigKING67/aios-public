@@ -12,7 +12,7 @@
   gap: var(--spacing-3);
   align-items: stretch;
   padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .fileUploadControl {
@@ -40,7 +40,7 @@
 .playerMeta strong {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -52,7 +52,7 @@
 .playerMeta span {
   min-width: 0;
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -65,17 +65,17 @@
   min-width: 0;
 }
 
-.segmentList :global(.ant-table) {
-  color: var(--text-secondary);
+.segmentList :global(.lobe-table) {
+  color: var(--lobe-color-text-secondary);
 }
 
-.segmentList :global(.ant-table-wrapper) {
+.segmentList > :global(.lobe-table) {
   min-width: 0;
   max-width: 100%;
 }
 
 .segmentList .segmentTableHeaderCell {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--component-table-detail-header-font-size);
   font-weight: var(--component-table-detail-header-font-weight);
   line-height: var(--component-table-detail-header-line-height);
@@ -100,9 +100,9 @@
   gap: var(--spacing-2);
   min-width: 0;
   padding: var(--spacing-3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .segmentCardHeader {
@@ -121,7 +121,7 @@
 
 .segmentCardTitle strong {
   min-width: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
@@ -130,7 +130,7 @@
 
 .segmentCardTitle > span:not(:first-child),
 .segmentCardMeta > span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
@@ -149,9 +149,9 @@
 .playerBox {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-2xl);
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .playerBoxEmpty {
@@ -164,12 +164,12 @@
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--text-primary);
+  background: var(--aios-stage);
 }
 
 .playerMeta {
   padding: var(--spacing-3);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .playerEmpty {
@@ -181,19 +181,19 @@
   justify-content: center;
   width: 100%;
   min-height: 132px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   text-align: center;
 }
 
 .playerEmpty p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
-.playerEmpty :global(.anticon) {
-  color: var(--brand-text);
+.playerEmpty svg {
+  color: var(--lobe-color-text);
   font-size: var(--font-size-3xl);
 }
 
@@ -204,7 +204,7 @@
 }
 
 @media (max-width: 640px) {
-  .segmentList :global(.ant-table-wrapper) {
+  .segmentList > :global(.lobe-table) {
     display: none;
   }
 
@@ -216,7 +216,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .segmentCardHeader :global(.ant-btn) {
+  .segmentCardHeader :global(.lobe-button) {
     width: 100%;
     justify-content: center;
   }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Alert, Button, Empty, Form, Input, Modal, Popconfirm, Space, Table, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Alert, Button, confirmModal, Empty, Modal, Table, TextArea, Tooltip } from '@lobehub/ui';
+import { FormField } from '@/components/molecules/form-field';
+import { bindTextField, type ControlledFormRules, useControlledForm } from '@/hooks/use-controlled-form';
+import type { TableColumnsType as ColumnsType } from '@lobehub/ui';
 import styles from './creator-library-follow-modal.module.css';
 import {
   formatDateTimeText,
@@ -15,6 +17,10 @@ import type {
 interface FollowValues {
   followNote?: string;
 }
+
+const FOLLOW_RULES: ControlledFormRules<FollowValues> = {
+  followNote: [{ required: true, message: '请输入本次跟进备注' }],
+};
 
 interface CreatorLibraryFollowModalProps {
   item: CreatorLibraryItem | null;
@@ -43,7 +49,11 @@ export function CreatorLibraryFollowModal({
   onDelete,
   onCancel,
 }: CreatorLibraryFollowModalProps) {
-  const [form] = Form.useForm<FollowValues>();
+  const form = useControlledForm<FollowValues>({
+    initialValues: {},
+    rules: FOLLOW_RULES,
+    onFinish: (values) => handleSubmit(values),
+  });
   const [editingLog, setEditingLog] = useState<CreatorLibraryFollowLogItem | null>(null);
   const canSubmitFollowLog = editingLog ? Boolean(editingLog.canEdit) : Boolean(item?.canEdit);
   const canShowFollowForm = Boolean(item?.canEdit || editingLog);
@@ -103,7 +113,7 @@ export function CreatorLibraryFollowModal({
       width: 128,
       align: 'center',
       render: (_, record) => (
-        <Space size={4} wrap={false}>
+        <div className={styles.followLogActions}>
           <Tooltip title={record.canEdit ? undefined : '当前记录无编辑权限'}>
             <Button
               size="small"
@@ -120,32 +130,32 @@ export function CreatorLibraryFollowModal({
             </Button>
           </Tooltip>
           <Tooltip title={record.canDelete ? undefined : '当前记录无删除权限'}>
-            <Popconfirm
-              title="删除跟进记录"
-              description="删除后该条历史跟进不可恢复。"
-              okText="删除"
-              cancelText="取消"
-              okButtonProps={{ danger: true }}
+            <Button
+              size="small"
+              type="link"
+              danger
               disabled={!record.canDelete || isMutating}
-              onConfirm={() => onDelete(record.id, record.updatedAt)}
+              loading={deletingLogId === record.id}
+              onClick={() =>
+                confirmModal({
+                  title: '删除跟进记录',
+                  content: '删除后该条历史跟进不可恢复。',
+                  okText: '删除',
+                  cancelText: '取消',
+                  okButtonProps: { danger: true },
+                  onOk: () => onDelete(record.id, record.updatedAt),
+                })
+              }
             >
-              <Button
-                size="small"
-                type="link"
-                danger
-                disabled={!record.canDelete || isMutating}
-                loading={deletingLogId === record.id}
-              >
-                删除
-              </Button>
-            </Popconfirm>
+              删除
+            </Button>
           </Tooltip>
-        </Space>
+        </div>
       ),
     },
   ];
 
-  const handleSubmit = (values: FollowValues) => {
+  function handleSubmit(values: FollowValues) {
     if (!canSubmitFollowLog || isMutating) {
       return;
     }
@@ -163,7 +173,7 @@ export function CreatorLibraryFollowModal({
       return;
     }
     onCreate(payload);
-  };
+  }
 
   return (
     <Modal
@@ -180,24 +190,17 @@ export function CreatorLibraryFollowModal({
     >
       <div className={styles.followModalStack}>
         {canShowFollowForm ? (
-          <Form<FollowValues>
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-          >
-            <Form.Item
-              name="followNote"
-              label={editingLog ? '编辑跟进记录' : '本次跟进备注'}
-              rules={[{ required: true, message: '请输入本次跟进备注' }]}
-            >
-              <Input.TextArea
+          <div>
+            <FormField form={form} name="followNote" label={editingLog ? '编辑跟进记录' : '本次跟进备注'} required>
+              <TextArea
+                {...bindTextField(form, 'followNote')}
                 rows={4}
                 placeholder="记录本次沟通结论、报价、样品、内容限制等"
                 showCount
                 maxLength={1000}
                 disabled={isMutating}
               />
-            </Form.Item>
+            </FormField>
             {editingLog ? (
               <Button
                 size="small"
@@ -208,12 +211,12 @@ export function CreatorLibraryFollowModal({
                 {item?.canEdit ? '退出编辑，新增一条跟进' : '退出编辑'}
               </Button>
             ) : null}
-          </Form>
+          </div>
         ) : (
           <Alert
             showIcon
             type="info"
-            message="当前达人无新增跟进权限"
+            title="当前达人无新增跟进权限"
             description="你仍可查看历史跟进记录；如需新增，请联系达人归属 BD 或管理员。"
           />
         )}
@@ -223,7 +226,7 @@ export function CreatorLibraryFollowModal({
             <Alert
               showIcon
               type="error"
-              message="跟进历史加载失败"
+              title="跟进历史加载失败"
               description={loadErrorMessage}
             />
           ) : null}
@@ -243,7 +246,7 @@ export function CreatorLibraryFollowModal({
               emptyText: (
                 <Empty
                   description="暂无历史跟进记录"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                 
                 />
               ),
             }}

@@ -82,6 +82,7 @@ export const FRONTEND_DELIVERY_RUN_GATES = Object.freeze([
   frontendDeliveryGate('verify:design:runtime-tokens-behavior'),
   frontendDeliveryGate('verify:design:runtime-tokens'),
   frontendDeliveryGate('verify:frontend:build-fingerprint-behavior'),
+  frontendDeliveryGate('verify:frontend:docker-dependency-cache-behavior'),
   frontendDeliveryGate('verify:frontend:bundle-budget-behavior'),
   frontendDeliveryGate('verify:frontend:smoke-behavior'),
   frontendDeliveryGate('verify:frontend:coverage-ratchet-behavior'),

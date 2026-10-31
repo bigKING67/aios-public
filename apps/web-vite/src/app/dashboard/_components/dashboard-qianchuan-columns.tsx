@@ -1,5 +1,4 @@
-import { Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Tag, type TableColumnsType } from '@lobehub/ui';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
@@ -205,7 +204,7 @@ function buildMetricColumn<Row extends object>({
   digits?: number;
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<Row>[number] {
+}): TableColumnsType<Row>[number] {
   const headerCellProps = () => buildHeaderCellProps(classNames);
   const bodyCellProps = () => buildBodyCellProps(classNames);
 
@@ -237,7 +236,7 @@ function buildTextColumn<Row extends object>({
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
   fixed?: 'left';
-}): ColumnsType<Row>[number] {
+}): TableColumnsType<Row>[number] {
   const headerCellProps = () => buildTextHeaderCellProps(classNames);
   const bodyCellProps = () => buildTextBodyCellProps(classNames);
 
@@ -269,7 +268,7 @@ function buildDateTimeColumn<Row extends object>({
   width: number;
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<Row>[number] {
+}): TableColumnsType<Row>[number] {
   const headerCellProps = () => buildTextHeaderCellProps(classNames);
   const bodyCellProps = () => buildTextBodyCellProps(classNames);
 
@@ -301,7 +300,7 @@ function buildSharedMetricColumns<Row extends DashboardQianchuanCommonRow>({
 }: {
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<Row> {
+}): TableColumnsType<Row> {
   return [
     buildMetricColumn<Row>({ key: 'overallCost', keys: ['overallCost', 'overall_cost', 'costAmount', 'cost_amount'], title: '消耗(元)', width: 124, format: 'currency', isMobile, classNames }),
     buildMetricColumn<Row>({ key: 'overallGmv', keys: ['overallGmv', 'overall_gmv'], title: 'GMV(元)', width: 124, format: 'currency', isMobile, classNames }),
@@ -329,7 +328,7 @@ export function buildDashboardQianchuanMaterialTypeMixColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<DashboardQianchuanMaterialTypeMixRow> {
+}): TableColumnsType<DashboardQianchuanMaterialTypeMixRow> {
   const textHeaderCellProps = () => buildTextHeaderCellProps(classNames);
   const textBodyCellProps = () => buildTextBodyCellProps(classNames);
 
@@ -376,7 +375,7 @@ export function buildDashboardQianchuanLiveRoomScreenColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<DashboardQianchuanLiveRoomScreenRow> {
+}): TableColumnsType<DashboardQianchuanLiveRoomScreenRow> {
   return [
     {
       title: '抖音账号',
@@ -435,7 +434,7 @@ export function buildDashboardQianchuanLiveVideoColumns({
 }: {
   isMobile: boolean;
   classNames: DashboardQianchuanTableClassNames;
-}): ColumnsType<DashboardQianchuanLiveVideoRow> {
+}): TableColumnsType<DashboardQianchuanLiveVideoRow> {
   const liveVideoBodyCellProps = () => ({
     className: mergeClassNames(
       getBodyClassName(classNames),

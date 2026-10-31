@@ -1,7 +1,15 @@
-import { FileImageOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  Alert,
+  Button,
+  Empty,
+  Pagination,
+  Segmented,
+  Table,
+  Tooltip,
+  type TableColumnsType,
+} from '@lobehub/ui';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { Alert, Button, Checkbox, Empty, Input, Pagination, Segmented, Select, Table, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Bot, ImageIcon, Upload } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { ContentAssetsGrid, ContentAssetsSkeleton } from '@/app/marketing/content-assets/_components/content-assets-asset-list';
@@ -10,18 +18,15 @@ import { resolveContentAssetDisplayTitle, resolveContentAssetProductText } from 
 import { formatDuration } from '@/app/marketing/content-assets/_lib/content-assets-formatters';
 import { contentAssetsQueryKeys } from '@/app/marketing/content-assets/_lib/content-assets-query-keys';
 import type { ContentAssetItem, ContentAssetQueryParams } from '@/app/marketing/content-assets/_lib/content-assets-types';
-import {
-  contentAssetVideoTypeLabel,
-  resolveContentAssetVideoTypeOptions,
-} from '@/app/marketing/content-assets/_lib/content-assets-ui-helpers';
 import { ROUTE_PATHS } from '@/lib/route-policy-registry';
 import { ASSET_ANNOTATION_OPTIONS, readAnnotationFilter, resolveAnnotationPills } from '../_lib/asset-annotation';
-import { buildContentAssetDetailPath } from '../_lib/remix-routes';
 import { buildSegmentAnnotationPath } from '../_lib/segment-routes';
 import { SELLING_POINT_PRESET_KEY } from '../_lib/segment-display';
-import { studioProductOptions } from '../_lib/studio-products';
+import { isLongOptionList, studioProductOptions } from '../_lib/studio-products';
 import pageStyles from '../ai-studio.module.css';
 import { AnnotationPillText } from './annotation-pill-text';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
+import { StudioSearch } from './studio-search';
 import viewStyles from './ai-studio-assets-view.module.css';
 import styles from './segment-annotation.module.css';
 import { StudioUploadModal } from './studio-upload-modal';
@@ -62,11 +67,12 @@ export function AiStudioAssetsView({
   const annotationPreset = searchParams.get('presetKey') === SELLING_POINT_PRESET_KEY ? SELLING_POINT_PRESET_KEY : undefined;
   const keyword = searchParams.get('keyword') ?? '';
   const productName = searchParams.get('productName') ?? '';
-  const videoType = searchParams.get('videoType') ?? '';
   const segmentStatus = readAnnotationFilter(searchParams.get('segmentStatus'));
   const view: AssetView = searchParams.get('view') === 'table' ? 'table' : 'grid';
-  const includeOutputs = searchParams.get('outputs') === 'include';
+  // The test originals (整片-001…005) stay out of 原片 until asked for; official originals come from 视频云管家.
+  const showTestSamples = searchParams.get('testSamples') === 'show';
   const page = readPage(searchParams.get('page'));
+  const productOptions = studioProductOptions(products);
 
   const query: ContentAssetQueryParams = {
     page,
@@ -74,9 +80,10 @@ export function AiStudioAssetsView({
     sort: 'updated_desc',
     keyword: keyword || undefined,
     productName: productName || undefined,
-    videoType: videoType || undefined,
     segmentStatus,
-    studioOutputs: includeOutputs ? undefined : 'exclude',
+    // 原片 lists originals only; studio outputs live on 成片.
+    studioOutputs: 'exclude',
+    testSamples: showTestSamples ? undefined : 'exclude',
     tags: enterpriseTag ? [enterpriseTag] : undefined,
   };
   const assetsQuery = useQuery({
@@ -105,10 +112,10 @@ export function AiStudioAssetsView({
       return next;
     }, { replace: true });
   };
-  const annotationPath = (asset: ContentAssetItem) => buildSegmentAnnotationPath(asset.assetId, undefined, annotationPreset);
+  const annotationPath = (asset: ContentAssetItem) => buildSegmentAnnotationPath(asset.assetId, undefined, annotationPreset, 'assets');
   const openAnnotation = (asset: ContentAssetItem) => navigate(annotationPath(asset));
 
-  const columns: ColumnsType<ContentAssetItem> = [
+  const columns: TableColumnsType<ContentAssetItem> = [
     {
       title: '原片',
       key: 'title',
@@ -117,7 +124,9 @@ export function AiStudioAssetsView({
           {asset.coverUrl ? (
             <img className={styles.assetCover} src={asset.coverUrl} alt="" loading="lazy" />
           ) : (
-            <span className={styles.assetCoverEmpty} aria-hidden><FileImageOutlined /></span>
+            <span className={styles.assetCoverEmpty} aria-hidden="true">
+              <ImageIcon size={16} strokeWidth={1.8} />
+            </span>
           )}
           <span className={styles.assetTitle}>{resolveContentAssetDisplayTitle(asset)}</span>
         </div>
@@ -131,7 +140,6 @@ export function AiStudioAssetsView({
       ),
     },
     { title: '产品', key: 'product', render: (_, asset) => resolveContentAssetProductText(asset) || '--' },
-    { title: '类型', key: 'type', render: (_, asset) => contentAssetVideoTypeLabel(asset.videoType) },
     { title: '时长', key: 'duration', render: (_, asset) => <span className={styles.mono}>{formatDuration(asset.durationSeconds)}</span> },
     {
       title: '操作',
@@ -139,9 +147,6 @@ export function AiStudioAssetsView({
       render: (_, asset) => (
         <div className={styles.rowActions}>
           <RouterLink className={styles.tableLink} to={annotationPath(asset)}>标注片段</RouterLink>
-          <RouterLink className={styles.tableLink} to={buildContentAssetDetailPath(asset.assetId)}>
-            在素材库打开
-          </RouterLink>
         </div>
       ),
     },
@@ -156,69 +161,56 @@ export function AiStudioAssetsView({
       <header className={pageStyles.pageHeader}>
         <div>
           <h1 id="ai-studio-page-title">原片</h1>
-          <p>直接使用素材库里的原片，授权和信息同步、不复制；点击原片进入片段标注。</p>
+          <p>点击原片人工标注，或用 AI 切段自动切分。</p>
         </div>
         <div className={viewStyles.headerActions}>
-          <RouterLink className={styles.secondaryLink} to={ROUTE_PATHS.marketingContentAssets}>前往素材库</RouterLink>
+          <RouterLink className={styles.secondaryLink} to={ROUTE_PATHS.contentAiStudioAnalysis}>
+            <Bot size={14} strokeWidth={1.8} aria-hidden="true" />
+            AI 切段
+          </RouterLink>
           {canUpload ? (
-            <Button type="primary" icon={<UploadOutlined />} onClick={() => setUploading(true)}>上传原片</Button>
+            <Button type="primary" icon={<Upload size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={() => setUploading(true)}>
+              上传原片
+            </Button>
           ) : (
             <Tooltip title="需要素材上传权限，请联系管理员开通">
-              <Button type="primary" icon={<UploadOutlined />} disabled>上传原片</Button>
+              <Button type="primary" icon={<Upload size={14} strokeWidth={1.8} aria-hidden="true" />} disabled>
+                上传原片
+              </Button>
             </Tooltip>
           )}
         </div>
       </header>
       <StudioUploadModal open={uploading} onClose={() => setUploading(false)} enterpriseTag={enterpriseTag} products={products} />
 
-      <article className={pageStyles.card}>
-        <div className={styles.filterBar} role="search" aria-label="原片筛选">
-          <Input.Search
-            key={keyword}
-            aria-label="搜索原片"
-            enterButton={<Button aria-label="搜索" icon={<SearchOutlined aria-hidden />} />}
-            placeholder="搜索标题、达人或备注"
-            defaultValue={keyword}
-            allowClear
-            onSearch={(value) => update({ keyword: value.trim() || undefined })}
-          />
-          <Select
-            aria-label="标注状态"
-            value={segmentStatus ?? ''}
-            options={ASSET_ANNOTATION_OPTIONS}
-            onChange={(value: string) => update({ segmentStatus: value || undefined })}
-          />
-          <Select
-            aria-label="产品"
-            showSearch
-            value={productName}
-            options={[{ value: '', label: '全部产品' }, ...studioProductOptions(products)]}
-            onChange={(value: string) => update({ productName: value || undefined })}
-          />
-          <Select
-            aria-label="类型"
-            value={videoType}
-            options={[{ value: '', label: '全部类型' }, ...resolveContentAssetVideoTypeOptions(assetsQuery.data?.filterOptions.videoTypes)]}
-            onChange={(value: string) => update({ videoType: value || undefined })}
-          />
-        </div>
-      </article>
-
       <article className={`${pageStyles.card} ${viewStyles.surface}`} aria-label="原片列表">
-        <div className={viewStyles.surfaceHeader}>
-          <div>
-            <h2>全部原片</h2>
-            <p>共 {assetsQuery.isError ? '--' : total} 条。混剪按产品组合片段，未绑定产品的原片请在标注时为片段填写产品。</p>
+        <div className={viewStyles.toolbar}>
+          <div className={styles.filterBar} role="search" aria-label="原片筛选">
+            <StudioSearch
+              key={keyword}
+              label="搜索原片"
+              placeholder="搜索标题、达人或备注"
+              defaultValue={keyword}
+              onSearch={(value) => update({ keyword: value || undefined })}
+            />
+            <LabeledSelect
+              label="标注状态"
+              wrapperClassName={styles.filterSelect}
+              value={segmentStatus ?? ''}
+              options={ASSET_ANNOTATION_OPTIONS}
+              onChange={(value) => update({ segmentStatus: typeof value === 'string' && value ? value : undefined })}
+            />
+            <LabeledSelect
+              label="产品"
+              wrapperClassName={styles.filterSelect}
+              showSearch={isLongOptionList(productOptions)}
+              value={productName}
+              options={[{ value: '', label: '全部产品' }, ...productOptions]}
+              onChange={(value) => update({ productName: typeof value === 'string' && value ? value : undefined })}
+            />
           </div>
-          <div className={viewStyles.surfaceTools}>
-            <Checkbox
-              checked={includeOutputs}
-              onChange={(event) => update({ outputs: event.target.checked ? 'include' : undefined })}
-            >
-              包含混剪成片
-            </Checkbox>
+          <div role="group" aria-label="视图">
             <Segmented<AssetView>
-              aria-label="视图"
               value={view}
               options={[
                 { label: '卡片', value: 'grid' },
@@ -228,6 +220,18 @@ export function AiStudioAssetsView({
             />
           </div>
         </div>
+        <p className={viewStyles.meta}>
+          共 {assetsQuery.isError ? '--' : total} 条 · 混剪按产品组合片段，未绑定产品的原片请在标注时为片段填写产品。
+          <Button
+            type="link"
+            size="small"
+            className={viewStyles.metaToggle}
+            aria-pressed={showTestSamples}
+            onClick={() => update({ testSamples: showTestSamples ? undefined : 'show' })}
+          >
+            {showTestSamples ? '隐藏测试样片' : '显示测试样片'}
+          </Button>
+        </p>
 
         {assetsQuery.isError ? (
           <Alert
@@ -245,9 +249,11 @@ export function AiStudioAssetsView({
         {isEmpty ? (
           <Empty
             description={
-              enterpriseTag
-                ? `没有符合条件的原片。AI 创作中心只显示带「${enterpriseTag}」标签的原片，可在素材库为原片添加该标签。`
-                : '没有符合条件的原片。可调整筛选，或先在素材库上传原片。'
+              showTestSamples
+                ? enterpriseTag
+                  ? `没有符合条件的原片。AI 创作中心只显示带「${enterpriseTag}」标签的原片。`
+                  : '没有符合条件的原片。可调整筛选，或先上传原片。'
+                : '没有符合条件的原片。正式原片将从视频云管家接入；测试样片已隐藏，可点上方「显示测试样片」查看。'
             }
           />
         ) : null}

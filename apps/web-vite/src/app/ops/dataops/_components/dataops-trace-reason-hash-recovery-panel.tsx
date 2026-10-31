@@ -1,6 +1,5 @@
 'use client';
 
-import { Tag } from 'antd';
 import type { DataOpsNotificationTraceReasonHashRecoveryItem } from '@/types/dataops';
 import type { NotificationTraceReasonHashRecoverySummary } from './dataops-notification-retry-helpers';
 import {
@@ -8,6 +7,7 @@ import {
   formatTokenPreview,
   normalizeToken,
 } from './dataops-hub-formatters';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import batchResultStyles from './dataops-batch-result.module.css';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 import traceReasonHashStyles from './dataops-trace-reason-hash.module.css';
@@ -64,13 +64,13 @@ export function DataOpsTraceReasonHashRecoveryPanel({
                     ? reasonLabel
                     : formatTokenPreview(reasonLabel, 16)}
                 </span>
-                <Tag
-                  color={
-                    item.recoveryRate >= 80 ? 'green' : item.recoveryRate >= 50 ? 'gold' : 'red'
+                <DataOpsToneTag
+                  tone={
+                    item.recoveryRate >= 80 ? 'success' : item.recoveryRate >= 50 ? 'warning' : 'danger'
                   }
                 >
                   {item.recoveryRate}%
-                </Tag>
+                </DataOpsToneTag>
               </div>
               <p className={traceReasonHashStyles.traceReasonHashMetric}>
                 首次失败 {item.firstFailedCount} · 后续成功 {item.recoveredCount} · 仍失败{' '}

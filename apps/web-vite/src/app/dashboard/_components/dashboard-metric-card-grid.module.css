@@ -34,7 +34,7 @@
 
 .metricCard {
   border-radius: 18px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg);
   padding: 14px 15px;
   display: flex;
@@ -47,13 +47,13 @@
 
 .metricCard:hover {
   transform: translateY(-2px);
-  border-color: var(--status-info-border);
+  border-color: var(--lobe-color-info-border);
   box-shadow: var(--dashboard-brand-card-hover-shadow);
 }
 
 .metricCardLabel {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   min-height: 2.4em;
@@ -64,7 +64,7 @@
 }
 
 .metricCardValue {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-display);
   line-height: var(--line-height-compact);
   font-weight: 680;

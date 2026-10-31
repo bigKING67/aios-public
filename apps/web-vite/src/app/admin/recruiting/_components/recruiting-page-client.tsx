@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Alert, Button, Card, Empty, Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import { LinkOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Alert, Button, Empty, Table, type TableColumnsType } from "@lobehub/ui";
+import { PageHeader, Surface } from "@lobehub/ui/dashboard";
+import { Link as LinkIcon, RotateCw } from "lucide-react";
 import { Badge } from "@/components/atoms/badge";
 import { Layout } from "@/components/organisms/layout";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -23,7 +23,7 @@ import { recruitingClasses as styles } from "../_lib/recruiting-classes";
 
 function buildColumns(
   onOpen: (submissionId: string) => void,
-): ColumnsType<RecruitingSubmissionListItem> {
+): TableColumnsType<RecruitingSubmissionListItem> {
   return [
     {
       title: "候选人",
@@ -113,24 +113,27 @@ export function RecruitingPageClient() {
       permissionMode="any"
     >
       <Layout>
-        <Card
-          title="招聘测评"
-          extra={
-            <Button
-              icon={<ReloadOutlined />}
-              loading={submissions.isFetching}
-              onClick={() => submissions.refetch()}
-            >
-              刷新
-            </Button>
-          }
-        >
-          <p className={styles.pageHint}>
-            AI 应用开发实习生 · 候选人答题链接（无需登录）：
-            <a href={candidateLink} target="_blank" rel="noopener noreferrer">
-              <LinkOutlined /> {candidateLink}
-            </a>
-          </p>
+        <section className={styles.page} aria-labelledby="admin-recruiting-title">
+          <PageHeader
+            title={<span id="admin-recruiting-title">招聘测评</span>}
+            description={
+              <span className={styles.pageHint}>
+                AI 应用开发实习生 · 候选人答题链接（无需登录）：
+                <a href={candidateLink} target="_blank" rel="noopener noreferrer">
+                  <LinkIcon size={14} strokeWidth={1.8} aria-hidden="true" /> {candidateLink}
+                </a>
+              </span>
+            }
+            action={
+              <Button
+                icon={<RotateCw size={16} strokeWidth={1.8} aria-hidden="true" />}
+                loading={submissions.isFetching}
+                onClick={() => submissions.refetch()}
+              >
+                刷新
+              </Button>
+            }
+          />
           {submissions.error ? (
             <Alert
               type="error"
@@ -142,29 +145,31 @@ export function RecruitingPageClient() {
               description="只有管理员可以查看答卷。"
             />
           ) : (
-            <Table
-              rowKey="submissionId"
-              columns={columns}
-              dataSource={submissions.data?.items ?? []}
-              loading={submissions.isLoading}
-              scroll={{ x: 970 }}
-              locale={{
-                emptyText: <Empty description="还没有候选人提交答卷" />,
-              }}
-              pagination={{
-                current: page,
-                pageSize,
-                total: submissions.data?.total ?? 0,
-                showSizeChanger: true,
-                showTotal: (total) => `共 ${total} 份`,
-                onChange: (nextPage, nextSize) => {
-                  setPage(nextSize === pageSize ? nextPage : 1);
-                  setPageSize(nextSize);
-                },
-              }}
-            />
+            <Surface bleed>
+              <Table<RecruitingSubmissionListItem>
+                rowKey="submissionId"
+                columns={columns}
+                dataSource={submissions.data?.items ?? []}
+                loading={submissions.isLoading}
+                scroll={{ x: 970 }}
+                locale={{
+                  emptyText: <Empty description="还没有候选人提交答卷" />,
+                }}
+                pagination={{
+                  current: page,
+                  pageSize,
+                  total: submissions.data?.total ?? 0,
+                  showSizeChanger: true,
+                  showTotal: (total) => `共 ${total} 份`,
+                  onChange: (nextPage, nextSize) => {
+                    setPage(nextSize === pageSize ? nextPage : 1);
+                    setPageSize(nextSize);
+                  },
+                }}
+              />
+            </Surface>
           )}
-        </Card>
+        </section>
         <RecruitingSubmissionDrawer
           submissionId={selectedId}
           onClose={() => setSelectedId(null)}

@@ -6,7 +6,7 @@
   min-height: calc(100vh - 106px);
   min-height: calc(100dvh - 106px);
   border-radius: 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg);
   box-shadow: var(--dashboard-sidebar-shadow);
   padding: 14px 12px 12px;
@@ -30,7 +30,7 @@
 }
 
 .dimensionTitleIcon {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   display: inline-flex;
   align-items: center;
@@ -40,7 +40,7 @@
 
 .dimensionSidebarHead h2 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-section-title);
   line-height: var(--line-height-compact);
   font-weight: 760;
@@ -60,7 +60,7 @@
   border: 1px solid transparent;
   border-radius: var(--dashboard-selection-tile-radius);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   text-align: left;
   padding: 11px 10px 11px 12px;
   cursor: pointer;
@@ -77,9 +77,9 @@
 }
 
 .dimensionButton:hover {
-  border-color: var(--border-color);
-  background: var(--bg-hover);
-  color: var(--brand-dark);
+  border-color: var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
+  color: var(--lobe-color-primary-hover);
 }
 
 .dimensionButton:active {
@@ -88,16 +88,16 @@
 
 .dimensionButtonActive {
   border-radius: var(--dashboard-selection-tile-radius);
-  border-color: var(--brand-primary);
-  background: var(--brand-primary);
+  border-color: var(--lobe-color-primary);
+  background: var(--lobe-color-primary);
   color: var(--dashboard-inverse-text);
   box-shadow: var(--dashboard-brand-selected-shadow);
 }
 
 .dimensionButtonActive:hover,
 .dimensionButtonActive:focus-visible {
-  border-color: var(--brand-primary);
-  background: var(--brand-dark);
+  border-color: var(--lobe-color-primary);
+  background: var(--lobe-color-primary-hover);
   color: var(--dashboard-inverse-text);
   box-shadow: var(--dashboard-brand-selected-shadow);
 }
@@ -118,7 +118,7 @@
 }
 
 .dimensionButtonHint {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   font-weight: 500;
@@ -130,7 +130,7 @@
 }
 
 .dimensionMobileTitle {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 650;
   white-space: nowrap;
@@ -144,7 +144,7 @@
   max-width: 100%;
   padding: 4px;
   border-radius: 999px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   background: var(--dashboard-surface-bg-strong);
   overflow-x: auto;
 }
@@ -157,7 +157,7 @@
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 620;
   white-space: nowrap;
@@ -177,7 +177,7 @@
 
 .dimensionMobileButtonActive {
   color: var(--dashboard-inverse-text);
-  background: var(--brand-primary);
+  background: var(--lobe-color-primary);
   box-shadow: var(--dashboard-brand-mobile-selected-shadow);
 }
 

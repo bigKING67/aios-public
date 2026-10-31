@@ -1,8 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import type { ColumnsType } from 'antd/es/table';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { TableColumnsType, ToastAPI } from '@lobehub/ui';
 import { request } from '@/lib/request';
 import { normalizeErrorMessage } from './creator-helpers';
 import type {
@@ -31,13 +30,13 @@ import {
 const CREATOR_SHORT_VIDEO_MANUAL_ATTRS_ENDPOINT = '/dashboard/creator/short-video/manual-attrs';
 
 interface UseCreatorShortVideoManualAttrsParams {
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
   reloadDetails: () => Promise<void>;
   detailRows: CreatorShortVideoDetailRow[];
 }
 
 interface UseCreatorShortVideoManualAttrsResult {
-  manualAttrColumns: ColumnsType<CreatorShortVideoDetailRow>;
+  manualAttrColumns: TableColumnsType<CreatorShortVideoDetailRow>;
 }
 
 export function useCreatorShortVideoManualAttrs({
@@ -264,7 +263,7 @@ export function useCreatorShortVideoManualAttrs({
     [deletingRowKey, editingRowKey, messageApi, reloadDetails, savingRowKey]
   );
 
-  const manualAttrColumns = useMemo<ColumnsType<CreatorShortVideoDetailRow>>(
+  const manualAttrColumns = useMemo<TableColumnsType<CreatorShortVideoDetailRow>>(
     () =>
       buildCreatorShortVideoManualAttrColumns({
         editingRowKey,
@@ -273,8 +272,6 @@ export function useCreatorShortVideoManualAttrs({
         draft,
         creatorTypeOptions: displayedCreatorTypeOptions,
         mcnOptions: displayedMcnOptions,
-        creatorTypeSearchValue,
-        mcnSearchValue,
         setCreatorTypeSearchValue,
         setMcnSearchValue,
         updateDraft,
@@ -290,14 +287,12 @@ export function useCreatorShortVideoManualAttrs({
     [
       cancelEdit,
       displayedCreatorTypeOptions,
-      creatorTypeSearchValue,
       draft,
       editingRowKey,
       commitCreatorTypeSearchValue,
       commitMcnSearchValue,
       handleCreatorTypeChange,
       handleMcnChange,
-      mcnSearchValue,
       displayedMcnOptions,
       deleteManualAttrs,
       saveDraft,

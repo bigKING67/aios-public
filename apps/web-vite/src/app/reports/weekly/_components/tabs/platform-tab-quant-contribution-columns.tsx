@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import {
   renderWeeklyPlainTextCell,
   renderWeeklyPriorityTag,
@@ -10,7 +10,7 @@ import {
 } from './platform-tab-metric-column-builders';
 import type { QuantAttributionRow } from './platform-tab-types';
 
-export function buildQuantContributionColumns(): ColumnsType<QuantAttributionRow> {
+export function buildQuantContributionColumns(): TableColumnsType<QuantAttributionRow> {
   return [
     createSignedCurrencyMetricColumn<QuantAttributionRow>(
       '归因贡献值',

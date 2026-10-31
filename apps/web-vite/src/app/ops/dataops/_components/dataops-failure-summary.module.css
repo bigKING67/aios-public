@@ -1,8 +1,8 @@
 .batchFailureSummaryPanel {
   margin-top: 8px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-bg-container);
   padding: 10px;
 }
 
@@ -21,13 +21,13 @@
 }
 
 .batchFailureSummaryHead strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
 }
 
 .batchFailureSummaryHead span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
 }
 
@@ -39,7 +39,7 @@
 .batchFailureSummaryItem {
   width: 100%;
   text-align: left;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   cursor: pointer;
   appearance: none;
   display: grid;
@@ -47,26 +47,26 @@
   gap: 6px 8px;
   align-items: start;
   border-radius: 8px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   padding: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
 }
 
 .batchFailureSummaryItem:hover {
-  border-color: var(--border-color-hover);
+  border-color: var(--aios-border-hover);
   box-shadow: var(--shadow-base);
 }
 
 .batchFailureSummaryItemActive {
-  border-color: var(--status-danger-border);
+  border-color: var(--lobe-color-error-border);
   box-shadow: var(--shadow-base);
-  background: var(--status-danger-bg);
+  background: var(--lobe-color-error-bg);
 }
 
 .batchFailureSummaryItem:focus-visible {
   outline: none;
-  border-color: var(--brand-dark);
-  box-shadow: 0 0 0 3px var(--brand-focus-ring);
+  border-color: var(--lobe-color-primary-hover);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
 }
 
 .batchFailureSummaryItem:active {
@@ -75,14 +75,14 @@
 
 .batchFailureSummaryItem p {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
 .batchFailureSummaryItem span {
   grid-column: 2;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
 }

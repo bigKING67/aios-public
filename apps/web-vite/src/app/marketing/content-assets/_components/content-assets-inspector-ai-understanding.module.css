@@ -10,7 +10,7 @@
   gap: 12px;
   align-items: start;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
 }
 
 .contentUnderstandingHeader > div:first-child {
@@ -20,14 +20,14 @@
 }
 
 .contentUnderstandingHeader span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-sm);
   font-weight: 620;
   line-height: var(--line-height-snug);
 }
 
 .contentUnderstandingHeader strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 650;
   line-height: var(--line-height-tight);
@@ -46,10 +46,10 @@
   min-height: 22px;
   align-items: center;
   padding: 0 7px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 999px;
-  color: var(--text-secondary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
   font-size: var(--font-size-xs);
   font-weight: 520;
   line-height: var(--line-height-snug);
@@ -66,13 +66,13 @@
   gap: 7px;
   min-width: 0;
   padding: 12px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 13px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .contentUnderstandingItem span {
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   font-size: var(--font-size-sm);
   font-weight: 620;
   line-height: var(--line-height-snug);
@@ -80,7 +80,7 @@
 
 .contentUnderstandingItem p {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   overflow-wrap: anywhere;

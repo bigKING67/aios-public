@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react";
-import { Checkbox, Form, Input, InputNumber, Modal } from "antd";
+import { useEffect, useId, useMemo, useState } from "react";
+import { Checkbox, Input, InputNumber, Modal } from "@lobehub/ui";
+
+import { FormField } from "@/components/molecules/form-field";
+import { bindTextField, useControlledForm } from "@/hooks/use-controlled-form";
 
 import type { CreateSampleInventoryInboundItem, SampleInventorySample } from "@/lib/generated-api-contract";
 import { normalizeSampleInventoryOptionalText } from "../_lib/sample-inventory-formatters";
@@ -27,18 +30,15 @@ export function SampleInventoryBatchInboundDialog({
   onCancel,
   onSubmit,
 }: SampleInventoryBatchInboundDialogProps) {
-  const [form] = Form.useForm<BatchInboundFormValues>();
+  const form = useControlledForm<BatchInboundFormValues>({
+    initialValues: {},
+    onFinish: (values) => void submit(values),
+  });
+  const samplesLabelId = useId();
   const [selectedSampleIds, setSelectedSampleIds] = useState<number[]>([]);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [selectionError, setSelectionError] = useState<string>();
   const orderedSamples = useMemo(() => orderSampleInventoryOptions(samples), [samples]);
-
-  const reset = () => {
-    form.resetFields();
-    setSelectedSampleIds([]);
-    setQuantities({});
-    setSelectionError(undefined);
-  };
 
   const toggleSample = (sampleId: number, checked: boolean) => {
     setSelectionError(undefined);
@@ -53,7 +53,16 @@ export function SampleInventoryBatchInboundDialog({
     });
   };
 
-  const submit = async (values: BatchInboundFormValues) => {
+  // Each opening starts with nothing selected.
+  useEffect(() => {
+    if (!open) return;
+    form.resetFields();
+    setSelectedSampleIds([]);
+    setQuantities({});
+    setSelectionError(undefined);
+  }, [form, open]);
+
+  async function submit(values: BatchInboundFormValues) {
     if (selectedSampleIds.length === 0) {
       setSelectionError("请至少选择一个样品");
       return;
@@ -76,7 +85,7 @@ export function SampleInventoryBatchInboundDialog({
     } catch {
       // The mutation keeps the dialog state and owns user-visible feedback.
     }
-  };
+  }
 
   return (
     <Modal
@@ -88,65 +97,62 @@ export function SampleInventoryBatchInboundDialog({
       confirmLoading={loading}
       onCancel={onCancel}
       onOk={() => form.submit()}
-      afterClose={reset}
       destroyOnHidden
     >
-      <Form<BatchInboundFormValues>
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        onFinish={(values) => void submit(values)}
-      >
-        <Form.Item
-          label="选择样品并填写各自入库数量 *"
-          validateStatus={selectionError ? "error" : undefined}
-          help={selectionError}
-        >
-          <div className={styles.batchSampleOptions}>
-            {orderedSamples.map((sample) => {
-              const selected = selectedSampleIds.includes(sample.id);
-              return (
-                <div key={sample.id} className={styles.batchSampleOption}>
-                  <Checkbox
-                    checked={selected}
-                    onChange={(event) => toggleSample(sample.id, event.target.checked)}
-                  >
-                    <span className={styles.batchSampleIdentity}>
-                      <strong>{sample.sampleName}</strong>
-                      <span>{sample.sampleCode} · 当前库存 {sample.onHandQuantity}</span>
-                    </span>
-                  </Checkbox>
-                  <InputNumber
-                    aria-label={`${sample.sampleName}入库数量`}
-                    min={1}
-                    precision={0}
-                    value={quantities[sample.id] ?? 1}
-                    disabled={!selected}
-                    onChange={(value) => {
-                      setQuantities((current) => ({
-                        ...current,
-                        [sample.id]: Math.max(1, Math.trunc(Number(value) || 1)),
-                      }));
-                      setSelectionError(undefined);
-                    }}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </Form.Item>
-        <div className={styles.batchInboundFields}>
-          <Form.Item label="操作人" name="operatorName">
-            <Input maxLength={120} placeholder="姓名" />
-          </Form.Item>
-          <Form.Item label="快递单号" name="trackingNumber">
-            <Input maxLength={200} placeholder="快递单号" />
-          </Form.Item>
+      <div className={styles.batchSampleField}>
+        <span id={samplesLabelId} className={styles.batchSampleLabel}>
+          选择样品并填写各自入库数量 *
+        </span>
+        <div className={styles.batchSampleOptions} role="group" aria-labelledby={samplesLabelId}>
+          {orderedSamples.map((sample) => {
+            const selected = selectedSampleIds.includes(sample.id);
+            return (
+              <div key={sample.id} className={styles.batchSampleOption}>
+                <Checkbox checked={selected} onChange={(checked) => toggleSample(sample.id, checked)}>
+                  <span className={styles.batchSampleIdentity}>
+                    <strong>{sample.sampleName}</strong>
+                    <span>{sample.sampleCode} · 当前库存 {sample.onHandQuantity}</span>
+                  </span>
+                </Checkbox>
+                {/* lobe InputNumber puts aria-* on its wrapper; the id reaches the input itself. */}
+                <label className="sr-only" htmlFor={`${samplesLabelId}-${sample.id}`}>
+                  {`${sample.sampleName}入库数量`}
+                </label>
+                <InputNumber
+                  id={`${samplesLabelId}-${sample.id}`}
+                  min={1}
+                  precision={0}
+                  value={quantities[sample.id] ?? 1}
+                  disabled={!selected}
+                  onChange={(value) => {
+                    setQuantities((current) => ({
+                      ...current,
+                      [sample.id]: Math.max(1, Math.trunc(Number(value) || 1)),
+                    }));
+                    setSelectionError(undefined);
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
-        <Form.Item label="备注" name="remark">
-          <Input maxLength={2000} placeholder="入库备注" />
-        </Form.Item>
-      </Form>
+        {selectionError ? (
+          <div className={styles.batchSampleError} role="alert">
+            {selectionError}
+          </div>
+        ) : null}
+      </div>
+      <div className={styles.batchInboundFields}>
+        <FormField form={form} name="operatorName" label="操作人">
+          <Input {...bindTextField(form, "operatorName")} maxLength={120} placeholder="姓名" />
+        </FormField>
+        <FormField form={form} name="trackingNumber" label="快递单号">
+          <Input {...bindTextField(form, "trackingNumber")} maxLength={200} placeholder="快递单号" />
+        </FormField>
+      </div>
+      <FormField form={form} name="remark" label="备注">
+        <Input {...bindTextField(form, "remark")} maxLength={2000} placeholder="入库备注" />
+      </FormField>
     </Modal>
   );
 }

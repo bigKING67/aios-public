@@ -45,7 +45,6 @@ export function CreatorShortVideoDashboardClient() {
   const {
     isMobile,
     messageApi,
-    messageContextHolder,
     isAuthenticated,
     dateControls,
     detailFilters,
@@ -169,7 +168,6 @@ export function CreatorShortVideoDashboardClient() {
       segmentedName="creator-shortvideo-date-mode"
       onDateModeChange={setDateMode}
       datePickerProps={datePickerProps}
-      messageContextHolder={messageContextHolder}
       loadError={loadError}
       mainClassName={styles.dashboardFill}
       errorClassName={styles.errorBanner}

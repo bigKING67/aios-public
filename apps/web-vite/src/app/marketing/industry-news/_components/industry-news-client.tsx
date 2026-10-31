@@ -2,22 +2,8 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import {
-  Alert,
-  Button,
-  DatePicker,
-  Empty,
-  Input,
-  Pagination,
-  Select,
-  Segmented,
-  Spin,
-} from 'antd';
-import {
-  ArrowLeftOutlined,
-  ReloadOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
+import { Alert, Button, DayjsDateRangePicker, Empty, Input, Pagination, Segmented, Spin } from '@lobehub/ui';
+import { ArrowLeft, RotateCw, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/organisms/layout';
@@ -38,6 +24,7 @@ import type {
   IndustryArticleSort,
 } from '../_lib/industry-news-types';
 import styles from '../industry-news.module.css';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import {
   ArticleDrawer,
   ArticleListItem,
@@ -52,8 +39,6 @@ import {
   type DateRangeValue,
   type FeedDensity,
 } from './industry-news-model';
-
-const { RangePicker } = DatePicker;
 
 export function IndustryNewsClient() {
   const [keywordInput, setKeywordInput] = useState('');
@@ -194,7 +179,7 @@ export function IndustryNewsClient() {
                 </p>
               </div>
               <Link to={ROUTE_PATHS.marketing} className={styles.backLink}>
-                <ArrowLeftOutlined />
+                <ArrowLeft size={14} strokeWidth={1.8} />
                 返回营销总览
               </Link>
             </section>
@@ -208,18 +193,17 @@ export function IndustryNewsClient() {
               <Input
                 allowClear
                 aria-label="搜索行业资讯文章"
-                prefix={<SearchOutlined />}
+                prefix={<Search size={14} strokeWidth={1.8} />}
                 placeholder="搜索标题、摘要或正文"
                 value={keywordInput}
                 onChange={(event) => setKeywordInput(event.target.value)}
                 onKeyDown={handleSearchKeyDown}
               />
-              <Select
+              <LabeledSelect
                 allowClear
-                aria-label="筛选公众号来源"
+                label="筛选公众号来源"
                 showSearch
                 placeholder="公众号来源"
-                optionFilterProp="label"
                 options={sourceOptions}
                 value={sourceFakeid}
                 onChange={(value) => {
@@ -227,7 +211,7 @@ export function IndustryNewsClient() {
                   setPage(1);
                 }}
               />
-              <RangePicker
+              <DayjsDateRangePicker
                 aria-label="筛选行业资讯发布日期范围"
                 placeholder={['开始日期', '结束日期']}
                 value={dateRange}
@@ -236,19 +220,20 @@ export function IndustryNewsClient() {
                   setPage(1);
                 }}
               />
-              <Select
-                aria-label="排序行业资讯"
+              <LabeledSelect
+                label="排序行业资讯"
                 options={SORT_OPTIONS}
                 value={sort}
                 onChange={(value) => {
+                  if (value === undefined) return;
                   setSort(value);
                   setPage(1);
                 }}
               />
             </div>
             <div className={styles.filterActions}>
-              <Segmented<FeedDensity>
-                aria-label="切换资讯流阅读密度"
+<div role="group" aria-label="切换资讯流阅读密度">
+                              <Segmented<FeedDensity>
                 value={density}
                 onChange={setDensity}
                 options={[
@@ -256,9 +241,10 @@ export function IndustryNewsClient() {
                   { label: '紧凑视图', value: 'compact' },
                 ]}
               />
+              </div>
               <div className={styles.filterActionButtons}>
                 <Button onClick={resetFilters}>重置</Button>
-                <Button type="primary" icon={<SearchOutlined />} onClick={applySearch}>
+                <Button type="primary" icon={<Search size={14} strokeWidth={1.8} />} onClick={applySearch}>
                   搜索
                 </Button>
               </div>
@@ -309,7 +295,7 @@ export function IndustryNewsClient() {
                   </span>
                 </div>
                 <Button
-                  icon={<ReloadOutlined />}
+                  icon={<RotateCw size={14} strokeWidth={1.8} />}
                   loading={isFetching}
                   onClick={() => refetch()}
                 >

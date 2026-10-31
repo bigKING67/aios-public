@@ -1,6 +1,6 @@
 .liveDetailHeaderCell {
   border-bottom: 1px solid var(--dashboard-detail-head-border) !important;
-  background: var(--bg-hover) !important;
+  background: var(--lobe-color-fill-tertiary) !important;
   color: var(--dashboard-detail-text);
   font-size: var(--font-size-sm) !important;
   font-weight: 560;
@@ -10,20 +10,20 @@
 
 .liveDetailBodyCell {
   border-bottom: 1px solid var(--dashboard-detail-border) !important;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 430;
   line-height: var(--line-height-normal);
   padding: 11px 10px !important;
 }
 
-.liveDetailTable :global(.ant-table-container) {
+.liveDetailTable :global(.lobe-table-container) {
   overflow: hidden;
   border: 1px solid var(--dashboard-detail-border);
   border-radius: 13px;
 }
 
-.liveDetailRow:hover > :global(.ant-table-cell) {
+.liveDetailRow:hover > :global(.lobe-table-cell) {
   background: var(--dashboard-live-card-hover-bg) !important;
 }
 

@@ -1,0 +1,280 @@
+/*
+ * 爆款拆解 · 开头 3 秒怎么说 / 在什么场景解决什么痛点 / 谁在背书: three unframed blocks stacked under
+ * hairlines, each a ranked list whose rows open their TOP5 films. The figure column is tabular and
+ * right-aligned (31/140 条 · 9 个品牌); text never takes a series colour.
+ */
+
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  min-width: 0;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.blockHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.blockTitle {
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.blockNote,
+.figureHead {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-1) var(--spacing-6);
+  align-items: baseline;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-2);
+  margin: 0 calc(-1 * var(--spacing-2));
+  border: 0;
+  border-radius: var(--lobe-border-radius-sm);
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover {
+  background: var(--lobe-color-fill-tertiary);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 0;
+}
+
+.rowStatic {
+  cursor: default;
+}
+
+.rowStatic:hover {
+  background: transparent;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowName {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.rowDetail {
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* 场景 → 痛点 → 卖点 reads as three parts on one line. */
+.chain {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 var(--spacing-2);
+  align-items: baseline;
+}
+
+.arrow {
+  color: var(--lobe-color-text-quaternary);
+}
+
+.point {
+  color: var(--lobe-color-text-secondary);
+}
+
+.tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+
+.tag {
+  padding: 0 var(--spacing-1);
+  border-radius: var(--lobe-border-radius-sm);
+  color: var(--lobe-color-text-tertiary);
+  background: var(--lobe-color-fill-quaternary);
+  font-size: var(--font-size-xs);
+}
+
+.figure {
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.readings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: var(--spacing-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reading {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.reading::before {
+  margin-right: var(--spacing-2);
+  color: var(--lobe-color-text-quaternary);
+  content: '—';
+}
+
+/* TOP5 drawer */
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.films {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.film {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  padding: var(--spacing-3) 0;
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+}
+
+.film:last-child {
+  border-bottom: 0;
+}
+
+.rank {
+  flex: none;
+  width: 1.5em;
+  color: var(--lobe-color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  width: 54px;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--border-radius-sm);
+  color: var(--lobe-color-text-quaternary);
+  background: var(--lobe-color-fill-secondary);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.filmBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.filmTitle {
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.filmLinks {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+.link {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.link:hover {
+  color: var(--lobe-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sales {
+  flex: none;
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .figure {
+    text-align: left;
+  }
+
+  .film {
+    flex-wrap: wrap;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}

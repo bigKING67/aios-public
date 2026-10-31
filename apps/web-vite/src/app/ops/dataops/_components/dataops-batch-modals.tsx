@@ -1,18 +1,16 @@
 'use client';
 
-import { Button, Modal } from 'antd';
-import type { FormInstance } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Modal, type TableColumnsType } from '@lobehub/ui';
 import type { DataOpsNotificationChannel } from '@/config/dataops-hub';
 import { DataOpsAlertSendModalBody } from './dataops-alert-send-modal-body';
 import { DataOpsBatchHistoryDetail } from './dataops-batch-history-detail';
 import { DataOpsBatchResultDetail } from './dataops-batch-result-detail';
 import type { AlertSendModalCopy } from './dataops-alert-helpers';
+import type { DataOpsAlertSendForm } from './dataops-alert-send-form';
 import type {
   BatchExecutionResultItem,
   BatchExecutionSummary,
   BatchFailureReasonSummaryItem,
-  BatchHistoryAlertSendFormValues,
   BatchOperationFailureContext,
 } from './dataops-batch-helpers';
 import type {
@@ -40,11 +38,11 @@ interface DataOpsBatchModalsProps {
   batchHistoryAlertTemplateText: string;
   batchHistoryAlertTooltipTitle: string;
   batchHistoryAlertDisabled: boolean;
-  batchHistoryColumns: ColumnsType<BatchExecutionSummary>;
+  batchHistoryColumns: TableColumnsType<BatchExecutionSummary>;
   batchHistoryAlertOpen: boolean;
   batchHistoryAlertCopy: AlertSendModalCopy;
   batchHistoryAlertSubmitting: boolean;
-  batchHistoryAlertForm: FormInstance<BatchHistoryAlertSendFormValues>;
+  batchHistoryAlertForm: DataOpsAlertSendForm;
   availableAlertChannels: DataOpsNotificationChannel[];
   batchResultOpen: boolean;
   batchResultSummary: BatchExecutionSummary | null;
@@ -52,7 +50,7 @@ interface DataOpsBatchModalsProps {
   batchResultFailedPipelineCount: number;
   batchResultRetryableFailedCount: number;
   batchResultFilteredItems: BatchExecutionResultItem[];
-  batchResultColumns: ColumnsType<BatchExecutionResultItem>;
+  batchResultColumns: TableColumnsType<BatchExecutionResultItem>;
   lastBatchFailureContext: BatchOperationFailureContext | null;
   retryableFailedCount: number;
   hasOperatePermission: boolean;
@@ -195,6 +193,7 @@ export function DataOpsBatchModals({
           void onSubmitBatchHistoryAlert();
         }}
         okText="发送到飞书"
+        cancelText="取消"
         confirmLoading={batchHistoryAlertSubmitting}
         destroyOnHidden
       >

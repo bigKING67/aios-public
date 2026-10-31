@@ -19,6 +19,13 @@ function isEnabled(rawValue: string): boolean {
   return rawValue.trim() === '1';
 }
 
+/** See `@/lib/module-profile`; anything but `ai_studio` keeps every module. */
+export type ModuleProfile = 'full' | 'ai_studio';
+
+function parseModuleProfile(rawValue: string): ModuleProfile {
+  return rawValue.trim() === 'ai_studio' ? 'ai_studio' : 'full';
+}
+
 export const frontendEnv = Object.freeze({
   apiDebugLogs: isEnabled(readEnv('VITE_API_DEBUG_LOGS')),
   apiGatewayPrefix: normalizePrefix(
@@ -29,6 +36,7 @@ export const frontendEnv = Object.freeze({
   dashboardMaxQueryDays: readEnv('VITE_DASHBOARD_MAX_QUERY_DAYS').trim(),
   forceFreshData: isEnabled(readEnv('VITE_FORCE_FRESH_DATA')),
   isDevelopment: readEnv('NODE_ENV') === 'development',
+  moduleProfile: parseModuleProfile(readEnv('VITE_AIOS_MODULE_PROFILE')),
   serverApiUrl:
     readEnv('VITE_API_GATEWAY_TARGET') ||
     readEnv('VITE_REPORT_API') ||

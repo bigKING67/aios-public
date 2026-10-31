@@ -1,11 +1,7 @@
 'use client';
 
-import { Button, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import {
-  PauseCircleOutlined,
-  PlayCircleOutlined,
-} from '@ant-design/icons';
+import { Button, Tag, type TableColumnsType } from '@lobehub/ui';
+import { CirclePause, CirclePlay } from 'lucide-react';
 import type { DataOpsActionRequest, DataOpsRuntimePipeline } from '@/types/dataops';
 import { DataOpsStatusTag } from './dataops-status-tag';
 import {
@@ -13,6 +9,7 @@ import {
   formatDateTime,
 } from './dataops-hub-formatters';
 import { getActionKey } from './dataops-action-helpers';
+import { DATAOPS_ICON_PROPS } from './dataops-icon-props';
 import pipelineStyles from './dataops-pipeline-table.module.css';
 
 interface DataOpsPipelineMobileColumnsOptions {
@@ -36,7 +33,7 @@ export function buildDataOpsPipelineMobileColumns({
   onPipelineAction,
   onOpenCommandModal,
   onOpenTriggerModal,
-}: DataOpsPipelineMobileColumnsOptions): ColumnsType<DataOpsRuntimePipeline> {
+}: DataOpsPipelineMobileColumnsOptions): TableColumnsType<DataOpsRuntimePipeline> {
   return [
     {
       title: '任务编排',
@@ -89,7 +86,7 @@ export function buildDataOpsPipelineMobileColumns({
             <div className="flex flex-wrap gap-2">
               <Button
                 size="small"
-                icon={<PlayCircleOutlined />}
+                icon={<CirclePlay {...DATAOPS_ICON_PROPS} />}
                 loading={isTriggerLoading}
                 disabled={shouldDisableAction}
                 onClick={() => onPipelineAction(record, 'trigger_pipeline')}
@@ -98,7 +95,7 @@ export function buildDataOpsPipelineMobileColumns({
               </Button>
               <Button
                 size="small"
-                icon={<PauseCircleOutlined />}
+                icon={<CirclePause {...DATAOPS_ICON_PROPS} />}
                 loading={isToggleLoading}
                 disabled={shouldDisableAction}
                 onClick={() => onPipelineAction(record, toggleAction)}

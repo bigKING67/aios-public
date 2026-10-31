@@ -4,6 +4,7 @@ import json
 import uuid
 from psycopg2.extras import RealDictCursor
 from .execution import Cancelled
+from . import remix_cloud_sources
 
 
 def claim(conn) -> dict | None:
@@ -73,8 +74,11 @@ def verify_sources(conn, snapshot: dict, bucket: str) -> None:
 def verify_source_rows(cursor, snapshot: dict, bucket: str, *, lock=False) -> None:
     """Same source contract inside a caller-owned transaction when adopting edits."""
     for asset in snapshot["assets"]:
+        if remix_cloud_sources.video_id(asset["objectKey"]) is not None:
+            remix_cloud_sources.resolve(cursor, asset, lock=lock)
+            continue
         cursor.execute("""SELECT raw_object_key,raw_sha256 FROM ads.marketing_content_assets
-              WHERE asset_id=%s AND bucket=%s AND asset_status='ready' AND NOT external_only
+              WHERE asset_id=%s AND bucket=%s AND asset_status='ready' AND NOT external_only AND NOT is_deleted
                 AND repurpose_allowed IS DISTINCT FROM FALSE AND authorization_status NOT IN ('restricted','expired')
                 AND (authorization_starts_at IS NULL OR authorization_starts_at<=CURRENT_DATE)
                 AND (authorization_expires_at IS NULL OR authorization_expires_at>=CURRENT_DATE)""" +

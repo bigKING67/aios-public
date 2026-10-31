@@ -1,5 +1,7 @@
-import { Drawer, Select } from 'antd';
+import { Drawer } from '@lobehub/ui';
 import type { CSSProperties } from 'react';
+
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 
 import { formatCompactWanInteger } from './dashboard-formatters';
 import dynamicVarStyles from './dashboard-dynamic-vars.module.css';
@@ -55,24 +57,30 @@ export function DashboardLiveFunnelDrawer({
                 {sessionCount} 场直播
               </span>
               {sessionCount > 1 ? (
-                <Select<string>
-                  className={sessionSelectStyles.sessionSelect}
+                <LabeledSelect<string>
+                  label="选择直播场次"
+                  wrapperClassName={sessionSelectStyles.sessionSelect}
+                  classNames={{ trigger: sessionSelectStyles.sessionSelectTrigger }}
                   popupClassName={sessionDropdownStyles.sessionDropdown}
                   size="middle"
                   placeholder="选择直播场次"
                   options={sessionOptions}
                   value={selectedSessionKey}
-                  onChange={onSessionChange}
+                  onChange={(value) => {
+                    if (value !== undefined) {
+                      onSessionChange(value);
+                    }
+                  }}
                 />
               ) : null}
             </div>
           ) : null}
         </div>
       }
-      className={drawerStyles.drawer}
+      classNames={{ content: drawerStyles.body, header: drawerStyles.header, title: drawerStyles.title }}
       placement="right"
       width={isMobile ? '100%' : 1020}
-      closable={{ placement: 'end' }}
+      closable
       open={open}
       onClose={onClose}
     >
@@ -94,6 +102,7 @@ export function DashboardLiveFunnelDrawer({
                         style={{
                           '--live-funnel-bar-width': `${step.widthPercent}%`,
                           '--live-funnel-bar-bg': step.color,
+                          '--live-funnel-bar-text': step.textColor,
                           '--live-funnel-bar-delay': `${index * 48}ms`,
                         } as CSSProperties}
                       >

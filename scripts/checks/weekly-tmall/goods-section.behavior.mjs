@@ -41,6 +41,7 @@ function main() {
   const bannedIdentifiers = [
     'buildTmallGoodsAttributionLeafProps',
     'ColumnsType',
+    'TableColumnsType',
     'WaterfallChart',
     'ComponentProps',
     'resolveResponsiveTableSize',

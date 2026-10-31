@@ -25,7 +25,7 @@
 }
 
 .track {
-  stroke: var(--bg-hover);
+  stroke: var(--lobe-color-fill-tertiary);
   stroke-width: 11;
 }
 
@@ -47,7 +47,7 @@
 .totalLabel,
 .totalValue {
   text-anchor: middle;
-  fill: var(--text-secondary);
+  fill: var(--lobe-color-text-secondary);
 }
 
 .totalLabel {
@@ -57,7 +57,7 @@
 .totalValue {
   font-size: var(--font-size-donut-value);
   font-weight: 700;
-  fill: var(--text-primary);
+  fill: var(--lobe-color-text);
 }
 
 .legend {
@@ -74,7 +74,7 @@
   grid-template-columns: 10px minmax(48px, 1fr) auto auto auto;
   align-items: center;
   gap: var(--spacing-2);
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
@@ -87,7 +87,7 @@
 
 .legendName {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;

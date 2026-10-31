@@ -15,6 +15,7 @@ import uuid
 
 import psycopg2
 from psycopg2 import errors as pg_errors
+from . import remix_qc, remix_qc_sources
 
 LOG = logging.getLogger(__name__)
 TITLE_PRODUCT_CHARS = 40
@@ -65,14 +66,15 @@ def publish(cursor, run_id, snapshot: dict, receipt: dict, output_key: str) -> s
     clips = snapshot.get("clips") if isinstance(snapshot, dict) else None
     if not segments or not isinstance(clips, list) or not _clips_match(segments, clips):
         return MISMATCH
+    reason = remix_qc.delivery_reason(snapshot, receipt)
+    if reason:
+        return reason
     inspection = receipt.get("host_inspection") or {}
     sha = str(inspection.get("sha256") or "").lower()
     if len(sha) != 64 or any(c not in "0123456789abcdef" for c in sha):
         return MISMATCH
-    cursor.execute("SELECT bucket FROM ads.marketing_content_assets WHERE asset_id=%s",
-                   (segments[0]["assetId"],))
-    source = cursor.fetchone()
-    if not source:
+    bucket = _output_bucket(cursor, segments, receipt, output_key)
+    if not bucket:
         return MISMATCH
     product = link["product"] or ""
     batch = uuid.UUID(str(link["batch_id"]))
@@ -81,13 +83,23 @@ def publish(cursor, run_id, snapshot: dict, receipt: dict, output_key: str) -> s
                   "ordinal": link["ordinal"], "mode": link.get("mode") if link.get("mode") in ("edit", "sellingPoint") else "framework"}
     cursor.execute("SAVEPOINT remix_output")
     try:
-        _register(cursor, run_id, link, segments, source["bucket"], output_key, sha, inspection, provenance, title)
-    except pg_errors.UniqueViolation:
-        # The same rendered bytes are already an active library asset: register no second
-        # asset, but link that asset as this Run's output so its lineage stays traceable.
-        cursor.execute("ROLLBACK TO SAVEPOINT remix_output")
-        LOG.warning("remix output of run %s duplicates an existing raw_sha256; linking that asset", run_id)
-        return _link_existing(cursor, run_id, segments, sha)
+        # Share locks remain held through asset/lineage commit, closing the gap
+        # between the pre-upload check and a human changing segment confirmation.
+        if remix_qc_sources.check(cursor, run_id, snapshot)["status"] != "passed":
+            cursor.execute("RELEASE SAVEPOINT remix_output")
+            return "remix_qc_sources_changed"
+        try:
+            _register(cursor, run_id, link, segments, bucket, output_key, sha, inspection, provenance, title)
+        except pg_errors.UniqueViolation:
+            # The same rendered bytes are already an active library asset: register no second
+            # asset, but link that asset as this Run's output so its lineage stays traceable.
+            cursor.execute("ROLLBACK TO SAVEPOINT remix_output")
+            LOG.warning("remix output of run %s duplicates an existing raw_sha256; checking whether it can be linked", run_id)
+            # The savepoint rollback released the source locks acquired above.
+            if remix_qc_sources.check(cursor, run_id, snapshot)["status"] != "passed":
+                cursor.execute("RELEASE SAVEPOINT remix_output")
+                return "remix_qc_sources_changed"
+            return _link_existing(cursor, run_id, segments, sha)
     except psycopg2.OperationalError:
         cursor.execute("ROLLBACK TO SAVEPOINT remix_output")
         LOG.warning("remix output registration of run %s hit a transient database error; retrying later", run_id)
@@ -97,13 +109,35 @@ def publish(cursor, run_id, snapshot: dict, receipt: dict, output_key: str) -> s
         cursor.execute("ROLLBACK TO SAVEPOINT remix_output")
         LOG.exception("remix output registration failed for run %s", run_id)
         return FAILED
+    except (KeyError, TypeError, ValueError):
+        cursor.execute("ROLLBACK TO SAVEPOINT remix_output")
+        cursor.execute("RELEASE SAVEPOINT remix_output")
+        return remix_qc.INCOMPLETE
     cursor.execute("RELEASE SAVEPOINT remix_output")
     return None
 
 
+def _output_bucket(cursor, segments, receipt, output_key):
+    storage = receipt.get("host_output_storage")
+    if storage is not None:
+        if (not isinstance(storage, dict) or storage.get("provider") != "tos"
+                or storage.get("objectKey") != output_key or not isinstance(storage.get("bucket"), str)
+                or not storage["bucket"].strip() or storage["bucket"] == "cloud_video"):
+            return None
+        return storage["bucket"]
+    # Old Garage receipts predate this field. A cloud or mixed-source Run must
+    # always provide the upload location rather than inherit a source bucket.
+    cursor.execute("""SELECT asset_id,bucket,source_type FROM ads.marketing_content_assets
+        WHERE asset_id=ANY(%s::UUID[])""", (list({s["assetId"] for s in segments}),))
+    rows = cursor.fetchall()
+    if any(r["bucket"] == "cloud_video" or r["source_type"] == "cloud_video" for r in rows):
+        return None
+    return next((r["bucket"] for r in rows if str(r["asset_id"]) == str(segments[0]["assetId"])), None)
+
+
 def _link_existing(cursor, run_id, segments, sha) -> str | None:
     cursor.execute("""SELECT asset_id FROM ads.marketing_content_assets
-      WHERE raw_sha256=%s AND is_deleted=FALSE""", (sha,))
+      WHERE raw_sha256=%s AND is_deleted=FALSE AND bucket<>'cloud_video' AND source_type<>'cloud_video'""", (sha,))
     existing = cursor.fetchone()
     if not existing:
         return FAILED

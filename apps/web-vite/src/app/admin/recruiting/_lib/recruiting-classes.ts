@@ -3,7 +3,8 @@
  * token aliases, so this page adds almost no CSS to the strict total-CSS budget.
  */
 export const recruitingClasses = {
-  pageHint: "mb-4 text-sm text-text-secondary break-words",
+  page: "flex min-w-0 flex-col gap-4",
+  pageHint: "break-words",
   tabular: "font-mono tabular-nums whitespace-nowrap",
   drawerLoading: "flex justify-center py-12",
   drawerLayout:
@@ -15,7 +16,7 @@ export const recruitingClasses = {
   answerText:
     "m-0 whitespace-pre-wrap rounded-md border border-border-color bg-bg-subtle px-4 py-3 font-sans text-base leading-relaxed text-text-primary break-words",
   answerCode:
-    "m-0 max-h-96 overflow-auto whitespace-pre rounded-md border border-border-color bg-bg-subtle px-4 py-3 font-mono text-sm leading-relaxed text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
+    "m-0 max-h-96 overflow-auto whitespace-pre rounded-md border border-border-color bg-bg-subtle px-4 py-3 font-mono text-sm leading-relaxed text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--aios-ai-9)]",
   reviewPanel: "flex flex-col gap-3",
   scoreSummary: "flex items-center justify-between gap-3",
   scoreTotal:
@@ -26,10 +27,11 @@ export const recruitingClasses = {
   dimensionLabel: "text-sm font-medium text-text-primary",
   dimensionValue: "font-mono text-sm text-text-tertiary",
   dimensionGuidance: "m-0 text-xs text-text-tertiary",
+  reviewActions: "flex flex-wrap gap-2",
   reviewMeta: "m-0 text-xs text-text-tertiary",
   disclosure: "rounded-md border border-border-color",
   disclosureSummary:
-    "cursor-pointer px-3 py-2 text-sm font-medium text-text-primary focus-visible:outline-2 focus-visible:outline-brand-primary",
+    "cursor-pointer px-3 py-2 text-sm font-medium text-text-primary focus-visible:outline-2 focus-visible:outline-[var(--aios-ai-9)]",
   disclosureBody: "px-3 pb-3",
   rubricList:
     "m-0 list-disc space-y-2 pl-5 text-sm leading-relaxed text-text-secondary",

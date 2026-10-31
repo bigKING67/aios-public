@@ -122,9 +122,8 @@ def _enum(values):
 
 
 # Full-match patterns only: an open-ended pattern lets constrained decoding loop on the prefix.
-STAT_REF = '^(comp|ours):[a-z_]+:[a-z_ >]+$'
+STAT_REF = '^(comp|ours):[a-z_]+:[a-z_ >+]+$'  # `+` joins a selling-point set
 FILM_REF = '^(竞品|蜜粉)-[0-9]{3}$'
-REF = {'type': 'string', 'pattern': f'^({STAT_REF[1:-1]}|{FILM_REF[1:-1]})$'}
 
 
 INSIGHT = _obj({'id': {'type': 'string', 'pattern': '^i[0-9]+$'}, 'statement': {'type': 'string'},
@@ -133,9 +132,10 @@ INSIGHT = _obj({'id': {'type': 'string', 'pattern': '^i[0-9]+$'}, 'statement': {
                'limitation': {'type': 'string'}})
 
 
-def response_schema():
+def response_schema(film_ref=FILM_REF):
+    """`film_ref`: full-match pattern of a film id (offline runs number films, the online report uses aweme ids)."""
     text = {'type': 'string'}
-    ids = _arr(text)
+    ref = {'type': 'string', 'pattern': f'^({STAT_REF[1:-1]}|{film_ref[1:-1]})$'}
     return _obj({
         'phenomenon_scope': text,
         'stats_used': _arr(_obj({'stat_id': {'type': 'string', 'pattern': STAT_REF},
@@ -146,8 +146,8 @@ def response_schema():
             'id': {'type': 'string', 'pattern': '^d[0-9]+$'}, 'question': text,
             'hypotheses': _arr(_obj({'id': {'type': 'string', 'pattern': '^h[0-9]+$'},
                                      'category': _enum(HYPOTHESIS_CATEGORIES), 'statement': text,
-                                     'support': _arr(REF),
-                                     'against': _arr(REF),
+                                     'support': _arr(ref),
+                                     'against': _arr(ref),
                                      'missing_data': _arr(text),
                                      'status': _enum(STATUSES)})),
         })),

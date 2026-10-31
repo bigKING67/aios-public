@@ -274,7 +274,6 @@ function assertProtectedPolicyEntryBehavior(canAccess, entry) {
 
   if (
     entry.kind !== 'authenticated' &&
-    entry.kind !== 'content_assets' &&
     entry.kind !== 'sample_inventory'
   ) {
     assertFalse(
@@ -417,30 +416,38 @@ export async function runProtectedNavigationConsistencyCheck(assertions) {
     canAccess(ROUTE_PATHS.marketingCreatorLibrary, { roles: ['bd'] }),
     'BD role should allow creator library route access without unrelated report permissions',
   );
-  assertTrue(
+  // 素材库 and 直播中台 are super-admin modules for now; AI 创作中心 stays open to every signed-in account.
+  assertFalse(
     canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: ['marketing:content_assets:read'] }),
-    'content assets read permission should allow content assets route access',
+    'content assets read permission alone should not allow content assets route access',
   );
-  assertTrue(
+  assertFalse(
     canAccess(ROUTE_PATHS.marketingContentAssets, { permissions: ['marketing:content_assets:write'] }),
-    'content assets write permission should allow content assets route access',
+    'content assets write permission alone should not allow content assets route access',
+  );
+  assertFalse(
+    canAccess(ROUTE_PATHS.contentLiveCenter, { roles: [], permissions: [] }),
+    'regular authenticated users should not open the live center',
   );
   assertTrue(
-    canAccess(ROUTE_PATHS.marketingContentAssets, { roles: [], permissions: [] }),
-    'regular authenticated users should allow content assets route access',
+    canAccess(ROUTE_PATHS.marketingContentAssets, { roles: ['super_admin'], permissions: [] }),
+    'the super admin should allow content assets route access',
+  );
+  assertTrue(
+    canAccess(ROUTE_PATHS.contentLiveCenter, { roles: ['super_admin'], permissions: [] }),
+    'the super admin should open the live center',
   );
   assertFalse(
     canAccess(ROUTE_PATHS.marketingContentAssets, {
       isAuthenticated: false,
-      permissions: ['marketing:content_assets:read'],
+      roles: ['super_admin'],
     }),
     'content assets route access must still require authentication',
   );
   for (const aiStudioPath of [ROUTE_PATHS.contentAiStudio, ROUTE_PATHS.contentAiStudioEditing]) {
     assertTrue(
-      canAccess(aiStudioPath, { roles: [], permissions: [] }) ===
-        canAccess(ROUTE_PATHS.marketingContentAssets, { roles: [], permissions: [] }),
-      `${aiStudioPath} access must follow content assets route access`,
+      canAccess(aiStudioPath, { roles: [], permissions: [] }),
+      `${aiStudioPath} must stay open to every signed-in account`,
     );
     assertFalse(
       canAccess(aiStudioPath, { isAuthenticated: false, permissions: ['marketing:content_assets:read'] }),

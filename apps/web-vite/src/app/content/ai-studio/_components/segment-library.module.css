@@ -4,97 +4,116 @@
   gap: var(--spacing-4);
 }
 
+/*
+ * One filter row: label chips (and their note) on the left, the product picker on the right, so
+ * the row is as tall as one control and does not leave half the card empty.
+ */
 .labelStrip {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-4);
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
-.stripHead {
+/* Chips wrap inside their own column so the product picker stays at the row's end. */
+.chipsGroup {
   display: flex;
+  flex: 1 1 0;
   flex-wrap: wrap;
   gap: var(--spacing-2) var(--spacing-3);
   align-items: center;
+  min-width: 0;
 }
 
 .stripProduct {
-  min-width: 220px;
+  flex: none;
+  width: 200px;
+}
+
+@media (max-width: 640px) {
+  .chipsGroup {
+    flex-basis: 100%;
+  }
+
+  .stripProduct {
+    width: 100%;
+  }
 }
 
 .stripNote {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
 }
 
 .stripSkeleton {
-  height: 56px;
+  width: min(480px, 100%);
+  height: 32px;
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: var(--spacing-1);
 }
 
+/*
+ * v3 filter chips, as Linear's view tabs: one line, name then count. The chosen chip gets a gray
+ * fill and a hairline border with ink text; the rest are bare gray text. Inverted ink fills stay
+ * reserved for the page's primary action.
+ */
 .chip {
   display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
-  min-width: 96px;
-  min-height: 56px;
-  padding: var(--spacing-2) var(--spacing-3);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
-  color: var(--text-primary);
-  background: var(--bg-card);
+  gap: 6px;
+  align-items: center;
+  height: 32px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  color: var(--lobe-color-text-secondary);
+  background: transparent;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
   cursor: pointer;
-  transition: border-color 120ms ease, background-color 120ms ease;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
 }
 
 .chip:hover {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .chip:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
 .chipName {
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
+  color: inherit;
 }
 
 .chipCount {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  color: var(--lobe-color-text-tertiary);
+  font-weight: var(--font-weight-normal);
   font-variant-numeric: tabular-nums;
-  line-height: var(--line-height-tight);
 }
 
 .chipActive,
 .chipActive:hover {
-  border-color: var(--brand-primary);
-  color: var(--brand-on-primary);
-  background: var(--brand-primary);
+  border-color: var(--lobe-color-border);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-secondary);
 }
 
-.chipActive .chipName {
-  color: var(--brand-on-primary-muted);
+.chipActive .chipCount {
+  color: var(--lobe-color-text-secondary);
 }
 
-.chipGap {
-  border-style: dashed;
-  border-color: var(--status-warning-border);
-  background: var(--status-warning-bg);
-}
-
+/* A label with no confirmed segment says 待补 in amber; the word carries it, no dashed box. */
 .chipGap .chipCount {
-  color: var(--status-warning-strong);
-  font-size: var(--font-size-base);
+  color: var(--aios-status-warning-strong);
 }
 
 .toolbar {
@@ -104,11 +123,11 @@
   align-items: center;
   justify-content: space-between;
   padding-top: var(--spacing-3);
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .resultCount {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
 }
@@ -145,33 +164,33 @@
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   cursor: pointer;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .segmentCard:hover {
-  border-color: var(--brand-border);
-  box-shadow: var(--shadow-sm);
+  border-color: var(--aios-ai-border);
+  box-shadow: var(--lobe-box-shadow-tertiary);
 }
 
 .segmentCard:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
 .segmentCardSelected {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 1px var(--brand-primary);
+  border-color: var(--lobe-color-primary);
+  box-shadow: 0 0 0 1px var(--lobe-color-primary);
 }
 
 .segmentCover {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .coverMedia {
@@ -189,7 +208,7 @@
   z-index: 2;
   padding: 2px var(--spacing-2);
   border-radius: var(--border-radius-sm);
-  color: var(--text-inverse);
+  color: var(--lobe-color-text-light-solid);
   background: var(--segment-library-material-ink-a780);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
@@ -206,7 +225,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--border-radius-md);
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .segmentBody {
@@ -227,14 +246,14 @@
 }
 
 .segmentHeadline strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   white-space: nowrap;
 }
 
 .segmentHeadline span {
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -243,7 +262,7 @@
 .segmentSource {
   overflow: hidden;
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -260,25 +279,25 @@
 .segmentPill {
   padding: 1px var(--spacing-2);
   border-radius: var(--border-radius-full);
-  color: var(--text-secondary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-fill-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
 
 .pillReady {
-  color: var(--brand-text-strong);
-  background: var(--brand-secondary);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
 }
 
 .pillActive {
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  color: var(--aios-ai-text);
+  background: var(--aios-ai-soft);
 }
 
 .pillWarning {
-  color: var(--status-warning-strong);
-  background: var(--status-warning-bg);
+  color: var(--aios-status-warning-strong);
+  background: var(--lobe-color-warning-bg);
 }
 
 .cardActions {
@@ -309,9 +328,9 @@
   gap: var(--spacing-2);
   align-items: center;
   padding: var(--spacing-2) var(--spacing-3);
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--aios-ai-border);
   border-radius: var(--border-radius-md);
-  background: var(--brand-secondary);
+  background: var(--aios-ai-soft);
 }
 
 @media (max-width: 560px) {

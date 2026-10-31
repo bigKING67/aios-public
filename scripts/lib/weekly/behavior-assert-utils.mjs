@@ -17,8 +17,8 @@ const DEFAULT_WEEKLY_BEHAVIOR_BUNDLE_EXTERNALS = [
   'react',
   'react-dom',
   'echarts',
-  'antd',
-  '@ant-design/icons',
+  '@lobehub/ui',
+  'lucide-react',
 ];
 
 export function createWeeklyTabsEntrySource(repoRoot, moduleName, exportNames) {

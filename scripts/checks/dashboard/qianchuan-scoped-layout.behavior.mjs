@@ -353,7 +353,7 @@ assertMatches(
 );
 assertMatches(
   filterTabStyles,
-  /\.tabRailThumb\s*\{[\s\S]*?width:\s*var\(--dashboard-platform-thumb-base-width,\s*1px\);[\s\S]*?border-radius:[\s\S]*?var\(--dashboard-platform-thumb-radius-x,\s*var\(--border-radius-full\)\)[\s\S]*?var\(--dashboard-platform-thumb-radius-y,\s*var\(--border-radius-full\)\);[\s\S]*?background-color:\s*var\(--brand-primary\);[\s\S]*?transform:\s*translate3d\(var\(--dashboard-platform-thumb-origin-left,\s*0\),\s*0,\s*0\)[\s\S]*?scaleX\(var\(--dashboard-platform-thumb-scale-x,\s*1\)\);[\s\S]*?transform-origin:\s*center center;/u,
+  /\.tabRailThumb\s*\{[\s\S]*?width:\s*var\(--dashboard-platform-thumb-base-width,\s*1px\);[\s\S]*?border-radius:[\s\S]*?var\(--dashboard-platform-thumb-radius-x,\s*var\(--border-radius-full\)\)[\s\S]*?var\(--dashboard-platform-thumb-radius-y,\s*var\(--border-radius-full\)\);[\s\S]*?background-color:\s*var\(--lobe-color-primary\);[\s\S]*?transform:\s*translate3d\(var\(--dashboard-platform-thumb-origin-left,\s*0\),\s*0,\s*0\)[\s\S]*?scaleX\(var\(--dashboard-platform-thumb-scale-x,\s*1\)\);[\s\S]*?transform-origin:\s*center center;/u,
   'dashboard platform thumb should use centered transform morphs with radius compensation like a stable pill'
 );
 assertMatches(
@@ -408,17 +408,17 @@ assertDoesNotMatch(
 );
 assertMatches(
   filterControlStyles,
-  /\.dateModeSegmented :global\(\.ant-segmented-thumb\)\s*\{[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;[\s\S]*?background-color:\s*var\(--brand-primary\)[\s\S]*?box-shadow:\s*var\(--dashboard-brand-tab-shadow\)/u,
+  /\.dateModeSegmented :global\(\.lobe-segmented__indicator\)\s*\{[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;[\s\S]*?background-color:\s*var\(--lobe-color-primary\)[\s\S]*?box-shadow:\s*var\(--dashboard-brand-tab-shadow\)/u,
   'date mode segmented control should remain the active-pill motion baseline'
 );
 assertMatches(
   filterControlStyles,
-  /\.dateModeSegmented :global\(\.ant-segmented-item\)\s*\{[\s\S]*?min-width:\s*var\(--dashboard-selection-compact-min-width\);[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;/u,
+  /\.dateModeSegmented :global\(\.lobe-segmented__item\)\s*\{[\s\S]*?min-width:\s*var\(--dashboard-selection-compact-min-width\);[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;/u,
   'date mode segmented items should share compact full-pill geometry and avoid near-circular one-character pills'
 );
 assertMatches(
   filterControlStyles,
-  /\.dateModeSegmented :global\(\.ant-segmented-item-label\)\s*\{[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*100%;[\s\S]*?min-height:\s*var\(--dashboard-selection-compact-height\);[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;/u,
+  /\.dateModeSegmented :global\(\.lobe-segmented__item-label\)\s*\{[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*100%;[\s\S]*?min-height:\s*var\(--dashboard-selection-compact-height\);[\s\S]*?border-radius:\s*var\(--border-radius-full\)\s*!important;/u,
   'date mode segmented labels should center text inside the compact full-pill geometry'
 );
 assertMatches(
@@ -428,7 +428,7 @@ assertMatches(
 );
 assertMatches(
   dimensionNavStyles,
-  /\.dimensionButtonActive\s*\{[\s\S]*?border-radius:\s*var\(--dashboard-selection-tile-radius\);[\s\S]*?background:\s*var\(--brand-primary\);[\s\S]*?box-shadow:\s*var\(--dashboard-brand-selected-shadow\);/u,
+  /\.dimensionButtonActive\s*\{[\s\S]*?border-radius:\s*var\(--dashboard-selection-tile-radius\);[\s\S]*?background:\s*var\(--lobe-color-primary\);[\s\S]*?box-shadow:\s*var\(--dashboard-brand-selected-shadow\);/u,
   'dashboard dimension active tile should share the brand selected-state family without becoming a full pill'
 );
 assertDoesNotMatch(
@@ -498,7 +498,7 @@ assertMatches(
 );
 assertMatches(
   contentStyles,
-  /\.table :global\(\.ant-table-container\)\s*\{[\s\S]*?overflow:\s*hidden;/u,
+  /\.table :global\(\.lobe-table-container\)\s*\{[\s\S]*?overflow:\s*hidden;/u,
   'qianchuan table containers should clip content inside the rounded table boundary'
 );
 assertNotIncludes(
@@ -543,29 +543,17 @@ assertMatches(
 );
 assertMatches(
   contentStyles,
-  /\.table :global\(\.ant-table-thead > tr > th\.ant-table-cell-fix-left\),[\s\S]*?z-index:\s*7\s*!important;/u,
+  /\.table :global\(\.lobe-table-thead > tr > th\.lobe-table-cell-fix-start\),[\s\S]*?z-index:\s*7\s*!important;/u,
   'qianchuan fixed header cells should stay below the dashboard filter topbar dock'
 );
 assertMatches(
   contentStyles,
-  /\.table :global\(\.ant-table-tbody > tr > td\.ant-table-cell-fix-left\),[\s\S]*?z-index:\s*6\s*!important;/u,
+  /\.table :global\(\.lobe-table-tbody > tr > td\.lobe-table-cell-fix-start\),[\s\S]*?z-index:\s*6\s*!important;/u,
   'qianchuan fixed body cells should stay below the dashboard filter topbar dock'
 );
-assertIncludes(
-  contentStyles,
-  'width: 0 !important;',
-  'qianchuan page-size select should hide the readonly AntD input caret/black line'
-);
-assertIncludes(
-  contentStyles,
-  'opacity: 0 !important;',
-  'qianchuan page-size select readonly AntD input should be visually hidden'
-);
-assertIncludes(
-  contentStyles,
-  'caret-color: transparent !important;',
-  'qianchuan page-size select readonly AntD input caret should be transparent'
-);
+// The AntD page-size select rendered a readonly search input whose caret showed as a black line;
+// lobe's Base UI select has no text input, so there is nothing left to hide.
+assertDoesNotMatch(contentStyles, /\.ant-select/u, 'qianchuan styles should not keep AntD select overrides');
 assertMatches(
   content,
   /title:\s*'视频 \/ 直播间画面对比'[\s\S]*?onClick=\{handleExportMaterialTypeMixDetails\}[\s\S]*?导出明细[\s\S]*?renderDataTable<DashboardQianchuanMaterialTypeMixRow>/u,
@@ -689,12 +677,12 @@ assertIncludes(contentStyles, '.tableIdentityCellLeft', 'qianchuan styles should
 assertIncludes(contentStyles, '.tableVideoName', 'qianchuan styles should define lighter video-name typography');
 assertMatches(
   contentStyles,
-  /\.tableVideoLink\s*\{[\s\S]*color:\s*var\(--brand-text\);[\s\S]*cursor:\s*pointer;[\s\S]*text-decoration:\s*none;/u,
+  /\.tableVideoLink\s*\{[\s\S]*color:\s*var\(--aios-ai-text\);[\s\S]*cursor:\s*pointer;[\s\S]*text-decoration:\s*none;/u,
   'linked video names should use AIOS brand text tokens and a pointer cursor'
 );
 assertMatches(
   contentStyles,
-  /\.tableVideoLink:hover,[\s\S]*\.tableVideoLink:focus-visible\s*\{[\s\S]*color:\s*var\(--brand-active\);[\s\S]*text-decoration:\s*underline;/u,
+  /\.tableVideoLink:hover,[\s\S]*\.tableVideoLink:focus-visible\s*\{[\s\S]*color:\s*var\(--aios-ai-12\);[\s\S]*text-decoration:\s*underline;/u,
   'linked video names should expose hover and keyboard-focus affordance'
 );
 assertIncludes(contentStyles, 'max-width: 280px', 'video names should have a width cap so the column can stay compact');
@@ -710,11 +698,11 @@ assertMatches(
 );
 assertMatches(
   contentStyles,
-  /\.table\s*:global\(\.ant-table-tbody\s*>\s*tr\s*>\s*td\)\s*\{[\s\S]*font-size:\s*var\(--font-size-xs\)\s*!important[\s\S]*font-weight:\s*430\s*!important/u,
+  /\.table\s*:global\(\.lobe-table-tbody\s*>\s*tr\s*>\s*td\)\s*\{[\s\S]*font-size:\s*var\(--font-size-xs\)\s*!important[\s\S]*font-weight:\s*430\s*!important/u,
   'all qianchuan detail table body cells should be smaller than headers, including live-detail class overrides'
 );
 
-assertIncludes(content, 'DownloadOutlined', 'video detail should expose a download icon for exporting details');
+assertIncludes(content, "import { Download } from 'lucide-react';", 'video detail should expose a download icon for exporting details');
 assertIncludes(content, '导出明细', 'video detail should expose an export detail action');
 assertIncludes(
   content,

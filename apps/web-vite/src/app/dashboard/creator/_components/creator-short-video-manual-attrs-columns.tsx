@@ -1,13 +1,19 @@
 'use client';
 
-import { Button, Input, InputNumber, Popconfirm, Select, Space, type SelectProps } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import type { KeyboardEvent, ReactNode } from 'react';
+import { Button, Input, InputNumber, confirmModal, type TableColumnsType } from '@lobehub/ui';
+import type { ReactNode } from 'react';
 import { formatCreatorCurrencyCell, formatCreatorIntegerCell } from './creator-formatters';
 import type { CreatorShortVideoDetailRow } from './creator-short-video-dashboard-types';
 import styles from './creator-short-video-manual-attrs.module.css';
+import { ManualTagSelect } from './creator-short-video-manual-attrs-select';
 import {
-  filterManualSelectOption,
+  CREATOR_TYPE_LABEL_RENDER,
+  CREATOR_TYPE_OPTION_RENDER,
+  MCN_LABEL_RENDER,
+  MCN_OPTION_RENDER,
+  resolveManualTagClassName,
+} from './creator-short-video-manual-attrs-tag-render';
+import {
   formatManualUpdatedAt,
   hasCreatorShortVideoManualAttrs,
   normalizeCreatorTypeValue,
@@ -20,8 +26,6 @@ import {
   type ManualTagKind,
 } from './creator-short-video-manual-attrs-utils';
 
-type ManualSelectProps = SelectProps<string, ManualSelectOption>;
-
 interface BuildCreatorShortVideoManualAttrColumnsParams {
   editingRowKey: string | null;
   savingRowKey: string | null;
@@ -29,8 +33,6 @@ interface BuildCreatorShortVideoManualAttrColumnsParams {
   draft: CreatorShortVideoManualAttrsDraft | null;
   creatorTypeOptions: ManualSelectOption[];
   mcnOptions: ManualSelectOption[];
-  creatorTypeSearchValue: string;
-  mcnSearchValue: string;
   setCreatorTypeSearchValue: (value: string) => void;
   setMcnSearchValue: (value: string) => void;
   updateDraft: (patch: Partial<CreatorShortVideoManualAttrsDraft>) => void;
@@ -44,58 +46,12 @@ interface BuildCreatorShortVideoManualAttrColumnsParams {
   cancelEdit: () => void;
 }
 
-const MANUAL_SELECT_POPUP_CLASS_NAME = styles.manualAttrSelectPopup;
-
-function resolveManualTagClassName(kind: ManualTagKind): string {
-  const toneClassName = kind === 'creatorType' ? styles.manualAttrTagCreatorType : styles.manualAttrTagMcn;
-
-  return [styles.manualAttrTag, toneClassName].filter(Boolean).join(' ');
-}
-
 function renderManualTagValue(value: string | null | undefined, kind: ManualTagKind): ReactNode {
   const normalized = kind === 'creatorType' ? normalizeCreatorTypeValue(value) : trimToNullable(value);
   if (!normalized) return '--';
 
   return <span className={resolveManualTagClassName(kind)}>{normalized}</span>;
 }
-
-function resolveManualTagLabel(label: ReactNode, value: string): string {
-  if (typeof label === 'string' || typeof label === 'number') return String(label);
-
-  return value;
-}
-
-function createManualLabelRender(kind: ManualTagKind): NonNullable<ManualSelectProps['labelRender']> {
-  return function manualLabelRender({ label, value }) {
-    const labelText = resolveManualTagLabel(label, String(value ?? ''));
-    if (!labelText) return null;
-
-    return <span className={resolveManualTagClassName(kind)}>{labelText}</span>;
-  };
-}
-
-function createManualOptionRender(kind: ManualTagKind): NonNullable<ManualSelectProps['optionRender']> {
-  return function manualOptionRender(option) {
-    const value = String(option.value ?? option.data.value ?? '');
-    const labelText = resolveManualTagLabel(option.label ?? option.data.label, value);
-
-    return (
-      <span className={styles.manualAttrOption}>
-        <span className={resolveManualTagClassName(kind)}>{labelText}</span>
-        {option.data.isInput ? (
-          <span className={styles.manualAttrOptionHint}>
-            {kind === 'creatorType' ? '新增标签' : '新增 MCN'}
-          </span>
-        ) : null}
-      </span>
-    );
-  };
-}
-
-const CREATOR_TYPE_LABEL_RENDER = createManualLabelRender('creatorType');
-const MCN_LABEL_RENDER = createManualLabelRender('mcn');
-const CREATOR_TYPE_OPTION_RENDER = createManualOptionRender('creatorType');
-const MCN_OPTION_RENDER = createManualOptionRender('mcn');
 
 function renderManualValue(primary: string, secondary?: string | null, cellClassName?: string) {
   return (
@@ -124,10 +80,6 @@ function renderManualFeeValue(row: CreatorShortVideoDetailRow) {
   return renderManualValue(primary, secondary, styles.manualAttrCellNumeric);
 }
 
-function isComposingEnter(event: KeyboardEvent): boolean {
-  return event.key === 'Enter' && (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229);
-}
-
 export function buildCreatorShortVideoManualAttrColumns({
   editingRowKey,
   savingRowKey,
@@ -135,8 +87,6 @@ export function buildCreatorShortVideoManualAttrColumns({
   draft,
   creatorTypeOptions,
   mcnOptions,
-  creatorTypeSearchValue,
-  mcnSearchValue,
   setCreatorTypeSearchValue,
   setMcnSearchValue,
   updateDraft,
@@ -148,7 +98,7 @@ export function buildCreatorShortVideoManualAttrColumns({
   deleteManualAttrs,
   startEdit,
   cancelEdit,
-}: BuildCreatorShortVideoManualAttrColumnsParams): ColumnsType<CreatorShortVideoDetailRow> {
+}: BuildCreatorShortVideoManualAttrColumnsParams): TableColumnsType<CreatorShortVideoDetailRow> {
   return [
     {
       title: '粉丝量',
@@ -169,6 +119,7 @@ export function buildCreatorShortVideoManualAttrColumns({
             min={0}
             precision={0}
             placeholder="粉丝量"
+            aria-label="粉丝量"
             value={draft.fansCount}
             onChange={(value) => updateDraft({ fansCount: normalizeEditableNumber(value) })}
           />
@@ -187,30 +138,16 @@ export function buildCreatorShortVideoManualAttrColumns({
         }
 
         return (
-          <Select
-            className={[styles.manualAttrSelect, styles.manualAttrTagSelect].join(' ')}
-            size="small"
-            allowClear
-            showSearch
+          <ManualTagSelect
+            label="达人类型"
             placeholder="选已有标签，或直接输入新标签"
-            popupClassName={MANUAL_SELECT_POPUP_CLASS_NAME}
-            optionFilterProp="value"
-            filterOption={filterManualSelectOption}
             optionRender={CREATOR_TYPE_OPTION_RENDER}
             labelRender={CREATOR_TYPE_LABEL_RENDER}
-            notFoundContent={<span className={styles.manualAttrEmptyHint}>没有匹配项，输入后按 Enter 作为新标签</span>}
             options={creatorTypeOptions}
-            searchValue={creatorTypeSearchValue}
-            value={draft.creatorType ?? undefined}
+            value={draft.creatorType}
             onSearch={setCreatorTypeSearchValue}
             onChange={handleCreatorTypeChange}
-            onClear={() => handleCreatorTypeChange(null)}
-            onBlur={() => commitCreatorTypeSearchValue('blur')}
-            onInputKeyDown={(event) => {
-              if (event.key === 'Enter' && !isComposingEnter(event)) {
-                commitCreatorTypeSearchValue('enter');
-              }
-            }}
+            onCommitSearch={commitCreatorTypeSearchValue}
           />
         );
       },
@@ -227,30 +164,16 @@ export function buildCreatorShortVideoManualAttrColumns({
         }
 
         return (
-          <Select
-            className={[styles.manualAttrSelect, styles.manualAttrTagSelect].join(' ')}
-            size="small"
-            allowClear
-            showSearch
+          <ManualTagSelect
+            label="MCN"
             placeholder="选已有 MCN，或直接输入新机构"
-            popupClassName={MANUAL_SELECT_POPUP_CLASS_NAME}
-            optionFilterProp="value"
-            filterOption={filterManualSelectOption}
             optionRender={MCN_OPTION_RENDER}
             labelRender={MCN_LABEL_RENDER}
-            notFoundContent={<span className={styles.manualAttrEmptyHint}>没有匹配项，输入后按 Enter 作为新 MCN</span>}
             options={mcnOptions}
-            searchValue={mcnSearchValue}
-            value={draft.mcn ?? undefined}
+            value={draft.mcn}
             onSearch={setMcnSearchValue}
             onChange={handleMcnChange}
-            onClear={() => handleMcnChange(null)}
-            onBlur={() => commitMcnSearchValue('blur')}
-            onInputKeyDown={(event) => {
-              if (event.key === 'Enter' && !isComposingEnter(event)) {
-                commitMcnSearchValue('enter');
-              }
-            }}
+            onCommitSearch={commitMcnSearchValue}
           />
         );
       },
@@ -267,7 +190,7 @@ export function buildCreatorShortVideoManualAttrColumns({
         }
 
         return (
-          <Space direction="vertical" size={4} className={styles.manualAttrEditStack}>
+          <div className={styles.manualAttrEditStack}>
             <div className={styles.manualAttrFeeInputs}>
               <InputNumber
                 className={styles.manualAttrNumberInput}
@@ -276,6 +199,7 @@ export function buildCreatorShortVideoManualAttrColumns({
                 min={0}
                 precision={2}
                 placeholder="金额"
+                aria-label="合作费用金额"
                 value={draft.creatorFeeAmount}
                 onChange={(value) => updateDraft({ creatorFeeAmount: normalizeEditableNumber(value) })}
               />
@@ -285,10 +209,11 @@ export function buildCreatorShortVideoManualAttrColumns({
               size="small"
               allowClear
               placeholder="备注"
+              aria-label="合作费用备注"
               value={draft.creatorFeeNote ?? ''}
               onChange={(event) => updateDraft({ creatorFeeNote: trimToNullable(event.target.value) })}
             />
-          </Space>
+          </div>
         );
       },
     },
@@ -321,7 +246,7 @@ export function buildCreatorShortVideoManualAttrColumns({
 
         if (!isEditing) {
           return (
-            <Space size={4} className={styles.manualAttrActions}>
+            <div className={styles.manualAttrActions}>
               <Button
                 type="link"
                 size="small"
@@ -333,34 +258,34 @@ export function buildCreatorShortVideoManualAttrColumns({
                 编辑
               </Button>
               {hasManualAttrs ? (
-                <Popconfirm
-                  title="删除人工字段"
-                  description="仅删除粉丝量、达人类型、MCN、费用等人工维护字段。"
-                  okText="删除"
-                  cancelText="取消"
-                  okButtonProps={{ danger: true }}
+                <Button
+                  danger
+                  type="link"
+                  size="small"
+                  className={styles.manualAttrActionButton}
+                  loading={isDeleting}
                   disabled={Boolean(editingRowKey) || Boolean(savingRowKey) || Boolean(deletingRowKey) || !canDelete}
-                  onConfirm={() => void deleteManualAttrs(row)}
+                  title={deleteDisabledReason}
+                  onClick={() =>
+                    confirmModal({
+                      title: '删除人工字段',
+                      content: '仅删除粉丝量、达人类型、MCN、费用等人工维护字段。',
+                      okText: '删除',
+                      cancelText: '取消',
+                      okButtonProps: { danger: true },
+                      onOk: () => deleteManualAttrs(row),
+                    })
+                  }
                 >
-                  <Button
-                    danger
-                    type="link"
-                    size="small"
-                    className={styles.manualAttrActionButton}
-                    loading={isDeleting}
-                    disabled={Boolean(editingRowKey) || Boolean(savingRowKey) || Boolean(deletingRowKey) || !canDelete}
-                    title={deleteDisabledReason}
-                  >
-                    删除
-                  </Button>
-                </Popconfirm>
+                  删除
+                </Button>
               ) : null}
-            </Space>
+            </div>
           );
         }
 
         return (
-          <Space size={4} className={styles.manualAttrActions}>
+          <div className={styles.manualAttrActions}>
             <Button
               type="link"
               size="small"
@@ -379,7 +304,7 @@ export function buildCreatorShortVideoManualAttrColumns({
             >
               取消
             </Button>
-          </Space>
+          </div>
         );
       },
     },

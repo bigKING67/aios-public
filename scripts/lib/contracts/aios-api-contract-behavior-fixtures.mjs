@@ -206,10 +206,48 @@ export function runAiosApiContractBehaviorFixtures({
     2,
     'recruiting admin reads should keep the auth requirement',
   );
+  assertDeepEqual(
+    document.paths['/v2/marketing/content-assets/studio/competitor/videos'].get.parameters.map((parameter) => parameter.name),
+    ['source', 'unit', 'date', 'from', 'to', 'page', 'pageSize'],
+    'competitor catalogue exposes its source, calendar and bounded pagination contract',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/competitor/videos/{aweme_id}'].patch.requestBody.content['application/json'].schema.$ref,
+    '#/components/schemas/UpdateCompetitorVideoRequest',
+    'competitor metadata editing has an explicit typed operation',
+  );
   assertEqual(
     document['x-aios-contract'].typedOperationCount,
-    112,
-    'typed operation count should include reports, sample inventory, AI studio remix edits and recruiting',
+    129,
+    'typed operation count should include reports, sample inventory, AI studio remix edits, competitor (with catalogue detail/edit, patterns, overview and AI summary), team output, the structure pool and recruiting',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/structure-pool'].get
+      .responses[200].content['application/json'].schema.$ref,
+    '#/components/schemas/StructurePoolResponse',
+    'structure pool preview exposes the typed allocation and shortage evidence',
+  );
+  assertDeepEqual(
+    document.paths['/v2/marketing/content-assets/studio/daily-remix:run'].post.security,
+    [{ dailyRemixServiceToken: [] }],
+    'daily dispatch accepts only its dedicated service credential',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/segments'].get.parameters
+      .some((parameter) => parameter.name === 'spendClass'),
+    true,
+    'segment lists expose source-spend filtering',
+  );
+  assertDeepEqual(
+    document.paths['/v2/marketing/content-assets/studio/team-output'].get.parameters.map((parameter) => parameter.name),
+    ['unit', 'date', 'from', 'to', 'dimension', 'oneLevelTypeId'],
+    'team output exposes its calendar, dimension and category filter',
+  );
+  assertEqual(
+    document.paths['/v2/marketing/content-assets/studio/team-output/videos'].get
+      .responses[200].content['application/json'].schema.$ref,
+    '#/components/schemas/TeamOutputVideosResponse',
+    'team output video list has an explicit typed response',
   );
   assertEqual(
     document.paths['/v2/sample-inventory/samples'].get

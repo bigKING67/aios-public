@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { AttributionTableProps } from './platform-tab-attribution-table-props';
 import type { AttributionWaterfallChartProps } from './platform-tab-attribution-waterfall-props';
 import type { DouyinSectionData } from './platform-tab-douyin-section-data';
@@ -33,12 +33,12 @@ export interface DouyinShortvideoAnalysisSectionProps
 export interface BuildDouyinShortvideoOverviewLeafPropsInput {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinShortvideoColumns: ColumnsType<DouyinShortvideoRow>;
+  douyinShortvideoColumns: TableColumnsType<DouyinShortvideoRow>;
   waterfallTotalColor: string;
 }
 
 export interface BuildDouyinShortvideoAnalysisLeafPropsInput {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinShortvideoColumns: ColumnsType<DouyinShortvideoRow>;
+  douyinShortvideoColumns: TableColumnsType<DouyinShortvideoRow>;
 }

@@ -30,6 +30,9 @@ export const CREATOR_LIBRARY_WRITE_PERMISSIONS: string[] = [
   'marketing:creator_library:manage',
 ];
 
+/** AI 创作中心 团队产出 (people's 成片 and spend); granted through the team_output_viewer role. */
+export const TEAM_OUTPUT_READ_PERMISSIONS: string[] = ['marketing:team_output:read'];
+
 export const CONTENT_ASSET_READ_PERMISSIONS: string[] = [
   'marketing:content_assets:read',
   'marketing:content_assets:write',

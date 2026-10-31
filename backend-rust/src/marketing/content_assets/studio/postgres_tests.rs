@@ -175,7 +175,7 @@ async fn presets_seed_framework_v1_and_hide_retired_versions() {
 async fn confirmed_segments_never_overlap_within_asset_and_preset() {
     let pool = pool().await;
     let owner = user(OWNER);
-    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(10.0), Some("精华水")).await;
+    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(10.0), Some("定妆喷雾")).await;
     let (asset_b, _) = asset(&pool, None, Some(10.0), None).await;
 
     let first = repository::create_segment(&pool, &owner, SCOPED, create(asset_a, 0, 1000))
@@ -184,7 +184,7 @@ async fn confirmed_segments_never_overlap_within_asset_and_preset() {
     assert_eq!(first.status, "confirmed");
     assert_eq!(first.origin, "human");
     assert_eq!(first.owner_user_id, OWNER);
-    assert_eq!(first.product_name.as_deref(), Some("精华水"));
+    assert_eq!(first.product_name.as_deref(), Some("定妆喷雾"));
     assert_eq!(first.source_content_hash, sha_a);
     assert!(first.source_current);
     assert_eq!(first.source_duration_ms, Some(10_000));
@@ -225,7 +225,7 @@ async fn confirmed_segments_never_overlap_within_asset_and_preset() {
     assert_eq!(other_asset.product_name, None);
     // Editing only the product of a confirmed segment keeps the original confirmer.
     let mut product_only = patch(other_asset.revision);
-    product_only.product_name = Some("面霜".into());
+    product_only.product_name = Some("口红".into());
     let product_only = repository::update_segment(
         &pool,
         &user(OTHER),
@@ -359,7 +359,7 @@ async fn confirmed_segments_never_overlap_within_asset_and_preset() {
 async fn validation_permissions_products_and_listing() {
     let pool = pool().await;
     let owner = user(OWNER);
-    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(10.0), Some("精华水")).await;
+    let (asset_a, sha_a) = asset(&pool, Some(OWNER), Some(10.0), Some("定妆喷雾")).await;
     let (foreign, _) = asset(&pool, Some("someone-else"), Some(10.0), None).await;
     let (unknown_duration, _) = asset(&pool, Some(OWNER), None, None).await;
 
@@ -393,11 +393,11 @@ async fn validation_permissions_products_and_listing() {
     ));
     let mut right_hash = create(asset_a, 0, 1000);
     right_hash.source_content_hash = Some(sha_a.to_ascii_uppercase());
-    right_hash.product_name = Some("  面霜 ".into());
+    right_hash.product_name = Some("  口红 ".into());
     let segment = repository::create_segment(&pool, &owner, SCOPED, right_hash)
         .await
         .unwrap();
-    assert_eq!(segment.product_name.as_deref(), Some("面霜"));
+    assert_eq!(segment.product_name.as_deref(), Some("口红"));
 
     // Unknown asset duration is allowed and marked by sourceDurationMs = null.
     let unbounded =
@@ -485,7 +485,7 @@ async fn validation_permissions_products_and_listing() {
         cursor,
         ..Default::default()
     };
-    let page = repository::list_segments(&pool, query(None), None)
+    let page = repository::list_segments(&pool, query(None), None, 5000.0)
         .await
         .unwrap();
     assert_eq!(
@@ -495,7 +495,7 @@ async fn validation_permissions_products_and_listing() {
             .collect::<Vec<_>>(),
         [2000, 3000]
     );
-    let next = repository::list_segments(&pool, query(page.next_cursor), None)
+    let next = repository::list_segments(&pool, query(page.next_cursor), None, 5000.0)
         .await
         .unwrap();
     assert_eq!(
@@ -514,6 +514,7 @@ async fn validation_permissions_products_and_listing() {
             ..Default::default()
         },
         None,
+        5000.0,
     )
     .await
     .unwrap();
@@ -527,7 +528,7 @@ async fn validation_permissions_products_and_listing() {
         origin: Some(origin.into()),
         ..Default::default()
     };
-    let ai = repository::list_segments(&pool, by_origin("ai"), None)
+    let ai = repository::list_segments(&pool, by_origin("ai"), None, 5000.0)
         .await
         .unwrap();
     assert_eq!(
@@ -537,13 +538,13 @@ async fn validation_permissions_products_and_listing() {
             .collect::<Vec<_>>(),
         [ai_segment]
     );
-    let human = repository::list_segments(&pool, by_origin("human"), None)
+    let human = repository::list_segments(&pool, by_origin("human"), None, 5000.0)
         .await
         .unwrap();
     assert!(!human.items.is_empty());
     assert!(human.items.iter().all(|item| item.origin == "human"));
     assert!(matches!(
-        repository::list_segments(&pool, by_origin("model"), None).await,
+        repository::list_segments(&pool, by_origin("model"), None, 5000.0).await,
         Err(StudioError::App(AppError::BadRequest(_)))
     ));
     assert!(matches!(
@@ -553,7 +554,8 @@ async fn validation_permissions_products_and_listing() {
                 cursor: Some(Uuid::new_v4()),
                 ..Default::default()
             },
-            None
+            None,
+            5000.0
         )
         .await,
         Err(StudioError::App(AppError::BadRequest(_)))
@@ -588,6 +590,7 @@ async fn changed_source_content_marks_segments_stale() {
             ..Default::default()
         },
         None,
+        5000.0,
     )
     .await
     .unwrap();

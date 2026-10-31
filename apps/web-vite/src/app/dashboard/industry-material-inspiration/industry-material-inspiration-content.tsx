@@ -1,5 +1,5 @@
-import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Empty, Skeleton, Table } from 'antd';
+import { Button, Empty, SkeletonText, Table } from '@lobehub/ui';
+import { Download } from 'lucide-react';
 import {
   buildSummaryMetrics,
   formatMonthLabel,
@@ -27,7 +27,7 @@ export function IndustryMaterialSummaryGrid({
       {isLoading
         ? Array.from({ length: 8 }).map((_, index) => (
             <div className={styles.summaryItem} key={index}>
-              <Skeleton active paragraph={{ rows: 1 }} title={{ width: '44%' }} />
+              <SkeletonText rows={2} width={['44%', '100%']} />
             </div>
           ))
         : metrics.map((metric) => (
@@ -68,7 +68,7 @@ export function IndustryMaterialTablePanel({
           <Button
             type="primary"
             className={styles.exportButton}
-            icon={<DownloadOutlined />}
+            icon={<Download size={14} strokeWidth={1.8} aria-hidden="true" />}
             disabled={!rows.length || isFetching}
             onClick={onExportDetails}
           >
@@ -93,7 +93,7 @@ export function IndustryMaterialTablePanel({
           scroll={{ x: TABLE_SCROLL_X, y: 620 }}
           size="middle"
           locale={{
-            emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={emptyDescription} />,
+            emptyText: <Empty description={emptyDescription} />,
           }}
         />
       </div>

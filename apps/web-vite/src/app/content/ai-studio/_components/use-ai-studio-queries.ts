@@ -4,7 +4,7 @@ import {
   fetchStudioCapabilities,
   fetchStudioOverview,
   fetchStudioPresets,
-  type StudioOverviewPeriodKey,
+  type StudioOverviewQuery,
 } from '../_lib/ai-studio-api';
 
 export function useStudioCapabilities() {
@@ -25,10 +25,10 @@ export function useStudioPresets(enabled: boolean) {
 }
 
 /** Estimated spend, live pipeline counts and recent work; keeps the previous period visible while switching. */
-export function useStudioOverview(period: StudioOverviewPeriodKey, enabled: boolean) {
+export function useStudioOverview(query: StudioOverviewQuery, enabled: boolean) {
   return useQuery({
-    queryKey: aiStudioQueryKeys.overview(period),
-    queryFn: ({ signal }) => fetchStudioOverview(period, { signal }),
+    queryKey: aiStudioQueryKeys.overview(query),
+    queryFn: ({ signal }) => fetchStudioOverview(query, { signal }),
     enabled,
     placeholderData: keepPreviousData,
     staleTime: 30_000,

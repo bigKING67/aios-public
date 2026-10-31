@@ -1,0 +1,159 @@
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  align-items: baseline;
+  padding-block: var(--spacing-2);
+  border-block: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.compact {
+  display: grid;
+  gap: var(--spacing-1);
+  padding-block: var(--spacing-1);
+  font-size: var(--font-size-xs);
+}
+
+.status {
+  display: inline-flex;
+  flex: none;
+  gap: var(--spacing-1);
+  align-items: center;
+  font-weight: var(--font-weight-medium);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.passed {
+  color: var(--aios-status-success);
+}
+
+.failed {
+  color: var(--aios-status-danger);
+}
+
+.incomplete {
+  color: var(--aios-status-warning-strong);
+}
+
+.unverified,
+.details {
+  color: var(--lobe-color-text-tertiary);
+}
+
+.report,
+.reportMissing {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+.report > summary {
+  width: fit-content;
+  padding-block: var(--spacing-1);
+  color: var(--lobe-color-text);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.report > summary:focus-visible {
+  border-radius: var(--border-radius-sm);
+  outline: 2px solid var(--lobe-focus-ring-color);
+  outline-offset: 2px;
+}
+
+.reportBody {
+  display: grid;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-2);
+}
+
+.reportSection {
+  display: grid;
+  gap: var(--spacing-2);
+}
+
+.reportSection + .reportSection {
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--lobe-color-border-secondary);
+}
+
+.reportSection h4 {
+  margin: 0;
+  color: var(--lobe-color-text);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.reportGrid {
+  display: grid;
+  gap: var(--spacing-1);
+  margin: 0;
+}
+
+.reportRow {
+  display: grid;
+  grid-template-columns: minmax(10em, auto) minmax(0, 1fr);
+  gap: var(--spacing-3);
+}
+
+.reportRow dt {
+  color: var(--lobe-color-text-tertiary);
+}
+
+.reportRow dd {
+  margin: 0;
+  color: var(--lobe-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.checkStatus {
+  display: inline-flex;
+  gap: var(--spacing-1);
+  align-items: center;
+}
+
+.reportList {
+  display: grid;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reportList li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1) var(--spacing-3);
+  justify-content: space-between;
+  padding-block: var(--spacing-1);
+  border-bottom: 1px solid var(--lobe-color-border-secondary);
+  color: var(--lobe-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.reportEmpty,
+.reportPartial,
+.reportNote,
+.reportMissing {
+  margin: 0;
+  color: var(--lobe-color-text-tertiary);
+}
+
+.reportPartial {
+  color: var(--aios-status-warning-strong);
+}
+
+@media (max-width: 680px) {
+  .reportRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}

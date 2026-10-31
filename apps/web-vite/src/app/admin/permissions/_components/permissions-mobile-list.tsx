@@ -1,6 +1,8 @@
 'use client';
 
-import { Card, Pagination, Tag } from 'antd';
+import { Tag } from '@lobehub/ui';
+import { AdminMobilePagination } from '../../_components/admin-mobile-pagination';
+import styles from '../../_components/admin-page.module.css';
 import type { PermissionItem } from './permissions-types';
 
 export interface PermissionsMobileListProps {
@@ -19,45 +21,29 @@ export function PermissionsMobileList({
   total,
 }: PermissionsMobileListProps) {
   return (
-    <div className="space-y-3">
+    <div className={styles.mobileList}>
       {items.map((item) => (
-        <Card key={String(item.id ?? item.code)} size="small" className="w-full">
-          <div className="space-y-2">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="m-0 break-all text-sm font-semibold text-text-primary">
-                  <code>{item.code}</code>
-                </p>
-                <p className="m-0 text-xs text-text-secondary">
-                  {item.display_name || item.name || '-'}
-                </p>
-              </div>
-              <Tag color={item.is_active === false ? 'default' : 'green'}>
-                {item.is_active === false ? '禁用' : '启用'}
-              </Tag>
+        <article key={String(item.id ?? item.code)} className={styles.mobileCard}>
+          <div className={styles.cardHead}>
+            <div className={styles.cardHeadText}>
+              <p className={`${styles.cardTitle} ${styles.cardTitleWrap}`}>
+                <code className={styles.code}>{item.code}</code>
+              </p>
+              <p className={styles.meta}>{item.display_name || item.name || '-'}</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Tag>{item.module || '-'}</Tag>
-              <Tag color="blue">{item.action || '-'}</Tag>
-              <Tag>{item.resource_type || '-'}</Tag>
-            </div>
-            <p className="m-0 text-xs text-text-secondary">
-              描述：{item.description || '-'}
-            </p>
+            <Tag color={item.is_active === false ? undefined : 'success'}>
+              {item.is_active === false ? '禁用' : '启用'}
+            </Tag>
           </div>
-        </Card>
+          <div className={styles.tagRow}>
+            <Tag>{item.module || '-'}</Tag>
+            <Tag>{item.action || '-'}</Tag>
+            <Tag>{item.resource_type || '-'}</Tag>
+          </div>
+          <p className={styles.meta}>描述：{item.description || '-'}</p>
+        </article>
       ))}
-      <Pagination
-        size="small"
-        current={current}
-        pageSize={pageSize}
-        total={total}
-        showSizeChanger
-        showTotal={(nextTotal) => `共 ${nextTotal} 条`}
-        onChange={onPaginationChange}
-        onShowSizeChange={onPaginationChange}
-        hideOnSinglePage
-      />
+      <AdminMobilePagination current={current} pageSize={pageSize} total={total} onChange={onPaginationChange} />
     </div>
   );
 }

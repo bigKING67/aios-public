@@ -8,11 +8,11 @@ import {
   DATAOPS_READ_PERMISSIONS,
 } from './dataops-permissions';
 import {
-  CONTENT_ASSET_WRITE_PERMISSIONS,
   CREATOR_LIBRARY_READ_PERMISSIONS,
   MARKETING_WORKSPACE_READ_PERMISSIONS,
   REPORT_EXPORT_PERMISSIONS,
   REPORT_READ_PERMISSIONS,
+  TEAM_OUTPUT_READ_PERMISSIONS,
 } from './report-permissions';
 import {
   hasAnyPermissionCode,
@@ -29,6 +29,8 @@ import {
   canAccessDataOpsByRole,
   canAccessExportsByRole,
   canAccessWeeklyReportsByRole,
+  isSuperAdminByRoleOrIdentity,
+  isTeamOutputOnlyByRole,
 } from './role-access';
 import {
   AUTH_NAVIGATION_POLICY_PATHS,
@@ -37,6 +39,7 @@ import {
   normalizeRoutePolicyPath,
   type RoutePolicyEntry,
 } from './route-policy-registry';
+import { isPathServedByModuleProfile } from './module-profile';
 
 type RouteAccessIdentity = {
   username?: string | null;
@@ -151,13 +154,11 @@ function canAccessPolicyEntry(
         canAccessCreatorLibraryByRole(options.roles, options.identity) ||
         hasAnyPermissionCode(options.permissionContext, CREATOR_LIBRARY_READ_PERMISSIONS)
       );
-    case 'content_assets':
-      return options.isAuthenticated;
-    case 'content_assets_write':
-      return options.isAuthenticated && hasAnyPermissionCode(
-        options.permissionContext,
-        CONTENT_ASSET_WRITE_PERMISSIONS
-      );
+    case 'team_output':
+      // Admins and the super admin pass like on the backend; everyone else needs the permission.
+      return options.isAuthenticated && hasAnyPermissionCode(options.permissionContext, TEAM_OUTPUT_READ_PERMISSIONS);
+    case 'super_admin':
+      return options.isAuthenticated && isSuperAdminByRoleOrIdentity(options.roles, options.identity);
     default:
       return assertNever(policyEntry);
   }
@@ -171,6 +172,15 @@ export function canAccessPath(
   isAuthenticated = false
 ): boolean {
   const pathname = normalizeRoutePolicyPath(path);
+  if (!isPathServedByModuleProfile(pathname)) return false;
+  // An account limited to 团队产出 keeps only that page and the studio home, which forwards to it.
+  if (
+    isTeamOutputOnlyByRole(roles, identity) &&
+    pathname.startsWith(`${ROUTE_PATHS.contentAiStudio}/`) &&
+    pathname !== ROUTE_PATHS.contentAiStudioTeamOutput
+  ) {
+    return false;
+  }
   const permissionContext = createPermissionAccessContext(permissions, roles, identity);
   return canAccessPolicyEntry(findRoutePolicyEntry(pathname), {
     identity,

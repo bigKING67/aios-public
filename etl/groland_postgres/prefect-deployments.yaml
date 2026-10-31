@@ -5,13 +5,24 @@ defaults:
   timezone: Asia/Shanghai
 
 deployments:
+  - flow_name: daily-remix-flow
+    deployment_name: daily-remix
+    state: active
+    deploy_script: scripts/deploy_prefect_daily_remix.sh
+    deploy_group: content-assets
+    deploy_order: 335
+    schedule: {kind: cron, source_env: CONTENT_AI_STUDIO_DAILY_REMIX_CRON, adapter_env: CRON, default: "0 10 * * *", enabled_env: CONTENT_AI_STUDIO_DAILY_REMIX_SCHEDULE_ENABLED, enabled_default: false, clean_count: 0, legacy_count: 0, active: false}
+    parameters: []
+    concurrency: {source_env: CONTENT_AI_STUDIO_DAILY_REMIX_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
+    watchdog: {success_slo_minutes: null, future_run_lookahead_minutes: null}
+
   - flow_name: cleanup-dataops-runtime-events-flow
     deployment_name: cleanup-dataops-runtime-events-daily
     state: active
     deploy_script: scripts/deploy_prefect_cleanup_dataops_runtime_events.sh
     deploy_group: dataops-hub-core
     deploy_order: 260
-    schedule: {kind: cron, source_env: DATAOPS_CLEANUP_CRON, adapter_env: CRON, default: "15 3 * * *", clean_count: 1, legacy_count: 1, active: true}
+    schedule: {kind: cron, source_env: DATAOPS_CLEANUP_CRON, adapter_env: CRON, default: "15 3 * * *", clean_count: 1, legacy_count: 1, active: false}
     parameters: [cleanup_batch_execution_events, notify_on_deleted_only, retain_days]
     concurrency: {source_env: DATAOPS_CLEANUP_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
     watchdog: {success_slo_minutes: 1800, future_run_lookahead_minutes: 1800}
@@ -44,7 +55,7 @@ deployments:
     deploy_script: scripts/deploy_prefect_dataops_notification_trace_slo_scan.sh
     deploy_group: dataops-hub-core
     deploy_order: 270
-    schedule: {kind: cron, source_env: DATAOPS_NOTIFY_TRACE_SLO_SCAN_CRON, adapter_env: CRON, default: "*/15 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    schedule: {kind: cron, source_env: DATAOPS_NOTIFY_TRACE_SLO_SCAN_CRON, adapter_env: CRON, default: "*/15 * * * *", clean_count: 1, legacy_count: 1, active: false}
     parameters: [dry_run, lookback_hours, max_groups, notify_on_issue_only, scan_concurrency]
     concurrency: {source_env: DATAOPS_NOTIFY_TRACE_SLO_SCAN_DEPLOY_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
     watchdog: {success_slo_minutes: 60, future_run_lookahead_minutes: 60}
@@ -231,7 +242,7 @@ deployments:
     deploy_script: scripts/deploy_prefect_process_douyin_live_center_analysis_jobs.sh
     deploy_group: dataops-hub-core
     deploy_order: 80
-    schedule: {kind: cron, source_env: DOUYIN_LIVE_CENTER_ANALYSIS_CRON, adapter_env: CRON, default: "5-59/10 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    schedule: {kind: cron, source_env: DOUYIN_LIVE_CENTER_ANALYSIS_CRON, adapter_env: CRON, default: "5-59/10 * * * *", clean_count: 1, legacy_count: 1, active: false}
     parameters: [limit]
     concurrency: {source_env: DOUYIN_LIVE_CENTER_ANALYSIS_DEPLOY_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
     watchdog: {success_slo_minutes: 45, future_run_lookahead_minutes: 45}
@@ -308,7 +319,7 @@ deployments:
     deploy_script: scripts/deploy_prefect_marketing_industry_articles.sh
     deploy_group: marketing-industry
     deploy_order: 340
-    schedule: {kind: cron, source_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, adapter_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, default: "7 * * * *", clean_count: 1, legacy_count: 1, active: true}
+    schedule: {kind: cron, source_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, adapter_env: WECHAT_ARTICLE_CACHE_SWEEP_CRON, default: "7 * * * *", clean_count: 1, legacy_count: 1, active: false}
     parameters: [api_base, backfill_missing_content, cache_only_backfill, content_fetch_retries, fetch_full_content, list_fetch_attempts, lookback_days, max_backfill_articles, max_pages_per_source, max_sources_per_run, page_size, rate_limit_buffer_seconds, request_sleep_seconds, retry_permanent_failures, rss_cache_db_path, sync_article_lists, timeout_seconds]
     concurrency: {source_env: WECHAT_ARTICLE_CONCURRENCY_LIMIT, adapter_env: CONCURRENCY_LIMIT, default: 1}
     watchdog: {success_slo_minutes: 180, future_run_lookahead_minutes: 180}

@@ -1,121 +1,85 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchStudioPresets, type StudioCapabilitiesResponse } from '../_lib/ai-studio-api';
 import {
   cancelRemixBatch,
   fetchRemixBatch,
-  fetchRemixBatches,
+  fetchRemixBatchPage,
   hasCancellableRemixItems,
   newRemixIdempotencyKey,
   remixItemStatusView,
-  type StudioRemixBatch,
-  type StudioRemixBatchItem,
 } from '../_lib/remix-api';
+import { useAuthStore } from '@/stores/auth.store';
+import { isSuperAdminAccount } from '@/lib/super-admin';
+import { batch, capabilities, item, renderView, seedPresets, SOURCE } from './remix-outputs-fixtures';
 import { nextRemixPollInterval, REMIX_POLL_INTERVAL_MS, REMIX_POLL_WINDOW_MS } from './use-remix-batches';
-import { RemixOutputsView } from './remix-outputs-view';
 
+vi.mock('@/lib/frontend-env', async (original) => {
+  const actual = await original<typeof import('@/lib/frontend-env')>();
+  return { ...actual, frontendEnv: { ...actual.frontendEnv, superAdminAccounts: 'fixture-super-admin' } };
+});
 vi.mock('../_lib/ai-studio-api', async (original) => ({ ...await original<object>(), fetchStudioPresets: vi.fn() }));
 vi.mock('../_lib/remix-api', async (original) => ({
   ...await original<object>(),
   cancelRemixBatch: vi.fn(),
   fetchRemixBatch: vi.fn(),
-  fetchRemixBatches: vi.fn(),
+  fetchRemixBatchPage: vi.fn(),
 }));
 
-const SOURCE = '9f9f9f9f-0000-4000-8000-000000000001';
-
-function capabilities(extra: Partial<StudioCapabilitiesResponse> = {}): StudioCapabilitiesResponse {
-  return {
-    enabled: true, openAccess: false, canWrite: true, segmentSuggestEnabled: false, segmentSuggestMaxAssets: 5,
-    remixEnabled: true, remixMaxPerBatch: 10, remixMaxSeconds: 600, remixMaxActive: 20, enterpriseTag: null, products: [], canUpload: true, ...extra,
-  };
+/** Opens an output card's ⋯ menu and returns its item names. */
+async function openMoreActions(ordinal: number): Promise<string[]> {
+  fireEvent.click(screen.getByRole('button', { name: `第 ${ordinal} 条的更多操作` }));
+  const items = await screen.findAllByRole('menuitem');
+  return items.map((node) => node.textContent?.trim() ?? '');
 }
 
-function batch(extra: Partial<StudioRemixBatch> = {}): StudioRemixBatch {
-  return {
-    batchId: 'b-1', mode: 'framework', ownerUserId: 'u-me', ownerName: null, ownedByCurrentUser: true, presetKey: 'framework', presetVersion: 1, labels: ['voice', 'demo'], sourceAssetId: null,
-    productName: '精华', requestedCount: 3, plannedCount: 2, seed: 7, status: 'partially_failed',
-    shortfallReason: '可用组合只有 2 种', succeededCount: 1, failedCount: 1, runningCount: 0, cancelledCount: 0,
-    coverUrls: ['https://cdn.invalid/out-1.jpg'], failureReason: 'render_failed',
-    createdAt: '2026-09-29T10:00:00+08:00', updatedAt: '2026-09-29T10:05:00+08:00', ...extra,
-  };
-}
+beforeEach(() => seedPresets());
 
-function item(ordinal: number, extra: Partial<StudioRemixBatchItem> = {}): StudioRemixBatchItem {
-  return {
-    ordinal, runId: `run-${ordinal}`, combinationHash: 'a'.repeat(64), outcome: 'succeeded', runStatus: 'succeeded',
-    runStage: 'delivery', waitingReason: null, jobStatus: 'completed', jobError: null, outputAssetId: `out-${ordinal}`,
-    outputCoverUrl: `https://cdn.invalid/out-${ordinal}.jpg`, durationMs: 9500,
-    segments: [
-      { segmentId: `s-${ordinal}-1`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'voice', startMs: 0, endMs: 4500, slot: null, tier: null, fallback: null, sellingPoints: null, segmentIds: null },
-      { segmentId: `s-${ordinal}-2`, assetId: SOURCE, assetTitle: '整片-001', labelKey: 'demo', startMs: 10000, endMs: 15000, slot: null, tier: null, fallback: null, sellingPoints: null, segmentIds: null },
-    ],
-    ...extra,
-  };
-}
-
-function renderView(entry: string, caps = capabilities()) {
-  // Mirrors the app-wide mutation retry default so a cancel that retried would be caught.
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: 1, retryDelay: 1 } } });
-  render(
-    <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[entry]}>
-        <RemixOutputsView capabilities={caps} />
-      </MemoryRouter>
-    </QueryClientProvider>,
-  );
-}
-
-beforeEach(() => {
-  vi.mocked(fetchStudioPresets).mockResolvedValue([
-    {
-      presetKey: 'framework', version: 1, status: 'active', dimension: 'framework', name: '框架 v1',
-      labels: [{ key: 'voice', name: '混剪口播', definition: '' }, { key: 'demo', name: '实拍内容', definition: '' }],
-    },
-  ]);
-});
-
-afterEach(() => { cleanup(); vi.clearAllMocks(); });
+afterEach(() => { cleanup(); vi.clearAllMocks(); useAuthStore.setState(useAuthStore.getInitialState(), true); });
 
 describe('成片 outputs view', () => {
   it('is honest when remix is off and never lists batches', async () => {
     renderView('/content/ai-studio/outputs', capabilities({ remixEnabled: false }));
     expect(screen.getByRole('heading', { name: '框架混剪未启用' })).toBeInTheDocument();
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(fetchRemixBatches).not.toHaveBeenCalled();
-  });
-
-  it('lists batches as cards with covers, progress and the failure reason', async () => {
-    vi.mocked(fetchRemixBatches).mockResolvedValue([batch()]);
-    renderView('/content/ai-studio/outputs');
-    const link = await screen.findByRole('link', { name: '精华 · 混剪口播 → 实拍内容' });
-    expect(link).toHaveAttribute('href', '/content/ai-studio/outputs?batch=b-1');
-    expect(within(link).getByText('部分失败')).toBeInTheDocument();
-    expect(within(link).getByText('完成 1 / 2 条')).toBeInTheDocument();
-    expect(within(link).getByText('失败 1')).toBeInTheDocument();
-    expect(within(link).getByText('请求 3 条')).toBeInTheDocument();
-    expect(within(link).getByText('失败原因：渲染失败')).toBeInTheDocument();
-    // One cover per planned output (up to four); a missing cover keeps its slot.
-    expect(link.querySelectorAll('img')).toHaveLength(1);
-    expect(link.querySelector('img')).toHaveAttribute('src', 'https://cdn.invalid/out-1.jpg');
+    expect(fetchRemixBatchPage).not.toHaveBeenCalled();
   });
 
   it('shows per-output status, failure reason, lineage and actions for one batch', async () => {
     vi.mocked(fetchRemixBatch).mockResolvedValue({
       batch: batch(),
       items: [
-        item(1),
-        item(2, { outcome: 'failed', runStatus: 'waiting', waitingReason: 'render_failed', jobStatus: 'failed', jobError: '制作失败：请检查源素材', outputAssetId: null }),
+        item(1, {
+          delivery: {
+            status: 'succeeded', cloudVideoId: 'cloud-1', videoName: '粉底液成片 01', errorCode: null,
+            attempts: 1, updatedAt: '2026-10-30T10:00:00+08:00', enabled: true, canRetry: false,
+          },
+          segments: item(1).segments.map((segment, index) => ({
+            ...segment,
+            spendClass: index === 0 ? 'qualified' : 'low',
+            spend30d: index === 0 ? 8_000 : 200,
+          })),
+        }),
+        item(2, {
+          outcome: 'failed', runStatus: 'waiting', waitingReason: 'render_failed', jobStatus: 'failed', jobError: '制作失败：请检查源素材', outputAssetId: null,
+          delivery: {
+            status: 'failed', cloudVideoId: null, videoName: null, errorCode: 'import_failed',
+            attempts: 1, updatedAt: '2026-10-30T10:05:00+08:00', enabled: true, canRetry: true,
+          },
+          qc: { status: 'failed', reasons: ['frame_freeze', 'duplicate_picture'], freezeCount: 2, timestampGapCount: 0, duplicatePairCount: 1, maxAvOffsetMs: 140, sourceStatus: 'passed' },
+        }),
       ],
     });
-    renderView('/content/ai-studio/outputs?batch=b-1');
+    const router = renderView('/content/ai-studio/outputs?batch=b-1');
     expect(await screen.findByText('只生成了 2 条：可用组合只有 2 种')).toBeInTheDocument();
     expect(fetchRemixBatch).toHaveBeenCalledWith('b-1', expect.anything());
     const first = screen.getByRole('article', { name: '第 1 条成片' });
-    expect(within(first).getByRole('button', { name: '播放 / 下载' })).toBeInTheDocument();
-    expect(within(first).getByRole('button', { name: '播放第 1 条成片' }).querySelector('img')).toHaveAttribute('src', 'https://cdn.invalid/out-1.jpg');
+    // Cover and primary action open the output's review page.
+    expect(within(first).getByRole('link', { name: '去审核' })).toHaveAttribute('href', '/content/ai-studio/outputs?batch=b-1&output=1');
+    expect(within(first).getByRole('link', { name: '打开第 1 条成片' }).querySelector('img')).toHaveAttribute('src', 'https://cdn.invalid/out-1.jpg');
+    expect(within(first).getByText('待审核')).toBeInTheDocument();
+    expect(within(first).getByText('达标 1 段 · 低消耗 1 段')).toBeInTheDocument();
+    expect(within(first).getByLabelText(/自动质检通过/)).toHaveTextContent('未发现卡帧、时间戳断层或重复画面');
+    expect(within(first).getByLabelText('云管家推送：已推送')).toBeInTheDocument();
     const lineage = within(first).getByRole('list', { name: '第 1 条的片段组成' });
     expect(within(lineage).getAllByRole('link', { name: '整片-001' })[0]).toHaveAttribute(
       'href',
@@ -123,64 +87,135 @@ describe('成片 outputs view', () => {
     );
     expect(within(lineage).getByText('0:10.0–0:15.0')).toBeInTheDocument();
     const failed = screen.getByRole('article', { name: '第 2 条成片' });
-    expect(within(failed).getByRole('button', { name: '第 2 条：渲染失败' })).toBeDisabled();
+    expect(within(failed).getByLabelText('第 2 条：渲染失败')).toBeInTheDocument();
     expect(within(failed).getByText('制作失败：请检查源素材')).toBeInTheDocument();
-    expect(within(failed).queryByRole('button', { name: '播放 / 下载' })).not.toBeInTheDocument();
-    expect(within(failed).getByRole('link', { name: '任务详情' })).toHaveAttribute('href', '/content/ai-studio/editing/run-2');
-    expect(within(failed).queryByRole('link', { name: '在素材库查看' })).not.toBeInTheDocument();
+    expect(within(failed).getByLabelText(/自动质检未通过/)).toHaveTextContent('卡帧 2 处 · 重复画面 1 组');
+    expect(within(failed).getByLabelText('云管家推送：推送失败')).toBeInTheDocument();
+    expect(within(failed).queryByText(/达标 .* 段 · 低消耗/)).not.toBeInTheDocument();
+    expect(within(failed).queryByRole('link', { name: /去审核|打开第/ })).not.toBeInTheDocument();
+    expect(within(failed).getByRole('link', { name: '查看质检报告' })).toHaveAttribute(
+      'href',
+      '/content/ai-studio/outputs?batch=b-1&output=2',
+    );
+    // Secondary actions sit behind ⋯; a failed output offers no library link.
+    expect(await openMoreActions(2)).toEqual(['以此为起点编辑', '任务详情']);
     // A failed render is still resumable, so it can be cancelled.
     expect(screen.getByRole('button', { name: '取消未完成' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('menuitem', { name: '任务详情' }));
+    await waitFor(() => expect(router.state.location.pathname).toBe('/content/ai-studio/editing/run-2'));
   });
 
-  it('deep-links outputs and lineage sources to the library asset detail in a new tab', async () => {
+  it('opens QC reports from an all-failed batch while preserving list state and never offers review', async () => {
+    vi.mocked(fetchRemixBatch).mockResolvedValue({
+      batch: batch({
+        batchId: 'b-all-failed', status: 'failed', succeededCount: 0, failedCount: 2, availableCount: 0,
+        reviewableCount: 0, qcFailedCount: 2,
+      }),
+      items: [
+        item(1, {
+          outcome: 'failed', runStatus: 'waiting', waitingReason: 'remix_qc_failed', jobStatus: 'failed', outputAssetId: null,
+          qc: { status: 'failed', reasons: ['frame_freeze'], freezeCount: 1, timestampGapCount: 0, duplicatePairCount: 0, maxAvOffsetMs: 40, sourceStatus: 'passed' },
+        }),
+        item(2, {
+          outcome: 'failed', runStatus: 'waiting', waitingReason: 'remix_qc_incomplete', jobStatus: 'failed', outputAssetId: null,
+          qc: { status: 'incomplete', reasons: ['incomplete'], freezeCount: 0, timestampGapCount: 0, duplicatePairCount: 0, maxAvOffsetMs: null, sourceStatus: 'incomplete' },
+        }),
+      ],
+    });
+    const router = renderView('/content/ai-studio/outputs?batch=b-all-failed&quality=failed&page=2');
+    const cards = await screen.findAllByRole('article', { name: /第 \d 条成片/ });
+    cards.forEach((card) => expect(within(card).queryByRole('link', { name: '去审核' })).not.toBeInTheDocument());
+    const reports = screen.getAllByRole('link', { name: '查看质检报告' });
+    expect(reports).toHaveLength(2);
+    expect(reports[0]).toHaveAttribute(
+      'href',
+      '/content/ai-studio/outputs?batch=b-all-failed&output=1&quality=failed&page=2',
+    );
+    fireEvent.click(reports[0]!);
+    await waitFor(() => expect(router.state.location.search).toBe('?batch=b-all-failed&output=1&quality=failed&page=2'));
+    expect(await screen.findByText('自动质检未通过或未完成，不能人工审核。')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '通过' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '驳回' })).not.toBeInTheDocument();
+  });
+
+  it('filters rejected outputs from an ordinary batch grid and shows only records in the rejected archive', async () => {
+    const detail = {
+      batch: batch({ status: 'succeeded', failedCount: 0, succeededCount: 2, availableCount: 2, reviewableCount: 2, rejectedCount: 1 }),
+      items: [
+        item(1),
+        item(2, {
+          review: {
+            decision: 'rejected', reasons: ['wrong_framework'], note: '框架不符', reviewerUserId: 'u-2', reviewerName: '小李',
+            reviewedAt: '2026-10-29T10:00:00+08:00',
+          },
+          retention: {
+            reason: 'rejected', status: 'pending', cleanupAt: '2026-11-05T10:00:00+08:00', cleanedAt: null, canRestore: true,
+          },
+        }),
+      ],
+    };
+    vi.mocked(fetchRemixBatch).mockResolvedValue(detail);
+    renderView('/content/ai-studio/outputs?batch=b-1');
+    expect(await screen.findByRole('article', { name: '第 1 条成片' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: '第 2 条成片' })).not.toBeInTheDocument();
+
+    cleanup();
+    renderView('/content/ai-studio/outputs?batch=b-1&review=rejected');
+    const rejected = await screen.findByRole('article', { name: '第 2 条成片' });
+    expect(screen.queryByRole('article', { name: '第 1 条成片' })).not.toBeInTheDocument();
+    expect(within(rejected).getByRole('link', { name: '查看驳回记录' })).toHaveAttribute(
+      'href',
+      '/content/ai-studio/outputs?batch=b-1&output=2&review=rejected',
+    );
+  });
+
+  it('offers no library link from an output, even to the super admin', async () => {
+    expect(isSuperAdminAccount({ username: 'fixture-super-admin', roles: [] })).toBe(true);
+    useAuthStore.setState({ user: { id: 'u-1', username: 'fixture-super-admin', email: 'fixture-super-admin@example.test', is_active: true, roles: ['admin'] }, isAuthenticated: true });
     vi.mocked(fetchRemixBatch).mockResolvedValue({ batch: batch({ status: 'succeeded', failedCount: 0 }), items: [item(1)] });
     renderView('/content/ai-studio/outputs?batch=b-1');
-    const output = await screen.findByRole('link', { name: '在素材库查看' });
-    expect(output).toHaveAttribute('href', '/marketing/content-assets/out-1');
-    expect(output).toHaveAttribute('target', '_blank');
-    expect(output).toHaveAttribute('rel', 'noopener noreferrer');
-    const sources = screen.getAllByRole('link', { name: '在素材库查看原片 整片-001' });
-    expect(sources).toHaveLength(2);
-    expect(sources[0]).toHaveAttribute('href', `/marketing/content-assets/${SOURCE}`);
-    expect(sources[0]).toHaveAttribute('target', '_blank');
+    await screen.findByRole('article', { name: '第 1 条成片' });
+    expect(await openMoreActions(1)).toEqual(['以此为起点编辑', '任务详情']);
+    // Each lineage row is one line; its source opens the annotation, not a library link.
+    expect(screen.queryByRole('link', { name: /在素材库查看原片/ })).not.toBeInTheDocument();
     expect(screen.queryByText(/按标题搜索/)).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: '打开素材库' })).not.toBeInTheDocument();
     // A settled batch offers no cancel.
     expect(screen.queryByRole('button', { name: '取消未完成' })).not.toBeInTheDocument();
   });
 
-  it('folds batches that produced nothing behind a toggle', async () => {
-    vi.mocked(fetchRemixBatches).mockResolvedValue([
-      batch(),
-      batch({ batchId: 'b-failed', productName: '面霜', status: 'failed', succeededCount: 0, failedCount: 2 }),
-      batch({ batchId: 'b-running', productName: '眼霜', status: 'running', succeededCount: 0, failedCount: 0, runningCount: 2 }),
-    ]);
-    renderView('/content/ai-studio/outputs');
-    expect(await screen.findByRole('link', { name: '精华 · 混剪口播 → 实拍内容' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '眼霜 · 混剪口播 → 实拍内容' })).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: '面霜 · 混剪口播 → 实拍内容' })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: '显示 1 个没有成片的批次（失败或已取消）' }));
-    expect(screen.getByRole('link', { name: '面霜 · 混剪口播 → 实拍内容' })).toBeInTheDocument();
+  it('returns from a batch to the type tab it was opened from', async () => {
+    vi.mocked(fetchRemixBatch).mockResolvedValue({ batch: batch({ mode: 'sellingPoint', status: 'succeeded', failedCount: 0 }), items: [item(1)] });
+    renderView('/content/ai-studio/outputs?batch=b-1&mode=sellingPoint');
+    expect(await screen.findByRole('link', { name: '全部批次' })).toHaveAttribute('href', '/content/ai-studio/outputs?mode=sellingPoint');
   });
 
-  it('lists every batch with its creator in open access', async () => {
-    vi.mocked(fetchRemixBatches).mockResolvedValue([
-      batch(),
-      batch({ batchId: 'b-2', ownerUserId: '42', ownerName: '业务同事', ownedByCurrentUser: false }),
-      batch({ batchId: 'b-3', ownerUserId: '43', ownerName: null, ownedByCurrentUser: false }),
-    ]);
-    renderView('/content/ai-studio/outputs', capabilities({ openAccess: true }));
-    expect(await screen.findByRole('heading', { name: '全部成片批次' })).toBeInTheDocument();
-    const cards = await screen.findAllByRole('link', { name: '精华 · 混剪口播 → 实拍内容' });
-    ['我', '业务同事', '用户 43'].forEach((label, index) => expect(within(cards[index]).getByText(label)).toBeInTheDocument());
-    expect(screen.getByText(/显示所有人最近 50 个批次/)).toBeInTheDocument();
+  it('returns from a batch to the 未成片 tab and page it was opened from', async () => {
+    vi.mocked(fetchRemixBatch).mockResolvedValue({ batch: batch({ status: 'failed', succeededCount: 0, failedCount: 2, availableCount: 0 }), items: [item(1)] });
+    renderView('/content/ai-studio/outputs?batch=b-1&outputs=without&page=2');
+    expect(await screen.findByRole('link', { name: '全部批次' })).toHaveAttribute('href', '/content/ai-studio/outputs?outputs=without&page=2');
   });
 
-  it('keeps the scoped list without a creator column', async () => {
-    vi.mocked(fetchRemixBatches).mockResolvedValue([]);
-    renderView('/content/ai-studio/outputs');
-    expect(await screen.findByText('你还没有生成过成片。')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '我的成片批次' })).toBeInTheDocument();
+  it('does not offer playback for a deleted output', async () => {
+    vi.mocked(fetchRemixBatch).mockResolvedValue({
+      batch: batch({ status: 'succeeded', failedCount: 0, availableCount: 0 }),
+      items: [item(1, { outputDeleted: true, outputCoverUrl: null })],
+    });
+    const router = renderView('/content/ai-studio/outputs?batch=b-1');
+    const first = await screen.findByRole('article', { name: '第 1 条成片' });
+    expect(within(first).getByLabelText('第 1 条：成片已删除')).toBeInTheDocument();
+    expect(within(first).queryByRole('link', { name: /去审核|打开第/ })).not.toBeInTheDocument();
+    expect(within(first).getByRole('link', { name: '查看质检报告' })).toBeInTheDocument();
+    expect(within(first).getByText('这条成片已删除，无法再播放或下载')).toBeInTheDocument();
+    // Its lineage still loads in single editing.
+    expect(await openMoreActions(1)).toEqual(['以此为起点编辑', '任务详情']);
+    expect(screen.getByText(/已删除 1 条/)).toBeInTheDocument();
+    // The batch itself never reads as 已完成 once its outputs are gone (an item card may still say so).
+    expect(screen.queryAllByText('已完成').filter((node) => !node.closest('article[aria-label$="条成片"]'))).toHaveLength(0);
+    fireEvent.click(screen.getByRole('menuitem', { name: '以此为起点编辑' }));
+    await waitFor(() =>
+      expect(`${router.state.location.pathname}${router.state.location.search}`).toBe('/content/ai-studio/editing?mode=single&fromBatch=b-1&ordinal=1'),
+    );
   });
 
   it('lets anyone cancel another user\'s batch in open access but hides its owner-only task links', async () => {
@@ -192,7 +227,7 @@ describe('成片 outputs view', () => {
     expect(await screen.findByRole('button', { name: '取消未完成' })).toBeInTheDocument();
     expect(screen.getByText(/发起人：业务同事/)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: '任务详情' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '播放 / 下载' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '去审核' })).toBeInTheDocument();
     expect(screen.getByText(/任务详情只对发起人开放/)).toBeInTheDocument();
   });
 
@@ -212,10 +247,14 @@ describe('成片 outputs view', () => {
     vi.mocked(fetchRemixBatch).mockResolvedValueOnce(running).mockResolvedValue(cancelled);
     vi.mocked(cancelRemixBatch).mockResolvedValue(cancelled);
     renderView('/content/ai-studio/outputs?batch=b-1');
-    fireEvent.click(await screen.findByRole('button', { name: '取消未完成' }));
+    const cancel = await screen.findByRole('button', { name: '取消未完成' });
+    // A running batch shows its finished share as progress.
+    expect(screen.getByRole('progressbar', { name: '生成进度' })).toBeInTheDocument();
+    fireEvent.click(cancel);
     expect(await screen.findByText(/已在渲染的条目需要等渲染进程停止，可能无法立即结束/)).toBeInTheDocument();
     expect(cancelRemixBatch).not.toHaveBeenCalled();
-    const confirm = screen.getAllByRole('button', { name: '取消未完成' }).find((button) => button.closest('.ant-popover'))!;
+    const dialog = await screen.findByRole('dialog', { name: '取消这个批次里未完成的成片？' });
+    const confirm = within(dialog).getByRole('button', { name: '取消未完成' });
     fireEvent.click(confirm);
     await waitFor(() => expect(cancelRemixBatch).toHaveBeenCalledTimes(1));
     expect(cancelRemixBatch).toHaveBeenCalledWith('b-1');
@@ -232,7 +271,8 @@ describe('成片 outputs view', () => {
     vi.mocked(cancelRemixBatch).mockRejectedValue(new Error('任务或方案已更新，请重新载入后操作'));
     renderView('/content/ai-studio/outputs?batch=b-1');
     fireEvent.click(await screen.findByRole('button', { name: '取消未完成' }));
-    const confirm = (await screen.findAllByRole('button', { name: '取消未完成' })).find((button) => button.closest('.ant-popover'))!;
+    const dialog = await screen.findByRole('dialog', { name: '取消这个批次里未完成的成片？' });
+    const confirm = within(dialog).getByRole('button', { name: '取消未完成' });
     fireEvent.click(confirm);
     expect(await screen.findByText('取消未完成成片失败')).toBeInTheDocument();
     expect(screen.getByText('任务或方案已更新，请重新载入后操作')).toBeInTheDocument();
@@ -242,7 +282,9 @@ describe('成片 outputs view', () => {
 
 describe('remix helpers', () => {
   it('maps item states without inventing success', () => {
-    expect(remixItemStatusView({ outcome: 'running', runStatus: 'running', waitingReason: null, jobStatus: 'queued' }).label).toBe('排队中');
+    expect(remixItemStatusView({ outcome: 'running', runStatus: 'running', waitingReason: null, jobStatus: 'queued' })).toEqual({ label: '排队中', state: 'queued' });
+    expect(remixItemStatusView({ outcome: 'running', runStatus: 'running', waitingReason: null, jobStatus: 'running' })).toEqual({ label: '渲染中', state: 'generating' });
+    expect(remixItemStatusView({ outcome: 'running', runStatus: 'cancelling', waitingReason: null, jobStatus: 'cancel_requested' }).state).toBe('cancelled');
     expect(remixItemStatusView({ outcome: 'running', runStatus: 'paused', waitingReason: 'render_paused', jobStatus: 'cancelled' }).label).toBe('已暂停');
     expect(remixItemStatusView({ outcome: 'cancelled', runStatus: 'cancelled', waitingReason: null, jobStatus: 'cancelled' }).label).toBe('已取消');
     expect(remixItemStatusView({ outcome: 'running', runStatus: 'cancelling', waitingReason: null, jobStatus: 'cancel_requested' }).label).toBe('取消中');

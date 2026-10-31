@@ -1,5 +1,5 @@
-import { Button, Empty, Input } from 'antd';
-import { RobotOutlined } from '@ant-design/icons';
+import { Button, Empty, Input } from '@lobehub/ui';
+import { Bot } from 'lucide-react';
 import { Badge } from '@/components/atoms/badge';
 import {
   formatAnalysisStatusLabel,
@@ -46,7 +46,7 @@ export function AnalysisPanel({
               <span>{formatAnalysisStatusLabel(sessionAnalysisStatus)}</span>
             </div>
           ) : (
-            <RobotOutlined className={styles.panelIcon} />
+            <Bot size={14} strokeWidth={1.8} className={styles.panelIcon} aria-hidden="true" />
           )
         }
       />
@@ -60,7 +60,7 @@ export function AnalysisPanel({
         />
         <Button
           type="primary"
-          icon={<RobotOutlined />}
+          icon={<Bot size={14} strokeWidth={1.8} aria-hidden="true" />}
           loading={mutationLoading}
           disabled={mutationLoading || hasActiveJob}
           onClick={onCreateAnalysis}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { MessageInstance } from 'antd/es/message/interface';
+import type { ToastAPI } from '@lobehub/ui';
 import { request } from '@/lib/request';
 import type { DateRange } from './creator-date-range';
 import { normalizeErrorMessage } from './creator-helpers';
@@ -17,7 +17,7 @@ export interface UseCreatorDashboardDataParams {
   includePreviousDetails?: boolean;
   previousDetailsRequestKey?: string;
   errorFallbackMessage: string;
-  messageApi: MessageInstance;
+  messageApi: ToastAPI;
 }
 
 export interface UseCreatorDashboardDataResult<TOverview, TDetails> {

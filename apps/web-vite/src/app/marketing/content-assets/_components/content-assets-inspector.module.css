@@ -7,9 +7,9 @@
   max-height: calc(100dvh - 28px);
   padding: 14px;
   overflow: auto;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 20px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .inspectorPanelPage {
@@ -20,12 +20,8 @@
   overflow: visible;
 }
 
-.inspectorTabs :global(.ant-tabs-nav) {
+.inspectorTabsList {
   margin-bottom: 14px;
-}
-
-.inspectorTabs :global(.ant-tabs-tab) {
-  padding: 8px 0;
 }
 
 .inspectorEmpty {
@@ -41,14 +37,14 @@
 
 .inspectorHeader p {
   margin: 0 0 4px;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .inspectorHeader h2 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-lg);
   font-weight: 660;
   line-height: var(--line-height-tight);
@@ -74,9 +70,9 @@
 .playerCard {
   overflow: hidden;
   padding: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 16px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .identityHealth {
@@ -84,9 +80,9 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   padding: 9px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .identityHealth div {
@@ -94,7 +90,7 @@
   gap: 8px;
   align-items: center;
   min-width: 0;
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -114,20 +110,20 @@
 
 .identityGuide {
   padding: 10px 12px;
-  border: 1px solid var(--brand-border);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 12px;
-  background: var(--brand-secondary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .identityGuide strong {
-  color: var(--brand-text);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .identityGuide p {
   margin: 4px 0 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -143,15 +139,15 @@
   gap: 5px;
   min-width: 0;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .identitySummaryCard span,
 .identitySummaryCard small {
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -159,8 +155,8 @@
 }
 
 .identitySummaryCard strong {
-  color: var(--text-primary);
-  font-family: var(--font-family-base);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-ui);
   font-size: var(--font-size-data-sm);
   font-variant-numeric: tabular-nums;
   font-weight: 660;
@@ -172,7 +168,7 @@
   padding: 8px 0 2px;
 }
 
-.identityEmptyAction :global(.ant-empty) {
+.identityEmptyAction :global(.lobe-empty) {
   margin: 0;
 }
 
@@ -188,9 +184,9 @@
   gap: 10px;
   min-width: 0;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 14px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .identityRecordHeader {
@@ -216,7 +212,7 @@
 
 .identityRecordTitle strong {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-base);
   font-weight: 620;
   line-height: var(--line-height-snug);
@@ -226,7 +222,7 @@
 
 .identityRecordTitle span {
   overflow: hidden;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -235,9 +231,9 @@
 
 .identityTag {
   margin-inline-end: 0;
-  border-color: var(--border-color);
-  color: var(--text-secondary);
-  background: var(--bg-card);
+  border-color: var(--lobe-color-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
@@ -253,21 +249,21 @@
   gap: 4px;
   min-width: 0;
   padding: 8px 9px;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--lobe-color-border-secondary);
   border-radius: 10px;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
 }
 
 .identityIdBlock span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
 }
 
 .identityIdBlock code {
   overflow: hidden;
-  color: var(--text-secondary);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text-secondary);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -275,7 +271,7 @@
 }
 
 .identityIdStrong {
-  color: var(--brand-text) !important;
+  color: var(--lobe-color-text) !important;
 }
 
 .identityRecordFooter {
@@ -283,7 +279,7 @@
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
@@ -292,13 +288,12 @@
   display: inline-flex;
   gap: 5px;
   align-items: center;
-  color: var(--brand-text);
+  color: var(--aios-ai-text);
   text-decoration: none;
 }
 
-.identityRecordFooter :global(.ant-btn) {
+.identityRecordFooter :global(.lobe-button) {
   margin-left: auto;
-  color: var(--brand-text);
 }
 
 .identityRelationPill,
@@ -313,15 +308,15 @@
 }
 
 .identityRelationPill {
-  border: 1px solid var(--brand-border);
-  color: var(--brand-text);
-  background: var(--brand-secondary);
+  border: 1px solid var(--lobe-color-border);
+  color: var(--lobe-color-text);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .identityRelationPillMuted {
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  background: var(--bg-card);
+  border: 1px solid var(--lobe-color-border);
+  color: var(--lobe-color-text-secondary);
+  background: var(--lobe-color-bg-container);
 }
 
 .objectList,
@@ -336,29 +331,29 @@
   display: grid;
   gap: 6px;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: 12px;
-  background: var(--bg-subtle);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .objectItem strong,
 .eventItem strong {
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .objectItem span,
 .eventItem span {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
 }
 
 .objectItem code {
   overflow: hidden;
-  color: var(--brand-text);
-  font-family: var(--font-family-mono);
+  color: var(--lobe-color-text);
+  font-family: var(--aios-font-data);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-snug);
   text-overflow: ellipsis;
@@ -366,7 +361,7 @@
 }
 
 .technicalDetails {
-  border-top: 1px solid var(--divider-color);
+  border-top: 1px solid var(--lobe-color-border-secondary);
 }
 
 .technicalDetails summary {
@@ -375,7 +370,7 @@
   align-items: baseline;
   justify-content: space-between;
   padding: 16px 0 0;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   cursor: pointer;
   list-style: none;
 }
@@ -391,14 +386,14 @@
 }
 
 .technicalDetails summary small {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   font-weight: 400;
   line-height: var(--line-height-snug);
 }
 
 .technicalDetails summary::after {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-sm);
   content: "展开";
 }
@@ -413,7 +408,7 @@
 
 .eventItem p {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }

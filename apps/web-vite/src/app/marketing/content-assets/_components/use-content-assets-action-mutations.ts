@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { toast } from '@lobehub/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   backfillContentAssetAiJobs,
@@ -109,9 +109,9 @@ export function useContentAssetsActionMutations({
       return { response: completed };
     },
     onSuccess: async ({ response, platformVideoError }) => {
-      message.success('视频源文件已上传到 TOS，正在生成预览和封面');
+      toast.success('视频源文件已上传到 TOS，正在生成预览和封面');
       if (platformVideoError) {
-        message.warning(`视频已上传，但平台视频 ID 未保存：${resolveContentAssetRequestError(platformVideoError)}`);
+        toast.warning(`视频已上传，但平台视频 ID 未保存：${resolveContentAssetRequestError(platformVideoError)}`);
       }
       onUploadProgress?.(null);
       onUploadSuccess(response);
@@ -120,7 +120,7 @@ export function useContentAssetsActionMutations({
     },
     onError: (requestError) => {
       onUploadProgress?.(null);
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -140,7 +140,7 @@ export function useContentAssetsActionMutations({
         return;
       }
       const detail = response.detail;
-      message.success('视频链接已导入素材库，正在生成预览和封面');
+      toast.success('视频链接已导入素材库，正在生成预览和封面');
       onUploadProgress?.(null);
       onUploadSuccess(detail);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(detail.asset.assetId), detail);
@@ -148,7 +148,7 @@ export function useContentAssetsActionMutations({
     },
     onError: (requestError) => {
       onUploadProgress?.(null);
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -156,13 +156,13 @@ export function useContentAssetsActionMutations({
     mutationFn: ({ assetId, payload }: { assetId: string; payload: ContentAssetProfileUpdatePayload }) =>
       updateContentAssetProfile(assetId, payload),
     onSuccess: async (response) => {
-      message.success('素材档案已保存');
+      toast.success('素材档案已保存');
       onProfileSuccess(response);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(response.asset.assetId), response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -170,13 +170,13 @@ export function useContentAssetsActionMutations({
     mutationFn: ({ assetId, payload }: { assetId: string; payload: ContentAssetPlatformVideoCreatePayload }) =>
       createContentAssetPlatformVideo(assetId, payload),
     onSuccess: async (response) => {
-      message.success('平台视频身份已保存');
+      toast.success('平台视频身份已保存');
       onIdentitySuccess(response);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(response.asset.assetId), response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -184,13 +184,13 @@ export function useContentAssetsActionMutations({
     mutationFn: ({ assetId, payload }: { assetId: string; payload: ContentAssetAdMaterialCreatePayload }) =>
       createContentAssetAdMaterial(assetId, payload),
     onSuccess: async (response) => {
-      message.success('广告素材实例已保存');
+      toast.success('广告素材实例已保存');
       onIdentitySuccess(response);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(response.asset.assetId), response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -205,13 +205,13 @@ export function useContentAssetsActionMutations({
       payload: ContentAssetPlatformVideoUpdatePayload;
     }) => updateContentAssetPlatformVideo(assetId, platformVideoId, payload),
     onSuccess: async (response) => {
-      message.success('平台视频身份已更新');
+      toast.success('平台视频身份已更新');
       onIdentitySuccess(response);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(response.asset.assetId), response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -226,79 +226,79 @@ export function useContentAssetsActionMutations({
       payload: ContentAssetAdMaterialUpdatePayload;
     }) => updateContentAssetAdMaterial(assetId, adMaterialId, payload),
     onSuccess: async (response) => {
-      message.success('广告素材实例已更新');
+      toast.success('广告素材实例已更新');
       onIdentitySuccess(response);
       queryClient.setQueryData(contentAssetsQueryKeys.detail(response.asset.assetId), response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const retryProcessingJobMutation = useMutation({
     mutationFn: retryContentAssetProcessingJob,
     onSuccess: async () => {
-      message.success('处理任务已重新排队');
+      toast.success('处理任务已重新排队');
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const cancelProcessingJobMutation = useMutation({
     mutationFn: cancelContentAssetProcessingJob,
     onSuccess: async () => {
-      message.success('处理任务已取消');
+      toast.success('处理任务已取消');
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const resetStaleProcessingJobMutation = useMutation({
     mutationFn: resetStaleContentAssetProcessingJob,
     onSuccess: async () => {
-      message.success('卡住的处理任务已标记为超时失败');
+      toast.success('卡住的处理任务已标记为超时失败');
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const backfillDerivativeJobsMutation = useMutation({
     mutationFn: backfillContentAssetDerivativeJobs,
     onSuccess: async (response) => {
-      message.success(response.message || `已补建 ${response.createdJobs} 个处理任务`);
+      toast.success(response.message || `已补建 ${response.createdJobs} 个处理任务`);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const backfillAiJobsMutation = useMutation({
     mutationFn: (payload: ContentAssetAiJobBackfillPayload) => backfillContentAssetAiJobs(payload),
     onSuccess: async (response) => {
-      message.success(response.message || `已排队 ${response.queuedJobs} 个任务`);
+      toast.success(response.message || `已排队 ${response.queuedJobs} 个任务`);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
   const bindUnmatchedStatsMutation = useMutation({
     mutationFn: (payload: ContentAssetUnmatchedStatsBindPayload) => bindContentAssetUnmatchedStats(payload),
     onSuccess: async (response) => {
-      message.success(response.message || `已绑定 ${response.affectedRows} 条日报记录`);
+      toast.success(response.message || `已绑定 ${response.affectedRows} 条日报记录`);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -306,12 +306,12 @@ export function useContentAssetsActionMutations({
     mutationFn: ({ assetId, payload }: { assetId: string; payload: ContentAssetAnalysisJobCreatePayload }) =>
       createContentAssetAnalysisJob(assetId, payload),
     onSuccess: async (response) => {
-      message.success('AI 分析任务已排队');
+      toast.success('AI 分析任务已排队');
       onProcessingJobSuccess?.(response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 
@@ -319,12 +319,12 @@ export function useContentAssetsActionMutations({
     mutationFn: ({ assetId, payload }: { assetId: string; payload: ContentAssetTranscriptJobCreatePayload }) =>
       createContentAssetTranscriptJob(assetId, payload),
     onSuccess: async (response) => {
-      message.success('脚本/SRT 任务已排队');
+      toast.success('脚本/SRT 任务已排队');
       onProcessingJobSuccess?.(response);
       await queryClient.invalidateQueries({ queryKey: contentAssetsQueryKeys.root });
     },
     onError: (requestError) => {
-      message.error(resolveContentAssetRequestError(requestError));
+      toast.error(resolveContentAssetRequestError(requestError));
     },
   });
 

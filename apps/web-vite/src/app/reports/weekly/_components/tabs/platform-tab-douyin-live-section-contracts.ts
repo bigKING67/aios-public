@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type {
   DouyinLiveFunnelAttributionLeafPropsBundle,
   DouyinLiveSessionAttributionLeafPropsBundle,
@@ -19,9 +19,9 @@ export interface DouyinLiveAttributionSubsectionDescriptor {
 export interface BuildDouyinLiveAttributionSectionPropsParams {
   isMobile: boolean;
   data: DouyinSectionData;
-  douyinLiveColumns: ColumnsType<DouyinLiveSessionRow>;
-  douyinLiveDetailColumns: ColumnsType<DouyinMetricDetailRow>;
-  quantColumns: ColumnsType<QuantAttributionRow>;
+  douyinLiveColumns: TableColumnsType<DouyinLiveSessionRow>;
+  douyinLiveDetailColumns: TableColumnsType<DouyinMetricDetailRow>;
+  quantColumns: TableColumnsType<QuantAttributionRow>;
   resolveFunnelStageColor: (index: number) => string;
   waterfallTotalColor: string;
 }

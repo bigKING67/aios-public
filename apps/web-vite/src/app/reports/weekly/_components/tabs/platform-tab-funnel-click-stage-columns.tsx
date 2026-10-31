@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import type { TrendClassNameResolver } from './platform-tab-column-contracts';
 import {
   createWeeklyGmvCellProps,
@@ -17,7 +17,7 @@ import {
 
 export function buildFunnelClickStageColumns(
   resolveTrendClassName: TrendClassNameResolver
-): ColumnsType<FunnelChannelRow> {
+): TableColumnsType<FunnelChannelRow> {
   return [
     {
       title: '花费',

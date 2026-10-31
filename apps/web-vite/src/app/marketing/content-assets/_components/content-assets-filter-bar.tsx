@@ -1,6 +1,6 @@
+import { Filter, RotateCw, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Button, Select, Tooltip } from 'antd';
-import { FilterOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from '@lobehub/ui';
 import {
   CONTENT_ASSET_PLATFORM_OPTIONS,
   contentAssetPlatformLabel,
@@ -17,6 +17,7 @@ import {
   toSelectOption,
 } from '../_lib/content-assets-ui-helpers';
 import { ContentAssetsAdvancedFilterDrawer } from './content-assets-advanced-filter-drawer';
+import { LabeledSelect } from '@/components/molecules/labeled-select';
 import { buildContentAssetPlatformSelectOptions } from './content-assets-platform-select';
 import styles from './content-assets-controls.module.css';
 
@@ -227,62 +228,50 @@ export function ContentAssetsFilterBar({
         <span>主筛选优先负责人、内容类型、平台归档、产品、达人和状态；标签与内容场景放高级筛选。</span>
       </div>
       <div className={styles.filterPrimaryRow}>
-        <Select
+        <LabeledSelect
+          label="负责人"
           allowClear
-          showSearch={false}
-          aria-label="负责人"
           placeholder="负责人"
-          optionFilterProp="searchText"
           value={ownerUserId}
           options={ownerOptions}
           onChange={onOwnerUserIdChange}
         />
-        <Select
+        <LabeledSelect
+          label="视频类型"
           allowClear
-          showSearch={false}
-          aria-label="视频类型"
           placeholder="视频类型"
-          optionFilterProp="label"
           value={videoType}
           options={videoTypeOptions}
           onChange={onVideoTypeChange}
         />
-        <Select
+        <LabeledSelect
+          label="平台"
           allowClear
-          showSearch={false}
-          aria-label="平台"
           placeholder="平台"
-          optionFilterProp="searchText"
           value={platform}
           options={platformOptions}
           onChange={onPlatformChange}
         />
-        <Select
+        <LabeledSelect
+          label="产品"
           allowClear
-          showSearch={false}
-          aria-label="产品"
           placeholder="产品"
-          optionFilterProp="searchText"
           value={productName}
           options={productOptions}
           onChange={onProductNameChange}
         />
-        <Select
+        <LabeledSelect
+          label="达人或账号"
           allowClear
-          showSearch={false}
-          aria-label="达人或账号"
           placeholder="达人/账号"
-          optionFilterProp="label"
           value={creatorName}
           options={filterOptions.creators.map(toSelectOption)}
           onChange={onCreatorNameChange}
         />
-        <Select
+        <LabeledSelect
+          label="资产状态"
           allowClear
-          showSearch={false}
-          aria-label="资产状态"
           placeholder="资产状态"
-          optionFilterProp="label"
           value={assetStatus}
           options={assetStatusOptions}
           onChange={onAssetStatusChange}
@@ -315,16 +304,16 @@ export function ContentAssetsFilterBar({
           <Button onClick={onReset}>重置</Button>
           <Button
             className={advancedFilterCount ? styles.activeFilterButton : undefined}
-            icon={<FilterOutlined />}
+            icon={<Filter size={14} strokeWidth={1.8} aria-hidden="true" />}
             onClick={() => setAdvancedOpen(true)}
           >
             高级筛选{advancedFilterCount ? ` ${advancedFilterCount}` : ''}
           </Button>
-          <Button type="primary" icon={<SearchOutlined />} onClick={onSearch}>
+          <Button type="primary" icon={<Search size={14} strokeWidth={1.8} aria-hidden="true" />} onClick={onSearch}>
             搜索
           </Button>
           <Tooltip title="刷新列表">
-            <Button icon={<ReloadOutlined />} loading={isFetching} onClick={onRefresh} />
+            <Button aria-label="刷新列表" icon={<RotateCw size={14} strokeWidth={1.8} aria-hidden="true" />} loading={isFetching} onClick={onRefresh} />
           </Tooltip>
         </div>
       </div>

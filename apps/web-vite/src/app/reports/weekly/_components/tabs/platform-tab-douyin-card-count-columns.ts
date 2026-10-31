@@ -1,4 +1,4 @@
-import type { ColumnsType } from 'antd/es/table';
+import type { TableColumnsType } from '@lobehub/ui';
 import { createIntegerMetricColumn } from './platform-tab-metric-column-builders';
 
 type DouyinCardCountRow = {
@@ -9,7 +9,7 @@ type DouyinCardCountRow = {
 
 export function buildDouyinCardCountColumns<
   Row extends DouyinCardCountRow,
->(): ColumnsType<Row> {
+>(): TableColumnsType<Row> {
   return [
     createIntegerMetricColumn<Row>('曝光人数', 'currCardExposureUserCount', 120),
     createIntegerMetricColumn<Row>('点击人数', 'currCardClickUserCount', 120),

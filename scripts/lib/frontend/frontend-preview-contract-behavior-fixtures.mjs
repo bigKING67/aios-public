@@ -132,7 +132,7 @@ export function runFrontendPreviewContractBehaviorFixtures(assertions) {
   });
 
   withPreviewFixture({
-    'apps/web-vite/dist/assets/index-fixture.css': ':root { --dashboard-inverse-text-missing: red; }\n',
+    'apps/web-vite/dist/assets/index-fixture.css': ':root { --dashboard-inverse-text-missing: red; }\n.dashboard { color: var(--dashboard-inverse-text); }\n',
   }, (fixture) => {
     const result = checkFrontendPreviewContract(fixture.repoRoot, { env: FIXTURE_ENV });
     assertEqual(result.status, 1, 'missing critical CSS token definitions should fail');

@@ -12,7 +12,7 @@
 
 .metricGroup h5 {
   margin: 0;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 600;
 }
@@ -46,7 +46,7 @@
 
 .metricValue {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: 500;

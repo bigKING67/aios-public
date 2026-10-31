@@ -11,7 +11,7 @@ export const designTokens = {
   },
   "color": {
     "primary": {
-      "value": "#2F6EEA",
+      "value": "#222222",
       "description": "Primary brand blue fill color",
       "deprecated": false
     },
@@ -31,7 +31,7 @@ export const designTokens = {
       "deprecated": false
     },
     "info": {
-      "value": "#2457C5",
+      "value": "#0060CC",
       "description": "Info state color (brand blue text family)",
       "deprecated": false
     },
@@ -45,11 +45,11 @@ export const designTokens = {
         "description": "Success strong text color"
       },
       "successBg": {
-        "value": "#EAF8EE",
+        "value": "#F8FBF1",
         "description": "Success soft background"
       },
       "successBorder": {
-        "value": "#BFE8CA",
+        "value": "#D4ECCC",
         "description": "Success soft border"
       },
       "warning": {
@@ -61,11 +61,11 @@ export const designTokens = {
         "description": "Warning strong text color"
       },
       "warningBg": {
-        "value": "#FFF7E6",
+        "value": "#FFF8F3",
         "description": "Warning soft background"
       },
       "warningBorder": {
-        "value": "#F3D38D",
+        "value": "#FFE1B3",
         "description": "Warning soft border"
       },
       "danger": {
@@ -77,57 +77,57 @@ export const designTokens = {
         "description": "Danger strong text color"
       },
       "dangerBg": {
-        "value": "#FFF1F0",
+        "value": "#FEF8F7",
         "description": "Danger soft background"
       },
       "dangerBorder": {
-        "value": "#F2C4C0",
+        "value": "#FFDED8",
         "description": "Danger soft border"
       },
       "info": {
-        "value": "#2457C5",
+        "value": "#0060CC",
         "description": "Info state text color"
       },
       "infoStrong": {
-        "value": "#1F4FBF",
+        "value": "#0060CC",
         "description": "Info strong text color"
       },
       "infoBg": {
-        "value": "#F2F6FF",
+        "value": "#F8F9FF",
         "description": "Info soft background"
       },
       "infoBorder": {
-        "value": "#C9D8FF",
+        "value": "#D7E6FF",
         "description": "Info soft border"
       },
       "neutral": {
-        "value": "#8A8F8A",
+        "value": "#707070",
         "description": "Neutral state text color"
       },
       "neutralStrong": {
-        "value": "#5F6368",
+        "value": "#666666",
         "description": "Neutral strong text color"
       },
       "neutralBg": {
-        "value": "#F5F5F5",
+        "value": "#F8F8F8",
         "description": "Neutral soft background"
       },
       "neutralBorder": {
-        "value": "#E6E6E6",
+        "value": "#E3E3E3",
         "description": "Neutral soft border"
       }
     },
     "trend": {
       "up": {
-        "value": "#BF3D2F",
+        "value": "#D9363E",
         "description": "Business upward trend color"
       },
       "down": {
-        "value": "#2F8C5B",
+        "value": "#13A05A",
         "description": "Business downward trend color"
       },
       "neutral": {
-        "value": "#8A8F8A",
+        "value": "#707070",
         "description": "Neutral or unavailable trend color"
       }
     },
@@ -157,25 +157,25 @@ export const designTokens = {
         "description": "WeChat legend color; Hex #07C160"
       },
       "unknown": {
-        "value": "#8A8F8A",
+        "value": "#8A8A8A",
         "description": "Unknown platform legend fallback"
       }
     },
     "text": {
       "primary": {
-        "value": "#1A1A1A",
+        "value": "#1F1F1F",
         "description": "Primary title and core value text color"
       },
       "secondary": {
-        "value": "#5F6368",
+        "value": "#666666",
         "description": "Secondary body and description text color"
       },
       "tertiary": {
-        "value": "#8A8F8A",
+        "value": "#707070",
         "description": "Tertiary metadata and helper text color"
       },
       "disabled": {
-        "value": "#B8B8B8",
+        "value": "#B0B0B0",
         "description": "Disabled text color"
       },
       "inverse": {
@@ -189,11 +189,11 @@ export const designTokens = {
         "description": "Primary background (white)"
       },
       "secondary": {
-        "value": "#F5F5F5",
+        "value": "#F8F8F8",
         "description": "Canvas background"
       },
       "tertiary": {
-        "value": "#FAFAFA",
+        "value": "#F8F8F8",
         "description": "Hover wash and quiet selected background"
       },
       "subtle": {
@@ -202,32 +202,32 @@ export const designTokens = {
       }
     },
     "border": {
-      "value": "#E6E6E6",
+      "value": "#E3E3E3",
       "description": "Border color"
     },
     "divider": {
-      "value": "#F0F0F0",
+      "value": "#EEEEEE",
       "description": "Divider color"
     },
     "brand": {
       "primary": {
-        "value": "#2F6EEA",
+        "value": "#222222",
         "description": "Brand blue primary fill"
       },
       "bright": {
-        "value": "#75B1F8",
+        "value": "#AA99EC",
         "description": "Brand bright blue highlight"
       },
       "soft": {
-        "value": "#F2F6FF",
+        "value": "#F4F0FE",
         "description": "Brand soft background"
       },
       "border": {
-        "value": "#C9D8FF",
+        "value": "#D4CAFE",
         "description": "Brand soft border"
       },
       "text": {
-        "value": "#2457C5",
+        "value": "#5B45B8",
         "description": "Accessible brand text on light surfaces"
       },
       "onPrimary": {
@@ -237,63 +237,63 @@ export const designTokens = {
     },
     "chart": {
       "series1": {
-        "value": "#445DF6",
+        "value": "#6E56CF",
         "description": "Ordinary chart series 1"
       },
       "series2": {
-        "value": "#75B1F8",
+        "value": "#0E9C8E",
         "description": "Ordinary chart series 2"
       },
       "series3": {
-        "value": "#3264F6",
+        "value": "#C76E12",
         "description": "Ordinary chart series 3"
       },
       "series4": {
-        "value": "#4F8CB5",
+        "value": "#2F6FE0",
         "description": "Ordinary chart series 4"
       },
       "series5": {
-        "value": "#536F86",
+        "value": "#C2417A",
         "description": "Ordinary chart series 5"
       },
       "series6": {
-        "value": "#A4772A",
+        "value": "#A8A8A8",
         "description": "Ordinary chart series 6"
       },
       "muted": {
-        "value": "#8A8F8A",
+        "value": "#A8A8A8",
         "description": "Previous period or benchmark series"
       },
       "highlight": {
-        "value": "#3264F6",
+        "value": "#6E56CF",
         "description": "Selected chart point or bar"
       }
     },
     "domainTaxonomy": {
       "traffic": {
         "summary": {
-          "accent": "#8795AA",
-          "text": "#3F5067",
-          "bg": "#F1F5FB",
-          "border": "#A6B4C7"
+          "accent": "#8A8A8A",
+          "text": "#505050",
+          "bg": "#F3F3F3",
+          "border": "#B0B0B0"
         },
         "l1": {
-          "accent": "#445DF6",
-          "text": "#243CB5",
-          "bg": "#F2F5FF",
-          "border": "#B8C4FF"
+          "accent": "#1854BC",
+          "text": "#17489F",
+          "bg": "#F4F7FC",
+          "border": "#ADCAFB"
         },
         "l2": {
-          "accent": "#2F6EEA",
-          "text": "#2457C5",
-          "bg": "#F2F6FF",
-          "border": "#C9D8FF"
+          "accent": "#2F6FE0",
+          "text": "#235ABC",
+          "bg": "#F4F7FC",
+          "border": "#C5DAFE"
         },
         "l3": {
-          "accent": "#75B1F8",
-          "text": "#2F6EA8",
-          "bg": "#F4FAFF",
-          "border": "#CDE6FE"
+          "accent": "#81ABF3",
+          "text": "#3766B8",
+          "bg": "#F4F7FC",
+          "border": "#DBE7FC"
         }
       },
       "topsis": {
@@ -303,14 +303,14 @@ export const designTokens = {
           "border": "#F2C4C0"
         },
         "stable": {
-          "text": "#2457C5",
-          "bg": "#F2F6FF",
-          "border": "#C9D8FF"
+          "text": "#235ABC",
+          "bg": "#F4F7FC",
+          "border": "#C5DAFE"
         },
         "opportunity": {
-          "text": "#2F6F9F",
-          "bg": "#EAF3FA",
-          "border": "#BFD5E5"
+          "text": "#9B4595",
+          "bg": "#FCF3FA",
+          "border": "#E5C6E1"
         },
         "longTail": {
           "text": "#2F8C5B",
@@ -318,83 +318,83 @@ export const designTokens = {
           "border": "#BFE8CA"
         },
         "neutral": {
-          "text": "#8A8F8A",
-          "bg": "#FAFAFA",
-          "border": "#E6E6E6"
+          "text": "#8A8A8A",
+          "bg": "#F8F8F8",
+          "border": "#E3E3E3"
         }
       },
       "funnel": {
         "track": {
-          "color": "#C9D8FF",
-          "bg": "#F2F6FF",
-          "textOnFill": "#1A1A1A"
+          "color": "#C5DAFE",
+          "bg": "#F4F7FC",
+          "textOnFill": "#1F1F1F"
         },
         "exposure": {
-          "color": "#7EA1F7",
-          "bg": "#F2F6FF",
-          "textOnFill": "#FFFFFF"
+          "color": "#98BBF8",
+          "bg": "#F4F7FC",
+          "textOnFill": "#1F1F1F"
         },
         "visit": {
-          "color": "#5D86F1",
-          "bg": "#EFF4FF",
-          "textOnFill": "#FFFFFF"
+          "color": "#6397F1",
+          "bg": "#EAF1FC",
+          "textOnFill": "#1F1F1F"
         },
         "intent": {
-          "color": "#4476ED",
-          "bg": "#E8F0FF",
+          "color": "#2F6FE0",
+          "bg": "#EAF1FC",
           "textOnFill": "#FFFFFF"
         },
         "conversion": {
-          "color": "#2F6EEA",
-          "bg": "#F5F8FF",
+          "color": "#1854BC",
+          "bg": "#F4F7FC",
           "textOnFill": "#FFFFFF"
         },
         "connector": {
-          "color": "#D7DEE0",
+          "color": "#E3E3E3",
           "bg": "transparent",
-          "textOnFill": "#1A1A1A"
+          "textOnFill": "#1F1F1F"
         }
       },
       "creator": {
         "s": {
-          "from": "#1F4FBF",
-          "to": "#445DF6",
-          "bg": "#D6E0FF",
-          "text": "#1F4FBF"
+          "from": "#17489F",
+          "to": "#1854BC",
+          "bg": "#DBE7FC",
+          "text": "#17489F"
         },
         "a": {
-          "from": "#3264F6",
-          "to": "#5D86F1",
-          "bg": "#DDE7FF",
-          "text": "#243CB5"
+          "from": "#1854BC",
+          "to": "#2F6FE0",
+          "bg": "#DBE7FC",
+          "text": "#1854BC"
         },
         "b": {
-          "from": "#2F6EEA",
-          "to": "#75B1F8",
-          "bg": "#E5EEFF",
-          "text": "#2457C5"
+          "from": "#2F6FE0",
+          "to": "#6397F1",
+          "bg": "#EAF1FC",
+          "text": "#235ABC"
         },
         "c": {
-          "from": "#75B1F8",
-          "to": "#CDE6FE",
-          "bg": "#EAF7FF",
-          "text": "#2F6EA8"
+          "from": "#6397F1",
+          "to": "#ADCAFB",
+          "bg": "#EAF1FC",
+          "text": "#3766B8"
         },
         "d": {
-          "from": "#C9D8FF",
-          "to": "#F2F6FF",
-          "bg": "#F0F5FF",
-          "text": "#536F86"
+          "from": "#ADCAFB",
+          "to": "#DBE7FC",
+          "bg": "#F3F3F3",
+          "text": "#666666"
         }
       },
       "cooperation": {
         "unclassified": {
-          "text": "#5F6368",
-          "bg": "#EFEFEF"
+          "text": "#666666",
+          "bg": "#F3F3F3"
         },
         "initialContact": {
-          "text": "#2457C5",
-          "bg": "#E4ECFF"
+          "text": "#235ABC",
+          "bg": "#DBE7FC"
         },
         "sampleNegotiation": {
           "text": "#8F5E02",
@@ -417,9 +417,9 @@ export const designTokens = {
   },
   "typography": {
     "fontFamily": {
-      "base": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif",
-      "display": "'Geist', 'Avenir Next', 'SF Pro Display', 'Segoe UI', system-ui, sans-serif",
-      "code": "'Maple Mono', 'SF Mono', 'JetBrains Mono', 'Roboto Mono', 'Cascadia Code', Consolas, monospace"
+      "base": "'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif",
+      "display": "'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif",
+      "code": "'Geist Mono Variable', 'SF Mono', ui-monospace, Menlo, Consolas, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', monospace"
     },
     "fontSize": {
       "xs": {
@@ -429,6 +429,10 @@ export const designTokens = {
       "sm": {
         "value": "12px",
         "lineHeight": "1.35"
+      },
+      "md": {
+        "value": "13px",
+        "lineHeight": "1.4"
       },
       "base": {
         "value": "14px",
@@ -628,39 +632,39 @@ export const designTokens = {
 } as const;
 
 export const DESIGN_TOKEN_RUNTIME_COLOR_VALUES = {
-  "primary": "#2F6EEA",
+  "primary": "#222222",
   "success": "#168A3A",
   "warning": "#B87503",
   "danger": "#C93A32",
-  "info": "#2457C5",
+  "info": "#0060CC",
   "statusSuccess": "#168A3A",
-  "statusSuccessBg": "#EAF8EE",
-  "statusSuccessBorder": "#BFE8CA",
+  "statusSuccessBg": "#F8FBF1",
+  "statusSuccessBorder": "#D4ECCC",
   "statusWarning": "#B87503",
-  "statusWarningBg": "#FFF7E6",
-  "statusWarningBorder": "#F3D38D",
+  "statusWarningBg": "#FFF8F3",
+  "statusWarningBorder": "#FFE1B3",
   "statusDanger": "#C93A32",
-  "statusDangerBg": "#FFF1F0",
-  "statusDangerBorder": "#F2C4C0",
-  "statusInfo": "#2457C5",
-  "statusInfoStrong": "#1F4FBF",
-  "statusInfoBg": "#F2F6FF",
-  "statusInfoBorder": "#C9D8FF",
-  "statusNeutral": "#8A8F8A",
-  "trendUp": "#BF3D2F",
-  "trendDown": "#2F8C5B",
-  "trendNeutral": "#8A8F8A",
-  "textPrimary": "#1A1A1A",
-  "textSecondary": "#5F6368",
-  "textTertiary": "#8A8F8A",
+  "statusDangerBg": "#FEF8F7",
+  "statusDangerBorder": "#FFDED8",
+  "statusInfo": "#0060CC",
+  "statusInfoStrong": "#0060CC",
+  "statusInfoBg": "#F8F9FF",
+  "statusInfoBorder": "#D7E6FF",
+  "statusNeutral": "#707070",
+  "trendUp": "#D9363E",
+  "trendDown": "#13A05A",
+  "trendNeutral": "#707070",
+  "textPrimary": "#1F1F1F",
+  "textSecondary": "#666666",
+  "textTertiary": "#707070",
   "textInverse": "#FFFFFF",
   "backgroundPrimary": "#FFFFFF",
-  "backgroundSecondary": "#F5F5F5",
-  "backgroundTertiary": "#FAFAFA",
-  "border": "#E6E6E6",
-  "divider": "#F0F0F0"
+  "backgroundSecondary": "#F8F8F8",
+  "backgroundTertiary": "#F8F8F8",
+  "border": "#E3E3E3",
+  "divider": "#EEEEEE"
 } as const;
-export const DESIGN_TOKEN_RUNTIME_FONT_FAMILY = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif";
+export const DESIGN_TOKEN_RUNTIME_FONT_FAMILY = "'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif";
 export const DESIGN_TOKEN_RUNTIME_SHADOW_VALUES = {
   "none": "none",
   "sm": "0 1px 2px rgba(0, 0, 0, 0.03)",

@@ -24,10 +24,10 @@
   width: 100%;
   min-width: 0;
   padding: var(--spacing-2);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--lobe-color-border);
   border-radius: var(--border-radius-lg);
   color: inherit;
-  background: var(--bg-card);
+  background: var(--lobe-color-bg-container);
   text-align: left;
 }
 
@@ -37,12 +37,12 @@
 }
 
 .card:hover:not(:disabled) {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
 }
 
 .card:focus-visible {
-  outline: 2px solid var(--brand-focus-ring);
+  outline: 2px solid color-mix(in srgb, var(--aios-ai-9) 48%, transparent);
   outline-offset: 2px;
 }
 
@@ -52,8 +52,8 @@
 }
 
 .selected {
-  border-color: var(--brand-border);
-  background: var(--brand-secondary);
+  border-color: var(--aios-ai-border);
+  background: var(--aios-ai-soft);
 }
 
 .cover {
@@ -64,8 +64,8 @@
   width: 54px;
   aspect-ratio: 9 / 16;
   border-radius: var(--border-radius-md);
-  color: var(--text-tertiary);
-  background: var(--bg-subtle);
+  color: var(--lobe-color-text-tertiary);
+  background: var(--lobe-color-fill-tertiary);
 }
 
 .cover img {
@@ -84,9 +84,9 @@
 
 .title {
   overflow: hidden;
-  color: var(--text-primary);
+  color: var(--lobe-color-text);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -94,14 +94,14 @@
 .chain {
   display: -webkit-box;
   overflow: hidden;
-  color: var(--text-secondary);
+  color: var(--lobe-color-text-secondary);
   font-size: var(--font-size-xs);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
 .meta {
-  color: var(--text-tertiary);
+  color: var(--lobe-color-text-tertiary);
   font-size: var(--font-size-xs);
 }
 

@@ -1,9 +1,9 @@
 'use client';
 
-import { Tag } from 'antd';
 import { DataOpsFailureSummaryActions } from './dataops-failure-summary-actions';
 import type { BatchFailureReasonSummaryItem } from './dataops-batch-helpers';
 import { truncateText } from './dataops-hub-formatters';
+import { DataOpsToneTag } from './dataops-tone-tag';
 import failureSummaryStyles from './dataops-failure-summary.module.css';
 
 interface DataOpsBatchHistoryFailureSummaryPanelProps {
@@ -58,7 +58,7 @@ export function DataOpsBatchHistoryFailureSummaryPanel({
             className={failureSummaryStyles.batchFailureSummaryItem}
             onClick={() => onApplyReasonFilter(item.reason)}
           >
-            <Tag color="red">x{item.count}</Tag>
+            <DataOpsToneTag tone="danger">x{item.count}</DataOpsToneTag>
             <p>{truncateText(item.reason, 120)}</p>
             <span>任务：{truncateText(item.pipelineNames.join(' / '), 120)}</span>
           </button>

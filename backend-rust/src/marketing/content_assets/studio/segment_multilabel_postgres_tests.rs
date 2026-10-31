@@ -30,6 +30,7 @@ async fn same_span_labels_round_trip_filter_and_patch_without_extra_rows() {
                 ..Default::default()
             },
             None,
+            5000.0,
         )
         .await
         .unwrap();
@@ -43,6 +44,7 @@ async fn same_span_labels_round_trip_filter_and_patch_without_extra_rows() {
             preset_version: Some(1),
         },
         None,
+        false,
     )
     .await
     .unwrap();

@@ -1,8 +1,8 @@
 'use client';
 
-import type { Dispatch, SetStateAction } from 'react';
-import { Alert, Input, Modal } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
+import { useId, type Dispatch, type SetStateAction } from 'react';
+import { Alert, Modal, TextArea } from '@lobehub/ui';
+import { Save } from 'lucide-react';
 import styles from './weekly-summary-card-modern.module.css';
 
 export interface WeeklySummaryEditModalProps {
@@ -32,6 +32,11 @@ export function WeeklySummaryEditModal({
   setEditHighlightsText,
   setEditRisksText,
 }: WeeklySummaryEditModalProps) {
+  const fieldIdPrefix = useId();
+  const overallId = `${fieldIdPrefix}-overall`;
+  const highlightsId = `${fieldIdPrefix}-highlights`;
+  const risksId = `${fieldIdPrefix}-risks`;
+
   return (
     <Modal
       title="手动编辑周报总结"
@@ -42,7 +47,7 @@ export function WeeklySummaryEditModal({
       cancelText="取消"
       confirmLoading={confirmLoading}
       okButtonProps={{
-        icon: <SaveOutlined />,
+        icon: <Save size={14} strokeWidth={1.8} aria-hidden="true" />,
       }}
     >
       <div className={styles.editModalStack}>
@@ -52,8 +57,11 @@ export function WeeklySummaryEditModal({
           title="提交后会写入数据库，并覆盖当前 scope 的最新总结。"
         />
         <div>
-          <div className={styles.editFieldLabel}>总体概况</div>
-          <Input.TextArea
+          <label htmlFor={overallId} className={styles.editFieldLabel}>
+            总体概况
+          </label>
+          <TextArea
+            id={overallId}
             rows={4}
             value={editOverall}
             onChange={(event) => setEditOverall(event.target.value)}
@@ -61,10 +69,11 @@ export function WeeklySummaryEditModal({
           />
         </div>
         <div>
-          <div className={styles.editFieldLabel}>
+          <label htmlFor={highlightsId} className={styles.editFieldLabel}>
             业务亮点（每行一条）
-          </div>
-          <Input.TextArea
+          </label>
+          <TextArea
+            id={highlightsId}
             rows={5}
             value={editHighlightsText}
             onChange={(event) => setEditHighlightsText(event.target.value)}
@@ -72,10 +81,11 @@ export function WeeklySummaryEditModal({
           />
         </div>
         <div>
-          <div className={styles.editFieldLabel}>
+          <label htmlFor={risksId} className={styles.editFieldLabel}>
             潜在风险（每行一条）
-          </div>
-          <Input.TextArea
+          </label>
+          <TextArea
+            id={risksId}
             rows={5}
             value={editRisksText}
             onChange={(event) => setEditRisksText(event.target.value)}

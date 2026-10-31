@@ -1,8 +1,11 @@
 'use client';
 
-import { Alert, Modal, Select, Space, Spin, Tag } from 'antd';
+import { Alert, Modal, Select, Spin, Tag } from '@lobehub/ui';
 import { isReservedElevatedRoleCode } from '@/lib/role-access';
+import styles from '../../_components/admin-page.module.css';
 import type { User, UserRoleItem } from '../_lib/users-types';
+
+const ROLE_SELECT_ID = 'user-role-assignment-select';
 
 export interface UserRoleSelectOption {
   label: string;
@@ -58,7 +61,7 @@ export function UserRoleAssignmentModal({
       {isLoading ? (
         <Spin />
       ) : (
-        <Space orientation="vertical" size={12} style={{ width: '100%' }}>
+        <div className={styles.form}>
           {!canManageElevatedRoles ? (
             <Alert
               type="info"
@@ -75,35 +78,41 @@ export function UserRoleAssignmentModal({
             />
           ) : null}
 
-          <div>
-            <div className="mb-2 text-xs text-text-tertiary">当前角色</div>
-            <Space wrap>
+          <div className={styles.field}>
+            <span className={styles.hint}>当前角色</span>
+            <div className={styles.tagRow}>
               {roleItems.length > 0 ? (
                 roleItems.map((role) => (
-                  <Tag
-                    key={`${role.id}-${role.code}`}
-                    color={isReservedElevatedRoleCode(role.code) ? 'gold' : 'blue'}
-                  >
+                  <Tag key={`${role.id}-${role.code}`} color={isReservedElevatedRoleCode(role.code) ? 'warning' : undefined}>
                     {role.name} ({role.code})
                   </Tag>
                 ))
               ) : (
                 <Tag>暂无角色</Tag>
               )}
-            </Space>
+            </div>
           </div>
 
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="选择角色（可多选）"
-            value={selectedRoleIds}
-            options={roleOptions}
-            onChange={(values) => onSelectedRoleIdsChange(values.map((value) => String(value)))}
-            disabled={roleEditBlocked}
-          />
-        </Space>
+          {/* lobe Select does not forward aria-label: an sr-only label names it. */}
+          <div>
+            <label className="sr-only" htmlFor={ROLE_SELECT_ID}>
+              分配角色
+            </label>
+            <Select
+              id={ROLE_SELECT_ID}
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="选择角色（可多选）"
+              value={selectedRoleIds}
+              options={roleOptions}
+              onChange={(values) =>
+                onSelectedRoleIdsChange(Array.isArray(values) ? values.map((value) => String(value)) : [])
+              }
+              disabled={roleEditBlocked}
+            />
+          </div>
+        </div>
       )}
     </Modal>
   );

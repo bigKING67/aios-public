@@ -1,5 +1,8 @@
-import { useMemo, useRef, useState } from "react";
-import { Button, Checkbox, Form, Input, InputNumber } from "antd";
+import { useId, useMemo, useRef, useState } from "react";
+import { Button, Checkbox, Input, InputNumber } from "@lobehub/ui";
+
+import { FormField } from "@/components/molecules/form-field";
+import { bindTextField, type ControlledFormRules, useControlledForm } from "@/hooks/use-controlled-form";
 
 import type {
   CreateSampleInventoryOutboundBatchRequest,
@@ -22,6 +25,14 @@ type SampleInventoryOutboundRegistrationProps = {
   onSubmit: (payload: CreateSampleInventoryOutboundBatchRequest) => Promise<void>;
 };
 
+const OUTBOUND_REGISTRATION_RULES: ControlledFormRules<Partial<OutboundRegistrationValues>> = {
+  applicant: [{ required: true, message: "请输入申领人" }],
+  department: [{ required: true, message: "请输入部门" }],
+  purpose: [{ required: true, message: "请输入邮寄用途" }],
+  receiver: [{ required: true, whitespace: true, message: "请输入收货人" }],
+  shippingAddress: [{ required: true, whitespace: true, message: "请输入收货地址" }],
+};
+
 function createSubmissionKey(): string {
   return `outbound-${crypto.randomUUID()}`;
 }
@@ -32,7 +43,12 @@ export function SampleInventoryOutboundRegistration({
   submitting,
   onSubmit,
 }: SampleInventoryOutboundRegistrationProps) {
-  const [form] = Form.useForm<OutboundRegistrationValues>();
+  const form = useControlledForm<Partial<OutboundRegistrationValues>>({
+    initialValues: {},
+    rules: OUTBOUND_REGISTRATION_RULES,
+    onFinish: (values) => void submit(values as OutboundRegistrationValues),
+  });
+  const quantityIdPrefix = useId();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const submissionKeyRef = useRef<string | undefined>(undefined);
@@ -54,7 +70,7 @@ export function SampleInventoryOutboundRegistration({
     submissionKeyRef.current = undefined;
   };
 
-  const submit = async (values: OutboundRegistrationValues) => {
+  async function submit(values: OutboundRegistrationValues) {
     const selected = availableSamples.filter((sample) =>
       selectedIds.includes(sample.id),
     );
@@ -86,7 +102,7 @@ export function SampleInventoryOutboundRegistration({
     } catch {
       // The mutation owns user-visible error feedback; retain the key for an exact retry.
     }
-  };
+  }
 
   return (
     <section className={styles.formArea} aria-labelledby="outbound-register-title">
@@ -138,9 +154,13 @@ export function SampleInventoryOutboundRegistration({
                     📦 库存：{sample.availableQuantity} 个
                   </span>
                 </div>
+                {/* lobe InputNumber puts aria-* on its wrapper; the id reaches the input itself. */}
+                <label className="sr-only" htmlFor={`${quantityIdPrefix}-${sample.id}`}>
+                  {`${sample.sampleName}出库数量`}
+                </label>
                 <InputNumber
+                  id={`${quantityIdPrefix}-${sample.id}`}
                   className={styles.sampleQuantity}
-                  aria-label={`${sample.sampleName}出库数量`}
                   min={1}
                   max={sample.availableQuantity}
                   precision={0}
@@ -165,38 +185,30 @@ export function SampleInventoryOutboundRegistration({
         )}
       </div>
 
-      <Form<OutboundRegistrationValues>
-        form={form}
+      <form
         className={styles.inlineForm}
-        layout="vertical"
-        requiredMark={false}
-        onFinish={(values) => void submit(values)}
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          form.submit();
+        }}
       >
-        <Form.Item label="申领人 *" name="applicant" rules={[{ required: true }]}>
-          <Input placeholder="姓名" maxLength={120} />
-        </Form.Item>
-        <Form.Item label="部门 *" name="department" rules={[{ required: true }]}>
-          <Input placeholder="部门名称" maxLength={120} />
-        </Form.Item>
-        <Form.Item label="邮寄用途 *" name="purpose" rules={[{ required: true }]}>
-          <Input placeholder="如：客户演示..." maxLength={1000} />
-        </Form.Item>
-        <Form.Item
-          label="收货人 *"
-          name="receiver"
-          rules={[{ required: true, whitespace: true, message: "请输入收货人" }]}
-        >
-          <Input placeholder="收货人姓名" maxLength={120} />
-        </Form.Item>
-        <Form.Item
-          className={styles.addressField}
-          label="收货地址 *"
-          name="shippingAddress"
-          rules={[{ required: true, whitespace: true, message: "请输入收货地址" }]}
-        >
-          <Input placeholder="详细地址" maxLength={1000} />
-        </Form.Item>
-        <Form.Item className={styles.submitField} label=" ">
+        <FormField form={form} name="applicant" label="申领人" required>
+          <Input {...bindTextField(form, "applicant")} placeholder="姓名" maxLength={120} />
+        </FormField>
+        <FormField form={form} name="department" label="部门" required>
+          <Input {...bindTextField(form, "department")} placeholder="部门名称" maxLength={120} />
+        </FormField>
+        <FormField form={form} name="purpose" label="邮寄用途" required>
+          <Input {...bindTextField(form, "purpose")} placeholder="如：客户演示..." maxLength={1000} />
+        </FormField>
+        <FormField form={form} name="receiver" label="收货人" required>
+          <Input {...bindTextField(form, "receiver")} placeholder="收货人姓名" maxLength={120} />
+        </FormField>
+        <FormField form={form} name="shippingAddress" label="收货地址" required className={styles.addressField}>
+          <Input {...bindTextField(form, "shippingAddress")} placeholder="详细地址" maxLength={1000} />
+        </FormField>
+        <div className={styles.submitField}>
           <Button
             type="primary"
             htmlType="submit"
@@ -205,8 +217,8 @@ export function SampleInventoryOutboundRegistration({
           >
             📤 提交出库{selectedIds.length > 0 ? `（${selectedIds.length}）` : ""}
           </Button>
-        </Form.Item>
-      </Form>
+        </div>
+      </form>
     </section>
   );
 }

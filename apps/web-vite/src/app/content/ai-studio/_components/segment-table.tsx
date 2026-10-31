@@ -1,6 +1,5 @@
-import { Button, Popconfirm, Table } from 'antd';
+import { Button, Table, type TableColumnsType, confirmModal } from '@lobehub/ui';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import type { ColumnsType } from 'antd/es/table';
 import { Badge } from '@/components/atoms/badge';
 import type { StudioContentSegment, StudioSegmentPreset, StudioSegmentStatus } from '../_lib/ai-studio-api';
 import {
@@ -54,7 +53,7 @@ export function SegmentTable({
   onAction,
 }: SegmentTableProps) {
   const compact = useMediaQuery(COMPACT_TABLE_QUERY);
-  const columns: ColumnsType<StudioContentSegment> = [
+  const columns: TableColumnsType<StudioContentSegment> = [
     {
       title: '起止',
       key: 'range',
@@ -92,11 +91,8 @@ export function SegmentTable({
         if (!evidence) return segmentOriginLabel(segment.origin);
         return (
           <span className={styles.originEvidence}>
-            <span>
-              {segmentOriginLabel(segment.origin)}
-              {evidence.confidence !== null ? (
-                <span> · 模型自评 {evidence.confidence.toFixed(2)}</span>
-              ) : null}
+            <span title={evidence.confidence !== null ? `模型自评置信度 ${evidence.confidence.toFixed(2)}` : undefined}>
+              {segmentOriginLabel(segment.origin)} 建议
             </span>
             {evidence.reason ? <small title={evidence.reason}>{evidence.reason}</small> : null}
           </span>
@@ -124,34 +120,40 @@ export function SegmentTable({
         const readOnly = isSegmentReadOnly(segment);
         return (
           <div className={styles.rowActions}>
-            <Button size="small" className={styles.touchButton} disabled={!canPlay} onClick={() => onAction({ type: 'play', segment })}>
+            <Button size="small" type="text" className={styles.touchButton} disabled={!canPlay} onClick={() => onAction({ type: 'play', segment })}>
               播放
             </Button>
             {canWrite && !readOnly ? (
               <>
-                <Button size="small" className={styles.touchButton} disabled={busy} onClick={() => onAction({ type: 'edit', segment })}>
+                <Button size="small" type="text" className={styles.touchButton} disabled={busy} onClick={() => onAction({ type: 'edit', segment })}>
                   编辑
                 </Button>
                 {statusActions(segment).map((action) =>
                   segment.status === 'confirmed' ? (
                     // Withdrawing takes the segment out of the remix pool; ask first.
-                    <Popconfirm
+                    <Button
                       key={action.status}
-                      title="撤回这段的确认？"
-                      description="撤回后它回到待确认，框架混剪和单条剪辑都不再使用它。"
-                      okText="撤回确认"
-                      cancelText="取消"
+                      size="small"
+                      type="text"
+                      className={styles.touchButton}
                       disabled={busy}
-                      onConfirm={() => onAction({ type: 'status', segment, status: action.status })}
+                      onClick={() =>
+                        confirmModal({
+                          title: '撤回这段的确认？',
+                          content: '撤回后它回到待确认，框架混剪和单条剪辑都不再使用它。',
+                          okText: '撤回确认',
+                          cancelText: '取消',
+                          onOk: () => onAction({ type: 'status', segment, status: action.status }),
+                        })
+                      }
                     >
-                      <Button size="small" className={styles.touchButton} disabled={busy}>
-                        {action.label}
-                      </Button>
-                    </Popconfirm>
+                      {action.label}
+                    </Button>
                   ) : (
                     <Button
                       key={action.status}
                       size="small"
+                      type="text"
                       danger={action.danger}
                       className={styles.touchButton}
                       disabled={busy}

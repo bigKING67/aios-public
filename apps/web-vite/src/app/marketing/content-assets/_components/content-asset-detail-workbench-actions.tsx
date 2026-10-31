@@ -1,5 +1,5 @@
-import { Button } from 'antd';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Pencil, Plus } from 'lucide-react';
+import { Button } from '@lobehub/ui';
 import workbenchStyles from './content-assets-detail-workbench.module.css';
 
 export type ContentAssetDetailWorkbenchAction = 'profile' | 'platform-video' | 'ad-material';
@@ -31,7 +31,7 @@ export function ContentAssetDetailWorkbenchActions({
         type="text"
         className={workbenchStyles.actionButton}
         data-active={activeAction === 'profile' ? 'true' : undefined}
-        icon={<EditOutlined />}
+        icon={<Pencil size={14} strokeWidth={1.8} aria-hidden="true" />}
         disabled={!canWrite}
         onClick={onEditProfile}
       >
@@ -41,7 +41,7 @@ export function ContentAssetDetailWorkbenchActions({
         type="text"
         className={workbenchStyles.actionButton}
         data-active={activeAction === 'platform-video' ? 'true' : undefined}
-        icon={platformVideoCount > 0 ? undefined : <PlusOutlined />}
+        icon={platformVideoCount > 0 ? undefined : <Plus size={14} strokeWidth={1.8} aria-hidden="true" />}
         disabled={!canWrite && platformVideoCount === 0}
         onClick={onPlatformVideoShortcut}
       >
@@ -51,7 +51,7 @@ export function ContentAssetDetailWorkbenchActions({
         type="text"
         className={workbenchStyles.actionButton}
         data-active={activeAction === 'ad-material' ? 'true' : undefined}
-        icon={adMaterialCount > 0 ? undefined : <PlusOutlined />}
+        icon={adMaterialCount > 0 ? undefined : <Plus size={14} strokeWidth={1.8} aria-hidden="true" />}
         disabled={!canWrite && adMaterialCount === 0}
         onClick={onAdMaterialShortcut}
       >

@@ -1,8 +1,8 @@
 .auditToolbar {
   margin-bottom: 10px;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-hover);
+  border: 1px solid var(--lobe-color-border);
+  background: var(--lobe-color-fill-tertiary);
   padding: 10px;
   display: grid;
   gap: 8px;
@@ -30,6 +30,11 @@
 
 .auditActionSelect {
   width: 240px;
+}
+
+.auditFilterSelect :global(.lobe-select),
+.auditActionSelect :global(.lobe-select) {
+  width: 100%;
 }
 
 .auditToolbarMeta {

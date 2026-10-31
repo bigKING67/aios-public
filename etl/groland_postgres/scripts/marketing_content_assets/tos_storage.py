@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import ipaddress
 import mimetypes
 import os
 import re
+import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -15,12 +17,34 @@ from typing import Dict, Iterable, Mapping, Tuple
 
 import requests
 
+from .storage_transport import StorageAddressAdapter
+
 MB = 1024 * 1024
 # Cross-border VPS -> TOS uploads run on a lossy ~200ms link where a single TCP
 # stream crawls (observed ~17 KB/s); large files go multipart with parallel parts,
 # every request is retried, and the whole upload has a deadline so a job fails
 # visibly instead of hanging.
 REQUEST_TIMEOUT = (10, 120)
+DOWNLOAD_ATTEMPTS = 3
+DOWNLOAD_DEADLINE_SECONDS = 1800
+
+
+class StorageUnavailable(RuntimeError):
+  """A transient transport/server failure exhausted its local retry budget."""
+
+
+def transient_request_error(error: Exception) -> bool:
+  # A broken TLS stream is retryable; an invalid certificate requires operator action.
+  if isinstance(error, requests.exceptions.SSLError) and any(
+      marker in str(error).lower() for marker in ("certificate_verify_failed", "certificate verify failed",
+                                                "hostname mismatch", "doesn't match")):
+    return False
+  return isinstance(error, (requests.ConnectionError, requests.Timeout,
+                            requests.exceptions.ChunkedEncodingError))
+
+
+def transient_status(status: int) -> bool:
+  return status in (408, 429) or 500 <= status < 600
 
 
 @dataclass(frozen=True)
@@ -42,6 +66,15 @@ class UploadTuning:
     )
 
 
+# Rebuildable or temporary objects. With TOS_DERIVED_BUCKET set they live in that bucket, so a
+# compute node can hold read-only access to originals and write access to derived files only.
+# The Rust API routes the same prefixes (`delivery::bucket_for_key`); keep the two lists equal.
+DERIVED_KEY_PREFIXES = (
+  "preview/", "cover/", "proxy/", "analysis/", "transcript/",
+  "segment-cover/", "competitor/evidence/", "competitor/raw/",
+)
+
+
 @dataclass(frozen=True)
 class TosStorageConfig:
   access_key_id: str
@@ -49,6 +82,23 @@ class TosStorageConfig:
   endpoint: str
   region: str
   bucket: str
+  derived_bucket: str = ""
+  connect_ip: str = ""
+
+  def __post_init__(self):
+    if self.connect_ip:
+      try:
+        ipaddress.ip_address(self.connect_ip)
+        if "%" in self.connect_ip:
+          raise ValueError("scoped addresses are not supported")
+      except ValueError:
+        raise ValueError("TOS_CONNECT_IP must be an IPv4 or IPv6 address") from None
+
+  def bucket_for(self, object_key: str) -> str:
+    """Bucket holding `object_key`: the derived bucket for derived prefixes when configured."""
+    if self.derived_bucket and object_key.startswith(DERIVED_KEY_PREFIXES):
+      return self.derived_bucket
+    return self.bucket
 
   @classmethod
   def from_env(cls) -> "TosStorageConfig":
@@ -62,6 +112,8 @@ class TosStorageConfig:
       endpoint=(os.getenv("TOS_ENDPOINT") or "https://tos-s3-cn-shanghai.volces.com").strip(),
       region=(os.getenv("TOS_REGION") or "cn-shanghai").strip(),
       bucket=(os.getenv("TOS_BUCKET") or "aios-content-assets").strip(),
+      derived_bucket=(os.getenv("TOS_DERIVED_BUCKET") or "").strip(),
+      connect_ip=(os.getenv("TOS_CONNECT_IP") or "").strip(),
     )
 
 
@@ -69,8 +121,21 @@ class TosStorageClient:
   def __init__(self, config: TosStorageConfig, tuning: UploadTuning | None = None):
     self.config = config
     self.tuning = tuning or UploadTuning.from_env()
-    self.session = requests.Session()
+    self.session = self._new_session()
     self._part_sessions = threading.local()
+
+  def _new_session(self) -> requests.Session:
+    session = requests.Session()
+    if self.config.connect_ip:
+      session.trust_env = False
+      # Preserve deployment CA bundles without also inheriting environment proxies/netrc.
+      session.verify = os.getenv("REQUESTS_CA_BUNDLE") or os.getenv("CURL_CA_BUNDLE") or True
+      authorities = {_virtual_host(self.config.endpoint, bucket)
+                     for bucket in (self.config.bucket, self.config.derived_bucket) if bucket}
+      adapter = StorageAddressAdapter(self.config.connect_ip, authorities)
+      session.mount("https://", adapter)
+      session.mount("http://", adapter)  # Reject downgrades before making any connection.
+    return session
 
   def upload_file(self, object_key: str, path: Path, content_type: str = "") -> None:
     content_type = content_type or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
@@ -141,7 +206,7 @@ class TosStorageClient:
     return etag
 
   def _new_part_session(self) -> requests.Session:
-    session = requests.Session()
+    session = self._new_session()
     session.trust_env = self.session.trust_env
     session.verify = self.session.verify
     return session
@@ -155,21 +220,29 @@ class TosStorageClient:
 
   def _with_retries(self, send, ok_statuses: Tuple[int, ...], message: str, deadline: float) -> requests.Response:
     last_error = ""
+    transient = False
     for attempt in range(1, self.tuning.attempts + 1):
       if time.monotonic() >= deadline:
-        raise RuntimeError(f"{message}: 超过上传时限 {self.tuning.deadline_seconds:.0f}s（{last_error or '未开始'}）")
+        error_type = StorageUnavailable if transient else RuntimeError
+        raise error_type(f"{message}: 超过上传时限 {self.tuning.deadline_seconds:.0f}s（{last_error or '未开始'}）")
       try:
         response = send()
       except requests.RequestException as error:
-        last_error = f"{type(error).__name__}: {str(error)[:160]}"
+        last_error = type(error).__name__  # Do not propagate signed URLs or proxy credentials.
+        transient = transient_request_error(error)
+        if not transient:
+          raise
       else:
         if response.status_code in ok_statuses:
           return response
         last_error = f"HTTP {response.status_code}: {response.text[:240]}"
-        if response.status_code < 500 and response.status_code not in (408, 429):
+        transient = transient_status(response.status_code)
+        if not transient:
           break
       if attempt < self.tuning.attempts:
         time.sleep(min(2 ** attempt, 10))
+    if transient:
+      raise StorageUnavailable(f"{message} {last_error}")
     raise RuntimeError(f"{message} {last_error}")
 
   def get_bucket_cors(self) -> str:
@@ -193,7 +266,7 @@ class TosStorageClient:
       raise RuntimeError(f"TOS 写入 Bucket CORS 失败 HTTP {response.status_code}: {response.text[:240]}")
 
   def presign_put_url(self, object_key: str, content_type: str, ttl_seconds: int = 600) -> str:
-    host = _virtual_host(self.config.endpoint, self.config.bucket)
+    host = _virtual_host(self.config.endpoint, self.config.bucket_for(object_key))
     now = datetime.now(timezone.utc)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
     date_stamp = now.strftime("%Y%m%d")
@@ -231,7 +304,7 @@ class TosStorageClient:
     return f"https://{host}{canonical_uri}?{canonical_query}&X-Amz-Signature={signature}"
 
   def presign_get_url(self, object_key: str, ttl_seconds: int = 600, response_content_type: str = "") -> str:
-    host = _virtual_host(self.config.endpoint, self.config.bucket)
+    host = _virtual_host(self.config.endpoint, self.config.bucket_for(object_key))
     now = datetime.now(timezone.utc)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
     date_stamp = now.strftime("%Y%m%d")
@@ -272,15 +345,42 @@ class TosStorageClient:
     return f"https://{host}{canonical_uri}?{canonical_query}&X-Amz-Signature={signature}"
 
   def download_file(self, object_key: str, target_path: Path) -> None:
-    url, headers = self._signed_url_and_headers("GET", object_key, {})
+    """Retry the entire stream; publish only a complete file, never a truncated attempt."""
     target_path.parent.mkdir(parents=True, exist_ok=True)
-    with self.session.get(url, headers=headers, stream=True, timeout=300) as response:
-      if response.status_code != 200:
-        raise RuntimeError(f"TOS 下载失败 key={object_key} HTTP {response.status_code}: {response.text[:240]}")
-      with target_path.open("wb") as file_obj:
-        for chunk in response.iter_content(chunk_size=1024 * 1024):
-          if chunk:
-            file_obj.write(chunk)
+    deadline = time.monotonic() + DOWNLOAD_DEADLINE_SECONDS
+    for attempt in range(DOWNLOAD_ATTEMPTS):
+      temporary = None
+      try:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+          break
+        url, headers = self._signed_url_and_headers("GET", object_key, {})
+        with self.session.get(url, headers=headers, stream=True,
+                              timeout=(min(10, remaining), min(60, remaining))) as response:
+          if transient_status(response.status_code):
+            raise StorageUnavailable(f"对象存储下载暂时不可用 HTTP {response.status_code}")
+          if response.status_code != 200:
+            raise RuntimeError(f"TOS 下载失败 HTTP {response.status_code}")
+          with tempfile.NamedTemporaryFile(dir=target_path.parent, prefix='.download-', delete=False) as file_obj:
+            temporary = Path(file_obj.name)
+            for chunk in response.iter_content(chunk_size=MB):
+              if time.monotonic() >= deadline:
+                raise StorageUnavailable("对象存储下载超过传输时限")
+              if chunk:
+                file_obj.write(chunk)
+          temporary.replace(target_path)
+          return
+      except requests.RequestException as error:
+        if not transient_request_error(error):
+          raise
+      except StorageUnavailable:
+        pass
+      finally:
+        if temporary is not None:
+          temporary.unlink(missing_ok=True)
+      if attempt + 1 < DOWNLOAD_ATTEMPTS:
+        time.sleep(min(2 ** (attempt + 1), max(0, deadline - time.monotonic())))
+    raise StorageUnavailable("对象存储下载暂时不可用，传输重试已耗尽")
 
   def object_exists(self, object_key: str) -> bool:
     url, headers = self._signed_url_and_headers("HEAD", object_key, {})
@@ -304,7 +404,7 @@ class TosStorageClient:
     signed_headers: Dict[str, str],
     query_params: Mapping[str, str] | None = None,
   ) -> Tuple[str, Dict[str, str]]:
-    host = _virtual_host(self.config.endpoint, self.config.bucket)
+    host = _virtual_host(self.config.endpoint, self.config.bucket_for(object_key))
     canonical_uri = f"/{_quote_path(object_key)}"
     canonical_query = _canonical_query(query_params or {})
     url = f"https://{host}{canonical_uri}"

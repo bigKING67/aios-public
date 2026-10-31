@@ -1,6 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { Empty, Table, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Empty, Table, Tag, type TableColumnsType } from '@lobehub/ui';
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { GOODS_SCORE_CONFIDENCE_FOOTNOTE_TEXT } from './dashboard-config';
@@ -41,7 +40,7 @@ export type DashboardGoodsDetailSectionProps = {
   scorePoolN: number;
   scoreVisibleCount: number;
   rows: DashboardGoodsTableItem[];
-  columns: ColumnsType<DashboardGoodsTableItem>;
+  columns: TableColumnsType<DashboardGoodsTableItem>;
   loading: boolean;
   selectedScoreDetail: DashboardGoodsScoreDetailItem | null;
   scoreOption: EChartsCoreOption;
